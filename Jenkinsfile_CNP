@@ -1,0 +1,34 @@
+#!groovy
+properties([
+        [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/ia-case-notifications-api.git'],
+        pipelineTriggers([[$class: 'GitHubPushTrigger']])
+])
+
+@Library("Infrastructure")
+
+def type = "java"
+def product = "ia"
+def component = "case-notifications-api"
+
+withPipeline(type, product, component) {
+    enableDockerBuild()
+
+    after('test') {
+        try {
+            sh './gradlew pitest'
+        }
+        finally {
+            steps.archiveArtifacts 'build/reports/pitest/**/*.*'
+        }
+    }
+
+    after('functionalTest:preview') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
+
+    after('functionalTest:aat') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
+
+    enableSlackNotifications('#ia-tech')
+}
