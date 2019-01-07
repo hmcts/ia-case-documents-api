@@ -10,8 +10,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 
 public class PreSubmitCallbackResponse<T extends CaseData> {
 
-    private final T data;
-    private final Set<String> errors = new LinkedHashSet<>();
+    private T data;
+    private Set<String> errors = new LinkedHashSet<>();
+
+    private PreSubmitCallbackResponse() {
+        // noop -- for deserializer
+    }
 
     public PreSubmitCallbackResponse(
         T data
@@ -24,11 +28,20 @@ public class PreSubmitCallbackResponse<T extends CaseData> {
         return data;
     }
 
+    public void addError(String error) {
+        this.errors.add(error);
+    }
+
     public void addErrors(Collection<String> errors) {
         this.errors.addAll(errors);
     }
 
     public Set<String> getErrors() {
         return ImmutableSet.copyOf(errors);
+    }
+
+    public void setData(T data) {
+        requireNonNull(data);
+        this.data = data;
     }
 }
