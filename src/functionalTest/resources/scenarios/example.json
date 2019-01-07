@@ -1,14 +1,16 @@
 {
   "description": "Example scenario",
-  "credentials": "CaseOfficer",
-  "callback": "/asylum/ccdAboutToSubmit",
-  "input": {
-    "eventId": "submitAppeal",
-    "state": "appealSubmitted",
-    "caseData": {
-      "template": "minimal-appeal-started.json",
-      "replacements": {
-        "homeOfficeReferenceNumber": "Example"
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "homeOfficeReferenceNumber": "Example"
+        }
       }
     }
   },

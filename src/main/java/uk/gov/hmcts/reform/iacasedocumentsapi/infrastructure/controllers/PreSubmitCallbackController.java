@@ -17,12 +17,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDispatcher;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.serialization.Deserializer;
 
 @Api(
-    value = "Handles callbacks from CCD that occur *before* changes are persisted.",
-    consumes = MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE
+    value = "/asylum",
+    consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+    produces = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
 @RequestMapping(
     path = "/asylum",
@@ -34,60 +33,102 @@ public class PreSubmitCallbackController {
 
     private static final org.slf4j.Logger LOG = getLogger(PreSubmitCallbackController.class);
 
-    private final Deserializer<Callback<AsylumCase>> callbackDeserializer;
     private final PreSubmitCallbackDispatcher<AsylumCase> callbackDispatcher;
 
     public PreSubmitCallbackController(
-        Deserializer<Callback<AsylumCase>> callbackDeserializer,
         PreSubmitCallbackDispatcher<AsylumCase> callbackDispatcher
     ) {
-        requireNonNull(callbackDeserializer, "callbackDeserializer must not be null");
         requireNonNull(callbackDispatcher, "callbackDispatcher must not be null");
 
-        this.callbackDeserializer = callbackDeserializer;
         this.callbackDispatcher = callbackDispatcher;
     }
 
-    @ApiOperation("Handles 'AboutToStartEvent' callbacks from CCD")
+    @ApiOperation(
+        value = "Handles 'AboutToStartEvent' callbacks from CCD or delegated calls from IA Case API",
+        response = PreSubmitCallbackResponse.class,
+        authorizations =
+            {
+                @Authorization(value = "Authorization"),
+                @Authorization(value = "ServiceAuthorization")
+            }
+    )
     @ApiResponses({
         @ApiResponse(
             code = 200,
             message = "Transformed Asylum case data, with any identified error or warning messages",
             response = PreSubmitCallbackResponse.class
+        ),
+        @ApiResponse(
+            code = 400,
+            message = "Bad Request"
+        ),
+        @ApiResponse(
+            code = 403,
+            message = "Forbidden"
+        ),
+        @ApiResponse(
+            code = 415,
+            message = "Unsupported Media Type"
+        ),
+        @ApiResponse(
+            code = 500,
+            message = "Internal Server Error"
         )
     })
     @PostMapping(path = "/ccdAboutToStart")
     public ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> ccdAboutToStart(
-        @ApiParam(value = "Asylum case data", required = true) @NotNull @RequestBody String source
+        @ApiParam(value = "Asylum case data", required = true) @NotNull @RequestBody Callback<AsylumCase> callback
     ) {
-        return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_START, source);
+        return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_START, callback);
     }
 
-    @ApiOperation("Handles 'AboutToSubmitEvent' callbacks from CCD")
+    @ApiOperation(
+        value = "Handles 'AboutToSubmitEvent' callbacks from CCD or delegated calls from IA Case API",
+        response = PreSubmitCallbackResponse.class,
+        authorizations =
+            {
+                @Authorization(value = "Authorization"),
+                @Authorization(value = "ServiceAuthorization")
+            }
+    )
     @ApiResponses({
         @ApiResponse(
             code = 200,
             message = "Transformed Asylum case data, with any identified error or warning messages",
             response = PreSubmitCallbackResponse.class
+        ),
+        @ApiResponse(
+            code = 400,
+            message = "Bad Request"
+        ),
+        @ApiResponse(
+            code = 403,
+            message = "Forbidden"
+        ),
+        @ApiResponse(
+            code = 415,
+            message = "Unsupported Media Type"
+        ),
+        @ApiResponse(
+            code = 500,
+            message = "Internal Server Error"
         )
     })
     @PostMapping(path = "/ccdAboutToSubmit")
     public ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> ccdAboutToSubmit(
-        @ApiParam(value = "Asylum case data", required = true) @NotNull @RequestBody String source
+        @ApiParam(value = "Asylum case data", required = true) @NotNull @RequestBody Callback<AsylumCase> callback
     ) {
-        return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, source);
+        return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
     }
 
     private ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> performStageRequest(
         PreSubmitCallbackStage callbackStage,
-        String source
+        Callback<AsylumCase> callback
     ) {
-        Callback<AsylumCase> callback =
-            callbackDeserializer.deserialize(source);
-
         LOG.info(
-            "Asylum Case CCD `{}` event received for Case ID `{}`",
+            "Asylum Case CCD `{}` event `{}` received for Case ID `{}`",
             callbackStage,
+            callback.getEvent(),
             callback.getCaseDetails().getId()
         );
 
@@ -95,8 +136,9 @@ public class PreSubmitCallbackController {
             callbackDispatcher.handle(callbackStage, callback);
 
         LOG.info(
-            "Asylum Case CCD `{}` event handled for Case ID `{}`",
+            "Asylum Case CCD `{}` event `{}` handled for Case ID `{}`",
             callbackStage,
+            callback.getEvent(),
             callback.getCaseDetails().getId()
         );
 
