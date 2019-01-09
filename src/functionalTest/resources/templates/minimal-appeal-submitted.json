@@ -2,8 +2,8 @@
   "homeOfficeReferenceNumber": "A123456",
   "homeOfficeDecisionDate": "{$TODAY}",
   "appellantTitle": "Mr",
-  "appellantGivenNames": "Talha",
-  "appellantFamilyName": "Awan",
+  "appellantGivenNames": "José",
+  "appellantFamilyName": "González",
   "appellantDateOfBirth": "{$TODAY-7300}",
   "appellantNationalities": [
     {
@@ -22,5 +22,9 @@
   },
   "hasNewMatters": "No",
   "hasOtherAppeals": "No",
-  "appealReferenceNumber": "DRAFT"
+  "appellantNameForDisplay": "Talha Awan",
+  "appealReferenceNumber": "PA/11111/2019",
+  "legalRepresentativeName": "LawFirm A",
+  "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+  "sendDirectionActionAvailable": "Yes"
 }
