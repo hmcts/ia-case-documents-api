@@ -1,0 +1,257 @@
+appealGrounds	protectionRefugeeConvention	Removing the appellant from the UK would breach the UK's obligation under the Refugee Convention
+appealGrounds	protectionHumanitarianProtection	Removing the appellant from the UK would breach the UK's obligation in relation to persons eligible for a grant of humanitarian protection
+appealGrounds	protectionHumanRights	Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998
+appealGrounds	revocationRefugeeConvention	Revocation of the appellant's protection status breaches the United Kingdom's obligations under the Refugee Convention
+appealGrounds	revocationHumanitarianProtection	Revocation of the appellant's protection status breaches the United Kingdom's obligations in relation to persons eligible for humanitarian protection
+appealType	protection	The refusal of a protection claim
+appealType	revocationOfProtection	The revocation of a protection status
+isoCountries	AF	Afghanistan
+isoCountries	AX	Aland Islands
+isoCountries	AL	Albania
+isoCountries	DZ	Algeria
+isoCountries	AS	American Samoa
+isoCountries	AD	Andorra
+isoCountries	AO	Angola
+isoCountries	AI	Anguilla
+isoCountries	AQ	Antarctica
+isoCountries	AG	Antigua and Barbuda
+isoCountries	AR	Argentina
+isoCountries	AM	Armenia
+isoCountries	AW	Aruba
+isoCountries	AU	Australia
+isoCountries	AT	Austria
+isoCountries	AZ	Azerbaijan
+isoCountries	BS	Bahamas
+isoCountries	BH	Bahrain
+isoCountries	BD	Bangladesh
+isoCountries	BB	Barbados
+isoCountries	BY	Belarus
+isoCountries	BE	Belgium
+isoCountries	BZ	Belize
+isoCountries	BJ	Benin
+isoCountries	BM	Bermuda
+isoCountries	BT	Bhutan
+isoCountries	BO	Bolivia
+isoCountries	BQ	Bonaire, Sint Eustatius and Saba
+isoCountries	BA	Bosnia and Herzegovina
+isoCountries	BW	Botswana
+isoCountries	BV	Bouvet Island
+isoCountries	BR	Brazil
+isoCountries	VG	British Virgin Islands
+isoCountries	IO	British Indian Ocean Territory
+isoCountries	BN	Brunei Darussalam
+isoCountries	BG	Bulgaria
+isoCountries	BF	Burkina Faso
+isoCountries	BI	Burundi
+isoCountries	KH	Cambodia
+isoCountries	CM	Cameroon
+isoCountries	CA	Canada
+isoCountries	CV	Cape Verde
+isoCountries	KY	Cayman Islands
+isoCountries	CF	Central African Republic
+isoCountries	TD	Chad
+isoCountries	CL	Chile
+isoCountries	CN	China
+isoCountries	HK	Hong Kong, Special Administrative Region of China
+isoCountries	MO	Macao, Special Administrative Region of China
+isoCountries	CX	Christmas Island
+isoCountries	CC	Cocos (Keeling) Islands
+isoCountries	CO	Colombia
+isoCountries	KM	Comoros
+isoCountries	CG	Congo (Brazzaville)
+isoCountries	CD	Congo, Democratic Republic of the
+isoCountries	CK	Cook Islands
+isoCountries	CR	Costa Rica
+isoCountries	CI	C�te d'Ivoire
+isoCountries	HR	Croatia
+isoCountries	CU	Cuba
+isoCountries	CW	Cura�ao
+isoCountries	CY	Cyprus
+isoCountries	CZ	Czech Republic
+isoCountries	DK	Denmark
+isoCountries	DJ	Djibouti
+isoCountries	DM	Dominica
+isoCountries	DO	Dominican Republic
+isoCountries	EC	Ecuador
+isoCountries	EG	Egypt
+isoCountries	SV	El Salvador
+isoCountries	GQ	Equatorial Guinea
+isoCountries	ER	Eritrea
+isoCountries	EE	Estonia
+isoCountries	ET	Ethiopia
+isoCountries	FK	Falkland Islands (Malvinas)
+isoCountries	FO	Faroe Islands
+isoCountries	FJ	Fiji
+isoCountries	FI	Finland
+isoCountries	FR	France
+isoCountries	GF	French Guiana
+isoCountries	PF	French Polynesia
+isoCountries	TF	French Southern Territories
+isoCountries	GA	Gabon
+isoCountries	GM	Gambia
+isoCountries	GE	Georgia
+isoCountries	DE	Germany
+isoCountries	GH	Ghana
+isoCountries	GI	Gibraltar
+isoCountries	GR	Greece
+isoCountries	GL	Greenland
+isoCountries	GD	Grenada
+isoCountries	GP	Guadeloupe
+isoCountries	GU	Guam
+isoCountries	GT	Guatemala
+isoCountries	GG	Guernsey
+isoCountries	GN	Guinea
+isoCountries	GW	Guinea-Bissau
+isoCountries	GY	Guyana
+isoCountries	HT	Haiti
+isoCountries	HM	Heard Island and Mcdonald Islands
+isoCountries	VA	Holy See (Vatican City State)
+isoCountries	HN	Honduras
+isoCountries	HU	Hungary
+isoCountries	IS	Iceland
+isoCountries	IN	India
+isoCountries	ID	Indonesia
+isoCountries	IR	Iran, Islamic Republic of
+isoCountries	IQ	Iraq
+isoCountries	IE	Ireland
+isoCountries	IM	Isle of Man
+isoCountries	IL	Israel
+isoCountries	IT	Italy
+isoCountries	JM	Jamaica
+isoCountries	JP	Japan
+isoCountries	JE	Jersey
+isoCountries	JO	Jordan
+isoCountries	KZ	Kazakhstan
+isoCountries	KE	Kenya
+isoCountries	KI	Kiribati
+isoCountries	KP	Korea, Democratic People's Republic of
+isoCountries	KR	Korea, Republic of
+isoCountries	KW	Kuwait
+isoCountries	KG	Kyrgyzstan
+isoCountries	LA	Lao PDR
+isoCountries	LV	Latvia
+isoCountries	LB	Lebanon
+isoCountries	LS	Lesotho
+isoCountries	LR	Liberia
+isoCountries	LY	Libya
+isoCountries	LI	Liechtenstein
+isoCountries	LT	Lithuania
+isoCountries	LU	Luxembourg
+isoCountries	MK	Macedonia, Republic of
+isoCountries	MG	Madagascar
+isoCountries	MW	Malawi
+isoCountries	MY	Malaysia
+isoCountries	MV	Maldives
+isoCountries	ML	Mali
+isoCountries	MT	Malta
+isoCountries	MH	Marshall Islands
+isoCountries	MQ	Martinique
+isoCountries	MR	Mauritania
+isoCountries	MU	Mauritius
+isoCountries	YT	Mayotte
+isoCountries	MX	Mexico
+isoCountries	FM	Micronesia, Federated States of
+isoCountries	MD	Moldova
+isoCountries	MC	Monaco
+isoCountries	MN	Mongolia
+isoCountries	ME	Montenegro
+isoCountries	MS	Montserrat
+isoCountries	MA	Morocco
+isoCountries	MZ	Mozambique
+isoCountries	MM	Myanmar
+isoCountries	NA	Namibia
+isoCountries	NR	Nauru
+isoCountries	NP	Nepal
+isoCountries	NL	Netherlands
+isoCountries	AN	Netherlands Antilles
+isoCountries	NC	New Caledonia
+isoCountries	NZ	New Zealand
+isoCountries	NI	Nicaragua
+isoCountries	NE	Niger
+isoCountries	NG	Nigeria
+isoCountries	NU	Niue
+isoCountries	NF	Norfolk Island
+isoCountries	MP	Northern Mariana Islands
+isoCountries	NO	Norway
+isoCountries	OM	Oman
+isoCountries	PK	Pakistan
+isoCountries	PW	Palau
+isoCountries	PS	Palestinian Territory, Occupied
+isoCountries	PA	Panama
+isoCountries	PG	Papua New Guinea
+isoCountries	PY	Paraguay
+isoCountries	PE	Peru
+isoCountries	PH	Philippines
+isoCountries	PN	Pitcairn
+isoCountries	PL	Poland
+isoCountries	PT	Portugal
+isoCountries	PR	Puerto Rico
+isoCountries	QA	Qatar
+isoCountries	RE	R�union
+isoCountries	RO	Romania
+isoCountries	RU	Russian Federation
+isoCountries	RW	Rwanda
+isoCountries	BL	Saint-Barth�lemy
+isoCountries	SH	Saint Helena
+isoCountries	KN	Saint Kitts and Nevis
+isoCountries	LC	Saint Lucia
+isoCountries	MF	Saint-Martin (French part)
+isoCountries	PM	Saint Pierre and Miquelon
+isoCountries	VC	Saint Vincent and Grenadines
+isoCountries	WS	Samoa
+isoCountries	SM	San Marino
+isoCountries	ST	Sao Tome and Principe
+isoCountries	SA	Saudi Arabia
+isoCountries	SN	Senegal
+isoCountries	RS	Serbia
+isoCountries	SC	Seychelles
+isoCountries	SL	Sierra Leone
+isoCountries	SG	Singapore
+isoCountries	SX	Sint Maarten (Dutch part)
+isoCountries	SK	Slovakia
+isoCountries	SI	Slovenia
+isoCountries	SB	Solomon Islands
+isoCountries	SO	Somalia
+isoCountries	ZA	South Africa
+isoCountries	GS	South Georgia and the South Sandwich Islands
+isoCountries	SS	South Sudan
+isoCountries	ES	Spain
+isoCountries	LK	Sri Lanka
+isoCountries	SD	Sudan
+isoCountries	SR	Suriname *
+isoCountries	SJ	Svalbard and Jan Mayen Islands
+isoCountries	SZ	Swaziland
+isoCountries	SE	Sweden
+isoCountries	CH	Switzerland
+isoCountries	SY	Syrian Arab Republic (Syria)
+isoCountries	TW	Taiwan
+isoCountries	TJ	Tajikistan
+isoCountries	TZ	Tanzania *, United Republic of
+isoCountries	TH	Thailand
+isoCountries	TL	Timor-Leste
+isoCountries	TG	Togo
+isoCountries	TK	Tokelau
+isoCountries	TO	Tonga
+isoCountries	TT	Trinidad and Tobago
+isoCountries	TN	Tunisia
+isoCountries	TR	Turkey
+isoCountries	TM	Turkmenistan
+isoCountries	TC	Turks and Caicos Islands
+isoCountries	TV	Tuvalu
+isoCountries	UG	Uganda
+isoCountries	UA	Ukraine
+isoCountries	AE	United Arab Emirates
+isoCountries	GB	United Kingdom
+isoCountries	US	United States of America
+isoCountries	UM	United States Minor Outlying Islands
+isoCountries	UY	Uruguay
+isoCountries	UZ	Uzbekistan
+isoCountries	VU	Vanuatu
+isoCountries	VE	Venezuela (Bolivarian Republic of)
+isoCountries	VN	Viet Nam
+isoCountries	VI	Virgin Islands, US
+isoCountries	WF	Wallis and Futuna Islands
+isoCountries	EH	Western Sahara
+isoCountries	YE	Yemen
+isoCountries	ZM	Zambia
+isoCountries	ZW	Zimbabwe
