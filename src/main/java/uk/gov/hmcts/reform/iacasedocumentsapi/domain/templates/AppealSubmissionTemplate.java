@@ -86,6 +86,7 @@ public class AppealSubmissionTemplate {
                         .put("appellantAddressLine2", appellantAddress.getAddressLine2().orElse(""))
                         .put("appellantAddressLine3", appellantAddress.getAddressLine3().orElse(""))
                         .put("appellantAddressPostTown", appellantAddress.getPostTown().orElse(""))
+                        .put("appellantAddressCounty", appellantAddress.getCounty().orElse(""))
                         .put("appellantAddressPostCode", appellantAddress.getPostCode().orElse(""))
                         .put("appellantAddressCountry", appellantAddress.getCountry().orElse(""))
                         .build()

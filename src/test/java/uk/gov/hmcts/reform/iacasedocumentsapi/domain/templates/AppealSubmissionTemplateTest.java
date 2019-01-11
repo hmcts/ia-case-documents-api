@@ -139,11 +139,12 @@ public class AppealSubmissionTemplateTest {
         assertEquals("The revocation of a protection status", templateFieldValues.get("appealType"));
         assertEquals(newMatters, templateFieldValues.get("newMatters"));
 
-        assertEquals(6, ((Map) templateFieldValues.get("appellantAddress")).size());
+        assertEquals(7, ((Map) templateFieldValues.get("appellantAddress")).size());
         assertEquals(appellantAddressLine1, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressLine1"));
         assertEquals(appellantAddressLine2, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressLine2"));
         assertEquals(appellantAddressLine3, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressLine3"));
         assertEquals(appellantAddressPostTown, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressPostTown"));
+        assertEquals(appellantAddressCounty, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressCounty"));
         assertEquals(appellantAddressPostCode, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressPostCode"));
         assertEquals(appellantAddressCountry, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressCountry"));
 
