@@ -48,7 +48,7 @@ public class BuildCaseDirectionNotifierTest {
     final String legalRepReferenceNumber = "SOMETHING";
     final String appealReferenceNumber = "PA/001/2018";
     final String appellantGivenNames = "Jane";
-    final String appellantLastName = "Doe";
+    final String appellantFamilyName = "Doe";
     final String buildCaseDirectionExplanation = "Build your case";
     final String buildCaseDirectionDateDue = "2018-12-31";
     final String buildCaseDirectionDateDueFormatted = "31 Dec 2018";
@@ -59,7 +59,7 @@ public class BuildCaseDirectionNotifierTest {
             .put("Appeal Ref Number", appealReferenceNumber)
             .put("LR reference", legalRepReferenceNumber)
             .put("Given names", appellantGivenNames)
-            .put("Family name", appellantLastName)
+            .put("Family name", appellantFamilyName)
             .put("Hyperlink to user’s case list", CCD_URL)
             .put("Explanation", buildCaseDirectionExplanation)
             .put("due date", buildCaseDirectionDateDueFormatted)
@@ -100,7 +100,7 @@ public class BuildCaseDirectionNotifierTest {
         when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantLastName()).thenReturn(Optional.of(appellantLastName));
+        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
         when(buildCaseDirection.getExplanation()).thenReturn(buildCaseDirectionExplanation);
         when(buildCaseDirection.getDateDue()).thenReturn(buildCaseDirectionDateDue);
 
@@ -154,7 +154,7 @@ public class BuildCaseDirectionNotifierTest {
         when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantLastName()).thenReturn(Optional.of(appellantLastName));
+        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
         when(buildCaseDirection.getExplanation()).thenReturn(buildCaseDirectionExplanation);
         when(buildCaseDirection.getDateDue()).thenReturn(buildCaseDirectionDateDue);
 
@@ -217,7 +217,7 @@ public class BuildCaseDirectionNotifierTest {
         when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
         when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.empty());
         when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantLastName()).thenReturn(Optional.empty());
+        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
         when(buildCaseDirection.getExplanation()).thenReturn(buildCaseDirectionExplanation);
         when(buildCaseDirection.getDateDue()).thenReturn(buildCaseDirectionDateDue);
 

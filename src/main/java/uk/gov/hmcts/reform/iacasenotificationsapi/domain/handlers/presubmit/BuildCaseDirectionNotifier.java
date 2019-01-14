@@ -87,7 +87,7 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
                 .put("Appeal Ref Number", asylumCase.getAppealReferenceNumber().orElse(""))
                 .put("LR reference", asylumCase.getLegalRepReferenceNumber().orElse(""))
                 .put("Given names", asylumCase.getAppellantGivenNames().orElse(""))
-                .put("Family name", asylumCase.getAppellantLastName().orElse(""))
+                .put("Family name", asylumCase.getAppellantFamilyName().orElse(""))
                 .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
                 .put("Explanation", buildCaseDirection.getExplanation())
                 .put("due date", directionDueDate)
