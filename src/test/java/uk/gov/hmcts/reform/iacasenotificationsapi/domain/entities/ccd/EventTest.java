@@ -10,11 +10,19 @@ public class EventTest {
     public void has_correct_values() {
         assertEquals("startAppeal", Event.START_APPEAL.toString());
         assertEquals("submitAppeal", Event.SUBMIT_APPEAL.toString());
+        assertEquals("sendDirection", Event.SEND_DIRECTION.toString());
+        assertEquals("requestRespondentEvidence", Event.REQUEST_RESPONDENT_EVIDENCE.toString());
+        assertEquals("uploadRespondentEvidence", Event.UPLOAD_RESPONDENT_EVIDENCE.toString());
+        assertEquals("buildCase", Event.BUILD_CASE.toString());
+        assertEquals("submitCase", Event.SUBMIT_CASE.toString());
+        assertEquals("requestRespondentReview", Event.REQUEST_RESPONDENT_REVIEW.toString());
+        assertEquals("addAppealResponse", Event.ADD_APPEAL_RESPONSE.toString());
+        assertEquals("requestHearingRequirements", Event.REQUEST_HEARING_REQUIREMENTS.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(3, Event.values().length);
+        assertEquals(11, Event.values().length);
     }
 }

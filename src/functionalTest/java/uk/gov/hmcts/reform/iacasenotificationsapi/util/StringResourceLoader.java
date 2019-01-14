@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.util;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.core.io.Resource;
@@ -24,22 +25,27 @@ public final class StringResourceLoader {
         return
             Stream
                 .of(resources)
-                .collect(
-                    Collectors.toMap(
-                        Resource::getFilename,
-                        r -> {
+                .collect(Collectors.toMap(
+                    Resource::getFilename,
+                    StringResourceLoader::loadResourceToString,
+                    (u, v) -> {
+                        throw new IllegalStateException(String.format("Duplicate key %s", u));
+                    },
+                    TreeMap::new
+                ));
+    }
 
-                            try {
+    private static String loadResourceToString(Resource r) {
 
-                                return StreamUtils.copyToString(
-                                    r.getInputStream(),
-                                    Charset.defaultCharset()
-                                );
+        try {
 
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
-                );
+            return StreamUtils.copyToString(
+                r.getInputStream(),
+                Charset.defaultCharset()
+            );
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

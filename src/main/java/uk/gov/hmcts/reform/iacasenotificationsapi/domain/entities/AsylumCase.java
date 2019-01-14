@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseData;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 
 public class AsylumCase implements CaseData {
 
     // -----------------------------------------------------------------------------
-    // legal rep appeal form model ...
+    // legal rep appeal ...
     // -----------------------------------------------------------------------------
 
     private Optional<String> homeOfficeReferenceNumber = Optional.empty();
@@ -22,14 +25,65 @@ public class AsylumCase implements CaseData {
     private Optional<String> appellantLastName = Optional.empty();
     private Optional<String> appellantDateOfBirth = Optional.empty();
     private Optional<List<IdValue<Map<String, String>>>> appellantNationalities = Optional.empty();
-    private Optional<String> appellantHasFixedAddress = Optional.empty();
+    private Optional<YesOrNo> appellantHasFixedAddress = Optional.empty();
     private Optional<AddressUk> appellantAddress = Optional.empty();
     private Optional<String> appealType = Optional.empty();
-    private Optional<String> hasNewMatters = Optional.empty();
+    private Optional<CheckValues<String>> appealGroundsProtection = Optional.empty();
+    private Optional<CheckValues<String>> appealGroundsHumanRights = Optional.empty();
+    private Optional<CheckValues<String>> appealGroundsRevocation = Optional.empty();
+    private Optional<YesOrNo> hasNewMatters = Optional.empty();
     private Optional<String> newMatters = Optional.empty();
     private Optional<String> hasOtherAppeals = Optional.empty();
     private Optional<List<IdValue<Map<String, String>>>> otherAppeals = Optional.empty();
     private Optional<String> legalRepReferenceNumber = Optional.empty();
+    private Optional<String> appealReferenceNumber = Optional.empty();
+
+    // -----------------------------------------------------------------------------
+    // case officer directions ...
+    // -----------------------------------------------------------------------------
+
+    private Optional<String> sendDirectionExplanation = Optional.empty();
+    private Optional<Parties> sendDirectionParties = Optional.empty();
+    private Optional<String> sendDirectionDateDue = Optional.empty();
+    private Optional<List<IdValue<Direction>>> directions = Optional.empty();
+
+    // -----------------------------------------------------------------------------
+    // case documents ...
+    // -----------------------------------------------------------------------------
+
+    private Optional<List<IdValue<DocumentWithMetadata>>> legalRepresentativeDocuments = Optional.empty();
+    private Optional<List<IdValue<DocumentWithMetadata>>> respondentDocuments = Optional.empty();
+
+    // -----------------------------------------------------------------------------
+    // upload respondent evidence ...
+    // -----------------------------------------------------------------------------
+
+    private Optional<List<IdValue<DocumentWithDescription>>> respondentEvidence = Optional.empty();
+
+    // -----------------------------------------------------------------------------
+    // case argument ...
+    // -----------------------------------------------------------------------------
+
+    private Optional<Document> caseArgumentDocument = Optional.empty();
+    private Optional<String> caseArgumentDescription = Optional.empty();
+    private Optional<List<IdValue<DocumentWithDescription>>> caseArgumentEvidence = Optional.empty();
+
+    // -----------------------------------------------------------------------------
+    // appeal response ...
+    // -----------------------------------------------------------------------------
+
+    private Optional<Document> appealResponseDocument = Optional.empty();
+    private Optional<String> appealResponseDescription = Optional.empty();
+    private Optional<List<IdValue<DocumentWithDescription>>> appealResponseEvidence = Optional.empty();
+
+    // -----------------------------------------------------------------------------
+    // internal API managed fields ...
+    // -----------------------------------------------------------------------------
+
+    private Optional<String> legalRepresentativeName = Optional.empty();
+    private Optional<String> legalRepresentativeEmailAddress = Optional.empty();
+    private Optional<List<IdValue<String>>> notificationsSent = Optional.empty();
+    private Optional<YesOrNo> sendDirectionActionAvailable = Optional.empty();
 
     private AsylumCase() {
         // noop -- for deserializers
@@ -48,11 +102,33 @@ public class AsylumCase implements CaseData {
         this.appellantHasFixedAddress = asylumCaseBuilder.getAppellantHasFixedAddress();
         this.appellantAddress = asylumCaseBuilder.getAppellantAddress();
         this.appealType = asylumCaseBuilder.getAppealType();
+        this.appealGroundsProtection = asylumCaseBuilder.getAppealGroundsProtection();
+        this.appealGroundsHumanRights = asylumCaseBuilder.getAppealGroundsHumanRights();
+        this.appealGroundsRevocation = asylumCaseBuilder.getAppealGroundsRevocation();
         this.hasNewMatters = asylumCaseBuilder.getHasNewMatters();
         this.newMatters = asylumCaseBuilder.getNewMatters();
         this.hasOtherAppeals = asylumCaseBuilder.getHasOtherAppeals();
         this.otherAppeals = asylumCaseBuilder.getOtherAppeals();
         this.legalRepReferenceNumber = asylumCaseBuilder.getLegalRepReferenceNumber();
+        this.appealReferenceNumber = asylumCaseBuilder.getAppealReferenceNumber();
+        this.sendDirectionActionAvailable = asylumCaseBuilder.getSendDirectionActionAvailable();
+        this.sendDirectionExplanation = asylumCaseBuilder.getSendDirectionExplanation();
+        this.sendDirectionParties = asylumCaseBuilder.getSendDirectionParties();
+        this.sendDirectionDateDue = asylumCaseBuilder.getSendDirectionDateDue();
+        this.directions = asylumCaseBuilder.getDirections();
+        this.legalRepresentativeDocuments = asylumCaseBuilder.getLegalRepresentativeDocuments();
+        this.respondentDocuments = asylumCaseBuilder.getRespondentDocuments();
+        this.respondentEvidence = asylumCaseBuilder.getRespondentEvidence();
+        this.caseArgumentDocument = asylumCaseBuilder.getCaseArgumentDocument();
+        this.caseArgumentDescription = asylumCaseBuilder.getCaseArgumentDescription();
+        this.caseArgumentEvidence = asylumCaseBuilder.getCaseArgumentEvidence();
+        this.appealResponseDocument = asylumCaseBuilder.getAppealResponseDocument();
+        this.appealResponseDescription = asylumCaseBuilder.getAppealResponseDescription();
+        this.appealResponseEvidence = asylumCaseBuilder.getAppealResponseEvidence();
+        this.legalRepresentativeName = asylumCaseBuilder.getLegalRepresentativeName();
+        this.legalRepresentativeEmailAddress = asylumCaseBuilder.getLegalRepresentativeEmailAddress();
+        this.notificationsSent = asylumCaseBuilder.getNotificationsSent();
+        this.sendDirectionActionAvailable = asylumCaseBuilder.getSendDirectionActionAvailable();
     }
 
     public Optional<String> getHomeOfficeReferenceNumber() {
@@ -90,7 +166,7 @@ public class AsylumCase implements CaseData {
         return appellantNationalities;
     }
 
-    public Optional<String> getAppellantHasFixedAddress() {
+    public Optional<YesOrNo> getAppellantHasFixedAddress() {
         requireNonNull(appellantHasFixedAddress);
         return appellantHasFixedAddress;
     }
@@ -105,7 +181,22 @@ public class AsylumCase implements CaseData {
         return appealType;
     }
 
-    public Optional<String> getHasNewMatters() {
+    public Optional<CheckValues<String>> getAppealGroundsProtection() {
+        requireNonNull(appealGroundsProtection);
+        return appealGroundsProtection;
+    }
+
+    public Optional<CheckValues<String>> getAppealGroundsHumanRights() {
+        requireNonNull(appealGroundsHumanRights);
+        return appealGroundsHumanRights;
+    }
+
+    public Optional<CheckValues<String>> getAppealGroundsRevocation() {
+        requireNonNull(appealGroundsRevocation);
+        return appealGroundsRevocation;
+    }
+
+    public Optional<YesOrNo> getHasNewMatters() {
         requireNonNull(hasNewMatters);
         return hasNewMatters;
     }
@@ -130,12 +221,179 @@ public class AsylumCase implements CaseData {
         return legalRepReferenceNumber;
     }
 
-    public void setHomeOfficeReferenceNumber(Optional<String> homeOfficeReferenceNumber) {
-        requireNonNull(homeOfficeReferenceNumber);
-        this.homeOfficeReferenceNumber = homeOfficeReferenceNumber;
+    public Optional<String> getAppealReferenceNumber() {
+        return appealReferenceNumber;
     }
 
     public void setHomeOfficeReferenceNumber(String homeOfficeReferenceNumber) {
         this.homeOfficeReferenceNumber = Optional.ofNullable(homeOfficeReferenceNumber);
+    }
+
+    public void setAppealReferenceNumber(String appealReferenceNumber) {
+        this.appealReferenceNumber = Optional.ofNullable(appealReferenceNumber);
+    }
+
+    // -----------------------------------------------------------------------------
+    // case officer directions ...
+    // -----------------------------------------------------------------------------
+
+    public Optional<String> getSendDirectionExplanation() {
+        requireNonNull(sendDirectionExplanation);
+        return sendDirectionExplanation;
+    }
+
+    public Optional<Parties> getSendDirectionParties() {
+        requireNonNull(sendDirectionParties);
+        return sendDirectionParties;
+    }
+
+    public Optional<String> getSendDirectionDateDue() {
+        requireNonNull(sendDirectionDateDue);
+        return sendDirectionDateDue;
+    }
+
+    public Optional<List<IdValue<Direction>>> getDirections() {
+        return directions;
+    }
+
+    public void clearSendDirectionExplanation() {
+        this.sendDirectionExplanation = Optional.empty();
+    }
+
+    public void clearSendDirectionParties() {
+        this.sendDirectionParties = Optional.empty();
+    }
+
+    public void clearSendDirectionDateDue() {
+        this.sendDirectionDateDue = Optional.empty();
+    }
+
+    public void setSendDirectionExplanation(String sendDirectionExplanation) {
+        this.sendDirectionExplanation = Optional.ofNullable(sendDirectionExplanation);
+    }
+
+    public void setSendDirectionParties(Parties sendDirectionParties) {
+        this.sendDirectionParties = Optional.ofNullable(sendDirectionParties);
+    }
+
+    public void setSendDirectionDateDue(String sendDirectionDateDue) {
+        this.sendDirectionDateDue = Optional.ofNullable(sendDirectionDateDue);
+    }
+
+    public void setDirections(List<IdValue<Direction>> directions) {
+        this.directions = Optional.ofNullable(directions);
+    }
+
+    // -----------------------------------------------------------------------------
+    // case documents ...
+    // -----------------------------------------------------------------------------
+
+    public Optional<List<IdValue<DocumentWithMetadata>>> getLegalRepresentativeDocuments() {
+        requireNonNull(legalRepresentativeDocuments);
+        return legalRepresentativeDocuments;
+    }
+
+    public Optional<List<IdValue<DocumentWithMetadata>>> getRespondentDocuments() {
+        requireNonNull(respondentDocuments);
+        return respondentDocuments;
+    }
+
+    public void setLegalRepresentativeDocuments(List<IdValue<DocumentWithMetadata>> legalRepresentativeDocuments) {
+        this.legalRepresentativeDocuments = Optional.ofNullable(legalRepresentativeDocuments);
+    }
+
+    public void setRespondentDocuments(List<IdValue<DocumentWithMetadata>> respondentDocuments) {
+        this.respondentDocuments = Optional.ofNullable(respondentDocuments);
+    }
+
+    // -----------------------------------------------------------------------------
+    // upload respondent evidence ...
+    // -----------------------------------------------------------------------------
+
+    public Optional<List<IdValue<DocumentWithDescription>>> getRespondentEvidence() {
+        requireNonNull(respondentEvidence);
+        return respondentEvidence;
+    }
+
+    public void clearRespondentEvidence() {
+        this.respondentEvidence = Optional.empty();
+    }
+
+    // -----------------------------------------------------------------------------
+    // case argument ...
+    // -----------------------------------------------------------------------------
+
+    public Optional<Document> getCaseArgumentDocument() {
+        requireNonNull(caseArgumentDocument);
+        return caseArgumentDocument;
+    }
+
+    public Optional<String> getCaseArgumentDescription() {
+        requireNonNull(caseArgumentDescription);
+        return caseArgumentDescription;
+    }
+
+    public Optional<List<IdValue<DocumentWithDescription>>> getCaseArgumentEvidence() {
+        requireNonNull(caseArgumentEvidence);
+        return caseArgumentEvidence;
+    }
+
+    // -----------------------------------------------------------------------------
+    // appeal response ...
+    // -----------------------------------------------------------------------------
+
+    public Optional<Document> getAppealResponseDocument() {
+        requireNonNull(appealResponseDocument);
+        return appealResponseDocument;
+    }
+
+    public Optional<String> getAppealResponseDescription() {
+        requireNonNull(appealResponseDescription);
+        return appealResponseDescription;
+    }
+
+    public Optional<List<IdValue<DocumentWithDescription>>> getAppealResponseEvidence() {
+        requireNonNull(appealResponseEvidence);
+        return appealResponseEvidence;
+    }
+
+    // -----------------------------------------------------------------------------
+    // internal API managed fields ...
+    // -----------------------------------------------------------------------------
+
+    public Optional<String> getLegalRepresentativeName() {
+        requireNonNull(legalRepresentativeName);
+        return legalRepresentativeName;
+    }
+
+    public Optional<String> getLegalRepresentativeEmailAddress() {
+        requireNonNull(legalRepresentativeEmailAddress);
+        return legalRepresentativeEmailAddress;
+    }
+
+    public Optional<List<IdValue<String>>> getNotificationsSent() {
+        requireNonNull(notificationsSent);
+        return notificationsSent;
+    }
+
+    public Optional<YesOrNo> getSendDirectionActionAvailable() {
+        requireNonNull(sendDirectionActionAvailable);
+        return sendDirectionActionAvailable;
+    }
+
+    public void setLegalRepresentativeName(String legalRepresentativeName) {
+        this.legalRepresentativeName = Optional.ofNullable(legalRepresentativeName);
+    }
+
+    public void setLegalRepresentativeEmailAddress(String legalRepresentativeEmailAddress) {
+        this.legalRepresentativeEmailAddress = Optional.ofNullable(legalRepresentativeEmailAddress);
+    }
+
+    public void setNotificationsSent(List<IdValue<String>> notificationsSent) {
+        this.notificationsSent = Optional.ofNullable(notificationsSent);
+    }
+
+    public void setSendDirectionActionAvailable(YesOrNo sendDirectionActionAvailable) {
+        this.sendDirectionActionAvailable = Optional.ofNullable(sendDirectionActionAvailable);
     }
 }

@@ -1,0 +1,30 @@
+{
+  "homeOfficeReferenceNumber": "A123456",
+  "homeOfficeDecisionDate": "{$TODAY}",
+  "appellantTitle": "Mr",
+  "appellantGivenNames": "Talha",
+  "appellantLastName": "Awan",
+  "appellantDateOfBirth": "{$TODAY-7300}",
+  "appellantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "Iceland": "IS"
+      }
+    }
+  ],
+  "appellantHasFixedAddress": "No",
+  "appealType": "protection",
+  "appealGroundsProtection": {
+    "values": [
+      "refugeeConvention"
+    ]
+  },
+  "hasNewMatters": "No",
+  "hasOtherAppeals": "No",
+  "legalRepReferenceNumber": "CASE001",
+  "appealReferenceNumber": "A123456",
+  "sendDirectionActionAvailable": "Yes",
+  "legalRepresentativeName": "LawFirm A",
+  "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+}

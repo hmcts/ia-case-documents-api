@@ -22,6 +22,61 @@ data "azurerm_key_vault" "ia_key_vault" {
   resource_group_name = "${local.key_vault_name}"
 }
 
+data "azurerm_key_vault_secret" "ia_ccd_frontend_url" {
+  name      = "ia-ccd-frontend-url"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_gov_notify_key" {
+  name      = "ia-gov-notify-key"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_idam_id" {
+  name      = "ia-idam-id"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_idam_secret" {
+  name      = "ia-idam-secret"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_idam_redirect_uri" {
+  name      = "ia-idam-redirect-uri"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_s2s_secret" {
+  name      = "ia-s2s-secret"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_s2s_microservice" {
+  name      = "ia-s2s-microservice"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ccd_url" {
+  name      = "ccd-url"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "dm_url" {
+  name      = "dm-url"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "idam_url" {
+  name      = "idam-url"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "s2s_url" {
+  name      = "s2s-url"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 module "ia_case_notifications_api" {
   source              = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product             = "${var.product}-${var.component}"
@@ -39,5 +94,18 @@ module "ia_case_notifications_api" {
   app_settings = {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
+
+    IA_CCD_FRONTEND_URL         = "${data.azurerm_key_vault_secret.ia_ccd_frontend_url.value}"
+    IA_GOV_NOTIFY_KEY           = "${data.azurerm_key_vault_secret.ia_gov_notify_key.value}"
+    IA_IDAM_ID                  = "${data.azurerm_key_vault_secret.ia_idam_id.value}"
+    IA_IDAM_SECRET              = "${data.azurerm_key_vault_secret.ia_idam_secret.value}"
+    IA_IDAM_REDIRECT_URI        = "${data.azurerm_key_vault_secret.ia_idam_redirect_uri.value}"
+    IA_S2S_SECRET               = "${data.azurerm_key_vault_secret.ia_s2s_secret.value}"
+    IA_S2S_MICROSERVICE         = "${data.azurerm_key_vault_secret.ia_s2s_microservice.value}"
+
+    CCD_URL                     = "${data.azurerm_key_vault_secret.ccd_url.value}"
+    DM_URL                      = "${data.azurerm_key_vault_secret.dm_url.value}"
+    IDAM_URL                    = "${data.azurerm_key_vault_secret.idam_url.value}"
+    S2S_URL                     = "${data.azurerm_key_vault_secret.s2s_url.value}"
   }
 }
