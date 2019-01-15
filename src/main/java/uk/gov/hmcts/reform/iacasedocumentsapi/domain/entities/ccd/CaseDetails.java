@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
-import static java.util.Objects.requireNonNull;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.time.LocalDateTime;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CaseDetails<T extends CaseData> {
@@ -12,6 +12,7 @@ public class CaseDetails<T extends CaseData> {
     private String jurisdiction;
     private State state;
     private T caseData;
+    private LocalDateTime createdDate;
 
     private CaseDetails() {
         // noop -- for deserializer
@@ -21,12 +22,14 @@ public class CaseDetails<T extends CaseData> {
         long id,
         String jurisdiction,
         State state,
-        T caseData
+        T caseData,
+        LocalDateTime createdDate
     ) {
         this.id = id;
         this.jurisdiction = jurisdiction;
         this.state = state;
         this.caseData = caseData;
+        this.createdDate = createdDate;
     }
 
     public long getId() {
@@ -34,17 +37,38 @@ public class CaseDetails<T extends CaseData> {
     }
 
     public String getJurisdiction() {
-        requireNonNull(jurisdiction);
+
+        if (jurisdiction == null) {
+            throw new RequiredFieldMissingException("jurisdiction field is required");
+        }
+
         return jurisdiction;
     }
 
     public State getState() {
-        requireNonNull(state);
+
+        if (state == null) {
+            throw new RequiredFieldMissingException("state field is required");
+        }
+
         return state;
     }
 
     public T getCaseData() {
-        requireNonNull(caseData);
+
+        if (caseData == null) {
+            throw new RequiredFieldMissingException("caseData field is required");
+        }
+
         return caseData;
+    }
+
+    public LocalDateTime getCreatedDate() {
+
+        if (createdDate == null) {
+            throw new RequiredFieldMissingException("createdDate field is required");
+        }
+
+        return createdDate;
     }
 }

@@ -1,0 +1,30 @@
+{
+  "homeOfficeReferenceNumber": "A123456",
+  "homeOfficeDecisionDate": "{$TODAY}",
+  "appellantTitle": "Mr",
+  "appellantGivenNames": "José",
+  "appellantFamilyName": "González",
+  "appellantDateOfBirth": "{$TODAY-7300}",
+  "appellantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "Iceland": "IS"
+      }
+    }
+  ],
+  "appellantHasFixedAddress": "No",
+  "appealType": "protection",
+  "appealGroundsProtection": {
+    "values": [
+      "refugeeConvention"
+    ]
+  },
+  "hasNewMatters": "No",
+  "hasOtherAppeals": "No",
+  "appellantNameForDisplay": "Talha Awan",
+  "appealReferenceNumber": "PA/11111/2019",
+  "legalRepresentativeName": "LawFirm A",
+  "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+  "sendDirectionActionAvailable": "Yes"
+}

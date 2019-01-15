@@ -3,7 +3,7 @@
   "homeOfficeDecisionDate": "{$TODAY}",
   "appellantTitle": "Mr",
   "appellantGivenNames": "Talha",
-  "appellantLastName": "Awan",
+  "appellantFamilyName": "Awan",
   "appellantDateOfBirth": "{$TODAY-7300}",
   "appellantNationalities": [
     {
@@ -15,6 +15,12 @@
   ],
   "appellantHasFixedAddress": "No",
   "appealType": "protection",
+  "appealGroundsProtection": {
+    "values": [
+      "refugeeConvention"
+    ]
+  },
   "hasNewMatters": "No",
-  "hasOtherAppeals": "No"
+  "hasOtherAppeals": "No",
+  "appealReferenceNumber": "DRAFT"
 }

@@ -5,13 +5,13 @@ provider "azurerm" {
 
 locals {
 
-  preview_app_service_plan        = "${var.product}-${var.component}-${var.env}"
-  non_preview_app_service_plan    = "${var.product}-${var.env}"
-  app_service_plan                = "${var.env == "preview" || var.env == "spreview" ? local.preview_app_service_plan : local.non_preview_app_service_plan}"
+  preview_app_service_plan     = "${var.product}-${var.component}-${var.env}"
+  non_preview_app_service_plan = "${var.product}-${var.env}"
+  app_service_plan             = "${var.env == "preview" || var.env == "spreview" ? local.preview_app_service_plan : local.non_preview_app_service_plan}"
 
-  preview_vault_name              = "${var.raw_product}-aat"
-  non_preview_vault_name          = "${var.raw_product}-${var.env}"
-  key_vault_name                  = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
+  preview_vault_name           = "${var.raw_product}-aat"
+  non_preview_vault_name       = "${var.raw_product}-${var.env}"
+  key_vault_name               = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -23,6 +23,16 @@ resource "azurerm_resource_group" "rg" {
 data "azurerm_key_vault" "ia_key_vault" {
   name                = "${local.key_vault_name}"
   resource_group_name = "${local.key_vault_name}"
+}
+
+data "azurerm_key_vault_secret" "docmosis_access_key" {
+  name      = "docmosis-access-key"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "docmosis_url" {
+  name      = "docmosis-url"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
 data "azurerm_key_vault_secret" "test_caseofficer_username" {
@@ -118,6 +128,9 @@ module "ia_case_documents_api" {
   app_settings = {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
+
+    IA_DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_access_key.value}"
+    IA_DOCMOSIS_URL        = "${data.azurerm_key_vault_secret.docmosis_url.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"

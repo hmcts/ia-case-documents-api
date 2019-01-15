@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.Optional;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -17,7 +18,7 @@ public class Callback<T extends CaseData> {
     private Event event;
 
     private CaseDetails<T> caseDetails;
-    private Optional<CaseDetails<T>> caseDetailsBefore;
+    private Optional<CaseDetails<T>> caseDetailsBefore = Optional.empty();
 
     private Callback() {
         // noop -- for deserializer
@@ -28,6 +29,10 @@ public class Callback<T extends CaseData> {
         Optional<CaseDetails<T>> caseDetailsBefore,
         Event event
     ) {
+        requireNonNull(caseDetails);
+        requireNonNull(caseDetailsBefore);
+        requireNonNull(event);
+
         this.caseDetails = caseDetails;
         this.caseDetailsBefore = caseDetailsBefore;
         this.event = event;
@@ -38,12 +43,17 @@ public class Callback<T extends CaseData> {
     }
 
     public CaseDetails<T> getCaseDetails() {
-        requireNonNull(caseDetails);
+
+        if (caseDetails == null) {
+            throw new RequiredFieldMissingException("caseDetails field is required");
+        }
+
         return caseDetails;
     }
 
     public Optional<CaseDetails<T>> getCaseDetailsBefore() {
-        requireNonNull(caseDetailsBefore);
+
         return caseDetailsBefore;
+
     }
 }
