@@ -25,6 +25,6 @@
   "legalRepReferenceNumber": "CASE001",
   "appealReferenceNumber": "A123456",
   "sendDirectionActionAvailable": "Yes",
-  "legalRepresentativeName": "LawFirm A",
+  "legalRepresentativeName": "A Legal Rep",
   "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
 }
