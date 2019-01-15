@@ -72,6 +72,7 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
         }
 
         return new ByteArrayResource(documentData) {
+            @Override
             public String getFilename() {
                 return fileNameWithExension;
             }

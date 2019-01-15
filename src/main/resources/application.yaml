@@ -18,7 +18,7 @@ appealSubmissionDocument.templateName: TB-IAC-APP-ENG-00003.docx
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY:EXAMPLE}
-docmosis.url: ${IA_DOCMOSIS_URL:http://example.docmosis}
+docmosis.url: ${DOCMOSIS_URL:http://example.docmosis}
 docmosis.render.uri: /render
 
 tsvStringsFileLocation: strings.tsv
