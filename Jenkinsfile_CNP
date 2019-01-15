@@ -12,6 +12,8 @@ def component = "case-documents-api"
 
 List<LinkedHashMap<String, Object>> secrets = [
 
+    secret('docmosis-access-key', 'IA_DOCMOSIS_ACCESS_KEY'),
+    secret('docmosis-url', 'IA_DOCMOSIS_URL'),
     secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
     secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
     secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
@@ -43,15 +45,6 @@ withPipeline(type, product, component) {
 
     setVaultName('ia')
     loadVaultSecrets(secrets)
-
-    after('test') {
-        try {
-            sh './gradlew pitest'
-        }
-        finally {
-            steps.archiveArtifacts 'build/reports/pitest/**/*.*'
-        }
-    }
 
     after('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
