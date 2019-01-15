@@ -134,8 +134,8 @@ module "ia_case_documents_api" {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
 
-    IA_DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_access_key.value}"
-    IA_DOCMOSIS_URL        = "${data.azurerm_key_vault_secret.docmosis_url.value}"
+    DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_access_key.value}"
+    DOCMOSIS_URL        = "${data.azurerm_key_vault_secret.docmosis_url.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"
