@@ -70,9 +70,8 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
         try {
 
             LOG.info("MediaType: {}", MediaType.MULTIPART_FORM_DATA_VALUE);
-            LOG.info("endpoint: {}", docmosisUrl + docmosisRenderUri);
+            LOG.info("endpoint: {}{}", docmosisUrl, docmosisRenderUri);
             LOG.info("outputName: {}", fileNameWithExension);
-            LOG.info("outputFormat: {}", fileExtension.toLowerCase());
             LOG.info("templateName: {}", templateName);
             LOG.info("data: {}", serializedTemplateFieldValues);
 
@@ -89,6 +88,7 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
             }
 
             return new ByteArrayResource(documentData) {
+                @Override
                 public String getFilename() {
                     return fileNameWithExension;
                 }
