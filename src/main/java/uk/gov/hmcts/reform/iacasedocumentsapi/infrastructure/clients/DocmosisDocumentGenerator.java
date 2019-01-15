@@ -69,12 +69,12 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
 
         try {
 
-            LOG.info("MediaType: " + MediaType.MULTIPART_FORM_DATA_VALUE);
-            LOG.info("endpoint: " + docmosisUrl + docmosisRenderUri);
-            LOG.info("outputName: " + fileNameWithExension);
-            LOG.info("outputFormat: " + fileExtension.toLowerCase());
-            LOG.info("templateName: " + templateName);
-            LOG.info("data: " + serializedTemplateFieldValues);
+            LOG.info("MediaType: {}", MediaType.MULTIPART_FORM_DATA_VALUE);
+            LOG.info("endpoint: {}", docmosisUrl + docmosisRenderUri);
+            LOG.info("outputName: {}", fileNameWithExension);
+            LOG.info("outputFormat: {}", fileExtension.toLowerCase());
+            LOG.info("templateName: {}", templateName);
+            LOG.info("data: {}", serializedTemplateFieldValues);
 
             byte[] documentData =
                 restTemplate
