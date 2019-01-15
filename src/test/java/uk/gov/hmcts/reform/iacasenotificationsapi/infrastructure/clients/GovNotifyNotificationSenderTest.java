@@ -1,11 +1,15 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import org.awaitility.core.ConditionTimeoutException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -124,9 +128,9 @@ public class GovNotifyNotificationSenderTest {
         assertEquals(expectedNotificationIdForOther.toString(), actualNotificationIdForOther);
 
         try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            // noop
+            await().atMost(2, TimeUnit.SECONDS).until(() -> false);
+        } catch (ConditionTimeoutException e) {
+            assertTrue("We expect this to timeout", true);
         }
 
         final String actualNotificationId3 =
