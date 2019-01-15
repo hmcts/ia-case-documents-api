@@ -1,8 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -12,11 +15,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 
 @Service
 public class DocmosisDocumentGenerator implements DocumentGenerator {
+
+    private static final Logger LOG = getLogger(DocmosisDocumentGenerator.class);
 
     private final String docmosisAccessKey;
     private final String docmosisUrl;
@@ -59,23 +65,41 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        byte[] documentData =
-            restTemplate
-                .postForObject(
-                    docmosisUrl + docmosisRenderUri,
-                    requestEntity,
-                    byte[].class
-                );
+        String docmosisError = "";
 
-        if (documentData == null) {
-            throw new IllegalStateException("No data returned from docmosis for file: " + fileName);
+        try {
+
+            LOG.info("MediaType: " + MediaType.MULTIPART_FORM_DATA_VALUE);
+            LOG.info("endpoint: " + docmosisUrl + docmosisRenderUri);
+            LOG.info("outputName: " + fileNameWithExension);
+            LOG.info("outputFormat: " + fileExtension.toLowerCase());
+            LOG.info("templateName: " + templateName);
+            LOG.info("data: " + serializedTemplateFieldValues);
+
+            byte[] documentData =
+                restTemplate
+                    .postForObject(
+                        docmosisUrl + docmosisRenderUri,
+                        requestEntity,
+                        byte[].class
+                    );
+
+            if (documentData == null) {
+                throw new IllegalStateException("No data returned from docmosis for file: " + fileName);
+            }
+
+            return new ByteArrayResource(documentData) {
+                public String getFilename() {
+                    return fileNameWithExension;
+                }
+            };
+
+        } catch (RestClientException e) {
+            docmosisError = e.getMessage();
+            LOG.error("Docmosis error: " + docmosisError, e);
         }
 
-        return new ByteArrayResource(documentData) {
-            public String getFilename() {
-                return fileNameWithExension;
-            }
-        };
+        throw new IllegalStateException("Docmosis error: " + docmosisError);
     }
 
     private String serializedTemplateFieldValues(
