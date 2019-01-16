@@ -19,7 +19,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -140,4 +143,51 @@ public class DocmosisDocumentGeneratorTest {
             .hasMessage("No data returned from docmosis for file: appeal-form")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
+
+    @Test
+    public void wraps_http_server_exception_when_calling_docmosis() {
+        HttpServerErrorException underlyingException = mock(HttpServerErrorException.class);
+
+        when(restTemplate
+            .postForObject(
+                eq(DOCMOSIS_URL + DOCMOSIS_RENDER_URI),
+                any(HttpEntity.class),
+                any()
+            ))
+            .thenThrow(underlyingException);
+
+        assertThatThrownBy(() -> docmosisDocumentGenerator.generate(
+            fileName,
+            fileExtension,
+            templateName,
+            templateFieldValues)
+        ).isExactlyInstanceOf(DocumentServiceResponseException.class)
+            .hasMessage("Couldn't generate asylum case documents with docmosis")
+            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2);
+
+    }
+
+    @Test
+    public void wraps_http_client_exception_when_calling_docmosis() {
+
+        HttpClientErrorException underlyingException = mock(HttpClientErrorException.class);
+
+        when(restTemplate
+            .postForObject(
+                eq(DOCMOSIS_URL + DOCMOSIS_RENDER_URI),
+                any(HttpEntity.class),
+                any()
+            )).thenThrow(underlyingException);
+
+        assertThatThrownBy(() -> docmosisDocumentGenerator.generate(
+            fileName,
+            fileExtension,
+            templateName,
+            templateFieldValues)
+        ).isExactlyInstanceOf(DocumentServiceResponseException.class)
+            .hasMessage("Couldn't generate asylum case documents with docmosis")
+            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2);
+
+    }
+
 }
