@@ -12,8 +12,12 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
+import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @Service
 public class DocmosisDocumentGenerator implements DocumentGenerator {
@@ -59,13 +63,23 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        byte[] documentData =
-            restTemplate
+        byte[] documentData;
+
+        try {
+            documentData = restTemplate
                 .postForObject(
                     docmosisUrl + docmosisRenderUri,
                     requestEntity,
                     byte[].class
                 );
+
+        } catch (RestClientResponseException clientEx) {
+            throw new DocumentServiceResponseException(AlertLevel.P2,
+                "Couldn't generate asylum case documents with docmosis",
+                clientEx
+            );
+
+        }
 
         if (documentData == null) {
             throw new IllegalStateException("No data returned from docmosis for file: " + fileName);

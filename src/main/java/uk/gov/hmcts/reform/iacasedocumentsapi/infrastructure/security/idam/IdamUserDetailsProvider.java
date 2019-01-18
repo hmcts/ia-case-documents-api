@@ -9,10 +9,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
+import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @Service
 public class IdamUserDetailsProvider implements UserDetailsProvider {
@@ -46,8 +48,10 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
 
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
-        Map<String, Object> response =
-            restTemplate
+        Map<String, Object> response;
+
+        try {
+            response = restTemplate
                 .exchange(
                     baseUrl + detailsUri,
                     HttpMethod.GET,
@@ -55,6 +59,12 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
                     new ParameterizedTypeReference<Map<String, Object>>() {
                     }
                 ).getBody();
+        } catch (RestClientResponseException ex) {
+            throw new IdentityManagerResponseException(AlertLevel.P2,
+                "Could not get user details with IDAM",
+                ex
+            );
+        }
 
         if (response.get("forename") == null) {
             throw new IllegalStateException("IDAM user details missing 'forename' field");
