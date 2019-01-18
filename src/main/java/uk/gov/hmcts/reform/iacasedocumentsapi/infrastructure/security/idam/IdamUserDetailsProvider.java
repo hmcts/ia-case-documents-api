@@ -9,7 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
@@ -59,7 +59,7 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
                     new ParameterizedTypeReference<Map<String, Object>>() {
                     }
                 ).getBody();
-        } catch (RestClientResponseException ex) {
+        } catch (RestClientException ex) {
             throw new IdentityManagerResponseException(AlertLevel.P2,
                 "Could not get user details with IDAM",
                 ex

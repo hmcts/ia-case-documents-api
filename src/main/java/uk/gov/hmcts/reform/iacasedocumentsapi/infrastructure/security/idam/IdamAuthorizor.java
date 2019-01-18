@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
@@ -79,7 +79,7 @@ public class IdamAuthorizor {
                     }
                 ).getBody();
 
-        } catch (RestClientResponseException ex) {
+        } catch (RestClientException ex) {
             throw new IdentityManagerResponseException(AlertLevel.P2,
                 "Could not get auth code",
                 ex
@@ -115,7 +115,7 @@ public class IdamAuthorizor {
                     new ParameterizedTypeReference<Map<String, String>>() {
                     }
                 ).getBody();
-        } catch (RestClientResponseException ex) {
+        } catch (RestClientException ex) {
             throw new IdentityManagerResponseException(AlertLevel.P2,
                 "Could not get auth token",
                 ex
