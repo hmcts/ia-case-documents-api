@@ -40,6 +40,7 @@ security:
     - "ccd_ps"
     - "ia_case_api"
     - "sscs" # TEMP for AAT until S2S configured for IA
+    - "iac"
   authorisedRoles:
     - "caseworker-ia"
   roleEventAccess:
