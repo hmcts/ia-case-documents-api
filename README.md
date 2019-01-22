@@ -15,6 +15,17 @@ To run the project you will need to have the following installed:
 
 For information about the software versions used to build this API and a complete list of it's dependencies see build.gradle
 
+The following environment variables are required when running the api without its dependencies mocked. This includes running the functional tests locally. The examples (the values below are not real):
+
+| Environment Variable | *Example values*  |
+|----------------------|----------|
+| IA_GOV_NOTIFY_KEY | some-gov-notify-key |
+| IA_IDAM_CLIENT_ID  |  some-idam-client-id |
+| IA_IDAM_SECRET  |  some-idam-secret |
+| IA_IDAM_REDIRECT_URI  |  http://localhost:3451/oauth2redirect |
+| IA_S2S_SECRET  |  some-s2s-secret |
+| IA_S2S_MICROSERVICE  |  some-s2s-gateway |
+
 ### Running the application
 
 To run the API quickly use the docker helper script as follows:
