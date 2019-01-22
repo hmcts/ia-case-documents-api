@@ -25,6 +25,11 @@ data "azurerm_key_vault" "ia_key_vault" {
   resource_group_name = "${local.key_vault_name}"
 }
 
+data "azurerm_key_vault_secret" "appeal_submission_template" {
+  name      = "appeal-submission-template"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "docmosis_access_key" {
   name      = "docmosis-access-key"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -136,6 +141,8 @@ module "ia_case_documents_api" {
 
     DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_access_key.value}"
     DOCMOSIS_URL        = "${data.azurerm_key_vault_secret.docmosis_url.value}"
+
+    IA_APPEAL_SUBMISSION_TEMPLATE = "${data.azurerm_key_vault_secret.appeal_submission_template.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"
