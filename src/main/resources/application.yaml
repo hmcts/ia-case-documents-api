@@ -13,7 +13,7 @@ spring:
 
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
-appealSubmissionDocument.templateName: TB-IAC-APP-ENG-00003.docx
+appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00003.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
