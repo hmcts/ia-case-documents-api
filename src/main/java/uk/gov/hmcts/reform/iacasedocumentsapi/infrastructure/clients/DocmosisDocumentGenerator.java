@@ -64,6 +64,7 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
         byte[] documentData;
 
         try {
+            
             documentData = restTemplate
                 .postForObject(
                     docmosisUrl + docmosisRenderUri,
