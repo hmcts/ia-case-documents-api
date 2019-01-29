@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.UnrecoverableException;
+import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 import uk.gov.service.notify.NotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
@@ -161,7 +161,9 @@ public class GovNotifyNotificationSenderTest {
     @Test
     public void wrap_gov_notify_exceptions() throws NotificationClientException {
 
-        doThrow(NotificationClientException.class)
+        NotificationClientException underlyingException = mock(NotificationClientException.class);
+
+        doThrow(underlyingException)
             .when(notificationClient)
             .sendEmail(
                 templateId,
@@ -177,7 +179,10 @@ public class GovNotifyNotificationSenderTest {
                 personalisation,
                 reference
             )
-        ).hasMessage("Failed to send email using GovNotify")
-            .isExactlyInstanceOf(UnrecoverableException.class);
+        ).isExactlyInstanceOf(NotificationServiceResponseException.class)
+            .hasMessage("Failed to send email using GovNotify")
+            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
+            .hasCause(underlyingException);
+
     }
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.UnrecoverableException;
+import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 import uk.gov.service.notify.NotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
@@ -71,7 +71,7 @@ public class GovNotifyNotificationSender implements NotificationSender {
                     return notificationId;
 
                 } catch (NotificationClientException e) {
-                    throw new UnrecoverableException("Failed to send email using GovNotify", e);
+                    throw new NotificationServiceResponseException(AlertLevel.P2, "Failed to send email using GovNotify", e);
                 }
             }
         );
