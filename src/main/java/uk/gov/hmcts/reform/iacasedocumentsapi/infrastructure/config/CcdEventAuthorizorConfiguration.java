@@ -9,9 +9,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.UserCredentialsProvider;
 
 @Configuration
 @ConfigurationProperties(prefix = "security")
@@ -26,11 +26,11 @@ public class CcdEventAuthorizorConfiguration {
     @Bean
     @Primary
     public CcdEventAuthorizor getCcdEventAuthorizor(
-        @Qualifier("requestUser") UserCredentialsProvider requestUserCredentialsProvider
+        @Qualifier("requestUser") UserDetailsProvider userDetailsProvider
     ) {
         return new CcdEventAuthorizor(
             ImmutableMap.copyOf(roleEventAccess),
-            requestUserCredentialsProvider
+            userDetailsProvider
         );
     }
 }

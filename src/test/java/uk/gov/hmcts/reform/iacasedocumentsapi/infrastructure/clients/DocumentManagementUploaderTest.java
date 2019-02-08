@@ -19,8 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
 import uk.gov.hmcts.reform.document.domain.UploadResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.UserCredentialsProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -28,7 +29,7 @@ public class DocumentManagementUploaderTest {
 
     @Mock private DocumentUploadClientApi documentUploadClientApi;
     @Mock private AuthTokenGenerator serviceAuthorizationTokenGenerator;
-    @Mock private UserCredentialsProvider userCredentialsProvider;
+    @Mock private UserDetailsProvider userDetailsProvider;
 
     private String serviceAuthorizationToken = "SERVICE_TOKEN";
     private String accessToken = "ACCESS_TOKEN";
@@ -48,6 +49,8 @@ public class DocumentManagementUploaderTest {
     private String expectedDocumentUrl = "document-self-href";
     private String expectedBinaryUrl = "document-binary-href";
 
+    @Mock private UserDetails userDetails;
+
     @Captor private ArgumentCaptor<List<MultipartFile>> multipartFilesCaptor;
 
     private DocumentManagementUploader documentManagementUploader;
@@ -59,7 +62,7 @@ public class DocumentManagementUploaderTest {
             new DocumentManagementUploader(
                 documentUploadClientApi,
                 serviceAuthorizationTokenGenerator,
-                userCredentialsProvider
+                userDetailsProvider
             );
 
         uploadedDocument.originalDocumentName = fileName;
@@ -74,8 +77,9 @@ public class DocumentManagementUploaderTest {
     public void should_upload_document_to_document_management_and_return_links() throws IOException {
 
         when(serviceAuthorizationTokenGenerator.generate()).thenReturn(serviceAuthorizationToken);
-        when(userCredentialsProvider.getAccessToken()).thenReturn(accessToken);
-        when(userCredentialsProvider.getId()).thenReturn(userId);
+        when(userDetails.getAccessToken()).thenReturn(accessToken);
+        when(userDetails.getId()).thenReturn(userId);
+        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
 
         when(resource.getFilename()).thenReturn(fileName);
         when(resource.getInputStream()).thenReturn(resourceInputStream);
