@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.util.Collections;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,25 +11,26 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
 import uk.gov.hmcts.reform.document.domain.UploadResponse;
 import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.UserCredentialsProvider;
 
 @Service
 public class DocumentManagementUploader implements DocumentUploader {
 
     private final DocumentUploadClientApi documentUploadClientApi;
     private final AuthTokenGenerator serviceAuthorizationTokenGenerator;
-    private final UserCredentialsProvider userCredentialsProvider;
+    private final UserDetailsProvider userDetailsProvider;
 
     public DocumentManagementUploader(
         DocumentUploadClientApi documentUploadClientApi,
         AuthTokenGenerator serviceAuthorizationTokenGenerator,
-        UserCredentialsProvider userCredentialsProvider
+        @Qualifier("requestUser") UserDetailsProvider userDetailsProvider
     ) {
         this.documentUploadClientApi = documentUploadClientApi;
         this.serviceAuthorizationTokenGenerator = serviceAuthorizationTokenGenerator;
-        this.userCredentialsProvider = userCredentialsProvider;
+        this.userDetailsProvider = userDetailsProvider;
     }
 
     public Document upload(
@@ -36,8 +38,9 @@ public class DocumentManagementUploader implements DocumentUploader {
         String contentType
     ) {
         final String serviceAuthorizationToken = serviceAuthorizationTokenGenerator.generate();
-        final String accessToken = userCredentialsProvider.getAccessToken();
-        final String userId = userCredentialsProvider.getId();
+        final UserDetails userDetails = userDetailsProvider.getUserDetails();
+        final String accessToken = userDetails.getAccessToken();
+        final String userId = userDetails.getId();
 
         try {
 
