@@ -13,13 +13,13 @@ spring:
 
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
-appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00003.docx}
+appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00003 v0.2.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
-docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY:EXAMPLE}
-docmosis.url: ${DOCMOSIS_URL:http://example.docmosis}
-docmosis.render.uri: /render
+docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
+docmosis.endpoint: ${DOCMOSIS_ENDPOINT}
+docmosis.render.uri: /rs/render
 
 tsvStringsFileLocation: strings.tsv
 

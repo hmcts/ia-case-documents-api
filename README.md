@@ -20,7 +20,7 @@ The following environment variables are required when running the api without it
 | Environment Variable | *Example values*  |
 |----------------------|----------|
 | DOCMOSIS_ACCESS_KEY | some-docmosis-access-key |
-| DOCMOSIS_URL | some-docmosis-url |
+| DOCMOSIS_ENDPOINT | some-docmosis-url |
 | IA_IDAM_CLIENT_ID  |  some-idam-client-id |
 | IA_IDAM_SECRET  |  some-idam-secret |
 | IA_IDAM_REDIRECT_URI  |  http://localhost:3451/oauth2redirect |
