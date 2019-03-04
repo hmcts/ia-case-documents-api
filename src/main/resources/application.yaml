@@ -47,11 +47,15 @@ security:
   roleEventAccess:
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
+      - "editAppeal"
       - "submitAppeal"
       - "buildCase"
       - "submitCase"
+      - "uploadAdditionalEvidence"
     caseworker-ia-caseofficer:
       - "sendDirection"
+      - "changeDirectionDueDate"
+      - "requestCaseEdit"
       - "requestHearingRequirements"
       - "requestRespondentEvidence"
       - "uploadRespondentEvidence"

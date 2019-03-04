@@ -60,6 +60,7 @@ public class AsylumCaseBuilder {
     // case documents ...
     // -----------------------------------------------------------------------------
 
+    private Optional<List<IdValue<DocumentWithMetadata>>> additionalEvidenceDocuments = Optional.empty();
     private Optional<List<IdValue<DocumentWithMetadata>>> legalRepresentativeDocuments = Optional.empty();
     private Optional<List<IdValue<DocumentWithMetadata>>> respondentDocuments = Optional.empty();
 
@@ -93,6 +94,12 @@ public class AsylumCaseBuilder {
     private Optional<Document> applicationOutOfTimeDocument = Optional.empty();
 
     // -----------------------------------------------------------------------------
+    // upload additional evidence ...
+    // -----------------------------------------------------------------------------
+
+    private Optional<List<IdValue<DocumentWithDescription>>> additionalEvidence = Optional.empty();
+
+    // -----------------------------------------------------------------------------
     // internal API managed fields ...
     // -----------------------------------------------------------------------------
 
@@ -101,6 +108,7 @@ public class AsylumCaseBuilder {
     private Optional<List<IdValue<String>>> notificationsSent = Optional.empty();
     private Optional<YesOrNo> changeDirectionDueDateActionAvailable = Optional.empty();
     private Optional<YesOrNo> sendDirectionActionAvailable = Optional.empty();
+    private Optional<YesOrNo> uploadAdditionalEvidenceActionAvailable = Optional.empty();
     private Optional<YesOrNo> caseBuildingReadyForSubmission = Optional.empty();
     private Optional<State> currentCaseStateVisibleToCaseOfficer = Optional.empty();
     private Optional<State> currentCaseStateVisibleToLegalRepresentative = Optional.empty();
@@ -345,6 +353,9 @@ public class AsylumCaseBuilder {
     // case documents ...
     // -----------------------------------------------------------------------------
 
+    public Optional<List<IdValue<DocumentWithMetadata>>> getAdditionalEvidenceDocuments() {
+        return additionalEvidenceDocuments;
+    }
 
     public Optional<List<IdValue<DocumentWithMetadata>>> getLegalRepresentativeDocuments() {
         return legalRepresentativeDocuments;
@@ -352,6 +363,10 @@ public class AsylumCaseBuilder {
 
     public Optional<List<IdValue<DocumentWithMetadata>>> getRespondentDocuments() {
         return respondentDocuments;
+    }
+
+    public void setAdditionalEvidenceDocuments(Optional<List<IdValue<DocumentWithMetadata>>> additionalEvidenceDocuments) {
+        this.additionalEvidenceDocuments = additionalEvidenceDocuments;
     }
 
     public void setLegalRepresentativeDocuments(Optional<List<IdValue<DocumentWithMetadata>>> legalRepresentativeDocuments) {
@@ -443,6 +458,18 @@ public class AsylumCaseBuilder {
     }
 
     // -----------------------------------------------------------------------------
+    // upload additional evidence ...
+    // -----------------------------------------------------------------------------
+
+    public Optional<List<IdValue<DocumentWithDescription>>> getAdditionalEvidence() {
+        return additionalEvidence;
+    }
+
+    public void setAdditionalEvidence(Optional<List<IdValue<DocumentWithDescription>>> additionalEvidence) {
+        this.additionalEvidence = additionalEvidence;
+    }
+
+    // -----------------------------------------------------------------------------
     // internal API managed fields ...
     // -----------------------------------------------------------------------------
 
@@ -464,6 +491,10 @@ public class AsylumCaseBuilder {
 
     public Optional<YesOrNo> getSendDirectionActionAvailable() {
         return sendDirectionActionAvailable;
+    }
+
+    public Optional<YesOrNo> getUploadAdditionalEvidenceActionAvailable() {
+        return uploadAdditionalEvidenceActionAvailable;
     }
 
     public Optional<YesOrNo> getCaseBuildingReadyForSubmission() {
@@ -516,6 +547,10 @@ public class AsylumCaseBuilder {
 
     public void setSendDirectionActionAvailable(Optional<YesOrNo> sendDirectionActionAvailable) {
         this.sendDirectionActionAvailable = sendDirectionActionAvailable;
+    }
+
+    public void setUploadAdditionalEvidenceActionAvailable(Optional<YesOrNo> uploadAdditionalEvidenceActionAvailable) {
+        this.uploadAdditionalEvidenceActionAvailable = uploadAdditionalEvidenceActionAvailable;
     }
 
     public void setCaseBuildingReadyForSubmission(Optional<YesOrNo> caseBuildingReadyForSubmission) {
