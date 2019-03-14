@@ -21,6 +21,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "hearingCentre": "manchester",
         "notificationsSent": [
           {
             "id": "1001_APPEAL_SUBMITTED_CASE_OFFICER",
@@ -35,7 +36,7 @@
         "recipient": "{$hearingCentreEmailAddresses.manchester}",
         "subject": "Asylum appeal: new appeal submitted",
         "body": [
-          "Appeal reference number: A123456",
+          "Appeal reference number: PA/12345/2019",
           "Appellant name: Talha Awan",
           "Link to the online service: {$iaCcdFrontendUrl}",
           "A new asylum appeal has been submitted.",

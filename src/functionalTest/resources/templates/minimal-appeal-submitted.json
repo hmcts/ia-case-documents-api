@@ -1,5 +1,5 @@
 {
-  "homeOfficeReferenceNumber": "A123456",
+  "homeOfficeReferenceNumber": "A1234567",
   "homeOfficeDecisionDate": "{$TODAY}",
   "appellantTitle": "Mr",
   "appellantGivenNames": "Talha",
@@ -23,8 +23,9 @@
   "hasNewMatters": "No",
   "hasOtherAppeals": "No",
   "legalRepReferenceNumber": "CASE001",
-  "appealReferenceNumber": "A123456",
+  "appealReferenceNumber": "PA/12345/2019",
   "sendDirectionActionAvailable": "Yes",
   "legalRepresentativeName": "A Legal Rep",
-  "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+  "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+  "hearingCentre": "taylorHouse"
 }

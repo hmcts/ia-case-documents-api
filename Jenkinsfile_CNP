@@ -16,6 +16,7 @@ List<LinkedHashMap<String, Object>> secrets = [
     secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
     secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
     secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+    secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
     secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
     secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
     secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),

@@ -32,6 +32,9 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
         Map<HearingCentre, String> hearingCentreEmailAddresses,
         NotificationSender notificationSender
     ) {
+        requireNonNull(appealSubmittedCaseOfficerTemplate, "appealSubmittedCaseOfficerTemplate must not be null");
+        requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
+
         this.appealSubmittedCaseOfficerTemplate = appealSubmittedCaseOfficerTemplate;
         this.iaCcdFrontendUrl = iaCcdFrontendUrl;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;

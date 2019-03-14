@@ -61,7 +61,7 @@
         "recipient": "RIA-610-test-case-1@example.com",
         "subject": "Asylum appeal direction: build your case",
         "body": [
-          "Appeal reference number: A123456",
+          "Appeal reference number: PA/12345/2019",
           "Your reference: CASE001",
           "Appellant name: Talha Awan",
           "Link to the online service: {$iaCcdFrontendUrl}",

@@ -14,13 +14,19 @@ spring:
 govnotify.key: ${IA_GOV_NOTIFY_KEY}
 govnotify.template.buildCaseDirection: 13a6331e-b0f5-4e64-ae1b-dc2c2fd0aeeb
 govnotify.template.appealSubmittedCaseOfficer: 23769f75-673c-4682-8433-d751e540e730
+govnotify.template.respondentEvidenceDirection: a1fee4a6-6650-4d91-8f9e-cd15944adef4
 
 hearingCentreEmailAddresses:
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}
   taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:taylorHouse@example.com}
 
+respondentEmailAddresses:
+  respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondentEvidenceDirection@example.com}
+
 notificationSender.deduplicateSendsWithinSeconds: 60
 iaCcdFrontendUrl: ${IA_CCD_FRONTEND_URL:http://localhost:3451/}
+
+tsvStringsFileLocation: strings.tsv
 
 ia_system_user: ${IA_SYSTEM_USERNAME:system-user}
 ia_system_user_password: ${IA_SYSTEM_PASSWORD:system-password}
