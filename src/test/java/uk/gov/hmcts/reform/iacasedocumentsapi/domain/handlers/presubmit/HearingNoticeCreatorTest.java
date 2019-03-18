@@ -30,9 +30,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class AppealSubmissionCreatorTest {
+public class HearingNoticeCreatorTest {
 
-    @Mock private DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     @Mock private DocumentReceiver documentReceiver;
     @Mock private DocumentsAppender documentsAppender;
 
@@ -41,101 +41,101 @@ public class AppealSubmissionCreatorTest {
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
     @Mock private DocumentWithMetadata documentWithMetadata;
-    @Mock private List<IdValue<DocumentWithMetadata>> existingLegalRepresentativeDocuments;
-    @Mock private List<IdValue<DocumentWithMetadata>> allLegalRepresentativeDocuments;
+    @Mock private List<IdValue<DocumentWithMetadata>> existingHearingDocuments;
+    @Mock private List<IdValue<DocumentWithMetadata>> allHearingDocuments;
 
-    @Captor private ArgumentCaptor<List<IdValue<DocumentWithMetadata>>> legalRepresentativeDocumentsCaptor;
+    @Captor private ArgumentCaptor<List<IdValue<DocumentWithMetadata>>> hearingDocumentsCaptor;
 
-    private AppealSubmissionCreator appealSubmissionCreator;
+    private HearingNoticeCreator hearingNoticeCreator;
 
     @Before
     public void setUp() {
 
-        appealSubmissionCreator =
-            new AppealSubmissionCreator(
-                appealSubmissionDocumentCreator,
+        hearingNoticeCreator =
+            new HearingNoticeCreator(
+                hearingNoticeDocumentCreator,
                 documentReceiver,
                 documentsAppender
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        when(appealSubmissionDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
-        when(asylumCase.getLegalRepresentativeDocuments()).thenReturn(Optional.of(existingLegalRepresentativeDocuments));
+        when(asylumCase.getHearingDocuments()).thenReturn(Optional.of(existingHearingDocuments));
 
         when(documentReceiver.receive(
             uploadedDocument,
             "",
-            DocumentTag.APPEAL_SUBMISSION
+            DocumentTag.HEARING_NOTICE
         )).thenReturn(documentWithMetadata);
 
         when(documentsAppender.append(
-            existingLegalRepresentativeDocuments,
+            existingHearingDocuments,
             Collections.singletonList(documentWithMetadata),
-            DocumentTag.APPEAL_SUBMISSION
-        )).thenReturn(allLegalRepresentativeDocuments);
+            DocumentTag.HEARING_NOTICE
+        )).thenReturn(allHearingDocuments);
     }
 
     @Test
-    public void should_create_appeal_submission_pdf_and_append_to_legal_representative_documents_for_the_case() {
+    public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(appealSubmissionDocumentCreator, times(1)).create(caseDetails);
+        verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
 
-        verify(asylumCase, times(1)).getLegalRepresentativeDocuments();
-        verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.APPEAL_SUBMISSION);
+        verify(asylumCase, times(1)).getHearingDocuments();
+        verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.HEARING_NOTICE);
         verify(documentsAppender, times(1))
             .append(
-                existingLegalRepresentativeDocuments,
+                existingHearingDocuments,
                 Collections.singletonList(documentWithMetadata),
-                DocumentTag.APPEAL_SUBMISSION
+                DocumentTag.HEARING_NOTICE
             );
 
-        verify(asylumCase, times(1)).setLegalRepresentativeDocuments(allLegalRepresentativeDocuments);
+        verify(asylumCase, times(1)).setHearingDocuments(allHearingDocuments);
     }
 
     @Test
-    public void should_create_appeal_submission_pdf_and_append_to_the_case_when_no_legal_representative_documents_exist() {
+    public void should_create_hearing_notice_pdf_and_append_to_the_case_when_no_legal_representative_documents_exist() {
 
         when(documentsAppender.append(
             any(List.class),
             eq(Collections.singletonList(documentWithMetadata)),
-            eq(DocumentTag.APPEAL_SUBMISSION)
-        )).thenReturn(allLegalRepresentativeDocuments);
+            eq(DocumentTag.HEARING_NOTICE)
+        )).thenReturn(allHearingDocuments);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(documentsAppender, times(1))
             .append(
-                legalRepresentativeDocumentsCaptor.capture(),
+                hearingDocumentsCaptor.capture(),
                 eq(Collections.singletonList(documentWithMetadata)),
-                eq(DocumentTag.APPEAL_SUBMISSION)
+                eq(DocumentTag.HEARING_NOTICE)
             );
 
-        verify(asylumCase, times(1)).setLegalRepresentativeDocuments(allLegalRepresentativeDocuments);
+        verify(asylumCase, times(1)).setHearingDocuments(allHearingDocuments);
     }
 
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
 
-        assertThatThrownBy(() -> appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -149,9 +149,9 @@ public class AppealSubmissionCreatorTest {
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-                boolean canHandle = appealSubmissionCreator.canHandle(callbackStage, callback);
+                boolean canHandle = hearingNoticeCreator.canHandle(callbackStage, callback);
 
-                if (event == Event.SUBMIT_APPEAL
+                if (event == Event.LIST_CASE
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);
@@ -167,19 +167,19 @@ public class AppealSubmissionCreatorTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> appealSubmissionCreator.canHandle(null, callback))
+        assertThatThrownBy(() -> hearingNoticeCreator.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> appealSubmissionCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> hearingNoticeCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> appealSubmissionCreator.handle(null, callback))
+        assertThatThrownBy(() -> hearingNoticeCreator.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
