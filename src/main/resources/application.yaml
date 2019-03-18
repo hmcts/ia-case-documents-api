@@ -13,7 +13,13 @@ spring:
 
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
+appealSubmissionDocument.fileName: "appeal-form"
 appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00003 v0.2.docx}
+
+hearingNoticeDocument.contentType: application/pdf
+hearingNoticeDocument.fileExtension: PDF
+hearingNoticeDocument.fileName: "hearing-notice"
+hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00009.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -61,6 +67,7 @@ security:
       - "uploadRespondentEvidence"
       - "requestRespondentReview"
       - "addAppealResponse"
+      - "listCase"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
