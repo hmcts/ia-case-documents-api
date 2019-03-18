@@ -22,18 +22,18 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 
 @Component
-public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumCase> {
+public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
+    private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     private final DocumentReceiver documentReceiver;
     private final DocumentsAppender documentsAppender;
 
-    public AppealSubmissionCreator(
-        @Qualifier("appealSubmission") DocumentCreator<AsylumCase> appealSubmissionDocumentCreator,
+    public HearingNoticeCreator(
+        @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
         DocumentReceiver documentReceiver,
         DocumentsAppender documentsAppender
     ) {
-        this.appealSubmissionDocumentCreator = appealSubmissionDocumentCreator;
+        this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
         this.documentReceiver = documentReceiver;
         this.documentsAppender = documentsAppender;
     }
@@ -46,7 +46,7 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.SUBMIT_APPEAL;
+               && callback.getEvent() == Event.LIST_CASE;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -60,36 +60,36 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+        Document hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
 
-        attachDocumentToCase(asylumCase, appealSubmission);
+        attachDocumentToCase(asylumCase, hearingNotice);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
     private void attachDocumentToCase(
         AsylumCase asylumCase,
-        Document appealSubmission
+        Document hearingNotice
     ) {
-        final List<IdValue<DocumentWithMetadata>> legalRepresentativeDocuments =
+        final List<IdValue<DocumentWithMetadata>> hearingDocuments =
             asylumCase
-                .getLegalRepresentativeDocuments()
+                .getHearingDocuments()
                 .orElse(Collections.emptyList());
 
         DocumentWithMetadata documentWithMetadata =
             documentReceiver.receive(
-                appealSubmission,
+                hearingNotice,
                 "",
-                DocumentTag.APPEAL_SUBMISSION
+                DocumentTag.HEARING_NOTICE
             );
 
-        List<IdValue<DocumentWithMetadata>> allLegalRepresentativeDocuments =
+        List<IdValue<DocumentWithMetadata>> allHearingDocuments =
             documentsAppender.append(
-                legalRepresentativeDocuments,
+                hearingDocuments,
                 Collections.singletonList(documentWithMetadata),
-                DocumentTag.APPEAL_SUBMISSION
+                DocumentTag.HEARING_NOTICE
             );
 
-        asylumCase.setLegalRepresentativeDocuments(allLegalRepresentativeDocuments);
+        asylumCase.setHearingDocuments(allHearingDocuments);
     }
 }
