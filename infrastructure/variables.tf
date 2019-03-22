@@ -52,3 +52,7 @@ variable "log_level_spring_web" {
 variable "log_level_ia" {
   default = "INFO"
 }
+
+variable "dns_server" {
+  type = "string"
+}

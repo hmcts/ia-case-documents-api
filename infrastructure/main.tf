@@ -144,6 +144,8 @@ module "ia_case_documents_api" {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
 
+    WEBSITE_DNS_SERVER = "${var.dns_server}"
+
     DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_api_key.value}"
     DOCMOSIS_ENDPOINT   = "${data.azurerm_key_vault_secret.docmosis_endpoint.value}"
 
