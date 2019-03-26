@@ -21,20 +21,20 @@ import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 public class DocmosisDocumentGenerator implements DocumentGenerator {
 
     private final String docmosisAccessKey;
-    private final String docmosisUrl;
+    private final String docmosisEndpoint;
     private final String docmosisRenderUri;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
 
     public DocmosisDocumentGenerator(
         @Value("${docmosis.accessKey}") String docmosisAccessKey,
-        @Value("${docmosis.url}") String docmosisUrl,
+        @Value("${docmosis.endpoint}") String docmosisEndpoint,
         @Value("${docmosis.render.uri}") String docmosisRenderUri,
         ObjectMapper objectMapper,
         RestTemplate restTemplate
     ) {
         this.docmosisAccessKey = docmosisAccessKey;
-        this.docmosisUrl = docmosisUrl;
+        this.docmosisEndpoint = docmosisEndpoint;
         this.docmosisRenderUri = docmosisRenderUri;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
@@ -64,19 +64,22 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
         byte[] documentData;
 
         try {
-            documentData = restTemplate
-                .postForObject(
-                    docmosisUrl + docmosisRenderUri,
-                    requestEntity,
-                    byte[].class
-                );
+
+            documentData =
+                restTemplate
+                    .postForObject(
+                        docmosisEndpoint + docmosisRenderUri,
+                        requestEntity,
+                        byte[].class
+                    );
 
         } catch (RestClientException clientEx) {
-            throw new DocumentServiceResponseException(AlertLevel.P2,
+
+            throw new DocumentServiceResponseException(
+                AlertLevel.P2,
                 "Couldn't generate asylum case documents with docmosis",
                 clientEx
             );
-
         }
 
         if (documentData == null) {

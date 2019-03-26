@@ -29,8 +29,8 @@ import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 public class DocmosisDocumentGeneratorTest {
 
     private static final String DOCMOSIS_ACCESS_KEY = "ABC";
-    private static final String DOCMOSIS_URL = "http://docmosis";
-    private static final String DOCMOSIS_RENDER_URI = "/render";
+    private static final String DOCMOSIS_ENDPOINT = "http://docmosis";
+    private static final String DOCMOSIS_RENDER_URI = "/rs/render";
     @Mock private ObjectMapper objectMapper;
     @Mock private RestTemplate restTemplate;
 
@@ -49,7 +49,7 @@ public class DocmosisDocumentGeneratorTest {
         docmosisDocumentGenerator =
             new DocmosisDocumentGenerator(
                 DOCMOSIS_ACCESS_KEY,
-                DOCMOSIS_URL,
+                DOCMOSIS_ENDPOINT,
                 DOCMOSIS_RENDER_URI,
                 objectMapper,
                 restTemplate
@@ -66,7 +66,7 @@ public class DocmosisDocumentGeneratorTest {
         doReturn(expectedDocumentData)
             .when(restTemplate)
             .postForObject(
-                eq(DOCMOSIS_URL + DOCMOSIS_RENDER_URI),
+                eq(DOCMOSIS_ENDPOINT + DOCMOSIS_RENDER_URI),
                 any(HttpEntity.class),
                 any()
             );
@@ -81,7 +81,7 @@ public class DocmosisDocumentGeneratorTest {
         ArgumentCaptor<HttpEntity> httpEntityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
         verify(restTemplate, times(1)).postForObject(
-            eq(DOCMOSIS_URL + DOCMOSIS_RENDER_URI),
+            eq(DOCMOSIS_ENDPOINT + DOCMOSIS_RENDER_URI),
             httpEntityCaptor.capture(),
             any()
         );
@@ -128,7 +128,7 @@ public class DocmosisDocumentGeneratorTest {
         doReturn(null)
             .when(restTemplate)
             .postForObject(
-                eq(DOCMOSIS_URL + DOCMOSIS_RENDER_URI),
+                eq(DOCMOSIS_ENDPOINT + DOCMOSIS_RENDER_URI),
                 any(HttpEntity.class),
                 any()
             );
@@ -150,7 +150,7 @@ public class DocmosisDocumentGeneratorTest {
 
         when(restTemplate
             .postForObject(
-                eq(DOCMOSIS_URL + DOCMOSIS_RENDER_URI),
+                eq(DOCMOSIS_ENDPOINT + DOCMOSIS_RENDER_URI),
                 any(HttpEntity.class),
                 any()
             ))
@@ -164,7 +164,6 @@ public class DocmosisDocumentGeneratorTest {
         ).isExactlyInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Couldn't generate asylum case documents with docmosis")
             .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2);
-
     }
 
     @Test
@@ -174,7 +173,7 @@ public class DocmosisDocumentGeneratorTest {
 
         when(restTemplate
             .postForObject(
-                eq(DOCMOSIS_URL + DOCMOSIS_RENDER_URI),
+                eq(DOCMOSIS_ENDPOINT + DOCMOSIS_RENDER_URI),
                 any(HttpEntity.class),
                 any()
             )).thenThrow(underlyingException);
@@ -187,7 +186,5 @@ public class DocmosisDocumentGeneratorTest {
         ).isExactlyInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Couldn't generate asylum case documents with docmosis")
             .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2);
-
     }
-
 }

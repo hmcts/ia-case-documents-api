@@ -12,6 +12,11 @@ locals {
   preview_vault_name           = "${var.raw_product}-aat"
   non_preview_vault_name       = "${var.raw_product}-${var.env}"
   key_vault_name               = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
+
+  docmosis_prod_key_vault_name = "docmosisiaasprodkv"
+  docmosis_dev_key_vault_name  = "docmosisiaasdevkv"
+  docmosis_key_vault_name      = "${var.env == "prod" ? local.docmosis_prod_key_vault_name : local.docmosis_dev_key_vault_name}"
+  docmosis_key_vault_uri       = "https://${local.docmosis_key_vault_name}.vault.azure.net/"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -30,14 +35,14 @@ data "azurerm_key_vault_secret" "appeal_submission_template" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "docmosis_access_key" {
-  name      = "docmosis-access-key"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "docmosis_api_key" {
+  name      = "docmosis-api-key"
+  vault_uri = "${local.docmosis_key_vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "docmosis_url" {
-  name      = "docmosis-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "docmosis_endpoint" {
+  name      = "docmosis-endpoint"
+  vault_uri = "${local.docmosis_key_vault_uri}"
 }
 
 data "azurerm_key_vault_secret" "test_caseofficer_username" {
@@ -139,8 +144,10 @@ module "ia_case_documents_api" {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
 
-    DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_access_key.value}"
-    DOCMOSIS_URL        = "${data.azurerm_key_vault_secret.docmosis_url.value}"
+    WEBSITE_DNS_SERVER = "${var.dns_server}"
+
+    DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_api_key.value}"
+    DOCMOSIS_ENDPOINT   = "${data.azurerm_key_vault_secret.docmosis_endpoint.value}"
 
     IA_APPEAL_SUBMISSION_TEMPLATE = "${data.azurerm_key_vault_secret.appeal_submission_template.value}"
 
