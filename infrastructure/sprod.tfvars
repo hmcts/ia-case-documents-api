@@ -1,1 +1,1 @@
-dns_server="10.100.75.254"
+consul_dns_resource_group_name="core-infra-saat"
