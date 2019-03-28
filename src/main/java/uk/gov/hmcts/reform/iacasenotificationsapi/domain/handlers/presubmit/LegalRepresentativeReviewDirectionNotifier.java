@@ -23,15 +23,15 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallb
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @Component
-public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
+public class LegalRepresentativeReviewDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String govNotifyTemplateId;
     private final String iaCcdFrontendUrl;
     private final DirectionFinder directionFinder;
     private final NotificationSender notificationSender;
 
-    public BuildCaseDirectionNotifier(
-        @Value("${govnotify.template.buildCaseDirection}") String govNotifyTemplateId,
+    public LegalRepresentativeReviewDirectionNotifier(
+        @Value("${govnotify.template.legalRepresentativeReviewDirection}") String govNotifyTemplateId,
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
         DirectionFinder directionFinder,
         NotificationSender notificationSender
@@ -53,7 +53,7 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.UPLOAD_RESPONDENT_EVIDENCE;
+               && callback.getEvent() == Event.ADD_APPEAL_RESPONSE;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -69,10 +69,10 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
                 .getCaseDetails()
                 .getCaseData();
 
-        Direction buildCaseDirection =
+        Direction legalRepresentativeReviewDirection =
             directionFinder
-                .findFirst(asylumCase, DirectionTag.BUILD_CASE)
-                .orElseThrow(() -> new IllegalStateException("build case direction is not present"));
+                .findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_REVIEW)
+                .orElseThrow(() -> new IllegalStateException("legal representative review direction is not present"));
 
         String emailAddress =
             asylumCase
@@ -81,7 +81,7 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
 
         String directionDueDate =
             LocalDate
-                .parse(buildCaseDirection.getDateDue())
+                .parse(legalRepresentativeReviewDirection.getDateDue())
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         Map<String, String> personalisation =
@@ -92,13 +92,13 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
                 .put("Given names", asylumCase.getAppellantGivenNames().orElse(""))
                 .put("Family name", asylumCase.getAppellantFamilyName().orElse(""))
                 .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
-                .put("Explanation", buildCaseDirection.getExplanation())
+                .put("Explanation", legalRepresentativeReviewDirection.getExplanation())
                 .put("due date", directionDueDate)
                 .build();
 
         String reference =
             callback.getCaseDetails().getId()
-            + "_BUILD_CASE_DIRECTION";
+            + "_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION";
 
         String notificationId =
             notificationSender.sendEmail(

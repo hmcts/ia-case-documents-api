@@ -21,21 +21,21 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallb
 @Component
 public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String appealSubmittedCaseOfficerTemplate;
+    private final String govNotifyTemplateId;
     private final String iaCcdFrontendUrl;
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
     private final NotificationSender notificationSender;
 
     public AppealSubmittedCaseOfficerNotifier(
-        @Value("${govnotify.template.appealSubmittedCaseOfficer}") String appealSubmittedCaseOfficerTemplate,
+        @Value("${govnotify.template.appealSubmittedCaseOfficer}") String govNotifyTemplateId,
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
         Map<HearingCentre, String> hearingCentreEmailAddresses,
         NotificationSender notificationSender
     ) {
-        requireNonNull(appealSubmittedCaseOfficerTemplate, "appealSubmittedCaseOfficerTemplate must not be null");
+        requireNonNull(govNotifyTemplateId, "govNotifyTemplateId must not be null");
         requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
 
-        this.appealSubmittedCaseOfficerTemplate = appealSubmittedCaseOfficerTemplate;
+        this.govNotifyTemplateId = govNotifyTemplateId;
         this.iaCcdFrontendUrl = iaCcdFrontendUrl;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
         this.notificationSender = notificationSender;
@@ -93,7 +93,7 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
 
         String notificationId =
             notificationSender.sendEmail(
-                appealSubmittedCaseOfficerTemplate,
+                govNotifyTemplateId,
                 hearingCentreEmailAddress,
                 personalisation,
                 reference

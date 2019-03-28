@@ -17,7 +17,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
@@ -25,109 +24,102 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class RespondentEvidenceDirectionNotifierTest {
+public class LegalRepresentativeReviewDirectionNotifierTest {
 
-    private static final String RESPONDENT_EVIDENCE_DIRECTION_TEMPLATE = "template-id";
+    private static final String LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE = "template-id";
+    private static final String CCD_URL = "http://ccd";
 
     @Mock private DirectionFinder directionFinder;
     @Mock private NotificationSender notificationSender;
-    @Mock private StringProvider stringProvider;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
-    @Mock private Direction respondentEvidenceDirection;
+    @Mock private Direction legalRepresentativeReviewDirection;
 
     @Captor private ArgumentCaptor<List<IdValue<String>>> existingNotificationsSentCaptor;
 
     final long caseId = 123L;
 
-    final String respondentEmailAddress = "respondent@example.com";
-    final HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
-    final String hearingCentreForDisplay = "Taylor House";
-    final String homeOfficeReferenceNumber = "SOMETHING";
+    final String legalRepresentativeEmailAddress = "legal-representative@example.com";
+    final String legalRepReferenceNumber = "SOMETHING";
     final String appealReferenceNumber = "PA/001/2018";
     final String appellantGivenNames = "Jane";
     final String appellantFamilyName = "Doe";
-    final String directionExplanation = "Send your evidence";
+    final String directionExplanation = "Review the appeal response";
     final String directionDateDue = "2018-12-31";
     final String directionDateDueFormatted = "31 Dec 2018";
 
     final Map<String, String> expectedPersonalisation =
         ImmutableMap
             .<String, String>builder()
-            .put("HearingCentre", hearingCentreForDisplay)
             .put("Appeal Ref Number", appealReferenceNumber)
-            .put("HORef", homeOfficeReferenceNumber)
+            .put("LR reference", legalRepReferenceNumber)
             .put("Given names", appellantGivenNames)
             .put("Family name", appellantFamilyName)
+            .put("Hyperlink to user’s case list", CCD_URL)
             .put("Explanation", directionExplanation)
             .put("due date", directionDateDueFormatted)
             .build();
 
     final String expectedNotificationId = "ABC-DEF-GHI-JKL";
-    final String expectedNotificationReference = caseId + "_RESPONDENT_EVIDENCE_DIRECTION";
+    final String expectedNotificationReference = caseId + "_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION";
 
-    private RespondentEvidenceDirectionNotifier respondentEvidenceDirectionNotifier;
+    private LegalRepresentativeReviewDirectionNotifier legalRepresentativeReviewDirectionNotifier;
 
     @Before
     public void setUp() {
-        respondentEvidenceDirectionNotifier =
-            new RespondentEvidenceDirectionNotifier(
-                RESPONDENT_EVIDENCE_DIRECTION_TEMPLATE,
-                respondentEmailAddress,
+        legalRepresentativeReviewDirectionNotifier =
+            new LegalRepresentativeReviewDirectionNotifier(
+                LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE,
+                CCD_URL,
                 directionFinder,
-                notificationSender,
-                stringProvider
+                notificationSender
             );
-
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.REQUEST_RESPONDENT_EVIDENCE);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-
-        when(directionFinder.findFirst(asylumCase, DirectionTag.RESPONDENT_EVIDENCE)).thenReturn(Optional.of(respondentEvidenceDirection));
-        when(stringProvider.get("hearingCentre", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreForDisplay));
-
-        when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(hearingCentre));
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getHomeOfficeReferenceNumber()).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
-        when(respondentEvidenceDirection.getExplanation()).thenReturn(directionExplanation);
-        when(respondentEvidenceDirection.getDateDue()).thenReturn(directionDateDue);
-
-        when(notificationSender.sendEmail(
-            RESPONDENT_EVIDENCE_DIRECTION_TEMPLATE,
-            respondentEmailAddress,
-            expectedPersonalisation,
-            expectedNotificationReference
-        )).thenReturn(expectedNotificationId);
     }
 
     @Test
-    public void should_send_respondent_evidence_direction_notification() {
+    public void should_send_legal_rep_review_direction_notification() {
 
         final List<IdValue<String>> existingNotifications =
             new ArrayList<>(Arrays.asList(
                 new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
             ));
 
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.ADD_APPEAL_RESPONSE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.of(legalRepresentativeEmailAddress));
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+        when(directionFinder.findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_REVIEW)).thenReturn(Optional.of(legalRepresentativeReviewDirection));
+
+        when(caseDetails.getId()).thenReturn(caseId);
+        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
+        when(legalRepresentativeReviewDirection.getExplanation()).thenReturn(directionExplanation);
+        when(legalRepresentativeReviewDirection.getDateDue()).thenReturn(directionDateDue);
+
+        when(notificationSender.sendEmail(
+            LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE,
+            legalRepresentativeEmailAddress,
+            expectedPersonalisation,
+            expectedNotificationReference
+        )).thenReturn(expectedNotificationId);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(notificationSender, times(1)).sendEmail(
-            RESPONDENT_EVIDENCE_DIRECTION_TEMPLATE,
-            respondentEmailAddress,
+            LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE,
+            legalRepresentativeEmailAddress,
             expectedPersonalisation,
             expectedNotificationReference
         );
@@ -144,80 +136,44 @@ public class RespondentEvidenceDirectionNotifierTest {
         assertEquals("some-notification-sent", actualExistingNotificationsSent.get(0).getId());
         assertEquals("ZZZ-ZZZ-ZZZ-ZZZ", actualExistingNotificationsSent.get(0).getValue());
 
-        assertEquals(caseId + "_RESPONDENT_EVIDENCE_DIRECTION", actualExistingNotificationsSent.get(1).getId());
+        assertEquals(caseId + "_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION", actualExistingNotificationsSent.get(1).getId());
         assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(1).getValue());
     }
 
     @Test
-    public void should_send_respondent_evidence_direction_notification_when_no_notifications_exist() {
+    public void should_send_legal_rep_review_direction_notification_when_no_notifications_exist() {
 
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.ADD_APPEAL_RESPONSE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.of(legalRepresentativeEmailAddress));
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(directionFinder.findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_REVIEW)).thenReturn(Optional.of(legalRepresentativeReviewDirection));
 
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(notificationSender, times(1)).sendEmail(
-            RESPONDENT_EVIDENCE_DIRECTION_TEMPLATE,
-            respondentEmailAddress,
-            expectedPersonalisation,
-            expectedNotificationReference
-        );
-
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
-
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(1, actualExistingNotificationsSent.size());
-
-        assertEquals(caseId + "_RESPONDENT_EVIDENCE_DIRECTION", actualExistingNotificationsSent.get(0).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(0).getValue());
-    }
-
-    @Test
-    public void should_send_respondent_evidence_direction_notification_using_defaults_where_available() {
-
-        final Map<String, String> expectedPersonalisation =
-            ImmutableMap
-                .<String, String>builder()
-                .put("HearingCentre", hearingCentreForDisplay)
-                .put("Appeal Ref Number", "")
-                .put("HORef", "")
-                .put("Given names", "")
-                .put("Family name", "")
-                .put("Explanation", directionExplanation)
-                .put("due date", directionDateDueFormatted)
-                .build();
-
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
-
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(hearingCentre));
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getHomeOfficeReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
+        when(caseDetails.getId()).thenReturn(caseId);
+        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
+        when(legalRepresentativeReviewDirection.getExplanation()).thenReturn(directionExplanation);
+        when(legalRepresentativeReviewDirection.getDateDue()).thenReturn(directionDateDue);
 
         when(notificationSender.sendEmail(
-            RESPONDENT_EVIDENCE_DIRECTION_TEMPLATE,
-            respondentEmailAddress,
+            LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE,
+            legalRepresentativeEmailAddress,
             expectedPersonalisation,
             expectedNotificationReference
         )).thenReturn(expectedNotificationId);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(notificationSender, times(1)).sendEmail(
-            RESPONDENT_EVIDENCE_DIRECTION_TEMPLATE,
-            respondentEmailAddress,
+            LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE,
+            legalRepresentativeEmailAddress,
             expectedPersonalisation,
             expectedNotificationReference
         );
@@ -231,52 +187,109 @@ public class RespondentEvidenceDirectionNotifierTest {
 
         assertEquals(1, actualExistingNotificationsSent.size());
 
-        assertEquals(caseId + "_RESPONDENT_EVIDENCE_DIRECTION", actualExistingNotificationsSent.get(0).getId());
+        assertEquals(caseId + "_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION", actualExistingNotificationsSent.get(0).getId());
         assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(0).getValue());
     }
 
     @Test
-    public void should_throw_when_respondent_evidence_direction_not_present() {
+    public void should_send_legal_rep_review_direction_notification_using_defaults_where_available() {
+
+        final Map<String, String> expectedPersonalisation =
+            ImmutableMap
+                .<String, String>builder()
+                .put("Appeal Ref Number", "")
+                .put("LR reference", "")
+                .put("Given names", "")
+                .put("Family name", "")
+                .put("Hyperlink to user’s case list", CCD_URL)
+                .put("Explanation", directionExplanation)
+                .put("due date", directionDateDueFormatted)
+                .build();
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.REQUEST_RESPONDENT_EVIDENCE);
+        when(callback.getEvent()).thenReturn(Event.ADD_APPEAL_RESPONSE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(directionFinder.findFirst(asylumCase, DirectionTag.RESPONDENT_EVIDENCE)).thenReturn(Optional.empty());
+        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.of(legalRepresentativeEmailAddress));
+        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(directionFinder.findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_REVIEW)).thenReturn(Optional.of(legalRepresentativeReviewDirection));
 
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-            .hasMessage("respondent evidence direction is not present")
+        when(caseDetails.getId()).thenReturn(caseId);
+        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
+        when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.empty());
+        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
+        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
+        when(legalRepresentativeReviewDirection.getExplanation()).thenReturn(directionExplanation);
+        when(legalRepresentativeReviewDirection.getDateDue()).thenReturn(directionDateDue);
+
+        when(notificationSender.sendEmail(
+            LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE,
+            legalRepresentativeEmailAddress,
+            expectedPersonalisation,
+            expectedNotificationReference
+        )).thenReturn(expectedNotificationId);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(notificationSender, times(1)).sendEmail(
+            LEGAL_REPRESENTATIVE_REVIEW_TEMPLATE,
+            legalRepresentativeEmailAddress,
+            expectedPersonalisation,
+            expectedNotificationReference
+        );
+
+        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+
+        List<IdValue<String>> actualExistingNotificationsSent =
+            existingNotificationsSentCaptor
+                .getAllValues()
+                .get(0);
+
+        assertEquals(1, actualExistingNotificationsSent.size());
+
+        assertEquals(caseId + "_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION", actualExistingNotificationsSent.get(0).getId());
+        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(0).getValue());
+    }
+
+    @Test
+    public void should_throw_when_legal_representative_review_direction_not_present() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.ADD_APPEAL_RESPONSE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_REVIEW)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .hasMessage("legal representative review direction is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void should_throw_when_hearing_centre_not_present() {
+    public void should_throw_when_legal_representative_email_address_not_present() {
 
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.empty());
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.ADD_APPEAL_RESPONSE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.empty());
+        when(directionFinder.findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_REVIEW)).thenReturn(Optional.of(legalRepresentativeReviewDirection));
 
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-            .hasMessage("hearingCentre is not present")
-            .isExactlyInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    public void should_throw_when_hearing_centre_display_string_not_present() {
-
-        when(stringProvider.get("hearingCentre", hearingCentre.toString())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-            .hasMessage("hearingCentre display string is not present")
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .hasMessage("legalRepresentativeEmailAddress is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
 
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -290,9 +303,9 @@ public class RespondentEvidenceDirectionNotifierTest {
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-                boolean canHandle = respondentEvidenceDirectionNotifier.canHandle(callbackStage, callback);
+                boolean canHandle = legalRepresentativeReviewDirectionNotifier.canHandle(callbackStage, callback);
 
-                if (event == Event.REQUEST_RESPONDENT_EVIDENCE
+                if (event == Event.ADD_APPEAL_RESPONSE
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);
@@ -308,19 +321,19 @@ public class RespondentEvidenceDirectionNotifierTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.canHandle(null, callback))
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.handle(null, callback))
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> respondentEvidenceDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

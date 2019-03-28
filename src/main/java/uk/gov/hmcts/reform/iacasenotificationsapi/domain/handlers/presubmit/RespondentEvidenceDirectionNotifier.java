@@ -27,23 +27,23 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 @Component
 public class RespondentEvidenceDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String respondentEvidenceDirectionTemplate;
+    private final String govNotifyTemplateId;
     private final String respondentEmailAddress;
     private final DirectionFinder directionFinder;
     private final NotificationSender notificationSender;
     private final StringProvider stringProvider;
 
     public RespondentEvidenceDirectionNotifier(
-        @Value("${govnotify.template.respondentEvidenceDirection}") String respondentEvidenceDirectionTemplate,
+        @Value("${govnotify.template.respondentEvidenceDirection}") String govNotifyTemplateId,
         @Value("${respondentEmailAddresses.respondentEvidenceDirection}") String respondentEmailAddress,
         DirectionFinder directionFinder,
         NotificationSender notificationSender,
         StringProvider stringProvider
     ) {
-        requireNonNull(respondentEvidenceDirectionTemplate, "respondentEvidenceDirectionTemplate must not be null");
+        requireNonNull(govNotifyTemplateId, "govNotifyTemplateId must not be null");
         requireNonNull(respondentEmailAddress, "respondentEmailAddress must not be null");
 
-        this.respondentEvidenceDirectionTemplate = respondentEvidenceDirectionTemplate;
+        this.govNotifyTemplateId = govNotifyTemplateId;
         this.respondentEmailAddress = respondentEmailAddress;
         this.directionFinder = directionFinder;
         this.notificationSender = notificationSender;
@@ -112,7 +112,7 @@ public class RespondentEvidenceDirectionNotifier implements PreSubmitCallbackHan
 
         String notificationId =
             notificationSender.sendEmail(
-                respondentEvidenceDirectionTemplate,
+                govNotifyTemplateId,
                 respondentEmailAddress,
                 personalisation,
                 reference

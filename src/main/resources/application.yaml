@@ -15,6 +15,7 @@ govnotify.key: ${IA_GOV_NOTIFY_KEY:some-govnotify-key}
 govnotify.template.buildCaseDirection: 13a6331e-b0f5-4e64-ae1b-dc2c2fd0aeeb
 govnotify.template.appealSubmittedCaseOfficer: 23769f75-673c-4682-8433-d751e540e730
 govnotify.template.respondentEvidenceDirection: a1fee4a6-6650-4d91-8f9e-cd15944adef4
+govnotify.template.legalRepresentativeReviewDirection: 75c6c191-083d-43a4-8811-f201fc4750a8
 
 hearingCentreEmailAddresses:
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}

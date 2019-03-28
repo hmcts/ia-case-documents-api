@@ -49,9 +49,9 @@ public class BuildCaseDirectionNotifierTest {
     final String appealReferenceNumber = "PA/001/2018";
     final String appellantGivenNames = "Jane";
     final String appellantFamilyName = "Doe";
-    final String buildCaseDirectionExplanation = "Build your case";
-    final String buildCaseDirectionDateDue = "2018-12-31";
-    final String buildCaseDirectionDateDueFormatted = "31 Dec 2018";
+    final String directionExplanation = "Build your case";
+    final String directionDateDue = "2018-12-31";
+    final String directionDateDueFormatted = "31 Dec 2018";
 
     final Map<String, String> expectedPersonalisation =
         ImmutableMap
@@ -61,8 +61,8 @@ public class BuildCaseDirectionNotifierTest {
             .put("Given names", appellantGivenNames)
             .put("Family name", appellantFamilyName)
             .put("Hyperlink to user’s case list", CCD_URL)
-            .put("Explanation", buildCaseDirectionExplanation)
-            .put("due date", buildCaseDirectionDateDueFormatted)
+            .put("Explanation", directionExplanation)
+            .put("due date", directionDateDueFormatted)
             .build();
 
     final String expectedNotificationId = "ABC-DEF-GHI-JKL";
@@ -101,8 +101,8 @@ public class BuildCaseDirectionNotifierTest {
         when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
-        when(buildCaseDirection.getExplanation()).thenReturn(buildCaseDirectionExplanation);
-        when(buildCaseDirection.getDateDue()).thenReturn(buildCaseDirectionDateDue);
+        when(buildCaseDirection.getExplanation()).thenReturn(directionExplanation);
+        when(buildCaseDirection.getDateDue()).thenReturn(directionDateDue);
 
         when(notificationSender.sendEmail(
             BUILD_CASE_DIRECTION_TEMPLATE,
@@ -155,8 +155,8 @@ public class BuildCaseDirectionNotifierTest {
         when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
-        when(buildCaseDirection.getExplanation()).thenReturn(buildCaseDirectionExplanation);
-        when(buildCaseDirection.getDateDue()).thenReturn(buildCaseDirectionDateDue);
+        when(buildCaseDirection.getExplanation()).thenReturn(directionExplanation);
+        when(buildCaseDirection.getDateDue()).thenReturn(directionDateDue);
 
         when(notificationSender.sendEmail(
             BUILD_CASE_DIRECTION_TEMPLATE,
@@ -202,8 +202,8 @@ public class BuildCaseDirectionNotifierTest {
                 .put("Given names", "")
                 .put("Family name", "")
                 .put("Hyperlink to user’s case list", CCD_URL)
-                .put("Explanation", buildCaseDirectionExplanation)
-                .put("due date", buildCaseDirectionDateDueFormatted)
+                .put("Explanation", directionExplanation)
+                .put("due date", directionDateDueFormatted)
                 .build();
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -218,8 +218,8 @@ public class BuildCaseDirectionNotifierTest {
         when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.empty());
         when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
         when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
-        when(buildCaseDirection.getExplanation()).thenReturn(buildCaseDirectionExplanation);
-        when(buildCaseDirection.getDateDue()).thenReturn(buildCaseDirectionDateDue);
+        when(buildCaseDirection.getExplanation()).thenReturn(directionExplanation);
+        when(buildCaseDirection.getDateDue()).thenReturn(directionDateDue);
 
         when(notificationSender.sendEmail(
             BUILD_CASE_DIRECTION_TEMPLATE,

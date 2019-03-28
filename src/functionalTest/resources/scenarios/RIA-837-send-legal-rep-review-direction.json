@@ -1,0 +1,77 @@
+{
+  "description": "RIA-837 Send Legal Representative review direction",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1234,
+      "eventId": "addAppealResponse",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "The respondent has replied to your appeal argument and evidence. You must now review their response.\n\nNext steps\nYou have 5 days to review the response. If you want to respond to what the Home Office has said, you should email the case officer.\n\nIf you do not respond within 5 days, the case will automatically go to hearing.",
+                "parties": "legalRepresentative",
+                "dateDue": "{$TODAY+5}",
+                "dateSent": "{$TODAY}",
+                "tag": "legalRepresentativeReview"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "RIA-837-test-case-1@example.com"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "The respondent has replied to your appeal argument and evidence. You must now review their response.\n\nNext steps\nYou have 5 days to review the response. If you want to respond to what the Home Office has said, you should email the case officer.\n\nIf you do not respond within 5 days, the case will automatically go to hearing.",
+              "parties": "legalRepresentative",
+              "dateDue": "{$TODAY+5}",
+              "dateSent": "{$TODAY}",
+              "tag": "legalRepresentativeReview"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1234_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "RIA-837-test-case-1@example.com"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1234_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION",
+        "recipient": "RIA-837-test-case-1@example.com",
+        "subject": "Asylum appeal direction: review response",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Your reference: CASE001",
+          "Appellant name: Talha Awan",
+          "Link to the online service: {$iaCcdFrontendUrl}",
+          "You have a direction for this case",
+          "The respondent has replied to your appeal argument and evidence.",
+          "You must now review their response.",
+          "You must complete this direction by: {$TODAY+5|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}
