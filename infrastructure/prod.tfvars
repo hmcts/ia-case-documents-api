@@ -1,3 +1,3 @@
 capacity = "1"
 instance_size="I2"
-dns_server="10.96.75.254"
+consul_dns_resource_group_name="core-infra-prod"

@@ -1,3 +1,4 @@
+
 output "microserviceName" {
   value = "${var.component}"
 }
@@ -20,4 +21,8 @@ output "docmosisVaultUri" {
 
 output "docmosisEndpoint" {
   value = "${data.azurerm_key_vault_secret.docmosis_endpoint.value}"
+}
+
+output "consulDnsIp" {
+  value = "${data.azurerm_lb.consul_dns.private_ip_address}"
 }

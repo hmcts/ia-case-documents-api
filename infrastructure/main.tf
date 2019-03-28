@@ -1,6 +1,6 @@
 # Temporary fix for template API version error on deployment
 provider "azurerm" {
-  version = "1.19.0"
+  version = "1.21.0"
 }
 
 locals {
@@ -125,6 +125,11 @@ data "azurerm_key_vault_secret" "s2s_url" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_lb" "consul_dns" {
+  name                = "consul-server_dns"
+  resource_group_name = "${var.consul_dns_resource_group_name}"
+}
+
 module "ia_case_documents_api" {
   source                          = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product                         = "${var.product}-${var.component}"
@@ -144,7 +149,7 @@ module "ia_case_documents_api" {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
 
-    WEBSITE_DNS_SERVER = "${var.dns_server}"
+    WEBSITE_DNS_SERVER = "${data.azurerm_lb.consul_dns.private_ip_address}"
 
     DOCMOSIS_ACCESS_KEY = "${data.azurerm_key_vault_secret.docmosis_api_key.value}"
     DOCMOSIS_ENDPOINT   = "${data.azurerm_key_vault_secret.docmosis_endpoint.value}"
