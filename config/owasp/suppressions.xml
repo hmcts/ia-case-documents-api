@@ -30,4 +30,12 @@
     <gav regex="true">^com\.google\.guava:guava:.*$</gav>
     <cve>CVE-2018-10237</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+         https://nvd.nist.gov/vuln/detail/CVE-2018-1258
+         False positive -- we do not use Spring Framework 5.0.5.RELEASE (5.0.8.RELEASE at the time of writing)
+         Additionally, we do not use Spring method security annotations which are the specific vulnerability
+        ]]></notes>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
 </suppressions>
