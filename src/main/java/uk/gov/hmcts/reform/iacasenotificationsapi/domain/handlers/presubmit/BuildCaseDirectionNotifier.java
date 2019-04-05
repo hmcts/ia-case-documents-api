@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.LegalRepresentativePersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @Component
 public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
@@ -27,12 +28,14 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
     private final LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory;
     private final DirectionFinder directionFinder;
     private final NotificationSender notificationSender;
+    private final NotificationIdAppender notificationIdAppender;
 
     public BuildCaseDirectionNotifier(
         @Value("${govnotify.template.buildCaseDirection}") String buildCaseDirectionTemplateId,
         LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory,
         DirectionFinder directionFinder,
-        NotificationSender notificationSender
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
     ) {
         requireNonNull(buildCaseDirectionTemplateId, "buildCaseDirectionTemplateId must not be null");
 
@@ -40,6 +43,7 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
         this.legalRepresentativePersonalisationFactory = legalRepresentativePersonalisationFactory;
         this.directionFinder = directionFinder;
         this.notificationSender = notificationSender;
+        this.notificationIdAppender = notificationIdAppender;
     }
 
     public boolean canHandle(
@@ -97,9 +101,13 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
                 .getNotificationsSent()
                 .orElseGet(ArrayList::new);
 
-        notificationsSent.add(new IdValue<>(reference, notificationId));
-
-        asylumCase.setNotificationsSent(notificationsSent);
+        asylumCase.setNotificationsSent(
+            notificationIdAppender.append(
+                notificationsSent,
+                reference,
+                notificationId
+            )
+        );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
