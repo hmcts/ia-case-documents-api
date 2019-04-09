@@ -11,17 +11,19 @@ spring:
     name: Immigration & Asylum case notifications API
   jackson.date-format: yyyy-MM-dd
 
-govnotify.key: ${IA_GOV_NOTIFY_KEY:some-govnotify-key}
+govnotify.key: ${IA_GOV_NOTIFY_KEY}
 govnotify.template.buildCaseDirection: 13a6331e-b0f5-4e64-ae1b-dc2c2fd0aeeb
 govnotify.template.appealSubmittedCaseOfficer: 23769f75-673c-4682-8433-d751e540e730
 govnotify.template.respondentEvidenceDirection: a1fee4a6-6650-4d91-8f9e-cd15944adef4
 govnotify.template.legalRepresentativeReviewDirection: 75c6c191-083d-43a4-8811-f201fc4750a8
+govnotify.template.respondentNonStandardDirection: 2e0dd0af-12d2-4a37-9bd1-dabdda1959bf
 
 hearingCentreEmailAddresses:
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}
   taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:taylorHouse@example.com}
 
 respondentEmailAddresses:
+  nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL}
   respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondentEvidenceDirection@example.com}
 
 notificationSender.deduplicateSendsWithinSeconds: 60

@@ -50,6 +50,11 @@ data "azurerm_key_vault_secret" "ia_respondent_evidence_direction_email" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_respondent_non_standard_direction_until_listing_email" {
+  name      = "respondent-non-standard-direction-until-listing-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "test_caseofficer_username" {
   name      = "test-caseofficer-username"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -147,9 +152,10 @@ module "ia_case_notifications_api" {
     IA_CCD_FRONTEND_URL  = "${data.azurerm_key_vault_secret.ia_ccd_frontend_url.value}"
     IA_GOV_NOTIFY_KEY    = "${data.azurerm_key_vault_secret.ia_gov_notify_key.value}"
 
-    IA_HEARING_CENTRE_MANCHESTER_EMAIL     = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_email.value}"
-    IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL   = "${data.azurerm_key_vault_secret.ia_hearing_centre_taylor_house_email.value}"
-    IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL = "${data.azurerm_key_vault_secret.ia_respondent_evidence_direction_email.value}"
+    IA_HEARING_CENTRE_MANCHESTER_EMAIL                       = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_email.value}"
+    IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_taylor_house_email.value}"
+    IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL                   = "${data.azurerm_key_vault_secret.ia_respondent_evidence_direction_email.value}"
+    IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL = "${data.azurerm_key_vault_secret.ia_respondent_non_standard_direction_until_listing_email.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"

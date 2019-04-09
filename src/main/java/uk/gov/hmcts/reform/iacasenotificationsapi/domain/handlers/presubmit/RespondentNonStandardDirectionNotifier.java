@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
@@ -21,26 +24,38 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RespondentDirectionPersonalisationFactory;
 
 @Component
-public class RespondentEvidenceDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
+public class RespondentNonStandardDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String respondentEvidenceDirectionTemplateId;
-    private final String respondentEvidenceDirectionEmailAddress;
+    private final List<State> allowedCaseStates =
+        Arrays.asList(
+            State.APPEAL_SUBMITTED,
+            State.APPEAL_SUBMITTED_OUT_OF_TIME,
+            State.AWAITING_RESPONDENT_EVIDENCE,
+            State.CASE_BUILDING,
+            State.CASE_UNDER_REVIEW,
+            State.RESPONDENT_REVIEW,
+            State.SUBMIT_HEARING_REQUIREMENTS,
+            State.LISTING
+        );
+
+    private final String respondentNonStandardDirectionTemplateId;
+    private final String respondentNonStandardDirectionEmailAddress;
     private final RespondentDirectionPersonalisationFactory respondentDirectionPersonalisationFactory;
     private final DirectionFinder directionFinder;
     private final NotificationSender notificationSender;
 
-    public RespondentEvidenceDirectionNotifier(
-        @Value("${govnotify.template.respondentEvidenceDirection}") String respondentEvidenceDirectionTemplateId,
-        @Value("${respondentEmailAddresses.respondentEvidenceDirection}") String respondentEvidenceDirectionEmailAddress,
+    public RespondentNonStandardDirectionNotifier(
+        @Value("${govnotify.template.respondentNonStandardDirection}") String respondentNonStandardDirectionTemplateId,
+        @Value("${respondentEmailAddresses.nonStandardDirectionUntilListing}") String respondentNonStandardDirectionEmailAddress,
         RespondentDirectionPersonalisationFactory respondentDirectionPersonalisationFactory,
         DirectionFinder directionFinder,
         NotificationSender notificationSender
     ) {
-        requireNonNull(respondentEvidenceDirectionTemplateId, "respondentEvidenceDirectionTemplateId must not be null");
-        requireNonNull(respondentEvidenceDirectionEmailAddress, "respondentEvidenceDirectionEmailAddress must not be null");
+        requireNonNull(respondentNonStandardDirectionTemplateId, "respondentNonStandardDirectionTemplateId must not be null");
+        requireNonNull(respondentNonStandardDirectionEmailAddress, "respondentNonStandardDirectionEmailAddress must not be null");
 
-        this.respondentEvidenceDirectionTemplateId = respondentEvidenceDirectionTemplateId;
-        this.respondentEvidenceDirectionEmailAddress = respondentEvidenceDirectionEmailAddress;
+        this.respondentNonStandardDirectionTemplateId = respondentNonStandardDirectionTemplateId;
+        this.respondentNonStandardDirectionEmailAddress = respondentNonStandardDirectionEmailAddress;
         this.respondentDirectionPersonalisationFactory = respondentDirectionPersonalisationFactory;
         this.directionFinder = directionFinder;
         this.notificationSender = notificationSender;
@@ -53,8 +68,14 @@ public class RespondentEvidenceDirectionNotifier implements PreSubmitCallbackHan
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
+        final State caseState =
+            callback
+                .getCaseDetails()
+                .getState();
+
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE;
+               && callback.getEvent() == Event.SEND_DIRECTION
+               && allowedCaseStates.contains(caseState);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -70,23 +91,27 @@ public class RespondentEvidenceDirectionNotifier implements PreSubmitCallbackHan
                 .getCaseDetails()
                 .getCaseData();
 
-        Direction respondentEvidenceDirection =
+        Direction nonStandardDirection =
             directionFinder
-                .findFirst(asylumCase, DirectionTag.RESPONDENT_EVIDENCE)
-                .orElseThrow(() -> new IllegalStateException("direction '" + DirectionTag.RESPONDENT_EVIDENCE + "' is not present"));
+                .findFirst(asylumCase, DirectionTag.NONE)
+                .orElseThrow(() -> new IllegalStateException("non-standard direction is not present"));
+
+        if (!nonStandardDirection.getParties().equals(Parties.RESPONDENT)) {
+            return new PreSubmitCallbackResponse<>(asylumCase);
+        }
 
         Map<String, String> personalisation =
             respondentDirectionPersonalisationFactory
-                .create(asylumCase, respondentEvidenceDirection);
+                .create(asylumCase, nonStandardDirection);
 
         String reference =
             callback.getCaseDetails().getId()
-            + "_RESPONDENT_EVIDENCE_DIRECTION";
+            + "_RESPONDENT_NON_STANDARD_DIRECTION";
 
         String notificationId =
             notificationSender.sendEmail(
-                respondentEvidenceDirectionTemplateId,
-                respondentEvidenceDirectionEmailAddress,
+                respondentNonStandardDirectionTemplateId,
+                respondentNonStandardDirectionEmailAddress,
                 personalisation,
                 reference
             );
