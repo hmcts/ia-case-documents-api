@@ -21,12 +21,18 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00009.docx}
 
+hearingBundle.fileExtension: PDF
+hearingBundle.fileName: "hearing-bundle"
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
 docmosis.endpoint: ${DOCMOSIS_ENDPOINT}
 docmosis.render.uri: /rs/render
 docmosis.status.uri: /rs/status
+
+emBundler.url: ${EM_BUNDLER_URL:http://localhost:4623}
+emBundler.stitch.uri: ${EM_BUNDLER_STITCH_URI:/api/stitch-ccd-bundles}
 
 tsvStringsFileLocation: strings.tsv
 
@@ -69,6 +75,7 @@ security:
       - "addAppealResponse"
       - "listCase"
       - "createCaseSummary"
+      - "generateHearingBundle"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
