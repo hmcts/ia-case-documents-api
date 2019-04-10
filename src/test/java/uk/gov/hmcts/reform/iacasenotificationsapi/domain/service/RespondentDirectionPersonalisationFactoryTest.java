@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -103,6 +103,21 @@ public class RespondentDirectionPersonalisationFactoryTest {
             respondentDirectionPersonalisationFactory.create(asylumCase, direction);
 
         assertEquals(expectedPersonalisation, actualPersonalisation);
+    }
+
+    @Test
+    public void should_use_correct_hearing_centre_personalisation() {
+
+        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+
+        when(stringProvider.get("hearingCentre", "manchester")).thenReturn(Optional.of("Manchester Hearing Centre"));
+
+        Map<String, String> actualPersonalisation =
+            respondentDirectionPersonalisationFactory.create(asylumCase, direction);
+
+        verify(stringProvider, times(1)).get("hearingCentre", "manchester");
+
+        assertEquals("Manchester Hearing Centre", actualPersonalisation.get("HearingCentre"));
     }
 
     @Test

@@ -5,13 +5,13 @@ provider "azurerm" {
 
 locals {
 
-  preview_app_service_plan        = "${var.product}-${var.component}-${var.env}"
-  non_preview_app_service_plan    = "${var.product}-${var.env}"
-  app_service_plan                = "${var.env == "preview" || var.env == "spreview" ? local.preview_app_service_plan : local.non_preview_app_service_plan}"
+  preview_app_service_plan     = "${var.product}-${var.component}-${var.env}"
+  non_preview_app_service_plan = "${var.product}-${var.env}"
+  app_service_plan             = "${var.env == "preview" || var.env == "spreview" ? local.preview_app_service_plan : local.non_preview_app_service_plan}"
 
-  preview_vault_name              = "${var.raw_product}-aat"
-  non_preview_vault_name          = "${var.raw_product}-${var.env}"
-  key_vault_name                  = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
+  preview_vault_name           = "${var.raw_product}-aat"
+  non_preview_vault_name       = "${var.raw_product}-${var.env}"
+  key_vault_name               = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -47,6 +47,11 @@ data "azurerm_key_vault_secret" "ia_hearing_centre_taylor_house_email" {
 
 data "azurerm_key_vault_secret" "ia_respondent_evidence_direction_email" {
   name      = "respondent-evidence-direction-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_respondent_review_direction_email" {
+  name      = "respondent-review-direction-email"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
@@ -149,12 +154,13 @@ module "ia_case_notifications_api" {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
 
-    IA_CCD_FRONTEND_URL  = "${data.azurerm_key_vault_secret.ia_ccd_frontend_url.value}"
-    IA_GOV_NOTIFY_KEY    = "${data.azurerm_key_vault_secret.ia_gov_notify_key.value}"
+    IA_CCD_FRONTEND_URL = "${data.azurerm_key_vault_secret.ia_ccd_frontend_url.value}"
+    IA_GOV_NOTIFY_KEY   = "${data.azurerm_key_vault_secret.ia_gov_notify_key.value}"
 
     IA_HEARING_CENTRE_MANCHESTER_EMAIL                       = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_email.value}"
     IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_taylor_house_email.value}"
     IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL                   = "${data.azurerm_key_vault_secret.ia_respondent_evidence_direction_email.value}"
+    IA_RESPONDENT_REVIEW_DIRECTION_EMAIL                     = "${data.azurerm_key_vault_secret.ia_respondent_review_direction_email.value}"
     IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL = "${data.azurerm_key_vault_secret.ia_respondent_non_standard_direction_until_listing_email.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"

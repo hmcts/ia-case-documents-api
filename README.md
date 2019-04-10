@@ -25,6 +25,11 @@ The following environment variables are required when running the api without it
 | IA_IDAM_REDIRECT_URI  |  http://localhost:3451/oauth2redirect |
 | IA_S2S_SECRET  |  some-s2s-secret |
 | IA_S2S_MICROSERVICE  |  some-s2s-gateway |
+| IA_HEARING_CENTRE_MANCHESTER_EMAIL |  some-email |
+| IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL |  some-email |
+| IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL |  some-email |
+| IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL |  some-email |
+| IA_RESPONDENT_REVIEW_DIRECTION_EMAIL |  some-email |
 
 ### Running the application
 

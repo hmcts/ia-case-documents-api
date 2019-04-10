@@ -17,6 +17,7 @@ govnotify.template.appealSubmittedCaseOfficer: 23769f75-673c-4682-8433-d751e540e
 govnotify.template.respondentEvidenceDirection: a1fee4a6-6650-4d91-8f9e-cd15944adef4
 govnotify.template.legalRepresentativeReviewDirection: 75c6c191-083d-43a4-8811-f201fc4750a8
 govnotify.template.respondentNonStandardDirection: 2e0dd0af-12d2-4a37-9bd1-dabdda1959bf
+govnotify.template.respondentReviewDirection: a0e0018c-44ef-4a77-a9d5-c036faad29a1
 
 hearingCentreEmailAddresses:
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}
@@ -24,7 +25,8 @@ hearingCentreEmailAddresses:
 
 respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL}
-  respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondentEvidenceDirection@example.com}
+  respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL}
+  respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL}
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 iaCcdFrontendUrl: ${IA_CCD_FRONTEND_URL:http://localhost:3451/}
