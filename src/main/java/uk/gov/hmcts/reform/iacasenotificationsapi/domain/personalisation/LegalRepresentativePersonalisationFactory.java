@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
+package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 
 import static java.util.Objects.requireNonNull;
 
@@ -6,20 +6,22 @@ import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 
 @Service
-public class RespondentDirectionPersonalisationFactory {
+public class LegalRepresentativePersonalisationFactory {
 
-    private final StringProvider stringProvider;
+    private final String iaCcdFrontendUrl;
 
-    public RespondentDirectionPersonalisationFactory(
-        StringProvider stringProvider
+    public LegalRepresentativePersonalisationFactory(
+        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl
     ) {
-        this.stringProvider = stringProvider;
+        requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
+
+        this.iaCcdFrontendUrl = iaCcdFrontendUrl;
     }
 
     public Map<String, String> create(
@@ -29,16 +31,6 @@ public class RespondentDirectionPersonalisationFactory {
         requireNonNull(asylumCase, "asylumCase must not be null");
         requireNonNull(direction, "direction must not be null");
 
-        final HearingCentre hearingCentre =
-            asylumCase
-                .getHearingCentre()
-                .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
-
-        final String hearingCentreForDisplay =
-            stringProvider
-                .get("hearingCentre", hearingCentre.toString())
-                .orElseThrow(() -> new IllegalStateException("hearingCentre display string is not present"));
-
         final String directionDueDate =
             LocalDate
                 .parse(direction.getDateDue())
@@ -47,11 +39,11 @@ public class RespondentDirectionPersonalisationFactory {
         return
             ImmutableMap
                 .<String, String>builder()
-                .put("HearingCentre", hearingCentreForDisplay)
                 .put("Appeal Ref Number", asylumCase.getAppealReferenceNumber().orElse(""))
-                .put("HORef", asylumCase.getHomeOfficeReferenceNumber().orElse(""))
+                .put("LR reference", asylumCase.getLegalRepReferenceNumber().orElse(""))
                 .put("Given names", asylumCase.getAppellantGivenNames().orElse(""))
                 .put("Family name", asylumCase.getAppellantFamilyName().orElse(""))
+                .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
                 .put("Explanation", direction.getExplanation())
                 .put("due date", directionDueDate)
                 .build();

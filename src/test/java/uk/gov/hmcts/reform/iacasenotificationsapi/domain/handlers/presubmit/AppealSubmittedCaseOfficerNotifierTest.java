@@ -22,39 +22,28 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.CaseOfficerPersonalisationFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class AppealSubmittedCaseOfficerNotifierTest {
 
     private static final String APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE = "template-id";
-    private static final String CCD_URL = "http://ccd";
     private static final String MANCHESTER_EMAIL_ADDRESS = "manchester@example.com";
     private static final String TAYLOR_HOUSE_EMAIL_ADDRESS = "taylorHouse@example.com";
 
+    @Mock private CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
     @Mock private Map<HearingCentre, String> hearingCentreEmailAddresses;
     @Mock private NotificationSender notificationSender;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
+    @Mock private Map<String, String> personalisation;
 
     @Captor private ArgumentCaptor<List<IdValue<String>>> existingNotificationsSentCaptor;
 
     final long caseId = 123L;
-
-    final String appealReferenceNumber = "PA/001/2018";
-    final String appellantGivenNames = "Jane";
-    final String appellantFamilyName = "Doe";
-
-    final Map<String, String> expectedPersonalisation =
-        ImmutableMap
-            .<String, String>builder()
-            .put("Appeal Ref Number", appealReferenceNumber)
-            .put("Given names", appellantGivenNames)
-            .put("Family name", appellantFamilyName)
-            .put("Hyperlink to user’s case list", CCD_URL)
-            .build();
 
     final String expectedNotificationId = "ABC-DEF-GHI-JKL";
     final String expectedNotificationReference = caseId + "_APPEAL_SUBMITTED_CASE_OFFICER";
@@ -66,10 +55,28 @@ public class AppealSubmittedCaseOfficerNotifierTest {
         appealSubmittedCaseOfficerNotifier =
             new AppealSubmittedCaseOfficerNotifier(
                 APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
-                CCD_URL,
+                caseOfficerPersonalisationFactory,
                 hearingCentreEmailAddresses,
                 notificationSender
             );
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getId()).thenReturn(caseId);
+        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+
+        when(caseOfficerPersonalisationFactory.create(asylumCase)).thenReturn(personalisation);
+
+        when(hearingCentreEmailAddresses.get(HearingCentre.MANCHESTER)).thenReturn(MANCHESTER_EMAIL_ADDRESS);
+        when(hearingCentreEmailAddresses.get(HearingCentre.TAYLOR_HOUSE)).thenReturn(TAYLOR_HOUSE_EMAIL_ADDRESS);
+
+        when(notificationSender.sendEmail(
+            eq(APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE),
+            any(),
+            eq(personalisation),
+            any()
+        )).thenReturn(expectedNotificationId);
     }
 
     @Test
@@ -80,24 +87,8 @@ public class AppealSubmittedCaseOfficerNotifierTest {
                 new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
             ));
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
-        when(hearingCentreEmailAddresses.get(HearingCentre.MANCHESTER)).thenReturn(MANCHESTER_EMAIL_ADDRESS);
-
-        when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
-
-        when(notificationSender.sendEmail(
-            APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
-            MANCHESTER_EMAIL_ADDRESS,
-            expectedPersonalisation,
-            expectedNotificationReference
-        )).thenReturn(expectedNotificationId);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -108,7 +99,7 @@ public class AppealSubmittedCaseOfficerNotifierTest {
         verify(notificationSender, times(1)).sendEmail(
             APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
             MANCHESTER_EMAIL_ADDRESS,
-            expectedPersonalisation,
+            personalisation,
             expectedNotificationReference
         );
 
@@ -131,24 +122,8 @@ public class AppealSubmittedCaseOfficerNotifierTest {
     @Test
     public void should_send_appeal_submitted_notification_to_hearing_centre_when_no_notifications_exist() {
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
-        when(hearingCentreEmailAddresses.get(HearingCentre.MANCHESTER)).thenReturn(MANCHESTER_EMAIL_ADDRESS);
-
-        when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
-
-        when(notificationSender.sendEmail(
-            APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
-            MANCHESTER_EMAIL_ADDRESS,
-            expectedPersonalisation,
-            expectedNotificationReference
-        )).thenReturn(expectedNotificationId);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -158,8 +133,8 @@ public class AppealSubmittedCaseOfficerNotifierTest {
 
         verify(notificationSender, times(1)).sendEmail(
             APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
-            MANCHESTER_EMAIL_ADDRESS,
-            expectedPersonalisation,
+            TAYLOR_HOUSE_EMAIL_ADDRESS,
+            personalisation,
             expectedNotificationReference
         );
 
@@ -177,60 +152,34 @@ public class AppealSubmittedCaseOfficerNotifierTest {
     }
 
     @Test
-    public void should_send_appeal_submitted_notification_to_hearing_centre_using_defaults_where_available() {
+    public void should_use_email_for_hearing_centre() {
 
-        final Map<String, String> expectedPersonalisation =
-            ImmutableMap
-                .<String, String>builder()
-                .put("Appeal Ref Number", "")
-                .put("Given names", "")
-                .put("Family name", "")
-                .put("Hyperlink to user’s case list", CCD_URL)
+        Map<HearingCentre, String> exampleInputOutputs =
+            ImmutableMap.<HearingCentre, String>builder()
+                .put(HearingCentre.MANCHESTER, MANCHESTER_EMAIL_ADDRESS)
+                .put(HearingCentre.TAYLOR_HOUSE, TAYLOR_HOUSE_EMAIL_ADDRESS)
                 .build();
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
-        when(hearingCentreEmailAddresses.get(HearingCentre.TAYLOR_HOUSE)).thenReturn(TAYLOR_HOUSE_EMAIL_ADDRESS);
+        exampleInputOutputs
+            .entrySet()
+            .forEach(inputOutput -> {
 
-        when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
+                final HearingCentre inputHearingCentre = inputOutput.getKey();
+                final String outputEmailAddress = inputOutput.getValue();
 
-        when(notificationSender.sendEmail(
-            APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
-            TAYLOR_HOUSE_EMAIL_ADDRESS,
-            expectedPersonalisation,
-            expectedNotificationReference
-        )).thenReturn(expectedNotificationId);
+                when(asylumCase.getHearingCentre()).thenReturn(Optional.of(inputHearingCentre));
 
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
+                verify(notificationSender, times(1)).sendEmail(
+                    APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
+                    outputEmailAddress,
+                    personalisation,
+                    expectedNotificationReference
+                );
 
-        verify(notificationSender, times(1)).sendEmail(
-            APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
-            TAYLOR_HOUSE_EMAIL_ADDRESS,
-            expectedPersonalisation,
-            expectedNotificationReference
-        );
-
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
-
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(1, actualExistingNotificationsSent.size());
-
-        assertEquals(caseId + "_APPEAL_SUBMITTED_CASE_OFFICER", actualExistingNotificationsSent.get(0).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(0).getValue());
+                reset(asylumCase);
+            });
     }
 
     @Test

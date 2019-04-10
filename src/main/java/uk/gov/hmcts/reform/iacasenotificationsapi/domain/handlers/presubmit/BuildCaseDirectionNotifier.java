@@ -2,9 +2,6 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 
-import com.google.common.collect.ImmutableMap;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,27 +17,27 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.LegalRepresentativePersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @Component
 public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String govNotifyTemplateId;
-    private final String iaCcdFrontendUrl;
+    private final String buildCaseDirectionTemplateId;
+    private final LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory;
     private final DirectionFinder directionFinder;
     private final NotificationSender notificationSender;
 
     public BuildCaseDirectionNotifier(
-        @Value("${govnotify.template.buildCaseDirection}") String govNotifyTemplateId,
-        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
+        @Value("${govnotify.template.buildCaseDirection}") String buildCaseDirectionTemplateId,
+        LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory,
         DirectionFinder directionFinder,
         NotificationSender notificationSender
     ) {
-        requireNonNull(govNotifyTemplateId, "govNotifyTemplateId must not be null");
-        requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
+        requireNonNull(buildCaseDirectionTemplateId, "buildCaseDirectionTemplateId must not be null");
 
-        this.govNotifyTemplateId = govNotifyTemplateId;
-        this.iaCcdFrontendUrl = iaCcdFrontendUrl;
+        this.buildCaseDirectionTemplateId = buildCaseDirectionTemplateId;
+        this.legalRepresentativePersonalisationFactory = legalRepresentativePersonalisationFactory;
         this.directionFinder = directionFinder;
         this.notificationSender = notificationSender;
     }
@@ -69,32 +66,19 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
                 .getCaseDetails()
                 .getCaseData();
 
+        String legalRepresentativeEmailAddress =
+            asylumCase
+                .getLegalRepresentativeEmailAddress()
+                .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
+
         Direction buildCaseDirection =
             directionFinder
                 .findFirst(asylumCase, DirectionTag.BUILD_CASE)
                 .orElseThrow(() -> new IllegalStateException("build case direction is not present"));
 
-        String emailAddress =
-            asylumCase
-                .getLegalRepresentativeEmailAddress()
-                .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
-
-        String directionDueDate =
-            LocalDate
-                .parse(buildCaseDirection.getDateDue())
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
-
         Map<String, String> personalisation =
-            ImmutableMap
-                .<String, String>builder()
-                .put("Appeal Ref Number", asylumCase.getAppealReferenceNumber().orElse(""))
-                .put("LR reference", asylumCase.getLegalRepReferenceNumber().orElse(""))
-                .put("Given names", asylumCase.getAppellantGivenNames().orElse(""))
-                .put("Family name", asylumCase.getAppellantFamilyName().orElse(""))
-                .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
-                .put("Explanation", buildCaseDirection.getExplanation())
-                .put("due date", directionDueDate)
-                .build();
+            legalRepresentativePersonalisationFactory
+                .create(asylumCase, buildCaseDirection);
 
         String reference =
             callback.getCaseDetails().getId()
@@ -102,8 +86,8 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
 
         String notificationId =
             notificationSender.sendEmail(
-                govNotifyTemplateId,
-                emailAddress,
+                buildCaseDirectionTemplateId,
+                legalRepresentativeEmailAddress,
                 personalisation,
                 reference
             );

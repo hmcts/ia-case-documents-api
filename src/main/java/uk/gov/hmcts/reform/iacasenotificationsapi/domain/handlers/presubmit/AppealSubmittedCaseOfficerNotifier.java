@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 
-import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,26 +16,26 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.CaseOfficerPersonalisationFactory;
 
 @Component
 public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String govNotifyTemplateId;
-    private final String iaCcdFrontendUrl;
+    private final String appealSubmittedCaseOfficerTemplateId;
+    private final CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
     private final NotificationSender notificationSender;
 
     public AppealSubmittedCaseOfficerNotifier(
-        @Value("${govnotify.template.appealSubmittedCaseOfficer}") String govNotifyTemplateId,
-        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
+        @Value("${govnotify.template.appealSubmittedCaseOfficer}") String appealSubmittedCaseOfficerTemplateId,
+        CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory,
         Map<HearingCentre, String> hearingCentreEmailAddresses,
         NotificationSender notificationSender
     ) {
-        requireNonNull(govNotifyTemplateId, "govNotifyTemplateId must not be null");
-        requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
+        requireNonNull(appealSubmittedCaseOfficerTemplateId, "appealSubmittedCaseOfficerTemplateId must not be null");
 
-        this.govNotifyTemplateId = govNotifyTemplateId;
-        this.iaCcdFrontendUrl = iaCcdFrontendUrl;
+        this.appealSubmittedCaseOfficerTemplateId = appealSubmittedCaseOfficerTemplateId;
+        this.caseOfficerPersonalisationFactory = caseOfficerPersonalisationFactory;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
         this.notificationSender = notificationSender;
     }
@@ -79,13 +78,8 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
         }
 
         Map<String, String> personalisation =
-            ImmutableMap
-                .<String, String>builder()
-                .put("Appeal Ref Number", asylumCase.getAppealReferenceNumber().orElse(""))
-                .put("Given names", asylumCase.getAppellantGivenNames().orElse(""))
-                .put("Family name", asylumCase.getAppellantFamilyName().orElse(""))
-                .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
-                .build();
+            caseOfficerPersonalisationFactory
+                .create(asylumCase);
 
         String reference =
             callback.getCaseDetails().getId()
@@ -93,7 +87,7 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
 
         String notificationId =
             notificationSender.sendEmail(
-                govNotifyTemplateId,
+                appealSubmittedCaseOfficerTemplateId,
                 hearingCentreEmailAddress,
                 personalisation,
                 reference

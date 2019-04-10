@@ -18,6 +18,7 @@ govnotify.template.respondentEvidenceDirection: a1fee4a6-6650-4d91-8f9e-cd15944a
 govnotify.template.legalRepresentativeReviewDirection: 75c6c191-083d-43a4-8811-f201fc4750a8
 govnotify.template.respondentNonStandardDirection: 2e0dd0af-12d2-4a37-9bd1-dabdda1959bf
 govnotify.template.respondentReviewDirection: a0e0018c-44ef-4a77-a9d5-c036faad29a1
+govnotify.template.legalRepresentativeHearingRequirementsDirection: e6694559-38be-46a5-9894-9498b047e2c6
 
 hearingCentreEmailAddresses:
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}

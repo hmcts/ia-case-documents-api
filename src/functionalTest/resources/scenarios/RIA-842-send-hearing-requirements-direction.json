@@ -1,0 +1,76 @@
+{
+  "description": "RIA-842 Send hearing requirements direction",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1007,
+      "eventId": "requestHearingRequirements",
+      "state": "submitHearingRequirements",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Your appeal is going to a hearing",
+                "parties": "legalRepresentative",
+                "dateDue": "{$TODAY+5}",
+                "dateSent": "{$TODAY}",
+                "tag": "legalRepresentativeHearingRequirements"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "RIA-842-test-case-1@example.com"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Your appeal is going to a hearing",
+              "parties": "legalRepresentative",
+              "dateDue": "{$TODAY+5}",
+              "dateSent": "{$TODAY}",
+              "tag": "legalRepresentativeHearingRequirements"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1007_LEGAL_REPRESENTATIVE_HEARING_REQUIREMENTS_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "RIA-842-test-case-1@example.com"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1007_LEGAL_REPRESENTATIVE_HEARING_REQUIREMENTS_DIRECTION",
+        "recipient": "RIA-842-test-case-1@example.com",
+        "subject": "Asylum appeal direction: submit hearing requirements",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Your reference: CASE001",
+          "Appellant name: Talha Awan",
+          "Link to the online service: {$iaCcdFrontendUrl}",
+          "You have a direction for this case",
+          "Your appeal is going to a hearing",
+          "You must complete this direction by: {$TODAY+5|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}
