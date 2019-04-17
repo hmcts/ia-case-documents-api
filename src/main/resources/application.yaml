@@ -61,13 +61,18 @@ security:
       - "submitAppeal"
       - "buildCase"
       - "submitCase"
+      - "uploadAdditionalEvidence"
     caseworker-ia-caseofficer:
       - "sendDirection"
+      - "changeDirectionDueDate"
+      - "requestCaseEdit"
       - "requestHearingRequirements"
       - "requestRespondentEvidence"
       - "uploadRespondentEvidence"
       - "requestRespondentReview"
       - "addAppealResponse"
+      - "listCase"
+      - "createCaseSummary"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
