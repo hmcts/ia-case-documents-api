@@ -94,7 +94,7 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
                 .map(IdValue::getValue)
                 .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE)
                 .collect(Collectors.toList());
-
+        
         Document hearingBundle = documentBundler.bundle(
             bundleDocuments,
             "Hearing documents",

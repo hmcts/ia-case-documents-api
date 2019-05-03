@@ -50,8 +50,7 @@ public class EmDocumentBundler implements DocumentBundler {
         Callback<BundleCaseData> payload =
             createBundlePayload(
                 documents,
-                bundleTitle,
-                bundleFilename
+                bundleTitle
             );
 
         PreSubmitCallbackResponse<BundleCaseData> response =
@@ -69,7 +68,7 @@ public class EmDocumentBundler implements DocumentBundler {
                 .orElseThrow(() -> new DocumentServiceResponseException(AlertLevel.P2, "Bundle was not created"))
                 .getValue()
                 .getStitchedDocument()
-                .orElseThrow(() -> new DocumentServiceResponseException(AlertLevel.P2, "Stitched document was not created"));
+                .orElseThrow(() -> new DocumentServiceResponseException(AlertLevel.P2, "Bundle was not created"));
 
         //rename the bundle file name
         return new Document(
@@ -82,8 +81,7 @@ public class EmDocumentBundler implements DocumentBundler {
 
     private Callback<BundleCaseData> createBundlePayload(
         List<DocumentWithMetadata> documents,
-        String bundleTitle,
-        String bundleFilename
+        String bundleTitle
     ) {
 
         //create the bundle documents as a list of IdValue
@@ -121,8 +119,7 @@ public class EmDocumentBundler implements DocumentBundler {
                                     bundleTitle,
                                     "",
                                     "yes",
-                                    bundleDocuments,
-                                    bundleFilename
+                                    bundleDocuments
                                 )
                             )
                         )
