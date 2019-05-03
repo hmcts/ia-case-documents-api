@@ -72,7 +72,8 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        final String qualifiedDocumentFileName =
+            fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments =
             Stream.concat(
@@ -93,7 +94,7 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
                 .map(IdValue::getValue)
                 .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE)
                 .collect(Collectors.toList());
-
+        
         Document hearingBundle = documentBundler.bundle(
             bundleDocuments,
             "Hearing documents",
