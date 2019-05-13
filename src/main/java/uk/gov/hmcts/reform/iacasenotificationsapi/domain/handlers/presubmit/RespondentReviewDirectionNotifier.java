@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.RespondentDirectionPersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @Component
 public class RespondentReviewDirectionNotifier implements PreSubmitCallbackHandler<AsylumCase> {
@@ -28,13 +29,15 @@ public class RespondentReviewDirectionNotifier implements PreSubmitCallbackHandl
     private final RespondentDirectionPersonalisationFactory respondentDirectionPersonalisationFactory;
     private final DirectionFinder directionFinder;
     private final NotificationSender notificationSender;
+    private final NotificationIdAppender notificationIdAppender;
 
     public RespondentReviewDirectionNotifier(
         @Value("${govnotify.template.respondentReviewDirection}") String respondentReviewDirectionTemplateId,
         @Value("${respondentEmailAddresses.respondentReviewDirection}") String respondentReviewDirectionEmailAddress,
         RespondentDirectionPersonalisationFactory respondentDirectionPersonalisationFactory,
         DirectionFinder directionFinder,
-        NotificationSender notificationSender
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
     ) {
         requireNonNull(respondentReviewDirectionTemplateId, "respondentReviewDirectionTemplateId must not be null");
         requireNonNull(respondentReviewDirectionEmailAddress, "respondentReviewDirectionEmailAddress must not be null");
@@ -44,6 +47,7 @@ public class RespondentReviewDirectionNotifier implements PreSubmitCallbackHandl
         this.respondentDirectionPersonalisationFactory = respondentDirectionPersonalisationFactory;
         this.directionFinder = directionFinder;
         this.notificationSender = notificationSender;
+        this.notificationIdAppender = notificationIdAppender;
     }
 
     public boolean canHandle(
@@ -96,9 +100,13 @@ public class RespondentReviewDirectionNotifier implements PreSubmitCallbackHandl
                 .getNotificationsSent()
                 .orElseGet(ArrayList::new);
 
-        notificationsSent.add(new IdValue<>(reference, notificationId));
-
-        asylumCase.setNotificationsSent(notificationsSent);
+        asylumCase.setNotificationsSent(
+            notificationIdAppender.append(
+                notificationsSent,
+                reference,
+                notificationId
+            )
+        );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

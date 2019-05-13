@@ -8,8 +8,6 @@ import java.util.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
@@ -26,6 +24,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.RespondentDirectionPersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -36,6 +35,7 @@ public class RespondentNonStandardDirectionNotifierTest {
     @Mock private RespondentDirectionPersonalisationFactory respondentDirectionPersonalisationFactory;
     @Mock private DirectionFinder directionFinder;
     @Mock private NotificationSender notificationSender;
+    @Mock private NotificationIdAppender notificationIdAppender;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -43,26 +43,25 @@ public class RespondentNonStandardDirectionNotifierTest {
     @Mock private Direction nonStandardDirection;
     @Mock private Map<String, String> personalisation;
 
-    @Captor private ArgumentCaptor<List<IdValue<String>>> existingNotificationsSentCaptor;
+    private final long caseId = 123L;
 
-    final long caseId = 123L;
+    private final String respondentEmailAddress = "respondent@example.com";
 
-    final String respondentEmailAddress = "respondent@example.com";
+    private final String expectedNotificationId = "ABC-DEF-GHI-JKL";
+    private final String expectedNotificationReference = caseId + "_RESPONDENT_NON_STANDARD_DIRECTION";
 
-    final String expectedNotificationId = "ABC-DEF-GHI-JKL";
-    final String expectedNotificationReference = caseId + "_RESPONDENT_NON_STANDARD_DIRECTION";
-
-    private RespondentNonStandardDirectionNotifier nespondentNonStandardDirectionNotifier;
+    private RespondentNonStandardDirectionNotifier respondentNonStandardDirectionNotifier;
 
     @Before
     public void setUp() {
-        nespondentNonStandardDirectionNotifier =
+        respondentNonStandardDirectionNotifier =
             new RespondentNonStandardDirectionNotifier(
                 RESPONDENT_NON_STANDARD_DIRECTION_TEMPLATE,
                 respondentEmailAddress,
                 respondentDirectionPersonalisationFactory,
                 directionFinder,
-                notificationSender
+                notificationSender,
+                notificationIdAppender
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -90,14 +89,25 @@ public class RespondentNonStandardDirectionNotifierTest {
     public void should_send_respondent_evidence_direction_notification() {
 
         final List<IdValue<String>> existingNotifications =
+            new ArrayList<>(Collections.singletonList(
+                new IdValue<>("respondent-evidence-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
+            ));
+
+        final List<IdValue<String>> expectedNotifications =
             new ArrayList<>(Arrays.asList(
-                new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
+                new IdValue<>("respondent-evidence-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ"),
+                new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+        when(notificationIdAppender.append(
+            existingNotifications,
+            expectedNotificationReference,
+            expectedNotificationId))
+            .thenReturn(expectedNotifications);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -109,27 +119,26 @@ public class RespondentNonStandardDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(2, actualExistingNotificationsSent.size());
-
-        assertEquals("some-notification-sent", actualExistingNotificationsSent.get(0).getId());
-        assertEquals("ZZZ-ZZZ-ZZZ-ZZZ", actualExistingNotificationsSent.get(0).getValue());
-
-        assertEquals(caseId + "_RESPONDENT_NON_STANDARD_DIRECTION", actualExistingNotificationsSent.get(1).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(1).getValue());
     }
 
     @Test
     public void should_send_respondent_evidence_direction_notification_when_no_notifications_exist() {
+        final List<IdValue<String>> expectedNotifications =
+            new ArrayList<>(Collections.singletonList(
+                new IdValue<>(expectedNotificationReference, expectedNotificationId)
+            ));
+
+        when(notificationIdAppender.append(
+            Collections.emptyList(),
+            expectedNotificationReference,
+            expectedNotificationId)
+        ).thenReturn(expectedNotifications);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -141,17 +150,9 @@ public class RespondentNonStandardDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+        verify(asylumCase).setNotificationsSent(expectedNotifications);
+        verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(1, actualExistingNotificationsSent.size());
-
-        assertEquals(caseId + "_RESPONDENT_NON_STANDARD_DIRECTION", actualExistingNotificationsSent.get(0).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(0).getValue());
     }
 
     @Test
@@ -165,7 +166,7 @@ public class RespondentNonStandardDirectionNotifierTest {
             when(nonStandardDirection.getParties()).thenReturn(parties);
 
             PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
             assertNotNull(callbackResponse);
             assertEquals(asylumCase, callbackResponse.getData());
@@ -181,7 +182,7 @@ public class RespondentNonStandardDirectionNotifierTest {
 
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("non-standard direction is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -193,19 +194,19 @@ public class RespondentNonStandardDirectionNotifierTest {
 
         when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
         when(caseDetails.getState()).thenReturn(State.APPEAL_SUBMITTED);
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getState()).thenReturn(State.APPEAL_SUBMITTED);
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
         when(caseDetails.getState()).thenReturn(State.HEARING_AND_OUTCOME);
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -235,7 +236,7 @@ public class RespondentNonStandardDirectionNotifierTest {
 
                 for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-                    boolean canHandle = nespondentNonStandardDirectionNotifier.canHandle(callbackStage, callback);
+                    boolean canHandle = respondentNonStandardDirectionNotifier.canHandle(callbackStage, callback);
 
                     if (event == Event.SEND_DIRECTION
                         && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -255,19 +256,19 @@ public class RespondentNonStandardDirectionNotifierTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.canHandle(null, callback))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.handle(null, callback))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> nespondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> respondentNonStandardDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

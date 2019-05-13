@@ -5,11 +5,10 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
@@ -24,6 +23,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.RespondentDirectionPersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -34,6 +34,7 @@ public class RespondentReviewDirectionNotifierTest {
     @Mock private RespondentDirectionPersonalisationFactory respondentDirectionPersonalisationFactory;
     @Mock private DirectionFinder directionFinder;
     @Mock private NotificationSender notificationSender;
+    @Mock private NotificationIdAppender notificationIdAppender;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -41,14 +42,12 @@ public class RespondentReviewDirectionNotifierTest {
     @Mock private Direction respondentReviewDirection;
     @Mock private Map<String, String> personalisation;
 
-    @Captor private ArgumentCaptor<List<IdValue<String>>> existingNotificationsSentCaptor;
+    private final long caseId = 123L;
 
-    final long caseId = 123L;
+    private final String respondentEmailAddress = "respondent@example.com";
 
-    final String respondentEmailAddress = "respondent@example.com";
-
-    final String expectedNotificationId = "ABC-DEF-GHI-JKL";
-    final String expectedNotificationReference = caseId + "_RESPONDENT_REVIEW_DIRECTION";
+    private final String expectedNotificationId = "ABC-DEF-GHI-JKL";
+    private final String expectedNotificationReference = caseId + "_RESPONDENT_REVIEW_DIRECTION";
 
     private RespondentReviewDirectionNotifier respondentReviewDirectionNotifier;
 
@@ -60,7 +59,8 @@ public class RespondentReviewDirectionNotifierTest {
                 respondentEmailAddress,
                 respondentDirectionPersonalisationFactory,
                 directionFinder,
-                notificationSender
+                notificationSender,
+                notificationIdAppender
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -84,11 +84,23 @@ public class RespondentReviewDirectionNotifierTest {
     public void should_send_respondent_review_direction_notification() {
 
         final List<IdValue<String>> existingNotifications =
-            new ArrayList<>(Arrays.asList(
+            new ArrayList<>(Collections.singletonList(
                 new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
             ));
 
+        final List<IdValue<String>> expectedNotifications =
+            new ArrayList<>(Lists.newArrayList(
+                new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ"),
+                new IdValue<>(expectedNotificationReference, expectedNotificationId)
+            ));
+
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+
+        when(notificationIdAppender.append(
+            existingNotifications,
+            expectedNotificationReference,
+            expectedNotificationId))
+            .thenReturn(expectedNotifications);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             respondentReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -103,26 +115,25 @@ public class RespondentReviewDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(2, actualExistingNotificationsSent.size());
-
-        assertEquals("some-notification-sent", actualExistingNotificationsSent.get(0).getId());
-        assertEquals("ZZZ-ZZZ-ZZZ-ZZZ", actualExistingNotificationsSent.get(0).getValue());
-
-        assertEquals(caseId + "_RESPONDENT_REVIEW_DIRECTION", actualExistingNotificationsSent.get(1).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(1).getValue());
     }
 
     @Test
     public void should_send_respondent_review_direction_notification_when_no_notifications_exist() {
 
+        final List<IdValue<String>> expectedNotifications =
+            new ArrayList<>(Lists.newArrayList(
+                new IdValue<>(expectedNotificationReference, expectedNotificationId)
+            ));
+
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(notificationIdAppender.append(
+            Lists.emptyList(),
+            expectedNotificationReference,
+            expectedNotificationId))
+            .thenReturn(expectedNotifications);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             respondentReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -137,17 +148,9 @@ public class RespondentReviewDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(1, actualExistingNotificationsSent.size());
-
-        assertEquals(caseId + "_RESPONDENT_REVIEW_DIRECTION", actualExistingNotificationsSent.get(0).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(0).getValue());
     }
 
     @Test

@@ -41,12 +41,12 @@ public class BuildCaseDirectionNotifierTest {
     @Mock private Direction buildCaseDirection;
     @Mock private Map<String, String> personalisation;
 
-    final long caseId = 123L;
+    private final long caseId = 123L;
 
-    final String legalRepresentativeEmailAddress = "legal-representative@example.com";
+    private final String legalRepresentativeEmailAddress = "legal-representative@example.com";
 
-    final String expectedNotificationId = "ABC-DEF-GHI-JKL";
-    final String expectedNotificationReference = caseId + "_BUILD_CASE_DIRECTION";
+    private final String expectedNotificationId = "ABC-DEF-GHI-JKL";
+    private final String expectedNotificationReference = caseId + "_BUILD_CASE_DIRECTION";
 
     private BuildCaseDirectionNotifier buildCaseDirectionNotifier;
 
@@ -83,13 +83,13 @@ public class BuildCaseDirectionNotifierTest {
     public void should_send_build_case_direction_notification() {
 
         final List<IdValue<String>> existingNotifications =
-            new ArrayList<>(Arrays.asList(
-                new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
+            new ArrayList<>(Collections.singletonList(
+                new IdValue<>("case-direction-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
             ));
 
         final List<IdValue<String>> expectedNotifications =
             new ArrayList<>(Arrays.asList(
-                new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ"),
+                new IdValue<>("case-direction-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ"),
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
@@ -114,6 +114,7 @@ public class BuildCaseDirectionNotifierTest {
             expectedNotificationReference
         );
 
+        verify(notificationIdAppender).append(anyList(), anyString(), anyString());
         verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
     }
 
@@ -123,7 +124,7 @@ public class BuildCaseDirectionNotifierTest {
         final List<IdValue<String>> existingNotifications = Collections.emptyList();
 
         final List<IdValue<String>> expectedNotifications =
-            new ArrayList<>(Arrays.asList(
+            new ArrayList<>(Collections.singletonList(
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 

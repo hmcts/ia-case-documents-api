@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.CaseOfficerPersonalisationFactory;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @Component
 public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHandler<AsylumCase> {
@@ -25,12 +26,14 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
     private final CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
     private final NotificationSender notificationSender;
+    private final NotificationIdAppender notificationIdAppender;
 
     public AppealSubmittedCaseOfficerNotifier(
         @Value("${govnotify.template.appealSubmittedCaseOfficer}") String appealSubmittedCaseOfficerTemplateId,
         CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory,
         Map<HearingCentre, String> hearingCentreEmailAddresses,
-        NotificationSender notificationSender
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
     ) {
         requireNonNull(appealSubmittedCaseOfficerTemplateId, "appealSubmittedCaseOfficerTemplateId must not be null");
 
@@ -38,6 +41,7 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
         this.caseOfficerPersonalisationFactory = caseOfficerPersonalisationFactory;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
         this.notificationSender = notificationSender;
+        this.notificationIdAppender = notificationIdAppender;
     }
 
     public boolean canHandle(
@@ -98,9 +102,13 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
                 .getNotificationsSent()
                 .orElseGet(ArrayList::new);
 
-        notificationsSent.add(new IdValue<>(reference, notificationId));
-
-        asylumCase.setNotificationsSent(notificationsSent);
+        asylumCase.setNotificationsSent(
+            notificationIdAppender.append(
+                notificationsSent,
+                reference,
+                notificationId
+            )
+        );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

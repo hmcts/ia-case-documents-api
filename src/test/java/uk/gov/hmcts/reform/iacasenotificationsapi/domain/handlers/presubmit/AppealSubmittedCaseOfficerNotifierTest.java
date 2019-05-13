@@ -6,11 +6,10 @@ import static org.mockito.Mockito.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.*;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
@@ -23,6 +22,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.CaseOfficerPersonalisationFactory;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -35,18 +35,17 @@ public class AppealSubmittedCaseOfficerNotifierTest {
     @Mock private CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
     @Mock private Map<HearingCentre, String> hearingCentreEmailAddresses;
     @Mock private NotificationSender notificationSender;
+    @Mock private NotificationIdAppender notificationIdAppender;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Map<String, String> personalisation;
 
-    @Captor private ArgumentCaptor<List<IdValue<String>>> existingNotificationsSentCaptor;
+    private final long caseId = 123L;
 
-    final long caseId = 123L;
-
-    final String expectedNotificationId = "ABC-DEF-GHI-JKL";
-    final String expectedNotificationReference = caseId + "_APPEAL_SUBMITTED_CASE_OFFICER";
+    private final String expectedNotificationId = "ABC-DEF-GHI-JKL";
+    private final String expectedNotificationReference = caseId + "_APPEAL_SUBMITTED_CASE_OFFICER";
 
     private AppealSubmittedCaseOfficerNotifier appealSubmittedCaseOfficerNotifier;
 
@@ -57,7 +56,8 @@ public class AppealSubmittedCaseOfficerNotifierTest {
                 APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE,
                 caseOfficerPersonalisationFactory,
                 hearingCentreEmailAddresses,
-                notificationSender
+                notificationSender,
+                notificationIdAppender
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -83,12 +83,24 @@ public class AppealSubmittedCaseOfficerNotifierTest {
     public void should_send_appeal_submitted_notification_to_hearing_centre() {
 
         final List<IdValue<String>> existingNotifications =
+            new ArrayList<>(Collections.singletonList(
+                new IdValue<>("appeal-submitted-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
+            ));
+
+        final List<IdValue<String>> expectedNotifications =
             new ArrayList<>(Arrays.asList(
-                new IdValue<>("some-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
+                new IdValue<>("appeal-submitted-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ"),
+                new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
         when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+
+        when(notificationIdAppender.append(
+            existingNotifications,
+            expectedNotificationReference,
+            expectedNotificationId
+        )).thenReturn(expectedNotifications);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -103,27 +115,27 @@ public class AppealSubmittedCaseOfficerNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(2, actualExistingNotificationsSent.size());
-
-        assertEquals("some-notification-sent", actualExistingNotificationsSent.get(0).getId());
-        assertEquals("ZZZ-ZZZ-ZZZ-ZZZ", actualExistingNotificationsSent.get(0).getValue());
-
-        assertEquals(caseId + "_APPEAL_SUBMITTED_CASE_OFFICER", actualExistingNotificationsSent.get(1).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(1).getValue());
     }
 
     @Test
-    public void should_send_appeal_submitted_notification_to_hearing_centre_when_no_notifications_exist() {
+    public void should_send_appeal_submitted_notification_to_hearing_centre_when_no_existing_notifications_exist() {
+
+        final List<IdValue<String>> expectedNotifications =
+            new ArrayList<>(Collections.singletonList(
+                new IdValue<>(expectedNotificationReference, expectedNotificationId)
+            ));
 
         when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(notificationIdAppender.append(
+            Lists.emptyList(),
+            expectedNotificationReference,
+            expectedNotificationId
+        )).thenReturn(expectedNotifications);
+
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -138,17 +150,8 @@ public class AppealSubmittedCaseOfficerNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
 
-        List<IdValue<String>> actualExistingNotificationsSent =
-            existingNotificationsSentCaptor
-                .getAllValues()
-                .get(0);
-
-        assertEquals(1, actualExistingNotificationsSent.size());
-
-        assertEquals(caseId + "_APPEAL_SUBMITTED_CASE_OFFICER", actualExistingNotificationsSent.get(0).getId());
-        assertEquals(expectedNotificationId, actualExistingNotificationsSent.get(0).getValue());
     }
 
     @Test
