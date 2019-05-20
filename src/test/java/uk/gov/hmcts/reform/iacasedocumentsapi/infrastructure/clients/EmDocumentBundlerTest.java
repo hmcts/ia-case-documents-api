@@ -49,9 +49,11 @@ public class EmDocumentBundlerTest {
     @Before
     public void setUp() {
 
+        String bundleFilename = "some-bundle-filename";
+
         returnedDocument = new Document("http://some-url",
             "documentBinaryUrl",
-            "some-random-filename");
+            bundleFilename);
 
         emDocumentBundler = new EmDocumentBundler(
             BUNDLE_URL,
@@ -102,8 +104,8 @@ public class EmDocumentBundlerTest {
 
         assertThat(documentBundle.getDocumentUrl()).isEqualTo(returnedDocument.getDocumentUrl());
         assertThat(documentBundle.getDocumentBinaryUrl()).isEqualTo(returnedDocument.getDocumentBinaryUrl());
-        assertThat(documentBundle.getDocumentFilename()).isEqualTo(bundleFilename);
-        assertThat(documentBundle.getDocumentFilename()).isNotEqualTo(returnedDocument.getDocumentFilename());
+        assertThat(documentBundle.getDocumentFilename()).isEqualTo(returnedDocument.getDocumentFilename());
+        assertThat(documentBundle.getDocumentFilename()).isEqualTo(returnedDocument.getDocumentFilename());
 
         ArgumentCaptor<Callback<BundleCaseData>> captor = ArgumentCaptor.forClass(Callback.class);
 
@@ -120,7 +122,8 @@ public class EmDocumentBundlerTest {
                     bundleTitle,
                     "",
                     "yes",
-                    null
+                    null,
+                    bundleFilename
                 )
             );
 
@@ -135,14 +138,13 @@ public class EmDocumentBundlerTest {
         assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getValue())
             .isEqualToIgnoringGivenFields(bundleIdValue.getValue(), "documents");
 
-
     }
 
     @Test
     public void should_throw_if_no_bundle_returned() {
 
-        List<IdValue<Bundle>> bundleIdValues =
-            ImmutableList.of(new IdValue<>("1", bundle));
+        //List<IdValue<Bundle>> bundleIdValues =
+        //    ImmutableList.of(new IdValue<>("1", bundle));
 
         DocumentWithMetadata docMeta1 = mock(DocumentWithMetadata.class);
         DocumentWithMetadata docMeta2 = mock(DocumentWithMetadata.class);
@@ -219,7 +221,7 @@ public class EmDocumentBundlerTest {
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
             .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
-            .hasMessage("Bundle was not created");
+            .hasMessage("Stitched document was not created");
     }
 
 }

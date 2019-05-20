@@ -5,6 +5,7 @@ import java.util.Optional;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 public class Bundle implements CaseData {
 
@@ -16,6 +17,10 @@ public class Bundle implements CaseData {
     private Optional<String> stitchStatus;
     private Optional<Document> stitchedDocument;
 
+    private YesOrNo hasCoversheets;
+    private YesOrNo hasTableOfContents;
+    private String filename;
+
     private Bundle() {
         // noop -- for deserializer
     }
@@ -25,7 +30,8 @@ public class Bundle implements CaseData {
         String title,
         String description,
         String eligibleForStitching,
-        List<IdValue<BundleDocument>> documents
+        List<IdValue<BundleDocument>> documents,
+        String filename
     ) {
         this(
             id,
@@ -34,7 +40,10 @@ public class Bundle implements CaseData {
             eligibleForStitching,
             documents,
             Optional.empty(),
-            Optional.empty()
+            Optional.empty(),
+            YesOrNo.YES,
+            YesOrNo.YES,
+            filename
         );
     }
 
@@ -45,7 +54,10 @@ public class Bundle implements CaseData {
         String eligibleForStitching,
         List<IdValue<BundleDocument>> documents,
         Optional<String> stitchStatus,
-        Optional<Document> stitchedDocument
+        Optional<Document> stitchedDocument,
+        YesOrNo hasCoversheets,
+        YesOrNo hasTableOfContents,
+        String filename
     ) {
         this.id = id;
         this.title = title;
@@ -54,6 +66,10 @@ public class Bundle implements CaseData {
         this.documents = documents;
         this.stitchStatus = stitchStatus;
         this.stitchedDocument = stitchedDocument;
+        this.hasCoversheets = hasCoversheets;
+        this.hasTableOfContents = hasTableOfContents;
+        this.filename = filename;
+
     }
 
     public String getId() {
@@ -82,5 +98,17 @@ public class Bundle implements CaseData {
 
     public Optional<Document> getStitchedDocument() {
         return stitchedDocument;
+    }
+
+    public YesOrNo getHasCoversheets() {
+        return hasCoversheets;
+    }
+
+    public YesOrNo getHasTableOfContents() {
+        return hasTableOfContents;
+    }
+
+    public String getFilename() {
+        return filename;
     }
 }
