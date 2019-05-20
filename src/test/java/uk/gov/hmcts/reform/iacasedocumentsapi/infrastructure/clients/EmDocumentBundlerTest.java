@@ -143,9 +143,6 @@ public class EmDocumentBundlerTest {
     @Test
     public void should_throw_if_no_bundle_returned() {
 
-        //List<IdValue<Bundle>> bundleIdValues =
-        //    ImmutableList.of(new IdValue<>("1", bundle));
-
         DocumentWithMetadata docMeta1 = mock(DocumentWithMetadata.class);
         DocumentWithMetadata docMeta2 = mock(DocumentWithMetadata.class);
         Document doc1 = mock(Document.class);
