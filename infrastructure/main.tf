@@ -125,6 +125,16 @@ data "azurerm_key_vault_secret" "s2s_url" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "em_bundler_url" {
+  name      = "em-bundler-url"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "em_bundler_stitch_uri" {
+  name      = "em-bundler-stitch-uri"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_lb" "consul_dns" {
   name                = "consul-server_dns"
   resource_group_name = "${var.consul_dns_resource_group_name}"
@@ -169,6 +179,9 @@ module "ia_case_documents_api" {
     DM_URL     = "${data.azurerm_key_vault_secret.dm_url.value}"
     IDAM_URL   = "${data.azurerm_key_vault_secret.idam_url.value}"
     S2S_URL    = "${data.azurerm_key_vault_secret.s2s_url.value}"
+
+    EM_BUNDLER_URL           = "${data.azurerm_key_vault_secret.em_bundler_url.value}"
+    EM_BUNDLER_STITCH_URI    = "${data.azurerm_key_vault_secret.em_bundler_stitch_uri.value}"
 
     ROOT_LOGGING_LEVEL   = "${var.root_logging_level}"
     LOG_LEVEL_SPRING_WEB = "${var.log_level_spring_web}"
