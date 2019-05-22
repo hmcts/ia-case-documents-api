@@ -133,6 +133,8 @@ public class CcdScenarioRunnerTest {
                 templatesByFilename
             );
 
+            System.out.println("Actual Response: " + actualResponseBody);
+
             Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
             Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
 
