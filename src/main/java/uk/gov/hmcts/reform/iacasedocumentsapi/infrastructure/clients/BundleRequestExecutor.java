@@ -2,12 +2,14 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import static java.util.Objects.requireNonNull;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
@@ -18,6 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
 import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
+@Slf4j
 @Service
 public class BundleRequestExecutor {
 
@@ -66,7 +69,21 @@ public class BundleRequestExecutor {
                         }
                     ).getBody();
 
-        } catch (RestClientException e) {
+        } catch (HttpClientErrorException e) {
+
+            log.error(e.getResponseBodyAsString());
+
+            throw new DocumentServiceResponseException(
+                AlertLevel.P2,
+                "Couldn't create bundle using API: " + endpoint
+                + "With Http Status: " + e.getStatusText()
+                + " With response body" + e.getResponseBodyAsString(),
+                e
+            );
+        }
+        catch (RestClientException e) {
+
+            log.error(e.getMessage());
 
             throw new DocumentServiceResponseException(
                 AlertLevel.P2,
