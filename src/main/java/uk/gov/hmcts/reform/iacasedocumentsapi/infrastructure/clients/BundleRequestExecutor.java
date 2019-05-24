@@ -71,8 +71,6 @@ public class BundleRequestExecutor {
 
         } catch (HttpClientErrorException e) {
 
-            log.error(e.getResponseBodyAsString());
-
             throw new DocumentServiceResponseException(
                 AlertLevel.P2,
                 "Couldn't create bundle using API: " + endpoint
@@ -80,10 +78,7 @@ public class BundleRequestExecutor {
                 + " With response body" + e.getResponseBodyAsString(),
                 e
             );
-        }
-        catch (RestClientException e) {
-
-            log.error(e.getMessage());
+        } catch (RestClientException e) {
 
             throw new DocumentServiceResponseException(
                 AlertLevel.P2,
