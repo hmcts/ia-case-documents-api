@@ -74,7 +74,7 @@ public class BundleRequestExecutor {
             throw new DocumentServiceResponseException(
                 AlertLevel.P2,
                 "Couldn't create bundle using API: " + endpoint
-                + "With Http Status: " + e.getStatusText()
+                + " With Http Status: " + e.getStatusText()
                 + " With response body" + e.getResponseBodyAsString(),
                 e
             );
