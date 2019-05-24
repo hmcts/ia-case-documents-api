@@ -1,9 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -71,10 +73,11 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         AsylumCase asylumCase,
         Document hearingNotice
     ) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeHearingDocuments = asylumCase.read(HEARING_DOCUMENTS);
+
         final List<IdValue<DocumentWithMetadata>> hearingDocuments =
-            asylumCase
-                .getHearingDocuments()
-                .orElse(Collections.emptyList());
+                maybeHearingDocuments
+                        .orElse(Collections.emptyList());
 
         DocumentWithMetadata documentWithMetadata =
             documentReceiver.receive(
@@ -90,6 +93,6 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 DocumentTag.HEARING_NOTICE
             );
 
-        asylumCase.setHearingDocuments(allHearingDocuments);
+        asylumCase.write(HEARING_DOCUMENTS, allHearingDocuments);
     }
 }

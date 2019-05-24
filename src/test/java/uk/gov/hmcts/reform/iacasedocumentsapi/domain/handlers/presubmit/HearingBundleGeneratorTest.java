@@ -4,11 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,14 +60,14 @@ public class HearingBundleGeneratorTest {
         String fileName = "some-file-name";
 
         hearingBundleGenerator =
-            new HearingBundleGenerator(
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentBundler,
-                documentReceiver,
-                documentsAppender
-            );
+                new HearingBundleGenerator(
+                        fileExtension,
+                        fileName,
+                        fileNameQualifier,
+                        documentBundler,
+                        documentReceiver,
+                        documentsAppender
+                );
 
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -78,7 +76,6 @@ public class HearingBundleGeneratorTest {
         when(callback.getEvent()).thenReturn(Event.GENERATE_HEARING_BUNDLE);
 
     }
-
 
     @Test
     public void it_can_handle_callback() {
@@ -92,7 +89,7 @@ public class HearingBundleGeneratorTest {
                 boolean canHandle = hearingBundleGenerator.canHandle(callbackStage, callback);
 
                 if (event == Event.GENERATE_HEARING_BUNDLE
-                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                        && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);
                 } else {
@@ -113,24 +110,24 @@ public class HearingBundleGeneratorTest {
         IdValue<DocumentWithMetadata> hearingDoc = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE));
         IdValue<DocumentWithMetadata> existingBundle = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE));
 
-        when(asylumCase.getHearingDocuments()).thenReturn(Optional.of(Lists.newArrayList(hearingDoc, existingBundle)));
-        when(asylumCase.getLegalRepresentativeDocuments()).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc)));
-        when(asylumCase.getRespondentDocuments()).thenReturn(Optional.of(Lists.newArrayList(respondantDoc)));
+        when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(hearingDoc, existingBundle)));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc)));
+        when(asylumCase.read(RESPONDENT_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(respondantDoc)));
 
         when(documentBundler.bundle(
-            anyList(),
-            eq("Hearing documents"),
-            eq("filename")
+                anyList(),
+                eq("Hearing documents"),
+                eq("filename")
         )).thenReturn(hearingBundle);
 
         when(documentReceiver.receive(
-            eq(hearingBundle),
-            eq(""),
-            eq(DocumentTag.HEARING_BUNDLE)
+                eq(hearingBundle),
+                eq(""),
+                eq(DocumentTag.HEARING_BUNDLE)
         )).thenReturn(documentWithMetadata);
 
         PreSubmitCallbackResponse<AsylumCase> response =
-            hearingBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                hearingBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertThat(response.getData()).isEqualTo(asylumCase);
 
@@ -145,9 +142,9 @@ public class HearingBundleGeneratorTest {
         assertThat(value.size()).isEqualTo(expectedBundleSize);
 
         assertThat(value).containsOnlyOnce(
-            legalRepDoc.getValue(),
-            respondantDoc.getValue(),
-            hearingDoc.getValue()
+                legalRepDoc.getValue(),
+                respondantDoc.getValue(),
+                hearingDoc.getValue()
         );
     }
 
@@ -155,24 +152,24 @@ public class HearingBundleGeneratorTest {
     public void should_call_document_bundler_with_when_there_are_no_documents() {
 
         int expectedBundleSize = 0;
-        when(asylumCase.getHearingDocuments()).thenReturn(Optional.empty());
-        when(asylumCase.getLegalRepresentativeDocuments()).thenReturn(Optional.empty());
-        when(asylumCase.getRespondentDocuments()).thenReturn(Optional.empty());
+        when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.empty());
+        when(asylumCase.read(RESPONDENT_DOCUMENTS)).thenReturn(Optional.empty());
 
         when(documentBundler.bundle(
-            anyList(),
-            eq("Hearing documents"),
-            eq("filename")
+                anyList(),
+                eq("Hearing documents"),
+                eq("filename")
         )).thenReturn(hearingBundle);
 
         when(documentReceiver.receive(
-            eq(hearingBundle),
-            eq(""),
-            eq(DocumentTag.HEARING_BUNDLE)
+                eq(hearingBundle),
+                eq(""),
+                eq(DocumentTag.HEARING_BUNDLE)
         )).thenReturn(documentWithMetadata);
 
         PreSubmitCallbackResponse<AsylumCase> response =
-            hearingBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                hearingBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertThat(response.getData()).isEqualTo(asylumCase);
 
@@ -194,30 +191,30 @@ public class HearingBundleGeneratorTest {
     public void handling_should_throw_if_cannot_actually_handle() {
 
         assertThatThrownBy(() -> hearingBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
-            .hasMessage("Cannot handle callback")
-            .isExactlyInstanceOf(IllegalStateException.class);
+                .hasMessage("Cannot handle callback")
+                .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
 
         assertThatThrownBy(() -> hearingBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-            .hasMessage("Cannot handle callback")
-            .isExactlyInstanceOf(IllegalStateException.class);
+                .hasMessage("Cannot handle callback")
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 
 
     private Document createDocumentWithDescription() {
         return
-            new Document("some-url",
-                "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                new Document("some-url",
+                        "some-binary-url",
+                        RandomStringUtils.randomAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {
 
         return
-            new DocumentWithMetadata(createDocumentWithDescription(),
-                RandomStringUtils.randomAlphabetic(20),
-                new SystemDateProvider().now().toString(), documentTag);
+                new DocumentWithMetadata(createDocumentWithDescription(),
+                        RandomStringUtils.randomAlphabetic(20),
+                        new SystemDateProvider().now().toString(), documentTag);
 
     }
 

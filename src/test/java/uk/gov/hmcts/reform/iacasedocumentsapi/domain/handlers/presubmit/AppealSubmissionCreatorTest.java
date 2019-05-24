@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,7 +65,7 @@ public class AppealSubmissionCreatorTest {
 
         when(appealSubmissionDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
-        when(asylumCase.getLegalRepresentativeDocuments()).thenReturn(Optional.of(existingLegalRepresentativeDocuments));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.of(existingLegalRepresentativeDocuments));
 
         when(documentReceiver.receive(
             uploadedDocument,
@@ -90,7 +91,7 @@ public class AppealSubmissionCreatorTest {
 
         verify(appealSubmissionDocumentCreator, times(1)).create(caseDetails);
 
-        verify(asylumCase, times(1)).getLegalRepresentativeDocuments();
+        verify(asylumCase, times(1)).read(LEGAL_REPRESENTATIVE_DOCUMENTS);
         verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.APPEAL_SUBMISSION);
         verify(documentsAppender, times(1))
             .append(
@@ -99,7 +100,7 @@ public class AppealSubmissionCreatorTest {
                 DocumentTag.APPEAL_SUBMISSION
             );
 
-        verify(asylumCase, times(1)).setLegalRepresentativeDocuments(allLegalRepresentativeDocuments);
+        verify(asylumCase, times(1)).write(LEGAL_REPRESENTATIVE_DOCUMENTS, allLegalRepresentativeDocuments);
     }
 
     @Test
@@ -124,7 +125,7 @@ public class AppealSubmissionCreatorTest {
                 eq(DocumentTag.APPEAL_SUBMISSION)
             );
 
-        verify(asylumCase, times(1)).setLegalRepresentativeDocuments(allLegalRepresentativeDocuments);
+        verify(asylumCase, times(1)).write(LEGAL_REPRESENTATIVE_DOCUMENTS, allLegalRepresentativeDocuments);
     }
 
     @Test

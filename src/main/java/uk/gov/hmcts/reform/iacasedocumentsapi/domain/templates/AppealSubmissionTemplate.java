@@ -1,21 +1,20 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static java.util.stream.Collectors.joining;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
@@ -48,15 +47,15 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
 
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("CREATED_DATE", caseDetails.getCreatedDate().format(DOCUMENT_DATE_FORMAT));
-        fieldValues.put("appealReferenceNumber", asylumCase.getAppealReferenceNumber().orElse(""));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.getLegalRepReferenceNumber().orElse(""));
-        fieldValues.put("homeOfficeReferenceNumber", asylumCase.getHomeOfficeReferenceNumber().orElse(""));
-        fieldValues.put("homeOfficeDecisionDate", formatDateForRendering(asylumCase.getHomeOfficeDecisionDate().orElse("")));
-        fieldValues.put("appellantGivenNames", asylumCase.getAppellantGivenNames().orElse(""));
-        fieldValues.put("appellantFamilyName", asylumCase.getAppellantFamilyName().orElse(""));
-        fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.getAppellantDateOfBirth().orElse("")));
+        fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("homeOfficeDecisionDate", formatDateForRendering(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class).orElse("")));
+        fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
+        fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
+        fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse("")));
 
-        Optional<String> optionalAppealType = asylumCase.getAppealType();
+        Optional<String> optionalAppealType = asylumCase.read(APPEAL_TYPE);
 
         if (optionalAppealType.isPresent()) {
 
@@ -68,11 +67,11 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             );
         }
 
-        fieldValues.put("newMatters", asylumCase.getNewMatters().orElse(""));
+        fieldValues.put("newMatters", asylumCase.read(NEW_MATTERS, String.class).orElse(""));
 
-        if (asylumCase.getAppellantHasFixedAddress().orElse(YesOrNo.NO) == YesOrNo.YES) {
+        if (asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
 
-            Optional<AddressUk> optionalAppellantAddress = asylumCase.getAppellantAddress();
+            Optional<AddressUk> optionalAppellantAddress = asylumCase.read(APPELLANT_ADDRESS);
 
             if (optionalAppellantAddress.isPresent()) {
 
@@ -94,10 +93,12 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             }
         }
 
+        Optional<List<IdValue<Map<String, String>>>> appellantNationalities = asylumCase
+                .read(APPELLANT_NATIONALITIES);
+
         fieldValues.put(
             "appellantNationalities",
-            asylumCase
-                .getAppellantNationalities()
+            appellantNationalities
                 .orElse(Collections.emptyList())
                 .stream()
                 .filter(idValue -> idValue.getValue().containsKey("code"))
@@ -109,10 +110,12 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 .collect(Collectors.toList())
         );
 
+        Optional<List<String>> groundsOfAppealForDisplay = asylumCase
+                .read(APPEAL_GROUNDS_FOR_DISPLAY);
+
         fieldValues.put(
             "appealGrounds",
-            asylumCase
-                .getAppealGroundsForDisplay()
+            groundsOfAppealForDisplay
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(code -> stringProvider.get("appealGrounds", code))
@@ -122,10 +125,12 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 .collect(Collectors.toList())
         );
 
+        Optional<List<IdValue<Map<String, String>>>> otherAppeals = asylumCase
+                .read(OTHER_APPEALS);
+
         fieldValues.put(
             "otherAppeals",
-            asylumCase
-                .getOtherAppeals()
+            otherAppeals
                 .orElse(Collections.emptyList())
                 .stream()
                 .filter(idValue -> idValue.getValue().containsKey("value"))

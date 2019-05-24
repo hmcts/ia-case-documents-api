@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+
 import com.google.common.base.Strings;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,21 +42,21 @@ public class HearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
 
         final HearingCentre listedHearingCentre =
             asylumCase
-                .getListCaseHearingCentre()
+                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
 
-        fieldValues.put("appealReferenceNumber", asylumCase.getAppealReferenceNumber().orElse(""));
-        fieldValues.put("appellantGivenNames", asylumCase.getAppellantGivenNames().orElse(""));
-        fieldValues.put("appellantFamilyName", asylumCase.getAppellantFamilyName().orElse(""));
-        fieldValues.put("homeOfficeReferenceNumber", asylumCase.getHomeOfficeReferenceNumber().orElse(""));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.getLegalRepReferenceNumber().orElse(""));
+        fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
+        fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
+        fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
 
-        fieldValues.put("hearingDate", formatDateForRendering(asylumCase.getListCaseHearingDate().orElse("")));
-        fieldValues.put("hearingTime", formatTimeForRendering(asylumCase.getListCaseHearingDate().orElse("")));
+        fieldValues.put("hearingDate", formatDateForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
+        fieldValues.put("hearingTime", formatTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
 
         fieldValues.put(
             "hearingCentreAddress",
@@ -62,11 +64,11 @@ public class HearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
                 .replaceAll(",\\s*", "\n")
         );
 
-        fieldValues.put("vulnerabilities", asylumCase.getListCaseRequirementsVulnerabilities().orElse(""));
-        fieldValues.put("multimedia", asylumCase.getListCaseRequirementsMultimedia().orElse(""));
-        fieldValues.put("singleSexCourt", asylumCase.getListCaseRequirementsSingleSexCourt().orElse(""));
-        fieldValues.put("inCamera", asylumCase.getListCaseRequirementsInCameraCourt().orElse(""));
-        fieldValues.put("otherHearingRequest", asylumCase.getListCaseRequirementsOther().orElse(""));
+        fieldValues.put("vulnerabilities", asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class).orElse(""));
+        fieldValues.put("multimedia", asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class).orElse(""));
+        fieldValues.put("singleSexCourt", asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class).orElse(""));
+        fieldValues.put("inCamera", asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class).orElse(""));
+        fieldValues.put("otherHearingRequest", asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class).orElse(""));
 
         return fieldValues;
     }

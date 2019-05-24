@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,7 +65,7 @@ public class HearingNoticeCreatorTest {
 
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
-        when(asylumCase.getHearingDocuments()).thenReturn(Optional.of(existingHearingDocuments));
+        when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(existingHearingDocuments));
 
         when(documentReceiver.receive(
             uploadedDocument,
@@ -90,7 +91,7 @@ public class HearingNoticeCreatorTest {
 
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
 
-        verify(asylumCase, times(1)).getHearingDocuments();
+        verify(asylumCase, times(1)).read(HEARING_DOCUMENTS);
         verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.HEARING_NOTICE);
         verify(documentsAppender, times(1))
             .append(
@@ -99,7 +100,7 @@ public class HearingNoticeCreatorTest {
                 DocumentTag.HEARING_NOTICE
             );
 
-        verify(asylumCase, times(1)).setHearingDocuments(allHearingDocuments);
+        verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, allHearingDocuments);
     }
 
     @Test
@@ -124,7 +125,7 @@ public class HearingNoticeCreatorTest {
                 eq(DocumentTag.HEARING_NOTICE)
             );
 
-        verify(asylumCase, times(1)).setHearingDocuments(allHearingDocuments);
+        verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, allHearingDocuments);
     }
 
     @Test

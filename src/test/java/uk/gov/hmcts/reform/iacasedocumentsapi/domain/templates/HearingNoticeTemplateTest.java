@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -59,23 +60,23 @@ public class HearingNoticeTemplateTest {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.getHomeOfficeReferenceNumber()).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
 
-        when(asylumCase.getListCaseHearingDate()).thenReturn(Optional.of(hearingDate));
+        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
 
-        when(asylumCase.getListCaseHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
         when(stringProvider.get("hearingCentreAddress", "taylorHouse")).thenReturn(Optional.of(taylorHouseHearingCentreAddress));
 
-        when(asylumCase.getListCaseRequirementsVulnerabilities()).thenReturn(Optional.of(vulnerabilities));
-        when(asylumCase.getListCaseRequirementsMultimedia()).thenReturn(Optional.of(multimedia));
-        when(asylumCase.getListCaseRequirementsSingleSexCourt()).thenReturn(Optional.of(singleSexCourt));
-        when(asylumCase.getListCaseRequirementsInCameraCourt()).thenReturn(Optional.of(inCamera));
-        when(asylumCase.getListCaseRequirementsOther()).thenReturn(Optional.of(otherHearingRequest));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.of(vulnerabilities));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.of(multimedia));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(inCamera));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(otherHearingRequest));
     }
 
     @Test
@@ -109,7 +110,7 @@ public class HearingNoticeTemplateTest {
     @Test
     public void should_use_correct_hearing_centre_address() {
 
-        when(asylumCase.getListCaseHearingCentre()).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
@@ -119,17 +120,17 @@ public class HearingNoticeTemplateTest {
     @Test
     public void should_be_tolerant_of_missing_data() {
 
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
-        when(asylumCase.getHomeOfficeReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getListCaseHearingDate()).thenReturn(Optional.empty());
-        when(asylumCase.getListCaseRequirementsVulnerabilities()).thenReturn(Optional.empty());
-        when(asylumCase.getListCaseRequirementsMultimedia()).thenReturn(Optional.empty());
-        when(asylumCase.getListCaseRequirementsSingleSexCourt()).thenReturn(Optional.empty());
-        when(asylumCase.getListCaseRequirementsInCameraCourt()).thenReturn(Optional.empty());
-        when(asylumCase.getListCaseRequirementsOther()).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
@@ -153,7 +154,7 @@ public class HearingNoticeTemplateTest {
     @Test
     public void handling_should_throw_if_hearing_centre_not_present() {
 
-        when(asylumCase.getListCaseHearingCentre()).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> hearingNoticeTemplate.mapFieldValues(caseDetails))
             .hasMessage("listCaseHearingCentre is not present")

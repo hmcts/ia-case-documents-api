@@ -40,4 +40,8 @@ public class EditableDirection {
         requireNonNull(dateDue);
         return dateDue;
     }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
 }

@@ -1,9 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,29 +74,29 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        final String qualifiedDocumentFileName =
-            fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeLegalRepresentativeDocuments = asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS);
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeRespondentDocuments = asylumCase.read(RESPONDENT_DOCUMENTS);
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeHearingDocuments = asylumCase.read(HEARING_DOCUMENTS);
 
         List<DocumentWithMetadata> bundleDocuments =
             Stream.concat(
-                asylumCase
-                    .getLegalRepresentativeDocuments()
+                    maybeLegalRepresentativeDocuments
                     .orElse(Collections.emptyList())
                     .stream(),
                 Stream.concat(
-                    asylumCase
-                        .getRespondentDocuments()
+                    maybeRespondentDocuments
                         .orElse(Collections.emptyList())
                         .stream(),
-                    asylumCase
-                        .getHearingDocuments()
+                    maybeHearingDocuments
                         .orElse(Collections.emptyList())
                         .stream()
                 ))
                 .map(IdValue::getValue)
                 .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE)
                 .collect(Collectors.toList());
-        
+
         Document hearingBundle = documentBundler.bundle(
             bundleDocuments,
             "Hearing documents",
@@ -110,10 +112,12 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         AsylumCase asylumCase,
         Document hearingBundle
     ) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeHearingDocuments = asylumCase
+                .read(HEARING_DOCUMENTS);
+
         final List<IdValue<DocumentWithMetadata>> hearingDocuments =
-            asylumCase
-                .getHearingDocuments()
-                .orElse(Collections.emptyList());
+                maybeHearingDocuments
+                        .orElse(Collections.emptyList());
 
         DocumentWithMetadata documentWithMetadata =
             documentReceiver.receive(
@@ -129,6 +133,6 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
                 DocumentTag.HEARING_BUNDLE
             );
 
-        asylumCase.setHearingDocuments(allHearingDocuments);
+        asylumCase.write(HEARING_DOCUMENTS, allHearingDocuments);
     }
 }
