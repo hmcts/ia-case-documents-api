@@ -31,7 +31,7 @@ def versions = [
     reformLogging   : '3.0.4',
     serenity        : '2.0.11',
     sonarPitest     : '0.5',
-    springBoot      : '2.0.4.RELEASE',
+    springBoot      : '2.0.8.RELEASE',
     springHystrix   : '2.0.2.RELEASE',
     springfoxSwagger: '2.9.2'
 ]
