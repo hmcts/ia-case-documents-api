@@ -21,9 +21,9 @@ public class AsylumCaseFileNameQualifierTest {
     @Mock private AsylumCase asylumCase;
 
     private String appealReferenceNumber = "PA/12345/2020";
-    private String appellantFamilyName = "Awan";
+    private String appellantFamilyName = "González";
     private String unqualifiedFileName = "appeal-form";
-    private String expectedFileName = "PA 12345 2020-Awan-appeal-form";
+    private String expectedFileName = "PA 12345 2020-González-appeal-form";
 
     private AsylumCaseFileNameQualifier asylumCaseFileNameQualifier;
 

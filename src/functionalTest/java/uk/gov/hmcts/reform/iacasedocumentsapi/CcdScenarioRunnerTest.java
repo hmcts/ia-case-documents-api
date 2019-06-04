@@ -27,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 
@@ -39,7 +40,9 @@ public class CcdScenarioRunnerTest {
 
     @Autowired private Environment environment;
     @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
+    @Autowired private MapValueExpander mapValueExpander;
     @Autowired private ObjectMapper objectMapper;
+    @Autowired private List<Fixture> fixtures;
     @Autowired private List<Verifier> verifiers;
 
     @Before
@@ -52,12 +55,16 @@ public class CcdScenarioRunnerTest {
     @Test
     public void scenarios_should_behave_as_specified() throws IOException {
 
+        loadPropertiesIntoMapValueExpander();
+
+        for (Fixture fixture : fixtures) {
+            fixture.prepare();
+        }
+
         assertFalse(
             "Verifiers are configured",
             verifiers.isEmpty()
         );
-
-        loadPropertiesIntoMapValueExpander();
 
         String scenarioPattern = System.getProperty("scenario");
         if (scenarioPattern == null) {
@@ -126,6 +133,8 @@ public class CcdScenarioRunnerTest {
                 templatesByFilename
             );
 
+            System.out.println("Actual Response: " + actualResponseBody);
+
             Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
             Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
 
@@ -157,7 +166,7 @@ public class CcdScenarioRunnerTest {
         String source
     ) throws IOException {
         Map<String, Object> data = MapSerializer.deserialize(source);
-        MapValueExpander.expandValues(data);
+        mapValueExpander.expandValues(data);
         return data;
     }
 
