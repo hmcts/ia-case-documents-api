@@ -1,0 +1,32 @@
+java:
+  image: 'https://hmcts.azurecr.io/hmcts/ia-case-notifications-api:latest'
+  applicationPort: 8092
+  keyVaults:
+    ia:
+      resourceGroup: ia
+      secrets:
+        - docmosis-api-key
+        - docmosis-endpoint
+        - appeal-submission-template
+        - system-username
+        - system-password
+        - idam-client-id
+        - idam-secret
+        - idam-redirect-uri
+        - s2s-secret
+        - s2s-microservice
+        - dm-url
+        - ccd-url
+        - ccd-gw-url
+        - idam-url
+        - s2s-url
+        - em-bundler-url
+        - em_bundler_stitch_uri
+    envionment:
+      LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
+      LOGBACK_REQUIRE_ERROR_CODE: 'false'
+
+
+
+# How to put his value into the application ???
+#    WEBSITE_DNS_SERVER = "${data.azurerm_lb.consul_dns.private_ip_address}"
