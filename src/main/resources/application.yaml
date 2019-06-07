@@ -43,6 +43,7 @@ security:
   anonymousPaths:
     - "/"
     - "/health"
+    - "/health/liveness"
     - "/loggers/**"
     - "/swagger-ui.html"
     - "/swagger-resources/**"
