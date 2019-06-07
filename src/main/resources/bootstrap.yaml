@@ -4,9 +4,9 @@ spring:
       prefixed: false
       paths: /mnt/secrets/ia
       aliases:
-        docmosis-api-key: IA_CCD_FRONTEND_URL
-        docmosis-endpoint: IA_GOV_NOTIFY_KEY
-        appeal-submission-template:
+        docmosis-api-key: DOCMOSIS_ACCESS_KEY
+        docmosis-endpoint: DOCMOSIS_ENDPOINT
+        appeal-submission-template: IA_APPEAL_SUBMISSION_TEMPLATE
         system-username: IA_SYSTEM_USERNAME
         system-password: IA_SYSTEM_PASSWORD
         idam-client-id: IA_IDAM_CLIENT_ID
@@ -21,6 +21,3 @@ spring:
         s2s-url: S2S_URL
         em-bundler-url: EM_BUNDLER_URL
         em-bundler-stitch-uri: EM_BUNDLER_STITCH_URI
-
-
-#    WEBSITE_DNS_SERVER = "${data.azurerm_lb.consul_dns.private_ip_address}"
