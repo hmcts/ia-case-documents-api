@@ -96,4 +96,5 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
         asylumCase.write(LEGAL_REPRESENTATIVE_DOCUMENTS, allLegalRepresentativeDocuments);
     }
+
 }
