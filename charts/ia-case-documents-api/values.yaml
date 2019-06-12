@@ -19,7 +19,7 @@ java:
         - idam-url
         - s2s-url
         - em-bundler-url
-        - em_bundler_stitch_uri
+        - em-bundler-stitch-uri
     docmosisiaasdevkv:
       resourceGroup: ia
       secrets:
