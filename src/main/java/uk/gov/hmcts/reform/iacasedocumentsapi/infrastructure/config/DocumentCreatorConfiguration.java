@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
 
 @Configuration
@@ -55,4 +56,26 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("decisionAndReasons")
+    public DocumentCreator<AsylumCase> getHearingAndDecisionDocumentCreator(
+            @Value("${decisionAndReasons.contentType}") String contentType,
+            @Value("${decisionAndReasons.fileExtension}") String fileExtension,
+            @Value("${decisionAndReasons.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            DecisionAndReasonsTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }

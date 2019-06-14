@@ -21,12 +21,13 @@ public class StateTest {
         assertEquals("finalBundling", State.FINAL_BUNDLING.toString());
         assertEquals("preHearing", State.PRE_HEARING.toString());
         assertEquals("hearingAndOutcome", State.HEARING_AND_OUTCOME.toString());
+        assertEquals("decision", State.DECISION.toString());
         assertEquals("decided", State.DECIDED.toString());
         assertEquals("unknown", State.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(15, State.values().length);
+        assertEquals(16, State.values().length);
     }
 }
