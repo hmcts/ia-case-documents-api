@@ -76,7 +76,7 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         fieldValues.put("respondentsImmigrationHistoryDescription", asylumCase.read(RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("immigrationHistoryDisagreementDescription", asylumCase.read(IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION, String.class).orElse(""));
 
-        fieldValues.put("scheduleOfIssuesAgreement", asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)
+        fieldValues.put("scheduleIssueAgreement", asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)
                 .orElseThrow(() -> new IllegalStateException("scheduleOfIssuesAgreement must be present")).toString());
         fieldValues.put("appellantsScheduleOfIssuesDescription", asylumCase.read(APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("appellantsDisputedScheduleOfIssuesDescription", asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class).orElse(""));
