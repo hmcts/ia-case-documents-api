@@ -104,7 +104,7 @@ public class DecisionAndReasonsTemplateTest {
         assertThat(templateFieldValues.get("respondentsImmigrationHistoryDescription")).isEqualTo("some-respondents-immigration-history");
         assertThat(templateFieldValues.get("immigrationHistoryDisagreementDescription")).isEqualTo("some-immigration-disagreement");
 
-        assertThat(templateFieldValues.get("scheduleOfIssuesAgreement")).isEqualTo("No");
+        assertThat(templateFieldValues.get("scheduleIssueAgreement")).isEqualTo("No");
         assertThat(templateFieldValues.get("appellantsScheduleOfIssuesDescription")).isEqualTo("some-agreed-schedule");
         assertThat(templateFieldValues.get("appellantsDisputedScheduleOfIssuesDescription")).isEqualTo("some-disputed-schedule");
         assertThat(templateFieldValues.get("scheduleOfIssuesDisagreementDescription")).isEqualTo("some-schedule-disagreement");
@@ -154,7 +154,7 @@ public class DecisionAndReasonsTemplateTest {
         assertThat(templateFieldValues.get("respondentsImmigrationHistoryDescription")).isEqualTo("");
         assertThat(templateFieldValues.get("immigrationHistoryDisagreementDescription")).isEqualTo("");
 
-        assertThat(templateFieldValues.get("scheduleOfIssuesAgreement")).isEqualTo("No");
+        assertThat(templateFieldValues.get("scheduleIssueAgreement")).isEqualTo("No");
         assertThat(templateFieldValues.get("appellantsScheduleOfIssuesDescription")).isEqualTo("");
         assertThat(templateFieldValues.get("appellantsDisputedScheduleOfIssuesDescription")).isEqualTo("");
         assertThat(templateFieldValues.get("scheduleOfIssuesDisagreementDescription")).isEqualTo("");
