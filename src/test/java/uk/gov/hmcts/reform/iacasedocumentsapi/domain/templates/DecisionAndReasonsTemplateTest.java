@@ -61,7 +61,7 @@ public class DecisionAndReasonsTemplateTest {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of("Manchester, 123 Somewhere, North"));
+        when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of("Manchester"));
 
         decisionAndReasonsTemplate =
                 new DecisionAndReasonsTemplate(
@@ -87,7 +87,7 @@ public class DecisionAndReasonsTemplateTest {
         assertThat(templateFieldValues.get("appealReferenceNumber")).isEqualTo("some-appeal-ref");
         assertThat(templateFieldValues.get("hearingDate")).isEqualTo("25122020");
         assertThat(templateFieldValues.get("hearingTime")).isEqualTo("1234");
-        assertThat(templateFieldValues.get("hearingCentre")).isEqualTo("Manchester\n123 Somewhere\nNorth");
+        assertThat(templateFieldValues.get("hearingCentre")).isEqualTo("Manchester");
 
         assertThat(templateFieldValues.get("appellantGivenNames")).isEqualTo("some-given-name");
         assertThat(templateFieldValues.get("appellantFamilyName")).isEqualTo("some-family-name");
@@ -125,7 +125,7 @@ public class DecisionAndReasonsTemplateTest {
         when(asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.empty());
 
-        when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of("Manchester, 123 Somewhere, North"));
+        when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of("Manchester"));
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -137,7 +137,7 @@ public class DecisionAndReasonsTemplateTest {
         assertThat(templateFieldValues.get("appealReferenceNumber")).isEqualTo("some-appeal-ref");
         assertThat(templateFieldValues.get("hearingDate")).isEqualTo("25122020");
         assertThat(templateFieldValues.get("hearingTime")).isEqualTo("1234");
-        assertThat(templateFieldValues.get("hearingCentre")).isEqualTo("Manchester\n123 Somewhere\nNorth");
+        assertThat(templateFieldValues.get("hearingCentre")).isEqualTo("Manchester");
 
         assertThat(templateFieldValues.get("appellantGivenNames")).isEqualTo("some-given-name");
         assertThat(templateFieldValues.get("appellantFamilyName")).isEqualTo("some-family-name");

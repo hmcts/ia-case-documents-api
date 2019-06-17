@@ -52,8 +52,7 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
 
         fieldValues.put(
                 "hearingCentre",
-                stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("")
-                        .replaceAll(",\\s*", "\n")
+                stringProvider.get("hearingCentreName", listedHearingCentre.toString()).orElse("")
         );
 
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
