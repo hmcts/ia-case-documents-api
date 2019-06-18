@@ -24,7 +24,7 @@ hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-
 decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
 decisionAndReasons.fileName: "decision-and-reasons-draft"
-decisionAndReasons.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-DEC-ENG-00022.docx}
+decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00022.docx}
 
 hearingBundle.fileExtension: PDF
 hearingBundle.fileName: "hearing-bundle"
