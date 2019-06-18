@@ -1,9 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -71,9 +73,11 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         AsylumCase asylumCase,
         Document appealSubmission
     ) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeDocuments = asylumCase
+                .read(LEGAL_REPRESENTATIVE_DOCUMENTS);
+
         final List<IdValue<DocumentWithMetadata>> legalRepresentativeDocuments =
-            asylumCase
-                .getLegalRepresentativeDocuments()
+            maybeDocuments
                 .orElse(Collections.emptyList());
 
         DocumentWithMetadata documentWithMetadata =
@@ -90,6 +94,7 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
                 DocumentTag.APPEAL_SUBMISSION
             );
 
-        asylumCase.setLegalRepresentativeDocuments(allLegalRepresentativeDocuments);
+        asylumCase.write(LEGAL_REPRESENTATIVE_DOCUMENTS, allLegalRepresentativeDocuments);
     }
+
 }

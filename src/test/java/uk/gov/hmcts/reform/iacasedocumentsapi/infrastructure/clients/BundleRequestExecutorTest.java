@@ -51,9 +51,9 @@ public class BundleRequestExecutorTest {
     @Before
     public void setUp() {
         bundleRequestExecutor = new BundleRequestExecutor(
-            restTemplate,
-            serviceAuthTokenGenerator,
-            userDetailsProvider
+                restTemplate,
+                serviceAuthTokenGenerator,
+                userDetailsProvider
         );
 
         when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
@@ -65,21 +65,21 @@ public class BundleRequestExecutorTest {
     public void should_invoke_endpoint_with_given_payload() {
 
         when(restTemplate
-            .exchange(
-                any(String.class),
-                eq(HttpMethod.POST),
-                any(HttpEntity.class),
-                any(ParameterizedTypeReference.class)
-            )
+                .exchange(
+                        any(String.class),
+                        eq(HttpMethod.POST),
+                        any(HttpEntity.class),
+                        any(ParameterizedTypeReference.class)
+                )
         ).thenReturn(responseEntity);
         when(responseEntity.getBody()).thenReturn(callbackResponse);
 
         PreSubmitCallbackResponse<BundleCaseData> response =
-            bundleRequestExecutor.post(
-                callback,
-                ENDPOINT
+                bundleRequestExecutor.post(
+                        callback,
+                        ENDPOINT
 
-            );
+                );
 
         assertThat(response).isNotNull();
         assertThat(response).isEqualTo(callbackResponse);
@@ -87,10 +87,10 @@ public class BundleRequestExecutorTest {
         ArgumentCaptor<HttpEntity> requestEntityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
         verify(restTemplate).exchange(
-            eq(ENDPOINT),
-            eq(HttpMethod.POST),
-            requestEntityCaptor.capture(),
-            any(ParameterizedTypeReference.class)
+                eq(ENDPOINT),
+                eq(HttpMethod.POST),
+                requestEntityCaptor.capture(),
+                any(ParameterizedTypeReference.class)
         );
 
         HttpEntity actualRequestEntity = requestEntityCaptor.getValue();
@@ -113,12 +113,12 @@ public class BundleRequestExecutorTest {
     public void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> bundleRequestExecutor.post(null, ENDPOINT))
-            .hasMessage("payload must not be null")
-            .isExactlyInstanceOf(NullPointerException.class);
+                .hasMessage("payload must not be null")
+                .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> bundleRequestExecutor.post(callback, null))
-            .hasMessage("endpoint must not be null")
-            .isExactlyInstanceOf(NullPointerException.class);
+                .hasMessage("endpoint must not be null")
+                .isExactlyInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -127,18 +127,18 @@ public class BundleRequestExecutorTest {
         HttpServerErrorException underlyingException = mock(HttpServerErrorException.class);
 
         when(restTemplate
-            .exchange(
-                eq(ENDPOINT),
-                eq(HttpMethod.POST),
-                any(HttpEntity.class),
-                any(ParameterizedTypeReference.class)
-            )).thenThrow(underlyingException);
+                .exchange(
+                        eq(ENDPOINT),
+                        eq(HttpMethod.POST),
+                        any(HttpEntity.class),
+                        any(ParameterizedTypeReference.class)
+                )).thenThrow(underlyingException);
 
         assertThatThrownBy(() -> bundleRequestExecutor.post(callback, ENDPOINT))
-            .isExactlyInstanceOf(DocumentServiceResponseException.class)
-            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
-            .hasMessageContaining("Couldn't create bundle using API")
-            .hasCause(underlyingException);
+                .isExactlyInstanceOf(DocumentServiceResponseException.class)
+                .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
+                .hasMessageContaining("Couldn't create bundle using API")
+                .hasCause(underlyingException);
 
     }
 
@@ -147,18 +147,18 @@ public class BundleRequestExecutorTest {
         HttpClientErrorException underlyingException = mock(HttpClientErrorException.class);
 
         when(restTemplate
-            .exchange(
-                eq(ENDPOINT),
-                eq(HttpMethod.POST),
-                any(HttpEntity.class),
-                any(ParameterizedTypeReference.class)
-            )).thenThrow(underlyingException);
+                .exchange(
+                        eq(ENDPOINT),
+                        eq(HttpMethod.POST),
+                        any(HttpEntity.class),
+                        any(ParameterizedTypeReference.class)
+                )).thenThrow(underlyingException);
 
         assertThatThrownBy(() -> bundleRequestExecutor.post(callback, ENDPOINT))
-            .isExactlyInstanceOf(DocumentServiceResponseException.class)
-            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
-            .hasMessageContaining("Couldn't create bundle using API")
-            .hasCause(underlyingException);
+                .isExactlyInstanceOf(DocumentServiceResponseException.class)
+                .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
+                .hasMessageContaining("Couldn't create bundle using API")
+                .hasCause(underlyingException);
     }
 
 

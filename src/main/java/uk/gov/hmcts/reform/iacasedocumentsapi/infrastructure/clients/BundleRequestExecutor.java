@@ -34,8 +34,8 @@ public class BundleRequestExecutor {
     }
 
     public PreSubmitCallbackResponse<BundleCaseData> post(
-        final Callback<BundleCaseData> payload,
-        final String endpoint
+            final Callback<BundleCaseData> payload,
+            final String endpoint
     ) {
 
         requireNonNull(payload, "payload must not be null");
@@ -57,21 +57,21 @@ public class BundleRequestExecutor {
 
         try {
             response =
-                restTemplate
-                    .exchange(
-                        endpoint,
-                        HttpMethod.POST,
-                        requestEntity,
-                        new ParameterizedTypeReference<PreSubmitCallbackResponse<BundleCaseData>>() {
-                        }
-                    ).getBody();
+                    restTemplate
+                            .exchange(
+                                    endpoint,
+                                    HttpMethod.POST,
+                                    requestEntity,
+                                    new ParameterizedTypeReference<PreSubmitCallbackResponse<BundleCaseData>>() {
+                                    }
+                            ).getBody();
 
         } catch (RestClientException e) {
 
             throw new DocumentServiceResponseException(
-                AlertLevel.P2,
-                "Couldn't create bundle using API: " + endpoint,
-                e
+                    AlertLevel.P2,
+                    "Couldn't create bundle using API: " + endpoint,
+                    e
             );
         }
 

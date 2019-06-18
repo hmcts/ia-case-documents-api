@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 
 import java.util.Optional;
 import org.junit.Before;
@@ -34,8 +36,8 @@ public class AsylumCaseFileNameQualifierTest {
             new AsylumCaseFileNameQualifier();
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
     }
 
     @Test
@@ -43,8 +45,8 @@ public class AsylumCaseFileNameQualifierTest {
 
         String qualifiedFileName = asylumCaseFileNameQualifier.get(unqualifiedFileName, caseDetails);
 
-        verify(asylumCase, times(1)).getAppealReferenceNumber();
-        verify(asylumCase, times(1)).getAppellantFamilyName();
+        verify(asylumCase, times(1)).read(APPEAL_REFERENCE_NUMBER, String.class);
+        verify(asylumCase, times(1)).read(APPELLANT_FAMILY_NAME, String.class);
 
         assertEquals(expectedFileName, qualifiedFileName);
     }
@@ -52,7 +54,7 @@ public class AsylumCaseFileNameQualifierTest {
     @Test
     public void should_throw_when_appeal_reference_number_is_not_present() {
 
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> asylumCaseFileNameQualifier.get(unqualifiedFileName, caseDetails))
             .hasMessage("appealReferenceNumber is not present")
@@ -62,7 +64,7 @@ public class AsylumCaseFileNameQualifierTest {
     @Test
     public void should_throw_when_appellant_family_name_is_not_present() {
 
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> asylumCaseFileNameQualifier.get(unqualifiedFileName, caseDetails))
             .hasMessage("appellantFamilyName is not present")
