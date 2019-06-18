@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 
 @Service
 public class CaseOfficerPersonalisationFactory {
@@ -29,9 +30,9 @@ public class CaseOfficerPersonalisationFactory {
         return
             ImmutableMap
                 .<String, String>builder()
-                .put("Appeal Ref Number", asylumCase.getAppealReferenceNumber().orElse(""))
-                .put("Given names", asylumCase.getAppellantGivenNames().orElse(""))
-                .put("Family name", asylumCase.getAppellantFamilyName().orElse(""))
+                .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("Given names", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("Family name", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
                 .build();
     }

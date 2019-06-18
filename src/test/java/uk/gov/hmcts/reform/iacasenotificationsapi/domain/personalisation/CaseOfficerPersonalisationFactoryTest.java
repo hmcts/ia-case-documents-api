@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -46,9 +47,9 @@ public class CaseOfficerPersonalisationFactoryTest {
                 iaCcdFrontendUrl
             );
 
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
     }
 
     @Test
@@ -72,9 +73,9 @@ public class CaseOfficerPersonalisationFactoryTest {
                 .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
                 .build();
 
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> actualPersonalisation =
             caseOfficerPersonalisationFactory.create(asylumCase);

@@ -1,11 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
@@ -120,12 +118,13 @@ public class RespondentNonStandardDirectionNotifier implements PreSubmitCallback
                 reference
             );
 
-        List<IdValue<String>> notificationsSent =
-            asylumCase
-                .getNotificationsSent()
-                .orElseGet(ArrayList::new);
+        Optional<List<IdValue<String>>> maybeNotificationsSent =
+                asylumCase.read(NOTIFICATIONS_SENT);
 
-        asylumCase.setNotificationsSent(
+        List<IdValue<String>> notificationsSent =
+                maybeNotificationsSent.orElseGet(ArrayList::new);
+
+        asylumCase.write(NOTIFICATIONS_SENT,
             notificationIdAppender.append(
                 notificationsSent,
                 reference,

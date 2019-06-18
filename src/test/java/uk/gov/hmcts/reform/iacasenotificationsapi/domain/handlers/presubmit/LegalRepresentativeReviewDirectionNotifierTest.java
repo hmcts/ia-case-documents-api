@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
 import java.util.*;
 import org.assertj.core.util.Lists;
@@ -15,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
@@ -70,8 +73,8 @@ public class LegalRepresentativeReviewDirectionNotifierTest {
         when(callback.getEvent()).thenReturn(Event.ADD_APPEAL_RESPONSE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.of(legalRepresentativeEmailAddress));
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(asylumCase.read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepresentativeEmailAddress));
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
 
         when(directionFinder.findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_REVIEW)).thenReturn(Optional.of(legalRepresentativeReviewDirection));
         when(legalRepresentativePersonalisationFactory.create(asylumCase, legalRepresentativeReviewDirection)).thenReturn(personalisation);
@@ -99,7 +102,7 @@ public class LegalRepresentativeReviewDirectionNotifierTest {
             ));
 
 
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.of(existingNotifications));
         when(notificationIdAppender.append(
             existingNotifications,
             expectedNotificationReference,
@@ -120,7 +123,7 @@ public class LegalRepresentativeReviewDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
         verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
     }
@@ -133,7 +136,7 @@ public class LegalRepresentativeReviewDirectionNotifierTest {
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
         when(notificationIdAppender.append(
             Lists.emptyList(),
             expectedNotificationReference,
@@ -154,7 +157,7 @@ public class LegalRepresentativeReviewDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(existingNotificationsSentCaptor.capture());
+        verify(asylumCase, times(1)).write(any(AsylumCaseDefinition.class), existingNotificationsSentCaptor.capture());
 
         List<IdValue<String>> actualExistingNotificationsSent =
             existingNotificationsSentCaptor
@@ -186,7 +189,7 @@ public class LegalRepresentativeReviewDirectionNotifierTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.ADD_APPEAL_RESPONSE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> legalRepresentativeReviewDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("legalRepresentativeEmailAddress is not present")

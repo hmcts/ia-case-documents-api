@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
@@ -72,7 +75,7 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
 
         String legalRepresentativeEmailAddress =
             asylumCase
-                .getLegalRepresentativeEmailAddress()
+                .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
                 .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
 
         Direction buildCaseDirection =
@@ -96,12 +99,14 @@ public class BuildCaseDirectionNotifier implements PreSubmitCallbackHandler<Asyl
                 reference
             );
 
+        Optional<List<IdValue<String>>> maybeNotificationSent =
+                asylumCase.read(NOTIFICATIONS_SENT);
+
         List<IdValue<String>> notificationsSent =
-            asylumCase
-                .getNotificationsSent()
+            maybeNotificationSent
                 .orElseGet(ArrayList::new);
 
-        asylumCase.setNotificationsSent(
+        asylumCase.write(NOTIFICATIONS_SENT,
             notificationIdAppender.append(
                 notificationsSent,
                 reference,

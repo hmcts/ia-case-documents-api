@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class DirectionFinderTest {
         when(existingDirection1.getTag()).thenReturn(DirectionTag.LEGAL_REPRESENTATIVE_REVIEW);
         when(existingDirection2.getTag()).thenReturn(DirectionTag.BUILD_CASE);
 
-        when(asylumCase.getDirections()).thenReturn(Optional.of(directions));
+        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directions));
 
         final Optional<Direction> firstFoundDirection =
             directionFinder.findFirst(asylumCase, DirectionTag.BUILD_CASE);
@@ -65,7 +66,7 @@ public class DirectionFinderTest {
 
         when(existingDirection1.getTag()).thenReturn(DirectionTag.LEGAL_REPRESENTATIVE_REVIEW);
 
-        when(asylumCase.getDirections()).thenReturn(Optional.of(directions));
+        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directions));
 
         final Optional<Direction> firstFoundDirection =
             directionFinder.findFirst(asylumCase, DirectionTag.RESPONDENT_REVIEW);

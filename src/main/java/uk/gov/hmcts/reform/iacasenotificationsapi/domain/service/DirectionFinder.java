@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
@@ -14,9 +16,10 @@ public class DirectionFinder {
         AsylumCase asylumCase,
         DirectionTag directionTag
     ) {
+        Optional<List<IdValue<Direction>>> maybeDirections = asylumCase
+                .read(AsylumCaseDefinition.DIRECTIONS);
         return
-            asylumCase
-                .getDirections()
+            maybeDirections
                 .orElseThrow(() -> new IllegalStateException("directions is not present"))
                 .stream()
                 .map(IdValue::getValue)

@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.*;
@@ -64,7 +66,7 @@ public class AppealSubmittedCaseOfficerNotifierTest {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
 
         when(caseOfficerPersonalisationFactory.create(asylumCase)).thenReturn(personalisation);
 
@@ -93,8 +95,8 @@ public class AppealSubmittedCaseOfficerNotifierTest {
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.of(existingNotifications));
 
         when(notificationIdAppender.append(
             existingNotifications,
@@ -115,7 +117,7 @@ public class AppealSubmittedCaseOfficerNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
         verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
     }
@@ -128,8 +130,8 @@ public class AppealSubmittedCaseOfficerNotifierTest {
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
         when(notificationIdAppender.append(
             Lists.emptyList(),
             expectedNotificationReference,
@@ -150,7 +152,7 @@ public class AppealSubmittedCaseOfficerNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
 
     }
 
@@ -170,7 +172,7 @@ public class AppealSubmittedCaseOfficerNotifierTest {
                 final HearingCentre inputHearingCentre = inputOutput.getKey();
                 final String outputEmailAddress = inputOutput.getValue();
 
-                when(asylumCase.getHearingCentre()).thenReturn(Optional.of(inputHearingCentre));
+                when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(inputHearingCentre));
 
                 appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
@@ -191,7 +193,7 @@ public class AppealSubmittedCaseOfficerNotifierTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.empty());
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("hearingCentre is not present")
@@ -204,7 +206,7 @@ public class AppealSubmittedCaseOfficerNotifierTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(hearingCentreEmailAddresses.get(HearingCentre.MANCHESTER)).thenReturn(null);
 
         assertThatThrownBy(() -> appealSubmittedCaseOfficerNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))

@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
 import java.util.*;
 import org.junit.Before;
@@ -65,8 +67,8 @@ public class BuildCaseDirectionNotifierTest {
         when(callback.getEvent()).thenReturn(Event.UPLOAD_RESPONDENT_EVIDENCE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.of(legalRepresentativeEmailAddress));
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepresentativeEmailAddress));
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
 
         when(directionFinder.findFirst(asylumCase, DirectionTag.BUILD_CASE)).thenReturn(Optional.of(buildCaseDirection));
         when(legalRepresentativePersonalisationFactory.create(asylumCase, buildCaseDirection)).thenReturn(personalisation);
@@ -93,7 +95,7 @@ public class BuildCaseDirectionNotifierTest {
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.of(existingNotifications));
 
         when(notificationIdAppender.append(
             existingNotifications,
@@ -115,7 +117,7 @@ public class BuildCaseDirectionNotifierTest {
         );
 
         verify(notificationIdAppender).append(anyList(), anyString(), anyString());
-        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
     }
 
     @Test
@@ -128,7 +130,7 @@ public class BuildCaseDirectionNotifierTest {
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
 
         when(notificationIdAppender.append(
             existingNotifications,
@@ -149,7 +151,7 @@ public class BuildCaseDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
     }
 
     @Test
@@ -171,7 +173,7 @@ public class BuildCaseDirectionNotifierTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.UPLOAD_RESPONDENT_EVIDENCE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.getLegalRepresentativeEmailAddress()).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> buildCaseDirectionNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("legalRepresentativeEmailAddress is not present")

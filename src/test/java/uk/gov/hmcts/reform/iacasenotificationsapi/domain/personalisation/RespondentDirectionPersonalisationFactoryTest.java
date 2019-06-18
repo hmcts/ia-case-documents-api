@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -58,11 +59,11 @@ public class RespondentDirectionPersonalisationFactoryTest {
                 stringProvider
             );
 
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(hearingCentre));
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getHomeOfficeReferenceNumber()).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
         when(direction.getExplanation()).thenReturn(directionExplanation);
         when(direction.getDateDue()).thenReturn(directionDateDue);
@@ -94,11 +95,11 @@ public class RespondentDirectionPersonalisationFactoryTest {
                 .put("due date", directionDateDueFormatted)
                 .build();
 
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(hearingCentre));
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getHomeOfficeReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> actualPersonalisation =
             respondentDirectionPersonalisationFactory.create(asylumCase, direction);
@@ -109,7 +110,7 @@ public class RespondentDirectionPersonalisationFactoryTest {
     @Test
     public void should_use_correct_hearing_centre_personalisation() {
 
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
 
         when(stringProvider.get("hearingCentre", "manchester")).thenReturn(Optional.of("Manchester Hearing Centre"));
 
@@ -124,7 +125,7 @@ public class RespondentDirectionPersonalisationFactoryTest {
     @Test
     public void should_throw_when_hearing_centre_not_present() {
 
-        when(asylumCase.getHearingCentre()).thenReturn(Optional.empty());
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> respondentDirectionPersonalisationFactory.create(asylumCase, direction))
             .hasMessage("hearingCentre is not present")

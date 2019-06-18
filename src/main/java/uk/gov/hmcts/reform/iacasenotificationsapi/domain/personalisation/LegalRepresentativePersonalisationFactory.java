@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -39,10 +40,10 @@ public class LegalRepresentativePersonalisationFactory {
         return
             ImmutableMap
                 .<String, String>builder()
-                .put("Appeal Ref Number", asylumCase.getAppealReferenceNumber().orElse(""))
-                .put("LR reference", asylumCase.getLegalRepReferenceNumber().orElse(""))
-                .put("Given names", asylumCase.getAppellantGivenNames().orElse(""))
-                .put("Family name", asylumCase.getAppellantFamilyName().orElse(""))
+                .put("Appeal Ref Number", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("LR reference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
                 .put("Explanation", direction.getExplanation())
                 .put("due date", directionDueDate)

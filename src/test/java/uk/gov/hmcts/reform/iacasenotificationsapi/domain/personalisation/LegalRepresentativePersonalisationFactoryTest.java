@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -53,10 +54,10 @@ public class LegalRepresentativePersonalisationFactoryTest {
                 iaCcdFrontendUrl
             );
 
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.of(legalRepReferenceNumber));
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
         when(direction.getExplanation()).thenReturn(directionExplanation);
         when(direction.getDateDue()).thenReturn(directionDateDue);
@@ -86,10 +87,10 @@ public class LegalRepresentativePersonalisationFactoryTest {
                 .put("due date", directionDateDueFormatted)
                 .build();
 
-        when(asylumCase.getAppealReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getLegalRepReferenceNumber()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantGivenNames()).thenReturn(Optional.empty());
-        when(asylumCase.getAppellantFamilyName()).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> actualPersonalisation =
             legalRepresentativePersonalisationFactory.create(asylumCase, direction);

@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
 import java.util.*;
 import org.assertj.core.util.Lists;
@@ -94,7 +95,7 @@ public class RespondentReviewDirectionNotifierTest {
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.of(existingNotifications));
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.of(existingNotifications));
 
         when(notificationIdAppender.append(
             existingNotifications,
@@ -115,7 +116,7 @@ public class RespondentReviewDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
         verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
     }
@@ -128,7 +129,7 @@ public class RespondentReviewDirectionNotifierTest {
                 new IdValue<>(expectedNotificationReference, expectedNotificationId)
             ));
 
-        when(asylumCase.getNotificationsSent()).thenReturn(Optional.empty());
+        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
         when(notificationIdAppender.append(
             Lists.emptyList(),
             expectedNotificationReference,
@@ -148,7 +149,7 @@ public class RespondentReviewDirectionNotifierTest {
             expectedNotificationReference
         );
 
-        verify(asylumCase, times(1)).setNotificationsSent(expectedNotifications);
+        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
         verify(notificationIdAppender).append(anyList(), anyString(), anyString());
 
     }

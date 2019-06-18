@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
@@ -70,7 +73,7 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
 
         final HearingCentre hearingCentre =
             asylumCase
-                .getHearingCentre()
+                .read(HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
 
         final String hearingCentreEmailAddress =
@@ -97,12 +100,12 @@ public class AppealSubmittedCaseOfficerNotifier implements PreSubmitCallbackHand
                 reference
             );
 
-        List<IdValue<String>> notificationsSent =
-            asylumCase
-                .getNotificationsSent()
+        Optional<List<IdValue<String>>> maybeNotificationSent = asylumCase.read(NOTIFICATIONS_SENT);
+
+        List<IdValue<String>> notificationsSent = maybeNotificationSent
                 .orElseGet(ArrayList::new);
 
-        asylumCase.setNotificationsSent(
+        asylumCase.write(NOTIFICATIONS_SENT,
             notificationIdAppender.append(
                 notificationsSent,
                 reference,
