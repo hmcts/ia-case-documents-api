@@ -21,6 +21,7 @@ java:
         - em-bundler-url
         - em-bundler-stitch-uri
     docmosisiaasdevkv:
+      excludeEnvironmentSuffix: true
       resourceGroup: docmosis-iaas-dev-rg
       secrets:
         - docmosis-api-key
