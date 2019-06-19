@@ -21,7 +21,7 @@ java:
         - em-bundler-url
         - em-bundler-stitch-uri
     docmosisiaasdevkv:
-      resourceGroup: ia
+      resourceGroup: docmosis-iaas-dev-rg
       secrets:
         - docmosis-api-key
         - docmosis-endpoint
