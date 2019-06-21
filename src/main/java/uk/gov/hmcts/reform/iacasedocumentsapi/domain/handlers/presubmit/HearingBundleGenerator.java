@@ -21,10 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
 
 @Component
 public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -35,6 +32,7 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
     private final DocumentBundler documentBundler;
     private final DocumentReceiver documentReceiver;
     private final DocumentsAppender documentsAppender;
+    private final HearingBundleOrder hearingBundleOrder;
 
     public HearingBundleGenerator(
         @Value("${hearingBundle.fileExtension}") String fileExtension,
@@ -42,7 +40,8 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
         DocumentReceiver documentReceiver,
-        DocumentsAppender documentsAppender
+        DocumentsAppender documentsAppender,
+        HearingBundleOrder hearingBundleOrder
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
@@ -50,6 +49,7 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         this.documentBundler = documentBundler;
         this.documentReceiver = documentReceiver;
         this.documentsAppender = documentsAppender;
+        this.hearingBundleOrder = hearingBundleOrder;
     }
 
     public boolean canHandle(
@@ -95,6 +95,7 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
                 ))
                 .map(IdValue::getValue)
                 .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE)
+                .sorted(hearingBundleOrder)
                 .collect(Collectors.toList());
 
         Document hearingBundle = documentBundler.bundle(
@@ -112,6 +113,7 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         AsylumCase asylumCase,
         Document hearingBundle
     ) {
+
         Optional<List<IdValue<DocumentWithMetadata>>> maybeHearingDocuments = asylumCase
                 .read(HEARING_DOCUMENTS);
 
