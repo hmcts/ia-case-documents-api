@@ -24,5 +24,6 @@ services:
       - LOGBACK_REQUIRE_THREAD
       - LOGBACK_REQUIRE_ALERT_LEVEL=false
       - LOGBACK_REQUIRE_ERROR_CODE=false
+      - S2S_URL:http://service-auth-provider-api:4502
     ports:
       - ${SERVER_PORT:-8093}:${SERVER_PORT:-8093}

@@ -1,0 +1,7 @@
+name: ia-case-notifications-api
+home: https://github.com/hmcts/ia-case-notifications-api
+version: 0.0.1
+description: Immigration & Asylum Case Notifications Service
+maintainers:
+  - name: HMCTS Immigration & Asylum Team
+    email: ImmigrationandAsylum@HMCTS.NET

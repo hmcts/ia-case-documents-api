@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    propertiesvolume:
+      prefixed: false
+      paths: /mnt/secrets/ia
+      aliases:
+        ia-ccd-frontend-url: IA_CCD_FRONTEND_URL
+        ia-gov-notify-key: IA_GOV_NOTIFY_KEY
+        hearing-centre-manchester-email: IA_HEARING_CENTRE_MANCHESTER_EMAIL
+        hearing-centre-taylor-house-email: IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL
+        respondent-evidence-direction-email: IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL
+        respondent-review-direction-email: IA_RESPONDENT_REVIEW_DIRECTION_EMAIL
+        respondent-non-standard-direction-until-listing-email: IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL
+        system-username: IA_SYSTEM_USERNAME
+        system-password: IA_SYSTEM_PASSWORD
+        idam-client-id: IA_IDAM_CLIENT_ID
+        idam-secret: IA_IDAM_SECRET
+        idam-redirect-uri: IA_IDAM_REDIRECT_URI
+        s2s-secret: IA_S2S_SECRET
+        s2s-microservice: IA_S2S_MICROSERVICE
+        dm-url: DM_URL
+        ccd-url: CCD_URL
+        idam-url: IDAM_URL
+        s2s-url: S2S_URL

@@ -1,0 +1,25 @@
+java:
+  image: 'https://hmcts.azurecr.io/hmcts/ia-case-notifications-api:latest'
+  applicationPort: 8093
+  keyVaults:
+    ia:
+      resourceGroup: ia
+      secrets:
+        - ia-ccd-frontend-url
+        - ia-gov-notify-key
+        - hearing-centre-manchester-email
+        - hearing-centre-taylor-house-email
+        - respondent-evidence-direction-email
+        - respondent-review-direction-email
+        - respondent-non-standard-direction-until-listing-email
+        - system-username
+        - system-password
+        - idam-client-id
+        - idam-secret
+        - idam-redirect-uri
+        - s2s-secret
+        - s2s-microservice
+        - dm-url
+        - ccd-url
+        - idam-url
+        - s2s-url
