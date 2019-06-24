@@ -13,6 +13,7 @@ public enum DocumentTag {
     HEARING_NOTICE("hearingNotice"),
     CASE_SUMMARY("caseSummary"),
     HEARING_BUNDLE("hearingBundle"),
+    DECISION_AND_REASONS("decisionAndReasons"),
 
     @JsonEnumDefaultValue
     NONE("");

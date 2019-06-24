@@ -21,6 +21,11 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00009.docx}
 
+decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
+decisionAndReasons.fileExtension: docx
+decisionAndReasons.fileName: "decision-and-reasons-draft"
+decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00022.docx}
+
 hearingBundle.fileExtension: PDF
 hearingBundle.fileName: "hearing-bundle"
 
@@ -76,6 +81,7 @@ security:
       - "listCase"
       - "createCaseSummary"
       - "generateHearingBundle"
+      - "generateDecisionAndReasons"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

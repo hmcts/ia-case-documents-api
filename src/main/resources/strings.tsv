@@ -7,6 +7,8 @@ appealType	protection	The refusal of a protection claim
 appealType	revocationOfProtection	The revocation of a protection status
 hearingCentreAddress	manchester	IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH
 hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
+hearingCentreName	manchester	IAC Manchester
+hearingCentreName	taylorHouse	IAC Taylor House
 isoCountries	AF	Afghanistan
 isoCountries	AX	Aland Islands
 isoCountries	AL	Albania

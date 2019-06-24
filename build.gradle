@@ -155,7 +155,8 @@ pitest {
     targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
     excludedClasses = [
         'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
-        'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
+        'uk.gov.hmcts.reform.iacasedocumentsapi.Application',
+        'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.TsvStringProvider'
     ]
     threads = 10
     outputFormats = ['XML', 'HTML']
@@ -253,6 +254,8 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+    testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
+
 
     integrationTestCompile sourceSets.main.runtimeClasspath
     integrationTestCompile sourceSets.test.runtimeClasspath

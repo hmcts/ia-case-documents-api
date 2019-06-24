@@ -82,7 +82,50 @@ public enum AsylumCaseDefinition {
             "listCaseRequirementsInCameraCourt", new TypeReference<String>(){}),
 
     LIST_CASE_REQUIREMENTS_OTHER(
-            "listCaseRequirementsOther", new TypeReference<String>(){});
+            "listCaseRequirementsOther", new TypeReference<String>(){}),
+
+    DECISION_AND_REASONS_DOCUMENTS(
+            "decisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    ANONYMITY_ORDER(
+            "anonymityOrder", new TypeReference<YesOrNo>(){}),
+
+    APPELLANT_REPRESENTATIVE(
+            "appellantRepresentative", new TypeReference<String>(){}),
+
+    RESPONDENT_REPRESENTATIVE(
+            "respondentRepresentative", new TypeReference<String>(){}),
+
+    APPELLANT_CASE_SUMMARY_DESCRIPTION(
+            "appellantCaseSummaryDescription", new TypeReference<String>(){}),
+
+    IMMIGRATION_HISTORY_AGREEMENT(
+            "immigrationHistoryAgreement", new TypeReference<YesOrNo>(){}),
+
+    AGREED_IMMIGRATION_HISTORY_DESCRIPTION(
+            "agreedImmigrationHistoryDescription", new TypeReference<String>(){}),
+
+    RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION(
+            "respondentsImmigrationHistoryDescription", new TypeReference<String>(){}),
+
+    IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION(
+            "immigrationHistoryDisagreementDescription", new TypeReference<String>(){}),
+
+    SCHEDULE_OF_ISSUES_AGREEMENT(
+            "scheduleOfIssuesAgreement", new TypeReference<YesOrNo>(){}),
+
+    APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION(
+            "appellantsAgreedScheduleOfIssuesDescription", new TypeReference<String>(){}),
+
+    APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION(
+            "appellantsDisputedScheduleOfIssuesDescription", new TypeReference<String>(){}),
+
+    SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION(
+            "scheduleOfIssuesDisagreementDescription", new TypeReference<String>(){}),
+
+    CASE_INTRODUCTION_DESCRIPTION(
+            "caseIntroductionDescription", new TypeReference<String>(){}),
+    ;
 
     private final String value;
     private final TypeReference typeReference;
