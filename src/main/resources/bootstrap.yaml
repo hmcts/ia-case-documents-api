@@ -21,3 +21,5 @@ spring:
         s2s-url: S2S_URL
         em-bundler-url: EM_BUNDLER_URL
         em-bundler-stitch-uri: EM_BUNDLER_STITCH_URI
+        docmosis-api-key: DOCMOSIS_ACCESS_KEY
+        docmosis-endpoint: DOCMOSIS_ENDPOINT
