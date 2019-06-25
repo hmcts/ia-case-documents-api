@@ -4,8 +4,8 @@ spring:
       prefixed: false
       paths: /mnt/secrets/ia
       aliases:
-        docmosis-api-key: DOCMOSIS_ACCESS_KEY
-        docmosis-endpoint: DOCMOSIS_ENDPOINT
+        docmosis-access-key: DOCMOSIS_ACCESS_KEY
+        docmosis-url: DOCMOSIS_ENDPOINT
         appeal-submission-template: IA_APPEAL_SUBMISSION_TEMPLATE
         system-username: IA_SYSTEM_USERNAME
         system-password: IA_SYSTEM_PASSWORD
@@ -21,5 +21,3 @@ spring:
         s2s-url: S2S_URL
         em-bundler-url: EM_BUNDLER_URL
         em-bundler-stitch-uri: EM_BUNDLER_STITCH_URI
-        docmosis-api-key: DOCMOSIS_ACCESS_KEY
-        docmosis-endpoint: DOCMOSIS_ENDPOINT

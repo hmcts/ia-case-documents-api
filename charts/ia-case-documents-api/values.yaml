@@ -20,5 +20,5 @@ java:
         - s2s-url
         - em-bundler-url
         - em-bundler-stitch-uri
-        - docmosis-api-key
-        - docmosis-endpoint
+        - docmosis-access-key
+        - docmosis-url
