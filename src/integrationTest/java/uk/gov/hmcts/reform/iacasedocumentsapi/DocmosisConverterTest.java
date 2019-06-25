@@ -31,7 +31,7 @@ import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 public class DocmosisConverterTest {
 
 
-    private String DOCMOSIS_ACCESS_KEY = "ZDYxMTkzZTQtMGY2Mi00NDM1LWIyN2ItNGRkNzdjOTczMjAwOjQ1NTE0ODQ";
+    private String DOCMOSIS_ACCESS_KEY = "";
     private String DOCMOSIS_ENDPOINT = "https://docmosis-development.platform.hmcts.net";
     private String CONVERT_PATH = "/rs/convert";
     private String DOC_FILE_NAME = "wordDocument.doc";
