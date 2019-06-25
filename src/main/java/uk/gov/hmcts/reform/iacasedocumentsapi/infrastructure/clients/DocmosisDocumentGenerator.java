@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
+@Slf4j
 @Service
 public class DocmosisDocumentGenerator implements DocumentGenerator {
 
@@ -33,6 +35,12 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
         ObjectMapper objectMapper,
         RestTemplate restTemplate
     ) {
+
+        //FOR TESTING ONLY --- MUST BE REMOVED
+        log.info("DOCMOSIS ACCESS_KEY: {}", docmosisAccessKey);
+        log.info("DOCMOSIS ENDPOINT: {}", docmosisEndpoint);
+        log.info("DOCMOSIS RENDER URI: {}", docmosisRenderUri);
+
         this.docmosisAccessKey = docmosisAccessKey;
         this.docmosisEndpoint = docmosisEndpoint;
         this.docmosisRenderUri = docmosisRenderUri;
