@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    propertiesvolume:
+      prefixed: false
+      paths: /mnt/secrets/ia
+      aliases:
+        docmosis-access-key: DOCMOSIS_ACCESS_KEY
+        docmosis-url: DOCMOSIS_ENDPOINT
+        appeal-submission-template: IA_APPEAL_SUBMISSION_TEMPLATE
+        system-username: IA_SYSTEM_USERNAME
+        system-password: IA_SYSTEM_PASSWORD
+        idam-client-id: IA_IDAM_CLIENT_ID
+        idam-secret: IA_IDAM_SECRET
+        idam-redirect-uri: IA_IDAM_REDIRECT_URI
+        s2s-secret: IA_S2S_SECRET
+        s2s-microservice: IA_S2S_MICROSERVICE
+        dm-url: DM_URL
+        ccd-url: CCD_URL
+        ccd-gw-url: CCD_GW_URL
+        idam-url: IDAM_URL
+        s2s-url: S2S_URL
+        em-bundler-url: EM_BUNDLER_URL
+        em-bundler-stitch-uri: EM_BUNDLER_STITCH_URI

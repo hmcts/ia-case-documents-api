@@ -1,0 +1,24 @@
+java:
+  image: 'https://hmcts.azurecr.io/hmcts/ia-case-notifications-api:latest'
+  applicationPort: 8092
+  keyVaults:
+    ia:
+      resourceGroup: ia
+      secrets:
+        - appeal-submission-template
+        - system-username
+        - system-password
+        - idam-client-id
+        - idam-secret
+        - idam-redirect-uri
+        - s2s-secret
+        - s2s-microservice
+        - dm-url
+        - ccd-url
+        - ccd-gw-url
+        - idam-url
+        - s2s-url
+        - em-bundler-url
+        - em-bundler-stitch-uri
+        - docmosis-access-key
+        - docmosis-url

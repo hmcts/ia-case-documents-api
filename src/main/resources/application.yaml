@@ -2,10 +2,12 @@ server:
   port: ${PORT:8092}
 
 management:
+  endpoint:
+    health:
+      show-details: "always"
   endpoints:
     web:
-      base-path: /
-
+      base-path: "/"
 spring:
   application:
     name: Immigration & Asylum case documents API
@@ -48,6 +50,7 @@ security:
   anonymousPaths:
     - "/"
     - "/health"
+    - "/health/liveness"
     - "/loggers/**"
     - "/swagger-ui.html"
     - "/swagger-resources/**"
