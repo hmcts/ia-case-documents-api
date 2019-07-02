@@ -40,11 +40,17 @@ public class HearingBundleOrder implements Comparator<DocumentWithMetadata> {
             case HEARING_BUNDLE:
                 log.warn("HEARING_BUNDLE tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
                 return 8;
-            case DECISION_AND_REASONS:
-                log.warn("DECISION_AND_REASONS tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
+            case DECISION_AND_REASONS_DRAFT:
+                log.warn("DECISION_AND_REASONS_DRAFT DRAFT tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
                 return 9;
-            case NONE:
+            case DECISION_AND_REASONS_COVER_LETTER:
+                log.warn("DECISION_AND_REASONS_COVER_LETTER tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
                 return 10;
+            case FINAL_DECISION_AND_REASONS_PDF:
+                log.warn("FINAL_DECISION_AND_REASONS_PDF tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
+                return 11;
+            case NONE:
+                return 12;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

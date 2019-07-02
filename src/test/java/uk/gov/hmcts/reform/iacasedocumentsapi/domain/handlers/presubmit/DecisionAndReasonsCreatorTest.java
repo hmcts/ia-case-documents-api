@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECISION_AND_REASONS_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +44,7 @@ public class DecisionAndReasonsCreatorTest {
     @Mock private Document uploadedDocument;
     @Mock private DocumentWithMetadata documentWithMetadata;
     @Mock private List<IdValue<DocumentWithMetadata>> existingDecisionAndReasonDocuments;
-    @Mock private List<IdValue<DocumentWithMetadata>> allDecisionAndReasonsDocuments;
+    @Mock private List<IdValue<DocumentWithMetadata>> allDraftDecisionAndReasonsDocuments;
 
     @Captor
     private ArgumentCaptor<List<IdValue<DocumentWithMetadata>>> hearingDocumentsCaptor;
@@ -65,21 +65,23 @@ public class DecisionAndReasonsCreatorTest {
         when(callback.getEvent()).thenReturn(Event.GENERATE_DECISION_AND_REASONS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        when(decisionAndReasonsDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(decisionAndReasonsDocumentCreator.create(caseDetails))
+            .thenReturn(uploadedDocument);
 
-        when(asylumCase.read(DECISION_AND_REASONS_DOCUMENTS)).thenReturn(Optional.of(existingDecisionAndReasonDocuments));
+        when(asylumCase.read(DRAFT_DECISION_AND_REASONS_DOCUMENTS))
+            .thenReturn(Optional.of(existingDecisionAndReasonDocuments));
 
         when(documentReceiver.receive(
                 uploadedDocument,
                 "",
-                DocumentTag.DECISION_AND_REASONS
+                DocumentTag.DECISION_AND_REASONS_DRAFT
         )).thenReturn(documentWithMetadata);
 
         when(documentsAppender.append(
                 existingDecisionAndReasonDocuments,
                 Collections.singletonList(documentWithMetadata),
-                DocumentTag.DECISION_AND_REASONS
-        )).thenReturn(allDecisionAndReasonsDocuments);
+                DocumentTag.DECISION_AND_REASONS_DRAFT
+        )).thenReturn(allDraftDecisionAndReasonsDocuments);
     }
 
     @Test
@@ -92,15 +94,20 @@ public class DecisionAndReasonsCreatorTest {
 
         verify(decisionAndReasonsDocumentCreator, times(1)).create(caseDetails);
 
-        verify(asylumCase, times(1)).read(DECISION_AND_REASONS_DOCUMENTS);
-        verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.DECISION_AND_REASONS);
+        verify(asylumCase, times(1))
+            .read(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
+
+        verify(documentReceiver, times(1))
+            .receive(uploadedDocument, "", DocumentTag.DECISION_AND_REASONS_DRAFT);
+
         verify(documentsAppender, times(1))
             .append(
                 existingDecisionAndReasonDocuments,
                 Collections.singletonList(documentWithMetadata),
-                DocumentTag.DECISION_AND_REASONS);
+                DocumentTag.DECISION_AND_REASONS_DRAFT);
 
-        verify(asylumCase, times(1)).write(DECISION_AND_REASONS_DOCUMENTS, allDecisionAndReasonsDocuments);
+        verify(asylumCase, times(1))
+            .write(DRAFT_DECISION_AND_REASONS_DOCUMENTS, allDraftDecisionAndReasonsDocuments);
     }
 
     @Test
@@ -111,6 +118,7 @@ public class DecisionAndReasonsCreatorTest {
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
+
         assertThatThrownBy(() -> decisionAndReasonsCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Map;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
@@ -84,8 +85,11 @@ public enum AsylumCaseDefinition {
     LIST_CASE_REQUIREMENTS_OTHER(
             "listCaseRequirementsOther", new TypeReference<String>(){}),
 
-    DECISION_AND_REASONS_DOCUMENTS(
-            "decisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+    DRAFT_DECISION_AND_REASONS_DOCUMENTS(
+            "draftDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    FINAL_DECISION_AND_REASONS_DOCUMENTS(
+        "finalDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     ANONYMITY_ORDER(
             "anonymityOrder", new TypeReference<YesOrNo>(){}),
@@ -125,6 +129,21 @@ public enum AsylumCaseDefinition {
 
     CASE_INTRODUCTION_DESCRIPTION(
             "caseIntroductionDescription", new TypeReference<String>(){}),
+
+    FINAL_DECISION_AND_REASONS_PDF(
+            "finalDecisionAndReasonsPdf", new TypeReference<Document>(){}),
+
+    FINAL_DECISION_AND_REASONS_DOCUMENT(
+            "finalDecisionAndReasonsDocument", new TypeReference<Document>(){}),
+
+    IS_DECISION_ALLOWED(
+            "isDecisionAllowed", new TypeReference<AppealDecision>(){}),
+
+    DECISION_AND_REASONS_COVER_LETTER(
+        "decisionAndReasonsCoverLetter", new TypeReference<Document>(){}),
+
+    DECISION_AND_REASONS_AVAILABLE(
+        "decisionAndReasonsAvailable", new TypeReference<YesOrNo>(){}),
     ;
 
     private final String value;

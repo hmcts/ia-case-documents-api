@@ -35,7 +35,7 @@ public class HearingBundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .collect(Collectors.toList());
 
-        assertEquals(12, sortedTags.size());
+        assertEquals(14, sortedTags.size());
         assertEquals(DocumentTag.CASE_SUMMARY, sortedTags.get(0));
         assertEquals(DocumentTag.HEARING_NOTICE, sortedTags.get(1));
         assertEquals(DocumentTag.APPEAL_SUBMISSION, sortedTags.get(2));
@@ -46,7 +46,9 @@ public class HearingBundleOrderTest {
         assertEquals(DocumentTag.APPEAL_RESPONSE, sortedTags.get(7));
         assertEquals(DocumentTag.RESPONDENT_EVIDENCE, sortedTags.get(8));
         assertEquals(DocumentTag.HEARING_BUNDLE, sortedTags.get(9));
-        assertEquals(DocumentTag.DECISION_AND_REASONS, sortedTags.get(10));
-        assertEquals(DocumentTag.NONE, sortedTags.get(11));
+        assertEquals(DocumentTag.DECISION_AND_REASONS_DRAFT, sortedTags.get(10));
+        assertEquals(DocumentTag.DECISION_AND_REASONS_COVER_LETTER, sortedTags.get(11));
+        assertEquals(DocumentTag.FINAL_DECISION_AND_REASONS_PDF, sortedTags.get(12));
+        assertEquals(DocumentTag.NONE, sortedTags.get(13));
     }
 }
