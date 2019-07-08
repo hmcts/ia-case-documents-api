@@ -71,7 +71,7 @@ public class EmDocumentBundler implements DocumentBundler {
                 .getStitchedDocument()
                 .orElseThrow(() -> new DocumentServiceResponseException(AlertLevel.P2, "Stitched document was not created"));
 
-        //rename the bundle file name
+        // rename the bundle file name
         return new Document(
             bundle.getDocumentUrl(),
             bundle.getDocumentBinaryUrl(),

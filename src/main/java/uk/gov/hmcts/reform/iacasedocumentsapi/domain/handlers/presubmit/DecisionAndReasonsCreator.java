@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECISION_AND_REASONS_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DRAFT_DECISION_AND_REASONS_DOCUMENTS;
 
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +75,7 @@ public class DecisionAndReasonsCreator implements PreSubmitCallbackHandler<Asylu
         Document decisionAndReasons
     ) {
         Optional<List<IdValue<DocumentWithMetadata>>> maybeDocuments = asylumCase
-                .read(DECISION_AND_REASONS_DOCUMENTS);
+                .read(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
 
         final List<IdValue<DocumentWithMetadata>> decisionAndReasonsDocuments =
             maybeDocuments
@@ -85,16 +85,16 @@ public class DecisionAndReasonsCreator implements PreSubmitCallbackHandler<Asylu
             documentReceiver.receive(
                 decisionAndReasons,
                 "",
-                DocumentTag.DECISION_AND_REASONS
+                DocumentTag.DECISION_AND_REASONS_DRAFT
             );
 
-        List<IdValue<DocumentWithMetadata>> allLegalRepresentativeDocuments =
+        List<IdValue<DocumentWithMetadata>> allDecisionAndReasonsDocuments =
             documentsAppender.append(
                 decisionAndReasonsDocuments,
                 singletonList(documentWithMetadata),
-                DocumentTag.DECISION_AND_REASONS
+                DocumentTag.DECISION_AND_REASONS_DRAFT
             );
 
-        asylumCase.write(DECISION_AND_REASONS_DOCUMENTS, allLegalRepresentativeDocuments);
+        asylumCase.write(DRAFT_DECISION_AND_REASONS_DOCUMENTS, allDecisionAndReasonsDocuments);
     }
 }

@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsCoverLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
 
@@ -58,7 +59,7 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("decisionAndReasons")
-    public DocumentCreator<AsylumCase> getHearingAndDecisionDocumentCreator(
+    public DocumentCreator<AsylumCase> getAndDecisionAndReasonsDocumentCreator(
             @Value("${decisionAndReasons.contentType}") String contentType,
             @Value("${decisionAndReasons.fileExtension}") String fileExtension,
             @Value("${decisionAndReasons.fileName}") String fileName,
@@ -75,6 +76,27 @@ public class DocumentCreatorConfiguration {
                 documentTemplate,
                 documentGenerator,
                 documentUploader
+        );
+    }
+
+    @Bean("decisionAndReasonsCoverLetter")
+    public DocumentCreator<AsylumCase> getAndDecisionAndReasonsCoverLetterDocumentCreator(
+        @Value("${decisionAndReasonsCoverLetter.contentType}") String contentType,
+        @Value("${decisionAndReasonsCoverLetter.fileExtension}") String fileExtension,
+        @Value("${decisionAndReasonsCoverLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        DecisionAndReasonsCoverLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 

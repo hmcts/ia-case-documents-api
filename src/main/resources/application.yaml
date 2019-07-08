@@ -9,6 +9,8 @@ management:
     web:
       base-path: "/"
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: Immigration & Asylum case documents API
   jackson.date-format: yyyy-MM-dd
@@ -26,7 +28,14 @@ hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-
 decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
 decisionAndReasons.fileName: "decision-and-reasons-draft"
-decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00022.docx}
+decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00064.docx}
+
+decisionAndReasonsCoverLetter.contentType:  application/pdf
+decisionAndReasonsCoverLetter.fileExtension: PDF
+decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
+decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00058.docx}
+
+decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
 hearingBundle.fileExtension: PDF
 hearingBundle.fileName: "hearing-bundle"
@@ -37,6 +46,7 @@ docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
 docmosis.endpoint: ${DOCMOSIS_ENDPOINT}
 docmosis.render.uri: /rs/render
 docmosis.status.uri: /rs/status
+docmosis.convert.uri: /rs/convert
 
 emBundler.url: ${EM_BUNDLER_URL:http://localhost:4623}
 emBundler.stitch.uri: ${EM_BUNDLER_STITCH_URI:/api/stitch-ccd-bundles}
@@ -85,6 +95,10 @@ security:
       - "createCaseSummary"
       - "generateHearingBundle"
       - "generateDecisionAndReasons"
+      - "sendDecisionAndReasons"
+
+
+
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

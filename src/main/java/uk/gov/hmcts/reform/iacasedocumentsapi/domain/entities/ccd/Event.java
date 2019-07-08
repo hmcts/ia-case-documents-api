@@ -24,6 +24,7 @@ public enum Event {
     REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence"),
     GENERATE_HEARING_BUNDLE("generateHearingBundle"),
     GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons"),
+    SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
