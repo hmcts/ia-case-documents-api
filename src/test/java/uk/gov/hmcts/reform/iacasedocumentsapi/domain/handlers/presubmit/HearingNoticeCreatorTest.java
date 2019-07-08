@@ -5,9 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,16 +24,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class HearingNoticeCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
-    @Mock private DocumentReceiver documentReceiver;
-    @Mock private DocumentsAppender documentsAppender;
+    @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -55,8 +51,7 @@ public class HearingNoticeCreatorTest {
         hearingNoticeCreator =
             new HearingNoticeCreator(
                 hearingNoticeDocumentCreator,
-                documentReceiver,
-                documentsAppender
+                documentHandler
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -64,20 +59,6 @@ public class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(existingHearingDocuments));
-
-        when(documentReceiver.receive(
-            uploadedDocument,
-            "",
-            DocumentTag.HEARING_NOTICE
-        )).thenReturn(documentWithMetadata);
-
-        when(documentsAppender.append(
-            existingHearingDocuments,
-            Collections.singletonList(documentWithMetadata),
-            DocumentTag.HEARING_NOTICE
-        )).thenReturn(allHearingDocuments);
     }
 
     @Test
@@ -90,42 +71,7 @@ public class HearingNoticeCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
-
-        verify(asylumCase, times(1)).read(HEARING_DOCUMENTS);
-        verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.HEARING_NOTICE);
-        verify(documentsAppender, times(1))
-            .append(
-                existingHearingDocuments,
-                Collections.singletonList(documentWithMetadata),
-                DocumentTag.HEARING_NOTICE
-            );
-
-        verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, allHearingDocuments);
-    }
-
-    @Test
-    public void should_create_hearing_notice_pdf_and_append_to_the_case_when_no_legal_representative_documents_exist() {
-
-        when(documentsAppender.append(
-            any(List.class),
-            eq(Collections.singletonList(documentWithMetadata)),
-            eq(DocumentTag.HEARING_NOTICE)
-        )).thenReturn(allHearingDocuments);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(documentsAppender, times(1))
-            .append(
-                hearingDocumentsCaptor.capture(),
-                eq(Collections.singletonList(documentWithMetadata)),
-                eq(DocumentTag.HEARING_NOTICE)
-            );
-
-        verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, allHearingDocuments);
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test

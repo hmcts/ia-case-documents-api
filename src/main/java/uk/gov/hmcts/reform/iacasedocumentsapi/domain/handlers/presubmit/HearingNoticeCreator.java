@@ -3,41 +3,32 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
 public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
-    private final DocumentReceiver documentReceiver;
-    private final DocumentsAppender documentsAppender;
+    private final DocumentHandler documentHandler;
 
     public HearingNoticeCreator(
         @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
-        DocumentReceiver documentReceiver,
-        DocumentsAppender documentsAppender
+        DocumentHandler documentHandler
     ) {
         this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
-        this.documentReceiver = documentReceiver;
-        this.documentsAppender = documentsAppender;
+        this.documentHandler = documentHandler;
     }
 
     public boolean canHandle(
@@ -64,35 +55,13 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         Document hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
 
-        attachDocumentToCase(asylumCase, hearingNotice);
+        documentHandler.addWithMetadata(
+            asylumCase,
+            hearingNotice,
+            HEARING_DOCUMENTS,
+            DocumentTag.HEARING_NOTICE
+        );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
-    }
-
-    private void attachDocumentToCase(
-        AsylumCase asylumCase,
-        Document hearingNotice
-    ) {
-        Optional<List<IdValue<DocumentWithMetadata>>> maybeHearingDocuments = asylumCase.read(HEARING_DOCUMENTS);
-
-        final List<IdValue<DocumentWithMetadata>> hearingDocuments =
-                maybeHearingDocuments
-                        .orElse(Collections.emptyList());
-
-        DocumentWithMetadata documentWithMetadata =
-            documentReceiver.receive(
-                hearingNotice,
-                "",
-                DocumentTag.HEARING_NOTICE
-            );
-
-        List<IdValue<DocumentWithMetadata>> allHearingDocuments =
-            documentsAppender.append(
-                hearingDocuments,
-                Collections.singletonList(documentWithMetadata),
-                DocumentTag.HEARING_NOTICE
-            );
-
-        asylumCase.write(HEARING_DOCUMENTS, allHearingDocuments);
     }
 }

@@ -5,9 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,8 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -35,8 +32,7 @@ public class DecisionAndReasonsCreatorTest {
 
     @Mock
     private DocumentCreator<AsylumCase> decisionAndReasonsDocumentCreator;
-    @Mock private DocumentReceiver documentReceiver;
-    @Mock private DocumentsAppender documentsAppender;
+    @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -57,8 +53,7 @@ public class DecisionAndReasonsCreatorTest {
         decisionAndReasonsCreator =
                 new DecisionAndReasonsCreator(
                         decisionAndReasonsDocumentCreator,
-                        documentReceiver,
-                        documentsAppender
+                        documentHandler
                 );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -67,21 +62,6 @@ public class DecisionAndReasonsCreatorTest {
 
         when(decisionAndReasonsDocumentCreator.create(caseDetails))
             .thenReturn(uploadedDocument);
-
-        when(asylumCase.read(DRAFT_DECISION_AND_REASONS_DOCUMENTS))
-            .thenReturn(Optional.of(existingDecisionAndReasonDocuments));
-
-        when(documentReceiver.receive(
-                uploadedDocument,
-                "",
-                DocumentTag.DECISION_AND_REASONS_DRAFT
-        )).thenReturn(documentWithMetadata);
-
-        when(documentsAppender.append(
-                existingDecisionAndReasonDocuments,
-                Collections.singletonList(documentWithMetadata),
-                DocumentTag.DECISION_AND_REASONS_DRAFT
-        )).thenReturn(allDraftDecisionAndReasonsDocuments);
     }
 
     @Test
@@ -94,20 +74,7 @@ public class DecisionAndReasonsCreatorTest {
 
         verify(decisionAndReasonsDocumentCreator, times(1)).create(caseDetails);
 
-        verify(asylumCase, times(1))
-            .read(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
-
-        verify(documentReceiver, times(1))
-            .receive(uploadedDocument, "", DocumentTag.DECISION_AND_REASONS_DRAFT);
-
-        verify(documentsAppender, times(1))
-            .append(
-                existingDecisionAndReasonDocuments,
-                Collections.singletonList(documentWithMetadata),
-                DocumentTag.DECISION_AND_REASONS_DRAFT);
-
-        verify(asylumCase, times(1))
-            .write(DRAFT_DECISION_AND_REASONS_DOCUMENTS, allDraftDecisionAndReasonsDocuments);
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, DRAFT_DECISION_AND_REASONS_DOCUMENTS, DocumentTag.DECISION_AND_REASONS_DRAFT);
     }
 
     @Test

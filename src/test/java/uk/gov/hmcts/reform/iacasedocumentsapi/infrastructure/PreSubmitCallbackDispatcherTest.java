@@ -267,7 +267,7 @@ public class PreSubmitCallbackDispatcherTest {
     @Test
     public void should_sort_handlers_by_name() {
         PreSubmitCallbackHandler<AsylumCase> h1 = new AppealSubmissionCreator(
-            mock(DocumentCreator.class), mock(DocumentReceiver.class), mock(DocumentsAppender.class)
+            mock(DocumentCreator.class), mock(DocumentHandler.class)
         );
 
         PreSubmitCallbackHandler<AsylumCase> h2 = new HearingBundleGenerator(
@@ -275,13 +275,12 @@ public class PreSubmitCallbackDispatcherTest {
             "mock",
             mock(FileNameQualifier.class),
             mock(DocumentBundler.class),
-            mock(DocumentReceiver.class),
-            mock(DocumentsAppender.class),
-            mock(HearingBundleOrder.class)
+            mock(DocumentHandler.class),
+            mock(BundleOrder.class)
         );
 
         PreSubmitCallbackHandler<AsylumCase> h3 = new HearingNoticeCreator(
-            mock(DocumentCreator.class), mock(DocumentReceiver.class), mock(DocumentsAppender.class)
+            mock(DocumentCreator.class), mock(DocumentHandler.class)
         );
 
         PreSubmitCallbackDispatcher<AsylumCase> dispatcher = new PreSubmitCallbackDispatcher<>(
