@@ -144,6 +144,15 @@ public enum AsylumCaseDefinition {
 
     DECISION_AND_REASONS_AVAILABLE(
         "decisionAndReasonsAvailable", new TypeReference<YesOrNo>(){}),
+
+    APPLICATION_OUT_OF_TIME_EXPLANATION(
+        "applicationOutOfTimeExplanation", new TypeReference<String>(){}),
+
+    APPLICATION_OUT_OF_TIME_DOCUMENT(
+        "applicationOutOfTimeDocument", new TypeReference<Document>(){}),
+
+    SUBMISSION_OUT_OF_TIME(
+        "submissionOutOfTime", new TypeReference<YesOrNo>(){}),
     ;
 
     private final String value;

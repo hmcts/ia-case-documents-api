@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
@@ -136,6 +137,15 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 .filter(idValue -> idValue.getValue().containsKey("value"))
                 .map(idValue -> idValue.getValue().get("value"))
                 .collect(joining(", "))
+        );
+
+        fieldValues.put("applicationOutOfTimeExplanation", asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class).orElse(""));
+        fieldValues.put("submissionOutOfTime", asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(YesOrNo.NO));
+        fieldValues.put(
+            "applicationOutOfTimeDocumentName",
+            asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)
+                .map(Document::getDocumentFilename)
+                .orElse("")
         );
 
         return fieldValues;

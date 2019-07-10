@@ -6,11 +6,13 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
@@ -32,6 +35,8 @@ public class AppealSubmissionTemplateTest {
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
+
+    @Mock private Document applicationOutOfTimeDocument;
 
     private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
     private String appealReferenceNumber = "RP/11111/2020";
@@ -68,6 +73,9 @@ public class AppealSubmissionTemplateTest {
             new IdValue<>("444", ImmutableMap.of("value", "5678"))
         );
 
+    private String outOfTimeExplanation = "someOutOfTimeExplanation";
+    private String outOfTimeDocumentFileName = "someOutOfTimeDocument.pdf";
+
     private AppealSubmissionTemplate appealSubmissionTemplate;
 
     @Before
@@ -80,8 +88,10 @@ public class AppealSubmissionTemplateTest {
             );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-
         when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+
+        when(applicationOutOfTimeDocument.getDocumentFilename()).thenReturn(outOfTimeDocumentFileName);
+
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
@@ -108,6 +118,9 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
         when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
         when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.of(otherAppeals));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.of(outOfTimeExplanation));
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.of(applicationOutOfTimeDocument));
 
         when(stringProvider.get("appealType", appealType)).thenReturn(Optional.of("The revocation of a protection status"));
         when(stringProvider.get("isoCountries", "FI")).thenReturn(Optional.of("Finland"));
@@ -127,7 +140,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(15, templateFieldValues.size());
+        assertEquals(18, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("31122020", templateFieldValues.get("CREATED_DATE"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
@@ -158,6 +171,10 @@ public class AppealSubmissionTemplateTest {
         assertEquals(ImmutableMap.of("appealGround", "Human rights"), ((List) templateFieldValues.get("appealGrounds")).get(1));
 
         assertEquals("1234, 5678", templateFieldValues.get("otherAppeals"));
+
+        assertEquals(outOfTimeExplanation, templateFieldValues.get("applicationOutOfTimeExplanation"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("submissionOutOfTime"));
+        assertEquals(outOfTimeDocumentFileName, templateFieldValues.get("applicationOutOfTimeDocumentName"));
     }
 
     @Test
@@ -167,7 +184,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(14, templateFieldValues.size());
+        assertEquals(17, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appealType"));
     }
 
@@ -178,7 +195,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(14, templateFieldValues.size());
+        assertEquals(17, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appellantAddress"));
     }
 
@@ -198,10 +215,13 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.empty());
         when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(13, templateFieldValues.size());
+        assertEquals(16, templateFieldValues.size());
 
         assertFalse(templateFieldValues.containsKey("appealType"));
         assertFalse(templateFieldValues.containsKey("appellantAddress"));
@@ -219,5 +239,8 @@ public class AppealSubmissionTemplateTest {
         assertEquals(0, ((List) templateFieldValues.get("appellantNationalities")).size());
         assertEquals(0, ((List) templateFieldValues.get("appealGrounds")).size());
         assertEquals("", templateFieldValues.get("otherAppeals"));
+        assertEquals("", templateFieldValues.get("applicationOutOfTimeExplanation"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("submissionOutOfTime"));
+        assertEquals("", templateFieldValues.get("applicationOutOfTimeDocumentName"));
     }
 }
