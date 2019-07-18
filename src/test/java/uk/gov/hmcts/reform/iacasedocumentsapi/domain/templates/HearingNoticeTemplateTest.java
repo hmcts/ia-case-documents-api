@@ -47,6 +47,8 @@ public class HearingNoticeTemplateTest {
     private String expectedFormattedManchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
     private String expectedFormattedTaylorHouseHearingCentreAddress = "London\n456 Somewhere\nSouth";
 
+    private String ariaListingReference = "AA/12345/1234";
+
     private HearingNoticeTemplate hearingNoticeTemplate;
 
     @Before
@@ -77,6 +79,7 @@ public class HearingNoticeTemplateTest {
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.of(singleSexCourt));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(inCamera));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(otherHearingRequest));
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
     }
 
     @Test
@@ -90,7 +93,7 @@ public class HearingNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(14, templateFieldValues.size());
+        assertEquals(15, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -105,6 +108,7 @@ public class HearingNoticeTemplateTest {
         assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
         assertEquals(inCamera, templateFieldValues.get("inCamera"));
         assertEquals(otherHearingRequest, templateFieldValues.get("otherHearingRequest"));
+        assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
     }
 
     @Test
@@ -131,10 +135,11 @@ public class HearingNoticeTemplateTest {
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(14, templateFieldValues.size());
+        assertEquals(15, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
@@ -149,6 +154,7 @@ public class HearingNoticeTemplateTest {
         assertEquals("", templateFieldValues.get("singleSexCourt"));
         assertEquals("", templateFieldValues.get("inCamera"));
         assertEquals("", templateFieldValues.get("otherHearingRequest"));
+        assertEquals("", templateFieldValues.get("ariaListingReference"));
     }
 
     @Test
