@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import java.util.Arrays;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,8 +63,10 @@ public class EndpointSecurityTest {
             .when()
             .get("/health")
             .then()
+            .log().all(true)
             .statusCode(HttpStatus.OK.value())
             .and()
+            .log().all(true)
             .extract().body().asString();
 
         assertThat(response)
