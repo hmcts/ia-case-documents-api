@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import java.util.Arrays;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +38,11 @@ public class EndpointSecurityTest {
         RestAssured.useRelaxedHTTPSValidation();
     }
 
+    @After
+    public void cleanUp() {
+        SerenityRest.clear();
+    }
+
     @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
 
     @Test
@@ -63,7 +68,6 @@ public class EndpointSecurityTest {
             .when()
             .get("/health")
             .then()
-            .log().all(true)
             .statusCode(HttpStatus.OK.value())
             .and()
             .log().all(true)
