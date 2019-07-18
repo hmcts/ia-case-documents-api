@@ -6,7 +6,6 @@ import io.restassured.RestAssured;
 import java.util.Arrays;
 import java.util.List;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,11 +35,6 @@ public class EndpointSecurityTest {
     public void setUp() {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-    }
-
-    @After
-    public void cleanUp() {
-        SerenityRest.clear();
     }
 
     @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
