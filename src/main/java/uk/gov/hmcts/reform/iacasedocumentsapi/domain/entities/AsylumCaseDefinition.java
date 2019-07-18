@@ -153,6 +153,10 @@ public enum AsylumCaseDefinition {
 
     SUBMISSION_OUT_OF_TIME(
         "submissionOutOfTime", new TypeReference<YesOrNo>(){}),
+
+    ARIA_LISTING_REFERENCE(
+        "ariaListingReference", new TypeReference<String>(){}),
+
     ;
 
     private final String value;

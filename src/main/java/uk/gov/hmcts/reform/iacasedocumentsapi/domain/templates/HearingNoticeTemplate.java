@@ -70,6 +70,8 @@ public class HearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("inCamera", asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class).orElse(""));
         fieldValues.put("otherHearingRequest", asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class).orElse(""));
 
+        fieldValues.put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
+
         return fieldValues;
     }
 
