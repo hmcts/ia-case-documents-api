@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import java.util.Arrays;
 import java.util.List;
 import net.serenitybdd.rest.SerenityRest;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +67,7 @@ public class EndpointSecurityTest {
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and()
+                .log().all(true)
                 .extract().body().asString();
 
         assertThat(response)
