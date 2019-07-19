@@ -1,13 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.List;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,9 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentSer
 @RunWith(MockitoJUnitRunner.class)
 public class SendDecisionAndReasonsOrchestratorTest {
 
-    @Mock
-    private DocumentReceiver documentReceiver;
-    @Mock private DocumentsAppender documentsAppender;
+    @Mock private DocumentHandler documentHandler;
     @Mock private SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
     @Mock private SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -36,15 +32,12 @@ public class SendDecisionAndReasonsOrchestratorTest {
 
     private SendDecisionAndReasonsOrchestrator sendDecisionAndReasonsOrchestrator;
     private List<IdValue<DocumentWithMetadata>> existingDecisionAnReasonsDocuments = emptyList();
-    private DocumentWithMetadata receivedCoverLetter = mock(DocumentWithMetadata.class);
-    private List<IdValue<DocumentWithMetadata>> appendedDecisionAndReasonsDocuments = emptyList();
 
     @Before
     public void setUp() {
         sendDecisionAndReasonsOrchestrator =
             new SendDecisionAndReasonsOrchestrator(
-                documentReceiver,
-                documentsAppender,
+                documentHandler,
                 sendDecisionAndReasonsPdfService,
                 sendDecisionAndReasonsCoverLetterService);
 
@@ -60,8 +53,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
             .hasMessage("Cover letter creation failed")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        verifyZeroInteractions(documentReceiver);
-        verifyZeroInteractions(documentsAppender);
+        verifyZeroInteractions(documentHandler);
         verifyZeroInteractions(sendDecisionAndReasonsPdfService);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
@@ -77,8 +69,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
             .isExactlyInstanceOf(DocumentServiceResponseException.class);
 
-        verifyZeroInteractions(documentReceiver);
-        verifyZeroInteractions(documentsAppender);
+        verifyZeroInteractions(documentHandler);
         verifyZeroInteractions(sendDecisionAndReasonsPdfService);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
@@ -98,8 +89,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
             .hasMessage("Document to pdf conversion failed")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        verifyZeroInteractions(documentReceiver);
-        verifyZeroInteractions(documentsAppender);
+        verifyZeroInteractions(documentHandler);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
@@ -117,8 +107,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
             .isInstanceOf(RuntimeException.class);
 
-        verifyZeroInteractions(documentReceiver);
-        verifyZeroInteractions(documentsAppender);
+        verifyZeroInteractions(documentHandler);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
@@ -133,39 +122,32 @@ public class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
             .thenReturn(pdf);
 
-        when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS))
-            .thenReturn(Optional.of(existingDecisionAnReasonsDocuments));
-
-        when(documentReceiver.receive(
-            coverLetter,
-            "",
-            DocumentTag.DECISION_AND_REASONS_COVER_LETTER)).thenReturn(receivedCoverLetter);
-
-        when(documentsAppender.append(
-            existingDecisionAnReasonsDocuments,
-            singletonList(receivedCoverLetter),
-            DocumentTag.DECISION_AND_REASONS_COVER_LETTER)).thenReturn(appendedDecisionAndReasonsDocuments);
-
-
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
 
 
-        verify(documentReceiver, times(1))
-            .receive(
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
                 coverLetter,
-                "",
-                DocumentTag.DECISION_AND_REASONS_COVER_LETTER);
-
-        verify(documentsAppender, times(1))
-            .append(
-                existingDecisionAnReasonsDocuments,
-                singletonList(receivedCoverLetter),
-                DocumentTag.DECISION_AND_REASONS_COVER_LETTER);
-
-        verify(asylumCase, times(2))
-            .write(
                 FINAL_DECISION_AND_REASONS_DOCUMENTS,
-                appendedDecisionAndReasonsDocuments);
+                DocumentTag.DECISION_AND_REASONS_COVER_LETTER
+            );
+
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                coverLetter,
+                FINAL_DECISION_AND_REASONS_DOCUMENTS,
+                DocumentTag.DECISION_AND_REASONS_COVER_LETTER
+            );
+
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                pdf,
+                FINAL_DECISION_AND_REASONS_DOCUMENTS,
+                DocumentTag.FINAL_DECISION_AND_REASONS_PDF
+            );
 
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_DOCUMENT);
         verify(asylumCase, times(1)).clear(DRAFT_DECISION_AND_REASONS_DOCUMENTS);

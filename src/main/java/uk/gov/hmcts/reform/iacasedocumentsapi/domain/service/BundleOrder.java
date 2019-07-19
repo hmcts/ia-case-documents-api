@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 
 @Component
-public class HearingBundleOrder implements Comparator<DocumentWithMetadata> {
+public class BundleOrder implements Comparator<DocumentWithMetadata> {
 
-    private static final Logger log = LoggerFactory.getLogger(HearingBundleOrder.class);
+    private static final Logger log = LoggerFactory.getLogger(BundleOrder.class);
 
     @Override
     public int compare(DocumentWithMetadata d1, DocumentWithMetadata d2) {
@@ -38,19 +38,22 @@ public class HearingBundleOrder implements Comparator<DocumentWithMetadata> {
             case RESPONDENT_EVIDENCE:
                 return 7;
             case HEARING_BUNDLE:
-                log.warn("HEARING_BUNDLE tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
+                log.warn("HEARING_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 8;
             case DECISION_AND_REASONS_DRAFT:
-                log.warn("DECISION_AND_REASONS_DRAFT DRAFT tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
+                log.warn("DECISION_AND_REASONS_DRAFT DRAFT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 9;
             case DECISION_AND_REASONS_COVER_LETTER:
-                log.warn("DECISION_AND_REASONS_COVER_LETTER tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
+                log.warn("DECISION_AND_REASONS_COVER_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 10;
             case FINAL_DECISION_AND_REASONS_PDF:
-                log.warn("FINAL_DECISION_AND_REASONS_PDF tag should not be checked for hearing bundle ordering, document desc: {}", document.getDescription());
+                log.warn("FINAL_DECISION_AND_REASONS_PDF tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 11;
-            case NONE:
+            case APPEAL_SKELETON_BUNDLE:
+                log.warn("APPEAL_SKELETON_BUNDLE tag should not be checked for hearing ordering, document desc: {}", document.getDescription());
                 return 12;
+            case NONE:
+                return 13;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

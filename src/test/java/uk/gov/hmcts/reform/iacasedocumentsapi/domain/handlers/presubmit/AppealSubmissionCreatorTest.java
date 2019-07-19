@@ -5,9 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,16 +24,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class AppealSubmissionCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
-    @Mock private DocumentReceiver documentReceiver;
-    @Mock private DocumentsAppender documentsAppender;
+    @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -55,8 +51,7 @@ public class AppealSubmissionCreatorTest {
         appealSubmissionCreator =
             new AppealSubmissionCreator(
                 appealSubmissionDocumentCreator,
-                documentReceiver,
-                documentsAppender
+                documentHandler
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -64,20 +59,6 @@ public class AppealSubmissionCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(appealSubmissionDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.of(existingLegalRepresentativeDocuments));
-
-        when(documentReceiver.receive(
-            uploadedDocument,
-            "",
-            DocumentTag.APPEAL_SUBMISSION
-        )).thenReturn(documentWithMetadata);
-
-        when(documentsAppender.append(
-            existingLegalRepresentativeDocuments,
-            Collections.singletonList(documentWithMetadata),
-            DocumentTag.APPEAL_SUBMISSION
-        )).thenReturn(allLegalRepresentativeDocuments);
     }
 
     @Test
@@ -89,43 +70,7 @@ public class AppealSubmissionCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(appealSubmissionDocumentCreator, times(1)).create(caseDetails);
-
-        verify(asylumCase, times(1)).read(LEGAL_REPRESENTATIVE_DOCUMENTS);
-        verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.APPEAL_SUBMISSION);
-        verify(documentsAppender, times(1))
-            .append(
-                existingLegalRepresentativeDocuments,
-                Collections.singletonList(documentWithMetadata),
-                DocumentTag.APPEAL_SUBMISSION
-            );
-
-        verify(asylumCase, times(1)).write(LEGAL_REPRESENTATIVE_DOCUMENTS, allLegalRepresentativeDocuments);
-    }
-
-    @Test
-    public void should_create_appeal_submission_pdf_and_append_to_the_case_when_no_legal_representative_documents_exist() {
-
-        when(documentsAppender.append(
-            any(List.class),
-            eq(Collections.singletonList(documentWithMetadata)),
-            eq(DocumentTag.APPEAL_SUBMISSION)
-        )).thenReturn(allLegalRepresentativeDocuments);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(documentsAppender, times(1))
-            .append(
-                legalRepresentativeDocumentsCaptor.capture(),
-                eq(Collections.singletonList(documentWithMetadata)),
-                eq(DocumentTag.APPEAL_SUBMISSION)
-            );
-
-        verify(asylumCase, times(1)).write(LEGAL_REPRESENTATIVE_DOCUMENTS, allLegalRepresentativeDocuments);
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, LEGAL_REPRESENTATIVE_DOCUMENTS, DocumentTag.APPEAL_SUBMISSION);
     }
 
     @Test

@@ -1,13 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -24,7 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
 
 @Component
-public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -32,22 +32,18 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    private final BundleOrder bundleOrder;
-
-    public HearingBundleGenerator(
-        @Value("${hearingBundle.fileExtension}") String fileExtension,
-        @Value("${hearingBundle.fileName}") String fileName,
+    public AppealSkeletonBundleGenerator(
+        @Value("${appealSkeletonBundle.fileExtension}") String fileExtension,
+        @Value("${appealSkeletonBundle.fileName}") String fileName,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
-        DocumentHandler documentHandler,
-        BundleOrder bundleOrder
+        DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
         this.fileNameQualifier = fileNameQualifier;
         this.documentBundler = documentBundler;
         this.documentHandler = documentHandler;
-        this.bundleOrder = bundleOrder;
     }
 
     public boolean canHandle(
@@ -58,7 +54,7 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.GENERATE_HEARING_BUNDLE;
+               && callback.getEvent() == Event.SUBMIT_CASE;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -75,38 +71,24 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         Optional<List<IdValue<DocumentWithMetadata>>> maybeLegalRepresentativeDocuments = asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS);
-        Optional<List<IdValue<DocumentWithMetadata>>> maybeRespondentDocuments = asylumCase.read(RESPONDENT_DOCUMENTS);
-        Optional<List<IdValue<DocumentWithMetadata>>> maybeHearingDocuments = asylumCase.read(HEARING_DOCUMENTS);
+        List<DocumentWithMetadata> bundleDocuments = maybeLegalRepresentativeDocuments
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(IdValue::getValue)
+            .filter(document -> document.getTag() == DocumentTag.CASE_ARGUMENT)
+            .collect(Collectors.toList());
 
-        List<DocumentWithMetadata> bundleDocuments =
-            Stream.concat(
-                    maybeLegalRepresentativeDocuments
-                    .orElse(Collections.emptyList())
-                    .stream(),
-                Stream.concat(
-                    maybeRespondentDocuments
-                        .orElse(Collections.emptyList())
-                        .stream(),
-                    maybeHearingDocuments
-                        .orElse(Collections.emptyList())
-                        .stream()
-                ))
-                .map(IdValue::getValue)
-                .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE && document.getTag() != DocumentTag.APPEAL_SKELETON_BUNDLE)
-                .sorted(bundleOrder)
-                .collect(Collectors.toList());
-
-        Document hearingBundle = documentBundler.bundle(
+        Document appealSkeletonBundle = documentBundler.bundle(
             bundleDocuments,
-            "Hearing documents",
+            "Appeal skeleton documents",
             qualifiedDocumentFileName
         );
 
         documentHandler.addWithMetadata(
             asylumCase,
-            hearingBundle,
-            HEARING_DOCUMENTS,
-            DocumentTag.HEARING_BUNDLE
+            appealSkeletonBundle,
+            LEGAL_REPRESENTATIVE_DOCUMENTS,
+            DocumentTag.APPEAL_SKELETON_BUNDLE
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

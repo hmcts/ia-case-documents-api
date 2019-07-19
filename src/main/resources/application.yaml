@@ -40,6 +40,9 @@ decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 hearingBundle.fileExtension: PDF
 hearingBundle.fileName: "hearing-bundle"
 
+appealSkeletonBundle.fileExtension: PDF
+appealSkeletonBundle.fileName: "appeal-skeleton-argument"
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
