@@ -23,7 +23,7 @@ appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-AP
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
-hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00009.docx}
+hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00072.docx}
 
 decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
@@ -94,12 +94,12 @@ security:
       - "uploadRespondentEvidence"
       - "requestRespondentReview"
       - "addAppealResponse"
-      - "listCase"
       - "createCaseSummary"
       - "generateHearingBundle"
       - "generateDecisionAndReasons"
       - "sendDecisionAndReasons"
-
+    caseworker-ia-admofficer:
+      - "listCase"
 
 
 
