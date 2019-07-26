@@ -87,6 +87,33 @@ public class DocumentHandlerTest {
         verify(asylumCase).write(documentField, allDocuments);
     }
 
+    @Test
+    public void should_add_document_to_non_empty_list_without_replacing_documents() {
+
+        DocumentWithMetadata newDocumentWithMetadata = createDocumentWithMetadata();
+        List<IdValue<DocumentWithMetadata>> existingDocuments = newArrayList(new IdValue<>("1", createDocumentWithMetadata()));
+        List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(existingDocuments.get(0), new IdValue<>("2", newDocumentWithMetadata));
+
+        when(asylumCase.read(documentField))
+            .thenReturn(Optional.of(existingDocuments));
+        when(documentReceiver.receive(document, "", tag))
+            .thenReturn(newDocumentWithMetadata);
+        when(documentsAppender.append(existingDocuments, Collections.singletonList(newDocumentWithMetadata)))
+            .thenReturn(allDocuments);
+
+        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase,
+            document,
+            documentField,
+            tag
+        );
+
+        verify(asylumCase).read(documentField);
+        verify(documentReceiver).receive(document, "", tag);
+        verify(documentsAppender).append(existingDocuments, Collections.singletonList(newDocumentWithMetadata));
+        verify(asylumCase).write(documentField, allDocuments);
+    }
+
     private DocumentWithMetadata createDocumentWithMetadata() {
         return new DocumentWithMetadata(
             document,

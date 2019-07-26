@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
@@ -39,7 +40,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.LIST_CASE;
+               && asList(Event.EDIT_CASE_LISTING, Event.LIST_CASE).contains(callback.getEvent());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -55,7 +56,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         Document hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
 
-        documentHandler.addWithMetadata(
+        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             hearingNotice,
             HEARING_DOCUMENTS,
