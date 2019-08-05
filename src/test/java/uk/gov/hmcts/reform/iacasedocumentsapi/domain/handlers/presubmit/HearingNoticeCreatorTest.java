@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -71,7 +72,7 @@ public class HearingNoticeCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
@@ -98,7 +99,7 @@ public class HearingNoticeCreatorTest {
 
                 boolean canHandle = hearingNoticeCreator.canHandle(callbackStage, callback);
 
-                if (event == Event.LIST_CASE
+                if (asList(Event.LIST_CASE, Event.EDIT_CASE_LISTING).contains(event)
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);

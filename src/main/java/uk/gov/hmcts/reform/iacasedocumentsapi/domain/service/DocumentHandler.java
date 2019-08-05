@@ -27,12 +27,9 @@ public class DocumentHandler {
     }
 
     public void addWithMetadata(AsylumCase asylumCase, Document document, AsylumCaseDefinition documentField, DocumentTag tag) {
-        Optional<List<IdValue<DocumentWithMetadata>>> maybeLegalRepresentativeDocuments = asylumCase
-            .read(documentField);
 
-        final List<IdValue<DocumentWithMetadata>> documents =
-            maybeLegalRepresentativeDocuments
-                .orElse(Collections.emptyList());
+        final List<IdValue<DocumentWithMetadata>> existingDocuments =
+            extractExistingDocuments(asylumCase, documentField);
 
         DocumentWithMetadata documentWithMetadata =
             documentReceiver.receive(
@@ -43,11 +40,48 @@ public class DocumentHandler {
 
         List<IdValue<DocumentWithMetadata>> allDocuments =
             documentsAppender.append(
-                documents,
+                existingDocuments,
                 Collections.singletonList(documentWithMetadata),
                 tag
             );
 
         asylumCase.write(documentField, allDocuments);
     }
+
+    public void addWithMetadataWithoutReplacingExistingDocuments(
+        AsylumCase asylumCase,
+        Document document,
+        AsylumCaseDefinition documentField,
+        DocumentTag tag
+    ) {
+
+        final List<IdValue<DocumentWithMetadata>> existingDocuments =
+            extractExistingDocuments(asylumCase, documentField);
+
+        DocumentWithMetadata documentWithMetadata =
+            documentReceiver.receive(
+                document,
+                "",
+                tag
+            );
+
+        List<IdValue<DocumentWithMetadata>> allDocuments =
+            documentsAppender.append(
+                existingDocuments,
+                Collections.singletonList(documentWithMetadata)
+            );
+
+        asylumCase.write(documentField, allDocuments);
+    }
+
+    private List<IdValue<DocumentWithMetadata>> extractExistingDocuments(AsylumCase asylumCase, AsylumCaseDefinition documentField) {
+
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingDocuments = asylumCase
+            .read(documentField);
+
+        return maybeExistingDocuments
+            .orElse(Collections.emptyList());
+    }
+
+
 }

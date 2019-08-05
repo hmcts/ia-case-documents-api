@@ -25,6 +25,7 @@ public enum Event {
     GENERATE_HEARING_BUNDLE("generateHearingBundle"),
     GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons"),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
+    EDIT_CASE_LISTING("editCaseListing"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

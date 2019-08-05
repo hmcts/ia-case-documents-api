@@ -98,6 +98,7 @@ security:
       - "generateHearingBundle"
       - "generateDecisionAndReasons"
       - "sendDecisionAndReasons"
+      - "editCaseListing"
     caseworker-ia-admofficer:
       - "listCase"
 
