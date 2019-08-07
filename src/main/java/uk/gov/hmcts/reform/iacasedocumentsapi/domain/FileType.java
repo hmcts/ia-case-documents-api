@@ -22,4 +22,5 @@ public enum FileType {
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(value + " not a FileType"));
     }
+
 }

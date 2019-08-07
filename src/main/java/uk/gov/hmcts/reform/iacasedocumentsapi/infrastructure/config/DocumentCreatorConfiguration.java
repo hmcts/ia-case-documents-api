@@ -8,10 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQ
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsCoverLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 
 @Configuration
 public class DocumentCreatorConfiguration {
@@ -86,6 +83,27 @@ public class DocumentCreatorConfiguration {
         @Value("${decisionAndReasonsCoverLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         DecisionAndReasonsCoverLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("endAppealNotice")
+    public DocumentCreator<AsylumCase> getEndAppealDocumentCreator(
+        @Value("${endAppeal.contentType}") String contentType,
+        @Value("${endAppeal.fileExtension}") String fileExtension,
+        @Value("${endAppeal.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        EndAppealTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

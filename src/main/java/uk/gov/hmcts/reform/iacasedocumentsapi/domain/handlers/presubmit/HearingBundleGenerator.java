@@ -92,7 +92,10 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
                         .stream()
                 ))
                 .map(IdValue::getValue)
-                .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE && document.getTag() != DocumentTag.APPEAL_SKELETON_BUNDLE)
+                .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE
+                                    && document.getTag() != DocumentTag.APPEAL_SKELETON_BUNDLE
+                                    && document.getTag() != DocumentTag.END_APPEAL
+                )
                 .sorted(bundleOrder)
                 .collect(Collectors.toList());
 

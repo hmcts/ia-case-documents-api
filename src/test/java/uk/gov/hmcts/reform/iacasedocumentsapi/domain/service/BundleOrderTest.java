@@ -35,7 +35,7 @@ public class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .collect(Collectors.toList());
 
-        assertEquals(15, sortedTags.size());
+        assertEquals(16, sortedTags.size());
         assertEquals(DocumentTag.CASE_SUMMARY, sortedTags.get(0));
         assertEquals(DocumentTag.HEARING_NOTICE, sortedTags.get(1));
         assertEquals(DocumentTag.APPEAL_SUBMISSION, sortedTags.get(2));
@@ -50,6 +50,7 @@ public class BundleOrderTest {
         assertEquals(DocumentTag.DECISION_AND_REASONS_COVER_LETTER, sortedTags.get(11));
         assertEquals(DocumentTag.FINAL_DECISION_AND_REASONS_PDF, sortedTags.get(12));
         assertEquals(DocumentTag.APPEAL_SKELETON_BUNDLE, sortedTags.get(13));
-        assertEquals(DocumentTag.NONE, sortedTags.get(14));
+        assertEquals(DocumentTag.END_APPEAL, sortedTags.get(14));
+        assertEquals(DocumentTag.NONE, sortedTags.get(15));
     }
 }
