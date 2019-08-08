@@ -30,11 +30,29 @@ public enum AsylumCaseDefinition {
     LEGAL_REPRESENTATIVE_EMAIL_ADDRESS(
             "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
 
+    LEGAL_REPRESENTATIVE_NAME(
+            "legalRepresentativeName", new TypeReference<String>(){}),
+
     NOTIFICATIONS_SENT(
             "notificationsSent",  new TypeReference<List<IdValue<String>>>(){}),
 
     LIST_CASE_HEARING_DATE(
             "listCaseHearingDate",  new TypeReference<String>(){}),
+
+    LIST_CASE_REQUIREMENTS_VULNERABILITIES(
+            "listCaseRequirementsVulnerabilities",  new TypeReference<String>(){}),
+
+    LIST_CASE_REQUIREMENTS_MULTIMEDIA(
+            "listCaseRequirementsMultimedia",  new TypeReference<String>(){}),
+
+    LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT(
+            "listCaseRequirementsSingleSexCourt",  new TypeReference<String>(){}),
+
+    LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT(
+            "listCaseRequirementsInCameraCourt",  new TypeReference<String>(){}),
+
+    LIST_CASE_REQUIREMENTS_OTHER(
+            "listCaseRequirementsOther",  new TypeReference<String>(){}),
 
     ARIA_LISTING_REFERENCE(
             "ariaListingReference",  new TypeReference<String>(){}),

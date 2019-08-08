@@ -1,155 +1,45 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
 
-import com.google.common.collect.ImmutableMap;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.CaseOfficerPersonalisationFactory;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class CaseOfficerCaseListedNotifierTest {
 
-    private static final String CASE_LISTED_CASE_OFFICER_TEMPLATE = "template-id";
     private static final String MANCHESTER_EMAIL_ADDRESS = "manchester@example.com";
     private static final String TAYLOR_HOUSE_EMAIL_ADDRESS = "taylorHouse@example.com";
 
     @Mock private CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
     @Mock private Map<HearingCentre, String> hearingCentreEmailAddresses;
-    @Mock private NotificationSender notificationSender;
-    @Mock private NotificationIdAppender notificationIdAppender;
-
-    @Mock private Callback<AsylumCase> callback;
-    @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
-    @Mock private Map<String, String> personalisation;
-
-    private final long caseId = 123L;
-
-    private final String expectedNotificationId = "ABC-DEF-GHI-JKL";
-    private final String expectedNotificationReference = caseId + "_CASE_LISTED_CASE_OFFICER";
 
     private CaseOfficerCaseListedNotifier caseOfficerCaseListedNotifier;
 
     @Before
     public void setUp() {
+
         caseOfficerCaseListedNotifier =
             new CaseOfficerCaseListedNotifier(
-                CASE_LISTED_CASE_OFFICER_TEMPLATE,
                 caseOfficerPersonalisationFactory,
-                hearingCentreEmailAddresses,
-                notificationSender,
-                notificationIdAppender
+                hearingCentreEmailAddresses
             );
-
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(caseDetails.getId()).thenReturn(caseId);
-        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.empty());
-
-        when(caseOfficerPersonalisationFactory.createListedCase(asylumCase)).thenReturn(personalisation);
 
         when(hearingCentreEmailAddresses.get(HearingCentre.MANCHESTER)).thenReturn(MANCHESTER_EMAIL_ADDRESS);
         when(hearingCentreEmailAddresses.get(HearingCentre.TAYLOR_HOUSE)).thenReturn(TAYLOR_HOUSE_EMAIL_ADDRESS);
-
-        when(notificationSender.sendEmail(
-            eq(CASE_LISTED_CASE_OFFICER_TEMPLATE),
-            any(),
-            eq(personalisation),
-            any()
-        )).thenReturn(expectedNotificationId);
-    }
-
-    @Test
-    public void should_send_case_listed_email_notification_to_hearing_centre() {
-
-        final List<IdValue<String>> existingNotifications =
-            new ArrayList<>(Collections.singletonList(
-                new IdValue<>("case-listed-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ")
-            ));
-
-        final List<IdValue<String>> expectedNotifications =
-            new ArrayList<>(Arrays.asList(
-                new IdValue<>("case-listed-notification-sent", "ZZZ-ZZZ-ZZZ-ZZZ"),
-                new IdValue<>(expectedNotificationReference, expectedNotificationId)
-            ));
-
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
-        when(asylumCase.read(NOTIFICATIONS_SENT)).thenReturn(Optional.of(existingNotifications));
-
-        when(notificationIdAppender.append(
-            existingNotifications,
-            expectedNotificationReference,
-            expectedNotificationId
-        )).thenReturn(expectedNotifications);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            caseOfficerCaseListedNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(notificationSender, times(1)).sendEmail(
-            CASE_LISTED_CASE_OFFICER_TEMPLATE,
-            MANCHESTER_EMAIL_ADDRESS,
-            personalisation,
-            expectedNotificationReference
-        );
-
-        verify(asylumCase, times(1)).write(NOTIFICATIONS_SENT, expectedNotifications);
-        verify(notificationIdAppender).append(anyList(), anyString(), anyString());
-    }
-
-    @Test
-    public void should_use_email_for_hearing_centre() {
-
-        Map<HearingCentre, String> exampleInputOutputs =
-            ImmutableMap.<HearingCentre, String>builder()
-                .put(HearingCentre.MANCHESTER, MANCHESTER_EMAIL_ADDRESS)
-                .put(HearingCentre.TAYLOR_HOUSE, TAYLOR_HOUSE_EMAIL_ADDRESS)
-                .build();
-
-        for (Map.Entry<HearingCentre, String> entry : exampleInputOutputs.entrySet()) {
-
-            final HearingCentre inputHearingCentre = entry.getKey();
-            final String outputEmailAddress = entry.getValue();
-
-            when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(inputHearingCentre));
-
-            caseOfficerCaseListedNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-            verify(notificationSender, times(1)).sendEmail(
-                CASE_LISTED_CASE_OFFICER_TEMPLATE,
-                outputEmailAddress,
-                personalisation,
-                expectedNotificationReference
-            );
-
-            reset(asylumCase);
-        }
     }
 
     @Test
@@ -157,80 +47,60 @@ public class CaseOfficerCaseListedNotifierTest {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.getEmailAddress(asylumCase))
             .hasMessage("listCaseHearingCentre is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void should_throw_when_hearing_centre_email_address_not_present() {
+    public void should_throw_when_hearing_centre_email_address_not_found() {
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(hearingCentreEmailAddresses.get(HearingCentre.MANCHESTER)).thenReturn(null);
 
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.getEmailAddress(asylumCase))
             .hasMessage("Hearing centre email address not found: manchester")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void handling_should_throw_if_cannot_actually_handle() {
+    public void should_return_email_address_for_manchester_hearing_centre() {
 
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
-            .hasMessage("Cannot handle callback")
-            .isExactlyInstanceOf(IllegalStateException.class);
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
 
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-            .hasMessage("Cannot handle callback")
-            .isExactlyInstanceOf(IllegalStateException.class);
+        final String actualEmailAddress = caseOfficerCaseListedNotifier.getEmailAddress(asylumCase);
+
+        assertEquals(MANCHESTER_EMAIL_ADDRESS, actualEmailAddress);
     }
 
     @Test
-    public void it_can_handle_callback() {
+    public void should_return_email_address_for_taylor_house_hearing_centre() {
 
-        for (Event event : Event.values()) {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
 
-            when(callback.getEvent()).thenReturn(event);
+        final String actualEmailAddress = caseOfficerCaseListedNotifier.getEmailAddress(asylumCase);
 
-            for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
+        assertEquals(TAYLOR_HOUSE_EMAIL_ADDRESS, actualEmailAddress);
+    }
 
-                boolean canHandle = caseOfficerCaseListedNotifier.canHandle(callbackStage, callback);
+    @Test
+    public void should_return_personalisation_for_case_officer() {
 
-                if (event == Event.LIST_CASE
-                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+        caseOfficerCaseListedNotifier.getPersonalisation(asylumCase);
 
-                    assertTrue(canHandle);
-                } else {
-                    assertFalse(canHandle);
-                }
-            }
-
-            reset(callback);
-        }
+        verify(caseOfficerPersonalisationFactory, times(1)).createListedCase(asylumCase);
     }
 
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.canHandle(null, callback))
-            .hasMessage("callbackStage must not be null")
+        assertThatThrownBy(() -> new CaseOfficerCaseListedNotifier(null, hearingCentreEmailAddresses))
+            .hasMessage("caseOfficerPersonalisationFactory must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
-            .hasMessage("callback must not be null")
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.handle(null, callback))
-            .hasMessage("callbackStage must not be null")
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> caseOfficerCaseListedNotifier.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
-            .hasMessage("callback must not be null")
+        assertThatThrownBy(() -> new CaseOfficerCaseListedNotifier(caseOfficerPersonalisationFactory, null))
+            .hasMessage("hearingCentreEmailAddresses must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
-
 }
+
