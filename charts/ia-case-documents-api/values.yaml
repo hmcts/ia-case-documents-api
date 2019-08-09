@@ -1,5 +1,5 @@
 java:
-  image: 'https://hmcts.azurecr.io/hmcts/ia-case-notifications-api:latest'
+  image: 'https://hmctspublic.azurecr.io/ia/case-notifications-api:latest'
   applicationPort: 8092
   keyVaults:
     ia:
