@@ -21,6 +21,8 @@ def secrets = [
         secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
         secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
         secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+        secret('home-office-manchester-email', 'IA_HOME_OFFICE_MANCHESTER_EMAIL'),
+        secret('home-office-taylor-house-email', 'IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
         secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
         secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
         secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),

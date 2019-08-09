@@ -8,6 +8,8 @@ spring:
         ia-gov-notify-key: IA_GOV_NOTIFY_KEY
         hearing-centre-manchester-email: IA_HEARING_CENTRE_MANCHESTER_EMAIL
         hearing-centre-taylor-house-email: IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL
+        home-office-manchester-email: IA_HOME_OFFICE_MANCHESTER_EMAIL
+        home-office-taylor-house-email: IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL
         respondent-evidence-direction-email: IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL
         respondent-review-direction-email: IA_RESPONDENT_REVIEW_DIRECTION_EMAIL
         respondent-non-standard-direction-until-listing-email: IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL

@@ -26,10 +26,15 @@ govnotify.template.respondentReviewDirection: a0e0018c-44ef-4a77-a9d5-c036faad29
 govnotify.template.legalRepresentativeHearingRequirementsDirection: e6694559-38be-46a5-9894-9498b047e2c6
 govnotify.template.caseOfficerCaseListed: 58eab057-b5c0-4a69-8f71-a21d6f02da3d
 govnotify.template.legalRepresentativeCaseListed: b87a1e5b-eec7-4268-a326-059893ab5c28
+govnotify.template.homeOfficeCaseListed: 86936ac9-e8d0-4a4c-8169-0948d7fb7935
 
 hearingCentreEmailAddresses:
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}
   taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:taylorHouse@example.com}
+
+homeOfficeEmailAddresses:
+  manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ReformpbManchester@example.com}
+  taylorHouse: ${IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ReformpbCentral@example.com}
 
 respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL}
