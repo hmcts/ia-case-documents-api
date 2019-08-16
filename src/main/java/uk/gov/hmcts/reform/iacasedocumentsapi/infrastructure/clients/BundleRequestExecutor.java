@@ -16,7 +16,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
-import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @Service
 public class BundleRequestExecutor {
@@ -69,7 +68,6 @@ public class BundleRequestExecutor {
         } catch (RestClientException e) {
 
             throw new DocumentServiceResponseException(
-                    AlertLevel.P2,
                     "Couldn't create bundle using API: " + endpoint,
                     e
             );

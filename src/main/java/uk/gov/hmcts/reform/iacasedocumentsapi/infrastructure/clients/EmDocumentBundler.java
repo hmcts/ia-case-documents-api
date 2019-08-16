@@ -19,7 +19,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDocument;
-import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @Service
 public class EmDocumentBundler implements DocumentBundler {
@@ -66,10 +65,10 @@ public class EmDocumentBundler implements DocumentBundler {
                 .getCaseBundles()
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new DocumentServiceResponseException(AlertLevel.P2, "Bundle was not created"))
+                .orElseThrow(() -> new DocumentServiceResponseException("Bundle was not created"))
                 .getValue()
                 .getStitchedDocument()
-                .orElseThrow(() -> new DocumentServiceResponseException(AlertLevel.P2, "Stitched document was not created"));
+                .orElseThrow(() -> new DocumentServiceResponseException("Stitched document was not created"));
 
         // rename the bundle file name
         return new Document(

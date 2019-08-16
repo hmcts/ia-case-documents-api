@@ -22,7 +22,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -162,8 +161,7 @@ public class DocmosisDocumentGeneratorTest {
             templateName,
             templateFieldValues)
         ).isExactlyInstanceOf(DocumentServiceResponseException.class)
-            .hasMessage("Couldn't generate asylum case documents with docmosis")
-            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2);
+            .hasMessage("Couldn't generate asylum case documents with docmosis");
     }
 
     @Test
@@ -184,7 +182,6 @@ public class DocmosisDocumentGeneratorTest {
             templateName,
             templateFieldValues)
         ).isExactlyInstanceOf(DocumentServiceResponseException.class)
-            .hasMessage("Couldn't generate asylum case documents with docmosis")
-            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2);
+            .hasMessage("Couldn't generate asylum case documents with docmosis");
     }
 }
