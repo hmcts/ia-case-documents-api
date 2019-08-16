@@ -1,7 +1,7 @@
 #!groovy
 properties([
-    [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/ia-case-notifications-api.git'],
-    pipelineTriggers([[$class: 'GitHubPushTrigger']])
+        [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/ia-case-notifications-api.git'],
+        pipelineTriggers([[$class: 'GitHubPushTrigger']])
 ])
 
 @Library("Infrastructure")

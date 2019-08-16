@@ -31,7 +31,16 @@ public enum AsylumCaseDefinition {
             "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
 
     NOTIFICATIONS_SENT(
-            "notificationsSent",  new TypeReference<List<IdValue<String>>>(){});
+            "notificationsSent",  new TypeReference<List<IdValue<String>>>(){}),
+
+    LIST_CASE_HEARING_DATE(
+            "listCaseHearingDate",  new TypeReference<String>(){}),
+
+    ARIA_LISTING_REFERENCE(
+            "ariaListingReference",  new TypeReference<String>(){}),
+
+    LIST_CASE_HEARING_CENTRE(
+            "listCaseHearingCentre",  new TypeReference<HearingCentre>(){});
 
     private final String value;
     private final TypeReference typeReference;

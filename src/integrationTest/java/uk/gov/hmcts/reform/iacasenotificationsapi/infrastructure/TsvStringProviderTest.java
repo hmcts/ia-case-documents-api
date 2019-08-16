@@ -30,6 +30,16 @@ public class TsvStringProviderTest {
             Optional.of("Taylor House"),
             tsvStringProvider.get("hearingCentre", "taylorHouse")
         );
+
+        assertEquals(
+            Optional.of("IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
+            tsvStringProvider.get("hearingCentreAddress", "manchester")
+        );
+
+        assertEquals(
+            Optional.of("IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU"),
+            tsvStringProvider.get("hearingCentreAddress", "taylorHouse")
+        );
     }
 
     @Test

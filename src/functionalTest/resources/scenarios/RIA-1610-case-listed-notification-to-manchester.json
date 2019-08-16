@@ -1,0 +1,36 @@
+{
+  "description": "RIA-1610 Send case listed notification (Manchester hearing centre)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1001,
+      "eventId": "listCase",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "manchester",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "manchester",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "notificationsSent": [
+          {
+            "id": "1001_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
