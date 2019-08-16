@@ -1,11 +1,11 @@
 #!groovy
 
 properties([
-  // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-  pipelineTriggers([cron('H 22 * * *')]),
-  parameters([
-          string(name: 'URL_TO_TEST', defaultValue: 'https://ia-case-notifications-api-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
-  ])
+    // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
+    pipelineTriggers([cron('H 22 * * *')]),
+    parameters([
+        string(name: 'URL_TO_TEST', defaultValue: 'https://ia-case-notifications-api-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
+    ])
 ])
 
 @Library("Infrastructure")
@@ -14,47 +14,51 @@ def type = "java"
 def product = "ia"
 def component = "case-notifications-api"
 
-List<LinkedHashMap<String, Object>> secrets = [
+def secrets = [
+    'ia-${env}': [
 
-    secret('ia-ccd-frontend-url', 'IA_CCD_FRONTEND_URL'),
-    secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
-    secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
-    secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
-    secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
-    secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
-    secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
-    secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
-    secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
-    secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
-    secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
+        secret('ia-ccd-frontend-url', 'IA_CCD_FRONTEND_URL'),
+        secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
+        secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
+        secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+        secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
+        secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
+        secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
+        secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
+        secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
+        secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
+        secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
+        secret('test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
+        secret('test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
 
-    secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
-    secret('idam-secret', 'IA_IDAM_SECRET'),
-    secret('idam-redirect-uri', 'IA_IDAM_REDIRECT_URI'),
-    secret('s2s-secret', 'IA_S2S_SECRET'),
-    secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
-    secret('ccd-url', 'CCD_URL'),
-    secret('dm-url', 'DM_URL'),
-    secret('idam-url', 'IDAM_URL'),
-    secret('s2s-url', 'S2S_URL'),
+        secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
+        secret('idam-secret', 'IA_IDAM_SECRET'),
+        secret('idam-redirect-uri', 'IA_IDAM_REDIRECT_URI'),
+        secret('s2s-secret', 'IA_S2S_SECRET'),
+        secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
+        secret('ccd-url', 'CCD_URL'),
+        secret('dm-url', 'DM_URL'),
+        secret('idam-url', 'IDAM_URL'),
+        secret('s2s-url', 'S2S_URL')
+
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
-  [$class     : 'AzureKeyVaultSecret',
-   secretType : 'Secret',
-   name       : secretName,
-   version    : '',
-   envVariable: envVar
-  ]
+    [$class     : 'AzureKeyVaultSecret',
+     secretType : 'Secret',
+     name       : secretName,
+     version    : '',
+     envVariable: envVar
+    ]
 }
 
 withNightlyPipeline(type, product, component) {
-  env.TEST_URL = params.URL_TO_TEST
+    env.TEST_URL = params.URL_TO_TEST
 
-  setVaultName('ia')
-  loadVaultSecrets(secrets)
+    loadVaultSecrets(secrets)
 
-  enableSecurityScan()
-  enableMutationTest()
-  enableSlackNotifications('#ia-tech')
+    enableSecurityScan()
+    enableMutationTest()
+    enableSlackNotifications('#ia-tech')
 }

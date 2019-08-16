@@ -140,7 +140,7 @@ task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verificatio
 }
 
 jacoco {
-    toolVersion = "0.8.1"
+    toolVersion = "0.8.4"
 }
 
 jacocoTestReport {
