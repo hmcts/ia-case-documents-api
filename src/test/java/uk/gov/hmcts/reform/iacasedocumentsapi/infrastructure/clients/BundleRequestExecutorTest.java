@@ -25,7 +25,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
-import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -136,7 +135,6 @@ public class BundleRequestExecutorTest {
 
         assertThatThrownBy(() -> bundleRequestExecutor.post(callback, ENDPOINT))
                 .isExactlyInstanceOf(DocumentServiceResponseException.class)
-                .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
                 .hasMessageContaining("Couldn't create bundle using API")
                 .hasCause(underlyingException);
 
@@ -156,7 +154,6 @@ public class BundleRequestExecutorTest {
 
         assertThatThrownBy(() -> bundleRequestExecutor.post(callback, ENDPOINT))
                 .isExactlyInstanceOf(DocumentServiceResponseException.class)
-                .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
                 .hasMessageContaining("Couldn't create bundle using API")
                 .hasCause(underlyingException);
     }

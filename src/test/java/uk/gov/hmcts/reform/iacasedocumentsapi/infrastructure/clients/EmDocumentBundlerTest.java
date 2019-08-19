@@ -26,7 +26,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
-import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -174,7 +173,6 @@ public class EmDocumentBundlerTest {
             bundleFilename
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
-            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
             .hasMessage("Bundle was not created");
 
     }
@@ -217,7 +215,6 @@ public class EmDocumentBundlerTest {
             bundleFilename
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
-            .hasFieldOrPropertyWithValue("alertLevel", AlertLevel.P2)
             .hasMessage("Stitched document was not created");
     }
 

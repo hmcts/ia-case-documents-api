@@ -15,7 +15,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
-import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @Service
 public class DocmosisDocumentGenerator implements DocumentGenerator {
@@ -76,7 +75,6 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
         } catch (RestClientException clientEx) {
 
             throw new DocumentServiceResponseException(
-                AlertLevel.P2,
                 "Couldn't generate asylum case documents with docmosis",
                 clientEx
             );

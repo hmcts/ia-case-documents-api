@@ -12,7 +12,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.FileType;
-import uk.gov.hmcts.reform.logging.exception.AlertLevel;
 
 @Service
 public class DocmosisDocumentConversionClient {
@@ -46,7 +45,6 @@ public class DocmosisDocumentConversionClient {
         } catch (HttpClientErrorException clientEx) {
 
             throw new DocumentServiceResponseException(
-                AlertLevel.P2,
                 clientEx.getResponseBodyAsString(),
                 clientEx
             );
