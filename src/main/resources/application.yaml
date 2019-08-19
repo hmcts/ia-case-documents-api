@@ -13,6 +13,8 @@ spring:
   application:
     name: Immigration & Asylum case notifications API
   jackson.date-format: yyyy-MM-dd
+  main:
+    allow-bean-definition-overriding: true
 
 govnotify.key: ${IA_GOV_NOTIFY_KEY}
 govnotify.template.buildCaseDirection: 13a6331e-b0f5-4e64-ae1b-dc2c2fd0aeeb
