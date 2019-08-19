@@ -29,6 +29,7 @@ public class DocumentCreatorTest {
     @Mock private DocumentUploader documentUploader;
 
     @Mock private CaseDetails<CaseData> caseDetails;
+    @Mock private CaseDetails<CaseData> caseDetailsBefore;
     private String qualifiedDocumentFileName = "unique-to-appellant-some-document";
     private String templateName = "template.docx";
     @Mock private Map<String, Object> templateFieldValues;
@@ -69,6 +70,30 @@ public class DocumentCreatorTest {
         when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
 
         Document actualDocument = documentCreator.create(caseDetails);
+
+        assertEquals(expectedDocument, actualDocument);
+
+        verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
+        verify(documentUploader, times(1)).upload(any(), any());
+    }
+
+    @Test
+    public void should_orchestrate_amended_document_creation() {
+
+        when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
+        when(documentTemplate.getName()).thenReturn(templateName);
+        when(documentTemplate.mapFieldValues(caseDetails, caseDetailsBefore)).thenReturn(templateFieldValues);
+
+        when(documentGenerator.generate(
+            qualifiedDocumentFileName,
+            documentFileExtension,
+            templateName,
+            templateFieldValues
+        )).thenReturn(documentResource);
+
+        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+
+        Document actualDocument = documentCreator.create(caseDetails, caseDetailsBefore);
 
         assertEquals(expectedDocument, actualDocument);
 

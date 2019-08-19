@@ -1,5 +1,6 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -14,13 +15,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class HearingNoticeTemplateTest {
+public class HearingNoticeFieldMapperTest {
 
     private final String templateName = "HEARING_NOTICE_TEMPLATE.docx";
+
     @Mock private StringProvider stringProvider;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -33,17 +35,12 @@ public class HearingNoticeTemplateTest {
     private String hearingDate = "2020-12-25T12:34:56";
     private String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
     private String taylorHouseHearingCentreAddress = "London, 456 Somewhere, South";
-    private String vulnerabilities = "Vulnerabilities";
-    private String multimedia = "Multimedia";
-    private String singleSexCourt = "Single sex court";
-    private String inCamera = "In camera";
-    private String otherHearingRequest = "Other";
+    private String ariaListingReference = "AA/12345/1234";
 
     private String expectedFormattedHearingDatePart = "25122020";
     private String expectedFormattedHearingTimePart = "1234";
     private String expectedFormattedManchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
-
-    private String ariaListingReference = "AA/12345/1234";
+    private String expectedFormattedTaylorHouseHearingCentreAddress = "London\n456 Somewhere\nSouth";
 
     private HearingNoticeTemplate hearingNoticeTemplate;
 
@@ -68,12 +65,8 @@ public class HearingNoticeTemplateTest {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
+        when(stringProvider.get("hearingCentreAddress", "taylorHouse")).thenReturn(Optional.of(taylorHouseHearingCentreAddress));
 
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.of(vulnerabilities));
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.of(multimedia));
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.of(singleSexCourt));
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(inCamera));
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(otherHearingRequest));
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
     }
 
@@ -98,12 +91,17 @@ public class HearingNoticeTemplateTest {
         assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("hearingDate"));
         assertEquals(expectedFormattedHearingTimePart, templateFieldValues.get("hearingTime"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
-        assertEquals(vulnerabilities, templateFieldValues.get("vulnerabilities"));
-        assertEquals(multimedia, templateFieldValues.get("multimedia"));
-        assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
-        assertEquals(inCamera, templateFieldValues.get("inCamera"));
-        assertEquals(otherHearingRequest, templateFieldValues.get("otherHearingRequest"));
         assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+    }
+
+    @Test
+    public void should_use_correct_hearing_centre_address() {
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(expectedFormattedTaylorHouseHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
     }
 
     @Test
@@ -115,11 +113,6 @@ public class HearingNoticeTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
@@ -131,14 +124,16 @@ public class HearingNoticeTemplateTest {
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
-        assertEquals("", templateFieldValues.get("hearingDate"));
-        assertEquals("", templateFieldValues.get("hearingTime"));
-        assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
-        assertEquals("", templateFieldValues.get("vulnerabilities"));
-        assertEquals("", templateFieldValues.get("multimedia"));
-        assertEquals("", templateFieldValues.get("singleSexCourt"));
-        assertEquals("", templateFieldValues.get("inCamera"));
-        assertEquals("", templateFieldValues.get("otherHearingRequest"));
         assertEquals("", templateFieldValues.get("ariaListingReference"));
+    }
+
+    @Test
+    public void handling_should_throw_if_hearing_centre_not_present() {
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> hearingNoticeTemplate.mapFieldValues(caseDetails))
+            .hasMessage("listCaseHearingCentre is not present")
+            .isExactlyInstanceOf(IllegalStateException.class);
     }
 }
