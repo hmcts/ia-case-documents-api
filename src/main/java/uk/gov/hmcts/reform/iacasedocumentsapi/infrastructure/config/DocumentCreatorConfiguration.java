@@ -4,14 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQualifier;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsCoverLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 
 @Configuration
 public class DocumentCreatorConfiguration {
@@ -44,6 +38,27 @@ public class DocumentCreatorConfiguration {
         @Value("${hearingNoticeDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("hearingNoticeEdited")
+    public DocumentCreator<AsylumCase> getHearingNoticeEditedDocumentCreator(
+        @Value("${hearingNoticeEditedDocument.contentType}") String contentType,
+        @Value("${hearingNoticeEditedDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeEditedDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HearingNoticeEditedTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
@@ -99,5 +114,4 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
-
 }

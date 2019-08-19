@@ -5,84 +5,90 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
-import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class HearingNoticeCreatorTest {
+public class HearingNoticeEditedCreatorTest {
 
-    @Mock private DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> hearingNoticeEditedDocumentCreator;
     @Mock private DocumentHandler documentHandler;
-
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
+    @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
-    @Mock private DocumentWithMetadata documentWithMetadata;
-    @Mock private List<IdValue<DocumentWithMetadata>> existingHearingDocuments;
-    @Mock private List<IdValue<DocumentWithMetadata>> allHearingDocuments;
 
-    @Captor private ArgumentCaptor<List<IdValue<DocumentWithMetadata>>> hearingDocumentsCaptor;
-
-    private HearingNoticeCreator hearingNoticeCreator;
+    private HearingNoticeEditedCreator hearingNoticeEditedCreator;
 
     @Before
     public void setUp() {
 
-        hearingNoticeCreator =
-            new HearingNoticeCreator(
-                hearingNoticeDocumentCreator,
+        hearingNoticeEditedCreator =
+            new HearingNoticeEditedCreator(
+                hearingNoticeEditedDocumentCreator,
                 documentHandler
             );
 
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-
-        when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(hearingNoticeEditedDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
     }
 
     @Test
     public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
 
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
+        verify(hearingNoticeEditedDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+    }
+
+    @Test
+    public void should_throw_when_no_previous_case_data_exists() {
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .hasMessage("previous case data is not present")
+            .isExactlyInstanceOf(IllegalStateException.class);
+
+        verify(hearingNoticeEditedDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
 
-        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -96,10 +102,10 @@ public class HearingNoticeCreatorTest {
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-                boolean canHandle = hearingNoticeCreator.canHandle(callbackStage, callback);
+                boolean canHandle = hearingNoticeEditedCreator.canHandle(callbackStage, callback);
 
-                if ((event == Event.LIST_CASE)
-                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                if ((event == Event.EDIT_CASE_LISTING)
+                    && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT)) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -113,19 +119,19 @@ public class HearingNoticeCreatorTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> hearingNoticeCreator.canHandle(null, callback))
+        assertThatThrownBy(() -> hearingNoticeEditedCreator.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> hearingNoticeCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> hearingNoticeEditedCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> hearingNoticeCreator.handle(null, callback))
+        assertThatThrownBy(() -> hearingNoticeEditedCreator.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
