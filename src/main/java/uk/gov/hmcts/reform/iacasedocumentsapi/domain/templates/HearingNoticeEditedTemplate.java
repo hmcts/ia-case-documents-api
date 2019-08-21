@@ -108,10 +108,10 @@ public class HearingNoticeEditedTemplate implements DocumentTemplate<AsylumCase>
 
             if (listedHearingCentreBefore.equals("taylorHouse")) {
                 return "Taylor House";
-            } else if (listedHearingCentreBefore.equals("manchester")) {
+            }
+
+            if (listedHearingCentreBefore.equals("manchester")) {
                 return "Manchester";
-            } else {
-                return "";
             }
         }
 
