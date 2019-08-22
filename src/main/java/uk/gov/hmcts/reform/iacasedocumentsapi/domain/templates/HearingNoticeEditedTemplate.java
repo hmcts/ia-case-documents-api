@@ -104,15 +104,12 @@ public class HearingNoticeEditedTemplate implements DocumentTemplate<AsylumCase>
     private String formatHearingCentreForRendering(
         String listedHearingCentreBefore
     ) {
-        if (!Strings.isNullOrEmpty(listedHearingCentreBefore)) {
+        if (listedHearingCentreBefore.equals("taylorHouse")) {
+            return "Taylor House";
+        }
 
-            if (listedHearingCentreBefore.equals("taylorHouse")) {
-                return "Taylor House";
-            }
-
-            if (listedHearingCentreBefore.equals("manchester")) {
-                return "Manchester";
-            }
+        if (listedHearingCentreBefore.equals("manchester")) {
+            return "Manchester";
         }
 
         return "";
