@@ -22,6 +22,16 @@ public class TsvStringProviderTest {
     public void should_load_strings_from_resources_and_return() {
 
         assertEquals(
+            Optional.of("Bradford"),
+            tsvStringProvider.get("hearingCentreName", "bradford")
+        );
+
+        assertEquals(
+            Optional.of("Newport"),
+            tsvStringProvider.get("hearingCentreName", "newport")
+        );
+
+        assertEquals(
             Optional.of("Removing the appellant from the UK would breach the UK's obligation under the Refugee Convention"),
             tsvStringProvider.get("appealGrounds", "protectionRefugeeConvention")
         );

@@ -78,18 +78,4 @@ public class HearingNoticeFieldMapper {
 
         return "";
     }
-
-    public String formatHearingCentreForRendering(
-        String listedHearingCentreBefore
-    ) {
-        if (listedHearingCentreBefore.equals("taylorHouse")) {
-            return "Taylor House";
-        }
-
-        if (listedHearingCentreBefore.equals("manchester")) {
-            return "Manchester";
-        }
-
-        return "";
-    }
 }

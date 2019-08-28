@@ -1,0 +1,115 @@
+{
+  "description": "RIA-1380 edit case listing hearing notice PDF (Bradford hearing centre)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "eventId": "editCaseListing",
+      "state": "finalBundling",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "ariaListingReference": "AA/12345/1234",
+          "hearingDocuments": [
+            {
+              "id": "2",
+              "value": {
+                "document": {
+                  "document_url": "old-hearing-notice",
+                  "document_binary_url": "old-hearing-notice",
+                  "document_filename": "old-hearing-notice"
+                },
+                "description": "OLD HEARING NOTICE",
+                "dateUploaded": "2019-01-01",
+                "tag": "hearingNotice"
+              }
+            }
+          ]
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "ariaListingReference": "AA/12345/1234",
+          "hearingDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "old-hearing-notice",
+                  "document_binary_url": "old-hearing-notice",
+                  "document_filename": "old-hearing-notice"
+                },
+                "description": "OLD HEARING NOTICE",
+                "dateUploaded": "2019-01-01",
+                "tag": "hearingNotice"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingDocuments": [
+          {
+            "id": "2",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 11111 2019-Gonzlez-hearing-notice.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "hearingNotice"
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "old-hearing-notice",
+                "document_binary_url": "old-hearing-notice",
+                "document_filename": "old-hearing-notice"
+              },
+              "description": "OLD HEARING NOTICE",
+              "dateUploaded": "2019-01-01",
+              "tag": "hearingNotice"
+            }
+          }
+        ],
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2018-12-31T12:34:56",
+        "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+        "listCaseRequirementsMultimedia": "something around Multimedia",
+        "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+        "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+        "listCaseRequirementsOther": "something around Other",
+        "ariaListingReference": "AA/12345/1234"
+      }
+    }
+  }
+}

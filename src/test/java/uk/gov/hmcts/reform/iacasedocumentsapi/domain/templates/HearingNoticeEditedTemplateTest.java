@@ -55,6 +55,8 @@ public class HearingNoticeEditedTemplateTest {
     private String expectedFormattedHearingDatePartBefore = "09102020";
     private String expectedFormattedTaylorHouseHearingCentreName = "Taylor House";
     private String expectedFormattedManchesterHearingCentreName = "Manchester";
+    private String expectedFormattedBradfordHearingCentreName = "Bradford";
+    private String expectedFormattedNewportHearingCentreName = "Newport";
 
     private HearingNoticeEditedTemplate hearingNoticeEditedTemplate;
 
@@ -90,6 +92,7 @@ public class HearingNoticeEditedTemplateTest {
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDateBefore));
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(stringProvider.get("hearingCentreName", "taylorHouse")).thenReturn(Optional.of(expectedFormattedTaylorHouseHearingCentreName));
     }
 
     @Test
@@ -157,10 +160,33 @@ public class HearingNoticeEditedTemplateTest {
     public void should_use_correct_previous_hearing_centre_name_for_manchester() {
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of(expectedFormattedManchesterHearingCentreName));
 
         Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
 
         assertEquals(expectedFormattedManchesterHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+    }
+
+    @Test
+    public void should_use_correct_previous_hearing_centre_name_for_bradford() {
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.BRADFORD));
+        when(stringProvider.get("hearingCentreName", "bradford")).thenReturn(Optional.of(expectedFormattedBradfordHearingCentreName));
+
+        Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals(expectedFormattedBradfordHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+    }
+
+    @Test
+    public void should_use_correct_previous_hearing_centre_name_for_newport() {
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.NEWPORT));
+        when(stringProvider.get("hearingCentreName", "newport")).thenReturn(Optional.of(expectedFormattedNewportHearingCentreName));
+
+        Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals(expectedFormattedNewportHearingCentreName, templateFieldValues.get("oldHearingCentre"));
     }
 
     @Test
