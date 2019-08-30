@@ -112,6 +112,7 @@ security:
       - "endAppeal"
     caseworker-ia-admofficer:
       - "listCase"
+      - "editCaseListing"
 
 
 
