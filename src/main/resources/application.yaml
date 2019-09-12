@@ -43,6 +43,11 @@ hearingBundle.fileName: "hearing-bundle"
 appealSkeletonBundle.fileExtension: PDF
 appealSkeletonBundle.fileName: "appeal-skeleton-argument"
 
+endAppeal.contentType:  application/pdf
+endAppeal.fileExtension: PDF
+endAppeal.fileName: "NoticeOfEndedAppeal"
+endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00078.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -99,6 +104,7 @@ security:
       - "generateDecisionAndReasons"
       - "sendDecisionAndReasons"
       - "editCaseListing"
+      - "endAppeal"
     caseworker-ia-admofficer:
       - "listCase"
 

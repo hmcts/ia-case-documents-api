@@ -157,6 +157,21 @@ public enum AsylumCaseDefinition {
     ARIA_LISTING_REFERENCE(
         "ariaListingReference", new TypeReference<String>(){}),
 
+    END_APPEAL_OUTCOME(
+        "endAppealOutcome", new TypeReference<String>(){}),
+
+    END_APPEAL_OUTCOME_REASON(
+        "endAppealOutcomeReason", new TypeReference<String>(){}),
+
+    END_APPEAL_DATE(
+        "endAppealDate", new TypeReference<String>(){}),
+
+    END_APPEAL_APPROVER_NAME(
+        "endAppealApproverName", new TypeReference<String>(){}),
+
+    TRIBUNAL_DOCUMENTS(
+        "tribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     ;
 
     private final String value;

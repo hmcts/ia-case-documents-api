@@ -20,6 +20,7 @@ public enum State {
     HEARING_AND_OUTCOME("hearingAndOutcome"),
     DECISION("decision"),
     DECIDED("decided"),
+    ENDED("ended"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
