@@ -4,14 +4,13 @@ provider "azurerm" {
 }
 
 locals {
-
   preview_app_service_plan     = "${var.product}-${var.component}-${var.env}"
   non_preview_app_service_plan = "${var.product}-${var.env}"
   app_service_plan             = "${var.env == "preview" || var.env == "spreview" ? local.preview_app_service_plan : local.non_preview_app_service_plan}"
 
-  preview_vault_name           = "${var.raw_product}-aat"
-  non_preview_vault_name       = "${var.raw_product}-${var.env}"
-  key_vault_name               = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
+  preview_vault_name     = "${var.raw_product}-aat"
+  non_preview_vault_name = "${var.raw_product}-${var.env}"
+  key_vault_name         = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
 
   docmosis_prod_key_vault_name = "docmosisiaasprodkv"
   docmosis_dev_key_vault_name  = "docmosisiaasdevkv"
@@ -22,7 +21,7 @@ locals {
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.component}-${var.env}"
   location = "${var.location}"
-  tags     = "${merge(var.common_tags, map("lastUpdated", "${timestamp()}"))}"
+  tags     = "${var.common_tags}"
 }
 
 data "azurerm_key_vault" "ia_key_vault" {
@@ -142,6 +141,7 @@ data "azurerm_lb" "consul_dns" {
 
 module "ia_case_documents_api" {
   source                          = "git@github.com:hmcts/cnp-module-webapp?ref=master"
+  enable_ase                      = "${var.enable_ase}"
   product                         = "${var.product}-${var.component}"
   location                        = "${var.location}"
   env                             = "${var.env}"
@@ -180,8 +180,8 @@ module "ia_case_documents_api" {
     IDAM_URL   = "${data.azurerm_key_vault_secret.idam_url.value}"
     S2S_URL    = "${data.azurerm_key_vault_secret.s2s_url.value}"
 
-    EM_BUNDLER_URL           = "${data.azurerm_key_vault_secret.em_bundler_url.value}"
-    EM_BUNDLER_STITCH_URI    = "${data.azurerm_key_vault_secret.em_bundler_stitch_uri.value}"
+    EM_BUNDLER_URL        = "${data.azurerm_key_vault_secret.em_bundler_url.value}"
+    EM_BUNDLER_STITCH_URI = "${data.azurerm_key_vault_secret.em_bundler_stitch_uri.value}"
 
     ROOT_LOGGING_LEVEL   = "${var.root_logging_level}"
     LOG_LEVEL_SPRING_WEB = "${var.log_level_spring_web}"
