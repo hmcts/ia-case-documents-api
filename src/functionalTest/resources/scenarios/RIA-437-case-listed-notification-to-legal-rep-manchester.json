@@ -1,0 +1,82 @@
+{
+  "description": "RIA-437 Send case listed notification to legal representative",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1001,
+      "eventId": "listCase",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "manchester",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "manchester",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net",
+        "notificationsSent": [
+          {
+            "id": "1001_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1001_CASE_LISTED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1001_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "HMCTS appeal reference number: PA/12345/2019",
+          "Listing reference:",
+          "# A hearing date has been booked for the appeal.",
+          "Date: 3 May 2019",
+          "Time: 14:25",
+          "Address: IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH",
+          "Hearing requirements: See Notice of Hearing in the Documents tab for the agreed hearing adjustments.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "1001_CASE_LISTED_LEGAL_REPRESENTATIVE",
+        "recipient": "ia-law-firm-a@fake.hmcts.net",
+        "subject": "Immigration and Asylum appeal: check the details of your hearing",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Listing reference:",
+          "Your reference: CASE001",
+          "Appellant name: Talha Awan",
+          "# A hearing date has been booked for your appeal.",
+          "Please ensure your client gets this information. The hearing details are below:",
+          "Date: 3 May 2019",
+          "Time: 14:25",
+          "Address: IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH",
+          "Hearing requirements:",
+          "* Adjustments to accommodate vulnerabilities: No special adjustments are being made to accommodate vulnerabilities",
+          "* Multimedia equipment: No multimedia equipment is being provided",
+          "* Single-sex court: The court will not be single sex",
+          "* In camera court: The hearing will be held in public court",
+          "* Other adjustments: No other adjustments are being made",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

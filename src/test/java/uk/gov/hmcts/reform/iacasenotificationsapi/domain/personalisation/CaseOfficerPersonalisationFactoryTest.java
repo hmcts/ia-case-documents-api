@@ -132,6 +132,15 @@ public class CaseOfficerPersonalisationFactoryTest {
     }
 
     @Test
+    public void should_throw_when_valid_iso_8601_date_time_not_present() {
+
+        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(invalidIso8601HearingDate));
+
+        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(asylumCase))
+            .isExactlyInstanceOf(DateTimeParseException.class);
+    }
+
+    @Test
     public void should_throw_when_list_case_hearing_centre_address_not_present() {
 
         when(stringProvider.get("hearingCentreAddress", "taylorHouse")).thenReturn(Optional.empty());
@@ -139,51 +148,6 @@ public class CaseOfficerPersonalisationFactoryTest {
         assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(asylumCase))
             .hasMessage("hearingCentreAddress is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    public void should_handle_valid_iso_8601_date() {
-
-        String actualHearingDate =
-            caseOfficerPersonalisationFactory.extractHearingDate(listCaseHearingDate);
-
-        assertEquals(extractedHearingDateFormatted, actualHearingDate);
-    }
-
-    @Test
-    public void should_handle_valid_iso_8601_time() {
-
-        String actualHearingTime =
-            caseOfficerPersonalisationFactory.extractHearingTime(listCaseHearingDate);
-
-        assertEquals(extractedHearingTime, actualHearingTime);
-    }
-
-    @Test
-    public void should_throw_when_valid_iso_8601_date_not_present() {
-
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.extractHearingDate(invalidIso8601HearingDate))
-            .isExactlyInstanceOf(DateTimeParseException.class);
-
-        verify(stringProvider, times(0)).get("hearingCentreAddress", "taylorHouse");
-    }
-
-    @Test
-    public void should_throw_when_valid_iso_8601_time_not_present() {
-
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.extractHearingTime(invalidIso8601HearingDate))
-            .isExactlyInstanceOf(DateTimeParseException.class);
-
-        verify(stringProvider, times(0)).get("hearingCentreAddress", "taylorHouse");
-    }
-
-    @Test
-    public void should_throw_when_valid_iso_8601_date_time_not_present() {
-
-        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(invalidIso8601HearingDate));
-
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(asylumCase))
-            .isExactlyInstanceOf(DateTimeParseException.class);
     }
 
     @Test
