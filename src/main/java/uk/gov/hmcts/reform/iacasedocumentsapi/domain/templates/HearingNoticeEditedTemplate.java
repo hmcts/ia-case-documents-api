@@ -51,7 +51,12 @@ public class HearingNoticeEditedTemplate implements DocumentTemplate<AsylumCase>
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
 
-        fieldValues.put("oldHearingCentre", fieldMapper.formatHearingCentreForRendering(listedHearingCentreBefore.toString()));
+        final String hearingCentreNameBefore =
+            stringProvider
+                .get("hearingCentreName", listedHearingCentreBefore.toString())
+                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
+
+        fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
         fieldValues.put("oldHearingDate", fieldMapper.formatDateForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
         fieldValues.put("vulnerabilities", asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class).orElse("No special adjustments are being made to accommodate vulnerabilities"));
         fieldValues.put("multimedia", asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class).orElse("No multimedia equipment is being provided"));

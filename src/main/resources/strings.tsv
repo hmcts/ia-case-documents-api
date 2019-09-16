@@ -5,10 +5,14 @@ appealGrounds	revocationRefugeeConvention	Revocation of the appellant's protecti
 appealGrounds	revocationHumanitarianProtection	Revocation of the appellant's protection status breaches the United Kingdom's obligations in relation to persons eligible for humanitarian protection
 appealType	protection	The refusal of a protection claim
 appealType	revocationOfProtection	The revocation of a protection status
+hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH
 hearingCentreAddress	manchester	IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH
+hearingCentreAddress	newport	IAC Newport, Columbus House, Langstone Business Park, Chepstow Road, Newport, NP18 2LX
 hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
-hearingCentreName	manchester	IAC Manchester
-hearingCentreName	taylorHouse	IAC Taylor House
+hearingCentreName	bradford	Bradford
+hearingCentreName	manchester	Manchester
+hearingCentreName	newport	Newport
+hearingCentreName	taylorHouse	Taylor House
 isoCountries	AF	Afghanistan
 isoCountries	AX	Aland Islands
 isoCountries	AL	Albania
