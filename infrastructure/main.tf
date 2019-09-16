@@ -35,8 +35,18 @@ data "azurerm_key_vault_secret" "ia_gov_notify_key" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_hearing_centre_bradford_email" {
+  name      = "hearing-centre-bradford-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "ia_hearing_centre_manchester_email" {
   name      = "hearing-centre-manchester-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_newport_email" {
+  name      = "hearing-centre-newport-email"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
@@ -45,8 +55,18 @@ data "azurerm_key_vault_secret" "ia_hearing_centre_taylor_house_email" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_home_office_bradford_email" {
+  name      = "home-office-bradford-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "ia_home_office_manchester_email" {
   name      = "home-office-manchester-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_home_office_newport_email" {
+  name      = "home-office-newport-email"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
@@ -67,6 +87,26 @@ data "azurerm_key_vault_secret" "ia_respondent_review_direction_email" {
 
 data "azurerm_key_vault_secret" "ia_respondent_non_standard_direction_until_listing_email" {
   name      = "respondent-non-standard-direction-until-listing-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_bradford_telephone" {
+  name      = "hearing-centre-bradford-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_manchester_telephone" {
+  name      = "hearing-centre-manchester-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_newport_telephone" {
+  name      = "hearing-centre-newport-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_taylor_house_telephone" {
+  name      = "hearing-centre-taylor-house-telephone"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
@@ -167,13 +207,24 @@ module "ia_case_notifications_api" {
     IA_CCD_FRONTEND_URL = "${data.azurerm_key_vault_secret.ia_ccd_frontend_url.value}"
     IA_GOV_NOTIFY_KEY   = "${data.azurerm_key_vault_secret.ia_gov_notify_key.value}"
 
+    IA_HEARING_CENTRE_BRADFORD_EMAIL                         = "${data.azurerm_key_vault_secret.ia_hearing_centre_bradford_email.value}"
     IA_HEARING_CENTRE_MANCHESTER_EMAIL                       = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_email.value}"
+    IA_HEARING_CENTRE_NEWPORT_EMAIL                          = "${data.azurerm_key_vault_secret.ia_hearing_centre_newport_email.value}"
     IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_taylor_house_email.value}"
+
+    IA_HOME_OFFICE_BRADFORD_EMAIL                            = "${data.azurerm_key_vault_secret.ia_home_office_bradford_email.value}"
     IA_HOME_OFFICE_MANCHESTER_EMAIL                          = "${data.azurerm_key_vault_secret.ia_home_office_manchester_email.value}"
+    IA_HOME_OFFICE_NEWPORT_EMAIL                             = "${data.azurerm_key_vault_secret.ia_home_office_newport_email.value}"
     IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL                        = "${data.azurerm_key_vault_secret.ia_home_office_taylor_house_email.value}"
+
     IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL                   = "${data.azurerm_key_vault_secret.ia_respondent_evidence_direction_email.value}"
     IA_RESPONDENT_REVIEW_DIRECTION_EMAIL                     = "${data.azurerm_key_vault_secret.ia_respondent_review_direction_email.value}"
     IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL = "${data.azurerm_key_vault_secret.ia_respondent_non_standard_direction_until_listing_email.value}"
+
+    IA_HEARING_CENTRE_BRADFORD_TELEPHONE                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_bradford_telephone.value}"
+    IA_HEARING_CENTRE_MANCHESTER_TELEPHONE                   = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_telephone.value}"
+    IA_HEARING_CENTRE_NEWPORT_TELEPHONE                      = "${data.azurerm_key_vault_secret.ia_hearing_centre_newport_telephone.value}"
+    IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE                 = "${data.azurerm_key_vault_secret.ia_hearing_centre_taylor_house_telephone.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"

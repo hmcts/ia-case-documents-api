@@ -22,8 +22,18 @@ public class TsvStringProviderTest {
     public void should_load_strings_from_resources_and_return() {
 
         assertEquals(
+            Optional.of("Bradford"),
+            tsvStringProvider.get("hearingCentre", "bradford")
+        );
+
+        assertEquals(
             Optional.of("Manchester"),
             tsvStringProvider.get("hearingCentre", "manchester")
+        );
+
+        assertEquals(
+            Optional.of("Newport"),
+            tsvStringProvider.get("hearingCentre", "newport")
         );
 
         assertEquals(
@@ -32,8 +42,28 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
+            Optional.of("Bradford"),
+            tsvStringProvider.get("hearingCentreName", "bradford")
+        );
+
+        assertEquals(
+            Optional.of("Newport"),
+            tsvStringProvider.get("hearingCentreName", "newport")
+        );
+
+        assertEquals(
+            Optional.of("IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH"),
+            tsvStringProvider.get("hearingCentreAddress", "bradford")
+        );
+
+        assertEquals(
             Optional.of("IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
             tsvStringProvider.get("hearingCentreAddress", "manchester")
+        );
+
+        assertEquals(
+            Optional.of("IAC Newport, Columbus House, Langstone Business Park, Chepstow Road, Newport, NP18 2LX"),
+            tsvStringProvider.get("hearingCentreAddress", "newport")
         );
 
         assertEquals(

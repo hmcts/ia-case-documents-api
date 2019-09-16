@@ -1,0 +1,50 @@
+{
+  "description": "RIA-1380 Send appeal submitted notification to Columbus House (Newport hearing centre)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 1003,
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "newport"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "newport",
+        "notificationsSent": [
+          {
+            "id": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.newport}",
+        "subject": "Asylum appeal: new appeal submitted",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Appellant name: Talha Awan",
+          "Link to the online service: {$iaCcdFrontendUrl}",
+          "A new asylum appeal has been submitted.",
+          "To access the new appeal, login to the pilot service.",
+          "If the appeal is suitable to go ahead you should direct the respondent to supply their evidence.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "description": "RIA-1380 Send case re-listed notification to case officer (Newport hearing centre)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1006,
+      "eventId": "editCaseListing",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "newport",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net"
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "manchester",
+          "listCaseHearingDate": "2019-05-01T13:30:15.000",
+          "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "newport",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net",
+        "notificationsSent": [
+          {
+            "id": "1006_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1006_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.newport}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Listing reference:",
+          "Appellant name: Talha Awan",
+          "#A new hearing date has been booked for this appeal.",
+          "The hearing at Manchester on 1 May 2019 has been adjourned. Please see the new hearing details below.",
+          "Date: 3 May 2019",
+          "Time: 14:25",
+          "Address: IAC Newport, Columbus House, Langstone Business Park, Chepstow Road, Newport, NP18 2LX",
+          "Hearing requirements: See the new Notice of Hearing in the Documents tab for the agreed hearing adjustments.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

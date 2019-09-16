@@ -6,10 +6,16 @@ spring:
       aliases:
         ia-ccd-frontend-url: IA_CCD_FRONTEND_URL
         ia-gov-notify-key: IA_GOV_NOTIFY_KEY
+        hearing-centre-bradford-email: IA_HEARING_CENTRE_BRADFORD_EMAIL
         hearing-centre-manchester-email: IA_HEARING_CENTRE_MANCHESTER_EMAIL
+        hearing-centre-newport-email: IA_HEARING_CENTRE_NEWPORT_EMAIL
         hearing-centre-taylor-house-email: IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL
         home-office-manchester-email: IA_HOME_OFFICE_MANCHESTER_EMAIL
         home-office-taylor-house-email: IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL
+        hearing-centre-bradford-telephone: IA_HEARING_CENTRE_BRADFORD_TELEPHONE
+        hearing-centre-manchester-telephone: IA_HEARING_CENTRE_MANCHESTER_TELEPHONE
+        hearing-centre-newport-telephone: IA_HEARING_CENTRE_NEWPORT_TELEPHONE
+        hearing-centre-taylor-house-telephone: IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE
         respondent-evidence-direction-email: IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL
         respondent-review-direction-email: IA_RESPONDENT_REVIEW_DIRECTION_EMAIL
         respondent-non-standard-direction-until-listing-email: IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL

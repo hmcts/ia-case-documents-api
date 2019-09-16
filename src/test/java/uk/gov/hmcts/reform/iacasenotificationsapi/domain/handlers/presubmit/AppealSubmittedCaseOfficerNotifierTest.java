@@ -31,7 +31,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdA
 public class AppealSubmittedCaseOfficerNotifierTest {
 
     private static final String APPEAL_SUBMITTED_CASE_OFFICER_TEMPLATE = "template-id";
+    private static final String BRADFORD_EMAIL_ADDRESS = "bradford@example.com";
     private static final String MANCHESTER_EMAIL_ADDRESS = "manchester@example.com";
+    private static final String NEWPORT_EMAIL_ADDRESS = "newport@example.com";
     private static final String TAYLOR_HOUSE_EMAIL_ADDRESS = "taylorHouse@example.com";
 
     @Mock private CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
@@ -70,7 +72,9 @@ public class AppealSubmittedCaseOfficerNotifierTest {
 
         when(caseOfficerPersonalisationFactory.create(asylumCase)).thenReturn(personalisation);
 
+        when(hearingCentreEmailAddresses.get(HearingCentre.BRADFORD)).thenReturn(BRADFORD_EMAIL_ADDRESS);
         when(hearingCentreEmailAddresses.get(HearingCentre.MANCHESTER)).thenReturn(MANCHESTER_EMAIL_ADDRESS);
+        when(hearingCentreEmailAddresses.get(HearingCentre.NEWPORT)).thenReturn(NEWPORT_EMAIL_ADDRESS);
         when(hearingCentreEmailAddresses.get(HearingCentre.TAYLOR_HOUSE)).thenReturn(TAYLOR_HOUSE_EMAIL_ADDRESS);
 
         when(notificationSender.sendEmail(
@@ -161,7 +165,9 @@ public class AppealSubmittedCaseOfficerNotifierTest {
 
         Map<HearingCentre, String> exampleInputOutputs =
             ImmutableMap.<HearingCentre, String>builder()
+                .put(HearingCentre.BRADFORD, BRADFORD_EMAIL_ADDRESS)
                 .put(HearingCentre.MANCHESTER, MANCHESTER_EMAIL_ADDRESS)
+                .put(HearingCentre.NEWPORT, NEWPORT_EMAIL_ADDRESS)
                 .put(HearingCentre.TAYLOR_HOUSE, TAYLOR_HOUSE_EMAIL_ADDRESS)
                 .build();
 

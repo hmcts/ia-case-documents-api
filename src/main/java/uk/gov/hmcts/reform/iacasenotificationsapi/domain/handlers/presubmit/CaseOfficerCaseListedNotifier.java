@@ -48,10 +48,6 @@ public class CaseOfficerCaseListedNotifier implements CaseEmailNotifier {
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
 
-        Map<String, String> personalisation =
-            caseOfficerPersonalisationFactory
-                .createListedCase(asylumCase);
-
-        return personalisation;
+        return caseOfficerPersonalisationFactory.createListedCase(asylumCase);
     }
 }

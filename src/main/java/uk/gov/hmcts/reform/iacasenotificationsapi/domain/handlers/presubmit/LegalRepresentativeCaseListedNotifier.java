@@ -23,21 +23,16 @@ public class LegalRepresentativeCaseListedNotifier implements CaseEmailNotifier 
     @Override
     public String getEmailAddress(AsylumCase asylumCase) {
 
-        final String legalRepresentativeEmailAddress =
-            asylumCase
-                .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-                .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
+        return asylumCase
+            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
+            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
 
-        return legalRepresentativeEmailAddress;
     }
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
 
-        Map<String, String> personalisation =
-            legalRepresentativePersonalisationFactory
-                .createListedCase(asylumCase);
+        return legalRepresentativePersonalisationFactory.createListedCase(asylumCase);
 
-        return personalisation;
     }
 }

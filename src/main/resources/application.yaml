@@ -27,14 +27,25 @@ govnotify.template.legalRepresentativeHearingRequirementsDirection: e6694559-38b
 govnotify.template.caseOfficerCaseListed: 58eab057-b5c0-4a69-8f71-a21d6f02da3d
 govnotify.template.legalRepresentativeCaseListed: b87a1e5b-eec7-4268-a326-059893ab5c28
 govnotify.template.homeOfficeCaseListed: 86936ac9-e8d0-4a4c-8169-0948d7fb7935
+govnotify.template.caseOfficerCaseEdited: 1e29cb57-b5ae-4cc1-b51b-093f6ce2a2f2
 
 hearingCentreEmailAddresses:
+  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:TCWBradfordIA@example.com}
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}
+  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:TCO.NewportIAC@example.com}
   taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:taylorHouse@example.com}
 
 homeOfficeEmailAddresses:
+  bradford: ${IA_HOME_OFFICE_BRADFORD_EMAIL:ReformpbAPC@example.com}
   manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ReformpbManchester@example.com}
+  newport: ${IA_HOME_OFFICE_NEWPORT_EMAIL:ReformpbAPC@example.com}
   taylorHouse: ${IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ReformpbCentral@example.com}
+
+hearingCentreTelephoneNumber:
+  bradford: ${IA_HEARING_CENTRE_BRADFORD_TELEPHONE:0300 123 1711}
+  manchester: ${IA_HEARING_CENTRE_MANCHESTER_TELEPHONE:0300 123 1711}
+  newport: ${IA_HEARING_CENTRE_NEWPORT_TELEPHONE:0300 123 1711}
+  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE:0300 123 1711}
 
 respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL}
@@ -86,6 +97,7 @@ security:
       - "addAppealResponse"
       - "createCaseSummary"
       - "generateHearingBundle"
+      - "editCaseListing"
     caseworker-ia-admofficer:
       - "listCase"
 

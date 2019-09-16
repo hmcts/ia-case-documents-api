@@ -18,13 +18,26 @@ def secrets = [
 
     secret('ia-ccd-frontend-url', 'IA_CCD_FRONTEND_URL'),
     secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
+
+    secret('hearing-centre-bradford-email', 'IA_HEARING_CENTRE_BRADFORD_EMAIL'),
     secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
+    secret('hearing-centre-newport-email', 'IA_HEARING_CENTRE_NEWPORT_EMAIL'),
     secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+
+    secret('home-office-bradford-email', 'IA_HOME_OFFICE_BRADFORD_EMAIL'),
     secret('home-office-manchester-email', 'IA_HOME_OFFICE_MANCHESTER_EMAIL'),
+    secret('home-office-newport-email', 'IA_HOME_OFFICE_NEWPORT_EMAIL'),
     secret('home-office-taylor-house-email', 'IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
+
+    secret('hearing-centre-bradford-telephone', 'IA_HEARING_CENTRE_BRADFORD_TELEPHONE'),
+    secret('hearing-centre-manchester-telephone', 'IA_HEARING_CENTRE_MANCHESTER_TELEPHONE'),
+    secret('hearing-centre-newport-telephone', 'IA_HEARING_CENTRE_NEWPORT_TELEPHONE'),
+    secret('hearing-centre-taylor-house-telephone', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE'),
+
     secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
     secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
     secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
+
     secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
     secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
     secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),

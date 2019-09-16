@@ -7,9 +7,13 @@ java:
       secrets:
         - ia-ccd-frontend-url
         - ia-gov-notify-key
+        - hearing-centre-bradford-email
         - hearing-centre-manchester-email
+        - hearing-centre-newport-email
         - hearing-centre-taylor-house-email
+        - home-office-bradford-email
         - home-office-manchester-email
+        - home-office-newport-email
         - home-office-taylor-house-email
         - respondent-evidence-direction-email
         - respondent-review-direction-email

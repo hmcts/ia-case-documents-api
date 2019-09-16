@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -20,40 +21,26 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallb
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
 @Component
-public class CaseListedNotifier implements PreSubmitCallbackHandler<AsylumCase> {
+public class CaseEditedNotifier implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String caseListedCaseOfficerTemplateId;
-    private final String caseListedLegalRepresentativeTemplateId;
-    private final String caseListedHomeOfficeTemplateId;
+    private final String caseEditedCaseOfficerTemplateId;
 
-    private final CaseOfficerCaseListedNotifier caseOfficerCaseListedNotifier;
-    private final LegalRepresentativeCaseListedNotifier legalRepresentativeCaseListedNotifier;
-    private final HomeOfficeCaseListedNotifier homeOfficeCaseListedNotifier;
+    private final CaseOfficerCaseEditedNotifier caseOfficerCaseEditedNotifier;
     private final NotificationSender notificationSender;
     private final NotificationIdAppender notificationIdAppender;
 
-    public CaseListedNotifier(
-        @Value("${govnotify.template.caseOfficerCaseListed}") String caseOfficerCaseListedTemplateId,
-        @Value("${govnotify.template.legalRepresentativeCaseListed}") String legalRepresentativeCaseListedTemplateId,
-        @Value("${govnotify.template.homeOfficeCaseListed}") String homeOfficeCaseListedTemplateId,
-        CaseOfficerCaseListedNotifier caseOfficerCaseListedNotifier,
-        LegalRepresentativeCaseListedNotifier legalRepresentativeCaseListedNotifier,
-        HomeOfficeCaseListedNotifier homeOfficeCaseListedNotifier,
+    public CaseEditedNotifier(
+        @Value("${govnotify.template.caseOfficerCaseEdited}") String caseOfficerCaseEditedTemplateId,
+        CaseOfficerCaseEditedNotifier caseOfficerCaseEditedNotifier,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender
     ) {
-        requireNonNull(caseOfficerCaseListedTemplateId, "caseOfficerCaseListedTemplateId must not be null");
-        requireNonNull(legalRepresentativeCaseListedTemplateId, "legalRepresentativeCaseListedTemplateId must not be null");
-        requireNonNull(homeOfficeCaseListedTemplateId, "homeOfficeCaseListedTemplateId must not be null");
+        requireNonNull(caseOfficerCaseEditedTemplateId, "caseOfficerCaseEditedTemplateId must not be null");
 
-        this.caseListedCaseOfficerTemplateId = caseOfficerCaseListedTemplateId;
-        this.caseListedLegalRepresentativeTemplateId = legalRepresentativeCaseListedTemplateId;
-        this.caseListedHomeOfficeTemplateId = homeOfficeCaseListedTemplateId;
+        this.caseEditedCaseOfficerTemplateId = caseOfficerCaseEditedTemplateId;
         this.notificationSender = notificationSender;
         this.notificationIdAppender = notificationIdAppender;
-        this.caseOfficerCaseListedNotifier = caseOfficerCaseListedNotifier;
-        this.legalRepresentativeCaseListedNotifier = legalRepresentativeCaseListedNotifier;
-        this.homeOfficeCaseListedNotifier = homeOfficeCaseListedNotifier;
+        this.caseOfficerCaseEditedNotifier = caseOfficerCaseEditedNotifier;
     }
 
     public boolean canHandle(
@@ -64,7 +51,7 @@ public class CaseListedNotifier implements PreSubmitCallbackHandler<AsylumCase> 
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.LIST_CASE;
+               && callback.getEvent() == Event.EDIT_CASE_LISTING;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -81,54 +68,27 @@ public class CaseListedNotifier implements PreSubmitCallbackHandler<AsylumCase> 
                 .getCaseDetails()
                 .getCaseData();
 
-        handleCaseOfficer(callback, asylumCase);
+        final Optional<CaseDetails<AsylumCase>> caseDetailsBefore =
+            callback.getCaseDetailsBefore();
 
-        handleLegalRepresentative(callback, asylumCase);
-
-        handleHomeOffice(callback, asylumCase);
+        handleCaseOfficer(callback, asylumCase, caseDetailsBefore);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
     protected void handleCaseOfficer(
         Callback<AsylumCase> callback,
-        AsylumCase asylumCase
+        AsylumCase asylumCase,
+        Optional<CaseDetails<AsylumCase>> caseDetailsBefore
+
     ) {
 
         sendGovNotifyEmail(
             callback,
             "CASE_OFFICER",
-            caseListedCaseOfficerTemplateId,
-            caseOfficerCaseListedNotifier.getEmailAddress(asylumCase),
-            caseOfficerCaseListedNotifier.getPersonalisation(asylumCase),
-            asylumCase);
-    }
-
-    protected void handleLegalRepresentative(
-        Callback<AsylumCase> callback,
-        AsylumCase asylumCase
-    ) {
-
-        sendGovNotifyEmail(
-            callback,
-            "LEGAL_REPRESENTATIVE",
-            caseListedLegalRepresentativeTemplateId,
-            legalRepresentativeCaseListedNotifier.getEmailAddress(asylumCase),
-            legalRepresentativeCaseListedNotifier.getPersonalisation(asylumCase),
-            asylumCase);
-    }
-
-    protected void handleHomeOffice(
-        Callback<AsylumCase> callback,
-        AsylumCase asylumCase
-    ) {
-
-        sendGovNotifyEmail(
-            callback,
-            "HOME_OFFICE",
-            caseListedHomeOfficeTemplateId,
-            homeOfficeCaseListedNotifier.getEmailAddress(asylumCase),
-            homeOfficeCaseListedNotifier.getPersonalisation(asylumCase),
+            caseEditedCaseOfficerTemplateId,
+            caseOfficerCaseEditedNotifier.getEmailAddress(asylumCase),
+            caseOfficerCaseEditedNotifier.getPersonalisation(asylumCase, caseDetailsBefore),
             asylumCase);
     }
 
