@@ -9,6 +9,8 @@ java:
         - ia-gov-notify-key
         - hearing-centre-manchester-email
         - hearing-centre-taylor-house-email
+        - home-office-manchester-email
+        - home-office-taylor-house-email
         - respondent-evidence-direction-email
         - respondent-review-direction-email
         - respondent-non-standard-direction-until-listing-email

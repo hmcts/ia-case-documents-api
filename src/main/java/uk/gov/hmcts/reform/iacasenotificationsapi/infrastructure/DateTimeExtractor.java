@@ -6,7 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DateTimeExtractor {
 
     public String extractHearingDate(String validIso8601HearingDate) {

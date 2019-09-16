@@ -27,7 +27,6 @@ public class LegalRepresentativePersonalisationFactoryTest {
     @Mock private AsylumCase asylumCase;
     @Mock private Direction direction;
     @Mock private StringProvider stringProvider;
-    @Mock private DateTimeExtractor dateTimeExtractor;
 
     final String iaCcdFrontendUrl = "http://www.ccd.example.com";
     final String appealReferenceNumber = "PA/001/2018";
@@ -64,6 +63,7 @@ public class LegalRepresentativePersonalisationFactoryTest {
             .build();
 
     private LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory;
+    private DateTimeExtractor dateTimeExtractor;
 
     @Before
     public void setUp() {
@@ -73,7 +73,8 @@ public class LegalRepresentativePersonalisationFactoryTest {
         legalRepresentativePersonalisationFactory =
             new LegalRepresentativePersonalisationFactory(
                 iaCcdFrontendUrl,
-                stringProvider
+                stringProvider,
+                dateTimeExtractor
             );
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));

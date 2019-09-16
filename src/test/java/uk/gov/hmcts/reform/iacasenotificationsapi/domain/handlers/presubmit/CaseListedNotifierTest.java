@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.CaseOfficerPersonalisationFactory;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.HomeOfficePersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.LegalRepresentativePersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
@@ -28,11 +29,14 @@ public class CaseListedNotifierTest {
 
     private static final String CASE_OFFICER_CASE_LISTED_TEMPLATE = "case-officer-template-id";
     private static final String LEGAL_REPRESENTATIVE_CASE_LISTED_TEMPLATE = "legal-representative-template-id";
+    private static final String HOME_OFFICE_CASE_LISTED_TEMPLATE = "home-office-template-id";
 
     @Mock private CaseOfficerCaseListedNotifier caseOfficerCaseListedNotifier;
     @Mock private LegalRepresentativeCaseListedNotifier legalRepresentativeCaseListedNotifier;
+    @Mock private HomeOfficeCaseListedNotifier homeOfficeCaseListedNotifier;
     @Mock private CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
     @Mock private LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory;
+    @Mock private HomeOfficePersonalisationFactory homeOfficePersonalisationFactory;
     @Mock private Map<HearingCentre, String> hearingCentreEmailAddresses;
     @Mock private NotificationSender notificationSender;
     @Mock private NotificationIdAppender notificationIdAppender;
@@ -50,10 +54,13 @@ public class CaseListedNotifierTest {
             new CaseListedNotifier(
                 CASE_OFFICER_CASE_LISTED_TEMPLATE,
                 LEGAL_REPRESENTATIVE_CASE_LISTED_TEMPLATE,
+                HOME_OFFICE_CASE_LISTED_TEMPLATE,
                 caseOfficerCaseListedNotifier,
                 legalRepresentativeCaseListedNotifier,
+                homeOfficeCaseListedNotifier,
                 caseOfficerPersonalisationFactory,
                 legalRepresentativePersonalisationFactory,
+                homeOfficePersonalisationFactory,
                 hearingCentreEmailAddresses,
                 notificationSender,
                 notificationIdAppender
@@ -72,12 +79,21 @@ public class CaseListedNotifierTest {
     }
 
     @Test
-    public void should_handle_legal_representative_email_adn_personalisation() {
+    public void should_handle_legal_representative_email_and_personalisation() {
 
         caseListedNotifier.handleLegalRepresentative(callback, asylumCase);
 
         verify(legalRepresentativeCaseListedNotifier, times(1)).getEmailAddress(asylumCase);
         verify(legalRepresentativeCaseListedNotifier, times(1)).getPersonalisation(asylumCase);
+    }
+
+    @Test
+    public void should_handle_home_office_email_and_personalisation() {
+
+        caseListedNotifier.handleHomeOffice(callback, asylumCase);
+
+        verify(homeOfficeCaseListedNotifier, times(1)).getEmailAddress(asylumCase);
+        verify(homeOfficeCaseListedNotifier, times(1)).getPersonalisation(asylumCase);
     }
 
     @Test

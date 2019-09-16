@@ -21,15 +21,17 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtract
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class CaseOfficerPersonalisationFactoryTest {
+public class HomeOfficePersonalisationFactoryTest {
 
-    @Mock private StringProvider stringProvider;
     @Mock private AsylumCase asylumCase;
+    @Mock private StringProvider stringProvider;
 
     final String iaCcdFrontendUrl = "http://www.ccd.example.com";
     final String appealReferenceNumber = "PA/001/2018";
+    final String homeOfficeReferenceNumber = "SOMETHING";
     final String appellantGivenNames = "Jane";
     final String appellantFamilyName = "Doe";
+
     final String ariaListingReference = "LP/12345/2019";
     final String listCaseHearingDate = "2019-05-03T14:25:15.000";
     final String invalidIso8601HearingDate = "2019-05-03 14:25:15";
@@ -37,16 +39,23 @@ public class CaseOfficerPersonalisationFactoryTest {
     final String extractedHearingTime = "14:25";
     final String listCaseHearingCentreAddress = "IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU";
 
+    final String hearingRequirementVulnerabilities = "No special adjustments are being made to accommodate vulnerabilities";
+    final String hearingRequirementMultimedia = "No multimedia equipment is being provided";
+    final String hearingRequirementSingleSexCourt = "The court will not be single sex";
+    final String hearingRequirementInCameraCourt = "The hearing will be held in public court";
+    final String hearingRequirementOther = "No other adjustments are being made";
+
     final Map<String, String> expectedPersonalisation =
         ImmutableMap
             .<String, String>builder()
             .put("Appeal Ref Number", appealReferenceNumber)
+            .put("Home Office Ref Number", homeOfficeReferenceNumber)
             .put("Given names", appellantGivenNames)
             .put("Family name", appellantFamilyName)
             .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
             .build();
 
-    private CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
+    private HomeOfficePersonalisationFactory homeOfficePersonalisationFactory;
     private DateTimeExtractor dateTimeExtractor;
 
     @Before
@@ -54,29 +63,29 @@ public class CaseOfficerPersonalisationFactoryTest {
 
         dateTimeExtractor = new DateTimeExtractor();
 
-        caseOfficerPersonalisationFactory =
-            new CaseOfficerPersonalisationFactory(
+        homeOfficePersonalisationFactory =
+            new HomeOfficePersonalisationFactory(
                 iaCcdFrontendUrl,
                 stringProvider,
                 dateTimeExtractor
             );
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
-        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(listCaseHearingDate));
         when(stringProvider.get("hearingCentreAddress", "taylorHouse")).thenReturn(Optional.of(listCaseHearingCentreAddress));
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
     }
 
     @Test
     public void should_create_personalisation_from_case() {
 
         Map<String, String> actualPersonalisation =
-            caseOfficerPersonalisationFactory.create(asylumCase);
+            homeOfficePersonalisationFactory.create(asylumCase);
 
         assertEquals(expectedPersonalisation, actualPersonalisation);
     }
@@ -88,17 +97,19 @@ public class CaseOfficerPersonalisationFactoryTest {
             ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", "")
+                .put("Home Office Ref Number", "")
                 .put("Given names", "")
                 .put("Family name", "")
                 .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
                 .build();
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> actualPersonalisation =
-            caseOfficerPersonalisationFactory.create(asylumCase);
+            homeOfficePersonalisationFactory.create(asylumCase);
 
         assertEquals(expectedPersonalisation, actualPersonalisation);
     }
@@ -111,13 +122,21 @@ public class CaseOfficerPersonalisationFactoryTest {
                 .<String, String>builder()
                 .put("Appeal Ref Number", appealReferenceNumber)
                 .put("Listing Ref Number", ariaListingReference)
+                .put("Home Office Ref Number", homeOfficeReferenceNumber)
+                .put("Appellant Given Names", appellantGivenNames)
+                .put("Appellant Family Name", appellantFamilyName)
                 .put("Hearing Date", extractedHearingDateFormatted)
                 .put("Hearing Time", extractedHearingTime)
                 .put("Hearing Centre Address", listCaseHearingCentreAddress)
+                .put("Hearing Requirement Vulnerabilities", hearingRequirementVulnerabilities)
+                .put("Hearing Requirement Multimedia", hearingRequirementMultimedia)
+                .put("Hearing Requirement Single Sex Court", hearingRequirementSingleSexCourt)
+                .put("Hearing Requirement In Camera Court", hearingRequirementInCameraCourt)
+                .put("Hearing Requirement Other", hearingRequirementOther)
                 .build();
 
         Map<String, String> actualPersonalisation =
-            caseOfficerPersonalisationFactory.createListedCase(asylumCase);
+            homeOfficePersonalisationFactory.createListedCase(asylumCase);
 
         verify(stringProvider, times(1)).get("hearingCentreAddress", "taylorHouse");
 
@@ -129,7 +148,7 @@ public class CaseOfficerPersonalisationFactoryTest {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(asylumCase))
+        assertThatThrownBy(() -> homeOfficePersonalisationFactory.createListedCase(asylumCase))
             .hasMessage("listCaseHearingCentre is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
 
@@ -141,7 +160,7 @@ public class CaseOfficerPersonalisationFactoryTest {
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(invalidIso8601HearingDate));
 
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(asylumCase))
+        assertThatThrownBy(() -> homeOfficePersonalisationFactory.createListedCase(asylumCase))
             .isExactlyInstanceOf(DateTimeParseException.class);
     }
 
@@ -150,9 +169,11 @@ public class CaseOfficerPersonalisationFactoryTest {
 
         when(stringProvider.get("hearingCentreAddress", "taylorHouse")).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(asylumCase))
+        assertThatThrownBy(() -> homeOfficePersonalisationFactory.createListedCase(asylumCase))
             .hasMessage("hearingCentreAddress is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
+
+        verify(stringProvider, times(1)).get("hearingCentreAddress", "taylorHouse");
     }
 
     @Test
@@ -160,7 +181,7 @@ public class CaseOfficerPersonalisationFactoryTest {
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(asylumCase))
+        assertThatThrownBy(() -> homeOfficePersonalisationFactory.createListedCase(asylumCase))
             .hasMessage("hearingDateTime is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
 
@@ -170,11 +191,11 @@ public class CaseOfficerPersonalisationFactoryTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.create(null))
+        assertThatThrownBy(() -> homeOfficePersonalisationFactory.create(null))
             .hasMessage("asylumCase must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> caseOfficerPersonalisationFactory.createListedCase(null))
+        assertThatThrownBy(() -> homeOfficePersonalisationFactory.createListedCase(null))
             .hasMessage("asylumCase must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

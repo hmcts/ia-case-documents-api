@@ -18,15 +18,18 @@ public class CaseOfficerPersonalisationFactory {
 
     private final String iaCcdFrontendUrl;
     private final StringProvider stringProvider;
+    private final DateTimeExtractor dateTimeExtractor;
 
     public CaseOfficerPersonalisationFactory(
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
-        StringProvider stringProvider
+        StringProvider stringProvider,
+        DateTimeExtractor dateTimeExtractor
     ) {
         requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
 
         this.iaCcdFrontendUrl = iaCcdFrontendUrl;
         this.stringProvider = stringProvider;
+        this.dateTimeExtractor = dateTimeExtractor;
     }
 
     public Map<String, String> create(
@@ -64,22 +67,13 @@ public class CaseOfficerPersonalisationFactory {
                 .read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class)
                 .orElseThrow(() -> new IllegalStateException("hearingDateTime is not present"));
 
-        final DateTimeExtractor dateTimeExtractor
-            = new DateTimeExtractor();
-
-        final String hearingDate =
-            dateTimeExtractor.extractHearingDate(hearingDateTime);
-
-        final String hearingTime =
-            dateTimeExtractor.extractHearingTime(hearingDateTime);
-
         return
             ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Listing Ref Number", asylumCase.read(AsylumCaseDefinition.ARIA_LISTING_REFERENCE, String.class).orElse(""))
-                .put("Hearing Date", hearingDate)
-                .put("Hearing Time", hearingTime)
+                .put("Hearing Date", dateTimeExtractor.extractHearingDate(hearingDateTime))
+                .put("Hearing Time", dateTimeExtractor.extractHearingTime(hearingDateTime))
                 .put("Hearing Centre Address", hearingCentreAddress)
                 .build();
     }

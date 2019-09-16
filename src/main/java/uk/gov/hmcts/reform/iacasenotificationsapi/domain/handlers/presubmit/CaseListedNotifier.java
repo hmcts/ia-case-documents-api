@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.CaseOfficerPersonalisationFactory;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.HomeOfficePersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.LegalRepresentativePersonalisationFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
 
@@ -27,11 +28,14 @@ public class CaseListedNotifier implements PreSubmitCallbackHandler<AsylumCase> 
 
     private final String caseListedCaseOfficerTemplateId;
     private final String caseListedLegalRepresentativeTemplateId;
+    private final String caseListedHomeOfficeTemplateId;
 
     private final CaseOfficerCaseListedNotifier caseOfficerCaseListedNotifier;
     private final LegalRepresentativeCaseListedNotifier legalRepresentativeCaseListedNotifier;
+    private final HomeOfficeCaseListedNotifier homeOfficeCaseListedNotifier;
     private final CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory;
     private final LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory;
+    private final HomeOfficePersonalisationFactory homeOfficePersonalisationFactory;
 
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
     private final NotificationSender notificationSender;
@@ -40,26 +44,33 @@ public class CaseListedNotifier implements PreSubmitCallbackHandler<AsylumCase> 
     public CaseListedNotifier(
         @Value("${govnotify.template.caseOfficerCaseListed}") String caseOfficerCaseListedTemplateId,
         @Value("${govnotify.template.legalRepresentativeCaseListed}") String legalRepresentativeCaseListedTemplateId,
+        @Value("${govnotify.template.homeOfficeCaseListed}") String homeOfficeCaseListedTemplateId,
         CaseOfficerCaseListedNotifier caseOfficerCaseListedNotifier,
         LegalRepresentativeCaseListedNotifier legalRepresentativeCaseListedNotifier,
+        HomeOfficeCaseListedNotifier homeOfficeCaseListedNotifier,
         CaseOfficerPersonalisationFactory caseOfficerPersonalisationFactory,
         LegalRepresentativePersonalisationFactory legalRepresentativePersonalisationFactory,
+        HomeOfficePersonalisationFactory homeOfficePersonalisationFactory,
         Map<HearingCentre, String> hearingCentreEmailAddresses,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender
     ) {
         requireNonNull(caseOfficerCaseListedTemplateId, "caseOfficerCaseListedTemplateId must not be null");
         requireNonNull(legalRepresentativeCaseListedTemplateId, "legalRepresentativeCaseListedTemplateId must not be null");
+        requireNonNull(homeOfficeCaseListedTemplateId, "homeOfficeCaseListedTemplateId must not be null");
 
         this.caseListedCaseOfficerTemplateId = caseOfficerCaseListedTemplateId;
         this.caseListedLegalRepresentativeTemplateId = legalRepresentativeCaseListedTemplateId;
+        this.caseListedHomeOfficeTemplateId = homeOfficeCaseListedTemplateId;
         this.caseOfficerPersonalisationFactory = caseOfficerPersonalisationFactory;
         this.legalRepresentativePersonalisationFactory = legalRepresentativePersonalisationFactory;
+        this.homeOfficePersonalisationFactory = homeOfficePersonalisationFactory;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
         this.notificationSender = notificationSender;
         this.notificationIdAppender = notificationIdAppender;
         this.caseOfficerCaseListedNotifier = caseOfficerCaseListedNotifier;
         this.legalRepresentativeCaseListedNotifier = legalRepresentativeCaseListedNotifier;
+        this.homeOfficeCaseListedNotifier = homeOfficeCaseListedNotifier;
     }
 
     public boolean canHandle(
@@ -91,6 +102,8 @@ public class CaseListedNotifier implements PreSubmitCallbackHandler<AsylumCase> 
 
         handleLegalRepresentative(callback, asylumCase);
 
+        handleHomeOffice(callback, asylumCase);
+
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
@@ -119,6 +132,20 @@ public class CaseListedNotifier implements PreSubmitCallbackHandler<AsylumCase> 
             caseListedLegalRepresentativeTemplateId,
             legalRepresentativeCaseListedNotifier.getEmailAddress(asylumCase),
             legalRepresentativeCaseListedNotifier.getPersonalisation(asylumCase),
+            asylumCase);
+    }
+
+    protected void handleHomeOffice(
+        Callback<AsylumCase> callback,
+        AsylumCase asylumCase
+    ) {
+
+        sendGovNotifyEmail(
+            callback,
+            "HOME_OFFICE",
+            caseListedHomeOfficeTemplateId,
+            homeOfficeCaseListedNotifier.getEmailAddress(asylumCase),
+            homeOfficeCaseListedNotifier.getPersonalisation(asylumCase),
             asylumCase);
     }
 
