@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import java.util.Map;
+import java.util.Optional;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -38,16 +38,24 @@ public class DocumentCreator<T extends CaseData> {
     public Document create(
         CaseDetails<T> caseDetails
     ) {
+        return create(caseDetails, null);
+    }
+
+    public Document create(
+        CaseDetails<T> caseDetails,
+        CaseDetails<T> caseDetailsBefore
+    ) {
         final String qualifiedDocumentFileName = fileNameQualifier.get(documentFileName, caseDetails);
         final String templateName = documentTemplate.getName();
-        final Map<String, Object> templateFieldValues = documentTemplate.mapFieldValues(caseDetails);
 
         Resource documentResource =
             documentGenerator.generate(
                 qualifiedDocumentFileName,
                 documentFileExtension,
                 templateName,
-                templateFieldValues
+                Optional.ofNullable(caseDetailsBefore)
+                    .map(it -> documentTemplate.mapFieldValues(caseDetails, it))
+                    .orElse(documentTemplate.mapFieldValues(caseDetails))
             );
 
         return documentUploader.upload(documentResource, documentContentType);

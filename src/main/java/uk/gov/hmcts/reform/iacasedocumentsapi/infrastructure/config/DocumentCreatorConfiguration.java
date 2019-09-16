@@ -55,6 +55,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("hearingNoticeEdited")
+    public DocumentCreator<AsylumCase> getHearingNoticeEditedDocumentCreator(
+        @Value("${hearingNoticeEditedDocument.contentType}") String contentType,
+        @Value("${hearingNoticeEditedDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeEditedDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HearingNoticeEditedTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("decisionAndReasons")
     public DocumentCreator<AsylumCase> getAndDecisionAndReasonsDocumentCreator(
             @Value("${decisionAndReasons.contentType}") String contentType,
