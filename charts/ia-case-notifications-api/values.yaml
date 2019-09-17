@@ -18,6 +18,7 @@ java:
         - respondent-evidence-direction-email
         - respondent-review-direction-email
         - respondent-non-standard-direction-until-listing-email
+        - home-office-end-appeal-email
         - system-username
         - system-password
         - idam-client-id

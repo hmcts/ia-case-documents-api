@@ -40,6 +40,7 @@ def secrets = [
         secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
         secret('test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
         secret('test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
+        secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
 
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),

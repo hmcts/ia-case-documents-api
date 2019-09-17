@@ -110,6 +110,11 @@ data "azurerm_key_vault_secret" "ia_hearing_centre_taylor_house_telephone" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_home_office_end_appeal_email" {
+  name      = "home-office-end-appeal-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "test_caseofficer_username" {
   name      = "test-caseofficer-username"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -220,6 +225,7 @@ module "ia_case_notifications_api" {
     IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL                   = "${data.azurerm_key_vault_secret.ia_respondent_evidence_direction_email.value}"
     IA_RESPONDENT_REVIEW_DIRECTION_EMAIL                     = "${data.azurerm_key_vault_secret.ia_respondent_review_direction_email.value}"
     IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL = "${data.azurerm_key_vault_secret.ia_respondent_non_standard_direction_until_listing_email.value}"
+    IA_HOME_OFFICE_END_APPEAL_EMAIL                          = "${data.azurerm_key_vault_secret.ia_home_office_end_appeal_email.value}"
 
     IA_HEARING_CENTRE_BRADFORD_TELEPHONE                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_bradford_telephone.value}"
     IA_HEARING_CENTRE_MANCHESTER_TELEPHONE                   = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_telephone.value}"

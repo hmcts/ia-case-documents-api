@@ -58,7 +58,24 @@ public enum AsylumCaseDefinition {
             "ariaListingReference",  new TypeReference<String>(){}),
 
     LIST_CASE_HEARING_CENTRE(
-            "listCaseHearingCentre",  new TypeReference<HearingCentre>(){});
+            "listCaseHearingCentre",  new TypeReference<HearingCentre>(){}),
+
+    END_APPEAL_OUTCOME(
+        "endAppealOutcome", new TypeReference<String>(){}),
+
+    END_APPEAL_OUTCOME_REASON(
+        "endAppealOutcomeReason", new TypeReference<String>(){}),
+
+    END_APPEAL_DATE(
+        "endAppealDate", new TypeReference<String>(){}),
+
+    END_APPEAL_APPROVER_NAME(
+        "endAppealApproverName", new TypeReference<String>(){}),
+
+    END_APPEAL_APPROVER_TYPE(
+        "endAppealApproverType", new TypeReference<String>(){})
+
+    ;
 
     private final String value;
     private final TypeReference typeReference;
