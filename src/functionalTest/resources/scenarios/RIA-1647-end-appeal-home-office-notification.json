@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1647 End appeal notification to Home Office",
+  "description": "RIA-1647-RIA-1276 End appeal notification to Home Office and legal representative",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -33,6 +33,10 @@
           {
             "id": "1001_END_APPEAL_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1001_END_APPEAL_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
@@ -45,6 +49,23 @@
         "body": [
           "Appeal reference number: PA/12345/2019",
           "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "# The appeal has been ended",
+          "Outcome of the appeal: Withdrawn",
+          "some outcome reason",
+          "Approved by: Judge",
+          "Outcome date: 13 Aug 2019",
+          "If a case worker has made this decision, you can ask for it to be reviewed by a judge.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "1001_END_APPEAL_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Your reference: CASE001",
           "Appellant name: Talha Awan",
           "# The appeal has been ended",
           "Outcome of the appeal: Withdrawn",

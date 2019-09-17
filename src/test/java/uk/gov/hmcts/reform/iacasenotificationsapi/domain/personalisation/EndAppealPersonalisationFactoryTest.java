@@ -1,24 +1,23 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
-
 import java.util.Map;
 import java.util.Optional;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EndAppealHomeOfficePersonalisationFactoryTest {
+public class EndAppealPersonalisationFactoryTest {
 
     @Mock private AsylumCase asylumCase;
 
@@ -35,12 +34,12 @@ public class EndAppealHomeOfficePersonalisationFactoryTest {
     final String endAppealOutcomeReason = "some reason";
     final String endAppealApproverType = "Case Worker";
 
-    private EndAppealHomeOfficePersonalisationFactory personalisationFactory;
+    private EndAppealPersonalisationFactory personalisationFactory;
 
     @Before
     public void setUp() {
 
-        personalisationFactory = new EndAppealHomeOfficePersonalisationFactory();
+        personalisationFactory = new EndAppealPersonalisationFactory();
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
@@ -65,7 +64,6 @@ public class EndAppealHomeOfficePersonalisationFactoryTest {
                 .put("appellantFamilyName", "")
                 .put("outcomeOfAppeal", "")
                 .put("reasonsOfOutcome", "No reason")
-                .put("endAppealApprover", "")
                 .put("endAppealDate", "")
                 .build();
 
@@ -75,12 +73,11 @@ public class EndAppealHomeOfficePersonalisationFactoryTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> actualPersonalisation = personalisationFactory.create(asylumCase);
 
-        assertEquals(expectedPersonalisation, actualPersonalisation);
+        assertThat(actualPersonalisation).isEqualToComparingOnlyGivenFields(expectedPersonalisation);
     }
 
     @Test
@@ -95,13 +92,12 @@ public class EndAppealHomeOfficePersonalisationFactoryTest {
                 .put("appellantFamilyName", appellantFamilyName)
                 .put("outcomeOfAppeal", endAppealOutcome)
                 .put("reasonsOfOutcome", endAppealOutcomeReason)
-                .put("endAppealApprover", endAppealApproverType)
                 .put("endAppealDate", endAppealExpectedDate)
                 .build();
 
         Map<String, String> actualPersonalisation = personalisationFactory.create(asylumCase);
 
-        assertEquals(expectedPersonalisation, actualPersonalisation);
+        assertThat(actualPersonalisation).isEqualToComparingOnlyGivenFields(expectedPersonalisation);
     }
 
     @Test
