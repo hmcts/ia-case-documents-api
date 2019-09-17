@@ -28,11 +28,13 @@ public class EventTest {
         assertEquals("generateHearingBundle", Event.GENERATE_HEARING_BUNDLE.toString());
         assertEquals("editCaseListing", Event.EDIT_CASE_LISTING.toString());
         assertEquals("endAppeal", Event.END_APPEAL.toString());
+        assertEquals("recordApplication", Event.RECORD_APPLICATION.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
+
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(21, Event.values().length);
+        assertEquals(22, Event.values().length);
     }
 }

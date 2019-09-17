@@ -1,0 +1,37 @@
+{
+  "description": "RIA-1674 Record granted application to Home Office and Legal Representative",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1001,
+      "eventId": "recordApplication",
+      "state": "caseBuilding",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "applicationType": "Transfer",
+          "applicationDecisionReason": "Some decision reason",
+          "applicationSupplier": "The respondent",
+          "applicationDecision": "Granted",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "applicationType": "Transfer",
+        "applicationDecisionReason": "Some decision reason",
+        "applicationSupplier": "The respondent",
+        "applicationDecision": "Granted",
+        "notificationsSent": []
+      }
+    },
+    "notifications": []
+  }
+}

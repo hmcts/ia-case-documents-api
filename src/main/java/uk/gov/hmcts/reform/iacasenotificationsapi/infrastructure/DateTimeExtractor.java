@@ -16,12 +16,9 @@ public class DateTimeExtractor {
         final LocalDate dateValue =
             getLocalDateTime(validIso8601HearingDate).toLocalDate();
 
-        final String hearingDate =
-            LocalDate
+        return LocalDate
                 .parse(dateValue.toString())
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
-
-        return hearingDate;
     }
 
     public String extractHearingTime(String validIso8601HearingDate) {
@@ -30,14 +27,12 @@ public class DateTimeExtractor {
             getLocalDateTime(validIso8601HearingDate).toLocalTime();
 
         return LocalTime
-            .parse(timeValue.toString())
-            .format(DateTimeFormatter.ofPattern("HH:mm"));
-
+                .parse(timeValue.toString())
+                .format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     private LocalDateTime getLocalDateTime(String validIso8601HearingDate) {
 
         return LocalDateTime.parse(validIso8601HearingDate, ISO_DATE_TIME);
-
     }
 }

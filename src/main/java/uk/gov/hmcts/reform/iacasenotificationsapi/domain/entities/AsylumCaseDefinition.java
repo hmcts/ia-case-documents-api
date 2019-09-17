@@ -73,8 +73,19 @@ public enum AsylumCaseDefinition {
         "endAppealApproverName", new TypeReference<String>(){}),
 
     END_APPEAL_APPROVER_TYPE(
-        "endAppealApproverType", new TypeReference<String>(){})
+        "endAppealApproverType", new TypeReference<String>(){}),
 
+    APPLICATION_DECISION_REASON(
+        "applicationDecisionReason", new TypeReference<String>(){}),
+
+    APPLICATION_TYPE(
+        "applicationType", new TypeReference<String>(){}),
+
+    APPLICATION_SUPPLIER(
+        "applicationSupplier", new TypeReference<String>(){}),
+
+    APPLICATION_DECISION(
+        "applicationDecision", new TypeReference<String>(){}),
     ;
 
     private final String value;

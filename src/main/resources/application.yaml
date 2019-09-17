@@ -30,6 +30,8 @@ govnotify.template.homeOfficeCaseListed: 86936ac9-e8d0-4a4c-8169-0948d7fb7935
 govnotify.template.caseOfficerCaseEdited: 1e29cb57-b5ae-4cc1-b51b-093f6ce2a2f2
 govnotify.template.endAppealHomeOfficeTemplateId: 993c1294-c6b8-4b46-ab0f-ab01b4f6607b
 govnotify.template.endAppealLegalRepresentativeTemplateId: 44ae9e7a-adeb-4d78-b2ed-219f4390b166
+govnotify.template.recordRefusedApplicationLegalRepresentativeTemplateId: 46778cba-1db5-4f17-9437-3b2944274df2
+govnotify.template.recordRefusedApplicationHomeOfficeTemplateId: 911d4121-1300-4c52-b8b3-bfa7526ca74d
 
 hearingCentreEmailAddresses:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:TCWBradfordIA@example.com}
@@ -103,6 +105,7 @@ security:
       - "generateHearingBundle"
       - "editCaseListing"
       - "endAppeal"
+      - "recordApplication"
     caseworker-ia-admofficer:
       - "listCase"
 
