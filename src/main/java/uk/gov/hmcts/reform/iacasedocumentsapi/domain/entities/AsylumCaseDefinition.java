@@ -172,6 +172,9 @@ public enum AsylumCaseDefinition {
     TRIBUNAL_DOCUMENTS(
         "tribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    ADDITIONAL_EVIDENCE_DOCUMENTS(
+        "additionalEvidenceDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     ;
 
     private final String value;

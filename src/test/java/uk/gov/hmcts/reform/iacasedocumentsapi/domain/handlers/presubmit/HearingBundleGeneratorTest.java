@@ -103,15 +103,18 @@ public class HearingBundleGeneratorTest {
     @Test
     public void should_call_document_bundler_with_correct_params_and_attach_to_case() {
 
-        int expectedBundleSize = 3;
+        int expectedBundleSize = 4;
         IdValue<DocumentWithMetadata> legalRepDoc = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE));
-        IdValue<DocumentWithMetadata> respondantDoc = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.APPEAL_RESPONSE));
+        IdValue<DocumentWithMetadata> respondentDoc = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.APPEAL_RESPONSE));
         IdValue<DocumentWithMetadata> hearingDoc = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE));
+        IdValue<DocumentWithMetadata> additionalEvidenceDoc = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE));
+
         IdValue<DocumentWithMetadata> existingBundle = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE));
 
         when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(hearingDoc, existingBundle)));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc)));
-        when(asylumCase.read(RESPONDENT_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(respondantDoc)));
+        when(asylumCase.read(RESPONDENT_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(respondentDoc)));
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDoc)));
 
         when(documentBundler.bundle(
             anyList(),
@@ -135,8 +138,9 @@ public class HearingBundleGeneratorTest {
 
         assertThat(value).containsOnlyOnce(
             legalRepDoc.getValue(),
-            respondantDoc.getValue(),
-            hearingDoc.getValue()
+            respondentDoc.getValue(),
+            hearingDoc.getValue(),
+            additionalEvidenceDoc.getValue()
         );
     }
 
@@ -147,6 +151,7 @@ public class HearingBundleGeneratorTest {
         when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.empty());
         when(asylumCase.read(RESPONDENT_DOCUMENTS)).thenReturn(Optional.empty());
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS)).thenReturn(Optional.empty());
 
         when(documentBundler.bundle(
             anyList(),

@@ -3,11 +3,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -69,28 +69,17 @@ public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCa
             throw new IllegalStateException("Cannot handle callback");
         }
 
-        final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
-        final AsylumCase asylumCase = caseDetails.getCaseData();
+        CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
+        AsylumCase asylumCase = caseDetails.getCaseData();
 
-        final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
-
-        Optional<List<IdValue<DocumentWithMetadata>>> maybeLegalRepresentativeDocuments = asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS);
-        Optional<List<IdValue<DocumentWithMetadata>>> maybeRespondentDocuments = asylumCase.read(RESPONDENT_DOCUMENTS);
-        Optional<List<IdValue<DocumentWithMetadata>>> maybeHearingDocuments = asylumCase.read(HEARING_DOCUMENTS);
+        String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments =
-            Stream.concat(
-                    maybeLegalRepresentativeDocuments
-                    .orElse(Collections.emptyList())
-                    .stream(),
-                Stream.concat(
-                    maybeRespondentDocuments
-                        .orElse(Collections.emptyList())
-                        .stream(),
-                    maybeHearingDocuments
-                        .orElse(Collections.emptyList())
-                        .stream()
-                ))
+            Stream.of(LEGAL_REPRESENTATIVE_DOCUMENTS, RESPONDENT_DOCUMENTS, HEARING_DOCUMENTS, ADDITIONAL_EVIDENCE_DOCUMENTS)
+                .map(asylumCase::<List<IdValue<DocumentWithMetadata>>>read)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .flatMap(List::stream)
                 .map(IdValue::getValue)
                 .filter(document -> document.getTag() != DocumentTag.HEARING_BUNDLE
                                     && document.getTag() != DocumentTag.APPEAL_SKELETON_BUNDLE
