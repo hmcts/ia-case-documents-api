@@ -8,7 +8,7 @@ ENV APPLICATION_SIZE_ON_DISK_IN_MB 75
 
 # Optional
 
-COPY lib/AI-Agent.xml /opt/app/
+COPY lib/applicationinsights-agent-2.4.1.jar lib/AI-Agent.xml /opt/app/
 COPY build/libs/$APP /opt/app/
 
 EXPOSE 8092
