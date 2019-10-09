@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +46,8 @@ public class NotificationIdAppenderTest {
     @Test
     public void should_append_subsequent_notifications_with_qualifiers() {
 
+        final String uuidRegex = "([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}";
+
         List<IdValue<String>> actualNotificationsSent1 =
             notificationIdAppender.append(
                 existingNotificationsSent,
@@ -63,10 +66,19 @@ public class NotificationIdAppenderTest {
         assertEquals(existingNotification1, actualNotificationsSent2.get(0));
         assertEquals(existingNotification2, actualNotificationsSent2.get(1));
 
-        assertEquals("foo_2", actualNotificationsSent2.get(2).getId());
-        assertEquals("555-666", actualNotificationsSent2.get(2).getValue());
+        final IdValue<String> actualNotificationsSent3 = actualNotificationsSent2.get(2);
+        final IdValue<String> actualNotificationsSent4 = actualNotificationsSent2.get(3);
 
-        assertEquals("foo_3", actualNotificationsSent2.get(3).getId());
-        assertEquals("777-888", actualNotificationsSent2.get(3).getValue());
+        assertThat(actualNotificationsSent3.getId()).startsWith("foo_");
+        assertThat(actualNotificationsSent3.getId()
+            .substring("foo_".length()))
+            .matches(uuidRegex);
+        assertEquals("555-666", actualNotificationsSent3.getValue());
+
+        assertThat(actualNotificationsSent4.getId()).startsWith("foo_");
+        assertThat(actualNotificationsSent4.getId()
+            .substring("foo_".length()))
+            .matches(uuidRegex);
+        assertEquals("777-888", actualNotificationsSent4.getValue());
     }
 }

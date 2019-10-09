@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
@@ -23,7 +24,7 @@ public class NotificationIdAppender {
         String qualifiedNotificationReference;
 
         if (numberOfExistingNotificationsOfSameKind > 0) {
-            qualifiedNotificationReference = notificationReference + "_" + (numberOfExistingNotificationsOfSameKind + 1);
+            qualifiedNotificationReference = notificationReference + "_" + UUID.randomUUID().toString();
         } else {
             qualifiedNotificationReference = notificationReference;
         }
