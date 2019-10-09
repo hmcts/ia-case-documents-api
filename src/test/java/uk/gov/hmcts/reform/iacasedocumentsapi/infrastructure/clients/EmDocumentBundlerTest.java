@@ -10,6 +10,8 @@ import com.google.common.collect.ImmutableList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UuidProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
@@ -37,6 +40,7 @@ public class EmDocumentBundlerTest {
     @Mock private DateProvider dateProvider;
     @Mock private BundleRequestExecutor bundleRequestExecutor;
     @Mock private PreSubmitCallbackResponse<BundleCaseData> callbackResponse;
+    @Mock private UuidProvider uuidProvider;
 
     @Mock private BundleCaseData bundleCaseData;
     @Mock private Bundle bundle;
@@ -44,6 +48,8 @@ public class EmDocumentBundlerTest {
     private Document returnedDocument;
 
     private EmDocumentBundler emDocumentBundler;
+
+    private UUID uuidBundle = UUID.randomUUID();
 
     @Before
     public void setUp() {
@@ -54,11 +60,14 @@ public class EmDocumentBundlerTest {
             "documentBinaryUrl",
             bundleFilename);
 
+        when(uuidProvider.randomUuid()).thenReturn(uuidBundle);
+
         emDocumentBundler = new EmDocumentBundler(
             BUNDLE_URL,
             BUNDLE_STITCH_URL,
             dateProvider,
-            bundleRequestExecutor
+            bundleRequestExecutor,
+            uuidProvider
         );
 
     }
@@ -117,7 +126,7 @@ public class EmDocumentBundlerTest {
             new IdValue<>(
                 "1",
                 new Bundle(
-                    "1",
+                    uuidBundle.toString(),
                     bundleTitle,
                     "",
                     "yes",

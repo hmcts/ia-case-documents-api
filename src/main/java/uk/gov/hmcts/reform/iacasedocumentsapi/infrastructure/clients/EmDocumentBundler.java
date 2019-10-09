@@ -1,12 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UuidProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -27,17 +26,20 @@ public class EmDocumentBundler implements DocumentBundler {
     private final String emBundlerStitchUri;
     private final DateProvider dateProvider;
     private final BundleRequestExecutor bundleRequestExecutor;
+    private final UuidProvider uuidProvider;
 
     public EmDocumentBundler(
         @Value("${emBundler.url}") String emBundlerUrl,
         @Value("${emBundler.stitch.uri}") String emBundlerStitchUri,
         DateProvider dateProvider,
-        BundleRequestExecutor bundleRequestExecutor
+        BundleRequestExecutor bundleRequestExecutor,
+        UuidProvider uuidProvider
     ) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
         this.dateProvider = dateProvider;
         this.bundleRequestExecutor = bundleRequestExecutor;
+        this.uuidProvider = uuidProvider;
     }
 
     public Document bundle(
@@ -116,7 +118,7 @@ public class EmDocumentBundler implements DocumentBundler {
                             new IdValue<>(
                                 "1",
                                 new Bundle(
-                                    "1",
+                                    uuidProvider.randomUuid().toString(),
                                     bundleTitle,
                                     "",
                                     "yes",
