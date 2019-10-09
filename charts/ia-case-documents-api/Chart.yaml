@@ -1,6 +1,6 @@
 name: ia-case-documents-api
 home: https://github.com/hmcts/ia-case-documents-api
-version: 0.0.4
+version: 0.0.5
 description: Immigration & Asylum Case Documents Service
 maintainers:
   - name: HMCTS Immigration & Asylum Team
