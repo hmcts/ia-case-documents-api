@@ -1,7 +1,6 @@
 java:
   image: 'https://hmctspublic.azurecr.io/ia/case-notifications-api:latest'
   applicationPort: 8093
-  aadIdentityName: ia
   keyVaults:
     ia:
       resourceGroup: ia
