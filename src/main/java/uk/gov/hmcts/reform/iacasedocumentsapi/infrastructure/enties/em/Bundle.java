@@ -93,11 +93,11 @@ public class Bundle implements CaseData {
     }
 
     public Optional<String> getStitchStatus() {
-        return stitchStatus;
+        return checkIsOptional(stitchStatus);
     }
 
     public Optional<Document> getStitchedDocument() {
-        return stitchedDocument;
+        return checkIsOptional(stitchedDocument);
     }
 
     public YesOrNo getHasCoversheets() {
@@ -110,5 +110,14 @@ public class Bundle implements CaseData {
 
     public String getFilename() {
         return filename;
+    }
+
+    //It is possible for the Optional types to be instantiated as null e.g. through Jackson
+    private <T> Optional<T> checkIsOptional(Optional<T> field) {
+        if (null == field) { //NOSONAR
+            return Optional.empty();
+        }
+
+        return field;
     }
 }

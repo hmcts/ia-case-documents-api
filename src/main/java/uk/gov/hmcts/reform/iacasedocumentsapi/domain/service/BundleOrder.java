@@ -1,10 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import java.util.Comparator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 

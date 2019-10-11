@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
@@ -20,6 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDocument;
 
+@Slf4j
 @Service
 public class EmDocumentBundler implements DocumentBundler {
 
@@ -65,10 +67,10 @@ public class EmDocumentBundler implements DocumentBundler {
                 .getCaseBundles()
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new DocumentServiceResponseException("Bundle was not created"))
+                .orElseThrow(() -> new DocumentBundlingErrorResponseException("Bundle was not created", response))
                 .getValue()
                 .getStitchedDocument()
-                .orElseThrow(() -> new DocumentServiceResponseException("Stitched document was not created"));
+                .orElseThrow(() -> new DocumentBundlingErrorResponseException("Stitched document was not created", response));
 
         // rename the bundle file name
         return new Document(

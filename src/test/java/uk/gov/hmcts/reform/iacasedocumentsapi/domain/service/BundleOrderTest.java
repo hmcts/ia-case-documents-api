@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DRAFT_DECISION_AND_REASONS_DOCUMENTS;
 
 import java.util.List;
 import org.junit.Before;

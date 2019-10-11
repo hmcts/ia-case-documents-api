@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
 
 import com.google.common.base.Strings;
 import java.time.LocalDateTime;

@@ -61,7 +61,7 @@ public class BundleRequestExecutorTest {
     }
 
     @Test
-    public void should_invoke_endpoint_with_given_payload() {
+    public void should_invoke_endpoint_with_given_payload_and_return_200_with_no_errors() {
 
         when(restTemplate
                 .exchange(
