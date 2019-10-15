@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+#setting encoding for Python 2 / 3 compatibilities
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
 echo ${TEST_URL}
 zap-api-scan.py -t ${TEST_URL}/v2/api-docs -f openapi -P 1001
 cat zap.out
