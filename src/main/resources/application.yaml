@@ -32,6 +32,7 @@ govnotify.template.endAppealHomeOfficeTemplateId: 993c1294-c6b8-4b46-ab0f-ab01b4
 govnotify.template.endAppealLegalRepresentativeTemplateId: 44ae9e7a-adeb-4d78-b2ed-219f4390b166
 govnotify.template.recordRefusedApplicationLegalRepresentativeTemplateId: 46778cba-1db5-4f17-9437-3b2944274df2
 govnotify.template.recordRefusedApplicationHomeOfficeTemplateId: 911d4121-1300-4c52-b8b3-bfa7526ca74d
+govnotify.template.respondentEvidenceSubmittedTemplateId: b71b11f6-c485-45a2-a162-c2310a094821
 
 hearingCentreEmailAddresses:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:TCWBradfordIA@example.com}
@@ -109,6 +110,11 @@ security:
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
+    caseworker-ia-homeofficeapc:
+      - "uploadHomeOfficeBundle"
+    caseworker-ia-respondentofficer:
+      - "uploadHomeOfficeBundle"
+      - "addAppealResponse"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

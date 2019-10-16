@@ -2,10 +2,10 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
@@ -111,6 +111,18 @@ public class NotificationHandlerConfiguration {
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.UPLOAD_RESPONDENT_EVIDENCE,
             notificationGenerator
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> respondentEvidenceSubmittedHandler(
+            @Qualifier("respondentEvidenceSubmitted") NotificationGenerator notificationGenerator
+    ) {
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.UPLOAD_HOME_OFFICE_BUNDLE,
+                notificationGenerator
         );
     }
 

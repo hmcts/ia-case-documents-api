@@ -159,4 +159,17 @@ public class NotificationGeneratorConfiguration {
             notificationIdAppender
         );
     }
+
+    @Bean("respondentEvidenceSubmitted")
+    public NotificationGenerator respondentEvidenceSubmitted(
+            CaseOfficerRespondentEvidenceSubmittedPersonalisation caseOfficerRespondentEvidenceSubmittedPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+        return new NotificationGenerator(
+                newArrayList(caseOfficerRespondentEvidenceSubmittedPersonalisation),
+                notificationSender,
+                notificationIdAppender
+        );
+    }
 }

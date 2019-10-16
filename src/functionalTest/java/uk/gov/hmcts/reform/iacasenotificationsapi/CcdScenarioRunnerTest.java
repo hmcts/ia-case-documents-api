@@ -281,6 +281,12 @@ public class CcdScenarioRunnerTest {
                 .getAdminOfficerAuthorization();
         }
 
+        if ("HomeOfficeAPC".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getHomeOfficeApcAuthorization();
+        }
+
         return new Headers();
     }
 }

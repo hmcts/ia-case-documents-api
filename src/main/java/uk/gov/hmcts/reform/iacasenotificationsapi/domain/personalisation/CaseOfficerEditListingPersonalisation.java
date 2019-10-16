@@ -5,12 +5,11 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 
 import com.google.common.collect.ImmutableMap;
-
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
@@ -41,7 +40,6 @@ public class CaseOfficerEditListingPersonalisation implements NotificationPerson
         this.dateTimeExtractor = dateTimeExtractor;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
     }
-
 
     @Override
     public String getTemplateId() {
