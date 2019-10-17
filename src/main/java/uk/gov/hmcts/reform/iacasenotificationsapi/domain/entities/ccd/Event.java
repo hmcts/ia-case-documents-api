@@ -27,6 +27,7 @@ public enum Event {
     END_APPEAL("endAppeal"),
     RECORD_APPLICATION("recordApplication"),
 
+
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
 
