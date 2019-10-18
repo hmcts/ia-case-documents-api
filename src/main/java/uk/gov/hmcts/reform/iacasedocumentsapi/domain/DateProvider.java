@@ -8,4 +8,5 @@ public interface DateProvider {
     LocalDate now();
 
     LocalDateTime nowWithTime();
+    
 }
