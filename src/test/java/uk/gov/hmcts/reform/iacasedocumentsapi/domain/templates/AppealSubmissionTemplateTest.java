@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +42,10 @@ public class AppealSubmissionTemplateTest {
     private String legalRepReferenceNumber = "OUR-REF";
     private String homeOfficeReferenceNumber = "A1234567/001";
     private String homeOfficeDecisionDate = "2020-12-23";
+    private String appealSubmissionDate = "2019-10-17";
+    private String legalRepresentativeEmailAddress = "legalrep@office.com";
+    private String legalRepName = "legaRepName";
+    private String legalRepCompany = "legaRepCompany";
     private String appellantGivenNames = "Talha";
     private String appellantFamilyName = "Awan";
     private String appellantDateOfBirth = "1999-12-31";
@@ -57,21 +60,21 @@ public class AppealSubmissionTemplateTest {
     private String newMatters = "Some new matters";
 
     private List<String> appealGroundsForDisplay = Arrays.asList(
-        "protectionRefugeeConvention",
-        "protectionHumanRights"
+            "protectionRefugeeConvention",
+            "protectionHumanRights"
     );
 
     private List<IdValue<Map<String, String>>> appellantNationalities =
-        Arrays.asList(
-            new IdValue<>("111", ImmutableMap.of("code", "IS")),
-            new IdValue<>("222", ImmutableMap.of("code", "FI"))
-        );
+            Arrays.asList(
+                    new IdValue<>("111", ImmutableMap.of("code", "IS")),
+                    new IdValue<>("222", ImmutableMap.of("code", "FI"))
+            );
 
     private List<IdValue<Map<String, String>>> otherAppeals =
-        Arrays.asList(
-            new IdValue<>("333", ImmutableMap.of("value", "1234")),
-            new IdValue<>("444", ImmutableMap.of("value", "5678"))
-        );
+            Arrays.asList(
+                    new IdValue<>("333", ImmutableMap.of("value", "1234")),
+                    new IdValue<>("444", ImmutableMap.of("value", "5678"))
+            );
 
     private String outOfTimeExplanation = "someOutOfTimeExplanation";
     private String outOfTimeDocumentFileName = "someOutOfTimeDocument.pdf";
@@ -82,10 +85,10 @@ public class AppealSubmissionTemplateTest {
     public void setUp() {
 
         appealSubmissionTemplate =
-            new AppealSubmissionTemplate(
-                templateName,
-                stringProvider
-            );
+                new AppealSubmissionTemplate(
+                        templateName,
+                        stringProvider
+                );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getCreatedDate()).thenReturn(createdDate);
@@ -104,15 +107,15 @@ public class AppealSubmissionTemplateTest {
 
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_ADDRESS)).thenReturn(Optional.of(
-            new AddressUk(
-                appellantAddressLine1,
-                appellantAddressLine2,
-                appellantAddressLine3,
-                appellantAddressPostTown,
-                appellantAddressCounty,
-                appellantAddressPostCode,
-                appellantAddressCountry
-            )
+                new AddressUk(
+                        appellantAddressLine1,
+                        appellantAddressLine2,
+                        appellantAddressLine3,
+                        appellantAddressPostTown,
+                        appellantAddressCounty,
+                        appellantAddressPostCode,
+                        appellantAddressCountry
+                )
         ));
 
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
@@ -140,7 +143,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(18, templateFieldValues.size());
+        assertEquals(23, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("31122020", templateFieldValues.get("CREATED_DATE"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
@@ -184,7 +187,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(17, templateFieldValues.size());
+        assertEquals(22, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appealType"));
     }
 
@@ -195,7 +198,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(17, templateFieldValues.size());
+        assertEquals(22, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appellantAddress"));
     }
 
@@ -207,6 +210,10 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
@@ -221,7 +228,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(16, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
 
         assertFalse(templateFieldValues.containsKey("appealType"));
         assertFalse(templateFieldValues.containsKey("appellantAddress"));

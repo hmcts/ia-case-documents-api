@@ -5,6 +5,8 @@
   "appellantGivenNames": "Talha",
   "appellantFamilyName": "Awan",
   "appellantDateOfBirth": "{$TODAY-7300}",
+  "legalRepName": "RS John",
+  "legalRepCompany": "RS Consulting",
   "appellantNationalities": [
     {
       "id": "1",

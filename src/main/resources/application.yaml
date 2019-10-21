@@ -18,7 +18,7 @@ spring:
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
 appealSubmissionDocument.fileName: "appeal-form"
-appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00063.docx}
+appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00122.docx}
 
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
