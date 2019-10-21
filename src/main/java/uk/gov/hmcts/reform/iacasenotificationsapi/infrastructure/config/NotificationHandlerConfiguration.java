@@ -127,6 +127,18 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> requestCaseBuildingNotificationHandler(
+            @Qualifier("requestCaseBuildingNotificationGenerator") NotificationGenerator notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.REQUEST_CASE_BUILDING,
+                notificationGenerator
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> sendDirectionNotificationHandler(
         @Qualifier("sendDirectionNotificationGenerator") NotificationGenerator notificationGenerator,
         DirectionFinder directionFinder) {

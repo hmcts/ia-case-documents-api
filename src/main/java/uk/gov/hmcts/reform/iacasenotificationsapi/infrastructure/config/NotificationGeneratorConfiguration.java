@@ -172,4 +172,17 @@ public class NotificationGeneratorConfiguration {
                 notificationIdAppender
         );
     }
+
+    @Bean("requestCaseBuildingNotificationGenerator")
+    public NotificationGenerator requestCaseBuildingNotificationGenerator(
+            LegalRepresentativeRequestCaseBuildingPersonalisation legalRepresentativeRequestCaseBuildingPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+                newArrayList(legalRepresentativeRequestCaseBuildingPersonalisation),
+                notificationSender,
+                notificationIdAppender
+        );
+    }
 }
