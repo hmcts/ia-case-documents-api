@@ -14,9 +14,10 @@ public class GovNotifyConfiguration {
     @Bean
     @Primary
     public NotificationClient notificationClient(
-        @Value("${govnotify.key}") String key
+        @Value("${govnotify.key}") String key,
+        @Value("${govnotify.baseUrl}") String goveNotifyBAseUrl
     ) {
         requireNonNull(key);
-        return new NotificationClient(key);
+        return new NotificationClient(key, goveNotifyBAseUrl);
     }
 }

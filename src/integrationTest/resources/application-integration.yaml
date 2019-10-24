@@ -4,3 +4,7 @@ respondentEmailAddresses:
   nonStandardDirectionUntilListing: not-used-in-integration
   respondentEvidenceDirection: not-used-in-integration
   respondentReviewDirection: not-used-in-integration
+
+security:
+  authorisedServices:
+    - "ia"
