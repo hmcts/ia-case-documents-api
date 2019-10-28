@@ -38,4 +38,4 @@ echo "./zap-known-issues.xml"
 echo
 echo and commit the change
 
-zap-cli -p 1001 alerts -l Informational
+zap-cli --zap-url http://0.0.0.0 -p 1001 alerts -l Informational --exit-code False
