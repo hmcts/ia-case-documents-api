@@ -9,16 +9,19 @@ zap-api-scan.py -t ${TEST_URL}/v2/api-docs -f openapi -P 1001
 cat zap.out
 zap-cli --zap-url http://0.0.0.0 -p 1001 report -o /zap/api-report.xml -f xml
 zap-cli --zap-url http://0.0.0.0 -p 1001 report -o /zap/api-report.html -f html
+curl --fail http://0.0.0.0:1001/OTHER/core/other/jsonreport/?formMethod=GET --output report.json
+
 echo "listings of zap folder"
 cat /zap/api-report.xml
 ls -la /zap
 cp /zap/api-report.html functional-output/
 cp /zap/api-report.xml functional-output/
+cp report.json functional-output/
 
 if [ -f zap-known-issues.xml ]; then
   if diff -q zap-known-issues.xml functional-output/api-report.xml --ignore-all-space --ignore-matching-lines=OWASPZAPReport > /dev/null 2>&1; then
     echo
-    echo Ignorning known vulnerabilities
+    echo Ignoring known vulnerabilities
     exit 0
   fi
 fi
