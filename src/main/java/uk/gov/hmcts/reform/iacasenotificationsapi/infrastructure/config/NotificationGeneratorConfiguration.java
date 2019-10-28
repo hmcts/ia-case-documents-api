@@ -160,16 +160,29 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("uploadHomeOfficeAppealResponseNotificationGenerator")
+    public NotificationGenerator uploadHomeOfficeAppealResponseNotificationGenerator(
+        CaseOfficerHomeOfficeResponseUploadedPersonalisation caseOfficerHomeOfficeResponseUploadedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+            newArrayList(caseOfficerHomeOfficeResponseUploadedPersonalisation),
+            notificationSender,
+            notificationIdAppender
+        );
+    }
+
     @Bean("respondentEvidenceSubmitted")
     public NotificationGenerator respondentEvidenceSubmitted(
-            CaseOfficerRespondentEvidenceSubmittedPersonalisation caseOfficerRespondentEvidenceSubmittedPersonalisation,
-            NotificationSender notificationSender,
-            NotificationIdAppender notificationIdAppender
+        CaseOfficerRespondentEvidenceSubmittedPersonalisation caseOfficerRespondentEvidenceSubmittedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
     ) {
         return new NotificationGenerator(
-                newArrayList(caseOfficerRespondentEvidenceSubmittedPersonalisation),
-                notificationSender,
-                notificationIdAppender
+            newArrayList(caseOfficerRespondentEvidenceSubmittedPersonalisation),
+            notificationSender,
+            notificationIdAppender
         );
     }
 

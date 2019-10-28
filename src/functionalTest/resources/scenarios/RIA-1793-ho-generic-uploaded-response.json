@@ -1,0 +1,46 @@
+{
+  "description": "RIA-1793 Home Office Generic user uploaded response",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "HomeOfficeGeneric",
+    "input": {
+      "id": 1003,
+      "eventId": "uploadHomeOfficeAppealResponse",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "1003_UPLOADED_HO_RESPONSE_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1003_UPLOADED_HO_RESPONSE_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Home Office response uploaded",
+        "body": [
+          "HMCTS appeal reference number: PA/12345/2019",
+          "The respondent has uploaded their response",
+          "Check the response, and if it complies with the Procedure Rules and Practice Directions, you should direct the appellant to review it.",
+          "If it does not comply, you should direct the respondent to make the appropriate changes.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

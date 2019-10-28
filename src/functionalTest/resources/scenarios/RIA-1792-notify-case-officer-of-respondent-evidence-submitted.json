@@ -2,7 +2,7 @@
   "description": "RIA-1792 Notify case officer of respondent evidence submitted",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "HomeOfficeAPC",
+    "credentials": "HomeOfficeApc",
     "input": {
       "id": 1792,
       "eventId": "uploadHomeOfficeBundle",

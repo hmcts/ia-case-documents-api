@@ -214,4 +214,16 @@ public class NotificationHandlerConfiguration {
             notificationGenerator
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> uploadHomeOfficeAppealResponseNotificationHandler(
+        @Qualifier("uploadHomeOfficeAppealResponseNotificationGenerator") NotificationGenerator notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.UPLOAD_HOME_OFFICE_APPEAL_RESPONSE,
+            notificationGenerator
+        );
+    }
 }

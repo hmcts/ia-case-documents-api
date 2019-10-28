@@ -27,6 +27,7 @@ public enum Event {
     END_APPEAL("endAppeal"),
     RECORD_APPLICATION("recordApplication"),
     REQUEST_CASE_BUILDING("requestCaseBuilding"),
+    UPLOAD_HOME_OFFICE_APPEAL_RESPONSE("uploadHomeOfficeAppealResponse"),
 
 
     @JsonEnumDefaultValue
