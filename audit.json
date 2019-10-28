@@ -1,1 +1,8 @@
-{}
+[
+  "10021_X-Content-Type-Options Header Missing_http://ia-case-documents-api-aat.service.core-compute-aat.internal/v2/api-docs_GET",
+  "10021_X-Content-Type-Options Header Missing_http://ia-case-documents-api-aat.service.core-compute-aat.internal/_GET",
+  "100000_A Client Error response code was returned by the server_http://ia-case-documents-api-aat.service.core-compute-aat.internal/asylum/ccdAboutToStart_POST",
+  "100000_A Client Error response code was returned by the server_http://ia-case-documents-api-aat.service.core-compute-aat.internal/asylum/ccdAboutToSubmit_POST",
+  "90022_Application Error Disclosure_http://ia-case-documents-api-aat.service.core-compute-aat.internal/v2/api-docs_GET",
+  "10023_Information Disclosure - Debug Error Messages_http://ia-case-documents-api-aat.service.core-compute-aat.internal/v2/api-docs_GET"
+]
