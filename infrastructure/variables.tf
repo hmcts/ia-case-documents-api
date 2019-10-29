@@ -56,3 +56,7 @@ variable "log_level_ia" {
 variable "consul_dns_resource_group_name" {
   type = "string"
 }
+
+variable "enable_ase" {
+  default = false
+}
