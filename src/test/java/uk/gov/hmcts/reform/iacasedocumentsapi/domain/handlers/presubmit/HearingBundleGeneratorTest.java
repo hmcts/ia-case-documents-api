@@ -4,13 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
@@ -31,7 +33,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BundleOrder;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 @RunWith(MockitoJUnitRunner.class)

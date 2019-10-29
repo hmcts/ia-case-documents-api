@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -21,7 +20,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BundleOrder;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 @Component
 public class HearingBundleGenerator implements PreSubmitCallbackHandler<AsylumCase> {

@@ -7,20 +7,20 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixture
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder.userWith;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.DECISION_AND_REASONS_DRAFT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.DECISION;
 
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WiremockSpringBootIntegrationTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
-public class GenerateDecisionAndReasonsTest extends SpringBootIntegrationTest {
+public class GenerateDecisionAndReasonsTestWiremock extends WiremockSpringBootIntegrationTest {
 
     @Test
     public void generates_decision_and_reasons() {
