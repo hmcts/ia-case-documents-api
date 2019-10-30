@@ -17,6 +17,7 @@ spring:
     allow-bean-definition-overriding: true
 
 govnotify.key: ${IA_GOV_NOTIFY_KEY}
+govnotify.template.responseReviewDirection: e3e36c28-b16a-4e85-b8e1-dbb7f6771181
 govnotify.template.buildCaseDirection: 13a6331e-b0f5-4e64-ae1b-dc2c2fd0aeeb
 govnotify.template.appealSubmittedCaseOfficer: 23769f75-673c-4682-8433-d751e540e730
 govnotify.template.respondentEvidenceDirection: a1fee4a6-6650-4d91-8f9e-cd15944adef4
@@ -112,6 +113,7 @@ security:
       - "endAppeal"
       - "recordApplication"
       - "requestCaseBuilding"
+      - "requestResponseReview"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

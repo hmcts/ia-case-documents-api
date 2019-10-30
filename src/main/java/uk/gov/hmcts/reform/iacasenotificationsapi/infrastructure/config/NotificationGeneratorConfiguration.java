@@ -173,6 +173,32 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("requestCaseBuildingNotificationGenerator")
+    public NotificationGenerator requestCaseBuildingNotificationGenerator(
+        LegalRepresentativeRequestCaseBuildingPersonalisation legalRepresentativeRequestCaseBuildingPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+            newArrayList(legalRepresentativeRequestCaseBuildingPersonalisation),
+            notificationSender,
+            notificationIdAppender
+        );
+    }
+
+    @Bean("requestResponseReviewNotificationGenerator")
+    public NotificationGenerator requestResponseReviewNotificationGenerator(
+        LegalRepresentativeRequestResponseReviewPersonalisation legalRepresentativeRequestResponseReviewPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+            newArrayList(legalRepresentativeRequestResponseReviewPersonalisation),
+            notificationSender,
+            notificationIdAppender
+        );
+    }
+
     @Bean("respondentEvidenceSubmitted")
     public NotificationGenerator respondentEvidenceSubmitted(
         CaseOfficerRespondentEvidenceSubmittedPersonalisation caseOfficerRespondentEvidenceSubmittedPersonalisation,
@@ -183,19 +209,6 @@ public class NotificationGeneratorConfiguration {
             newArrayList(caseOfficerRespondentEvidenceSubmittedPersonalisation),
             notificationSender,
             notificationIdAppender
-        );
-    }
-
-    @Bean("requestCaseBuildingNotificationGenerator")
-    public NotificationGenerator requestCaseBuildingNotificationGenerator(
-            LegalRepresentativeRequestCaseBuildingPersonalisation legalRepresentativeRequestCaseBuildingPersonalisation,
-            NotificationSender notificationSender,
-            NotificationIdAppender notificationIdAppender) {
-
-        return new NotificationGenerator(
-                newArrayList(legalRepresentativeRequestCaseBuildingPersonalisation),
-                notificationSender,
-                notificationIdAppender
         );
     }
 }

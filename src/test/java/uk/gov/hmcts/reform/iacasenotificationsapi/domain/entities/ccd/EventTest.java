@@ -31,12 +31,13 @@ public class EventTest {
         assertEquals("recordApplication", Event.RECORD_APPLICATION.toString());
         assertEquals("requestCaseBuilding", Event.REQUEST_CASE_BUILDING.toString());
         assertEquals("uploadHomeOfficeAppealResponse", Event.UPLOAD_HOME_OFFICE_APPEAL_RESPONSE.toString());
+        assertEquals("requestResponseReview", Event.REQUEST_RESPONSE_REVIEW.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
 
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(25, Event.values().length);
+        assertEquals(26, Event.values().length);
     }
 }
