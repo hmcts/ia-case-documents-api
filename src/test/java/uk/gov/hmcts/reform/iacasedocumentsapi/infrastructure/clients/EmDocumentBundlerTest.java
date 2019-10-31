@@ -173,12 +173,13 @@ public class EmDocumentBundlerTest {
             bundleFilename
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
-            .hasMessage("Bundle was not created");
+            .hasMessage("Bundle was not created")
+            .hasFieldOrProperty("bundlingServiceResponse");
 
     }
 
     @Test
-    public void should_throw_if_no_stitched_document_returned() {
+    public void should_throw_if_empty_stitched_document_returned() {
 
         List<IdValue<Bundle>> bundleIdValues =
             ImmutableList.of(new IdValue<>("1", bundle));
@@ -215,7 +216,9 @@ public class EmDocumentBundlerTest {
             bundleFilename
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
-            .hasMessage("Stitched document was not created");
+            .hasMessage("Stitched document was not created")
+            .hasFieldOrProperty("bundlingServiceResponse");
     }
 
 }
+

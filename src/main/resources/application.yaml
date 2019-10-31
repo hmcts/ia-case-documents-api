@@ -114,8 +114,6 @@ security:
       - "listCase"
       - "editCaseListing"
 
-
-
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
 auth.idam.client.detailsUri: "/details"

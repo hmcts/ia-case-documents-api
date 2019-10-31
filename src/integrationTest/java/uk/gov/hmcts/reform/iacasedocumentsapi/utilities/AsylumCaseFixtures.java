@@ -1,12 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.utilities;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION;
 
 import java.time.LocalDateTime;
 import org.apache.commons.lang.RandomStringUtils;
+import org.assertj.core.util.Lists;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 public class AsylumCaseFixtures {
@@ -40,7 +44,27 @@ public class AsylumCaseFixtures {
         asylumCase.write(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, someString());
         asylumCase.write(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, someString());
 
+        asylumCase.write(HEARING_DOCUMENTS,
+            Lists.newArrayList(
+                new IdValue<>("1", someDocumentWithMetadataWithDefaults(DocumentTag.CASE_SUMMARY)),
+                new IdValue<>("2", someDocumentWithMetadataWithDefaults(DocumentTag.HEARING_NOTICE))
+            )
+        );
+
         return asylumCase;
+    }
+
+    public static DocumentWithMetadata someDocumentWithMetadataWithDefaults(DocumentTag documentTag) {
+        return new DocumentWithMetadata(someDocumentWithDefaults(),
+            "some-description",
+            "",
+            documentTag);
+    }
+
+    public static Document someDocumentWithDefaults() {
+        return new Document("some-doc-url",
+            "some-doc-bin-url",
+            "some-filename");
     }
 
     private static String someDate() {
@@ -53,54 +77,54 @@ public class AsylumCaseFixtures {
 
     public static String someUploadResponse() {
         return "{\n"
-                +
-                "  \"_embedded\": {\n"
-                +
-                "    \"documents\": [\n"
-                +
-                "      {\n"
-                +
-                "        \"originalDocumentName\": \"some-document-name\",\n"
-                +
-                "        \"_links\": {\n"
-                +
-                "          \"self\": {\n"
-                +
-                "            \"href\": \"\"\n"
-                +
-                "          },\n"
-                +
-                "          \"binary\": {\n"
-                +
-                "            \"href\": \"\"\n"
-                +
-                "          }\n"
-                +
-                "      }\n"
-                +
-                "    }\n"
-                +
-                "    ]\n"
-                +
-                "  }\n"
-                +
-                "}\n";
+               +
+               "  \"_embedded\": {\n"
+               +
+               "    \"documents\": [\n"
+               +
+               "      {\n"
+               +
+               "        \"originalDocumentName\": \"some-document-name\",\n"
+               +
+               "        \"_links\": {\n"
+               +
+               "          \"self\": {\n"
+               +
+               "            \"href\": \"\"\n"
+               +
+               "          },\n"
+               +
+               "          \"binary\": {\n"
+               +
+               "            \"href\": \"\"\n"
+               +
+               "          }\n"
+               +
+               "      }\n"
+               +
+               "    }\n"
+               +
+               "    ]\n"
+               +
+               "  }\n"
+               +
+               "}\n";
     }
 
     public static String someUserDetails() {
         return "{\n"
-                +
-                "  \"id\": \"1\",\n"
-                +
-                "  \"roles\": [\"caseworker-ia-caseofficer\"],\n"
-                +
-                "  \"email\": \"someone@somewhere.com\",\n"
-                +
-                "  \"forename\": \"some-fname\",\n"
-                +
-                "  \"surname\": \"some-sname\"\n"
-                +
-                "}";
+               +
+               "  \"id\": \"1\",\n"
+               +
+               "  \"roles\": [\"caseworker-ia-caseofficer\"],\n"
+               +
+               "  \"email\": \"someone@somewhere.com\",\n"
+               +
+               "  \"forename\": \"some-fname\",\n"
+               +
+               "  \"surname\": \"some-sname\"\n"
+               +
+               "}";
     }
 
     private AsylumCaseFixtures() {

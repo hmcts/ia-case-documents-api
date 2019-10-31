@@ -1,2 +1,6 @@
 docmosis.accessKey: unused
 docmosis.endpoint: unused
+
+security:
+  authorisedServices:
+    - "ia"

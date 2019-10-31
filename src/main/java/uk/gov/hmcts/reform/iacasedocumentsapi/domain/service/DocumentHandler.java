@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
