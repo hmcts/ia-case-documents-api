@@ -121,6 +121,7 @@ public class CcdScenarioRunnerTest {
                     .body(requestBody)
                     .when()
                     .post(requestUri)
+                    .peek()
                     .then()
                     .statusCode(expectedStatus)
                     .and()
@@ -132,8 +133,6 @@ public class CcdScenarioRunnerTest {
                 MapValueExtractor.extract(scenario, "expectation"),
                 templatesByFilename
             );
-
-            System.out.println("Actual Response: " + actualResponseBody);
 
             Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
             Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
