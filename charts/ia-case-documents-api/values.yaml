@@ -1,6 +1,7 @@
 java:
   image: 'https://hmctspublic.azurecr.io/ia/case-documents-api:latest'
   applicationPort: 8092
+  aadIdentityName: ia
   keyVaults:
     ia:
       resourceGroup: ia
@@ -22,3 +23,5 @@ java:
         - em-bundler-stitch-uri
         - docmosis-access-key
         - docmosis-url
+        - AppInsightsInstrumentationKey
+
