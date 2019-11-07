@@ -16,6 +16,9 @@ public enum AsylumCaseDefinition {
     HOME_OFFICE_DECISION_DATE(
             "homeOfficeDecisionDate", new TypeReference<String>(){}),
 
+    APPELLANT_TITLE(
+            "appellantTitle", new TypeReference<String>(){}),
+
     APPELLANT_GIVEN_NAMES(
             "appellantGivenNames", new TypeReference<String>(){}),
 
@@ -37,6 +40,9 @@ public enum AsylumCaseDefinition {
     APPEAL_TYPE(
             "appealType", new TypeReference<String>(){}),
 
+    APPEAL_SUBMISSION_DATE(
+            "appealSubmissionDate", new TypeReference<String>(){}),
+
     NEW_MATTERS(
             "newMatters", new TypeReference<String>(){}),
 
@@ -54,6 +60,15 @@ public enum AsylumCaseDefinition {
 
     HEARING_DOCUMENTS(
             "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LEGAL_REPRESENTATIVE_EMAIL_ADDRESS(
+            "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
+
+    LEGAL_REP_NAME(
+            "legalRepName", new TypeReference<String>(){}),
+
+    LEGAL_REP_COMPANY(
+            "legalRepCompany", new TypeReference<String>(){}),
 
     LEGAL_REPRESENTATIVE_DOCUMENTS(
             "legalRepresentativeDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
