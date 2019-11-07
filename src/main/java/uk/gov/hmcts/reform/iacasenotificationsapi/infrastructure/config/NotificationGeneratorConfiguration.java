@@ -54,6 +54,19 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("submitCaseNotificationGenerator")
+    public NotificationGenerator submitCaseNotificationGenerator(
+        CaseOfficerSubmitCasePersonalisation caseOfficerSubmitCasePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+            newArrayList(caseOfficerSubmitCasePersonalisation),
+            notificationSender,
+            notificationIdAppender
+        );
+    }
+
     @Bean("uploadRespondentNotificationGenerator")
     public NotificationGenerator uploadRespondentNotificationGenerator(
         LegalRepresentativeUploadRespondentEvidencePersonalisation legalRepresentativeUploadRespondentEvidencePersonalisation,

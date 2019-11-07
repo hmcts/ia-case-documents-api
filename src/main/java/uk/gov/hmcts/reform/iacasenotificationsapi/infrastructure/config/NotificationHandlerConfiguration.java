@@ -103,6 +103,18 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitCaseNotificationHandler(
+        @Qualifier("submitCaseNotificationGenerator") NotificationGenerator notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.SUBMIT_CASE,
+            notificationGenerator
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> uploadRespondentNotificationHandler(
         @Qualifier("uploadRespondentNotificationGenerator") NotificationGenerator notificationGenerator) {
 

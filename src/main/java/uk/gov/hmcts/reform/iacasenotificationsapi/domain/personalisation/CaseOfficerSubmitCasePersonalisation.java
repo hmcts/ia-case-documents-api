@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,22 +13,23 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
-public class CaseOfficerRespondentEvidenceSubmittedPersonalisation implements NotificationPersonalisation {
+public class CaseOfficerSubmitCasePersonalisation implements NotificationPersonalisation {
 
-    private final String respondentEvidenceSubmittedTemplateId;
+    private final String submitCaseCaseOfficerTemplateId;
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
-    public CaseOfficerRespondentEvidenceSubmittedPersonalisation(
-        @NotNull(message = "respondentEvidenceSubmittedTemplateId cannot be null") @Value("${govnotify.template.respondentEvidenceSubmittedTemplateId}") String respondentEvidenceSubmittedTemplateId,
+    public CaseOfficerSubmitCasePersonalisation(
+        @Value("${govnotify.template.caseOfficerSubmitCase}") String submitCaseCaseOfficerTemplateId,
         Map<HearingCentre, String> hearingCentreEmailAddresses
     ) {
-        this.respondentEvidenceSubmittedTemplateId = respondentEvidenceSubmittedTemplateId;
+
+        this.submitCaseCaseOfficerTemplateId = submitCaseCaseOfficerTemplateId;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
     }
 
     @Override
     public String getTemplateId() {
-        return respondentEvidenceSubmittedTemplateId;
+        return submitCaseCaseOfficerTemplateId;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisation implements No
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_RESPONDENT_EVIDENCE_SUBMITTED_CASE_OFFICER";
+        return caseId + "_CASE_SUBMITTED_CASE_OFFICER";
     }
 
     @Override
@@ -51,6 +51,8 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisation implements No
             ImmutableMap
                 .<String, String>builder()
                 .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .build();
     }
 }

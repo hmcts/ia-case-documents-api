@@ -25,6 +25,7 @@ govnotify.template.legalRepresentativeReviewDirection: 75c6c191-083d-43a4-8811-f
 govnotify.template.respondentNonStandardDirection: 2e0dd0af-12d2-4a37-9bd1-dabdda1959bf
 govnotify.template.respondentReviewDirection: a0e0018c-44ef-4a77-a9d5-c036faad29a1
 govnotify.template.legalRepresentativeHearingRequirementsDirection: e6694559-38be-46a5-9894-9498b047e2c6
+govnotify.template.caseOfficerSubmitCase: f6c5ad6b-d585-4421-a93f-c36126f3c4ce
 govnotify.template.caseOfficerCaseListed: 58eab057-b5c0-4a69-8f71-a21d6f02da3d
 govnotify.template.legalRepresentativeCaseListed: b87a1e5b-eec7-4268-a326-059893ab5c28
 govnotify.template.homeOfficeCaseListed: 86936ac9-e8d0-4a4c-8169-0948d7fb7935
