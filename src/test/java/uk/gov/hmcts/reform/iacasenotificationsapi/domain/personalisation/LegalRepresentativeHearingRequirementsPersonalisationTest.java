@@ -7,12 +7,13 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 
 import java.util.Map;
 import java.util.Optional;
-
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
@@ -98,13 +99,7 @@ public class LegalRepresentativeHearingRequirementsPersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(appellantGivenNames, personalisation.get("Given names"));
-        assertEquals(appellantFamilyName, personalisation.get("Family name"));
-        assertEquals(iaCcdFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals(legalRepRefNumber, personalisation.get("LR reference"));
+        Assertions.assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 
     @Test
@@ -117,13 +112,7 @@ public class LegalRepresentativeHearingRequirementsPersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals("", personalisation.get("Appeal Ref Number"));
-        assertEquals("", personalisation.get("Given names"));
-        assertEquals("", personalisation.get("Family name"));
-        assertEquals(iaCcdFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals("", personalisation.get("LR reference"));
+        Assertions.assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 
     @Test

@@ -9,26 +9,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
 public class CaseOfficerSubmitAppealPersonalisation implements NotificationPersonalisation {
 
     private final String appealSubmittedCaseOfficerTemplateId;
-    private final Map<HearingCentre, String> hearingCentreEmailAddresses;
     private final String iaCcdFrontendUrl;
+    private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerSubmitAppealPersonalisation(
         @Value("${govnotify.template.appealSubmittedCaseOfficer}") String appealSubmittedCaseOfficerTemplateId,
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
-        Map<HearingCentre, String> hearingCentreEmailAddresses
+        EmailAddressFinder emailAddressFinder
     ) {
         requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
 
         this.appealSubmittedCaseOfficerTemplateId = appealSubmittedCaseOfficerTemplateId;
         this.iaCcdFrontendUrl = iaCcdFrontendUrl;
-        this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class CaseOfficerSubmitAppealPersonalisation implements NotificationPerso
     @Override
     public String getEmailAddress(AsylumCase asylumCase) {
 
-        return new EmailAddressFinder(hearingCentreEmailAddresses).getEmailAddress(asylumCase);
+        return emailAddressFinder.getEmailAddress(asylumCase);
     }
 
     @Override

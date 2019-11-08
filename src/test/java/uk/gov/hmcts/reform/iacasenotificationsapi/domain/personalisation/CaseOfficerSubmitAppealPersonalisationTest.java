@@ -14,20 +14,19 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class CaseOfficerSubmitAppealPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
-    @Mock Map<HearingCentre, String> hearingCentreEmailAddressMap;
+    @Mock EmailAddressFinder emailAddressFinder;
 
     private Long caseId = 12345L;
     private String iaFrontendCcdUrl = "http://somefrontendyurl";
     private String templateId = "someTemplateId";
 
-    private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
 
     private String appealReferenceNumber = "someReferenceNumber";
@@ -38,19 +37,16 @@ public class CaseOfficerSubmitAppealPersonalisationTest {
 
     @Before
     public void setup() {
-
-        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
+        when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
-        when(hearingCentreEmailAddressMap.get(hearingCentre)).thenReturn(hearingCentreEmailAddress);
-
         caseOfficerSubmitAppealPersonalisation = new CaseOfficerSubmitAppealPersonalisation(
             templateId,
             iaFrontendCcdUrl,
-            hearingCentreEmailAddressMap
+            emailAddressFinder
         );
     }
 
@@ -67,24 +63,6 @@ public class CaseOfficerSubmitAppealPersonalisationTest {
     @Test
     public void should_return_given_email_address_from_lookup_map() {
         assertEquals(hearingCentreEmailAddress, caseOfficerSubmitAppealPersonalisation.getEmailAddress(asylumCase));
-    }
-
-    @Test
-    public void should_throw_exception_on_email_address_when_hearing_centre_is_empty() {
-        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> caseOfficerSubmitAppealPersonalisation.getEmailAddress(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingCentre is not present");
-    }
-
-    @Test
-    public void should_throw_exception_when_cannot_find_email_address_for_hearing_centre() {
-        when(hearingCentreEmailAddressMap.get(hearingCentre)).thenReturn(null);
-
-        assertThatThrownBy(() -> caseOfficerSubmitAppealPersonalisation.getEmailAddress(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("Hearing centre email address not found: " + hearingCentre.toString());
     }
 
     @Test

@@ -238,4 +238,19 @@ public class NotificationGeneratorConfiguration {
             notificationIdAppender
         );
     }
+
+    @Bean("hearingBundleReadyNotificationGenerator")
+    public NotificationGenerator hearingBundleReadyNotificationGenerator(
+            HomeOfficeHearingBundleReadyPersonalisation homeOfficeHearingBundleReadyPersonalisation,
+            LegalRepresentativeHearingBundleReadyPersonalisation legalRepresentativeHearingBundleReadyPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+                newArrayList(homeOfficeHearingBundleReadyPersonalisation, legalRepresentativeHearingBundleReadyPersonalisation),
+                notificationSender,
+                notificationIdAppender
+
+        );
+    }
 }

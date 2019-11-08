@@ -262,4 +262,16 @@ public class NotificationHandlerConfiguration {
             notificationGenerator
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> hearingBundleReadyNotificationHandler(
+            @Qualifier("hearingBundleReadyNotificationGenerator") NotificationGenerator notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.GENERATE_HEARING_BUNDLE,
+            notificationGenerator
+        );
+    }
 }

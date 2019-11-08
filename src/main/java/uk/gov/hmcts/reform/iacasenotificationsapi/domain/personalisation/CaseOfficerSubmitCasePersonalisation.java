@@ -9,22 +9,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
 public class CaseOfficerSubmitCasePersonalisation implements NotificationPersonalisation {
 
     private final String submitCaseCaseOfficerTemplateId;
-    private final Map<HearingCentre, String> hearingCentreEmailAddresses;
+    private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerSubmitCasePersonalisation(
         @Value("${govnotify.template.caseOfficerSubmitCase}") String submitCaseCaseOfficerTemplateId,
-        Map<HearingCentre, String> hearingCentreEmailAddresses
+        EmailAddressFinder emailAddressFinder
     ) {
 
         this.submitCaseCaseOfficerTemplateId = submitCaseCaseOfficerTemplateId;
-        this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class CaseOfficerSubmitCasePersonalisation implements NotificationPersona
     @Override
     public String getEmailAddress(AsylumCase asylumCase) {
 
-        return new EmailAddressFinder(hearingCentreEmailAddresses).getEmailAddress(asylumCase);
+        return emailAddressFinder.getEmailAddress(asylumCase);
     }
 
     @Override
