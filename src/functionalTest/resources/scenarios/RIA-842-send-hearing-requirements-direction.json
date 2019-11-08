@@ -23,7 +23,7 @@
             }
           ],
           "notificationsSent": [],
-          "legalRepresentativeEmailAddress": "RIA-842-test-case-1@example.com"
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
         }
       }
     }
@@ -52,13 +52,13 @@
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
-        "legalRepresentativeEmailAddress": "RIA-842-test-case-1@example.com"
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
       }
     },
     "notifications": [
       {
         "reference": "1007_LEGAL_REPRESENTATIVE_HEARING_REQUIREMENTS_DIRECTION",
-        "recipient": "RIA-842-test-case-1@example.com",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Asylum appeal direction: submit hearing requirements",
         "body": [
           "Appeal reference number: PA/12345/2019",

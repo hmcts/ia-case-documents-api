@@ -26,6 +26,20 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("appealOutcomeNotificationGenerator")
+    public NotificationGenerator appealOutcomeNotificationGenerator(
+        HomeOfficeAppealOutcomePersonalisation homeOfficeAppealOutcomePersonalisation,
+        LegalRepresentativeAppealOutcomePersonalisation legalRepresentativeAppealOutcomePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+            newArrayList(homeOfficeAppealOutcomePersonalisation, legalRepresentativeAppealOutcomePersonalisation),
+            notificationSender,
+            notificationIdAppender
+        );
+    }
+
     @Bean("listCaseNotificationGenerator")
     public NotificationGenerator listCaseNotificationGenerator(
         CaseOfficerListCasePersonalisation caseOfficerListCasePersonalisation,

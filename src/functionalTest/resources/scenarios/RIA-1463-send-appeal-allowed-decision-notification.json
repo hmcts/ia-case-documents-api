@@ -1,0 +1,75 @@
+{
+  "description": "RIA-1463 Send appeal (allowed) decision notification to Home Office and Legal Representative",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1001,
+      "eventId": "sendDecisionAndReasons",
+      "state": "decided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isDecisionAllowed": "allowed",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isDecisionAllowed": "allowed",
+        "notificationsSent": [
+          {
+            "id": "1001_APPEAL_OUTCOME_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1001_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1001_APPEAL_OUTCOME_HOME_OFFICE",
+        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The Tribunal has made a decision about this appeal",
+          "The appeal has been allowed.",
+          "The grounds for this decision are explained in the Decision and Reasons document.",
+          "Next steps",
+          "Visit the online service and use the reference given in this email to find the case. You can then view and download the Decision and Reasons document from the Documents tab.",
+          "If you think there's a legal error in the Tribunal's decision, you can ask for permission to appeal to the Upper Tribunal (Immigration and Asylum Chamber).",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "1001_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Your reference: CASE001",
+          "Appellant name: Talha Awan",
+          "The Tribunal has made a decision about this appeal",
+          "The appeal has been allowed.",
+          "The grounds for this decision are explained in the Decision and Reasons document. If the appeal has been allowed on some grounds and dismissed on others, overall this means the appeal is allowed and, unless the Home Office appeals, the decision should be implemented.",
+          "Next steps",
+          "Visit the online service and use the reference given in this email to find the case. You can then view and download the Decision and Reasons document from the Documents tab.",
+          "If the Home Office thinks there's a legal error in the Tribunal's decision, they can ask for permission to appeal to the Upper Tribunal (Immigration and Asylum Chamber). You'll be notified if the Home Office asks for permission to appeal.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

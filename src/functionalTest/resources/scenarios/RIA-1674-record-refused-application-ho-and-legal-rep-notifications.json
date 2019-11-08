@@ -44,7 +44,7 @@
     "notifications": [
       {
         "reference": "1001_RECORD_APPLICATION_HOME_OFFICE",
-        "recipient": "ReformpbAPC@example.com",
+        "recipient": "{$endAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: application for transfer refused",
         "body": [
           "Appeal reference number: PA/12345/2019",

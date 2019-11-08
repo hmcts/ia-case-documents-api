@@ -12,7 +12,7 @@
         "replacements": {
           "listCaseHearingCentre": "manchester",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
-          "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net"
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
         }
       }
     }
@@ -25,7 +25,7 @@
       "replacements": {
         "listCaseHearingCentre": "manchester",
         "listCaseHearingDate": "2019-05-03T14:25:15.000",
-        "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
         "notificationsSent": [
           {
             "id": "1001_CASE_LISTED_CASE_OFFICER",
@@ -60,7 +60,7 @@
       },
       {
         "reference": "1001_CASE_LISTED_LEGAL_REPRESENTATIVE",
-        "recipient": "ia-law-firm-a@fake.hmcts.net",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: check the details of your hearing",
         "body": [
           "Appeal reference number: PA/12345/2019",

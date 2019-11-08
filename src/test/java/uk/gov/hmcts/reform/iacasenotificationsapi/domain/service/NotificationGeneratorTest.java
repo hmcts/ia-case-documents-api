@@ -69,8 +69,8 @@ public class NotificationGeneratorTest {
         when(notificationPersonalisation1.getEmailAddress(asylumCase)).thenReturn(emailAddress1);
         when(notificationPersonalisation2.getEmailAddress(asylumCase)).thenReturn(emailAddress2);
 
-        when(notificationPersonalisation1.getTemplateId()).thenReturn(templateId1);
-        when(notificationPersonalisation2.getTemplateId()).thenReturn(templateId2);
+        when(notificationPersonalisation1.getTemplateId(asylumCase)).thenReturn(templateId1);
+        when(notificationPersonalisation2.getTemplateId(asylumCase)).thenReturn(templateId2);
 
         when(notificationPersonalisation1.getPersonalisation(callback)).thenReturn(personalizationMap1);
         when(notificationPersonalisation2.getPersonalisation(callback)).thenReturn(personalizationMap2);

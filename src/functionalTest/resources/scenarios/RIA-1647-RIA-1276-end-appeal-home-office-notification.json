@@ -44,7 +44,7 @@
     "notifications": [
       {
         "reference": "1001_END_APPEAL_HOME_OFFICE",
-        "recipient": "ReformpbAPC@example.com",
+        "recipient": "{$endAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
           "Appeal reference number: PA/12345/2019",

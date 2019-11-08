@@ -86,6 +86,10 @@ public enum AsylumCaseDefinition {
 
     APPLICATION_DECISION(
         "applicationDecision", new TypeReference<String>(){}),
+
+    IS_DECISION_ALLOWED(
+        "isDecisionAllowed", new TypeReference<AppealDecision>(){}),
+
     ;
 
     private final String value;

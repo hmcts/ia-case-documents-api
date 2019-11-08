@@ -37,7 +37,7 @@ public class NotificationGenerator {
 
             String notificationId =
                 notificationSender.sendEmail(
-                    personalisation.getTemplateId(),
+                    personalisation.getTemplateId(asylumCase),
                     personalisation.getEmailAddress(asylumCase),
                     personalisation.getPersonalisation(callback),
                     referenceId

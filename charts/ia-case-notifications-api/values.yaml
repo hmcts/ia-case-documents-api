@@ -20,6 +20,8 @@ java:
         - respondent-review-direction-email
         - respondent-non-standard-direction-until-listing-email
         - home-office-end-appeal-email
+        - home-office-allowed-appeal-email
+        - home-office-dismissed-appeal-email
         - system-username
         - system-password
         - idam-client-id

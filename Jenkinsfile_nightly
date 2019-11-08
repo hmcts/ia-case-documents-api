@@ -45,7 +45,6 @@ def secrets = [
         secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
         secret('test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
         secret('test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
-        secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
 
         secret('test-homeoffice-apc-username', 'TEST_HOMEOFFICE_APC_USERNAME'),
         secret('test-homeoffice-apc-password', 'TEST_HOMEOFFICE_APC_PASSWORD'),
@@ -55,6 +54,10 @@ def secrets = [
         secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
         secret('test-homeoffice-generic-username', 'TEST_HOMEOFFICE_GENERIC_USERNAME'),
         secret('test-homeoffice-generic-password', 'TEST_HOMEOFFICE_GENERIC_PASSWORD'),
+
+        secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
+        secret('home-office-allowed-appeal-email', 'IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL'),
+        secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
 
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),

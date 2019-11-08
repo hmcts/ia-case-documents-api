@@ -8,7 +8,13 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 
 public interface NotificationPersonalisation {
 
-    String getTemplateId();
+    default String getTemplateId(AsylumCase asylumCase) {
+        return getTemplateId();
+    }
+
+    default String getTemplateId() {
+        return "";
+    }
 
     String getEmailAddress(AsylumCase asylumCase);
 
