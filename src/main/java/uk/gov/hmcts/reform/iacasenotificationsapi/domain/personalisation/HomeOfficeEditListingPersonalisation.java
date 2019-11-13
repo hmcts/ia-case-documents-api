@@ -13,34 +13,35 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisa
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
-public class CaseOfficerEditListingPersonalisation implements NotificationPersonalisation {
+public class HomeOfficeEditListingPersonalisation implements NotificationPersonalisation {
 
-    private final String caseOfficerCaseEditedTemplateId;
+    private final String homeOfficeCaseEditedTemplateId;
     private final BasePersonalisationProvider basePersonalisationProvider;
-    private final EmailAddressFinder emailAddressFinder;
+    private EmailAddressFinder emailAddressFinder;
 
-    public CaseOfficerEditListingPersonalisation(
-        @Value("${govnotify.template.caseOfficerCaseEdited}") String caseOfficerCaseEditedTemplateId,
+    public HomeOfficeEditListingPersonalisation(
+        @Value("${govnotify.template.homeOfficeCaseEditedTemplateId}") String homeOfficeCaseEditedTemplateId,
         EmailAddressFinder emailAddressFinder,
-        BasePersonalisationProvider basePersonalisationProvider) {
-        this.caseOfficerCaseEditedTemplateId = caseOfficerCaseEditedTemplateId;
+        BasePersonalisationProvider basePersonalisationProvider
+    ) {
+        this.homeOfficeCaseEditedTemplateId = homeOfficeCaseEditedTemplateId;
         this.emailAddressFinder = emailAddressFinder;
         this.basePersonalisationProvider = basePersonalisationProvider;
     }
 
     @Override
     public String getTemplateId() {
-        return caseOfficerCaseEditedTemplateId;
+        return homeOfficeCaseEditedTemplateId;
     }
 
     @Override
     public String getEmailAddress(AsylumCase asylumCase) {
-        return emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase);
+        return emailAddressFinder.getHomeOfficeEmailAddress(asylumCase);
     }
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_CASE_RE_LISTED_CASE_OFFICER";
+        return caseId + "_CASE_RE_LISTED_HOME_OFFICE";
     }
 
     @Override
@@ -48,6 +49,5 @@ public class CaseOfficerEditListingPersonalisation implements NotificationPerson
         requireNonNull(callback, "callback must not be null");
 
         return basePersonalisationProvider.getEditCaseListingPersonalisation(callback);
-
     }
 }

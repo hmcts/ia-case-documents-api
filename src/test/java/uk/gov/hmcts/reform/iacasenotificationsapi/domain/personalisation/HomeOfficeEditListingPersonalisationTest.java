@@ -21,7 +21,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisa
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CaseOfficerEditListingPersonalisationTest {
+public class HomeOfficeEditListingPersonalisationTest {
 
     @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
@@ -31,7 +31,7 @@ public class CaseOfficerEditListingPersonalisationTest {
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
 
-    private String hearingCentreEmailAddress = "hearingCentre@example.com";
+    private String homeOfficeEmailAddress = "homeoffice@example.com";
 
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
@@ -39,13 +39,19 @@ public class CaseOfficerEditListingPersonalisationTest {
     private String appellantFamilyName = "appellantFamilyName";
     private String homeOfficeRefNumber = "homeOfficeRefNumber";
 
-    private CaseOfficerEditListingPersonalisation caseOfficerEditListingPersonalisation;
+    private String requirementsVulnerabilities = "someRequirementsVulnerabilities";
+    private String requirementsMultimedia = "someRequirementsMultimedia";
+    private String requirementsSingleSexCourt = "someRequirementsSingleSexCourt";
+    private String requirementsInCamera = "someRequirementsInCamera";
+    private String requirementsOther = "someRequirementsOther";
+
+    private HomeOfficeEditListingPersonalisation homeOfficeEditListingPersonalisation;
 
     @Before
     public void setup() {
-        when(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
+        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
-        caseOfficerEditListingPersonalisation = new CaseOfficerEditListingPersonalisation(
+        homeOfficeEditListingPersonalisation = new HomeOfficeEditListingPersonalisation(
             templateId,
             emailAddressFinder,
             basePersonalisationProvider
@@ -54,42 +60,32 @@ public class CaseOfficerEditListingPersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, caseOfficerEditListingPersonalisation.getTemplateId());
+        assertEquals(templateId, homeOfficeEditListingPersonalisation.getTemplateId());
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_CASE_RE_LISTED_CASE_OFFICER", caseOfficerEditListingPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_CASE_RE_LISTED_HOME_OFFICE", homeOfficeEditListingPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_lookup_map() {
-        assertEquals(hearingCentreEmailAddress, caseOfficerEditListingPersonalisation.getEmailAddress(asylumCase));
+        assertEquals(homeOfficeEmailAddress, homeOfficeEditListingPersonalisation.getEmailAddress(asylumCase));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> caseOfficerEditListingPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(() -> homeOfficeEditListingPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(basePersonalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
-
-        Map<String, String> personalisation = caseOfficerEditListingPersonalisation.getPersonalisation(callback);
-
-        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
-    }
-
-    @Test
-    public void should_return_personalisation_when_all_mandatory_information_given() {
-
         when(basePersonalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
-        Map<String, String> personalisation = caseOfficerEditListingPersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation = homeOfficeEditListingPersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -102,6 +98,11 @@ public class CaseOfficerEditListingPersonalisationTest {
             .put("homeOfficeReferenceNumber", homeOfficeRefNumber)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
+            .put("Hearing Requirement Vulnerabilities", requirementsVulnerabilities)
+            .put("Hearing Requirement Multimedia", requirementsMultimedia)
+            .put("Hearing Requirement Single Sex Court", requirementsSingleSexCourt)
+            .put("Hearing Requirement In Camera Court", requirementsInCamera)
+            .put("Hearing Requirement Other", requirementsOther)
             .build();
     }
 
@@ -113,6 +114,12 @@ public class CaseOfficerEditListingPersonalisationTest {
             .put("homeOfficeReferenceNumber", "")
             .put("appellantGivenNames", "")
             .put("appellantFamilyName", "")
+            .put("Hearing Requirement Vulnerabilities", "")
+            .put("Hearing Requirement Multimedia", "")
+            .put("Hearing Requirement Single Sex Court", "")
+            .put("Hearing Requirement In Camera Court", "")
+            .put("Hearing Requirement Other", "")
+            .put("oldHearingCentre", "")
             .build();
     }
 }

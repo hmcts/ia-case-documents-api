@@ -1,12 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 
 @Service
@@ -25,9 +26,7 @@ public class EmailAddressFinder {
     public String getEmailAddress(AsylumCase asylumCase) {
 
         final HearingCentre hearingCentre =
-            asylumCase
-                .read(HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
+                getHearingCentre(asylumCase, AsylumCaseDefinition.HEARING_CENTRE);
 
         final String hearingCentreEmailAddress =
             hearingCentreEmailAddresses
@@ -42,9 +41,7 @@ public class EmailAddressFinder {
 
     public String getHomeOfficeEmailAddress(AsylumCase asylumCase) {
         final HearingCentre listCaseHearingCentre =
-                asylumCase
-                        .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+                getHearingCentre(asylumCase, AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE);
 
         final String homeOfficeEmailAddress =
                 homeOfficeEmailAddresses
@@ -55,5 +52,21 @@ public class EmailAddressFinder {
         }
 
         return homeOfficeEmailAddress;
+    }
+
+    public String getListCaseHearingCentreEmailAddress(AsylumCase asylumCase) {
+        return asylumCase
+                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .map(it -> Optional.ofNullable(hearingCentreEmailAddresses.get(it))
+                        .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
+                )
+                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+
+    }
+
+    private HearingCentre getHearingCentre(AsylumCase asylumCase, AsylumCaseDefinition asylumCaseDefinition) {
+        return asylumCase
+                .read(asylumCaseDefinition, HearingCentre.class)
+                .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
     }
 }

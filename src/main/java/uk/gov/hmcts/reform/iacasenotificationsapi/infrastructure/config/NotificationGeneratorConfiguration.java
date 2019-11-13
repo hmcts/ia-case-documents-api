@@ -177,11 +177,13 @@ public class NotificationGeneratorConfiguration {
     @Bean("editCaseListingNotificationGenerator")
     public NotificationGenerator editCaseListingNotificationGenerator(
         CaseOfficerEditListingPersonalisation caseOfficerEditListingPersonalisation,
+        HomeOfficeEditListingPersonalisation homeOfficeEditListingPersonalisation,
+        LegalRepresentativeEditListingPersonalisation legalRepresentativeEditListingPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return new NotificationGenerator(
-            newArrayList(caseOfficerEditListingPersonalisation),
+            newArrayList(caseOfficerEditListingPersonalisation, homeOfficeEditListingPersonalisation, legalRepresentativeEditListingPersonalisation),
             notificationSender,
             notificationIdAppender
         );
