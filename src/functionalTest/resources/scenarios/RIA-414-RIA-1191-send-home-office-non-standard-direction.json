@@ -1,0 +1,96 @@
+{
+  "description": "RIA-414 Send Home Office non-standard direction, RIA-1191 Notify legal rep of home office direction",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1003,
+      "eventId": "sendDirection",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Do the non standard thing",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "RIA-1003-test-case-1@example.com"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Do the non standard thing",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": ""
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1003_LEGAL_REP_NON_STANDARD_DIRECTION_OF_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "RIA-1003-test-case-1@example.com"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
+        "recipient": "{$respondentEmailAddresses.nonStandardDirectionUntilListing}",
+        "subject": "Asylum appeal: Direction Taylor House",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "You have a direction for this case",
+          "Do the non standard thing",
+          "You must complete this direction by: {$TODAY+14|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "1003_LEGAL_REP_NON_STANDARD_DIRECTION_OF_HOME_OFFICE",
+        "recipient": "RIA-1003-test-case-1@example.com",
+        "subject": "Immigration and Asylum appeal: direction",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Your reference: CASE001",
+          "Appellant name: Talha Awan",
+          "A direction has been sent to the Home Office",
+          "The respondent has been directed to:",
+          "Do the non standard thing",
+          "by {$TODAY+14|d MMM yyyy}",
+          "What happens next",
+          "The case will be updated when the Home Office has responded to the direction.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

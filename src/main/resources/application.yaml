@@ -45,6 +45,8 @@ govnotify.template.hearingBundleReadyHomeOfficeTemplateId: d4c6352d-325a-4933-91
 govnotify.template.homeOfficeResponseUploadedTemplateId: 32584965-8374-469a-a71b-b417da7709ed
 govnotify.template.legalRepresentativeCaseEditedTemplateId: 347f2959-4cb5-447f-bd35-cb1e2308f6fb
 govnotify.template.homeOfficeCaseEditedTemplateId: 54975c09-6634-4f1a-bfe6-caaeb5913e6a
+govnotify.template.legalRepresentativeNonStandardDirectionTemplateId: d85587f4-2a7d-44a2-b6d8-538b91b7144b
+govnotify.template.legalRepNonStandardDirectionOfHomeOfficeTemplateId: a03720df-2c7d-403d-9a45-a58c192e8570
 
 govnotify.baseUrl: "https://api.notifications.service.gov.uk"
 

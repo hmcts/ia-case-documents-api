@@ -147,16 +147,30 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("sendDirectionNotificationGenerator")
-    public NotificationGenerator sendDirectionNotificationGenerator(
+    @Bean("respondentDirectionNotificationGenerator")
+    public NotificationGenerator respondentDirectionNotificationGenerator(
         RespondentNonStandardDirectionPersonalisation respondentNonStandardDirectionPersonalisation,
+        LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return new NotificationGenerator(
-            newArrayList(respondentNonStandardDirectionPersonalisation),
+            newArrayList(respondentNonStandardDirectionPersonalisation, legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation),
             notificationSender,
             notificationIdAppender
+        );
+    }
+
+    @Bean("legalRepDirectionNotificationGenerator")
+    public NotificationGenerator legalRepDirectionNotificationGenerator(
+            LegalRepresentativeNonStandardDirectionPersonalisation legalRepresentativeNonStandardDirectionPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
+
+        return new NotificationGenerator(
+                newArrayList(legalRepresentativeNonStandardDirectionPersonalisation),
+                notificationSender,
+                notificationIdAppender
         );
     }
 

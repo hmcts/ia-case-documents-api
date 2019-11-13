@@ -14,6 +14,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Sta
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.junit.Test;
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.SpringBootIntegrationTest;
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
@@ -43,6 +44,7 @@ public class SendsDirectionTest extends SpringBootIntegrationTest {
                 .caseData(anAsylumCase()
                     .with(HEARING_CENTRE, HearingCentre.MANCHESTER)
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
+                    .with(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, "legalrep@domain.com")
                     .with(DIRECTIONS, someListOf(Direction.class)
                         .with(new Direction(
                             "exp",
@@ -60,7 +62,7 @@ public class SendsDirectionTest extends SpringBootIntegrationTest {
 
         List<IdValue<String>> notifications = notificationsSent.get();
 
-        assertThat(notifications.size()).isEqualTo(1);
+        assertThat(notifications.size()).isEqualTo(2);
         assertThat(notifications.get(0).getId()).contains("_RESPONDENT_NON_STANDARD_DIRECTION");
         assertThat(notifications.get(0).getValue()).matches(UUID_PATTERN);
     }

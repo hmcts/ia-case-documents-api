@@ -11,11 +11,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BasePersonalisationProviderTest {
@@ -27,6 +32,8 @@ public class BasePersonalisationProviderTest {
     @Mock AsylumCase asylumCaseBefore;
     @Mock HearingDetailsFinder hearingDetailsFinder;
     @Mock DateTimeExtractor dateTimeExtractor;
+    @Mock Direction direction;
+    @Mock DirectionFinder directionFinder;
 
     private String iaCcdFrontendUrl = "http://localhost";
 
@@ -51,6 +58,9 @@ public class BasePersonalisationProviderTest {
     private String requirementsSingleSexCourt = "someRequirementsSingleSexCourt";
     private String requirementsInCamera = "someRequirementsInCamera";
     private String requirementsOther = "someRequirementsOther";
+
+    private String directionExplanation = "someExplanation";
+    private String directionDueDate = "2019-10-29";
 
     private BasePersonalisationProvider basePersonalisationProvider;
 
@@ -82,9 +92,14 @@ public class BasePersonalisationProviderTest {
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(requirementsInCamera));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(requirementsOther));
 
+        Mockito.when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
+        Mockito.when(direction.getDateDue()).thenReturn(directionDueDate);
+        Mockito.when(direction.getExplanation()).thenReturn(directionExplanation);
+
         basePersonalisationProvider = new BasePersonalisationProvider(
             iaCcdFrontendUrl,
             hearingDetailsFinder,
+            directionFinder,
             dateTimeExtractor
         );
     }
@@ -93,6 +108,14 @@ public class BasePersonalisationProviderTest {
     public void should_return_edit_case_listing_personalisation() {
 
         Map<String, String> personalisation = basePersonalisationProvider.getEditCaseListingPersonalisation(callback);
+
+        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+    }
+
+    @Test
+    public void should_return_non_direction_personalisation() {
+
+        Map<String, String> personalisation = basePersonalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

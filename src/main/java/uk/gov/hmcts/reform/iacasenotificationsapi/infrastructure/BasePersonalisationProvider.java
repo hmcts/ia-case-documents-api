@@ -4,6 +4,8 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 
 import com.google.common.collect.ImmutableMap;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 
@@ -11,8 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @Service
 public class BasePersonalisationProvider {
@@ -20,14 +25,17 @@ public class BasePersonalisationProvider {
     private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
     private final String iaCcdFrontendUrl;
     private final HearingDetailsFinder hearingDetailsFinder;
+    private final DirectionFinder directionFinder;
     private final DateTimeExtractor dateTimeExtractor;
 
     public BasePersonalisationProvider(
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
         HearingDetailsFinder hearingDetailsFinder,
+        DirectionFinder directionFinder,
         DateTimeExtractor dateTimeExtractor) {
         this.iaCcdFrontendUrl = iaCcdFrontendUrl;
         this.hearingDetailsFinder = hearingDetailsFinder;
+        this.directionFinder = directionFinder;
         this.dateTimeExtractor = dateTimeExtractor;
     }
 
@@ -79,6 +87,31 @@ public class BasePersonalisationProvider {
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
             .put(HEARING_CENTRE_ADDRESS, hearingCentreAddress)
             .build();
+    }
+
+    public Map<String, String> getNonStandardDirectionPersonalisation(AsylumCase asylumCase) {
+
+        final Direction direction =
+            directionFinder
+                .findFirst(asylumCase, DirectionTag.NONE)
+                .orElseThrow(() -> new IllegalStateException("non-standard direction is not present"));
+
+        final String directionDueDate =
+            LocalDate
+                .parse(direction.getDateDue())
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+
+        return ImmutableMap
+            .<String, String>builder()
+            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("iaCaseListHyperLink", iaCcdFrontendUrl)
+            .put("explanation", direction.getExplanation())
+            .put("dueDate", directionDueDate)
+            .build();
+
     }
 
     private String readStringCaseField(final AsylumCase asylumCase, final AsylumCaseDefinition caseField, final String defaultIfNotPresent) {

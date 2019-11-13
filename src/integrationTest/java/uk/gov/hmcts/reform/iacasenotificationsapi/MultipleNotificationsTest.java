@@ -149,7 +149,7 @@ public class MultipleNotificationsTest {
         List<IdValue<String>> allNotifications =
             maybeNotificationsSent.orElseThrow(IllegalStateException::new);
 
-        assertThat(allNotifications.size()).isEqualTo(2);
+        assertThat(allNotifications.size()).isGreaterThan(1);
         assertThat(allNotifications.get(0).getId()).isNotEqualTo(allNotifications.get(1).getId());
 
     }

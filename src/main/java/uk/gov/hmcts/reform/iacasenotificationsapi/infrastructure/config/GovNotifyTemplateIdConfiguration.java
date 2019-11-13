@@ -22,4 +22,10 @@ public class GovNotifyTemplateIdConfiguration {
 
     @NotBlank
     private String hearingBundleReadyHomeOfficeTemplateId;
+
+    @NotBlank
+    private String legalRepresentativeNonStandardDirectionTemplateId;
+
+    @NotBlank
+    private String legalRepNonStandardDirectionOfHomeOfficeTemplateId;
 }

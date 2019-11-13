@@ -1,14 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit.NotificationHandler;
@@ -163,29 +160,12 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
-    public PreSubmitCallbackHandler<AsylumCase> sendDirectionNotificationHandler(
-        @Qualifier("sendDirectionNotificationGenerator") NotificationGenerator notificationGenerator,
+    public PreSubmitCallbackHandler<AsylumCase> respondentDirectionNotificationHandler(
+        @Qualifier("respondentDirectionNotificationGenerator") NotificationGenerator notificationGenerator,
         DirectionFinder directionFinder) {
-
-        List<State> allowedCaseStates =
-            Arrays.asList(
-                State.APPEAL_SUBMITTED,
-                State.APPEAL_SUBMITTED_OUT_OF_TIME,
-                State.AWAITING_RESPONDENT_EVIDENCE,
-                State.CASE_BUILDING,
-                State.CASE_UNDER_REVIEW,
-                State.RESPONDENT_REVIEW,
-                State.SUBMIT_HEARING_REQUIREMENTS,
-                State.LISTING
-            );
 
         return new NotificationHandler(
             (callbackStage, callback) -> {
-                State caseState =
-                    callback
-                        .getCaseDetails()
-                        .getState();
-
                 AsylumCase asylumCase =
                     callback
                         .getCaseDetails()
@@ -198,8 +178,32 @@ public class NotificationHandlerConfiguration {
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.SEND_DIRECTION
-                       && allowedCaseStates.contains(caseState)
                        && isRespondentDirection;
+            },
+            notificationGenerator
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> legalRepDirectionNotificationHandler(
+            @Qualifier("legalRepDirectionNotificationGenerator") NotificationGenerator notificationGenerator,
+            DirectionFinder directionFinder) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                boolean isLegalRepDirection = directionFinder
+                    .findFirst(asylumCase, DirectionTag.NONE)
+                    .map(direction -> direction.getParties().equals(Parties.LEGAL_REPRESENTATIVE))
+                    .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.SEND_DIRECTION
+                       && isLegalRepDirection;
             },
             notificationGenerator
         );
