@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 
@@ -72,7 +72,7 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
                         byte[].class
                     );
 
-        } catch (RestClientException clientEx) {
+        } catch (RestClientResponseException clientEx) {
 
             throw new DocumentServiceResponseException(
                 "Couldn't generate asylum case documents with docmosis",

@@ -9,7 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
@@ -67,7 +67,7 @@ public class BundleRequestExecutor {
                         }
                     ).getBody();
 
-        } catch (RestClientException e) {
+        } catch (RestClientResponseException e) {
 
             throw new DocumentServiceResponseException(
                 "Couldn't create bundle using API: " + endpoint,

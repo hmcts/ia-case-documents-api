@@ -27,7 +27,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.IaApiClient;
         "docmosis.endpoint=http://127.0.0.1:8990",
         "docmosis.render.uri=/docmosis",
         "idam.s2s-auth.url=http://127.0.0.1:8990",
-        "ccdGatewayUrl=http://127.0.0.1:8990"})
+        "ccdGatewayUrl=http://127.0.0.1:8990",
+        "emBundler.url=http://127.0.0.1:8990"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = MOCK)
 @ActiveProfiles("integration")

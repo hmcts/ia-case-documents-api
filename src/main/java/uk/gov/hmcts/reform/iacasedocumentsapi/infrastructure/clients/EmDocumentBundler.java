@@ -67,10 +67,10 @@ public class EmDocumentBundler implements DocumentBundler {
                 .getCaseBundles()
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new DocumentBundlingErrorResponseException("Bundle was not created", response))
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Bundle was not created", response))
                 .getValue()
                 .getStitchedDocument()
-                .orElseThrow(() -> new DocumentBundlingErrorResponseException("Stitched document was not created", response));
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Stitched document was not created", response));
 
         // rename the bundle file name
         return new Document(

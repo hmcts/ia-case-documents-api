@@ -37,7 +37,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.CaseDetailsBuilder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.ClassCreatorForTests;
 
 @SuppressWarnings("unchecked")
-public class BundlingIntegrationTest extends SpringBootIntegrationTest {
+public class StitchingIntegrationTest extends SpringBootIntegrationTest {
 
     @MockBean
     private BundleRequestExecutor bundleRequestExecutor;
