@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.FileType;
 
@@ -42,7 +42,7 @@ public class DocmosisDocumentConversionClient {
                     byte[].class
                 );
 
-        } catch (HttpClientErrorException clientEx) {
+        } catch (RestClientResponseException clientEx) {
 
             throw new DocumentServiceResponseException(
                 clientEx.getResponseBodyAsString(),

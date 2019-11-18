@@ -1,13 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.Before;
@@ -20,7 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentBundlingErrorResponseException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentServiceResponseException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentStitchingErrorResponseException;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -32,77 +31,90 @@ public class CallbackControllerAdviceTest {
     @Mock
     private HttpServletRequest httpServletRequest;
 
+    @Mock
+    private ErrorResponseLogger errorResponseLogger;
+
     @InjectMocks
     private CallbackControllerAdvice callbackControllerAdvice;
+
+    private ListAppender<ILoggingEvent> listAppender;
+
+    private String testExceptionMessage;
 
     @Before
     public void setup() {
 
-    }
-
-    @Test
-    public void should_handle_bundling_exception_and_log_correctly_when_errors() {
         Logger controllerAdviceLogger = (Logger) LoggerFactory.getLogger(CallbackControllerAdvice.class);
-        ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+        listAppender = new ListAppender<>();
         listAppender.start();
         controllerAdviceLogger.addAppender(listAppender);
 
-        DocumentBundlingErrorResponseException ex = new DocumentBundlingErrorResponseException("Test exception message!", preSubmitCallbackResponse);
-        String logMessage = "Handling Bundling Exception ";
-        String error1 = "THIS IS AN ERROR!";
-        String error2 = "THIS IS ANOTHER ERROR!";
+        testExceptionMessage = "Test exception message!";
 
-        when(preSubmitCallbackResponse.getErrors()).thenReturn(ImmutableSet.of(error1, error2));
-
-        ResponseEntity<String> responseEntity =
-            callbackControllerAdvice.handleDocumentBundlingErrorResponseException(httpServletRequest, ex);
-
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        List<ILoggingEvent> logEvents = listAppender.list;
-        assertThat(logEvents.size()).isEqualTo(3);
-
-        assertThat(logEvents.get(0).getFormattedMessage())
-            .isEqualTo(logMessage + ex.getMessage() + ".");
-        assertThat(logEvents.get(1).getFormattedMessage()).isEqualTo(error1);
-        assertThat(logEvents.get(2).getFormattedMessage()).isEqualTo(error2);
-
-        verify(preSubmitCallbackResponse).getErrors();
+        doNothing().when(errorResponseLogger).maybeLogErrorsListResponse(any());
+        doNothing().when(errorResponseLogger).maybeLogException(any());
 
     }
 
     @Test
-    public void should_handle_bundling_exception_and_log_correctly_when_no_errors() {
+    public void should_handle_stitching_exception_and_log_message_correctly() {
 
-        Logger controllerAdviceLogger = (Logger) LoggerFactory.getLogger(CallbackControllerAdvice.class);
-        ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
-        listAppender.start();
-        controllerAdviceLogger.addAppender(listAppender);
-
-        DocumentBundlingErrorResponseException ex = new DocumentBundlingErrorResponseException("Test exception message!", preSubmitCallbackResponse);
-        String logMessage = "Handling Bundling Exception ";
-
-        when(preSubmitCallbackResponse.getErrors()).thenReturn(ImmutableSet.of());
+        DocumentStitchingErrorResponseException ex =
+            new DocumentStitchingErrorResponseException(testExceptionMessage, preSubmitCallbackResponse);
+        String logMessage = "Exception when stitching a bundle with message: ";
 
         ResponseEntity<String> responseEntity =
-            callbackControllerAdvice.handleDocumentBundlingErrorResponseException(httpServletRequest, ex);
+            callbackControllerAdvice.handleDocumentStitchingErrorResponseException(httpServletRequest, ex);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        List<ILoggingEvent> logEvents = listAppender.list;
+        List<ILoggingEvent> logEvents = this.listAppender.list;
         assertThat(logEvents.size()).isEqualTo(1);
 
         assertThat(logEvents.get(0).getFormattedMessage())
             .isEqualTo(logMessage + ex.getMessage() + ".");
 
-        verify(preSubmitCallbackResponse).getErrors();
+        verify(errorResponseLogger).maybeLogErrorsListResponse(any());
 
     }
 
     @Test
-    public void should_handle_bundling_exception_when_null_response() {
+    public void should_handle_document_service_exception() {
+
+        DocumentServiceResponseException ex = mock(DocumentServiceResponseException.class);
+        String logMessage = "Document service Exception with message: ";
+
+        when(ex.getMessage()).thenReturn(testExceptionMessage);
+
+        ResponseEntity<String> responseEntity =
+            callbackControllerAdvice.handleDocumentServiceResponseException(httpServletRequest, ex);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        List<ILoggingEvent> logEvents = this.listAppender.list;
+
+        assertThat(logEvents.size()).isEqualTo(1);
+        assertThat(logEvents.get(0).getFormattedMessage()).isEqualTo(logMessage + testExceptionMessage + ".");
+
+        verify(errorResponseLogger).maybeLogException(any());
 
     }
 
+    @Test
+    public void should_handle_stitching_http_exception_when_cause_is_null() {
+        String logMessage = "Document service Exception with message: ";
+
+        DocumentServiceResponseException ex = new DocumentServiceResponseException(testExceptionMessage);
+        ResponseEntity<String> responseEntity =
+            callbackControllerAdvice.handleDocumentServiceResponseException(httpServletRequest, ex);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        List<ILoggingEvent> logEvents = this.listAppender.list;
+
+        assertThat(logEvents.size()).isEqualTo(1);
+        assertThat(logEvents.get(0).getFormattedMessage()).isEqualTo(logMessage + ex.getMessage() + ".");
+
+    }
 
 }

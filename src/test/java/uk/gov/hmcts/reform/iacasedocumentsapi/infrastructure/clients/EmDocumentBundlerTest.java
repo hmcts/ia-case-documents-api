@@ -174,7 +174,7 @@ public class EmDocumentBundlerTest {
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Bundle was not created")
-            .hasFieldOrProperty("bundlingServiceResponse");
+            .hasFieldOrProperty("stitchingServiceResponse");
 
     }
 
@@ -217,7 +217,7 @@ public class EmDocumentBundlerTest {
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Stitched document was not created")
-            .hasFieldOrProperty("bundlingServiceResponse");
+            .hasFieldOrProperty("stitchingServiceResponse");
     }
 
 }
