@@ -22,10 +22,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.CaseDetailsBuilder;
 @SuppressWarnings("unchecked")
 public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest {
 
+    private static final String STITCH_API_PATH = "/api/stitch-ccd-bundles";
+
     @Test
     public void should_return_500_with_correct_message_when_api_returns_500() throws Exception {
 
-        stubFor(post(urlPathEqualTo("/api/stitch-ccd-bundles"))
+        stubFor(post(urlPathEqualTo(STITCH_API_PATH))
             .willReturn(aResponse()
                 .withStatus(500)
                 .withHeader("Content-Type", "application/json")
@@ -55,13 +57,14 @@ public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest {
 
         assertNotNull(content);
         assertThat(content).startsWith("Couldn't create bundle using API: ");
+        assertThat(content).contains(STITCH_API_PATH);
 
     }
 
     @Test
     public void should_return_500_with_correct_message_when_api_returns_400() throws Exception {
 
-        stubFor(post(urlPathEqualTo("/api/stitch-ccd-bundles"))
+        stubFor(post(urlPathEqualTo(STITCH_API_PATH))
             .willReturn(aResponse()
                 .withStatus(400)
                 .withHeader("Content-Type", "application/json")
@@ -90,6 +93,7 @@ public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest {
 
         assertNotNull(content);
         assertThat(content).startsWith("Couldn't create bundle using API: ");
+        assertThat(content).contains(STITCH_API_PATH);
 
     }
 
