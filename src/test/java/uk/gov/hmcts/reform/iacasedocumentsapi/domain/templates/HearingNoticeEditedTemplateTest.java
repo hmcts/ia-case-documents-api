@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.util.Map;
 import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
+
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -57,6 +59,10 @@ public class HearingNoticeEditedTemplateTest {
     private String expectedFormattedManchesterHearingCentreName = "Manchester";
     private String expectedFormattedBradfordHearingCentreName = "Bradford";
     private String expectedFormattedNewportHearingCentreName = "Newport";
+    private String expectedFormattedNorthShieldsHearingCentreName = "North Shields";
+    private String expectedFormattedBirminghamHearingCentreName = "Birmingham";
+    private String expectedFormattedHattonCrossHearingCentreName = "Hatton Cross";
+    private String expectedFormattedGlasgowHearingCentreName = "Glasgow";
 
     private HearingNoticeEditedTemplate hearingNoticeEditedTemplate;
 
@@ -187,6 +193,50 @@ public class HearingNoticeEditedTemplateTest {
         Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
 
         assertEquals(expectedFormattedNewportHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+    }
+
+    @Test
+    public void should_use_correct_previous_hearing_centre_name_for_north_shields() {
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.NORTH_SHIELDS));
+        when(stringProvider.get("hearingCentreName", "northShields")).thenReturn(Optional.of(expectedFormattedNorthShieldsHearingCentreName));
+
+        Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals(expectedFormattedNorthShieldsHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+    }
+
+    @Test
+    public void should_use_correct_previous_hearing_centre_name_for_birmingham() {
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.BIRMINGHAM));
+        when(stringProvider.get("hearingCentreName", "birmingham")).thenReturn(Optional.of(expectedFormattedBirminghamHearingCentreName));
+
+        Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals(expectedFormattedBirminghamHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+    }
+
+    @Test
+    public void should_use_correct_previous_hearing_centre_name_for_hatton_cross() {
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.HATTON_CROSS));
+        when(stringProvider.get("hearingCentreName", "hattonCross")).thenReturn(Optional.of(expectedFormattedHattonCrossHearingCentreName));
+
+        Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals(expectedFormattedHattonCrossHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+    }
+
+    @Test
+    public void should_use_correct_previous_hearing_centre_name_for_glasgow() {
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.GLASGOW));
+        when(stringProvider.get("hearingCentreName", "glasgow")).thenReturn(Optional.of(expectedFormattedGlasgowHearingCentreName));
+
+        Map<String, Object> templateFieldValues = hearingNoticeEditedTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals(expectedFormattedGlasgowHearingCentreName, templateFieldValues.get("oldHearingCentre"));
     }
 
     @Test
