@@ -20,6 +20,11 @@ appealSubmissionDocument.fileExtension: PDF
 appealSubmissionDocument.fileName: "appeal-form"
 appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00122.docx}
 
+hearingRequirementsDocument.contentType: application/pdf
+hearingRequirementsDocument.fileExtension: PDF
+hearingRequirementsDocument.fileName: "hearing-requirements"
+hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-TRB-GNO-ENG-00224.docx}
+
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
@@ -95,6 +100,7 @@ security:
       - "buildCase"
       - "submitCase"
       - "uploadAdditionalEvidence"
+      - "draftHearingRequirements"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"

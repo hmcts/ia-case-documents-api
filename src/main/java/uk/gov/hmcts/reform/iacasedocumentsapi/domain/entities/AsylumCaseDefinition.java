@@ -1,158 +1,157 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.util.List;
 import java.util.Map;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 public enum AsylumCaseDefinition {
 
     HOME_OFFICE_REFERENCE_NUMBER(
-            "homeOfficeReferenceNumber", new TypeReference<String>(){}),
+        "homeOfficeReferenceNumber", new TypeReference<String>(){}),
 
     HOME_OFFICE_DECISION_DATE(
-            "homeOfficeDecisionDate", new TypeReference<String>(){}),
+        "homeOfficeDecisionDate", new TypeReference<String>(){}),
 
     APPELLANT_TITLE(
-            "appellantTitle", new TypeReference<String>(){}),
+        "appellantTitle", new TypeReference<String>(){}),
 
     APPELLANT_GIVEN_NAMES(
-            "appellantGivenNames", new TypeReference<String>(){}),
+        "appellantGivenNames", new TypeReference<String>(){}),
 
     APPELLANT_FAMILY_NAME(
-            "appellantFamilyName", new TypeReference<String>(){}),
+        "appellantFamilyName", new TypeReference<String>(){}),
 
     APPELLANT_DATE_OF_BIRTH(
-            "appellantDateOfBirth", new TypeReference<String>(){}),
+        "appellantDateOfBirth", new TypeReference<String>(){}),
 
     APPELLANT_NATIONALITIES(
-            "appellantNationalities", new TypeReference<List<IdValue<Map<String, String>>>>(){}),
+        "appellantNationalities", new TypeReference<List<IdValue<Map<String, String>>>>(){}),
 
     APPELLANT_HAS_FIXED_ADDRESS(
-            "appellantHasFixedAddress", new TypeReference<YesOrNo>(){}),
+        "appellantHasFixedAddress", new TypeReference<YesOrNo>(){}),
 
     APPELLANT_ADDRESS(
-            "appellantAddress", new TypeReference<AddressUk>(){}),
+        "appellantAddress", new TypeReference<AddressUk>(){}),
 
     APPEAL_TYPE(
-            "appealType", new TypeReference<String>(){}),
+        "appealType", new TypeReference<String>(){}),
 
     APPEAL_SUBMISSION_DATE(
-            "appealSubmissionDate", new TypeReference<String>(){}),
+        "appealSubmissionDate", new TypeReference<String>(){}),
 
     NEW_MATTERS(
-            "newMatters", new TypeReference<String>(){}),
+        "newMatters", new TypeReference<String>(){}),
 
     OTHER_APPEALS(
-            "otherAppeals", new TypeReference<List<IdValue<Map<String, String>>>>(){}),
+        "otherAppeals", new TypeReference<List<IdValue<Map<String, String>>>>(){}),
 
     LEGAL_REP_REFERENCE_NUMBER(
-            "legalRepReferenceNumber", new TypeReference<String>(){}),
+        "legalRepReferenceNumber", new TypeReference<String>(){}),
 
     APPEAL_REFERENCE_NUMBER(
-            "appealReferenceNumber", new TypeReference<String>(){}),
+        "appealReferenceNumber", new TypeReference<String>(){}),
 
     APPEAL_GROUNDS_FOR_DISPLAY(
-            "appealGroundsForDisplay", new TypeReference<List<String>>(){}),
+        "appealGroundsForDisplay", new TypeReference<List<String>>(){}),
 
     HEARING_DOCUMENTS(
-            "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     LEGAL_REPRESENTATIVE_EMAIL_ADDRESS(
-            "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
+        "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
 
     LEGAL_REP_NAME(
-            "legalRepName", new TypeReference<String>(){}),
+        "legalRepName", new TypeReference<String>(){}),
 
     LEGAL_REP_COMPANY(
-            "legalRepCompany", new TypeReference<String>(){}),
+        "legalRepCompany", new TypeReference<String>(){}),
 
     LEGAL_REPRESENTATIVE_DOCUMENTS(
-            "legalRepresentativeDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+        "legalRepresentativeDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     RESPONDENT_DOCUMENTS(
-            "respondentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+        "respondentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     CASE_ARGUMENT_EVIDENCE(
-            "caseArgumentEvidence", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+        "caseArgumentEvidence", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
 
     LIST_CASE_HEARING_CENTRE(
-            "listCaseHearingCentre", new TypeReference<HearingCentre>(){}),
+        "listCaseHearingCentre", new TypeReference<HearingCentre>(){}),
 
     LIST_CASE_HEARING_DATE(
-            "listCaseHearingDate", new TypeReference<String>(){}),
+        "listCaseHearingDate", new TypeReference<String>(){}),
 
     LIST_CASE_REQUIREMENTS_VULNERABILITIES(
-            "listCaseRequirementsVulnerabilities", new TypeReference<String>(){}),
+        "listCaseRequirementsVulnerabilities", new TypeReference<String>(){}),
 
     LIST_CASE_REQUIREMENTS_MULTIMEDIA(
-            "listCaseRequirementsMultimedia", new TypeReference<String>(){}),
+        "listCaseRequirementsMultimedia", new TypeReference<String>(){}),
 
     LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT(
-            "listCaseRequirementsSingleSexCourt", new TypeReference<String>(){}),
+        "listCaseRequirementsSingleSexCourt", new TypeReference<String>(){}),
 
     LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT(
-            "listCaseRequirementsInCameraCourt", new TypeReference<String>(){}),
+        "listCaseRequirementsInCameraCourt", new TypeReference<String>(){}),
 
     LIST_CASE_REQUIREMENTS_OTHER(
-            "listCaseRequirementsOther", new TypeReference<String>(){}),
+        "listCaseRequirementsOther", new TypeReference<String>(){}),
 
     DRAFT_DECISION_AND_REASONS_DOCUMENTS(
-            "draftDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+        "draftDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     FINAL_DECISION_AND_REASONS_DOCUMENTS(
         "finalDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     ANONYMITY_ORDER(
-            "anonymityOrder", new TypeReference<YesOrNo>(){}),
+        "anonymityOrder", new TypeReference<YesOrNo>(){}),
 
     APPELLANT_REPRESENTATIVE(
-            "appellantRepresentative", new TypeReference<String>(){}),
+        "appellantRepresentative", new TypeReference<String>(){}),
 
     RESPONDENT_REPRESENTATIVE(
-            "respondentRepresentative", new TypeReference<String>(){}),
+        "respondentRepresentative", new TypeReference<String>(){}),
 
     APPELLANT_CASE_SUMMARY_DESCRIPTION(
-            "appellantCaseSummaryDescription", new TypeReference<String>(){}),
+        "appellantCaseSummaryDescription", new TypeReference<String>(){}),
 
     IMMIGRATION_HISTORY_AGREEMENT(
-            "immigrationHistoryAgreement", new TypeReference<YesOrNo>(){}),
+        "immigrationHistoryAgreement", new TypeReference<YesOrNo>(){}),
 
     AGREED_IMMIGRATION_HISTORY_DESCRIPTION(
-            "agreedImmigrationHistoryDescription", new TypeReference<String>(){}),
+        "agreedImmigrationHistoryDescription", new TypeReference<String>(){}),
 
     RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION(
-            "respondentsImmigrationHistoryDescription", new TypeReference<String>(){}),
+        "respondentsImmigrationHistoryDescription", new TypeReference<String>(){}),
 
     IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION(
-            "immigrationHistoryDisagreementDescription", new TypeReference<String>(){}),
+        "immigrationHistoryDisagreementDescription", new TypeReference<String>(){}),
 
     SCHEDULE_OF_ISSUES_AGREEMENT(
-            "scheduleOfIssuesAgreement", new TypeReference<YesOrNo>(){}),
+        "scheduleOfIssuesAgreement", new TypeReference<YesOrNo>(){}),
 
     APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION(
-            "appellantsAgreedScheduleOfIssuesDescription", new TypeReference<String>(){}),
+        "appellantsAgreedScheduleOfIssuesDescription", new TypeReference<String>(){}),
 
     APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION(
-            "appellantsDisputedScheduleOfIssuesDescription", new TypeReference<String>(){}),
+        "appellantsDisputedScheduleOfIssuesDescription", new TypeReference<String>(){}),
 
     SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION(
-            "scheduleOfIssuesDisagreementDescription", new TypeReference<String>(){}),
+        "scheduleOfIssuesDisagreementDescription", new TypeReference<String>(){}),
 
     CASE_INTRODUCTION_DESCRIPTION(
-            "caseIntroductionDescription", new TypeReference<String>(){}),
+        "caseIntroductionDescription", new TypeReference<String>(){}),
 
     FINAL_DECISION_AND_REASONS_PDF(
-            "finalDecisionAndReasonsPdf", new TypeReference<Document>(){}),
+        "finalDecisionAndReasonsPdf", new TypeReference<Document>(){}),
 
     FINAL_DECISION_AND_REASONS_DOCUMENT(
-            "finalDecisionAndReasonsDocument", new TypeReference<Document>(){}),
+        "finalDecisionAndReasonsDocument", new TypeReference<Document>(){}),
 
     IS_DECISION_ALLOWED(
-            "isDecisionAllowed", new TypeReference<AppealDecision>(){}),
+        "isDecisionAllowed", new TypeReference<AppealDecision>(){}),
 
     DECISION_AND_REASONS_COVER_LETTER(
         "decisionAndReasonsCoverLetter", new TypeReference<Document>(){}),
@@ -189,6 +188,76 @@ public enum AsylumCaseDefinition {
 
     ADDITIONAL_EVIDENCE_DOCUMENTS(
         "additionalEvidenceDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    HEARING_REQUIREMENTS(
+        "hearingRequirements", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    IS_APPELLANT_ATTENDING_THE_HEARING(
+        "isAppellantAttendingTheHearing", new TypeReference<YesOrNo>(){}),
+
+    IS_APPELLANT_GIVING_ORAL_EVIDENCE(
+        "isAppellantGivingOralEvidence", new TypeReference<YesOrNo>(){}),
+
+    IS_WITNESSES_ATTENDING(
+        "isWitnessesAttending", new TypeReference<YesOrNo>(){}),
+
+    WITNESS_DETAILS(
+        "witnessDetails", new TypeReference<List<IdValue<WitnessDetails>>>(){}),
+
+    IS_INTERPRETER_SERVICES_NEEDED(
+        "isInterpreterServicesNeeded", new TypeReference<YesOrNo>(){}),
+
+    INTERPRETER_LANGUAGE(
+        "interpreterLanguage", new TypeReference<List<IdValue<InterpreterLanguage>>>(){}),
+
+    IS_HEARING_ROOM_NEEDED(
+        "isHearingRoomNeeded", new TypeReference<YesOrNo>(){}),
+
+    IS_HEARING_LOOP_NEEDED(
+        "isHearingLoopNeeded", new TypeReference<YesOrNo>(){}),
+
+    PHYSICAL_OR_MENTAL_HEALTH_ISSUES(
+        "physicalOrMentalHealthIssues", new TypeReference<YesOrNo>(){}),
+
+    PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION(
+        "physicalOrMentalHealthIssuesDescription", new TypeReference<String>(){}),
+
+    PAST_EXPERIENCES(
+        "pastExperiences", new TypeReference<YesOrNo>(){}),
+
+    PAST_EXPERIENCES_DESCRIPTION(
+        "pastExperiencesDescription", new TypeReference<String>(){}),
+
+    MULTIMEDIA_EVIDENCE(
+        "multimediaEvidence", new TypeReference<YesOrNo>(){}),
+
+    MULTIMEDIA_EVIDENCE_DESCRIPTION(
+        "multimediaEvidenceDescription", new TypeReference<String>(){}),
+
+    SINGLE_SEX_COURT(
+        "singleSexCourt", new TypeReference<YesOrNo>(){}),
+
+    SINGLE_SEX_COURT_TYPE(
+        "singleSexCourtType", new TypeReference<MaleOrFemale>(){}),
+
+    SINGLE_SEX_COURT_TYPE_DESCRIPTION(
+        "singleSexCourtTypeDescription", new TypeReference<String>(){}),
+
+    IN_CAMERA_COURT(
+        "inCameraCourt", new TypeReference<YesOrNo>(){}),
+
+    IN_CAMERA_COURT_DESCRIPTION(
+        "inCameraCourtDescription", new TypeReference<String>(){}),
+
+    ADDITIONAL_REQUESTS(
+        "additionalRequests", new TypeReference<YesOrNo>(){}),
+
+    ADDITIONAL_REQUESTS_DESCRIPTION(
+        "additionalRequestsDescription", new TypeReference<String>(){}),
+
+    DATES_TO_AVOID(
+        "datesToAvoid", new TypeReference<List<IdValue<DatesToAvoid>>>(){}),
+
 
     ;
 
