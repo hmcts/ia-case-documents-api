@@ -9,10 +9,18 @@ hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thorn
 hearingCentreAddress	manchester	IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH
 hearingCentreAddress	newport	IAC Newport, Columbus House, Langstone Business Park, Chepstow Road, Newport, NP18 2LX
 hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
+hearingCentreAddress	northShields	IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR
+hearingCentreAddress	birmingham	IAC Birmingham, Birmingham Justice Centre, 33 Bull Street, Birmingham, B4 6DS
+hearingCentreAddress	hattonCross	IAC Hatton Cross, York House, 2-3 Dukes Green Avenue, Feltham, Middlesex, TW14 0LS
+hearingCentreAddress	glasgow	IAC Glasgow, 4th Floor, Eagle Building, 215 Bothwell Street, Glasgow, G2 7EZ
 hearingCentreName	bradford	Bradford
 hearingCentreName	manchester	Manchester
 hearingCentreName	newport	Newport
 hearingCentreName	taylorHouse	Taylor House
+hearingCentreName	northShields	North Shields
+hearingCentreName	birmingham	Birmingham
+hearingCentreName	hattonCross	Hatton Cross
+hearingCentreName	glasgow	Glasgow
 isoCountries	AF	Afghanistan
 isoCountries	AX	Aland Islands
 isoCountries	AL	Albania
