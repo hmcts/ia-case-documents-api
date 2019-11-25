@@ -12,10 +12,18 @@ java:
         - hearing-centre-manchester-email
         - hearing-centre-newport-email
         - hearing-centre-taylor-house-email
+        - hearing-centre-north-shields-email
+        - hearing-centre-birmingham-email
+        - hearing-centre-hatton-cross-email
+        - hearing-centre-glasgow-email
         - home-office-bradford-email
         - home-office-manchester-email
         - home-office-newport-email
         - home-office-taylor-house-email
+        - home-office-north-shields-email
+        - home-office-birmingham-email
+        - home-office-hatton-cross-email
+        - home-office-glasgow-email
         - respondent-evidence-direction-email
         - respondent-review-direction-email
         - respondent-non-standard-direction-until-listing-email

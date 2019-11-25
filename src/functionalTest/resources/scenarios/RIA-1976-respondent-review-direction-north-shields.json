@@ -1,0 +1,75 @@
+{
+  "description": "RIA-1976 Send respondent review direction (IAC North Shields)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1006,
+      "eventId": "requestRespondentReview",
+      "state": "caseBuilding",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Review the built case",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentReview"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "hearingCentre": "northShields"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Review the built case",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentReview"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1006_RESPONDENT_REVIEW_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "hearingCentre": "northShields"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1006_RESPONDENT_REVIEW_DIRECTION",
+        "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+        "subject": "Asylum appeal direction: review case – North Shields",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "You have a direction for this case",
+          "Review the built case",
+          "You must complete this direction by: {$TODAY+14|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

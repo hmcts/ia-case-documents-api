@@ -55,6 +55,26 @@ data "azurerm_key_vault_secret" "ia_hearing_centre_taylor_house_email" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_hearing_centre_north_shields_email" {
+  name      = "hearing-centre-north-shields-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_birmingham_email" {
+  name      = "hearing-centre-birmingham-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_hatton_cross_email" {
+  name      = "hearing-centre-hatton-cross-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_glasgow_email" {
+  name      = "hearing-centre-glasgow-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "ia_home_office_bradford_email" {
   name      = "home-office-bradford-email"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -72,6 +92,26 @@ data "azurerm_key_vault_secret" "ia_home_office_newport_email" {
 
 data "azurerm_key_vault_secret" "ia_home_office_taylor_house_email" {
   name      = "home-office-taylor-house-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_home_office_north_shields_email" {
+  name      = "home-office-north-shields-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_home_office_birmingham_email" {
+  name      = "home-office-birmingham-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_home_office_hatton_cross_email" {
+  name      = "home-office-hatton-cross-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_home_office_glasgow_email" {
+  name      = "home-office-glasgow-email"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
@@ -107,6 +147,26 @@ data "azurerm_key_vault_secret" "ia_hearing_centre_newport_telephone" {
 
 data "azurerm_key_vault_secret" "ia_hearing_centre_taylor_house_telephone" {
   name      = "hearing-centre-taylor-house-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_north_shields_telephone" {
+  name      = "hearing-centre-north-shields-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_birmingham_telephone" {
+  name      = "hearing-centre-birmingham-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_hatton_cross_telephone" {
+  name      = "hearing-centre-hatton-cross-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_hearing_centre_glasgow_telephone" {
+  name      = "hearing-centre-glasgow-telephone"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
@@ -227,11 +287,19 @@ module "ia_case_notifications_api" {
     IA_HEARING_CENTRE_MANCHESTER_EMAIL                       = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_email.value}"
     IA_HEARING_CENTRE_NEWPORT_EMAIL                          = "${data.azurerm_key_vault_secret.ia_hearing_centre_newport_email.value}"
     IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_taylor_house_email.value}"
+    IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL                    = "${data.azurerm_key_vault_secret.ia_hearing_centre_north_shields_email.value}"
+    IA_HEARING_CENTRE_BIRMINGHAM_EMAIL                       = "${data.azurerm_key_vault_secret.ia_hearing_centre_birmingham_email.value}"
+    IA_HEARING_CENTRE_HATTON_CROSS_EMAIL                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_hatton_cross_email.value}"
+    IA_HEARING_CENTRE_GLASGOW_EMAIL                          = "${data.azurerm_key_vault_secret.ia_hearing_centre_glasgow_email.value}"
 
     IA_HOME_OFFICE_BRADFORD_EMAIL                            = "${data.azurerm_key_vault_secret.ia_home_office_bradford_email.value}"
     IA_HOME_OFFICE_MANCHESTER_EMAIL                          = "${data.azurerm_key_vault_secret.ia_home_office_manchester_email.value}"
     IA_HOME_OFFICE_NEWPORT_EMAIL                             = "${data.azurerm_key_vault_secret.ia_home_office_newport_email.value}"
     IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL                        = "${data.azurerm_key_vault_secret.ia_home_office_taylor_house_email.value}"
+    IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL                       = "${data.azurerm_key_vault_secret.ia_home_office_north_shields_email.value}"
+    IA_HOME_OFFICE_BIRMINGHAM_EMAIL                          = "${data.azurerm_key_vault_secret.ia_home_office_birmingham_email.value}"
+    IA_HOME_OFFICE_HATTON_CROSS_EMAIL                        = "${data.azurerm_key_vault_secret.ia_home_office_hatton_cross_email.value}"
+    IA_HOME_OFFICE_GLASGOW_EMAIL                             = "${data.azurerm_key_vault_secret.ia_home_office_glasgow_email.value}"
 
     IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL                   = "${data.azurerm_key_vault_secret.ia_respondent_evidence_direction_email.value}"
     IA_RESPONDENT_REVIEW_DIRECTION_EMAIL                     = "${data.azurerm_key_vault_secret.ia_respondent_review_direction_email.value}"
@@ -245,6 +313,10 @@ module "ia_case_notifications_api" {
     IA_HEARING_CENTRE_MANCHESTER_TELEPHONE                   = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_telephone.value}"
     IA_HEARING_CENTRE_NEWPORT_TELEPHONE                      = "${data.azurerm_key_vault_secret.ia_hearing_centre_newport_telephone.value}"
     IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE                 = "${data.azurerm_key_vault_secret.ia_hearing_centre_taylor_house_telephone.value}"
+    IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE                = "${data.azurerm_key_vault_secret.ia_hearing_centre_north_shields_telephone.value}"
+    IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE                   = "${data.azurerm_key_vault_secret.ia_hearing_centre_birmingham_telephone.value}"
+    IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE                 = "${data.azurerm_key_vault_secret.ia_hearing_centre_hatton_cross_telephone.value}"
+    IA_HEARING_CENTRE_GLASGOW_TELEPHONE                      = "${data.azurerm_key_vault_secret.ia_hearing_centre_glasgow_telephone.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"

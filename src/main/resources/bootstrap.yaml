@@ -10,12 +10,26 @@ spring:
         hearing-centre-manchester-email: IA_HEARING_CENTRE_MANCHESTER_EMAIL
         hearing-centre-newport-email: IA_HEARING_CENTRE_NEWPORT_EMAIL
         hearing-centre-taylor-house-email: IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL
+        hearing-centre-north-shields-email: IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL
+        hearing-centre-birmingham-email: IA_HEARING_CENTRE_BIRMINGHAM_EMAIL
+        hearing-centre-hatton-cross-email: IA_HEARING_CENTRE_HATTON_CROSS_EMAIL
+        hearing-centre-glasgow-email: IA_HEARING_CENTRE_GLASGOW_EMAIL
+        home-office-bradford-email: IA_HOME_OFFICE_BRADFORD_EMAIL
         home-office-manchester-email: IA_HOME_OFFICE_MANCHESTER_EMAIL
+        home-office-newport-email: IA_HOME_OFFICE_NEWPORT_EMAIL
         home-office-taylor-house-email: IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL
+        home-office-north-shields-email: IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL
+        home-office-birmingham-email: IA_HOME_OFFICE_BIRMINGHAM_EMAIL
+        home-office-hatton-cross-email: IA_HOME_OFFICE_HATTON_CROSS_EMAIL
+        home-office-glasgow-email: IA_HOME_OFFICE_GLASGOW_EMAIL
         hearing-centre-bradford-telephone: IA_HEARING_CENTRE_BRADFORD_TELEPHONE
         hearing-centre-manchester-telephone: IA_HEARING_CENTRE_MANCHESTER_TELEPHONE
         hearing-centre-newport-telephone: IA_HEARING_CENTRE_NEWPORT_TELEPHONE
         hearing-centre-taylor-house-telephone: IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE
+        hearing-centre-north-shields-telephone: IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE
+        hearing-centre-birmingham-telephone: IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE
+        hearing-centre-hatton-cross-telephone: IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE
+        hearing-centre-glasgow-telephone: IA_HEARING_CENTRE_GLASGOW_TELEPHONE
         respondent-evidence-direction-email: IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL
         respondent-review-direction-email: IA_RESPONDENT_REVIEW_DIRECTION_EMAIL
         respondent-non-standard-direction-until-listing-email: IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL

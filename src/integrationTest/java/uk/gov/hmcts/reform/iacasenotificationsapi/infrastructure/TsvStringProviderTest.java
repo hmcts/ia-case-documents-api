@@ -42,6 +42,26 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
+            Optional.of("North Shields"),
+            tsvStringProvider.get("hearingCentre", "northShields")
+        );
+
+        assertEquals(
+            Optional.of("Birmingham"),
+            tsvStringProvider.get("hearingCentre", "birmingham")
+        );
+
+        assertEquals(
+            Optional.of("Hatton Cross"),
+            tsvStringProvider.get("hearingCentre", "hattonCross")
+        );
+
+        assertEquals(
+            Optional.of("Glasgow"),
+            tsvStringProvider.get("hearingCentre", "glasgow")
+        );
+
+        assertEquals(
             Optional.of("Bradford"),
             tsvStringProvider.get("hearingCentreName", "bradford")
         );
@@ -49,6 +69,26 @@ public class TsvStringProviderTest {
         assertEquals(
             Optional.of("Newport"),
             tsvStringProvider.get("hearingCentreName", "newport")
+        );
+
+        assertEquals(
+            Optional.of("North Shields"),
+            tsvStringProvider.get("hearingCentreName", "northShields")
+        );
+
+        assertEquals(
+            Optional.of("Birmingham"),
+            tsvStringProvider.get("hearingCentreName", "birmingham")
+        );
+
+        assertEquals(
+            Optional.of("Hatton Cross"),
+            tsvStringProvider.get("hearingCentreName", "hattonCross")
+        );
+
+        assertEquals(
+            Optional.of("Glasgow"),
+            tsvStringProvider.get("hearingCentreName", "glasgow")
         );
 
         assertEquals(
@@ -69,6 +109,26 @@ public class TsvStringProviderTest {
         assertEquals(
             Optional.of("IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU"),
             tsvStringProvider.get("hearingCentreAddress", "taylorHouse")
+        );
+
+        assertEquals(
+            Optional.of("IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR"),
+            tsvStringProvider.get("hearingCentreAddress", "northShields")
+        );
+
+        assertEquals(
+            Optional.of("IAC Birmingham, Birmingham Justice Centre, 33 Bull Street, Birmingham, B4 6DS"),
+            tsvStringProvider.get("hearingCentreAddress", "birmingham")
+        );
+
+        assertEquals(
+            Optional.of("IAC Hatton Cross, York House, 2-3 Dukes Green Avenue, Feltham, Middlesex, TW14 0LS"),
+            tsvStringProvider.get("hearingCentreAddress", "hattonCross")
+        );
+
+        assertEquals(
+            Optional.of("IAC Glasgow, 4th Floor, Eagle Building, 215 Bothwell Street, Glasgow, G2 7EZ"),
+            tsvStringProvider.get("hearingCentreAddress", "glasgow")
         );
     }
 

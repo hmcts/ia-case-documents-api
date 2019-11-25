@@ -15,6 +15,9 @@ spring:
   jackson.date-format: yyyy-MM-dd
   main:
     allow-bean-definition-overriding: true
+  profiles:
+    include:
+      - email-addresses
 
 govnotify.key: ${IA_GOV_NOTIFY_KEY}
 govnotify.template.responseReviewDirection: e3e36c28-b16a-4e85-b8e1-dbb7f6771181
@@ -49,33 +52,6 @@ govnotify.template.legalRepresentativeNonStandardDirectionTemplateId: d85587f4-2
 govnotify.template.legalRepNonStandardDirectionOfHomeOfficeTemplateId: a03720df-2c7d-403d-9a45-a58c192e8570
 
 govnotify.baseUrl: "https://api.notifications.service.gov.uk"
-
-hearingCentreEmailAddresses:
-  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:TCWBradfordIA@example.com}
-  manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:manchester@example.com}
-  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:TCO.NewportIAC@example.com}
-  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:taylorHouse@example.com}
-
-homeOfficeEmailAddresses:
-  bradford: ${IA_HOME_OFFICE_BRADFORD_EMAIL:ReformpbAPC@example.com}
-  manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ReformpbManchester@example.com}
-  newport: ${IA_HOME_OFFICE_NEWPORT_EMAIL:ReformpbAPC@example.com}
-  taylorHouse: ${IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ReformpbCentral@example.com}
-
-hearingCentreTelephoneNumber:
-  bradford: ${IA_HEARING_CENTRE_BRADFORD_TELEPHONE:0300 123 1711}
-  manchester: ${IA_HEARING_CENTRE_MANCHESTER_TELEPHONE:0300 123 1711}
-  newport: ${IA_HEARING_CENTRE_NEWPORT_TELEPHONE:0300 123 1711}
-  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE:0300 123 1711}
-
-endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ReformpbAPC@example.com}
-allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:HOAllowedDeterminations@example.com}
-dismissedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL:HODismissedDeterminations@example.com}
-
-respondentEmailAddresses:
-  nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL}
-  respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL}
-  respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL}
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 iaCcdFrontendUrl: ${IA_CCD_FRONTEND_URL:http://localhost:3451/}

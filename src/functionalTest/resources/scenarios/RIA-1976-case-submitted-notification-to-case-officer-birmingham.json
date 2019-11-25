@@ -1,0 +1,51 @@
+{
+  "description": "RIA-1976 Send case submitted notification to case officer (IAC Birmingham)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 1004,
+      "eventId": "submitCase",
+      "state": "caseBuilding",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "birmingham"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "birmingham",
+        "notificationsSent": [
+          {
+            "id": "1004_CASE_SUBMITTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1004_CASE_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.birmingham}",
+        "subject": "Immigration and Asylum appeal: Appeal Skeleton Argument submitted",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Appellant name: Talha Awan",
+          "#An Appeal Skeleton Argument has been submitted",
+          "Log in to the service to access the Appeal Skeleton Argument, then go to your case list and set the state to 'Case under review'. Select 'Apply' to see all new Appeal Skeleton Arguments.",
+          "You can also search for the case using either the appellants's name or the appeal reference number given above.",
+          "#Next steps",
+          "Review the Appeal Skeleton Argument. If it's complete, you should direct the respondent to review it. If you don't think it's complete, you should direct the legal representative to make the appropriate changes.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}
