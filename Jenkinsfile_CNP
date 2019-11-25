@@ -30,7 +30,7 @@ def secrets = [
         secret('dm-url', 'DM_URL'),
         secret('idam-url', 'IDAM_URL'),
         secret('s2s-url', 'S2S_URL')
-        
+
     ]
 ]
 
@@ -48,7 +48,6 @@ withPipeline(type, product, component) {
     installCharts()
     enableAksStagingDeployment()
     disableLegacyDeployment()
-
     loadVaultSecrets(secrets)
 
     after('functionalTest:preview') {
