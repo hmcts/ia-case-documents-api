@@ -1,5 +1,4 @@
 {
-  "disabled": true,
   "description": "RIA-481 Create appeal skeleton document bundle",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
