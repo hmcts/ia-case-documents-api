@@ -134,11 +134,11 @@ public class HearingNoticeTemplateTest {
         assertEquals("", templateFieldValues.get("hearingDate"));
         assertEquals("", templateFieldValues.get("hearingTime"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
-        assertEquals("", templateFieldValues.get("vulnerabilities"));
-        assertEquals("", templateFieldValues.get("multimedia"));
-        assertEquals("", templateFieldValues.get("singleSexCourt"));
-        assertEquals("", templateFieldValues.get("inCamera"));
-        assertEquals("", templateFieldValues.get("otherHearingRequest"));
+        assertEquals("No special adjustments are being made to accommodate vulnerabilities", templateFieldValues.get("vulnerabilities"));
+        assertEquals("No multimedia equipment is being provided", templateFieldValues.get("multimedia"));
+        assertEquals("The court will not be single sex", templateFieldValues.get("singleSexCourt"));
+        assertEquals("The hearing will be held in public court", templateFieldValues.get("inCamera"));
+        assertEquals("No other adjustments are being made", templateFieldValues.get("otherHearingRequest"));
         assertEquals("", templateFieldValues.get("ariaListingReference"));
     }
 }
