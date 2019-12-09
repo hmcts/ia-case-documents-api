@@ -258,6 +258,23 @@ public enum AsylumCaseDefinition {
     DATES_TO_AVOID(
         "datesToAvoid", new TypeReference<List<IdValue<DatesToAvoid>>>(){}),
 
+    VULNERABILITIES_TRIBUNAL_RESPONSE(
+        "vulnerabilitiesTribunalResponse", new TypeReference<String>(){}),
+
+    MULTIMEDIA_TRIBUNAL_RESPONSE(
+        "multimediaTribunalResponse", new TypeReference<String>(){}),
+
+    SINGLE_SEX_COURT_TRIBUNAL_RESPONSE(
+        "singleSexCourtTribunalResponse", new TypeReference<String>(){}),
+
+    IN_CAMERA_COURT_TRIBUNAL_RESPONSE(
+        "inCameraCourtTribunalResponse", new TypeReference<String>(){}),
+
+    ADDITIONAL_TRIBUNAL_RESPONSE(
+        "additionalTribunalResponse", new TypeReference<String>(){}),
+
+    SUBMIT_HEARING_REQUIREMENTS_AVAILABLE(
+        "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),
 
     ;
 
