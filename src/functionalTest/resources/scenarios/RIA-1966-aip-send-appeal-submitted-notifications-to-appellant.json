@@ -1,0 +1,109 @@
+{
+  "description": "RIA-1966 AIP Send appeal submitted notifications (Email and SMS) and Email to Case worker",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 1003,
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Your appeal has been submitted",
+        "body": [
+          "Home Office reference: A1234567",
+          "Appellant name: Pablo Jimenez",
+          "Dear Pablo,",
+          "Your appeal has been submitted.",
+          "See your appeal details: {$iaAipFrontendUrl}",
+          "#What happens next",
+          "* A case worker will check your application and get in touch with you within 14 days",
+          "#What you can do now",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Asylum appeal: new appeal submitted",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Appellant name: Pablo Jimenez",
+          "Link to the online service: {$iaCcdFrontendUrl}",
+          "A new asylum appeal has been submitted.",
+          "To access the new appeal, login to the pilot service.",
+          "If the appeal is suitable to go ahead you should direct the respondent to supply their evidence.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
+        "recipient": "+447123456789",
+        "subject": "",
+        "body": [
+          "Your appeal application has been sent to the Tribunal. Your appeal reference number is PA/12345/2019",
+          "A Tribunal case worker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
+          "Sign in to your account to see how your appeal is progressing:",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

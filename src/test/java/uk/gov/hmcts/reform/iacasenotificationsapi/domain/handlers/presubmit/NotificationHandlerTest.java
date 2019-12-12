@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.function.BiPredicate;
 
 import org.junit.Before;
@@ -40,7 +41,7 @@ public class NotificationHandlerTest {
 
         when(canHandle.test(callbackStage, callback)).thenReturn(true);
 
-        notificationHandler = new NotificationHandler(canHandle, notificationGenerator);
+        notificationHandler = new NotificationHandler(canHandle, Collections.singletonList(notificationGenerator));
     }
 
     @Test

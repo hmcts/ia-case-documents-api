@@ -90,6 +90,11 @@ public enum AsylumCaseDefinition {
     IS_DECISION_ALLOWED(
         "isDecisionAllowed", new TypeReference<AppealDecision>(){}),
 
+    JOURNEY_TYPE(
+            "journeyType", new TypeReference<JourneyType>(){}),
+
+    SUBSCRIPTIONS(
+            "subscriptions", new TypeReference<List<IdValue<Subscriber>>>(){}),
     ;
 
     private final String value;

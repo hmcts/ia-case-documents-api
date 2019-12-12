@@ -34,7 +34,6 @@ public class EventTest {
         assertEquals("requestResponseReview", Event.REQUEST_RESPONSE_REVIEW.toString());
         assertEquals("sendDecisionAndReasons", Event.SEND_DECISION_AND_REASONS.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
-
     }
 
     @Test

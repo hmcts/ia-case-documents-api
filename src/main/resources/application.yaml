@@ -51,10 +51,15 @@ govnotify.template.homeOfficeCaseEditedTemplateId: 54975c09-6634-4f1a-bfe6-caaeb
 govnotify.template.legalRepresentativeNonStandardDirectionTemplateId: d85587f4-2a7d-44a2-b6d8-538b91b7144b
 govnotify.template.legalRepNonStandardDirectionOfHomeOfficeTemplateId: a03720df-2c7d-403d-9a45-a58c192e8570
 
+govnotify.template.appealSubmittedAppellant.email: b53d6e97-b7d9-4112-9669-9db81e563506
+govnotify.template.appealSubmittedAppellant.sms: 2cc4d346-cfb6-4ea9-93b3-c3f1f4f56491
+
 govnotify.baseUrl: "https://api.notifications.service.gov.uk"
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 iaCcdFrontendUrl: ${IA_CCD_FRONTEND_URL:http://localhost:3451/}
+
+iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
 tsvStringsFileLocation: strings.tsv
 
@@ -79,7 +84,12 @@ security:
     - "iac"
   authorisedRoles:
     - "caseworker-ia"
+    - "citizen"
   roleEventAccess:
+    citizen:
+      - "startAppeal"
+      - "editAppeal"
+      - "submitAppeal"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"

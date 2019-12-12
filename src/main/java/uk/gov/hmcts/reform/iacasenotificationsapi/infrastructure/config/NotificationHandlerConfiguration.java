@@ -1,10 +1,19 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.REP;
+
+import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicationDecision;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
@@ -17,151 +26,172 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> endAppealNotificationHandler(
-        @Qualifier("endAppealNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("endAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.END_APPEAL,
-            notificationGenerator
+                    && callback.getEvent() == Event.END_APPEAL,
+            notificationGenerators
+
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> appealOutcomeNotificationHandler(
-        @Qualifier("appealOutcomeNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("appealOutcomeNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.SEND_DECISION_AND_REASONS,
-            notificationGenerator
+                    && callback.getEvent() == Event.SEND_DECISION_AND_REASONS,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> listCaseNotificationHandler(
-        @Qualifier("listCaseNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("listCaseNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.LIST_CASE,
-            notificationGenerator
+                    && callback.getEvent() == Event.LIST_CASE,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> addAppealNotificationHandler(
-        @Qualifier("addAppealNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("addAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.ADD_APPEAL_RESPONSE,
-            notificationGenerator
+                    && callback.getEvent() == Event.ADD_APPEAL_RESPONSE,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> hearingRequirementsNotificationHandler(
-        @Qualifier("hearingRequirementsNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("hearingRequirementsNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REQUEST_HEARING_REQUIREMENTS,
-            notificationGenerator
+                    && callback.getEvent() == Event.REQUEST_HEARING_REQUIREMENTS,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> respondentEvidenceNotificationHandler(
-        @Qualifier("respondentEvidenceNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("respondentEvidenceNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE,
-            notificationGenerator
+                    && callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE,
+            notificationGenerators
+
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> respondentReviewNotificationHandler(
-        @Qualifier("respondentReviewNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("respondentReviewNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW,
-            notificationGenerator
+                    && callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW,
+            notificationGenerators
         );
     }
 
     @Bean
-    public PreSubmitCallbackHandler<AsylumCase> submitAppealNotificationHandler(
-        @Qualifier("submitAppealNotificationGenerator") NotificationGenerator notificationGenerator) {
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealAipNotificationHandler(
+        @Qualifier("submitAppealAipNotificationGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.SUBMIT_APPEAL
+                    && callback.getCaseDetails().getCaseData()
+                    .read(JOURNEY_TYPE, JourneyType.class)
+                    .map(type -> type == AIP).orElse(false),
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealRepNotificationHandler(
+        @Qualifier("submitAppealRepNotificationGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.SUBMIT_APPEAL,
-            notificationGenerator
+                    && callback.getEvent() == Event.SUBMIT_APPEAL
+                    && callback.getCaseDetails().getCaseData()
+                    .read(JOURNEY_TYPE, JourneyType.class)
+                    .map(type -> type == REP).orElse(true),
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> submitCaseNotificationHandler(
-        @Qualifier("submitCaseNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("submitCaseNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.SUBMIT_CASE,
-            notificationGenerator
+                    && callback.getEvent() == Event.SUBMIT_CASE,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> uploadRespondentNotificationHandler(
-        @Qualifier("uploadRespondentNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("uploadRespondentNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.UPLOAD_RESPONDENT_EVIDENCE,
-            notificationGenerator
+                    && callback.getEvent() == Event.UPLOAD_RESPONDENT_EVIDENCE,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> respondentEvidenceSubmittedHandler(
-            @Qualifier("respondentEvidenceSubmitted") NotificationGenerator notificationGenerator
+        @Qualifier("respondentEvidenceSubmitted") List<NotificationGenerator> notificationGenerators
     ) {
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.UPLOAD_HOME_OFFICE_BUNDLE,
-                notificationGenerator
+                    && callback.getEvent() == Event.UPLOAD_HOME_OFFICE_BUNDLE,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> requestCaseBuildingNotificationHandler(
-            @Qualifier("requestCaseBuildingNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("requestCaseBuildingNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REQUEST_CASE_BUILDING,
-                notificationGenerator
+                    && callback.getEvent() == Event.REQUEST_CASE_BUILDING,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> respondentDirectionNotificationHandler(
-        @Qualifier("respondentDirectionNotificationGenerator") NotificationGenerator notificationGenerator,
+        @Qualifier("respondentDirectionNotificationGenerator") List<NotificationGenerator> notificationGenerators,
         DirectionFinder directionFinder) {
 
         return new NotificationHandler(
@@ -177,17 +207,17 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.SEND_DIRECTION
-                       && isRespondentDirection;
+                    && callback.getEvent() == Event.SEND_DIRECTION
+                    && isRespondentDirection;
             },
-            notificationGenerator
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> legalRepDirectionNotificationHandler(
-            @Qualifier("legalRepDirectionNotificationGenerator") NotificationGenerator notificationGenerator,
-            DirectionFinder directionFinder) {
+        @Qualifier("legalRepDirectionNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+        DirectionFinder directionFinder) {
 
         return new NotificationHandler(
             (callbackStage, callback) -> {
@@ -202,16 +232,16 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.SEND_DIRECTION
-                       && isLegalRepDirection;
+                    && callback.getEvent() == Event.SEND_DIRECTION
+                    && isLegalRepDirection;
             },
-            notificationGenerator
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> recordApplicationNotificationHandler(
-        @Qualifier("recordApplicationNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("recordApplicationNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) -> {
@@ -224,58 +254,58 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.RECORD_APPLICATION
-                       && isApplicationRefused;
+                    && callback.getEvent() == Event.RECORD_APPLICATION
+                    && isApplicationRefused;
             },
-            notificationGenerator
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> editCaseListingNotificationHandler(
-        @Qualifier("editCaseListingNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("editCaseListingNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.EDIT_CASE_LISTING,
-            notificationGenerator
+                    && callback.getEvent() == Event.EDIT_CASE_LISTING,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> uploadHomeOfficeAppealResponseNotificationHandler(
-        @Qualifier("uploadHomeOfficeAppealResponseNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("uploadHomeOfficeAppealResponseNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.UPLOAD_HOME_OFFICE_APPEAL_RESPONSE,
-            notificationGenerator
+                    && callback.getEvent() == Event.UPLOAD_HOME_OFFICE_APPEAL_RESPONSE,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> requestResponseReviewNotificationHandler(
-        @Qualifier("requestResponseReviewNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("requestResponseReviewNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REQUEST_RESPONSE_REVIEW,
-            notificationGenerator
+                    && callback.getEvent() == Event.REQUEST_RESPONSE_REVIEW,
+            notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> hearingBundleReadyNotificationHandler(
-            @Qualifier("hearingBundleReadyNotificationGenerator") NotificationGenerator notificationGenerator) {
+        @Qualifier("hearingBundleReadyNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.GENERATE_HEARING_BUNDLE,
-            notificationGenerator
+                    && callback.getEvent() == Event.GENERATE_HEARING_BUNDLE,
+            notificationGenerators
         );
     }
 }

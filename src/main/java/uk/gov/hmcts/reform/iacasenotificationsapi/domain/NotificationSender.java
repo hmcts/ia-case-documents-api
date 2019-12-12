@@ -10,4 +10,11 @@ public interface NotificationSender {
         Map<String, String> personalisation,
         String reference
     );
+
+    String sendSms(
+        String templateId,
+        String phoneNumber,
+        Map<String, String> personalisation,
+        String reference
+    );
 }

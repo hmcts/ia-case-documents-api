@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.List;
 import java.util.function.BiPredicate;
-
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -14,12 +14,12 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGen
 public class NotificationHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final BiPredicate<PreSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction;
-    private final NotificationGenerator notificationGenerator;
+    private final List<? extends NotificationGenerator> notificationGenerators;
 
     public NotificationHandler(BiPredicate<PreSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction,
-                               NotificationGenerator notificationGenerator) {
+        List<? extends NotificationGenerator> notificationGenerator) {
         this.canHandleFunction = canHandleFunction;
-        this.notificationGenerator = notificationGenerator;
+        this.notificationGenerators = notificationGenerator;
     }
 
     @Override
@@ -37,7 +37,8 @@ public class NotificationHandler implements PreSubmitCallbackHandler<AsylumCase>
             throw new IllegalStateException("Cannot handle callback");
         }
 
-        notificationGenerator.generate(callback);
+        notificationGenerators.forEach(notificationGenerator -> notificationGenerator.generate(callback));
+
 
         return new PreSubmitCallbackResponse<>(callback.getCaseDetails().getCaseData());
     }

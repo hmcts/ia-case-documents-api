@@ -78,7 +78,7 @@ public class NotificationVerifier implements Verifier {
                     Notification notification = notificationClient.getNotificationById(deliveredNotificationId);
 
                     final String actualReference = notification.getReference().orElse("");
-                    final String actualRecipient = notification.getEmailAddress().orElse("");
+                    final String actualRecipient = notification.getEmailAddress().orElse(notification.getPhoneNumber().orElse(""));
                     final String actualSubject = notification.getSubject().orElse("");
                     final String actualBody = notification.getBody();
 

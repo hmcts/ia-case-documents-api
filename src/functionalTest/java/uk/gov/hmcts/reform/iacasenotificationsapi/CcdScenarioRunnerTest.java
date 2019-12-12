@@ -305,6 +305,12 @@ public class CcdScenarioRunnerTest {
                 .getHomeOfficeGenericAuthorization();
         }
 
+        if ("Citizen".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getCitizenAuthorization();
+        }
+
         return new Headers();
     }
 }

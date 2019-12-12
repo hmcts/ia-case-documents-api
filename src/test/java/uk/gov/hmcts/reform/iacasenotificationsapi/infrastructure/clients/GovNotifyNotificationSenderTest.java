@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.service.notify.NotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
+import uk.gov.service.notify.SendSmsResponse;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -28,6 +29,7 @@ public class GovNotifyNotificationSenderTest {
 
     private String templateId = "a-b-c-d-e-f";
     private String emailAddress = "recipient@example.com";
+    private String phoneNumber = "07123456789";
     private Map<String, String> personalisation = mock(Map.class);
     private String reference = "our-reference";
 
@@ -158,7 +160,7 @@ public class GovNotifyNotificationSenderTest {
     }
 
     @Test
-    public void wrap_gov_notify_exceptions() throws NotificationClientException {
+    public void wrap_gov_notify_email_exceptions() throws NotificationClientException {
 
         NotificationClientException underlyingException = mock(NotificationClientException.class);
 
@@ -183,4 +185,147 @@ public class GovNotifyNotificationSenderTest {
             .hasCause(underlyingException);
 
     }
+
+    @Test
+    public void should_send_sms_using_gov_notify() throws NotificationClientException {
+
+        final UUID expectedNotificationId = UUID.randomUUID();
+
+        SendSmsResponse sendSmsResponse = mock(SendSmsResponse.class);
+
+        when(notificationClient.sendSms(
+            templateId,
+            phoneNumber,
+            personalisation,
+            reference
+        )).thenReturn(sendSmsResponse);
+
+        when(sendSmsResponse.getNotificationId()).thenReturn(expectedNotificationId);
+
+        String actualNotificationId =
+            govNotifyNotificationSender.sendSms(
+                templateId,
+                phoneNumber,
+                personalisation,
+                reference
+            );
+
+        assertEquals(expectedNotificationId.toString(), actualNotificationId);
+    }
+
+    @Test
+    public void should_not_send_duplicate_sms_in_short_space_of_time() throws NotificationClientException {
+
+        final String otherPhoneNumber = "07123456780";
+        final String otherReference = "1111_SOME_OTHER_NOTIFICATION";
+
+        final UUID expectedNotificationId = UUID.randomUUID();
+        final UUID expectedNotificationIdForOther = UUID.randomUUID();
+
+        SendSmsResponse sendSmsResponse = mock(SendSmsResponse.class);
+        SendSmsResponse sendSmsResponseForOther = mock(SendSmsResponse.class);
+
+        when(notificationClient.sendSms(
+            templateId,
+            phoneNumber,
+            personalisation,
+            reference
+        )).thenReturn(sendSmsResponse);
+
+        when(notificationClient.sendSms(
+            templateId,
+            otherPhoneNumber,
+            personalisation,
+            otherReference
+        )).thenReturn(sendSmsResponseForOther);
+
+        when(sendSmsResponse.getNotificationId()).thenReturn(expectedNotificationId);
+        when(sendSmsResponseForOther.getNotificationId()).thenReturn(expectedNotificationIdForOther);
+
+        final String actualNotificationId1 =
+            govNotifyNotificationSender.sendSms(
+                templateId,
+                phoneNumber,
+                personalisation,
+                reference
+            );
+
+        final String actualNotificationId2 =
+            govNotifyNotificationSender.sendSms(
+                templateId,
+                phoneNumber,
+                personalisation,
+                reference
+            );
+
+        final String actualNotificationIdForOther =
+            govNotifyNotificationSender.sendSms(
+                templateId,
+                otherPhoneNumber,
+                personalisation,
+                otherReference
+            );
+
+        assertEquals(expectedNotificationId.toString(), actualNotificationId1);
+        assertEquals(expectedNotificationId.toString(), actualNotificationId2);
+        assertEquals(expectedNotificationIdForOther.toString(), actualNotificationIdForOther);
+
+        try {
+            await().atMost(2, TimeUnit.SECONDS).until(() -> false);
+        } catch (ConditionTimeoutException e) {
+            assertTrue("We expect this to timeout", true);
+        }
+
+        final String actualNotificationId3 =
+            govNotifyNotificationSender.sendSms(
+                templateId,
+                phoneNumber,
+                personalisation,
+                reference
+            );
+
+        assertEquals(expectedNotificationId.toString(), actualNotificationId3);
+
+        verify(notificationClient, times(2)).sendSms(
+            templateId,
+            phoneNumber,
+            personalisation,
+            reference
+        );
+
+        verify(notificationClient, times(1)).sendSms(
+            templateId,
+            otherPhoneNumber,
+            personalisation,
+            otherReference
+        );
+    }
+
+    @Test
+    public void wrap_gov_notify_sms_exceptions() throws NotificationClientException {
+
+        NotificationClientException underlyingException = mock(NotificationClientException.class);
+
+        doThrow(underlyingException)
+            .when(notificationClient)
+            .sendSms(
+                templateId,
+                phoneNumber,
+                personalisation,
+                reference
+            );
+
+        assertThatThrownBy(() ->
+            govNotifyNotificationSender.sendSms(
+                templateId,
+                phoneNumber,
+                personalisation,
+                reference
+            )
+        ).isExactlyInstanceOf(NotificationServiceResponseException.class)
+            .hasMessage("Failed to send sms using GovNotify")
+            .hasCause(underlyingException);
+
+    }
+
 }

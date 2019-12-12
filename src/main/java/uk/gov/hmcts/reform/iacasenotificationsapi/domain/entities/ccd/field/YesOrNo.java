@@ -1,5 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field;
 
+import static java.util.Arrays.stream;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Optional;
+
 public enum YesOrNo {
 
     NO("No"),
@@ -9,6 +15,20 @@ public enum YesOrNo {
 
     YesOrNo(String id) {
         this.id = id;
+    }
+
+    @JsonCreator
+    public static Optional<YesOrNo> from(
+        String value
+    ) {
+        return stream(values())
+            .filter(v -> v.getId().equalsIgnoreCase(value))
+            .findFirst();
+    }
+
+    @JsonValue
+    public String getId() {
+        return id;
     }
 
     @Override
