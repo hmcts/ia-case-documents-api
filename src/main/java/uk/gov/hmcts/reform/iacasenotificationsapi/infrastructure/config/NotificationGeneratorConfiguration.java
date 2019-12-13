@@ -30,6 +30,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalre
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeRecordApplicationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeRequestCaseBuildingPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeRequestResponseReviewPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeSubmittedHearingRequirementsPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeUploadRespondentEvidencePersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentDirectionPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentEvidenceDirectionPersonalisation;
@@ -368,6 +369,23 @@ public class NotificationGeneratorConfiguration {
         return Arrays.asList(
             new EmailNotificationGenerator(
                 newArrayList(homeOfficeHearingBundleReadyPersonalisation, legalRepresentativeHearingBundleReadyPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("submittedHearingRequirementsNotificationGenerator")
+    public List<NotificationGenerator> submittedHearingRequirementsNotificationGenerator(
+        CaseOfficerSubmittedHearingRequirementsPersonalisation caseOfficerSubmittedHearingRequirementsPersonalisation,
+        LegalRepresentativeSubmittedHearingRequirementsPersonalisation legalRepresentativeSubmittedHearingRequirementsPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(caseOfficerSubmittedHearingRequirementsPersonalisation, legalRepresentativeSubmittedHearingRequirementsPersonalisation),
                 notificationSender,
                 notificationIdAppender
             )

@@ -44,6 +44,7 @@ public class BasePersonalisationProviderTest {
     private String hearingTime = "14:25";
 
     private String appealReferenceNumber = "someReferenceNumber";
+    private String legalRepReferenceNumber = "legalRepReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
     private String appellantGivenNames = "appellantGivenNames";
     private String appellantFamilyName = "appellantFamilyName";
@@ -77,6 +78,7 @@ public class BasePersonalisationProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
@@ -116,6 +118,14 @@ public class BasePersonalisationProviderTest {
     public void should_return_non_direction_personalisation() {
 
         Map<String, String> personalisation = basePersonalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
+
+        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+    }
+
+    @Test
+    public void should_return_submitted_hearing_requirements_personalisation() {
+
+        Map<String, String> personalisation = basePersonalisationProvider.getSubmittedHearingRequirementsPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

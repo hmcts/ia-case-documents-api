@@ -114,6 +114,16 @@ public class BasePersonalisationProvider {
 
     }
 
+    public Map<String, String> getSubmittedHearingRequirementsPersonalisation(AsylumCase asylumCase) {
+        return ImmutableMap
+            .<String, String>builder()
+            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .build();
+    }
+
     private String readStringCaseField(final AsylumCase asylumCase, final AsylumCaseDefinition caseField, final String defaultIfNotPresent) {
 
         final Optional<String> optionalFieldValue = asylumCase.read(caseField, String.class);
