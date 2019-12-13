@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -98,13 +99,7 @@ public class LegalRepresentativeAddAppealPersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeAddAppealPersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(appellantGivenNames, personalisation.get("Given names"));
-        assertEquals(appellantFamilyName, personalisation.get("Family name"));
-        assertEquals(iaCcdFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals(legalRepRefNumber, personalisation.get("LR reference"));
+        assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
     }
 
     @Test
@@ -117,13 +112,7 @@ public class LegalRepresentativeAddAppealPersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeAddAppealPersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals("", personalisation.get("Appeal Ref Number"));
-        assertEquals("", personalisation.get("Given names"));
-        assertEquals("", personalisation.get("Family name"));
-        assertEquals(iaCcdFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals("", personalisation.get("LR reference"));
+        assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
     }
 
     @Test

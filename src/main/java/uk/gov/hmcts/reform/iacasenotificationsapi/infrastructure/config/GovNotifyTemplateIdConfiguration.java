@@ -28,4 +28,7 @@ public class GovNotifyTemplateIdConfiguration {
 
     @NotBlank
     private String legalRepNonStandardDirectionOfHomeOfficeTemplateId;
+
+    @NotBlank
+    private String caseOfficerRequestHearingRequirementsTemplateId;
 }

@@ -50,6 +50,8 @@ govnotify.template.legalRepresentativeCaseEditedTemplateId: 347f2959-4cb5-447f-b
 govnotify.template.homeOfficeCaseEditedTemplateId: 54975c09-6634-4f1a-bfe6-caaeb5913e6a
 govnotify.template.legalRepresentativeNonStandardDirectionTemplateId: d85587f4-2a7d-44a2-b6d8-538b91b7144b
 govnotify.template.legalRepNonStandardDirectionOfHomeOfficeTemplateId: a03720df-2c7d-403d-9a45-a58c192e8570
+govnotify.template.caseOfficerRequestHearingRequirementsTemplateId: f6185789-8328-4208-8ee5-8a12d641180f
+
 
 govnotify.template.appealSubmittedAppellant.email: b53d6e97-b7d9-4112-9669-9db81e563506
 govnotify.template.appealSubmittedAppellant.sms: 2cc4d346-cfb6-4ea9-93b3-c3f1f4f56491
@@ -102,6 +104,7 @@ security:
       - "changeDirectionDueDate"
       - "requestCaseEdit"
       - "requestHearingRequirements"
+      - "requestHearingRequirementsFeature"
       - "requestRespondentEvidence"
       - "uploadRespondentEvidence"
       - "requestRespondentReview"

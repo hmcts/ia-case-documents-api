@@ -95,7 +95,7 @@
       },
       {
         "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
-        "recipient": "+447123456789",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
           "Your appeal application has been sent to the Tribunal. Your appeal reference number is PA/12345/2019",
