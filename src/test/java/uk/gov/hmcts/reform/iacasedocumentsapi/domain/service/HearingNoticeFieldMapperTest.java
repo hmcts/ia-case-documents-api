@@ -37,6 +37,12 @@ public class HearingNoticeFieldMapperTest {
     private String taylorHouseHearingCentreAddress = "London, 456 Somewhere, South";
     private String ariaListingReference = "AA/12345/1234";
 
+    private String vulnerabilities = "Vulnerabilities";
+    private String multimedia = "Multimedia";
+    private String singleSexCourt = "Single sex court";
+    private String inCamera = "In camera";
+    private String otherHearingRequest = "Other";
+
     private String expectedFormattedHearingDatePart = "25122020";
     private String expectedFormattedHearingTimePart = "1234";
     private String expectedFormattedManchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
@@ -68,6 +74,13 @@ public class HearingNoticeFieldMapperTest {
         when(stringProvider.get("hearingCentreAddress", "taylorHouse")).thenReturn(Optional.of(taylorHouseHearingCentreAddress));
 
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
+
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.of(vulnerabilities));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.of(multimedia));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(inCamera));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(otherHearingRequest));
+
     }
 
     @Test
@@ -92,6 +105,12 @@ public class HearingNoticeFieldMapperTest {
         assertEquals(expectedFormattedHearingTimePart, templateFieldValues.get("hearingTime"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
         assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+        assertEquals(vulnerabilities, templateFieldValues.get("vulnerabilities"));
+        assertEquals(multimedia, templateFieldValues.get("multimedia"));
+        assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
+        assertEquals(inCamera, templateFieldValues.get("inCamera"));
+        assertEquals(otherHearingRequest, templateFieldValues.get("otherHearingRequest"));
+
     }
 
     @Test
@@ -114,6 +133,11 @@ public class HearingNoticeFieldMapperTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
@@ -125,6 +149,12 @@ public class HearingNoticeFieldMapperTest {
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals("", templateFieldValues.get("ariaListingReference"));
+        assertEquals("No special adjustments are being made to accommodate vulnerabilities", templateFieldValues.get("vulnerabilities"));
+        assertEquals("No multimedia equipment is being provided", templateFieldValues.get("multimedia"));
+        assertEquals("The court will not be single sex", templateFieldValues.get("singleSexCourt"));
+        assertEquals("The hearing will be held in public court", templateFieldValues.get("inCamera"));
+        assertEquals("No other adjustments are being made", templateFieldValues.get("otherHearingRequest"));
+
     }
 
     @Test

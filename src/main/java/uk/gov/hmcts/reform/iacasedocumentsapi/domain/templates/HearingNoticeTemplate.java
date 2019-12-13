@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,6 +26,7 @@ public class HearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
         return templateName;
     }
 
+    @Override
     public Map<String, Object> mapFieldValues(
         CaseDetails<AsylumCase> caseDetails
     ) {
@@ -37,15 +36,6 @@ public class HearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
         final HearingNoticeFieldMapper fieldMapper =
             new HearingNoticeFieldMapper(stringProvider);
 
-        final Map<String, Object> fieldValues =
-            fieldMapper.mapFields(asylumCase);
-
-        fieldValues.put("vulnerabilities", asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class).orElse(""));
-        fieldValues.put("multimedia", asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class).orElse(""));
-        fieldValues.put("singleSexCourt", asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class).orElse(""));
-        fieldValues.put("inCamera", asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class).orElse(""));
-        fieldValues.put("otherHearingRequest", asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class).orElse(""));
-
-        return fieldValues;
+        return fieldMapper.mapFields(asylumCase);
     }
 }
