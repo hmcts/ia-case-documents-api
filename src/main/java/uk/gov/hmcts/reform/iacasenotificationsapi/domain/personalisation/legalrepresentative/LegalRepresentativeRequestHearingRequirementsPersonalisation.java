@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
+package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
@@ -22,13 +22,13 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
-public class CaseOfficerRequestHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeRequestHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
     private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
     private final EmailAddressFinder emailAddressFinder;
     private final DirectionFinder directionFinder;
 
-    public CaseOfficerRequestHearingRequirementsPersonalisation(
+    public LegalRepresentativeRequestHearingRequirementsPersonalisation(
         GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
         EmailAddressFinder emailAddressFinder,
         DirectionFinder directionFinder
@@ -50,7 +50,7 @@ public class CaseOfficerRequestHearingRequirementsPersonalisation implements Ema
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION";
+        return caseId + "_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION";
     }
 
     @Override

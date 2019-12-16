@@ -21,13 +21,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeRequestHearingRequirementsPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class CaseOfficerRequestHearingRequirementsPersonalisationTest {
+public class LegalRepresentativeRequestHearingRequirementsPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
     @Mock DirectionFinder directionFinder;
@@ -49,7 +50,7 @@ public class CaseOfficerRequestHearingRequirementsPersonalisationTest {
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
 
-    private CaseOfficerRequestHearingRequirementsPersonalisation caseOfficerRequestHearingRequirementsPersonalisation;
+    private LegalRepresentativeRequestHearingRequirementsPersonalisation legalRepresentativeRequestHearingRequirementsPersonalisation;
 
     @Before
     public void setup() {
@@ -65,7 +66,7 @@ public class CaseOfficerRequestHearingRequirementsPersonalisationTest {
         when(govNotifyTemplateIdConfiguration.getCaseOfficerRequestHearingRequirementsTemplateId()).thenReturn("someTemplateId");
         when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
 
-        caseOfficerRequestHearingRequirementsPersonalisation = new CaseOfficerRequestHearingRequirementsPersonalisation(
+        legalRepresentativeRequestHearingRequirementsPersonalisation = new LegalRepresentativeRequestHearingRequirementsPersonalisation(
             govNotifyTemplateIdConfiguration,
             emailAddressFinder,
             directionFinder
@@ -74,23 +75,23 @@ public class CaseOfficerRequestHearingRequirementsPersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, caseOfficerRequestHearingRequirementsPersonalisation.getTemplateId());
+        assertEquals(templateId, legalRepresentativeRequestHearingRequirementsPersonalisation.getTemplateId());
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION", caseOfficerRequestHearingRequirementsPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION", legalRepresentativeRequestHearingRequirementsPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(legalRepEmailAddress), caseOfficerRequestHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(legalRepEmailAddress), legalRepresentativeRequestHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> caseOfficerRequestHearingRequirementsPersonalisation.getPersonalisation((AsylumCase) null))
+        assertThatThrownBy(() -> legalRepresentativeRequestHearingRequirementsPersonalisation.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -98,7 +99,7 @@ public class CaseOfficerRequestHearingRequirementsPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = caseOfficerRequestHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation = legalRepresentativeRequestHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
         Assertions.assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -108,7 +109,7 @@ public class CaseOfficerRequestHearingRequirementsPersonalisationTest {
 
         when(directionFinder.findFirst(asylumCase, DirectionTag.LEGAL_REPRESENTATIVE_HEARING_REQUIREMENTS)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> caseOfficerRequestHearingRequirementsPersonalisation.getPersonalisation(asylumCase))
+        assertThatThrownBy(() -> legalRepresentativeRequestHearingRequirementsPersonalisation.getPersonalisation(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("case officer request hearing requirements direction is not present");
     }

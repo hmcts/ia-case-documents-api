@@ -48,7 +48,7 @@
         ],
         "notificationsSent": [
           {
-            "id": "2047_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+            "id": "2047_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
@@ -57,7 +57,7 @@
     },
     "notifications": [
       {
-        "reference": "2047_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+        "reference": "2047_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Asylum appeal: submit hearing requirements direction",
         "body": [
