@@ -30,6 +30,7 @@ java:
         - home-office-end-appeal-email
         - home-office-allowed-appeal-email
         - home-office-dismissed-appeal-email
+        - admin-officer-review-hearing-requirements-email
         - system-username
         - system-password
         - idam-client-id

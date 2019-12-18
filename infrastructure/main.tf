@@ -309,6 +309,8 @@ module "ia_case_notifications_api" {
     IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL                      = "${data.azurerm_key_vault_secret.ia_home_office_allowed_appeal_email.value}"
     IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL                    = "${data.azurerm_key_vault_secret.ia_home_office_dismissed_appeal_email.value}"
 
+    IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL       = "${data.azurerm_key_vault_secret.ia_admin_officer_review_hearing_requirements_email.value}"
+
     IA_HEARING_CENTRE_BRADFORD_TELEPHONE                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_bradford_telephone.value}"
     IA_HEARING_CENTRE_MANCHESTER_TELEPHONE                   = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_telephone.value}"
     IA_HEARING_CENTRE_NEWPORT_TELEPHONE                      = "${data.azurerm_key_vault_secret.ia_hearing_centre_newport_telephone.value}"
