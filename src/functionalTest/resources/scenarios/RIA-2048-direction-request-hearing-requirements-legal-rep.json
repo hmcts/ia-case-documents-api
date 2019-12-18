@@ -1,0 +1,79 @@
+{
+  "description": "RIA-2048 direction to legal rep to submit hearing requirements Legal Rep",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 2048,
+      "eventId": "requestHearingRequirementsFeature",
+      "state": "submitHearingRequirements",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "The appeal is going to a hearing and you should tell the Tribunal if the appellant has any hearing requirements.\n\n# Next steps\n\nVisit the online service and use the reference given in this email to find the case. You'll be able to submit the hearing requirements using the Overview tab.\nThe Tribunal will review the hearing requirements and any requests for additional adjustments. You'll then be sent a hearing date.\nIf you do not submit the hearing requirements within 5 working days, the Tribunal may not be able to accommodate the appellant's needs for the hearing.",
+                "parties": "legalRepresentative",
+                "dateDue": "{$TODAY+5}",
+                "dateSent": "{$TODAY}",
+                "tag": "legalRepresentativeHearingRequirements"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "The appeal is going to a hearing and you should tell the Tribunal if the appellant has any hearing requirements.\n\n# Next steps\n\nVisit the online service and use the reference given in this email to find the case. You'll be able to submit the hearing requirements using the Overview tab.\nThe Tribunal will review the hearing requirements and any requests for additional adjustments. You'll then be sent a hearing date.\nIf you do not submit the hearing requirements within 5 working days, the Tribunal may not be able to accommodate the appellant's needs for the hearing.",
+              "parties": "legalRepresentative",
+              "dateDue": "{$TODAY+5}",
+              "dateSent": "{$TODAY}",
+              "tag": "legalRepresentativeHearingRequirements"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "2048_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2048_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Asylum appeal: submit hearing requirements direction",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Your reference: CASE001",
+          "Appellant name: Talha Awan",
+          "You have a direction for this case",
+          "The appeal is going to a hearing and you should tell the Tribunal if the appellant has any hearing requirements.",
+          "Next steps",
+          "Visit the online service and use the reference given in this email to find the case. You'll be able to submit the hearing requirements using the Overview tab.",
+          "The Tribunal will review the hearing requirements and any requests for additional adjustments. You'll then be sent a hearing date.",
+          "If you do not submit the hearing requirements within 5 working days, the Tribunal may not be able to accommodate the appellant's needs for the hearing.",
+          "You must complete this direction by: {$TODAY+5|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}
