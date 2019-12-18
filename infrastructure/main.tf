@@ -185,6 +185,11 @@ data "azurerm_key_vault_secret" "ia_home_office_dismissed_appeal_email" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_admin_officer_review_hearing_requirements_email" {
+  name      = "admin-officer-review-hearing-requirements-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "test_caseofficer_username" {
   name      = "test-caseofficer-username"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
