@@ -210,7 +210,8 @@ public class MultipleNotificationsTest {
             party,
             LocalDate.now().plusDays(7L).format(DateTimeFormatter.ofPattern(dateFormat)),
             LocalDate.now().format(DateTimeFormatter.ofPattern(dateFormat)),
-            directionTag);
+            directionTag,
+            Collections.emptyList());
     }
 
 }

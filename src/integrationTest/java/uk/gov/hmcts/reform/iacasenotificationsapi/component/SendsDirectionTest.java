@@ -11,6 +11,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.SEND_DIRECTION;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State.APPEAL_SUBMITTED;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,7 +52,8 @@ public class SendsDirectionTest extends SpringBootIntegrationTest {
                             Parties.RESPONDENT,
                             "1980-04-12",
                             "1980-04-12",
-                            DirectionTag.NONE))))));
+                            DirectionTag.NONE,
+                            Collections.emptyList()))))));
 
         then.govNotifyReceivesAnEmailNotificationRequest();
 

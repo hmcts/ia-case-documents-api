@@ -6,9 +6,12 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre.MANCHESTER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.Test;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
@@ -44,27 +47,27 @@ public class AsylumCaseTest {
     public void reads_id_value_list() throws IOException {
 
         String caseData = "{\"directions\": [\n" +
-                "    {\n" +
-                "      \"id\": \"2\",\n" +
-                "      \"value\": {\n" +
-                "        \"tag\": \"buildCase\",\n" +
-                "        \"dateDue\": \"2019-06-13\",\n" +
-                "        \"parties\": \"legalRepresentative\",\n" +
-                "        \"dateSent\": \"2019-05-16\",\n" +
-                "        \"explanation\": \"some-explanation\"\n" +
-                "      }\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"id\": \"1\",\n" +
-                "      \"value\": {\n" +
-                "        \"tag\": \"respondentEvidence\",\n" +
-                "        \"dateDue\": \"2019-05-30\",\n" +
-                "        \"parties\": \"respondent\",\n" +
-                "        \"dateSent\": \"2019-05-16\",\n" +
-                "        \"explanation\": \"some-other-explanation\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]}";
+                          "    {\n" +
+                          "      \"id\": \"2\",\n" +
+                          "      \"value\": {\n" +
+                          "        \"tag\": \"buildCase\",\n" +
+                          "        \"dateDue\": \"2019-06-13\",\n" +
+                          "        \"parties\": \"legalRepresentative\",\n" +
+                          "        \"dateSent\": \"2019-05-16\",\n" +
+                          "        \"explanation\": \"some-explanation\"\n" +
+                          "      }\n" +
+                          "    },\n" +
+                          "    {\n" +
+                          "      \"id\": \"1\",\n" +
+                          "      \"value\": {\n" +
+                          "        \"tag\": \"respondentEvidence\",\n" +
+                          "        \"dateDue\": \"2019-05-30\",\n" +
+                          "        \"parties\": \"respondent\",\n" +
+                          "        \"dateSent\": \"2019-05-16\",\n" +
+                          "        \"explanation\": \"some-other-explanation\"\n" +
+                          "      }\n" +
+                          "    }\n" +
+                          "  ]}";
 
         AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
 
@@ -97,7 +100,7 @@ public class AsylumCaseTest {
         AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
 
         assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get())
-                .isEqualTo("PA/50222/2019");
+            .isEqualTo("PA/50222/2019");
     }
 
     @Test
@@ -108,7 +111,7 @@ public class AsylumCaseTest {
         asylumCase.write(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number");
 
         assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get())
-                .isEqualTo("some-appeal-reference-number");
+            .isEqualTo("some-appeal-reference-number");
     }
 
     @Test
@@ -117,13 +120,14 @@ public class AsylumCaseTest {
         AsylumCase asylumCase = new AsylumCase();
 
         IdValue<Direction> idValue = new IdValue<>(
-                "some-id",
-                new Direction(
-                        "some-explanation",
-                        Parties.BOTH,
-                        "some-date",
-                        "some-other-date",
-                        DirectionTag.CASE_EDIT));
+            "some-id",
+            new Direction(
+                "some-explanation",
+                Parties.BOTH,
+                "some-date",
+                "some-other-date",
+                DirectionTag.CASE_EDIT,
+                Collections.emptyList()));
 
 
         asylumCase.write(DIRECTIONS, asList(idValue));
