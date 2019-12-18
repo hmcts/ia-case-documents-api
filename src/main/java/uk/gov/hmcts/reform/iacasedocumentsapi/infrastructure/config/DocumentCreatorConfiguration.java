@@ -34,6 +34,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("hearingRequirements")
+    public DocumentCreator<AsylumCase> getHearingRequirementsDocumentCreator(
+        @Value("${hearingRequirementsDocument.contentType}") String contentType,
+        @Value("${hearingRequirementsDocument.fileExtension}") String fileExtension,
+        @Value("${hearingRequirementsDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HearingRequirementsTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("hearingNotice")
     public DocumentCreator<AsylumCase> getHearingNoticeDocumentCreator(
         @Value("${hearingNoticeDocument.contentType}") String contentType,

@@ -17,6 +17,7 @@ public enum Event {
     REQUEST_RESPONDENT_REVIEW("requestRespondentReview"),
     ADD_APPEAL_RESPONSE("addAppealResponse"),
     REQUEST_HEARING_REQUIREMENTS("requestHearingRequirements"),
+    DRAFT_HEARING_REQUIREMENTS("draftHearingRequirements"),
     CHANGE_DIRECTION_DUE_DATE("changeDirectionDueDate"),
     UPLOAD_ADDITIONAL_EVIDENCE("uploadAdditionalEvidence"),
     LIST_CASE("listCase"),
