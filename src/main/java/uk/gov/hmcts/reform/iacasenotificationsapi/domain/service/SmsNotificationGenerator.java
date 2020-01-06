@@ -33,12 +33,12 @@ public class SmsNotificationGenerator implements NotificationGenerator {
 
         personalisationList.forEach(personalisation -> {
             String referenceId = personalisation.getReferenceId(callback.getCaseDetails().getId());
-            List<String> notificationIds = create(personalisation, asylumCase, referenceId, callback);
+            List<String> notificationIds = createSms(personalisation, asylumCase, referenceId, callback);
             notificationIdAppender.appendAll(asylumCase, referenceId, notificationIds);
         });
     }
 
-    private List<String> create(
+    private List<String> createSms(
         final BaseNotificationPersonalisation personalisation,
         final AsylumCase asylumCase,
         final String referenceId,

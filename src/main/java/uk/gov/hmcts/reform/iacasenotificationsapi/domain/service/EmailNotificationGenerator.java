@@ -33,12 +33,12 @@ public class EmailNotificationGenerator implements NotificationGenerator {
 
         personalisationList.forEach(personalisation -> {
             String referenceId = personalisation.getReferenceId(callback.getCaseDetails().getId());
-            List<String> notificationIds = create(personalisation, asylumCase, referenceId, callback);
+            List<String> notificationIds = createEmail(personalisation, asylumCase, referenceId, callback);
             notificationIdAppender.appendAll(asylumCase, referenceId, notificationIds);
         });
     }
 
-    private List<String> create(
+    private List<String> createEmail(
         final BaseNotificationPersonalisation personalisation,
         final AsylumCase asylumCase,
         final String referenceId,
