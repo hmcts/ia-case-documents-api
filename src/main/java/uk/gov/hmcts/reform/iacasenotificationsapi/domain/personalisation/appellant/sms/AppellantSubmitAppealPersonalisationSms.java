@@ -5,8 +5,6 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import com.google.common.collect.ImmutableMap;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,19 +18,24 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 @Service
 public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationPersonalisation {
 
     private final String appealSubmittedAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
+    private final SystemDateProvider systemDateProvider;
+
 
     public AppellantSubmitAppealPersonalisationSms(
         @Value("${govnotify.template.appealSubmittedAppellant.sms}") String appealSubmittedAppellantSmsTemplateId,
-        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl
+        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        SystemDateProvider systemDateProvider
     ) {
         this.appealSubmittedAppellantSmsTemplateId = appealSubmittedAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.systemDateProvider = systemDateProvider;
     }
 
 
@@ -62,9 +65,9 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-        final String dueDate =
-                LocalDate.now().plusDays(14)
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+
+        final String dueDate = systemDateProvider.dueDate(14);
+
         return
             ImmutableMap
                 .<String, String>builder()

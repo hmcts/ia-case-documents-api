@@ -66,17 +66,17 @@
       {
         "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Immigration and Asylum appeal: Your appeal has been submitted",
+        "subject": "Your appeal has been submitted",
         "body": [
+          "Appeal reference: PA/12345/2019",
           "Home Office reference: A1234567",
-          "Appellant name: Pablo Jimenez",
-          "Dear Pablo,",
-          "Your appeal has been submitted.",
-          "See your appeal details: {$iaAipFrontendUrl}",
-          "#What happens next",
-          "* A case worker will check your application and get in touch with you within 14 days",
-          "#What you can do now",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "Dear Pablo Jimenez,",
+          "Your appeal application has been sent to the Tribunal",
+          "A Tribunal case worker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next",
+          "Sign in to your account to see how your appeal is progressing:",
+          "{$iaAipFrontendUrl}",
+          "#How to contact the Tribunal",
+          "Telephone: 0300 123 1711 (Monday to Friday, 8.30am to 5pm)"
         ]
       },
       {

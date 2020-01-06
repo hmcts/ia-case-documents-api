@@ -18,19 +18,23 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 @Service
 public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificationPersonalisation {
 
     private final String appealSubmittedAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
+    private final SystemDateProvider systemDateProvider;
 
     public AppellantSubmitAppealPersonalisationEmail(
         @Value("${govnotify.template.appealSubmittedAppellant.email}") String appealSubmittedAppellantEmailTemplateId,
-        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl
+        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        SystemDateProvider systemDateProvider
     ) {
         this.appealSubmittedAppellantEmailTemplateId = appealSubmittedAppellantEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.systemDateProvider = systemDateProvider;
     }
 
     @Override
@@ -59,6 +63,9 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
+
+        String dueDate = systemDateProvider.dueDate(14);
+
         return
             ImmutableMap
                 .<String, String>builder()
@@ -66,6 +73,7 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
                 .put("HO Ref Number", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Given names", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("Family name", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("due date", dueDate)
                 .put("Hyperlink to service", iaAipFrontendUrl)
                 .build();
     }

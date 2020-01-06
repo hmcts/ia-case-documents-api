@@ -22,12 +22,14 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.SubscriberType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class AppellantSubmitAppealPersonalisationSmsTest {
 
     @Mock AsylumCase asylumCase;
+    @Mock SystemDateProvider systemDateProvider;
 
     private Long caseId = 12345L;
     private String smsTemplateId = "someSmsTemplateId";
@@ -44,7 +46,10 @@ public class AppellantSubmitAppealPersonalisationSmsTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
 
-        appellantSubmitAppealPersonalisationSms = new AppellantSubmitAppealPersonalisationSms(smsTemplateId, iaAipFrontendUrl);
+        appellantSubmitAppealPersonalisationSms = new AppellantSubmitAppealPersonalisationSms(
+            smsTemplateId,
+            iaAipFrontendUrl,
+            systemDateProvider);
     }
 
     @Test
@@ -94,6 +99,8 @@ public class AppellantSubmitAppealPersonalisationSmsTest {
         final String dueDate = LocalDate.now().plusDays(14)
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
+        when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
+
         Map<String, String> personalisation = appellantSubmitAppealPersonalisationSms.getPersonalisation(asylumCase);
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(dueDate, personalisation.get("due date"));
@@ -107,6 +114,7 @@ public class AppellantSubmitAppealPersonalisationSmsTest {
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
 
         Map<String, String> personalisation = appellantSubmitAppealPersonalisationSms.getPersonalisation(asylumCase);
 
