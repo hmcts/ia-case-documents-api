@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,6 +43,12 @@ public class HearingNoticeFieldMapperTest {
     private String singleSexCourt = "Single sex court";
     private String inCamera = "In camera";
     private String otherHearingRequest = "Other";
+
+    private String caseOfficerReviewedVulnerabilities = "someCaseOfficerReviewedVulnerabilities";
+    private String caseOfficerReviewedMultimedia = "someCaseOfficerReviewedMultimedia";
+    private String caseOfficerReviewedSingleSexCourt = "someCaseOfficerReviewedSingleSexCourt";
+    private String caseOfficerReviewedInCamera = "someCaseOfficerReviewedInCamera";
+    private String caseOfficerReviewedOther = "someCaseOfficerReviewedOther";
 
     private String expectedFormattedHearingDatePart = "25122020";
     private String expectedFormattedHearingTimePart = "1234";
@@ -81,6 +88,13 @@ public class HearingNoticeFieldMapperTest {
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(inCamera));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(otherHearingRequest));
 
+        when(asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedVulnerabilities));
+        when(asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedMultimedia));
+        when(asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedSingleSexCourt));
+        when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedInCamera));
+        when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedOther));
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+
     }
 
     @Test
@@ -110,6 +124,31 @@ public class HearingNoticeFieldMapperTest {
         assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
         assertEquals(inCamera, templateFieldValues.get("inCamera"));
         assertEquals(otherHearingRequest, templateFieldValues.get("otherHearingRequest"));
+
+    }
+
+    @Test
+    public void should_map_case_data_from_submit_hearing_to_template_field_values() {
+
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
+        Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(15, templateFieldValues.size());
+        assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
+        assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
+        assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
+        assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("hearingDate"));
+        assertEquals(expectedFormattedHearingTimePart, templateFieldValues.get("hearingTime"));
+        assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
+        assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+        assertEquals(caseOfficerReviewedVulnerabilities, templateFieldValues.get("vulnerabilities"));
+        assertEquals(caseOfficerReviewedMultimedia, templateFieldValues.get("multimedia"));
+        assertEquals(caseOfficerReviewedSingleSexCourt, templateFieldValues.get("singleSexCourt"));
+        assertEquals(caseOfficerReviewedInCamera, templateFieldValues.get("inCamera"));
+        assertEquals(caseOfficerReviewedOther, templateFieldValues.get("otherHearingRequest"));
 
     }
 
