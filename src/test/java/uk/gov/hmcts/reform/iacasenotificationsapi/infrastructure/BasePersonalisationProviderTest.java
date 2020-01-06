@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
@@ -20,6 +19,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -60,6 +60,12 @@ public class BasePersonalisationProviderTest {
     private String requirementsInCamera = "someRequirementsInCamera";
     private String requirementsOther = "someRequirementsOther";
 
+    private String caseOfficerReviewedVulnerabilities = "someCaseOfficerReviewedVulnerabilities";
+    private String caseOfficerReviewedMultimedia = "someCaseOfficerReviewedMultimedia";
+    private String caseOfficerReviewedSingleSexCourt = "someCaseOfficerReviewedSingleSexCourt";
+    private String caseOfficerReviewedInCamera = "someCaseOfficerReviewedInCamera";
+    private String caseOfficerReviewedOther = "someCaseOfficerReviewedOther";
+
     private String directionExplanation = "someExplanation";
     private String directionDueDate = "2019-10-29";
 
@@ -94,9 +100,16 @@ public class BasePersonalisationProviderTest {
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(requirementsInCamera));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(requirementsOther));
 
-        Mockito.when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
-        Mockito.when(direction.getDateDue()).thenReturn(directionDueDate);
-        Mockito.when(direction.getExplanation()).thenReturn(directionExplanation);
+        when(asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedVulnerabilities));
+        when(asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedMultimedia));
+        when(asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedSingleSexCourt));
+        when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedInCamera));
+        when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedOther));
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
+        when(direction.getDateDue()).thenReturn(directionDueDate);
+        when(direction.getExplanation()).thenReturn(directionExplanation);
 
         basePersonalisationProvider = new BasePersonalisationProvider(
             iaCcdFrontendUrl,
@@ -112,6 +125,25 @@ public class BasePersonalisationProviderTest {
         Map<String, String> personalisation = basePersonalisationProvider.getEditCaseListingPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+        assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(requirementsVulnerabilities);
+        assertThat(personalisation.get("Hearing Requirement Multimedia")).isEqualTo(requirementsMultimedia);
+        assertThat(personalisation.get("Hearing Requirement Single Sex Court")).isEqualTo(requirementsSingleSexCourt);
+        assertThat(personalisation.get("Hearing Requirement In Camera Court")).isEqualTo(requirementsInCamera);
+        assertThat(personalisation.get("Hearing Requirement Other")).isEqualTo(requirementsOther);
+    }
+
+    @Test
+    public void should_return_edit_case_listing_personalisation_when_submit_hearing_present() {
+
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
+        Map<String, String> personalisation = basePersonalisationProvider.getEditCaseListingPersonalisation(callback);
+
+        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+        assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(caseOfficerReviewedVulnerabilities);
+        assertThat(personalisation.get("Hearing Requirement Multimedia")).isEqualTo(caseOfficerReviewedMultimedia);
+        assertThat(personalisation.get("Hearing Requirement Single Sex Court")).isEqualTo(caseOfficerReviewedSingleSexCourt);
+        assertThat(personalisation.get("Hearing Requirement In Camera Court")).isEqualTo(caseOfficerReviewedInCamera);
+        assertThat(personalisation.get("Hearing Requirement Other")).isEqualTo(caseOfficerReviewedOther);
     }
 
     @Test

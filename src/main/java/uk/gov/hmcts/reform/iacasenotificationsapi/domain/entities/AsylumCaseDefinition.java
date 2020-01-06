@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 
 public enum AsylumCaseDefinition {
 
@@ -95,6 +96,24 @@ public enum AsylumCaseDefinition {
 
     SUBSCRIPTIONS(
             "subscriptions", new TypeReference<List<IdValue<Subscriber>>>(){}),
+    VULNERABILITIES_TRIBUNAL_RESPONSE(
+        "vulnerabilitiesTribunalResponse", new TypeReference<String>(){}),
+
+    MULTIMEDIA_TRIBUNAL_RESPONSE(
+        "multimediaTribunalResponse", new TypeReference<String>(){}),
+
+    SINGLE_SEX_COURT_TRIBUNAL_RESPONSE(
+        "singleSexCourtTribunalResponse", new TypeReference<String>(){}),
+
+    IN_CAMERA_COURT_TRIBUNAL_RESPONSE(
+        "inCameraCourtTribunalResponse", new TypeReference<String>(){}),
+
+    ADDITIONAL_TRIBUNAL_RESPONSE(
+        "additionalTribunalResponse", new TypeReference<String>(){}),
+
+    SUBMIT_HEARING_REQUIREMENTS_AVAILABLE(
+        "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),
+
     ;
 
     private final String value;

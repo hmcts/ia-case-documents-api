@@ -4,19 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_MULTIMEDIA;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_OTHER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_VULNERABILITIES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 
@@ -60,6 +49,12 @@ public class LegalRepresentativeListCasePersonalisationTest {
     private String requirementsInCamera = "someRequirementsInCamera";
     private String requirementsOther = "someRequirementsOther";
 
+    private String caseOfficerReviewedVulnerabilities = "someCaseOfficerReviewedVulnerabilities";
+    private String caseOfficerReviewedMultimedia = "someCaseOfficerReviewedMultimedia";
+    private String caseOfficerReviewedSingleSexCourt = "someCaseOfficerReviewedSingleSexCourt";
+    private String caseOfficerReviewedInCamera = "someCaseOfficerReviewedInCamera";
+    private String caseOfficerReviewedOther = "someCaseOfficerReviewedOther";
+
     private LegalRepresentativeListCasePersonalisation legalRepresentativeListCasePersonalisation;
 
     @Before
@@ -80,6 +75,13 @@ public class LegalRepresentativeListCasePersonalisationTest {
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.of(requirementsSingleSexCourt));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(requirementsInCamera));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(requirementsOther));
+
+        when(asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedVulnerabilities));
+        when(asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedMultimedia));
+        when(asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedSingleSexCourt));
+        when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedInCamera));
+        when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedOther));
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreAddress));
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
@@ -139,6 +141,27 @@ public class LegalRepresentativeListCasePersonalisationTest {
         assertEquals(requirementsSingleSexCourt, personalisation.get("Hearing Requirement Single Sex Court"));
         assertEquals(requirementsInCamera, personalisation.get("Hearing Requirement In Camera Court"));
         assertEquals(requirementsOther, personalisation.get("Hearing Requirement Other"));
+        assertEquals(hearingDate, personalisation.get("Hearing Date"));
+        assertEquals(hearingTime, personalisation.get("Hearing Time"));
+        assertEquals(hearingCentreAddress, personalisation.get("Hearing Centre Address"));
+    }
+
+    @Test
+    public void should_return_personalisation_when_co_records_hearing_response() {
+
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
+        Map<String, String> personalisation = legalRepresentativeListCasePersonalisation.getPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
+        assertEquals(ariaListingReference, personalisation.get("Listing Ref Number"));
+        assertEquals(legalRepRefNumber, personalisation.get("Legal Rep Ref Number"));
+        assertEquals(appellantGivenNames, personalisation.get("Appellant Given Names"));
+        assertEquals(appellantFamilyName, personalisation.get("Appellant Family Name"));
+        assertEquals(caseOfficerReviewedVulnerabilities, personalisation.get("Hearing Requirement Vulnerabilities"));
+        assertEquals(caseOfficerReviewedMultimedia, personalisation.get("Hearing Requirement Multimedia"));
+        assertEquals(caseOfficerReviewedSingleSexCourt, personalisation.get("Hearing Requirement Single Sex Court"));
+        assertEquals(caseOfficerReviewedInCamera, personalisation.get("Hearing Requirement In Camera Court"));
+        assertEquals(caseOfficerReviewedOther, personalisation.get("Hearing Requirement Other"));
         assertEquals(hearingDate, personalisation.get("Hearing Date"));
         assertEquals(hearingTime, personalisation.get("Hearing Time"));
         assertEquals(hearingCentreAddress, personalisation.get("Hearing Centre Address"));

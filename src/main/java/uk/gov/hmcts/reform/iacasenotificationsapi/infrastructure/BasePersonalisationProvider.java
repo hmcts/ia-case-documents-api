@@ -4,6 +4,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 
 import com.google.common.collect.ImmutableMap;
 
+import com.google.common.collect.ImmutableMap.Builder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @Service
@@ -62,7 +64,7 @@ public class BasePersonalisationProvider {
                 hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.get().getCaseData());
         }
 
-        return ImmutableMap
+        final Builder<String, String> caseListingValues = ImmutableMap
             .<String, String>builder()
             .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
@@ -71,22 +73,48 @@ public class BasePersonalisationProvider {
             .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-            .put("Hearing Requirement Vulnerabilities", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_VULNERABILITIES,
-                "No special adjustments are being made to accommodate vulnerabilities"))
-            .put("Hearing Requirement Multimedia", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_MULTIMEDIA,
-                "No multimedia equipment is being provided"))
-            .put("Hearing Requirement Single Sex Court", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT,
-                "The court will not be single sex"))
-            .put("Hearing Requirement In Camera Court", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT,
-                "The hearing will be held in public court"))
-            .put("Hearing Requirement Other", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_OTHER,
-                "No other adjustments are being made"))
             .put("oldHearingCentre", hearingCentreNameBefore)
             .put("oldHearingDate", oldHearingDate == null || oldHearingDate.isEmpty() ? "" : dateTimeExtractor.extractHearingDate(oldHearingDate))
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
-            .put(HEARING_CENTRE_ADDRESS, hearingCentreAddress)
-            .build();
+            .put(HEARING_CENTRE_ADDRESS, hearingCentreAddress);
+
+        buildHearingRequirementsFields(asylumCase, caseListingValues);
+
+        return caseListingValues.build();
+    }
+
+    public static void buildHearingRequirementsFields(AsylumCase asylumCase, Builder<String, String> caseListingValues) {
+
+        final Optional<YesOrNo> isSubmitRequirementsAvailable = asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
+
+        if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
+
+            caseListingValues
+                .put("Hearing Requirement Vulnerabilities", readStringCaseField(asylumCase, VULNERABILITIES_TRIBUNAL_RESPONSE,
+                    "No special adjustments are being made to accommodate vulnerabilities"))
+                .put("Hearing Requirement Multimedia", readStringCaseField(asylumCase, MULTIMEDIA_TRIBUNAL_RESPONSE,
+                  "No multimedia equipment is being provided"))
+                .put("Hearing Requirement Single Sex Court", readStringCaseField(asylumCase, SINGLE_SEX_COURT_TRIBUNAL_RESPONSE,
+                  "The court will not be single sex"))
+                .put("Hearing Requirement In Camera Court", readStringCaseField(asylumCase, IN_CAMERA_COURT_TRIBUNAL_RESPONSE,
+                  "The hearing will be held in public court"))
+                .put("Hearing Requirement Other", readStringCaseField(asylumCase, ADDITIONAL_TRIBUNAL_RESPONSE,
+                  "No other adjustments are being made"));
+        } else {
+
+            caseListingValues
+                .put("Hearing Requirement Vulnerabilities", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_VULNERABILITIES,
+                    "No special adjustments are being made to accommodate vulnerabilities"))
+                .put("Hearing Requirement Multimedia", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_MULTIMEDIA,
+                    "No multimedia equipment is being provided"))
+                .put("Hearing Requirement Single Sex Court", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT,
+                    "The court will not be single sex"))
+                .put("Hearing Requirement In Camera Court", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT,
+                    "The hearing will be held in public court"))
+                .put("Hearing Requirement Other", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_OTHER,
+                    "No other adjustments are being made"));
+        }
     }
 
     public Map<String, String> getNonStandardDirectionPersonalisation(AsylumCase asylumCase) {
@@ -124,7 +152,7 @@ public class BasePersonalisationProvider {
             .build();
     }
 
-    private String readStringCaseField(final AsylumCase asylumCase, final AsylumCaseDefinition caseField, final String defaultIfNotPresent) {
+    private static String readStringCaseField(final AsylumCase asylumCase, final AsylumCaseDefinition caseField, final String defaultIfNotPresent) {
 
         final Optional<String> optionalFieldValue = asylumCase.read(caseField, String.class);
         return optionalFieldValue.isPresent() && !optionalFieldValue.get().isEmpty() ? optionalFieldValue.get() : defaultIfNotPresent;
