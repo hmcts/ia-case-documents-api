@@ -172,8 +172,6 @@ sonarqube {
     properties {
         property "sonar.projectName", "IA :: Immigration & Asylum case documents api"
         property "sonar.projectKey", "IACASEDOCUMENTSAPI"
-        property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-        property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/integration.exec"
         property "sonar.pitest.mode", "reuseReport"
         property "sonar.pitest.reportsDirectory", "build/reports/pitest"
         property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/config/**," +
