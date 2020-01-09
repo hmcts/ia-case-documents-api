@@ -66,7 +66,7 @@
       {
         "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Your appeal has been submitted",
+        "subject": "Your appeal has been sent",
         "body": [
           "Appeal reference: PA/12345/2019",
           "Home Office reference: A1234567",
