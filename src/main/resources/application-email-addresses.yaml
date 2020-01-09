@@ -1,22 +1,22 @@
 hearingCentreEmailAddresses:
-  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:TCWBradfordIA@example.com}
-  manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:TCO.manchesteriac@example.com}
-  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:TCO.NewportIAC@example.com}
-  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:tcw.taylorhouse@example.com}
-  northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:TCWNorthShieldsIA@example.com}
-  birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:IACBirminghamTCW@example.com}
-  hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:TBD_HC_HattonCross@example.com}
-  glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:TBD_HC_Glasgow@example.com}
+  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}
+  manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester@example.com}
+  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport@example.com}
+  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse@example.com}
+  northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
+  birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham@example.com}
+  hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
+  glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
 
 homeOfficeEmailAddresses:
-  bradford: ${IA_HOME_OFFICE_BRADFORD_EMAIL:ReformPBLeeds@example.com}
-  manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ReformpbManchester@example.com}
-  newport: ${IA_HOME_OFFICE_NEWPORT_EMAIL:ReformpbCardiff@example.com}
-  taylorHouse: ${IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ReformpbCentral@example.com}
-  northShields: ${IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL:TBD_HO_NorthShields@example.com}
-  birmingham: ${IA_HOME_OFFICE_BIRMINGHAM_EMAIL:TBD_HO_Birmingham@example.com}
-  hattonCross: ${IA_HOME_OFFICE_HATTON_CROSS_EMAIL:TBD_HO_HattonCross@example.com}
-  glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:TBD_HO_Glasgow@example.com}
+  bradford: ${IA_HOME_OFFICE_BRADFORD_EMAIL:ho-bradford@example.com}
+  manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ho-manchester@example.com}
+  newport: ${IA_HOME_OFFICE_NEWPORT_EMAIL:ho-newport@example.com}
+  taylorHouse: ${IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ho-taylorhouse@example.com}
+  northShields: ${IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL:ho-north-shields@example.com}
+  birmingham: ${IA_HOME_OFFICE_BIRMINGHAM_EMAIL:ho-birmingham@example.com}
+  hattonCross: ${IA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-hatton-cross@example.com}
+  glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
 
 hearingCentreTelephoneNumber:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_TELEPHONE:0300 123 1711}
@@ -28,13 +28,13 @@ hearingCentreTelephoneNumber:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE:0300 123 1711}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_TELEPHONE:0300 123 1711}
 
-endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ReformpbAPC@example.com}
-allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:HOAllowedDeterminations@example.com}
-dismissedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL:HODismissedDeterminations@example.com}
+endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ho-end-appeal@example.com}
+allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:ho-allowed-appeal@example.com}
+dismissedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL:ho-dismissed-appeal@example.com}
 
-reviewHearingRequirementsAdminOfficerEmailAddress: ${IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL:IACReformlisting@example.com}
+reviewHearingRequirementsAdminOfficerEmailAddress: ${IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL:ao-review@example.com}
 
 respondentEmailAddresses:
-  nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:APC_PrivateBetaInbox@example.com}
-  respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:APC_PrivateBetaInbox@example.com}
-  respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL:ReformpbLART@example.com}
+  nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}
+  respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondent@example.com}
+  respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL:respondent-lart@example.com}
