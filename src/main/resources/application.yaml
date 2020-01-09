@@ -69,6 +69,9 @@ docmosis.convert.uri: /rs/convert
 emBundler.url: ${EM_BUNDLER_URL:http://localhost:4623}
 emBundler.stitch.uri: ${EM_BUNDLER_STITCH_URI:/api/stitch-ccd-bundles}
 
+featureFlag:
+  isEmStitchingEnabled: ${IA_EM_STITCHING_ENABLED:true}
+
 tsvStringsFileLocation: strings.tsv
 
 ia_system_user: ${IA_SYSTEM_USERNAME:system-user}

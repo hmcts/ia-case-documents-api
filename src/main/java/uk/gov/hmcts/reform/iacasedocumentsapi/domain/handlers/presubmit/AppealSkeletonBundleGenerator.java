@@ -29,6 +29,7 @@ public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<A
 
     private final String fileExtension;
     private final String fileName;
+    private final boolean isEmStitchingEnabled;
     private final FileNameQualifier<AsylumCase> fileNameQualifier;
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
@@ -36,12 +37,14 @@ public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<A
     public AppealSkeletonBundleGenerator(
         @Value("${appealSkeletonBundle.fileExtension}") String fileExtension,
         @Value("${appealSkeletonBundle.fileName}") String fileName,
+        @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
         DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
+        this.isEmStitchingEnabled = isEmStitchingEnabled;
         this.fileNameQualifier = fileNameQualifier;
         this.documentBundler = documentBundler;
         this.documentHandler = documentHandler;
@@ -55,7 +58,8 @@ public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<A
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.SUBMIT_CASE;
+               && callback.getEvent() == Event.SUBMIT_CASE
+               && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

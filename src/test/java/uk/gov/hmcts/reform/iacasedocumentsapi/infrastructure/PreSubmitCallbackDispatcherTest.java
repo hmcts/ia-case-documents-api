@@ -271,6 +271,7 @@ public class PreSubmitCallbackDispatcherTest {
         PreSubmitCallbackHandler<AsylumCase> h2 = new HearingBundleGenerator(
             "mock",
             "mock",
+            true,
             mock(FileNameQualifier.class),
             mock(DocumentBundler.class),
             mock(DocumentHandler.class),

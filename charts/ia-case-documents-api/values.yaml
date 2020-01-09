@@ -21,6 +21,7 @@ java:
         - s2s-url
         - em-bundler-url
         - em-bundler-stitch-uri
+        - em-stitching-enabled
         - docmosis-access-key
         - docmosis-url
         - AppInsightsInstrumentationKey
