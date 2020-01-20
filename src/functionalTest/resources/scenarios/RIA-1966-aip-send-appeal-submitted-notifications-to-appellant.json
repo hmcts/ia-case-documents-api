@@ -66,13 +66,13 @@
       {
         "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Your appeal has been sent",
+        "subject": "Your appeal details have been sent",
         "body": [
           "Appeal reference: PA/12345/2019",
           "Home Office reference: A1234567",
           "Dear Pablo Jimenez,",
-          "Your appeal application has been sent to the Tribunal",
-          "A Tribunal case worker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next",
+          "Your appeal details have been sent to the Tribunal",
+          "A Tribunal Caseworker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next",
           "Sign in to your account to see how your appeal is progressing:",
           "{$iaAipFrontendUrl}",
           "#How to contact the Tribunal",
@@ -98,8 +98,8 @@
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
-          "Your appeal application has been sent to the Tribunal. Your appeal reference number is PA/12345/2019",
-          "A Tribunal case worker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
+          "Your appeal details have been sent to the Tribunal. Your appeal reference number is PA/12345/2019",
+          "A Tribunal Caseworker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
           "Sign in to your account to see how your appeal is progressing:",
           "{$iaAipFrontendUrl}"
         ]
