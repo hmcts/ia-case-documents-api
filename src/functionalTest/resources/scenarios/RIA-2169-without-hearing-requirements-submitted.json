@@ -1,0 +1,46 @@
+{
+  "description": "RIA-2169 Send without hearing requirements notification (Admin Officer)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 2169,
+      "eventId": "listCaseWithoutHearingRequirements",
+      "state": "listing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json"
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "2169_WITHOUT_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2169_WITHOUT_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+        "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: list case",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Appellant name: Talha Awan",
+          "The Tribunal Caseworker has recorded the length of the hearing. No hearing requirements or adjustments have been submitted.",
+          "Next steps",
+          "Go to the Hearing tab to view the length of the hearing and then list the case in Aria.",
+          "You should then list the case in the online service. Once you've done this, the Notice of Hearing will be sent to all parties.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

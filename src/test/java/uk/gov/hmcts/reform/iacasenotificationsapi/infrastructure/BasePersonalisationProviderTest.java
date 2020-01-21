@@ -161,4 +161,12 @@ public class BasePersonalisationProviderTest {
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
+
+    @Test
+    public void should_return_reviewed_hearing_requirements_personalisation() {
+
+        Map<String, String> personalisation = basePersonalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
+
+        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+    }
 }

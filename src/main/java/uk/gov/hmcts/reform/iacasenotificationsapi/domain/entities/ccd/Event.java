@@ -23,6 +23,7 @@ public enum Event {
     CHANGE_DIRECTION_DUE_DATE("changeDirectionDueDate"),
     UPLOAD_ADDITIONAL_EVIDENCE("uploadAdditionalEvidence"),
     LIST_CASE("listCase"),
+    LIST_CASE_WITHOUT_HEARING_REQUIREMENTS("listCaseWithoutHearingRequirements"),
     CREATE_CASE_SUMMARY("createCaseSummary"),
     REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence"),
     GENERATE_HEARING_BUNDLE("generateHearingBundle"),

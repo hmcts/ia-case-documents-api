@@ -51,6 +51,7 @@ govnotify.template.homeOfficeCaseEditedTemplateId: 54975c09-6634-4f1a-bfe6-caaeb
 govnotify.template.legalRepresentativeNonStandardDirectionTemplateId: d85587f4-2a7d-44a2-b6d8-538b91b7144b
 govnotify.template.legalRepNonStandardDirectionOfHomeOfficeTemplateId: a03720df-2c7d-403d-9a45-a58c192e8570
 govnotify.template.reviewHearingRequirementsAdminOfficerTemplateId: 58632d37-fe36-4fae-adfd-b44bf8509770
+govnotify.template.withoutHearingRequirementsAdminOfficerTemplateId: 435ea40a-47ac-4397-9bd8-37be50589162
 govnotify.template.caseOfficerRequestHearingRequirementsTemplateId: f6185789-8328-4208-8ee5-8a12d641180f
 govnotify.template.submittedHearingRequirementsLegalRepTemplateId: bfee0880-9bdd-41a1-805a-8be4818bbb6a
 govnotify.template.submittedHearingRequirementsCaseOfficerTemplateId: aa36afd2-254b-4fd7-b7c8-72078176294f
@@ -109,6 +110,7 @@ security:
       - "requestCaseEdit"
       - "requestHearingRequirements"
       - "reviewHearingRequirements"
+      - "listCaseWithoutHearingRequirements"
       - "requestHearingRequirementsFeature"
       - "draftHearingRequirements"
       - "requestRespondentEvidence"

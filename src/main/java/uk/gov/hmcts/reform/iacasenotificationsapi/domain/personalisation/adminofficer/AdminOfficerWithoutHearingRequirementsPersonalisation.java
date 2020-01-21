@@ -16,35 +16,35 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisa
 
 
 @Service
-public class AdminOfficerReviewHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
+public class AdminOfficerWithoutHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
-    private final String reviewHearingRequirementsAdminOfficerTemplateId;
+    private final String withoutHearingRequirementsAdminOfficerTemplateId;
     private final String reviewHearingRequirementsAdminOfficerEmailAddress;
     private final BasePersonalisationProvider basePersonalisationProvider;
 
-    public AdminOfficerReviewHearingRequirementsPersonalisation(
-        @NotNull(message = "reviewHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.reviewHearingRequirementsAdminOfficerTemplateId}") String reviewHearingRequirementsAdminOfficerTemplateId,
+    public AdminOfficerWithoutHearingRequirementsPersonalisation(
+        @NotNull(message = "withoutHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.withoutHearingRequirementsAdminOfficerTemplateId}") String withoutHearingRequirementsAdminOfficerTemplateId,
         @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
         BasePersonalisationProvider basePersonalisationProvider
     ) {
-        this.reviewHearingRequirementsAdminOfficerTemplateId = reviewHearingRequirementsAdminOfficerTemplateId;
+        this.withoutHearingRequirementsAdminOfficerTemplateId = withoutHearingRequirementsAdminOfficerTemplateId;
         this.reviewHearingRequirementsAdminOfficerEmailAddress = reviewHearingRequirementsAdminOfficerEmailAddress;
         this.basePersonalisationProvider = basePersonalisationProvider;
     }
 
     @Override
+    public String getReferenceId(Long caseId) {
+        return caseId + "_WITHOUT_HEARING_REQUIREMENTS_ADMIN_OFFICER";
+    }
+
+    @Override
     public String getTemplateId() {
-        return reviewHearingRequirementsAdminOfficerTemplateId;
+        return withoutHearingRequirementsAdminOfficerTemplateId;
     }
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
         return Collections.singleton(reviewHearingRequirementsAdminOfficerEmailAddress);
-    }
-
-    @Override
-    public String getReferenceId(Long caseId) {
-        return caseId + "_REVIEW_HEARING_REQUIREMENTS_ADMIN_OFFICER";
     }
 
     @Override

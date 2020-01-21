@@ -344,4 +344,16 @@ public class NotificationHandlerConfiguration {
             notificationGenerator
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> withoutHearingRequirementsNotificationHandler(
+        @Qualifier("withoutHearingRequirementsNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.LIST_CASE_WITHOUT_HEARING_REQUIREMENTS,
+            notificationGenerator
+        );
+    }
 }
