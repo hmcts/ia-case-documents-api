@@ -114,15 +114,15 @@ public class AsylumCaseFixtures {
     public static String someUserDetails() {
         return "{\n"
                +
-               "  \"id\": \"1\",\n"
+               "  \"uid\": \"1\",\n"
                +
                "  \"roles\": [\"caseworker-ia-caseofficer\"],\n"
                +
-               "  \"email\": \"someone@somewhere.com\",\n"
+               "  \"sub\": \"someone@somewhere.com\",\n"
                +
-               "  \"forename\": \"some-fname\",\n"
+               "  \"given_name\": \"some-fname\",\n"
                +
-               "  \"surname\": \"some-sname\"\n"
+               "  \"family_name\": \"some-sname\"\n"
                +
                "}";
     }
