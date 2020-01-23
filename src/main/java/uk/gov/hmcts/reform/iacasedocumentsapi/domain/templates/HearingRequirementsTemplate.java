@@ -39,8 +39,6 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        final String dateToAvoid = "dateToAvoid";
-
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
@@ -100,8 +98,9 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
 
+        String dateToAvoid = "dateToAvoid";
         fieldValues.put(
-            "dateToAvoid",
+            dateToAvoid,
             datesToAvoid
                 .orElse(Collections.emptyList())
                 .stream()
@@ -114,14 +113,20 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
                         )
                     )
                 )
-                .map(datesIdValue -> ImmutableMap.of("dateToAvoid", datesIdValue.getValue().getDateToAvoid().format(formatter)))
+                .map(datesIdValue -> ImmutableMap.of(dateToAvoid, datesIdValue.getValue().getDateToAvoid().format(formatter)))
                 .collect(Collectors.toList())
         );
 
-        if (((List) fieldValues.get(dateToAvoid)).isEmpty()) {
-            fieldValues.put("datesToAvoid", YesOrNo.NO);
+        Optional<YesOrNo> datesToAvoidFlag = asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class);
+        if (datesToAvoidFlag.isPresent()) {
+            fieldValues.put("datesToAvoid", datesToAvoidFlag.get());
         } else {
-            fieldValues.put("datesToAvoid", YesOrNo.YES);
+            // old path before introducing DATES_TO_AVOID_YES_NO flag
+            if (((List) fieldValues.get(dateToAvoid)).isEmpty()) {
+                fieldValues.put("datesToAvoid", YesOrNo.NO);
+            } else {
+                fieldValues.put("datesToAvoid", YesOrNo.YES);
+            }
         }
 
         fieldValues.put(

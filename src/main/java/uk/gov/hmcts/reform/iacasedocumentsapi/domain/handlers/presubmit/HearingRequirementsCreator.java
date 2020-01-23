@@ -41,7 +41,7 @@ public class HearingRequirementsCreator implements PreSubmitCallbackHandler<Asyl
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && asList(Event.DRAFT_HEARING_REQUIREMENTS).contains(callback.getEvent());
+               && asList(Event.DRAFT_HEARING_REQUIREMENTS, Event.UPDATE_HEARING_REQUIREMENTS).contains(callback.getEvent());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

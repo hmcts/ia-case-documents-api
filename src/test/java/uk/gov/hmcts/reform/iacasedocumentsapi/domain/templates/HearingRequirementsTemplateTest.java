@@ -147,6 +147,8 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(ADDITIONAL_REQUESTS, YesOrNo.class)).thenReturn(Optional.of(additionalRequests));
         when(asylumCase.read(ADDITIONAL_REQUESTS_DESCRIPTION, String.class)).thenReturn(Optional.of(additionalRequestsDescription));
 
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
+
         when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
 
     }
@@ -207,6 +209,21 @@ public class HearingRequirementsTemplateTest {
     }
 
     @Test
+    public void should_map_case_data_to_template_field_values_no_dates_to_avoid_flag() {
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.empty());
+
+        Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(YesOrNo.YES, templateFieldValues.get("datesToAvoid"));
+        assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
+        assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
+    }
+
+    @Test
     public void should_be_tolerant_of_missing_data() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -235,6 +252,7 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(IN_CAMERA_COURT_DESCRIPTION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ADDITIONAL_REQUESTS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ADDITIONAL_REQUESTS_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);

@@ -88,7 +88,7 @@ public class HearingRequirementsCreatorTest {
 
                 boolean canHandle = hearingRequirementsCreator.canHandle(callbackStage, callback);
 
-                if ((event == Event.DRAFT_HEARING_REQUIREMENTS)
+                if ((event == Event.DRAFT_HEARING_REQUIREMENTS || event == Event.UPDATE_HEARING_REQUIREMENTS)
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
                 } else {
