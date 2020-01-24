@@ -42,3 +42,4 @@ java:
         - ccd-url
         - idam-url
         - s2s-url
+        - AppInsightsInstrumentationKey
