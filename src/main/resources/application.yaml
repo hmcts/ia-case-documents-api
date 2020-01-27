@@ -15,9 +15,6 @@ spring:
   jackson.date-format: yyyy-MM-dd
   main:
     allow-bean-definition-overriding: true
-  profiles:
-    include:
-      - email-addresses
 
 govnotify.key: ${IA_GOV_NOTIFY_KEY}
 govnotify.template.responseReviewDirection: e3e36c28-b16a-4e85-b8e1-dbb7f6771181
@@ -149,3 +146,45 @@ document_management.url: ${DM_URL:http://127.0.0.1:4506}
 idam.s2s-auth.totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
 idam.s2s-auth.microservice: ${IA_S2S_MICROSERVICE:ia}
 idam.s2s-auth.url: ${S2S_URL:http://127.0.0.1:4502}
+
+### Email addresses
+hearingCentreEmailAddresses:
+  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}
+  manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester@example.com}
+  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport@example.com}
+  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse@example.com}
+  northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
+  birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham@example.com}
+  hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
+  glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+
+homeOfficeEmailAddresses:
+  bradford: ${IA_HOME_OFFICE_BRADFORD_EMAIL:ho-bradford@example.com}
+  manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ho-manchester@example.com}
+  newport: ${IA_HOME_OFFICE_NEWPORT_EMAIL:ho-newport@example.com}
+  taylorHouse: ${IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ho-taylorhouse@example.com}
+  northShields: ${IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL:ho-north-shields@example.com}
+  birmingham: ${IA_HOME_OFFICE_BIRMINGHAM_EMAIL:ho-birmingham@example.com}
+  hattonCross: ${IA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-hatton-cross@example.com}
+  glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
+
+hearingCentreTelephoneNumber:
+  bradford: ${IA_HEARING_CENTRE_BRADFORD_TELEPHONE:0300 123 1711}
+  manchester: ${IA_HEARING_CENTRE_MANCHESTER_TELEPHONE:0300 123 1711}
+  newport: ${IA_HEARING_CENTRE_NEWPORT_TELEPHONE:0300 123 1711}
+  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE:0300 123 1711}
+  northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE:0300 123 1711}
+  birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE:0300 123 1711}
+  hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE:0300 123 1711}
+  glasgow: ${IA_HEARING_CENTRE_GLASGOW_TELEPHONE:0300 123 1711}
+
+endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ho-end-appeal@example.com}
+allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:ho-allowed-appeal@example.com}
+dismissedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL:ho-dismissed-appeal@example.com}
+
+reviewHearingRequirementsAdminOfficerEmailAddress: ${IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL:ao-review@example.com}
+
+respondentEmailAddresses:
+  nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}
+  respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondent@example.com}
+  respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL:respondent-lart@example.com}
