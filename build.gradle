@@ -252,7 +252,7 @@ dependencies {
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
     testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
 
-    testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
+    testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.2.0'
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
