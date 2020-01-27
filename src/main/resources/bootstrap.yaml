@@ -48,3 +48,4 @@ spring:
         ccd-url: CCD_URL
         idam-url: IDAM_URL
         s2s-url: S2S_URL
+        AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
