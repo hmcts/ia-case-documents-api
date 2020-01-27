@@ -100,8 +100,8 @@ public class BundleRequestExecutorTest {
         final String actualAuthorizationHeader = actualRequestEntity.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         final Callback<AsylumCase> actualPostBody = (Callback<AsylumCase>) actualRequestEntity.getBody();
 
-        assertThat(actualContentTypeHeader).isEqualTo(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        assertThat(actualAcceptHeader).isEqualTo(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        assertThat(actualContentTypeHeader).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
+        assertThat(actualAcceptHeader).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
         assertThat(actualServiceAuthorizationHeader).isEqualTo(SERVICE_TOKEN);
         assertThat(actualAuthorizationHeader).isEqualTo(ACCESS_TOKEN);
         assertThat(actualPostBody).isEqualTo(callback);

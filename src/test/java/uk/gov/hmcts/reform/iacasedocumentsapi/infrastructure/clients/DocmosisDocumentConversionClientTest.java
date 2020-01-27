@@ -75,7 +75,7 @@ public class DocmosisDocumentConversionClientTest {
         assertThat(httpEntity.getBody().get("outputName").get(0)).isEqualTo("temp.pdf");
         assertThat(httpEntity.getBody().get("file").get(0))
             .extracting("file")
-            .containsExactly(tempSourceFile);
+            .isEqualTo(tempSourceFile);
 
         assertThat(convertedBytes).isEqualTo(convertedBytes);
     }
