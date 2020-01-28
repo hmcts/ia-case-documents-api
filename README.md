@@ -47,10 +47,10 @@ The following environment variables are required when running the api without it
 
 ### Running the application
 
-To run the API quickly use the docker helper script as follows:
+To run the API quickly use the docker helper script as follows: (make sure to have set the required environment variables as above)
 
 ```
-./bin/run-in-docker.sh install
+./bin/run-in-docker.sh --clean --install
 ```
 
 Alternatively, you can start the application from the current source files using Gradle as follows:
