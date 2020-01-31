@@ -21,5 +21,6 @@ spring:
         s2s-url: S2S_URL
         em-bundler-url: EM_BUNDLER_URL
         em-bundler-stitch-uri: EM_BUNDLER_STITCH_URI
+        em-stitching-enabled: IA_EM_STITCHING_ENABLED
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
 

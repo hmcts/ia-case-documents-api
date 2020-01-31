@@ -55,16 +55,17 @@ public class AppealSkeletonBundleGeneratorTest {
     @Mock private DocumentWithMetadata documentWithMetadata;
     @Mock private Document appealSkeletonBundle;
 
+    private String fileExtension = "PDF";
+    private String fileName = "some-file-name";
+
     @Before
     public void setUp() {
-
-        String fileExtension = "PDF";
-        String fileName = "some-file-name";
 
         appealSkeletonBundleGenerator =
             new AppealSkeletonBundleGenerator(
                 fileExtension,
                 fileName,
+                true,
                 fileNameQualifier,
                 documentBundler,
                 documentHandler
@@ -98,6 +99,27 @@ public class AppealSkeletonBundleGeneratorTest {
 
             reset(callback);
         }
+    }
+
+    @Test
+    public void it_should_not_handle_callback_when_stitching_flag_is_false() {
+
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_CASE);
+
+        appealSkeletonBundleGenerator =
+            new AppealSkeletonBundleGenerator(
+                fileExtension,
+                fileName,
+                false,
+                fileNameQualifier,
+                documentBundler,
+                documentHandler
+            );
+
+        boolean canHandle = appealSkeletonBundleGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertFalse(canHandle);
+        reset(callback);
     }
 
     @Test

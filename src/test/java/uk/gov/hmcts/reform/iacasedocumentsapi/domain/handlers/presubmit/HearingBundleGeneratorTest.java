@@ -13,6 +13,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.util.List;
 import java.util.Optional;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
@@ -57,16 +58,17 @@ public class HearingBundleGeneratorTest {
     @Mock private DocumentWithMetadata documentWithMetadata;
     @Mock private Document hearingBundle;
 
+    private String fileExtension = "PDF";
+    private String fileName = "some-file-name";
+
     @Before
     public void setUp() {
-
-        String fileExtension = "PDF";
-        String fileName = "some-file-name";
 
         hearingBundleGenerator =
             new HearingBundleGenerator(
                 fileExtension,
                 fileName,
+                true,
                 fileNameQualifier,
                 documentBundler,
                 documentHandler,
@@ -103,6 +105,28 @@ public class HearingBundleGeneratorTest {
 
             reset(callback);
         }
+    }
+
+    @Test
+    public void it_should_not_handle_callback_when_stitching_flag_is_false() {
+
+        when(callback.getEvent()).thenReturn(Event.GENERATE_HEARING_BUNDLE);
+
+        hearingBundleGenerator =
+            new HearingBundleGenerator(
+                fileExtension,
+                fileName,
+                false,
+                fileNameQualifier,
+                documentBundler,
+                documentHandler,
+                bundleOrder
+            );
+
+        boolean canHandle = hearingBundleGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertFalse(canHandle);
+        reset(callback);
     }
 
     @Test
