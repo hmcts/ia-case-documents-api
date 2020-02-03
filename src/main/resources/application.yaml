@@ -95,6 +95,7 @@ security:
     - "iac"
   authorisedRoles:
     - "caseworker-ia"
+    - "citizen"
   roleEventAccess:
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
@@ -122,6 +123,11 @@ security:
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
+    citizen:
+      - "startAppeal"
+      - "editAppeal"
+      - "submitAppeal"
+
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
