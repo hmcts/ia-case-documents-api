@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.REP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.*;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +17,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit.NotificationHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
@@ -126,14 +128,24 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> submitAppealAipNotificationHandler(
         @Qualifier("submitAppealAipNotificationGenerator") List<NotificationGenerator> notificationGenerators
     ) {
+
         return new NotificationHandler(
-            (callbackStage, callback) ->
-                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.SUBMIT_APPEAL
-                    && callback.getCaseDetails().getCaseData()
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isAipJourney = asylumCase
                     .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false),
-            notificationGenerators
+                    .map(type -> type == AIP).orElse(false);
+
+                boolean isAppealOnTime = asylumCase
+                    .read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)
+                    .map(outOfTime -> outOfTime == NO).orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.SUBMIT_APPEAL
+                    && isAipJourney
+                    && isAppealOnTime;
+            }, notificationGenerators
         );
     }
 
@@ -150,6 +162,31 @@ public class NotificationHandlerConfiguration {
                     .read(JOURNEY_TYPE, JourneyType.class)
                     .map(type -> type == REP).orElse(true),
             notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealOutOfTimeAipNotificationHandler(
+        @Qualifier("submitAppealOutOfTimeAipNotificationGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isAipJourney = asylumCase
+                    .read(JOURNEY_TYPE, JourneyType.class)
+                    .map(type -> type == AIP).orElse(false);
+
+                boolean isOutOfTimeAppeal = asylumCase
+                    .read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)
+                    .map(outOfTime -> outOfTime == YES).orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.SUBMIT_APPEAL
+                    && isAipJourney
+                    && isOutOfTimeAppeal;
+            }, notificationGenerators
         );
     }
 

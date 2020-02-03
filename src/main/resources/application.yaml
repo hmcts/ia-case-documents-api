@@ -55,6 +55,8 @@ govnotify.template.submittedHearingRequirementsCaseOfficerTemplateId: aa36afd2-2
 
 govnotify.template.appealSubmittedAppellant.email: b53d6e97-b7d9-4112-9669-9db81e563506
 govnotify.template.appealSubmittedAppellant.sms: 2cc4d346-cfb6-4ea9-93b3-c3f1f4f56491
+govnotify.template.appealSubmittedOutOfTimeAppellant.email: 98f18bbb-c746-4fbd-8860-a629957a94ac
+govnotify.template.appealSubmittedOutOfTimeAppellant.sms: 2587432c-aeb9-483d-bc0d-086b175f4fa7
 
 govnotify.baseUrl: "https://api.notifications.service.gov.uk"
 
