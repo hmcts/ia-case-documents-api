@@ -18,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeEditListingPersonalisationTest {
@@ -29,7 +29,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
     @Mock
     AsylumCase asylumCase;
     @Mock
-    BasePersonalisationProvider basePersonalisationProvider;
+    PersonalisationProvider personalisationProvider;
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String iaCcdFrontendUrl = "http://localhost";
@@ -57,7 +57,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
 
         legalRepresentativeEditListingPersonalisation = new LegalRepresentativeEditListingPersonalisation(
             templateId,
-            basePersonalisationProvider
+            personalisationProvider
         );
     }
 
@@ -95,7 +95,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(basePersonalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
         Map<String, String> personalisation = legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
 
@@ -104,7 +104,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_optional_fields_are_blank() {
-        when(basePersonalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
+        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
 
         Map<String, String> personalisation = legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
 

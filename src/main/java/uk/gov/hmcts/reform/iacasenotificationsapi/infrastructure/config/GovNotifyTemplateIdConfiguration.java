@@ -37,4 +37,7 @@ public class GovNotifyTemplateIdConfiguration {
 
     @NotBlank
     private String submittedHearingRequirementsCaseOfficerTemplateId;
+
+    @NotBlank
+    private String uploadedAdditionalEvidenceTemplateId;
 }

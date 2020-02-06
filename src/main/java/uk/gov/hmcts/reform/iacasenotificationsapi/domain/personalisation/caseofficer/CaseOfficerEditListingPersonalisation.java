@@ -12,23 +12,23 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
 public class CaseOfficerEditListingPersonalisation implements EmailNotificationPersonalisation {
 
     private final String caseOfficerCaseEditedTemplateId;
-    private final BasePersonalisationProvider basePersonalisationProvider;
+    private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerEditListingPersonalisation(
         @Value("${govnotify.template.caseOfficerCaseEdited}") String caseOfficerCaseEditedTemplateId,
         EmailAddressFinder emailAddressFinder,
-        BasePersonalisationProvider basePersonalisationProvider) {
+        PersonalisationProvider personalisationProvider) {
         this.caseOfficerCaseEditedTemplateId = caseOfficerCaseEditedTemplateId;
         this.emailAddressFinder = emailAddressFinder;
-        this.basePersonalisationProvider = basePersonalisationProvider;
+        this.personalisationProvider = personalisationProvider;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CaseOfficerEditListingPersonalisation implements EmailNotificationP
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
 
-        return basePersonalisationProvider.getEditCaseListingPersonalisation(callback);
+        return personalisationProvider.getEditCaseListingPersonalisation(callback);
 
     }
 }

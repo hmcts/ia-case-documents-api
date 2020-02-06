@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
@@ -19,17 +19,17 @@ public class LegalRepresentativeNonStandardDirectionPersonalisation implements E
     private static final String legalRepNonStandardDirectionSuffix = "_LEGAL_REP_NON_STANDARD_DIRECTION";
 
     private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
-    private final BasePersonalisationProvider basePersonalisationProvider;
+    private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
 
 
     public LegalRepresentativeNonStandardDirectionPersonalisation(
-            GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
-            BasePersonalisationProvider basePersonalisationProvider,
-            EmailAddressFinder emailAddressFinder) {
+        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
+        PersonalisationProvider personalisationProvider,
+        EmailAddressFinder emailAddressFinder) {
 
         this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
-        this.basePersonalisationProvider = basePersonalisationProvider;
+        this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
     }
 
@@ -52,6 +52,6 @@ public class LegalRepresentativeNonStandardDirectionPersonalisation implements E
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        return basePersonalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
+        return personalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
     }
 }

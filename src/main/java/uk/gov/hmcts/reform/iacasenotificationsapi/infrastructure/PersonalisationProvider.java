@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesO
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @Service
-public class BasePersonalisationProvider {
+public class PersonalisationProvider {
 
     private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
     private final String iaCcdFrontendUrl;
@@ -30,7 +30,7 @@ public class BasePersonalisationProvider {
     private final DirectionFinder directionFinder;
     private final DateTimeExtractor dateTimeExtractor;
 
-    public BasePersonalisationProvider(
+    public PersonalisationProvider(
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
         HearingDetailsFinder hearingDetailsFinder,
         DirectionFinder directionFinder,
@@ -147,6 +147,18 @@ public class BasePersonalisationProvider {
             .<String, String>builder()
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .build();
+    }
+
+    public Map<String, String> getUploadAdditionalEvidencePersonalisation(AsylumCase asylumCase) {
+        return ImmutableMap
+            .<String, String>builder()
+            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse("N/A"))
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .build();

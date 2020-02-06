@@ -15,8 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CaseOfficerEditListingPersonalisationTest {
@@ -24,7 +24,7 @@ public class CaseOfficerEditListingPersonalisationTest {
     @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
     @Mock EmailAddressFinder emailAddressFinder;
-    @Mock BasePersonalisationProvider basePersonalisationProvider;
+    @Mock PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -46,7 +46,7 @@ public class CaseOfficerEditListingPersonalisationTest {
         caseOfficerEditListingPersonalisation = new CaseOfficerEditListingPersonalisation(
             templateId,
             emailAddressFinder,
-            basePersonalisationProvider
+            personalisationProvider
         );
     }
 
@@ -75,7 +75,7 @@ public class CaseOfficerEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(basePersonalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
+        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
 
         Map<String, String> personalisation = caseOfficerEditListingPersonalisation.getPersonalisation(callback);
 
@@ -85,7 +85,7 @@ public class CaseOfficerEditListingPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_mandatory_information_given() {
 
-        when(basePersonalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
         Map<String, String> personalisation = caseOfficerEditListingPersonalisation.getPersonalisation(callback);
 

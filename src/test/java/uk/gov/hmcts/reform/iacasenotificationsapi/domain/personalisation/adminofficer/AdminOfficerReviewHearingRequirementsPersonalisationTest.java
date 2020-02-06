@@ -12,14 +12,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class AdminOfficerReviewHearingRequirementsPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
-    @Mock BasePersonalisationProvider basePersonalisationProvider;
+    @Mock PersonalisationProvider personalisationProvider;
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String reviewHearingRequirementsAdminOfficerEmailAddress = "adminofficer-review-hearing-requirements@example.com";
@@ -31,7 +31,7 @@ public class AdminOfficerReviewHearingRequirementsPersonalisationTest {
         adminOfficerReviewHearingRequirementsPersonalisation = new AdminOfficerReviewHearingRequirementsPersonalisation(
             templateId,
             reviewHearingRequirementsAdminOfficerEmailAddress,
-            basePersonalisationProvider
+            personalisationProvider
         );
     }
 

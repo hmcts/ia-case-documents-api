@@ -14,8 +14,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,7 +23,7 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
     @Mock EmailAddressFinder emailAddressFinder;
-    @Mock BasePersonalisationProvider basePersonalisationProvider;
+    @Mock PersonalisationProvider personalisationProvider;
     @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private Long caseId = 12345L;
@@ -47,7 +47,7 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
 
         legalRepresentativeNonStandardDirectionPersonalisation = new LegalRepresentativeNonStandardDirectionPersonalisation(
             govNotifyTemplateIdConfiguration,
-            basePersonalisationProvider,
+            personalisationProvider,
             emailAddressFinder
         );
     }
@@ -77,7 +77,7 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(basePersonalisationProvider.getNonStandardDirectionPersonalisation(asylumCase)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(personalisationProvider.getNonStandardDirectionPersonalisation(asylumCase)).thenReturn(getPersonalisationMapWithGivenValues());
 
         Map<String, String> personalisation = legalRepresentativeNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
 

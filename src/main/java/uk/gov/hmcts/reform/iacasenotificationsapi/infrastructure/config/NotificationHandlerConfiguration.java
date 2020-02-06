@@ -393,4 +393,28 @@ public class NotificationHandlerConfiguration {
             notificationGenerator
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> uploadAdditionalEvidenceHandler(
+        @Qualifier("uploadAdditionalEvidence") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.UPLOAD_ADDITIONAL_EVIDENCE,
+            notificationGenerator
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> uploadAdditionalEvidenceHomeOfficeHandler(
+        @Qualifier("uploadAdditionalEvidenceHomeOffice") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.UPLOAD_ADDITIONAL_EVIDENCE_HOME_OFFICE,
+            notificationGenerator
+        );
+    }
 }

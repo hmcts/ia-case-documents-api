@@ -1,15 +1,12 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import com.google.common.collect.ImmutableMap;
-
 import java.util.Collections;
 import java.util.Map;
-
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
@@ -24,8 +22,10 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotif
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
+public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
 
+    @Mock Callback<AsylumCase> callback;
+    @Mock CaseDetails<AsylumCase> caseDetails;
     @Mock AsylumCase asylumCase;
 
     @Mock EmailAddressFinder emailAddressFinder;
@@ -37,62 +37,66 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
 
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
 
-    private String appealReferenceNumber = "someReferenceNumber";
+    private String hmctsReference = "hmctsReference";
+    private String legalRepReference = "legalRepresentativeReference";
+    private String homeOfficeReference = "homeOfficeReference";
+    private String listingReference = "listingReference";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
 
-    private CaseOfficerSubmittedHearingRequirementsPersonalisation caseOfficerSubmittedHearingRequirementsPersonalisation;
+    private CaseOfficerUploadAdditionalEvidencePersonalisation caseOfficerUploadAdditionalEvidencePersonalisation;
 
     @Before
     public void setUp() {
         when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
-        when(govNotifyTemplateIdConfiguration.getSubmittedHearingRequirementsCaseOfficerTemplateId()).thenReturn(templateId);
+        when(govNotifyTemplateIdConfiguration.getUploadedAdditionalEvidenceTemplateId()).thenReturn(templateId);
 
-        caseOfficerSubmittedHearingRequirementsPersonalisation =
-            new CaseOfficerSubmittedHearingRequirementsPersonalisation(
-                govNotifyTemplateIdConfiguration,
-                personalisationProvider,
-                emailAddressFinder
-            );
+        caseOfficerUploadAdditionalEvidencePersonalisation = new CaseOfficerUploadAdditionalEvidencePersonalisation(govNotifyTemplateIdConfiguration, personalisationProvider, emailAddressFinder);
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, caseOfficerSubmittedHearingRequirementsPersonalisation.getTemplateId());
+        assertEquals(templateId, caseOfficerUploadAdditionalEvidencePersonalisation.getTemplateId());
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(hearingCentreEmailAddress), caseOfficerSubmittedHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(hearingCentreEmailAddress), caseOfficerUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_CASE_OFFICER_OF_SUBMITTED_HEARING_REQUIREMENTS", caseOfficerSubmittedHearingRequirementsPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER", caseOfficerUploadAdditionalEvidencePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        Map<String, String> personalisation = caseOfficerSubmittedHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
-        Map<String, String> expectedPersonalisation = getPersonalisation();
+        when(personalisationProvider.getUploadAdditionalEvidencePersonalisation(asylumCase)).thenReturn(getPersonalisationForCaseOfficer());
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        Map<String, String> personalisation = caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
 
-        Assertions.assertThat(personalisation).isEqualToComparingOnlyGivenFields(expectedPersonalisation);
+        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> caseOfficerSubmittedHearingRequirementsPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(() -> caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
 
-    private Map<String, String> getPersonalisation() {
+    private Map<String, String> getPersonalisationForCaseOfficer() {
         return ImmutableMap
             .<String, String>builder()
-            .put("appealReferenceNumber", appealReferenceNumber)
+            .put("hmctsReference", hmctsReference)
+            .put("legalRepReference", legalRepReference)
+            .put("homeOfficeReference", homeOfficeReference)
+            .put("listingReference", listingReference)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
             .build();
     }
+
 }

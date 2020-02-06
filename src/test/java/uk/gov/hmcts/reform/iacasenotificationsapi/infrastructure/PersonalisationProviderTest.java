@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesO
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BasePersonalisationProviderTest {
+public class PersonalisationProviderTest {
 
     @Mock Callback<AsylumCase> callback;
     @Mock CaseDetails<AsylumCase> caseDetails;
@@ -69,7 +69,7 @@ public class BasePersonalisationProviderTest {
     private String directionExplanation = "someExplanation";
     private String directionDueDate = "2019-10-29";
 
-    private BasePersonalisationProvider basePersonalisationProvider;
+    private PersonalisationProvider personalisationProvider;
 
     @Before
     public void setUp() {
@@ -111,7 +111,7 @@ public class BasePersonalisationProviderTest {
         when(direction.getDateDue()).thenReturn(directionDueDate);
         when(direction.getExplanation()).thenReturn(directionExplanation);
 
-        basePersonalisationProvider = new BasePersonalisationProvider(
+        personalisationProvider = new PersonalisationProvider(
             iaCcdFrontendUrl,
             hearingDetailsFinder,
             directionFinder,
@@ -122,7 +122,7 @@ public class BasePersonalisationProviderTest {
     @Test
     public void should_return_edit_case_listing_personalisation() {
 
-        Map<String, String> personalisation = basePersonalisationProvider.getEditCaseListingPersonalisation(callback);
+        Map<String, String> personalisation = personalisationProvider.getEditCaseListingPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
         assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(requirementsVulnerabilities);
@@ -136,7 +136,7 @@ public class BasePersonalisationProviderTest {
     public void should_return_edit_case_listing_personalisation_when_submit_hearing_present() {
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
-        Map<String, String> personalisation = basePersonalisationProvider.getEditCaseListingPersonalisation(callback);
+        Map<String, String> personalisation = personalisationProvider.getEditCaseListingPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
         assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(caseOfficerReviewedVulnerabilities);
@@ -147,9 +147,17 @@ public class BasePersonalisationProviderTest {
     }
 
     @Test
+    public void should_return_uploaded_additional_evidence_personalisation() {
+
+        Map<String, String> personalisation = personalisationProvider.getUploadAdditionalEvidencePersonalisation(asylumCase);
+
+        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+    }
+
+    @Test
     public void should_return_non_direction_personalisation() {
 
-        Map<String, String> personalisation = basePersonalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
+        Map<String, String> personalisation = personalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -157,7 +165,7 @@ public class BasePersonalisationProviderTest {
     @Test
     public void should_return_submitted_hearing_requirements_personalisation() {
 
-        Map<String, String> personalisation = basePersonalisationProvider.getSubmittedHearingRequirementsPersonalisation(asylumCase);
+        Map<String, String> personalisation = personalisationProvider.getSubmittedHearingRequirementsPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -165,7 +173,7 @@ public class BasePersonalisationProviderTest {
     @Test
     public void should_return_reviewed_hearing_requirements_personalisation() {
 
-        Map<String, String> personalisation = basePersonalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
+        Map<String, String> personalisation = personalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

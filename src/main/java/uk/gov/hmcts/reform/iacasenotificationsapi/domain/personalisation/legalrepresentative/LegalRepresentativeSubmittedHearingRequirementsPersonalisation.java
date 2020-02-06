@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
@@ -19,14 +19,14 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation impl
 
     private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
     private final EmailAddressFinder emailAddressFinder;
-    private final BasePersonalisationProvider basePersonalisationProvider;
+    private final PersonalisationProvider personalisationProvider;
 
     public LegalRepresentativeSubmittedHearingRequirementsPersonalisation(
-        BasePersonalisationProvider basePersonalisationProvider,
+        PersonalisationProvider personalisationProvider,
         GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
         EmailAddressFinder emailAddressFinder
     ) {
-        this.basePersonalisationProvider = basePersonalisationProvider;
+        this.personalisationProvider = personalisationProvider;
         this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
         this.emailAddressFinder = emailAddressFinder;
     }
@@ -50,7 +50,7 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation impl
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        return basePersonalisationProvider.getSubmittedHearingRequirementsPersonalisation(asylumCase);
+        return personalisationProvider.getSubmittedHearingRequirementsPersonalisation(asylumCase);
     }
 
 }

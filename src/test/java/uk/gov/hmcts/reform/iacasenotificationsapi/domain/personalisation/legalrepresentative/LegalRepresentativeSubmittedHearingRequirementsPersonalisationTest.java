@@ -17,9 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeSubmittedHearingRequirementsPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,7 +29,7 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
 
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
-    @Mock BasePersonalisationProvider basePersonalisationProvider;
+    @Mock PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -51,7 +50,7 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
 
         legalRepresentativeSubmittedHearingRequirementsPersonalisation =
             new LegalRepresentativeSubmittedHearingRequirementsPersonalisation(
-                basePersonalisationProvider,
+                personalisationProvider,
                 govNotifyTemplateIdConfiguration,
                 emailAddressFinder
             );

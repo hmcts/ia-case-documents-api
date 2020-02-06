@@ -1,0 +1,66 @@
+{
+  "description": "RIA-2045 Notification of legal rep uploaded additional evidence",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 2045,
+      "eventId": "uploadAdditionalEvidence",
+      "state": "listing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json"
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "2045_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2045_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2045_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: additional evidence uploaded",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Legal representative reference: CASE001",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "Additional evidence has been uploaded.",
+          "Next steps",
+          "Log in to the online service and review 'Additional evidence' in the Documents tab.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "2045_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
+        "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+        "subject": "Immigration and Asylum appeal: additional evidence uploaded",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Legal representative reference: CASE001",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "Additional evidence has been uploaded.",
+          "Next steps",
+          "Log in to the online service and review 'Additional evidence' in the Documents tab.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

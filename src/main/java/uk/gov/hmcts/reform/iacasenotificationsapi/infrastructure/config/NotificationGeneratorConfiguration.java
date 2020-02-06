@@ -425,4 +425,36 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("uploadAdditionalEvidence")
+    public List<NotificationGenerator> uploadAdditionalEvidence(
+        CaseOfficerUploadAdditionalEvidencePersonalisation caseOfficerUploadAdditionalEvidencePersonalisation,
+        HomeOfficeUploadAdditionalEvidencePersonalisation homeOfficeUploadAdditionalEvidencePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(caseOfficerUploadAdditionalEvidencePersonalisation, homeOfficeUploadAdditionalEvidencePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("uploadAdditionalEvidenceHomeOffice")
+    public List<NotificationGenerator> uploadAdditionalEvidenceHomeOffice(
+        CaseOfficerUploadAdditionalEvidencePersonalisation caseOfficerUploadAdditionalEvidencePersonalisation,
+        LegalRepresentativeUploadAdditionalEvidencePersonalisation legalRepresentativeUploadAdditionalEvidencePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(caseOfficerUploadAdditionalEvidencePersonalisation, legalRepresentativeUploadAdditionalEvidencePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

@@ -22,6 +22,7 @@ public enum Event {
     DRAFT_HEARING_REQUIREMENTS("draftHearingRequirements"),
     CHANGE_DIRECTION_DUE_DATE("changeDirectionDueDate"),
     UPLOAD_ADDITIONAL_EVIDENCE("uploadAdditionalEvidence"),
+    UPLOAD_ADDITIONAL_EVIDENCE_HOME_OFFICE("uploadAdditionalEvidenceHomeOffice"),
     LIST_CASE("listCase"),
     LIST_CASE_WITHOUT_HEARING_REQUIREMENTS("listCaseWithoutHearingRequirements"),
     CREATE_CASE_SUMMARY("createCaseSummary"),

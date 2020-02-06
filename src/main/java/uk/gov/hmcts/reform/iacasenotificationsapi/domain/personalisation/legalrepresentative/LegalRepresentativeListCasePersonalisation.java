@@ -17,8 +17,8 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.BasePersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
 public class LegalRepresentativeListCasePersonalisation implements EmailNotificationPersonalisation {
@@ -84,7 +84,7 @@ public class LegalRepresentativeListCasePersonalisation implements EmailNotifica
             .put("Hearing Time", dateTimeExtractor.extractHearingTime(hearingDateTime))
             .put("Hearing Centre Address", hearingCentreAddress);
 
-        BasePersonalisationProvider.buildHearingRequirementsFields(asylumCase, listCaseFields);
+        PersonalisationProvider.buildHearingRequirementsFields(asylumCase, listCaseFields);
 
         return listCaseFields.build();
 
