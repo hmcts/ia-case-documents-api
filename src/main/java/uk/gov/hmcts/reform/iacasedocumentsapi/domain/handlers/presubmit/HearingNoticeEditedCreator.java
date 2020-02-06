@@ -18,19 +18,26 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @Component
 public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> hearingNoticeEditedDocumentCreator;
+    private final DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator;
+    private final DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentHandler documentHandler;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     public HearingNoticeEditedCreator(
-        @Qualifier("hearingNoticeEdited") DocumentCreator<AsylumCase> hearingNoticeEditedDocumentCreator,
-        DocumentHandler documentHandler
+        @Qualifier("hearingNoticeUpdatedRequirements") DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator,
+        @Qualifier("hearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator,
+        DocumentHandler documentHandler,
+        HearingDetailsFinder hearingDetailsFinder
     ) {
-        this.hearingNoticeEditedDocumentCreator = hearingNoticeEditedDocumentCreator;
+        this.hearingNoticeUpdatedRequirementsDocumentCreator = hearingNoticeUpdatedRequirementsDocumentCreator;
+        this.hearingNoticeUpdatedDetailsDocumentCreator = hearingNoticeUpdatedDetailsDocumentCreator;
         this.documentHandler = documentHandler;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     public boolean canHandle(
@@ -55,6 +62,33 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
         final Optional<CaseDetails<AsylumCase>> caseDetailsBefore = callback.getCaseDetailsBefore();
+        final String listCaseHearingCentre = hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData());
+        final String hearingDate = hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData());
+
+        if (caseDetailsBefore.isPresent()) {
+
+            final String hearingCentreNameBefore =
+                hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.get().getCaseData());
+
+            final String oldHearingDate =
+                hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.get().getCaseData());
+
+            if (hearingCentreNameBefore.equals(listCaseHearingCentre) && oldHearingDate.equals(hearingDate)) {
+                generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedRequirementsDocumentCreator);
+            } else {
+                generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedDetailsDocumentCreator);
+            }
+        } else {
+            throw new IllegalStateException("previous case data is not present");
+        }
+
+        return new PreSubmitCallbackResponse<>(asylumCase);
+    }
+
+    private void generateDocument(CaseDetails<AsylumCase> caseDetails,
+                                 AsylumCase asylumCase,
+                                 Optional<CaseDetails<AsylumCase>> caseDetailsBefore,
+                                 DocumentCreator<AsylumCase> hearingNoticeEditedDocumentCreator) {
 
         Document hearingNoticeEdited =
             hearingNoticeEditedDocumentCreator.create(
@@ -68,7 +102,5 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             HEARING_DOCUMENTS,
             DocumentTag.HEARING_NOTICE
         );
-
-        return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }
