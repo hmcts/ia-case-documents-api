@@ -5,16 +5,19 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
+@Slf4j
 public class IdamUserDetailsProvider implements UserDetailsProvider {
 
     private final AccessTokenProvider accessTokenProvider;
@@ -37,9 +40,8 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
         this.detailsUri = detailsUri;
     }
 
-    public IdamUserDetails getUserDetails() {
-
-        final String accessToken = accessTokenProvider.getAccessToken();
+    @Override
+    public IdamUserDetails getUserDetails(String accessToken) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, accessToken);
@@ -60,7 +62,7 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
                         }
                     ).getBody();
 
-        } catch (RestClientResponseException ex) {
+        } catch (RestClientException ex) {
 
             throw new IdentityManagerResponseException(
                 "Could not get user details with IDAM",
@@ -68,34 +70,39 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
             );
         }
 
-        if (response.get("id") == null) {
-            throw new IllegalStateException("IDAM user details missing 'id' field");
+        if (response.get("uid") == null) {
+            throw new IllegalStateException("IDAM user details missing 'uid' field");
         }
 
         if (response.get("roles") == null) {
             throw new IllegalStateException("IDAM user details missing 'roles' field");
         }
 
-        if (response.get("email") == null) {
-            throw new IllegalStateException("IDAM user details missing 'email' field");
+        if (response.get("sub") == null) {
+            throw new IllegalStateException("IDAM user details missing 'sub' field");
         }
 
-        if (response.get("forename") == null) {
-            throw new IllegalStateException("IDAM user details missing 'forename' field");
+        if (response.get("given_name") == null) {
+            throw new IllegalStateException("IDAM user details missing 'given_name' field");
         }
 
-        if (response.get("surname") == null) {
-            throw new IllegalStateException("IDAM user details missing 'surname' field");
+        if (response.get("family_name") == null) {
+            throw new IllegalStateException("IDAM user details missing 'family_name' field");
         }
 
         return new IdamUserDetails(
             accessToken,
-            String.valueOf(response.get("id")),
+            String.valueOf(response.get("uid")),
             castRolesToList(response.get("roles")),
-            (String) response.get("email"),
-            (String) response.get("forename"),
-            (String) response.get("surname")
+            (String) response.get("sub"),
+            (String) response.get("given_name"),
+            (String) response.get("family_name")
         );
+    }
+
+    public IdamUserDetails getUserDetails() {
+
+        return getUserDetails(accessTokenProvider.getAccessToken());
     }
 
     @SuppressWarnings("unchecked")

@@ -7,8 +7,10 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.io.Resource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -24,6 +26,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class WiremockSpringBootIntegrationTest {
 
+    @Value("classpath:idam-jwks.json")
+    private Resource resourceJwksFile;
+
     protected GivensBuilder given;
     protected IaCaseDocumentsApiClient iaCaseDocumentsApiClient;
     protected DocumentCaseApiVerifications then;
@@ -38,7 +43,7 @@ public abstract class WiremockSpringBootIntegrationTest {
 
     @Before
     public void setUpGivens() {
-        given = new GivensBuilder();
+        given = new GivensBuilder(resourceJwksFile);
     }
 
     @Before
