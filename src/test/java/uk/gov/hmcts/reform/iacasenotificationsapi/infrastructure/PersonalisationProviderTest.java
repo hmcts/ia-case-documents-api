@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
@@ -119,8 +120,9 @@ public class PersonalisationProviderTest {
 
     @Test
     public void should_return_edit_case_listing_personalisation() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
 
-        Map<String, String> personalisation = personalisationProvider.getEditCaseListingPersonalisation(callback);
+        Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
         assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(requirementsVulnerabilities);
@@ -132,9 +134,10 @@ public class PersonalisationProviderTest {
 
     @Test
     public void should_return_edit_case_listing_personalisation_when_submit_hearing_present() {
-
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
-        Map<String, String> personalisation = personalisationProvider.getEditCaseListingPersonalisation(callback);
+
+        Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
         assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(caseOfficerReviewedVulnerabilities);
@@ -146,24 +149,18 @@ public class PersonalisationProviderTest {
 
     @Test
     public void should_return_uploaded_additional_evidence_personalisation() {
+        when(callback.getEvent()).thenReturn(Event.UPLOAD_ADDITIONAL_EVIDENCE);
 
-        Map<String, String> personalisation = personalisationProvider.getUploadAdditionalEvidencePersonalisation(asylumCase);
+        Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 
     @Test
     public void should_return_non_direction_personalisation() {
+        when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
 
-        Map<String, String> personalisation = personalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
-
-        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
-    }
-
-    @Test
-    public void should_return_submitted_hearing_requirements_personalisation() {
-
-        Map<String, String> personalisation = personalisationProvider.getSubmittedHearingRequirementsPersonalisation(asylumCase);
+        Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

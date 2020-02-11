@@ -67,9 +67,7 @@ public class HomeOfficeUploadAdditionalEvidencePersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(personalisationProvider.getUploadAdditionalEvidencePersonalisation(asylumCase)).thenReturn(getPersonalisationForHomeOffice());
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationForHomeOffice());
 
         Map<String, String> personalisation = homeOfficeUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
 

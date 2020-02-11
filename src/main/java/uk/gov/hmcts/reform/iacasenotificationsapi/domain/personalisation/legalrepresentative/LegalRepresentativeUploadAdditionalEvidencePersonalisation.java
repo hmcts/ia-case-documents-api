@@ -30,10 +30,16 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implemen
         this.emailAddressFinder = emailAddressFinder;
     }
 
-
     @Override
     public String getTemplateId() {
         return govNotifyTemplateIdConfiguration.getUploadedAdditionalEvidenceTemplateId();
+    }
+
+    @Override
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        return personalisationProvider.getPersonalisation(callback);
     }
 
     @Override
@@ -44,13 +50,5 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implemen
     @Override
     public String getReferenceId(Long caseId) {
         return caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_LEGAL_REP";
-    }
-
-    @Override
-    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
-        requireNonNull(callback, "callback must not be null");
-
-        return personalisationProvider.getUploadAdditionalEvidencePersonalisation(callback.getCaseDetails().getCaseData());
-
     }
 }

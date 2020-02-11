@@ -70,9 +70,7 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
 
     @Test
     public void should_return_given_personalisation_when_all_information_given() {
-        when(personalisationProvider.getUploadAdditionalEvidencePersonalisation(asylumCase)).thenReturn(getPersonalisationForLegalRep());
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationForLegalRep());
         Map<String, String> personalisation = legalRepresentativeUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
@@ -30,6 +31,13 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation impl
     }
 
     @Override
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        return personalisationProvider.getPersonalisation(callback);
+    }
+
+    @Override
     public String getTemplateId() {
         return govNotifyTemplateIdConfiguration.getSubmittedHearingRequirementsLegalRepTemplateId();
     }
@@ -43,12 +51,4 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation impl
     public String getReferenceId(Long caseId) {
         return caseId + "_LEGAL_REP_OF_SUBMITTED_HEARING_REQUIREMENTS";
     }
-
-    @Override
-    public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        requireNonNull(asylumCase, "asylumCase must not be null");
-
-        return personalisationProvider.getSubmittedHearingRequirementsPersonalisation(asylumCase);
-    }
-
 }

@@ -48,6 +48,6 @@ public class LegalRepresentativeEditListingPersonalisation implements EmailNotif
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
 
-        return personalisationProvider.getEditCaseListingPersonalisation(callback);
+        return personalisationProvider.getPersonalisation(callback);
     }
 }

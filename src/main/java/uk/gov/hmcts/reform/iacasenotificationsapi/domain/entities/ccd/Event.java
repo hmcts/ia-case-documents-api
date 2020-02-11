@@ -33,6 +33,9 @@ public enum Event {
     RECORD_APPLICATION("recordApplication"),
     REQUEST_CASE_BUILDING("requestCaseBuilding"),
     UPLOAD_HOME_OFFICE_APPEAL_RESPONSE("uploadHomeOfficeAppealResponse"),
+    UPLOAD_ADDENDUM_EVIDENCE("uploadAddendumEvidence"),
+    UPLOAD_ADDENDUM_EVIDENCE_LEGAL_REP("uploadAddendumEvidenceLegalRep"),
+    UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE("uploadAddendumEvidenceHomeOffice"),
     REQUEST_RESPONSE_REVIEW("requestResponseReview"),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
 

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.*;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
@@ -15,6 +17,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
@@ -27,6 +30,33 @@ public class PersonalisationProvider {
     private final HearingDetailsFinder hearingDetailsFinder;
     private final DirectionFinder directionFinder;
     private final DateTimeExtractor dateTimeExtractor;
+
+    ImmutableMap.Builder<String, AsylumCaseDefinition> personalisationBuilder = new ImmutableMap.Builder<String, AsylumCaseDefinition>()
+        .put("appealReferenceNumber", APPEAL_REFERENCE_NUMBER)
+        .put("legalRepReferenceNumber", LEGAL_REP_REFERENCE_NUMBER)
+        .put("ariaListingReference", ARIA_LISTING_REFERENCE)
+        .put("homeOfficeReferenceNumber", HOME_OFFICE_REFERENCE_NUMBER)
+        .put("appellantGivenNames", APPELLANT_GIVEN_NAMES)
+        .put("appellantFamilyName", APPELLANT_FAMILY_NAME);
+
+    Map<Event, Map<String, AsylumCaseDefinition>> eventDefinition = new ImmutableMap.Builder<Event, Map<String, AsylumCaseDefinition>>()
+        .put(DRAFT_HEARING_REQUIREMENTS, personalisationBuilder
+            .build())
+        .put(EDIT_CASE_LISTING, personalisationBuilder
+            .build())
+        .put(UPLOAD_ADDITIONAL_EVIDENCE, personalisationBuilder
+            .build())
+        .put(UPLOAD_ADDITIONAL_EVIDENCE_HOME_OFFICE, personalisationBuilder
+            .build())
+        .put(UPLOAD_ADDENDUM_EVIDENCE, personalisationBuilder
+            .build())
+        .put(UPLOAD_ADDENDUM_EVIDENCE_LEGAL_REP, personalisationBuilder
+            .build())
+        .put(UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE, personalisationBuilder
+            .build())
+        .put(SEND_DIRECTION, personalisationBuilder
+            .build())
+        .build();
 
     public PersonalisationProvider(
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
@@ -65,12 +95,6 @@ public class PersonalisationProvider {
         final Builder<String, String> caseListingValues = ImmutableMap
             .<String, String>builder()
             .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
-            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
-            .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .put("oldHearingCentre", hearingCentreNameBefore)
             .put("oldHearingDate", oldHearingDate == null || oldHearingDate.isEmpty() ? "" : dateTimeExtractor.extractHearingDate(oldHearingDate))
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
@@ -92,13 +116,13 @@ public class PersonalisationProvider {
                 .put("Hearing Requirement Vulnerabilities", readStringCaseField(asylumCase, VULNERABILITIES_TRIBUNAL_RESPONSE,
                     "No special adjustments are being made to accommodate vulnerabilities"))
                 .put("Hearing Requirement Multimedia", readStringCaseField(asylumCase, MULTIMEDIA_TRIBUNAL_RESPONSE,
-                  "No multimedia equipment is being provided"))
+                    "No multimedia equipment is being provided"))
                 .put("Hearing Requirement Single Sex Court", readStringCaseField(asylumCase, SINGLE_SEX_COURT_TRIBUNAL_RESPONSE,
-                  "The court will not be single sex"))
+                    "The court will not be single sex"))
                 .put("Hearing Requirement In Camera Court", readStringCaseField(asylumCase, IN_CAMERA_COURT_TRIBUNAL_RESPONSE,
-                  "The hearing will be held in public court"))
+                    "The hearing will be held in public court"))
                 .put("Hearing Requirement Other", readStringCaseField(asylumCase, ADDITIONAL_TRIBUNAL_RESPONSE,
-                  "No other adjustments are being made"));
+                    "No other adjustments are being made"));
         } else {
 
             caseListingValues
@@ -115,7 +139,9 @@ public class PersonalisationProvider {
         }
     }
 
-    public Map<String, String> getNonStandardDirectionPersonalisation(AsylumCase asylumCase) {
+    public Map<String, String> getNonStandardDirectionPersonalisation(Callback<AsylumCase> callback) {
+
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         final Direction direction =
             directionFinder
@@ -129,10 +155,6 @@ public class PersonalisationProvider {
 
         return ImmutableMap
             .<String, String>builder()
-            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .put("iaCaseListHyperLink", iaCcdFrontendUrl)
             .put("explanation", direction.getExplanation())
             .put("dueDate", directionDueDate)
@@ -140,26 +162,23 @@ public class PersonalisationProvider {
 
     }
 
-    public Map<String, String> getSubmittedHearingRequirementsPersonalisation(AsylumCase asylumCase) {
-        return ImmutableMap
-            .<String, String>builder()
-            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-            .build();
-    }
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
 
-    public Map<String, String> getUploadAdditionalEvidencePersonalisation(AsylumCase asylumCase) {
-        return ImmutableMap
-            .<String, String>builder()
-            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse("N/A"))
-            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-            .build();
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+        Map<String, String> immutableMap = eventDefinition
+            .get(callback.getEvent())
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(e -> e.getKey(), e -> asylumCase.read(e.getValue(), String.class).orElse("N/A")));
+
+        if (callback.getEvent() == Event.SEND_DIRECTION) {
+            immutableMap.putAll(getNonStandardDirectionPersonalisation(callback));
+        } else if (callback.getEvent() == Event.EDIT_CASE_LISTING) {
+            immutableMap.putAll(getEditCaseListingPersonalisation(callback));
+        }
+
+        return immutableMap;
     }
 
     public Map<String, String> getReviewedHearingRequirementsPersonalisation(AsylumCase asylumCase) {

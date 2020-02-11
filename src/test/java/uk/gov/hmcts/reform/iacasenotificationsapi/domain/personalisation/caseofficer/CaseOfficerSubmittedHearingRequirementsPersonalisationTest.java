@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -7,7 +8,6 @@ import static org.mockito.Mockito.*;
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +23,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotif
 @SuppressWarnings("unchecked")
 public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
 
+    @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
 
     @Mock EmailAddressFinder emailAddressFinder;
@@ -70,10 +71,11 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        Map<String, String> personalisation = caseOfficerSubmittedHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
-        Map<String, String> expectedPersonalisation = getPersonalisation();
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisation());
 
-        Assertions.assertThat(personalisation).isEqualToComparingOnlyGivenFields(expectedPersonalisation);
+        Map<String, String> personalisation = caseOfficerSubmittedHearingRequirementsPersonalisation.getPersonalisation(callback);
+
+        assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
     }
 
     @Test

@@ -50,8 +50,7 @@ public class HomeOfficeUploadAdditionalEvidencePersonalisation implements EmailN
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
 
-        return personalisationProvider.getUploadAdditionalEvidencePersonalisation(callback.getCaseDetails().getCaseData());
-
+        return personalisationProvider.getPersonalisation(callback);
     }
 }
 

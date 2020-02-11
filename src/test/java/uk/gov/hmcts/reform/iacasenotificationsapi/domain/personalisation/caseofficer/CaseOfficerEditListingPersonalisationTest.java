@@ -75,7 +75,7 @@ public class CaseOfficerEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
 
         Map<String, String> personalisation = caseOfficerEditListingPersonalisation.getPersonalisation(callback);
 
@@ -84,8 +84,7 @@ public class CaseOfficerEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_mandatory_information_given() {
-
-        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
         Map<String, String> personalisation = caseOfficerEditListingPersonalisation.getPersonalisation(callback);
 

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
+package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.*;
@@ -21,20 +21,20 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotif
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
+public class HomeOfficeUploadAddendumEvidencePersonalisationTest {
 
     @Mock Callback<AsylumCase> callback;
     @Mock CaseDetails<AsylumCase> caseDetails;
     @Mock AsylumCase asylumCase;
 
-    @Mock EmailAddressFinder emailAddressFinder;
     @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
 
-    private String hearingCentreEmailAddress = "hearingCentre@example.com";
+    private String homeOfficeEmailAddress = "homeOffice@example.com";
 
     private String hmctsReference = "hmctsReference";
     private String legalRepReference = "legalRepresentativeReference";
@@ -43,49 +43,49 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
 
-    private CaseOfficerUploadAdditionalEvidencePersonalisation caseOfficerUploadAdditionalEvidencePersonalisation;
+    private HomeOfficeUploadAddendumEvidencePersonalisation homeOfficeUploadAddendumEvidencePersonalisation;
 
     @Before
     public void setUp() {
-        when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
-        when(govNotifyTemplateIdConfiguration.getUploadedAdditionalEvidenceTemplateId()).thenReturn(templateId);
+        when(govNotifyTemplateIdConfiguration.getUploadedAddendumEvidenceTemplateId()).thenReturn(templateId);
+        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
-        caseOfficerUploadAdditionalEvidencePersonalisation = new CaseOfficerUploadAdditionalEvidencePersonalisation(govNotifyTemplateIdConfiguration, personalisationProvider, emailAddressFinder);
+        homeOfficeUploadAddendumEvidencePersonalisation = new HomeOfficeUploadAddendumEvidencePersonalisation(govNotifyTemplateIdConfiguration, personalisationProvider, emailAddressFinder);
+    }
+
+    @Test
+    public void should_return_given_email_address() {
+        assertEquals(Collections.singleton(homeOfficeEmailAddress), homeOfficeUploadAddendumEvidencePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, caseOfficerUploadAdditionalEvidencePersonalisation.getTemplateId());
-    }
-
-    @Test
-    public void should_return_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(hearingCentreEmailAddress), caseOfficerUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase));
+        assertEquals(templateId, homeOfficeUploadAddendumEvidencePersonalisation.getTemplateId());
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER", caseOfficerUploadAdditionalEvidencePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_UPLOADED_ADDENDUM_EVIDENCE_HOME_OFFICE", homeOfficeUploadAddendumEvidencePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationForCaseOfficer());
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationForHomeOffice());
 
-        Map<String, String> personalisation = caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation = homeOfficeUploadAddendumEvidencePersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    public void should_throw_exception_when_callback_is_null() {
 
-        assertThatThrownBy(() -> caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(() -> homeOfficeUploadAddendumEvidencePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
 
-    private Map<String, String> getPersonalisationForCaseOfficer() {
+    private Map<String, String> getPersonalisationForHomeOffice() {
         return ImmutableMap
             .<String, String>builder()
             .put("hmctsReference", hmctsReference)
@@ -97,4 +97,6 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
             .build();
     }
 
+
 }
+

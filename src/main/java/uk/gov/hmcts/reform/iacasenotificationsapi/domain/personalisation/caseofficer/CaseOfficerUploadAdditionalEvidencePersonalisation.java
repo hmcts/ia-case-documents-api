@@ -30,10 +30,11 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisation implements Email
         this.emailAddressFinder = emailAddressFinder;
     }
 
-
     @Override
-    public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getUploadedAdditionalEvidenceTemplateId();
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        return personalisationProvider.getPersonalisation(callback);
     }
 
     @Override
@@ -42,15 +43,12 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisation implements Email
     }
 
     @Override
-    public String getReferenceId(Long caseId) {
-        return caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER";
+    public String getTemplateId() {
+        return govNotifyTemplateIdConfiguration.getUploadedAdditionalEvidenceTemplateId();
     }
 
     @Override
-    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
-        requireNonNull(callback, "callback must not be null");
-
-        return personalisationProvider.getUploadAdditionalEvidencePersonalisation(callback.getCaseDetails().getCaseData());
-
+    public String getReferenceId(Long caseId) {
+        return caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER";
     }
 }

@@ -23,13 +23,11 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeEditListingPersonalisationTest {
 
+    @Mock Callback<AsylumCase> callback;
+    @Mock AsylumCase asylumCase;
+    @Mock PersonalisationProvider personalisationProvider;
+
     private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
-    @Mock
-    Callback<AsylumCase> callback;
-    @Mock
-    AsylumCase asylumCase;
-    @Mock
-    PersonalisationProvider personalisationProvider;
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String iaCcdFrontendUrl = "http://localhost";
@@ -95,7 +93,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
         Map<String, String> personalisation = legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
 
@@ -104,7 +102,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_optional_fields_are_blank() {
-        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
 
         Map<String, String> personalisation = legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
 

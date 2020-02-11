@@ -81,7 +81,7 @@ public class HomeOfficeEditListingPersonalisationTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(personalisationProvider.getEditCaseListingPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
         Map<String, String> personalisation = homeOfficeEditListingPersonalisation.getPersonalisation(callback);
 

@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotif
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
 
+    @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
@@ -70,16 +72,16 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> legalRepresentativeNonStandardDirectionPersonalisation.getPersonalisation((AsylumCase) null))
+        assertThatThrownBy(() -> legalRepresentativeNonStandardDirectionPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("asylumCase must not be null");
+            .hasMessage("callback must not be null");
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        when(personalisationProvider.getNonStandardDirectionPersonalisation(asylumCase)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
-        Map<String, String> personalisation = legalRepresentativeNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation = legalRepresentativeNonStandardDirectionPersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

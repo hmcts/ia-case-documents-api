@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
@@ -46,9 +47,9 @@ public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation 
     }
 
     @Override
-    public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        requireNonNull(asylumCase, "asylumCase must not be null");
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
 
-        return personalisationProvider.getNonStandardDirectionPersonalisation(asylumCase);
+        return personalisationProvider.getPersonalisation(callback);
     }
 }

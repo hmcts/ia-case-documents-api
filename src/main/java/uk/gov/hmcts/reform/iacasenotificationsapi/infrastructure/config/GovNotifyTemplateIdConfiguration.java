@@ -39,4 +39,7 @@ public class GovNotifyTemplateIdConfiguration {
 
     @NotBlank
     private String uploadedAdditionalEvidenceTemplateId;
+
+    @NotBlank
+    private String uploadedAddendumEvidenceTemplateId;
 }

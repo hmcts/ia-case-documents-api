@@ -1,0 +1,69 @@
+{
+  "description": "RIA-2046 Notification of case officer uploaded addendum evidence",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 2046,
+      "eventId": "uploadAddendumEvidence",
+      "state": "preHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "2046_UPLOADED_ADDENDUM_EVIDENCE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2046_UPLOADED_ADDENDUM_EVIDENCE_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2046_UPLOADED_ADDENDUM_EVIDENCE_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: addendum uploaded",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Legal representative reference: CASE001",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "Additional evidence has been uploaded as an addendum.",
+          "Next steps",
+          "Log in to the online service and review the addendum in the Documents tab under 'Evidence supplied after the hearing bundle'.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "2046_UPLOADED_ADDENDUM_EVIDENCE_LEGAL_REP",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: addendum uploaded",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Legal representative reference: CASE001",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "Additional evidence has been uploaded as an addendum.",
+          "Next steps",
+          "Log in to the online service and review the addendum in the Documents tab under 'Evidence supplied after the hearing bundle'.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}
