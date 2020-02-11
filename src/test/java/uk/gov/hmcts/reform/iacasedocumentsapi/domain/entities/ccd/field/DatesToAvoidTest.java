@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
 import java.time.LocalDate;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

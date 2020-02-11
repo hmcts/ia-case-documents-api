@@ -13,7 +13,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Before;

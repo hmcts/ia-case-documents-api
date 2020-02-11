@@ -1,10 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-
 import java.util.List;
 import java.util.Map;
-
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 public enum AsylumCaseDefinition {
