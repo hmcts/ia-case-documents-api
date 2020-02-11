@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.function.BiPredicate;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
