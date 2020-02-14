@@ -42,4 +42,10 @@ public class GovNotifyTemplateIdConfiguration {
 
     @NotBlank
     private String uploadedAddendumEvidenceTemplateId;
+
+    @NotBlank
+    private String changeDirectionDueDateTemplateId;
+
+    @NotBlank
+    private String changeDirectionDueDateOfHomeOfficeTemplateId;
 }

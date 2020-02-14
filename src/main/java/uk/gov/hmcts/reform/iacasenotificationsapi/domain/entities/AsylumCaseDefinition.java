@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 
@@ -116,6 +117,10 @@ public enum AsylumCaseDefinition {
 
     SUBMISSION_OUT_OF_TIME(
         "submissionOutOfTime", new TypeReference<YesOrNo>(){}),
+
+    CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL(
+        "currentCaseStateVisibleToHomeOfficeAll", new TypeReference<State>(){})
+
     ;
 
     private final String value;

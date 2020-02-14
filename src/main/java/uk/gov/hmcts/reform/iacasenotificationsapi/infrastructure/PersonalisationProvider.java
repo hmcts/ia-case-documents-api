@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +41,8 @@ public class PersonalisationProvider {
         .put("appellantFamilyName", APPELLANT_FAMILY_NAME);
 
     Map<Event, Map<String, AsylumCaseDefinition>> eventDefinition = new ImmutableMap.Builder<Event, Map<String, AsylumCaseDefinition>>()
+        .put(CHANGE_DIRECTION_DUE_DATE, personalisationBuilder
+            .build())
         .put(DRAFT_HEARING_REQUIREMENTS, personalisationBuilder
             .build())
         .put(EDIT_CASE_LISTING, personalisationBuilder
@@ -143,7 +146,11 @@ public class PersonalisationProvider {
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        final Direction direction =
+        final Direction direction = callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+            ?
+            directionFinder
+                .findFirst(asylumCase, DirectionTag.CHANGE_DIRECTION_DUE_DATE)
+                .orElseThrow(() -> new IllegalStateException("change-due-date direction is not present")) :
             directionFinder
                 .findFirst(asylumCase, DirectionTag.NONE)
                 .orElseThrow(() -> new IllegalStateException("non-standard direction is not present"));
@@ -172,7 +179,9 @@ public class PersonalisationProvider {
             .stream()
             .collect(Collectors.toMap(e -> e.getKey(), e -> asylumCase.read(e.getValue(), String.class).orElse("N/A")));
 
-        if (callback.getEvent() == Event.SEND_DIRECTION) {
+        if (Arrays.asList(Event.SEND_DIRECTION, Event.CHANGE_DIRECTION_DUE_DATE)
+            .contains(callback.getEvent())
+        ) {
             immutableMap.putAll(getNonStandardDirectionPersonalisation(callback));
         } else if (callback.getEvent() == Event.EDIT_CASE_LISTING) {
             immutableMap.putAll(getEditCaseListingPersonalisation(callback));

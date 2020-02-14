@@ -9,12 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicationDecision;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Parties;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
@@ -250,14 +245,29 @@ public class NotificationHandlerConfiguration {
                         .getCaseDetails()
                         .getCaseData();
 
-                boolean isRespondentDirection = directionFinder
-                    .findFirst(asylumCase, DirectionTag.NONE)
-                    .map(direction -> direction.getParties().equals(Parties.RESPONDENT))
-                    .orElse(false);
-
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && callback.getEvent() == Event.SEND_DIRECTION
-                    && isRespondentDirection;
+                       && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT);
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> respondentChangeDirectionDueDateNotificationHandler(
+        @Qualifier("respondentChangeDirectionDueDateNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+        DirectionFinder directionFinder) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+                       && isValidUserDirection(directionFinder, asylumCase, DirectionTag.CHANGE_DIRECTION_DUE_DATE, Parties.RESPONDENT);
             },
             notificationGenerators
         );
@@ -275,14 +285,29 @@ public class NotificationHandlerConfiguration {
                         .getCaseDetails()
                         .getCaseData();
 
-                boolean isLegalRepDirection = directionFinder
-                    .findFirst(asylumCase, DirectionTag.NONE)
-                    .map(direction -> direction.getParties().equals(Parties.LEGAL_REPRESENTATIVE))
-                    .orElse(false);
-
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && callback.getEvent() == Event.SEND_DIRECTION
-                    && isLegalRepDirection;
+                    && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.LEGAL_REPRESENTATIVE);
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> legalRepChangeDirectionDueDateNotificationHandler(
+        @Qualifier("legalRepChangeDirectionDueDateNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+        DirectionFinder directionFinder) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+                       && isValidUserDirection(directionFinder, asylumCase, DirectionTag.CHANGE_DIRECTION_DUE_DATE, Parties.LEGAL_REPRESENTATIVE);
             },
             notificationGenerators
         );
@@ -452,5 +477,15 @@ public class NotificationHandlerConfiguration {
                 && callback.getEvent() == Event.UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE,
             notificationGenerator
         );
+    }
+
+    private boolean isValidUserDirection(
+        DirectionFinder directionFinder, AsylumCase asylumCase,
+        DirectionTag directionTag, Parties parties
+    ) {
+        return directionFinder
+            .findFirst(asylumCase, directionTag)
+            .map(direction -> direction.getParties().equals(parties))
+            .orElse(false);
     }
 }
