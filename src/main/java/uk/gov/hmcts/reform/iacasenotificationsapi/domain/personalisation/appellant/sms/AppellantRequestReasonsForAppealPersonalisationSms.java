@@ -15,30 +15,31 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinde
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 @Service
-public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationPersonalisation {
+public class AppellantRequestReasonsForAppealPersonalisationSms implements SmsNotificationPersonalisation {
 
-    private final String appealSubmittedAppellantSmsTemplateId;
+    private final String submitReasonForAppealSmsTemplateId;
     private final String iaAipFrontendUrl;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
 
-    public AppellantSubmitAppealPersonalisationSms(
-        @Value("${govnotify.template.appealSubmittedAppellant.sms}") String appealSubmittedAppellantSmsTemplateId,
+    public AppellantRequestReasonsForAppealPersonalisationSms(
+        @Value("${govnotify.template.requestReasonsForAppeal.sms}") String submitReasonForAppealSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
-        this.appealSubmittedAppellantSmsTemplateId = appealSubmittedAppellantSmsTemplateId;
+        this.submitReasonForAppealSmsTemplateId = submitReasonForAppealSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
+
     }
 
 
     @Override
     public String getTemplateId() {
-        return appealSubmittedAppellantSmsTemplateId;
+        return submitReasonForAppealSmsTemplateId;
     }
 
     @Override
@@ -48,14 +49,13 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_APPEAL_SUBMITTED_APPELLANT_AIP_SMS";
+        return caseId + "_REQUEST_REASONS_FOR_APPEAL_APPELLANT_AIP_SMS";
     }
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-
-        final String dueDate = systemDateProvider.dueDate(14);
+        final String dueDate = systemDateProvider.dueDate(28);
 
         return
             ImmutableMap

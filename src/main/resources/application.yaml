@@ -62,6 +62,14 @@ govnotify.template.appealSubmittedAppellant.sms: 2cc4d346-cfb6-4ea9-93b3-c3f1f4f
 govnotify.template.appealSubmittedOutOfTimeAppellant.email: 98f18bbb-c746-4fbd-8860-a629957a94ac
 govnotify.template.appealSubmittedOutOfTimeAppellant.sms: 2587432c-aeb9-483d-bc0d-086b175f4fa7
 
+
+govnotify.template.requestReasonsForAppeal.email: 50f1b88e-51d5-446c-b2da-1188feb7e26c
+govnotify.template.requestReasonsForAppeal.sms: a7056fd8-6de7-408e-881b-c6f9984fe5cf
+
+govnotify.template.submitReasonsForAppeal.email: 91ab0576-f0cc-412f-aadf-ad260fee1428
+govnotify.template.submitReasonsForAppeal.sms: 33758f88-eb3c-469d-8c49-ca3f9fa69a6d
+govnotify.template.submitReasonsForAppealCaseOfficer: 2e3d6dfb-409d-4b45-a50b-0703c47341ea
+
 govnotify.baseUrl: "https://api.notifications.service.gov.uk"
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -98,6 +106,7 @@ security:
       - "startAppeal"
       - "editAppeal"
       - "submitAppeal"
+      - "submitReasonsForAppeal"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -130,6 +139,8 @@ security:
       - "requestResponseReview"
       - "sendDecisionAndReasons"
       - "uploadAddendumEvidence"
+      - "requestReasonsForAppeal"
+
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

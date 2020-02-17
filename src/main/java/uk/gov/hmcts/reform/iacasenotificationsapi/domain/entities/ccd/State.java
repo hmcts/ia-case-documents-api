@@ -19,6 +19,7 @@ public enum State {
     PRE_HEARING("preHearing"),
     HEARING_AND_OUTCOME("hearingAndOutcome"),
     DECIDED("decided"),
+    AWAITING_REASONS_FOR_APPEAL("awaitingReasonsForAppeal"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

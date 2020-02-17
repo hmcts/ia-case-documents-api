@@ -1,0 +1,73 @@
+{
+  "description": "RIA-2267 AIP CaseOfficer Sends request to submit reason for appeal SMS to appellant",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1005,
+      "eventId": "requestReasonsForAppeal",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "No",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "No",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1005_REQUEST_REASONS_FOR_APPEAL_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1005_REQUEST_REASONS_FOR_APPEAL_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "Appeal reference: PA/12345/2019",
+          "A Tribunal Caseworker has looked at your appeal details and decided you have the right to appeal.",
+          "You now need to tell us why you think the Home Office was wrong to refuse your claim.",
+          "Sign in to your account to do this:",
+          "{$iaAipFrontendUrl}",
+          "You have until {$TODAY+28|d MMM yyyy} to give us this information."
+        ]
+      }
+    ]
+  }
+}

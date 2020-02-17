@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms;
+package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
 
@@ -10,59 +10,60 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 @Service
-public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationPersonalisation {
+public class AppellantSubmitReasonsForAppealPersonalisationEmail implements EmailNotificationPersonalisation {
 
-    private final String appealSubmittedAppellantSmsTemplateId;
+    private final String reasonsForAppealSubmittedAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
 
-    public AppellantSubmitAppealPersonalisationSms(
-        @Value("${govnotify.template.appealSubmittedAppellant.sms}") String appealSubmittedAppellantSmsTemplateId,
+    public AppellantSubmitReasonsForAppealPersonalisationEmail(
+        @Value("${govnotify.template.submitReasonsForAppeal.email}") String reasonsForAppealSubmittedAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
-        this.appealSubmittedAppellantSmsTemplateId = appealSubmittedAppellantSmsTemplateId;
+        this.reasonsForAppealSubmittedAppellantEmailTemplateId = reasonsForAppealSubmittedAppellantEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
     }
 
-
     @Override
     public String getTemplateId() {
-        return appealSubmittedAppellantSmsTemplateId;
+        return reasonsForAppealSubmittedAppellantEmailTemplateId;
     }
 
     @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return recipientsFinder.findAll(asylumCase, NotificationType.SMS);
+    public Set<String> getRecipientsList(final AsylumCase asylumCase) {
+        return recipientsFinder.findAll(asylumCase, NotificationType.EMAIL);
     }
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_APPEAL_SUBMITTED_APPELLANT_AIP_SMS";
+        return caseId + "_SUBMIT_REASONS_FOR_APPEAL_APPELLANT_AIP_EMAIL";
     }
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-
         final String dueDate = systemDateProvider.dueDate(14);
 
         return
             ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("Hyperlink to service", iaAipFrontendUrl)
+                .put("HO Ref Number", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("Given names", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("Family name", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .put("due date", dueDate)
+                .put("Hyperlink to service", iaAipFrontendUrl)
                 .build();
     }
 }

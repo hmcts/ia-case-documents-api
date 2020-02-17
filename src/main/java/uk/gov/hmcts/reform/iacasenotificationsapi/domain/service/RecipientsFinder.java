@@ -23,6 +23,8 @@ public class RecipientsFinder {
         NotificationType notificationType) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
+        requireNonNull(asylumCase, "asylumCase must not be null");
+
         final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
 
         switch (notificationType) {

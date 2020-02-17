@@ -1,23 +1,17 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBSCRIPTIONS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 @Service
@@ -25,15 +19,18 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
 
     private final String appealSubmittedAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
+    private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
     public AppellantSubmitAppealPersonalisationEmail(
         @Value("${govnotify.template.appealSubmittedAppellant.email}") String appealSubmittedAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
         this.appealSubmittedAppellantEmailTemplateId = appealSubmittedAppellantEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
     }
 
@@ -44,15 +41,8 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
-        requireNonNull(asylumCase, "asylumCase must not be null");
+        return recipientsFinder.findAll(asylumCase, NotificationType.EMAIL);
 
-        final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
-
-        return maybeSubscribers
-            .orElse(Collections.emptyList()).stream()
-            .filter(subscriber ->
-                subscriber.getValue() != null && YES.equals(subscriber.getValue().getWantsEmail()))
-            .map(subscriber -> subscriber.getValue().getEmail()).collect(Collectors.toSet());
     }
 
     @Override

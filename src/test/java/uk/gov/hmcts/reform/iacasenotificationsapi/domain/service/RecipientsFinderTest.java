@@ -23,12 +23,10 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("unchecked")
 public class RecipientsFinderTest {
 
     private final RecipientsFinder recipientsFinder = new RecipientsFinder();
-    @Mock
-    private AsylumCase asylumCase;
+    @Mock private AsylumCase asylumCase;
 
     private String mockedAppellantEmailAddress = "appelant@example.net";
     private String mockedAppellantMobilePhone = "07123456789";

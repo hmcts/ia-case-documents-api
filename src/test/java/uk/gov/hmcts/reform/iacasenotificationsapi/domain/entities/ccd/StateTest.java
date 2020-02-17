@@ -23,10 +23,11 @@ public class StateTest {
         assertEquals("hearingAndOutcome", State.HEARING_AND_OUTCOME.toString());
         assertEquals("decided", State.DECIDED.toString());
         assertEquals("unknown", State.UNKNOWN.toString());
+        assertEquals("awaitingReasonsForAppeal", State.AWAITING_REASONS_FOR_APPEAL.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(15, State.values().length);
+        assertEquals(16, State.values().length);
     }
 }

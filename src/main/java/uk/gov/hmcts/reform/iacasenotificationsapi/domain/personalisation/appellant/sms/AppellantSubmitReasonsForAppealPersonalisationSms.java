@@ -15,21 +15,20 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinde
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 @Service
-public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationPersonalisation {
+public class AppellantSubmitReasonsForAppealPersonalisationSms implements SmsNotificationPersonalisation {
 
-    private final String appealSubmittedAppellantSmsTemplateId;
+    private final String reasonsForAppealSubmittedAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
-
-    public AppellantSubmitAppealPersonalisationSms(
-        @Value("${govnotify.template.appealSubmittedAppellant.sms}") String appealSubmittedAppellantSmsTemplateId,
+    public AppellantSubmitReasonsForAppealPersonalisationSms(
+        @Value("${govnotify.template.submitReasonsForAppeal.sms}") String reasonsForAppealSubmittedAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
-        this.appealSubmittedAppellantSmsTemplateId = appealSubmittedAppellantSmsTemplateId;
+        this.reasonsForAppealSubmittedAppellantSmsTemplateId = reasonsForAppealSubmittedAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
@@ -38,7 +37,7 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
 
     @Override
     public String getTemplateId() {
-        return appealSubmittedAppellantSmsTemplateId;
+        return reasonsForAppealSubmittedAppellantSmsTemplateId;
     }
 
     @Override
@@ -48,21 +47,20 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_APPEAL_SUBMITTED_APPELLANT_AIP_SMS";
+        return caseId + "_SUBMIT_REASONS_FOR_APPEAL_APPELLANT_AIP_SMS";
     }
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-
         final String dueDate = systemDateProvider.dueDate(14);
 
         return
             ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("Hyperlink to service", iaAipFrontendUrl)
                 .put("due date", dueDate)
+                .put("Hyperlink to service", iaAipFrontendUrl)
                 .build();
     }
 }

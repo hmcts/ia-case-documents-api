@@ -1,0 +1,109 @@
+{
+  "description": "RIA-2270 Send Reason for appeal submitted to appellant and caseworker",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 1011,
+      "eventId": "submitReasonsForAppeal",
+      "state": "awaitingReasonsForAppeal",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1011_REASONS_FOR_APPEAL_SUBMITTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1011_SUBMIT_REASONS_FOR_APPEAL_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1011_SUBMIT_REASONS_FOR_APPEAL_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1011_REASONS_FOR_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: Reasons for Appeal submitted",
+        "body": [
+          "Appeal reference number: PA/12345/2019",
+          "Appellant name: Pablo Jimenez",
+          "Link to the online service: {$iaCcdFrontendUrl}",
+          "# An appellant in person has submitted their Appeal Reasons",
+          "Log in to the service to review the Appeal Reasons",
+          "If you believe the case is ready to proceed, you should direct the respondent to review it. If you don’t think it is ready, you should direct the appellant to answer clarifying questions or attend a case management appointment.",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "1011_SUBMIT_REASONS_FOR_APPEAL_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "You told us why you think the Home Office is wrong",
+        "body": [
+          "Appeal reference: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Dear Pablo Jimenez",
+          "You have told the Tribunal why you think the Home Office was wrong to refuse your claim. You don’t need to do anything now.",
+          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
+          "Sign in to your account to see your appeal progress:",
+          "{$iaAipFrontendUrl}",
+          "# How to contact the Tribunal"
+        ]
+      },
+      {
+        "reference": "1011_SUBMIT_REASONS_FOR_APPEAL_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "Appeal reference: PA/12345/2019",
+          "You have told the Tribunal why you think the Home Office was wrong to refuse your claim.",
+          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
+          "Sign in to your account to see your appeal progress:",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}
