@@ -62,6 +62,8 @@ govnotify.template.appealSubmittedAppellant.sms: 2cc4d346-cfb6-4ea9-93b3-c3f1f4f
 govnotify.template.appealSubmittedOutOfTimeAppellant.email: 98f18bbb-c746-4fbd-8860-a629957a94ac
 govnotify.template.appealSubmittedOutOfTimeAppellant.sms: 2587432c-aeb9-483d-bc0d-086b175f4fa7
 
+govnotify.template.requestRespondentEvidenceDirectionAppellant.email: 9c8ab848-b1f7-4dbe-9854-4922e94ece67
+govnotify.template.requestRespondentEvidenceDirectionAppellant.sms: e805b3c5-b1e2-4ad1-9416-3298ca765738
 
 govnotify.template.requestReasonsForAppeal.email: 50f1b88e-51d5-446c-b2da-1188feb7e26c
 govnotify.template.requestReasonsForAppeal.sms: a7056fd8-6de7-408e-881b-c6f9984fe5cf

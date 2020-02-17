@@ -269,8 +269,30 @@ public class NotificationGeneratorConfiguration {
     }
 
 
-    @Bean("respondentEvidenceNotificationGenerator")
-    public List<NotificationGenerator> respondentEvidenceNotificationGenerator(
+    @Bean("respondentEvidenceAipNotificationGenerator")
+    public List<NotificationGenerator> respondentEvidenceAipNotificationGenerator(
+        RespondentEvidenceDirectionPersonalisation respondentEvidenceDirectionPersonalisation,
+        AppellantRequestRespondentEvidencePersonalisationEmail appellantRequestRespondentEvidencePersonalisationEmail,
+        AppellantRequestRespondentEvidencePersonalisationSms appellantRequestRespondentEvidencePersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(respondentEvidenceDirectionPersonalisation, appellantRequestRespondentEvidencePersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantRequestRespondentEvidencePersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("respondentEvidenceRepNotificationGenerator")
+    public List<NotificationGenerator> respondentEvidenceRepNotificationGenerator(
         RespondentEvidenceDirectionPersonalisation respondentEvidenceDirectionPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
