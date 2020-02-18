@@ -138,7 +138,8 @@ security:
       - "startAppeal"
       - "editAppeal"
       - "submitAppeal"
-
+    caseworker-ia-iacjudge:
+      - "sendDirection"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
