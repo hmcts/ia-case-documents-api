@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -146,14 +145,9 @@ public class PersonalisationProvider {
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        final Direction direction = callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
-            ?
-            directionFinder
-                .findFirst(asylumCase, DirectionTag.CHANGE_DIRECTION_DUE_DATE)
-                .orElseThrow(() -> new IllegalStateException("change-due-date direction is not present")) :
-            directionFinder
-                .findFirst(asylumCase, DirectionTag.NONE)
-                .orElseThrow(() -> new IllegalStateException("non-standard direction is not present"));
+        final Direction direction = directionFinder
+            .findFirst(asylumCase, DirectionTag.NONE)
+            .orElseThrow(() -> new IllegalStateException("non-standard direction is not present"));
 
         final String directionDueDate =
             LocalDate
@@ -169,6 +163,29 @@ public class PersonalisationProvider {
 
     }
 
+    public Map<String, String> getChangeDirectionDueDatePersonalisation(Callback<AsylumCase> callback) {
+
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+        String directionEditDueDate = asylumCase.read(DIRECTION_EDIT_DATE_DUE, String.class)
+            .orElseThrow(() -> new IllegalStateException("Direction edit date due is not present"));
+
+        String directionEditExplanation = asylumCase.read(DIRECTION_EDIT_EXPLANATION, String.class)
+            .orElseThrow(() -> new IllegalStateException("Direction edit explanation is not present"));
+
+        final String directionDueDate =
+            LocalDate
+                .parse(directionEditDueDate)
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+
+        return ImmutableMap
+            .<String, String>builder()
+            .put("iaCaseListHyperLink", iaCcdFrontendUrl)
+            .put("explanation", directionEditExplanation)
+            .put("dueDate", directionDueDate)
+            .build();
+    }
+
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
@@ -179,10 +196,10 @@ public class PersonalisationProvider {
             .stream()
             .collect(Collectors.toMap(e -> e.getKey(), e -> asylumCase.read(e.getValue(), String.class).orElse("N/A")));
 
-        if (Arrays.asList(Event.SEND_DIRECTION, Event.CHANGE_DIRECTION_DUE_DATE)
-            .contains(callback.getEvent())
-        ) {
+        if (callback.getEvent() == Event.SEND_DIRECTION) {
             immutableMap.putAll(getNonStandardDirectionPersonalisation(callback));
+        } else if (callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE) {
+            immutableMap.putAll(getChangeDirectionDueDatePersonalisation(callback));
         } else if (callback.getEvent() == Event.EDIT_CASE_LISTING) {
             immutableMap.putAll(getEditCaseListingPersonalisation(callback));
         }

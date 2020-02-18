@@ -10,19 +10,9 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "directions": [
-            {
-              "id": "1",
-              "value": {
-                "explanation": "Please submit your hearing requirements",
-                "parties": "legalRepresentative",
-                "dateDue": "{$TODAY+5}",
-                "dateSent": "{$TODAY}",
-                "tag": "changeDirectionDueDate"
-              }
-            }
-          ],
-          "notificationsSent": [],
+          "directionEditExplanation": "Please submit your hearing requirements",
+          "directionEditDateDue": "{$TODAY+5}",
+          "directionEditParties": "legalRepresentative",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
         }
       }
@@ -34,18 +24,9 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "directions": [
-          {
-            "id": "1",
-            "value": {
-              "explanation": "Please submit your hearing requirements",
-              "parties": "legalRepresentative",
-              "dateDue": "{$TODAY+5}",
-              "dateSent": "{$TODAY}",
-              "tag": "changeDirectionDueDate"
-            }
-          }
-        ],
+        "directionEditExplanation": "Please submit your hearing requirements",
+        "directionEditDateDue": "{$TODAY+5}",
+        "directionEditParties": "legalRepresentative",
         "notificationsSent": [
           {
             "id": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",

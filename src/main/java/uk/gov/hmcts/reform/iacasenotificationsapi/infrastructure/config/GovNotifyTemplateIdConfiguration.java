@@ -48,4 +48,5 @@ public class GovNotifyTemplateIdConfiguration {
 
     @NotBlank
     private String changeDirectionDueDateOfHomeOfficeTemplateId;
+
 }

@@ -59,6 +59,37 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("respondentChangeDirectionDueDateNotificationGenerator")
+    public List<NotificationGenerator> respondentChangeDirectionDueDateNotificationGenerator(
+        RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
+        LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(respondentChangeDirectionDueDatePersonalisation, legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("legalRepChangeDirectionDueDateNotificationGenerator")
+    public List<NotificationGenerator> legalRepChangeDirectionDueDateNotificationGenerator(
+        LegalRepresentativeChangeDirectionDueDatePersonalisation legalRepresentativeChangeDirectionDueDatePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeChangeDirectionDueDatePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("listCaseNotificationGenerator")
     public List<NotificationGenerator> listCaseNotificationGenerator(
         CaseOfficerListCasePersonalisation caseOfficerListCasePersonalisation,
@@ -331,37 +362,6 @@ public class NotificationGeneratorConfiguration {
         return Arrays.asList(
             new EmailNotificationGenerator(
                 newArrayList(legalRepresentativeNonStandardDirectionPersonalisation),
-                notificationSender,
-                notificationIdAppender
-            )
-        );
-    }
-
-    @Bean("respondentChangeDirectionDueDateNotificationGenerator")
-    public List<NotificationGenerator> respondentChangeDirectionDueDateNotificationGenerator(
-        RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
-        LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation,
-        NotificationSender notificationSender,
-        NotificationIdAppender notificationIdAppender) {
-
-        return Arrays.asList(
-            new EmailNotificationGenerator(
-                newArrayList(respondentChangeDirectionDueDatePersonalisation, legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation),
-                notificationSender,
-                notificationIdAppender
-            )
-        );
-    }
-
-    @Bean("legalRepChangeDirectionDueDateNotificationGenerator")
-    public List<NotificationGenerator> legalRepChangeDirectionDueDateNotificationGenerator(
-        LegalRepresentativeChangeDirectionDueDatePersonalisation legalRepresentativeChangeDirectionDueDatePersonalisation,
-        NotificationSender notificationSender,
-        NotificationIdAppender notificationIdAppender) {
-
-        return Arrays.asList(
-            new EmailNotificationGenerator(
-                newArrayList(legalRepresentativeChangeDirectionDueDatePersonalisation),
                 notificationSender,
                 notificationIdAppender
             )

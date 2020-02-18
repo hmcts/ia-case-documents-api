@@ -11,10 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
@@ -48,6 +45,9 @@ public class PersonalisationProviderTest {
     private String appellantGivenNames = "appellantGivenNames";
     private String appellantFamilyName = "appellantFamilyName";
     private String homeOfficeRefNumber = "homeOfficeRefNumber";
+
+    private String directionEditExplanation = "This is edit direction explanation";
+    private String directionEditDateDue = "2020-02-14";
 
     private String oldHearingCentreName = HearingCentre.MANCHESTER.toString();
     private String oldHearingDateTime = "2019-08-20T14:25:15.000";
@@ -169,6 +169,18 @@ public class PersonalisationProviderTest {
     public void should_return_reviewed_hearing_requirements_personalisation() {
 
         Map<String, String> personalisation = personalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
+
+        assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+    }
+
+    @Test
+    public void should_return_change_direction_due_date_personalisation() {
+        when(callback.getEvent()).thenReturn(Event.CHANGE_DIRECTION_DUE_DATE);
+        when(callback.getCaseDetails().getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(DIRECTION_EDIT_EXPLANATION, String.class)).thenReturn(Optional.of(directionEditExplanation));
+        when(asylumCase.read(DIRECTION_EDIT_DATE_DUE, String.class)).thenReturn(Optional.of(directionEditDateDue));
+
+        Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

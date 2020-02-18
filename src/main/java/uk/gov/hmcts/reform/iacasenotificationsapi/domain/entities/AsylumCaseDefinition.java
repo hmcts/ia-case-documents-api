@@ -29,6 +29,18 @@ public enum AsylumCaseDefinition {
     DIRECTIONS(
             "directions", new TypeReference<List<IdValue<Direction>>>(){}),
 
+    CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL(
+            "currentCaseStateVisibleToHomeOfficeAll", new TypeReference<State>(){}),
+
+    DIRECTION_EDIT_DATE_DUE(
+            "directionEditDateDue", new TypeReference<String>(){}),
+
+    DIRECTION_EDIT_EXPLANATION(
+            "directionEditExplanation", new TypeReference<String>(){}),
+
+    DIRECTION_EDIT_PARTIES(
+            "directionEditParties", new TypeReference<Parties>(){}),
+
     LEGAL_REPRESENTATIVE_EMAIL_ADDRESS(
             "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
 
@@ -116,10 +128,7 @@ public enum AsylumCaseDefinition {
         "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),
 
     SUBMISSION_OUT_OF_TIME(
-        "submissionOutOfTime", new TypeReference<YesOrNo>(){}),
-
-    CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL(
-        "currentCaseStateVisibleToHomeOfficeAll", new TypeReference<State>(){})
+        "submissionOutOfTime", new TypeReference<YesOrNo>(){})
 
     ;
 

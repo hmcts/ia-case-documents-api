@@ -11,18 +11,9 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "currentCaseStateVisibleToHomeOfficeAll": "finalBundling",
-          "directions": [
-            {
-              "id": "1",
-              "value": {
-                "explanation": "Upload additional evidence",
-                "parties": "respondent",
-                "dateDue": "{$TODAY+14}",
-                "dateSent": "{$TODAY}",
-                "tag": "changeDirectionDueDate"
-              }
-            }
-          ],
+          "directionEditExplanation": "Upload additional evidence",
+          "directionEditDateDue": "{$TODAY+14}",
+          "directionEditParties": "respondent",
           "notificationsSent": [],
           "listCaseHearingCentre": "birmingham"
         }
@@ -35,18 +26,9 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "directions": [
-          {
-            "id": "1",
-            "value": {
-              "explanation": "Upload additional evidence",
-              "parties": "respondent",
-              "dateDue": "{$TODAY+14}",
-              "dateSent": "{$TODAY}",
-              "tag": "changeDirectionDueDate"
-            }
-          }
-        ],
+        "directionEditExplanation": "Upload additional evidence",
+        "directionEditDateDue": "{$TODAY+14}",
+        "directionEditParties": "respondent",
         "notificationsSent": [
           {
             "id": "2345_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
