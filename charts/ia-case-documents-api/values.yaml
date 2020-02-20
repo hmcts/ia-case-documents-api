@@ -1,6 +1,7 @@
 java:
   image: 'https://hmctspublic.azurecr.io/ia/case-documents-api:latest'
   applicationPort: 8092
+  aadIdentityName: ia
   keyVaults:
     ia:
       resourceGroup: ia
