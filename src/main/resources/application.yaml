@@ -134,6 +134,7 @@ security:
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
+      - "sendDecisionAndReasons"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -141,6 +142,8 @@ security:
     caseworker-ia-iacjudge:
       - "generateDecisionAndReasons"
       - "endAppeal"
+      - "sendDecisionAndReasons"
+
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
