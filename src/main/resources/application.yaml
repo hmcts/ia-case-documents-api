@@ -120,6 +120,7 @@ security:
       - "sendDecisionAndReasons"
       - "editCaseListing"
       - "endAppeal"
+      - "updateHearingRequirements"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

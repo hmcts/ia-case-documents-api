@@ -256,6 +256,9 @@ public enum AsylumCaseDefinition {
     DATES_TO_AVOID(
         "datesToAvoid", new TypeReference<List<IdValue<DatesToAvoid>>>(){}),
 
+    DATES_TO_AVOID_YES_NO(
+        "datesToAvoidYesNo", new TypeReference<YesOrNo>(){}),
+
     VULNERABILITIES_TRIBUNAL_RESPONSE(
         "vulnerabilitiesTribunalResponse", new TypeReference<String>(){}),
 
