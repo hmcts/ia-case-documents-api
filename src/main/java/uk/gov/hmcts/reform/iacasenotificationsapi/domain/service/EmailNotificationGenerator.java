@@ -12,9 +12,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 
 public class EmailNotificationGenerator implements NotificationGenerator {
 
-    private final List<EmailNotificationPersonalisation> personalisationList;
-    private final NotificationIdAppender notificationIdAppender;
-    private final NotificationSender notificationSender;
+    protected final List<EmailNotificationPersonalisation> personalisationList;
+    protected final NotificationIdAppender notificationIdAppender;
+    protected final NotificationSender notificationSender;
 
     public EmailNotificationGenerator(
         List<EmailNotificationPersonalisation> repPersonalisationList,
@@ -38,7 +38,7 @@ public class EmailNotificationGenerator implements NotificationGenerator {
         });
     }
 
-    private List<String> createEmail(
+    protected List<String> createEmail(
         final BaseNotificationPersonalisation personalisation,
         final AsylumCase asylumCase,
         final String referenceId,
@@ -62,7 +62,7 @@ public class EmailNotificationGenerator implements NotificationGenerator {
         return notificationIds;
     }
 
-    private String sendEmail(
+    protected String sendEmail(
         final String email,
         final EmailNotificationPersonalisation personalisation,
         final String referenceId,

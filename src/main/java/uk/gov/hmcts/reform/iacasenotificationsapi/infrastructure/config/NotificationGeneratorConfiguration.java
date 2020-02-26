@@ -14,11 +14,11 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appella
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.*;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentChangeDirectionDueDatePersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentDirectionPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentEvidenceDirectionPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentNonStandardDirectionPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.EditListingEmailNotificationGenerator;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.EmailNotificationGenerator;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGenerator;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
@@ -389,12 +389,14 @@ public class NotificationGeneratorConfiguration {
         CaseOfficerEditListingPersonalisation caseOfficerEditListingPersonalisation,
         HomeOfficeEditListingPersonalisation homeOfficeEditListingPersonalisation,
         LegalRepresentativeEditListingPersonalisation legalRepresentativeEditListingPersonalisation,
+        LegalRepresentativeEditListingNoChangePersonalisation legalRepresentativeEditListingNoChangePersonalisation,
+        HomeOfficeEditListingNoChangePersonalisation homeOfficeEditListingNoChangePersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Arrays.asList(
-            new EmailNotificationGenerator(
-                newArrayList(caseOfficerEditListingPersonalisation, homeOfficeEditListingPersonalisation, legalRepresentativeEditListingPersonalisation),
+            new EditListingEmailNotificationGenerator(
+                newArrayList(caseOfficerEditListingPersonalisation, homeOfficeEditListingPersonalisation, legalRepresentativeEditListingPersonalisation, legalRepresentativeEditListingNoChangePersonalisation, homeOfficeEditListingNoChangePersonalisation),
                 notificationSender,
                 notificationIdAppender
             )

@@ -1,25 +1,25 @@
 {
-  "description": "RIA-1380/RIA-1616: Send case re-listed notification to case officer, Home Office (Bradford hearing centre) and legal rep",
+  "description": "RIA-2252: Send case re-listed notification to Home Office (Bradford hearing centre) and legal rep when no change",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 1005,
+      "id": 1050,
       "eventId": "editCaseListing",
       "state": "prepareForHearing",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "listCaseHearingCentre": "bradford",
-          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "listCaseHearingDate": "2019-05-03T13:30:15.000",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
         }
       },
       "caseDataBefore": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "taylorHouse",
-          "listCaseHearingDate": "2019-05-01T13:30:15.000",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingDate": "2019-05-03T13:30:15.000",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
         }
       }
@@ -32,19 +32,15 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "listCaseHearingCentre": "bradford",
-        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "listCaseHearingDate": "2019-05-03T13:30:15.000",
         "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
         "notificationsSent": [
           {
-            "id": "1005_CASE_RE_LISTED_CASE_OFFICER",
+            "id": "1050_CASE_RE_LISTED_NO_CHANGE_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1005_CASE_RE_LISTED_HOME_OFFICE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "1005_CASE_RE_LISTED_LEGAL_REPRESENTATIVE",
+            "id": "1050_CASE_RE_LISTED_NO_CHANGE_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -52,41 +48,22 @@
     },
     "notifications": [
       {
-        "reference": "1005_CASE_RE_LISTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.bradford}",
-        "subject": "Immigration and Asylum appeal: case re-listed",
-        "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Listing reference:",
-          "Appellant name: Talha Awan",
-          "#The hearing details for this appeal have changed",
-          "There are changes to the hearing at Taylor House on 1 May 2019.",
-          "#New hearing details:",
-          "* Date: 3 May 2019",
-          "* Time: 14:25",
-          "* Address: IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
-          "Hearing requirements: View the new Notice of Hearing for the agreed Hearing adjustments.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
-        ]
-      },
-      {
-        "reference": "1005_CASE_RE_LISTED_HOME_OFFICE",
-        "recipient": "{$homeOfficeEmailAddresses.bradford}",
-        "subject": "Immigration and Asylum appeal: case re-listed",
+        "reference": "1050_CASE_RE_LISTED_NO_CHANGE_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: change to Hearing requirements",
         "body": [
           "Appeal reference number: PA/12345/2019",
           "Listing reference:",
-          "Home Office reference: A1234567",
+          "Your reference: CASE001",
           "Appellant name: Talha Awan",
-          "#The hearing details for this appeal have changed",
-          "There are changes to the hearing at Taylor House on 1 May 2019.",
-          "#New hearing details:",
+          "#The hearing requirements for this appeal have changed",
+          "There are changes to the hearing at Bradford on 3 May 2019.",
+          "#Hearing details:",
           "* Date: 3 May 2019",
-          "* Time: 14:25",
+          "* Time: 13:30",
           "* Address: IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
           "#Hearing requirements:",
-          "If the appellant requested interpreter services, step free access, or a hearing loop, these will be provided.",
+          "If you requested interpreter services, step free access, or a hearing loop, these will be provided.",
           "Additional requests:",
           "* Adjustments to accommodate vulnerabilities: No special adjustments are being made to accommodate vulnerabilities",
           "* Multimedia equipment: No multimedia equipment is being provided",
@@ -97,22 +74,22 @@
         ]
       },
       {
-        "reference": "1005_CASE_RE_LISTED_LEGAL_REPRESENTATIVE",
-        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: case re-listed",
+        "reference": "1050_CASE_RE_LISTED_NO_CHANGE_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: change to Hearing requirements",
         "body": [
           "Appeal reference number: PA/12345/2019",
           "Listing reference:",
-          "Your reference: CASE001",
+          "Home Office reference: A1234567",
           "Appellant name: Talha Awan",
-          "#The hearing details for this appeal have changed",
-          "There are changes to the hearing at Taylor House on 1 May 2019. Please inform your client and ensure they receive the new hearing details.",
-          "#New hearing details:",
+          "#The hearing requirements for this appeal have changed",
+          "There are changes to the Hearing at Bradford on 3 May 2019.",
+          "#Hearing details:",
           "* Date: 3 May 2019",
-          "* Time: 14:25",
+          "* Time: 13:30",
           "* Address: IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
           "#Hearing requirements:",
-          "If you requested interpreter services, step free access, or a hearing loop, these will be provided.",
+          "If the appellant requested interpreter services, step free access, or a hearing loop, these will be provided.",
           "Additional requests:",
           "* Adjustments to accommodate vulnerabilities: No special adjustments are being made to accommodate vulnerabilities",
           "* Multimedia equipment: No multimedia equipment is being provided",

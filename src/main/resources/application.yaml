@@ -29,7 +29,6 @@ govnotify.template.caseOfficerSubmitCase: f6c5ad6b-d585-4421-a93f-c36126f3c4ce
 govnotify.template.caseOfficerCaseListed: 58eab057-b5c0-4a69-8f71-a21d6f02da3d
 govnotify.template.legalRepresentativeCaseListed: b87a1e5b-eec7-4268-a326-059893ab5c28
 govnotify.template.homeOfficeCaseListed: 86936ac9-e8d0-4a4c-8169-0948d7fb7935
-govnotify.template.caseOfficerCaseEdited: 5fdb27ee-dbd6-4aad-845c-d0a2db474a76
 govnotify.template.endAppealHomeOfficeTemplateId: 993c1294-c6b8-4b46-ab0f-ab01b4f6607b
 govnotify.template.appealOutcomeAllowedHomeOfficeTemplateId: ba4f360b-586b-433d-b5c2-ceb0f2f5a323
 govnotify.template.appealOutcomeAllowedLegalRepresentativeTemplateId: 95fa02b7-babb-444d-805c-06dff42cfea7
@@ -43,8 +42,11 @@ govnotify.template.legalRepresentativeBuildCaseDirection: ea1a6d4c-0d6e-4d95-afb
 govnotify.template.hearingBundleReadyLegalRepTemplateId: 03d427d1-f032-40cb-8e8e-96ea54c2f234
 govnotify.template.hearingBundleReadyHomeOfficeTemplateId: d4c6352d-325a-4933-91bb-61eb56554efc
 govnotify.template.homeOfficeResponseUploadedTemplateId: 32584965-8374-469a-a71b-b417da7709ed
-govnotify.template.legalRepresentativeCaseEditedTemplateId: 347f2959-4cb5-447f-bd35-cb1e2308f6fb
-govnotify.template.homeOfficeCaseEditedTemplateId: 54975c09-6634-4f1a-bfe6-caaeb5913e6a
+govnotify.template.caseOfficerCaseEdited: 3ee36e48-b824-4d80-8642-2332eeaab11b
+govnotify.template.legalRepresentativeCaseEditedTemplateId: 20f96361-e43a-4791-ac84-4f61f7e9ba40
+govnotify.template.homeOfficeCaseEditedTemplateId: 56d6f2ac-60a1-4789-94f0-fa02354e205c
+govnotify.template.legalRepresentativeCaseEditedNoChange: febcbbd2-da42-49b9-b1f9-5ab19e4fc265
+govnotify.template.homeOfficeCaseEditedNoChange: 1cee9f09-ade4-4b8f-8bc7-8d1fbc3e8089
 govnotify.template.legalRepresentativeNonStandardDirectionTemplateId: d85587f4-2a7d-44a2-b6d8-538b91b7144b
 govnotify.template.legalRepNonStandardDirectionOfHomeOfficeTemplateId: a03720df-2c7d-403d-9a45-a58c192e8570
 govnotify.template.reviewHearingRequirementsAdminOfficerTemplateId: 58632d37-fe36-4fae-adfd-b44bf8509770
