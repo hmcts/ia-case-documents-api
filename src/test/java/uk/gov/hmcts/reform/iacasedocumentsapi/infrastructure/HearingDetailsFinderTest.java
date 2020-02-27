@@ -16,7 +16,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class HearingDetailsFinderTest {
 
