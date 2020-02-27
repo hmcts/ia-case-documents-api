@@ -553,4 +553,16 @@ public class NotificationHandlerConfiguration {
             .map(direction -> direction.getParties().equals(parties))
             .orElse(false);
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> changeToHearingRequirementsNotificationHandler(
+        @Qualifier("changeToHearingRequirementsNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.UPDATE_HEARING_ADJUSTMENTS,
+            notificationGenerator
+        );
+    }
 }

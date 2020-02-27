@@ -58,6 +58,7 @@ govnotify.template.uploadedAdditionalEvidenceTemplateId: b012e823-c658-4d10-a7a5
 govnotify.template.uploadedAddendumEvidenceTemplateId: 271ae717-cbc4-4c6e-8011-cd8c6b1ba0b9
 govnotify.template.changeDirectionDueDateTemplateId: 0b7cbe04-1b76-4d17-a854-4071fa3c1d69
 govnotify.template.changeDirectionDueDateOfHomeOfficeTemplateId: dd2474ca-8b5d-4f2b-9515-37f3bb506e7b
+govnotify.template.changeToHearingRequirementsAdminOfficerTemplateId: 6e32ccba-3c68-4b7a-a976-96c149492661
 
 govnotify.template.appealSubmittedAppellant.email: b53d6e97-b7d9-4112-9669-9db81e563506
 govnotify.template.appealSubmittedAppellant.sms: 2cc4d346-cfb6-4ea9-93b3-c3f1f4f56491
@@ -144,7 +145,7 @@ security:
       - "sendDecisionAndReasons"
       - "uploadAddendumEvidence"
       - "requestReasonsForAppeal"
-
+      - "updateHearingAdjustments"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

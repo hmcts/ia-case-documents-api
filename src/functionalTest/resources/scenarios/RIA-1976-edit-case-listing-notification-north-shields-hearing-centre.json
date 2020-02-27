@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1976: Send case re-listed notification to case officer, Home Office and legal rep when Admin Officer edits case (IAC North Shields)",
+  "description": "RIA-1976 Send case re-listed notification to case officer, Home Office and legal rep when Admin Officer edits case (IAC North Shields)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

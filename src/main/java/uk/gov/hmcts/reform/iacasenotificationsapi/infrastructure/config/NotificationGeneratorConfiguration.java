@@ -612,5 +612,18 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("changeToHearingRequirementsNotificationGenerator")
+    public List<NotificationGenerator> changeToHearingRequirementsNotificationGenerator(
+        AdminOfficerChangeToHearingRequirementsPersonalisation adminOfficerChangeToHearingRequirementsPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
 
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(adminOfficerChangeToHearingRequirementsPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

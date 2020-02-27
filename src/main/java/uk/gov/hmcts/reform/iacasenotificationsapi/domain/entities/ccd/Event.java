@@ -40,6 +40,7 @@ public enum Event {
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
     REQUEST_REASONS_FOR_APPEAL("requestReasonsForAppeal"),
     SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal"),
+    UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

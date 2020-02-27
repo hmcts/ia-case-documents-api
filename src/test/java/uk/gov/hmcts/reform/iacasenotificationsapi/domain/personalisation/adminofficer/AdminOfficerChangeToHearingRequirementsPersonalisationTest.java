@@ -14,41 +14,40 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdminOfficerReviewHearingRequirementsPersonalisationTest {
+public class AdminOfficerChangeToHearingRequirementsPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
     @Mock AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
-
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-    private String reviewHearingRequirementsAdminOfficerEmailAddress = "adminofficer-review-hearing-requirements@example.com";
-    private AdminOfficerReviewHearingRequirementsPersonalisation adminOfficerReviewHearingRequirementsPersonalisation;
+    private String changeToHearingRequirementsAdminOfficerEmailAddress = "adminofficer-change-to-hearing-requirements@example.com";
+    private AdminOfficerChangeToHearingRequirementsPersonalisation adminOfficerChangeToHearingRequirementsPersonalisation;
 
     @Before
     public void setup() {
 
-        adminOfficerReviewHearingRequirementsPersonalisation = new AdminOfficerReviewHearingRequirementsPersonalisation(
+        adminOfficerChangeToHearingRequirementsPersonalisation = new AdminOfficerChangeToHearingRequirementsPersonalisation(
             templateId,
-            reviewHearingRequirementsAdminOfficerEmailAddress,
+            changeToHearingRequirementsAdminOfficerEmailAddress,
             adminOfficerPersonalisationProvider
         );
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, adminOfficerReviewHearingRequirementsPersonalisation.getTemplateId());
+        assertEquals(templateId, adminOfficerChangeToHearingRequirementsPersonalisation.getTemplateId());
     }
 
     @Test
     public void should_return_given_reference_id() {
 
-        assertEquals(caseId + "_REVIEW_HEARING_REQUIREMENTS_ADMIN_OFFICER", adminOfficerReviewHearingRequirementsPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_CHANGE_TO_HEARING_REQUIREMENTS_ADMIN_OFFICER", adminOfficerChangeToHearingRequirementsPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> adminOfficerReviewHearingRequirementsPersonalisation.getPersonalisation((AsylumCase) null))
+        assertThatThrownBy(() -> adminOfficerChangeToHearingRequirementsPersonalisation.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -56,7 +55,7 @@ public class AdminOfficerReviewHearingRequirementsPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = adminOfficerReviewHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation = adminOfficerChangeToHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
 
@@ -65,7 +64,7 @@ public class AdminOfficerReviewHearingRequirementsPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_mandatory_information_given() {
 
-        Map<String, String> personalisation = adminOfficerReviewHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation = adminOfficerChangeToHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

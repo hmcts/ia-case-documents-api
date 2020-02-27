@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 
 @Service
@@ -18,16 +17,16 @@ public class AdminOfficerReviewHearingRequirementsPersonalisation implements Ema
 
     private final String reviewHearingRequirementsAdminOfficerTemplateId;
     private final String reviewHearingRequirementsAdminOfficerEmailAddress;
-    private final PersonalisationProvider personalisationProvider;
+    private final AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     public AdminOfficerReviewHearingRequirementsPersonalisation(
         @NotNull(message = "reviewHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.reviewHearingRequirementsAdminOfficerTemplateId}") String reviewHearingRequirementsAdminOfficerTemplateId,
         @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
-        PersonalisationProvider personalisationProvider
+        AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider
     ) {
         this.reviewHearingRequirementsAdminOfficerTemplateId = reviewHearingRequirementsAdminOfficerTemplateId;
         this.reviewHearingRequirementsAdminOfficerEmailAddress = reviewHearingRequirementsAdminOfficerEmailAddress;
-        this.personalisationProvider = personalisationProvider;
+        this.adminOfficerPersonalisationProvider = adminOfficerPersonalisationProvider;
     }
 
     @Override
@@ -48,6 +47,6 @@ public class AdminOfficerReviewHearingRequirementsPersonalisation implements Ema
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-        return personalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
+        return adminOfficerPersonalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
     }
 }

@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1380/RIA-1616: Send case re-listed notification to case officer (Newport hearing centre)",
+  "description": "RIA-1380-RIA-1616 Send case re-listed notification to case officer (Newport hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

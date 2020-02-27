@@ -13,30 +13,30 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 
 
 @Service
-public class AdminOfficerWithoutHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
+public class AdminOfficerChangeToHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
-    private final String withoutHearingRequirementsAdminOfficerTemplateId;
+    private final String changeToHearingRequirementsAdminOfficerTemplateId;
     private final String reviewHearingRequirementsAdminOfficerEmailAddress;
     private final AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
-    public AdminOfficerWithoutHearingRequirementsPersonalisation(
-        @NotNull(message = "withoutHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.withoutHearingRequirementsAdminOfficerTemplateId}") String withoutHearingRequirementsAdminOfficerTemplateId,
+    public AdminOfficerChangeToHearingRequirementsPersonalisation(
+        @NotNull(message = "changeToHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.changeToHearingRequirementsAdminOfficerTemplateId}") String changeToHearingRequirementsAdminOfficerTemplateId,
         @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
         AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider
     ) {
-        this.withoutHearingRequirementsAdminOfficerTemplateId = withoutHearingRequirementsAdminOfficerTemplateId;
+        this.changeToHearingRequirementsAdminOfficerTemplateId = changeToHearingRequirementsAdminOfficerTemplateId;
         this.reviewHearingRequirementsAdminOfficerEmailAddress = reviewHearingRequirementsAdminOfficerEmailAddress;
         this.adminOfficerPersonalisationProvider = adminOfficerPersonalisationProvider;
     }
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_WITHOUT_HEARING_REQUIREMENTS_ADMIN_OFFICER";
+        return caseId + "_CHANGE_TO_HEARING_REQUIREMENTS_ADMIN_OFFICER";
     }
 
     @Override
     public String getTemplateId() {
-        return withoutHearingRequirementsAdminOfficerTemplateId;
+        return changeToHearingRequirementsAdminOfficerTemplateId;
     }
 
     @Override
@@ -47,6 +47,7 @@ public class AdminOfficerWithoutHearingRequirementsPersonalisation implements Em
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-        return adminOfficerPersonalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
+        return adminOfficerPersonalisationProvider.getChangeToHearingRequirementsPersonalisation(asylumCase);
+
     }
 }
