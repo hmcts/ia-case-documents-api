@@ -97,6 +97,48 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("hearingNoticeUpdatedRequirements")
+    public DocumentCreator<AsylumCase> getHearingNoticeUpdatedRequirementsDocumentCreator(
+        @Value("${hearingNoticeUpdatedRequirementsDocument.contentType}") String contentType,
+        @Value("${hearingNoticeUpdatedRequirementsDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeUpdatedRequirementsDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HearingNoticeUpdatedRequirementsTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("hearingNoticeUpdatedDetails")
+    public DocumentCreator<AsylumCase> getHearingNoticeUpdatedDetailsDocumentCreator(
+        @Value("${hearingNoticeUpdatedDetailsDocument.contentType}") String contentType,
+        @Value("${hearingNoticeUpdatedDetailsDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeUpdatedDetailsDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HearingNoticeUpdatedDetailsTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("decisionAndReasons")
     public DocumentCreator<AsylumCase> getAndDecisionAndReasonsDocumentCreator(
             @Value("${decisionAndReasons.contentType}") String contentType,

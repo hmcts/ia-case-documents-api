@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -21,12 +22,15 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class HearingNoticeEditedCreatorTest {
 
-    @Mock private DocumentCreator<AsylumCase> hearingNoticeEditedDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator;
+    @Mock private HearingDetailsFinder hearingDetailsFinder;
     @Mock private DocumentHandler documentHandler;
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -36,26 +40,41 @@ public class HearingNoticeEditedCreatorTest {
 
     private HearingNoticeEditedCreator hearingNoticeEditedCreator;
 
+    private String hearingCentreNameBefore = HearingCentre.MANCHESTER.toString();
+    private String oldHearingDate = "2020-01-05T12:30:00";
+
     @Before
     public void setUp() {
 
         hearingNoticeEditedCreator =
             new HearingNoticeEditedCreator(
-                hearingNoticeEditedDocumentCreator,
-                documentHandler
+                hearingNoticeUpdatedRequirementsDocumentCreator,
+                hearingNoticeUpdatedDetailsDocumentCreator,
+                documentHandler,
+                hearingDetailsFinder
             );
 
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(hearingNoticeEditedDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+        when(hearingNoticeUpdatedDetailsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
     }
 
     @Test
     public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
 
+        final String listCaseHearingCentre = hearingCentreNameBefore;
+        final String hearingDate = oldHearingDate;
+
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -63,7 +82,56 @@ public class HearingNoticeEditedCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(hearingNoticeEditedDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+    }
+
+    @Test
+    public void should_create_hearing_notice_pdf_for_updated_hearing_date_and_append_to_legal_representative_documents_for_the_case() {
+
+        final String listCaseHearingCentre = hearingCentreNameBefore;
+        final String hearingDate = "2020-02-05T12:30:00";
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+    }
+
+    @Test
+    public void should_create_hearing_notice_pdf_for_updated_hearing_centre_and_append_to_legal_representative_documents_for_the_case() {
+
+        final String listCaseHearingCentre = HearingCentre.GLASGOW.toString();
+        final String hearingDate = oldHearingDate;
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
@@ -76,7 +144,8 @@ public class HearingNoticeEditedCreatorTest {
             .hasMessage("previous case data is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
 
-        verify(hearingNoticeEditedDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
