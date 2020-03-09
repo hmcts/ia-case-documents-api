@@ -60,10 +60,10 @@ govnotify.template.changeDirectionDueDateTemplateId: 0b7cbe04-1b76-4d17-a854-407
 govnotify.template.changeDirectionDueDateOfHomeOfficeTemplateId: dd2474ca-8b5d-4f2b-9515-37f3bb506e7b
 govnotify.template.changeToHearingRequirementsAdminOfficerTemplateId: 6e32ccba-3c68-4b7a-a976-96c149492661
 
-govnotify.template.appealSubmittedAppellant.email: b53d6e97-b7d9-4112-9669-9db81e563506
-govnotify.template.appealSubmittedAppellant.sms: 2cc4d346-cfb6-4ea9-93b3-c3f1f4f56491
-govnotify.template.appealSubmittedOutOfTimeAppellant.email: 98f18bbb-c746-4fbd-8860-a629957a94ac
-govnotify.template.appealSubmittedOutOfTimeAppellant.sms: 2587432c-aeb9-483d-bc0d-086b175f4fa7
+govnotify.template.appealSubmittedAppellant.email: 4625616a-178b-45fb-aebf-8cb945369ae0
+govnotify.template.appealSubmittedAppellant.sms: 5b7091e5-908a-4c5b-ac66-5dc5216fc53b
+govnotify.template.appealSubmittedOutOfTimeAppellant.email: b864d01f-c80c-4d91-947f-9599f0b64163
+govnotify.template.appealSubmittedOutOfTimeAppellant.sms: c52f3074-4b5a-47e0-8dec-154ac5fc0513
 
 govnotify.template.requestRespondentEvidenceDirectionAppellant.email: 9c8ab848-b1f7-4dbe-9854-4922e94ece67
 govnotify.template.requestRespondentEvidenceDirectionAppellant.sms: e805b3c5-b1e2-4ad1-9416-3298ca765738
@@ -71,8 +71,8 @@ govnotify.template.requestRespondentEvidenceDirectionAppellant.sms: e805b3c5-b1e
 govnotify.template.requestReasonsForAppeal.email: 50f1b88e-51d5-446c-b2da-1188feb7e26c
 govnotify.template.requestReasonsForAppeal.sms: a7056fd8-6de7-408e-881b-c6f9984fe5cf
 
-govnotify.template.submitReasonsForAppeal.email: 91ab0576-f0cc-412f-aadf-ad260fee1428
-govnotify.template.submitReasonsForAppeal.sms: 33758f88-eb3c-469d-8c49-ca3f9fa69a6d
+govnotify.template.submitReasonsForAppeal.email: cd10866a-094d-43aa-bdf5-1e20fda9b10d
+govnotify.template.submitReasonsForAppeal.sms: d7b0ef96-ea54-46f1-a605-6e3855b09b91
 govnotify.template.submitReasonsForAppealCaseOfficer: 2e3d6dfb-409d-4b45-a50b-0703c47341ea
 
 govnotify.baseUrl: "https://api.notifications.service.gov.uk"
@@ -221,3 +221,8 @@ respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}
   respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondent@example.com}
   respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL:respondent-lart@example.com}
+
+appellantDaysToWait:
+  afterSubmission: 28
+  afterReasonsForAppeal: 14
+

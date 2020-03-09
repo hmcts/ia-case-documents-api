@@ -47,6 +47,7 @@ public class AppellantSubmitAppealPersonalisationSmsTest {
         appellantSubmitAppealPersonalisationSms = new AppellantSubmitAppealPersonalisationSms(
             smsTemplateId,
             iaAipFrontendUrl,
+            28,
             recipientsFinder,
             systemDateProvider);
     }
@@ -90,10 +91,10 @@ public class AppellantSubmitAppealPersonalisationSmsTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        final String dueDate = LocalDate.now().plusDays(14)
+        final String dueDate = LocalDate.now().plusDays(28)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
-        when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
+        when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
 
         Map<String, String> personalisation = appellantSubmitAppealPersonalisationSms.getPersonalisation(asylumCase);
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
@@ -104,11 +105,11 @@ public class AppellantSubmitAppealPersonalisationSmsTest {
 
     @Test
     public void should_return_personalisation_when_only_mandatory_information_given() {
-        final String dueDate = LocalDate.now().plusDays(14)
+        final String dueDate = LocalDate.now().plusDays(28)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
+        when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
 
         Map<String, String> personalisation = appellantSubmitAppealPersonalisationSms.getPersonalisation(asylumCase);
 

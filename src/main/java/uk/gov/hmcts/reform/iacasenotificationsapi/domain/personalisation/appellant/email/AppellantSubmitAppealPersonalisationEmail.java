@@ -19,17 +19,20 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
 
     private final String appealSubmittedAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
+    private final int daysToWaitAfterSubmission;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
     public AppellantSubmitAppealPersonalisationEmail(
         @Value("${govnotify.template.appealSubmittedAppellant.email}") String appealSubmittedAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
         this.appealSubmittedAppellantEmailTemplateId = appealSubmittedAppellantEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.daysToWaitAfterSubmission = daysToWaitAfterSubmission;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
     }
@@ -54,7 +57,7 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        String dueDate = systemDateProvider.dueDate(14);
+        String dueDate = systemDateProvider.dueDate(daysToWaitAfterSubmission);
 
         return
             ImmutableMap

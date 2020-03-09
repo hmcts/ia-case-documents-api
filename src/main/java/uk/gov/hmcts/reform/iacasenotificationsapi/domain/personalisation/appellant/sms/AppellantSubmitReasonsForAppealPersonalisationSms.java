@@ -19,17 +19,20 @@ public class AppellantSubmitReasonsForAppealPersonalisationSms implements SmsNot
 
     private final String reasonsForAppealSubmittedAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
+    private final int daysToWaitAfterReasonsForAppeal;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
     public AppellantSubmitReasonsForAppealPersonalisationSms(
         @Value("${govnotify.template.submitReasonsForAppeal.sms}") String reasonsForAppealSubmittedAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${appellantDaysToWait.afterReasonsForAppeal}") int daysToWaitAfterReasonsForAppeal,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
         this.reasonsForAppealSubmittedAppellantSmsTemplateId = reasonsForAppealSubmittedAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.daysToWaitAfterReasonsForAppeal = daysToWaitAfterReasonsForAppeal;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
     }
@@ -53,7 +56,7 @@ public class AppellantSubmitReasonsForAppealPersonalisationSms implements SmsNot
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-        final String dueDate = systemDateProvider.dueDate(14);
+        final String dueDate = systemDateProvider.dueDate(daysToWaitAfterReasonsForAppeal);
 
         return
             ImmutableMap

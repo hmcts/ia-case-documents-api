@@ -72,7 +72,10 @@
           "Home Office reference: A1234567",
           "Dear Pablo Jimenez,",
           "Your appeal details have been sent to the Tribunal",
-          "A Tribunal Caseworker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next",
+          "A Tribunal Caseworker will:",
+          "* ask the Home Office to send any documents it has about your case to the Tribunal",
+          "* check the Home Office documents and then contact you to tell you what to do next",
+          "This should be by {$TODAY+28|d MMM yyyy} but it might take longer than that.",
           "Sign in to your account to see how your appeal is progressing:",
           "{$iaAipFrontendUrl}",
           "#How to contact the Tribunal",
@@ -99,7 +102,8 @@
         "subject": "",
         "body": [
           "Your appeal details have been sent to the Tribunal. Your appeal reference number is PA/12345/2019",
-          "A Tribunal Caseworker will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
+          "A Tribunal Caseworker will now ask the Home Office to send any documents it has about your case to the Tribunal, check the documents and then contact you to tell you what to do next.",
+          "This should be by {$TODAY+28|d MMM yyyy} but it might take longer than that.",
           "Sign in to your account to see how your appeal is progressing:",
           "{$iaAipFrontendUrl}"
         ]

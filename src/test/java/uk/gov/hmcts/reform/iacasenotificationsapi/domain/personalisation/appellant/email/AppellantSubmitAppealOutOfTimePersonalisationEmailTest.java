@@ -61,6 +61,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmailTest {
         appellantSubmitAppealOutOfTimePersonalisationEmail = new AppellantSubmitAppealOutOfTimePersonalisationEmail(
             emailTemplateId,
             iaAipFrontendUrl,
+            28,
             systemDateProvider,
             recipientsFinder);
     }
@@ -105,9 +106,9 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmailTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
         final String dueDate =
-            LocalDate.now().plusDays(14)
+            LocalDate.now().plusDays(28)
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
-        when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
+        when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
 
         Map<String, String> personalisation = appellantSubmitAppealOutOfTimePersonalisationEmail.getPersonalisation(asylumCase);
 
@@ -125,14 +126,14 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmailTest {
     public void should_return_personalisation_when_only_mandatory_information_given() {
 
         final String dueDate =
-            LocalDate.now().plusDays(14)
+            LocalDate.now().plusDays(28)
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
-        when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
+        when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
 
         Map<String, String> personalisation = appellantSubmitAppealOutOfTimePersonalisationEmail.getPersonalisation(asylumCase);
 

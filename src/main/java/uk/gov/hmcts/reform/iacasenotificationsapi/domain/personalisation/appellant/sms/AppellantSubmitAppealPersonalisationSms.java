@@ -19,6 +19,7 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
 
     private final String appealSubmittedAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
+    private final int daysToWaitAfterSubmission;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
@@ -26,11 +27,13 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
     public AppellantSubmitAppealPersonalisationSms(
         @Value("${govnotify.template.appealSubmittedAppellant.sms}") String appealSubmittedAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
         this.appealSubmittedAppellantSmsTemplateId = appealSubmittedAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.daysToWaitAfterSubmission = daysToWaitAfterSubmission;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
     }
@@ -55,7 +58,7 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        final String dueDate = systemDateProvider.dueDate(14);
+        final String dueDate = systemDateProvider.dueDate(daysToWaitAfterSubmission);
 
         return
             ImmutableMap

@@ -20,14 +20,17 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmail implements Email
     private final String appealSubmittedOutOfTimeAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
     private final SystemDateProvider systemDateProvider;
+    private final int daysToWaitAfterSubmission;
     private final RecipientsFinder recipientsFinder;
 
     public AppellantSubmitAppealOutOfTimePersonalisationEmail(
         @Value("${govnotify.template.appealSubmittedOutOfTimeAppellant.email}") String appealSubmittedOutOfTimeAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         SystemDateProvider systemDateProvider,
         RecipientsFinder recipientsFinder
     ) {
+        this.daysToWaitAfterSubmission = daysToWaitAfterSubmission;
 
         this.recipientsFinder = recipientsFinder;
         this.appealSubmittedOutOfTimeAppellantEmailTemplateId = appealSubmittedOutOfTimeAppellantEmailTemplateId;
@@ -49,7 +52,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmail implements Email
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        String dueDate = systemDateProvider.dueDate(14);
+        String dueDate = systemDateProvider.dueDate(daysToWaitAfterSubmission);
 
         return
             ImmutableMap

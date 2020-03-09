@@ -21,9 +21,9 @@ public class SystemDateProviderTest {
 
     @Test
     public void returns_now_date_plus_days_offset() {
-        String actualDate = systemDateProvider.dueDate(14);
+        String actualDate = systemDateProvider.dueDate(28);
         assertNotNull(actualDate);
-        assertEquals(actualDate, LocalDate.now().plusDays(14)
+        assertEquals(actualDate, LocalDate.now().plusDays(28)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy")));
     }
 }

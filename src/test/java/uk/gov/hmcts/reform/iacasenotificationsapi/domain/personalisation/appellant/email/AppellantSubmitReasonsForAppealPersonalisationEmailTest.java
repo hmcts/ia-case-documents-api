@@ -55,6 +55,7 @@ public class AppellantSubmitReasonsForAppealPersonalisationEmailTest {
         appellantReasonsForAppealSubmittedPersonalisationEmail = new AppellantSubmitReasonsForAppealPersonalisationEmail(
             emailTemplateId,
             iaAipFrontendUrl,
+            14,
             recipientsFinder,
             systemDateProvider
         );

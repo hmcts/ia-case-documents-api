@@ -19,18 +19,21 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSms implements SmsNoti
 
     private final String appealSubmittedOutOfTimeAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
+    private final int daysToWaitAfterSubmission;
     private final SystemDateProvider systemDateProvider;
     private final RecipientsFinder recipientsFinder;
 
     public AppellantSubmitAppealOutOfTimePersonalisationSms(
         @Value("${govnotify.template.appealSubmittedOutOfTimeAppellant.sms}") String appealSubmittedOutOfTimeAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         SystemDateProvider systemDateProvider,
         RecipientsFinder recipientsFinder
 
     ) {
         this.appealSubmittedOutOfTimeAppellantSmsTemplateId = appealSubmittedOutOfTimeAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.daysToWaitAfterSubmission = daysToWaitAfterSubmission;
         this.systemDateProvider = systemDateProvider;
         this.recipientsFinder = recipientsFinder;
     }
@@ -55,7 +58,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSms implements SmsNoti
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        final String dueDate = systemDateProvider.dueDate(14);
+        final String dueDate = systemDateProvider.dueDate(daysToWaitAfterSubmission);
 
         return
             ImmutableMap

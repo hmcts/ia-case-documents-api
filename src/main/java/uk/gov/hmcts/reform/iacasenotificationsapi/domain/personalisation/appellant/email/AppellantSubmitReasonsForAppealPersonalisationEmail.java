@@ -19,6 +19,7 @@ public class AppellantSubmitReasonsForAppealPersonalisationEmail implements Emai
 
     private final String reasonsForAppealSubmittedAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
+    private final int daysToWaitAfterReasonsForAppeal;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
 
@@ -26,11 +27,13 @@ public class AppellantSubmitReasonsForAppealPersonalisationEmail implements Emai
     public AppellantSubmitReasonsForAppealPersonalisationEmail(
         @Value("${govnotify.template.submitReasonsForAppeal.email}") String reasonsForAppealSubmittedAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${appellantDaysToWait.afterReasonsForAppeal}") int daysToWaitAfterReasonsForAppeal,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
         this.reasonsForAppealSubmittedAppellantEmailTemplateId = reasonsForAppealSubmittedAppellantEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.daysToWaitAfterReasonsForAppeal = daysToWaitAfterReasonsForAppeal;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
     }
@@ -53,7 +56,7 @@ public class AppellantSubmitReasonsForAppealPersonalisationEmail implements Emai
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-        final String dueDate = systemDateProvider.dueDate(14);
+        final String dueDate = systemDateProvider.dueDate(daysToWaitAfterReasonsForAppeal);
 
         return
             ImmutableMap

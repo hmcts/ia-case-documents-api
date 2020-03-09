@@ -86,7 +86,7 @@
           "Home Office reference: A1234567",
           "Dear Pablo Jimenez",
           "You have told the Tribunal why you think the Home Office was wrong to refuse your claim. You don’t need to do anything now.",
-          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
+          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you to tell you what to do next. This should be by {$TODAY+14|d MMM yyyy} but it might take longer than that.",
           "Sign in to your account to see your appeal progress:",
           "{$iaAipFrontendUrl}",
           "# How to contact the Tribunal"
@@ -99,7 +99,7 @@
         "body": [
           "Appeal reference: PA/12345/2019",
           "You have told the Tribunal why you think the Home Office was wrong to refuse your claim.",
-          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you by {$TODAY+14|d MMM yyyy} to tell you what to do next.",
+          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you to tell you what to do next. This should be by {$TODAY+14|d MMM yyyy} but it might take longer than that.",
           "Sign in to your account to see your appeal progress:",
           "{$iaAipFrontendUrl}"
         ]
