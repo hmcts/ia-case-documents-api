@@ -306,12 +306,6 @@ public class CcdScenarioRunnerTest {
             return authorizationHeadersProvider
                 .getCitizenAuthorization();
         }
-        if ("Judge".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getJudgeAuthorization();
-        }
-
 
         if ("Judge".equalsIgnoreCase(credentials)) {
 
