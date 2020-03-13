@@ -1,0 +1,79 @@
+{
+  "description": "RIA-2240 Send respondent notification of change direction due date after respondent review",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 2345,
+      "eventId": "changeDirectionDueDate",
+      "state": "finalBundling",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll": "finalBundling",
+          "directionEditExplanation": "Upload additional evidence",
+          "directionEditDateDue": "{$TODAY+14}",
+          "directionEditParties": "respondent",
+          "notificationsSent": [],
+          "listCaseHearingCentre": "birmingham"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directionEditExplanation": "Upload additional evidence",
+        "directionEditDateDue": "{$TODAY+14}",
+        "directionEditParties": "respondent",
+        "notificationsSent": [
+          {
+            "id": "2345_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE_OF_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "listCaseHearingCentre": "birmingham"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2345_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
+        "subject": "Immigration and Asylum appeal: change to direction due date",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Legal representative reference: CASE001",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The due date has changed for this direction.",
+          "Upload additional evidence",
+          "Next steps",
+          "You must complete this direction by: {$TODAY+14|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      },
+      {
+        "reference": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE_OF_HOME_OFFICE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: revised direction",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Legal representative reference: CASE001",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "A revised direction has been sent to the Home Office",
+          "The respondent has been directed to:",
+          "Upload additional evidence by {$TODAY+14|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}

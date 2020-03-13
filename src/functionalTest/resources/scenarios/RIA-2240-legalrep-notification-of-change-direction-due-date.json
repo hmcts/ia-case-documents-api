@@ -1,0 +1,57 @@
+{
+  "description": "RIA-2240 Send legal rep notification of change direction due date",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 2345,
+      "eventId": "changeDirectionDueDate",
+      "state": "submitHearingRequirements",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directionEditExplanation": "Please submit your hearing requirements",
+          "directionEditDateDue": "{$TODAY+5}",
+          "directionEditParties": "legalRepresentative",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directionEditExplanation": "Please submit your hearing requirements",
+        "directionEditDateDue": "{$TODAY+5}",
+        "directionEditParties": "legalRepresentative",
+        "notificationsSent": [
+          {
+            "id": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: change to direction due date",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Legal representative reference: CASE001",
+          "Appellant name: Talha Awan",
+          "The due date has changed for this direction.",
+          "Please submit your hearing requirements",
+          "Next steps",
+          "You must complete this direction by: {$TODAY+5|d MMM yyyy}",
+          "First-tier Tribunal (Immigration and Asylum Chamber)"
+        ]
+      }
+    ]
+  }
+}
