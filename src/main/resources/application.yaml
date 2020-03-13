@@ -138,6 +138,8 @@ security:
       - "startAppeal"
       - "editAppeal"
       - "submitAppeal"
+    caseworker-ia-iacjudge:
+      - "generateDecisionAndReasons"
 
 
 ### dependency configuration
