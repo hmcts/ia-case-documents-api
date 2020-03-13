@@ -149,6 +149,7 @@ security:
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
+      - "sendDecisionAndReasons"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -168,6 +169,7 @@ security:
       - "uploadAddendumEvidenceHomeOffice"
     caseworker-ia-iacjudge:
       - "endAppeal"
+      - "sendDecisionAndReasons"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
