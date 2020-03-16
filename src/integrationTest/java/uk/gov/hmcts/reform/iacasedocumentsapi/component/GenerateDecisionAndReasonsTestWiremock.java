@@ -13,14 +13,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.D
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WiremockSpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
-public class GenerateDecisionAndReasonsTestWiremock extends WiremockSpringBootIntegrationTest {
+public class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest {
 
     @Test
     public void generates_decision_and_reasons() {

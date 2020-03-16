@@ -21,6 +21,19 @@ spring:
   application:
     name: Immigration & Asylum case documents API
   jackson.date-format: yyyy-MM-dd
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${IDAM_URL:http://127.0.0.1:4501}/o
+        registration:
+          oidc:
+            client-id: ${IA_IDAM_CLIENT_ID:ia}
+            client-secret: ${IA_IDAM_SECRET:something}
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${IDAM_URL:http://127.0.0.1:4501}/o/jwks
 
 
 health:
@@ -111,6 +124,7 @@ ia_system_user: ${IA_SYSTEM_USERNAME:system-user}
 ia_system_user_password: ${IA_SYSTEM_PASSWORD:system-password}
 
 security:
+  useOpenId: ${IA_USE_OPEN_ID:false}
   anonymousPaths:
     - "/"
     - "/health"
@@ -172,6 +186,7 @@ security:
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
 auth.idam.client.detailsUri: "/details"
+auth.openid.client.detailsUri: "/o/userinfo"
 auth.idam.client.id: ${IA_IDAM_CLIENT_ID:ia}
 auth.idam.client.secret: ${IA_IDAM_SECRET:something}
 auth.idam.client.redirectUri: ${IA_IDAM_REDIRECT_URI:http://localhost}

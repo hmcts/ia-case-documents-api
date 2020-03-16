@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SystemUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdamUserDetailsProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.OpenIdUserDetailsProvider;
 
 @Configuration
 public class UserDetailsProviderConfiguration {
@@ -19,14 +20,28 @@ public class UserDetailsProviderConfiguration {
         RequestUserAccessTokenProvider requestUserAccessTokenProvider,
         RestTemplate restTemplate,
         @Value("${auth.idam.client.baseUrl}") String baseUrl,
-        @Value("${auth.idam.client.detailsUri}") String detailsUri
+        @Value("${auth.idam.client.detailsUri}") String detailsUri,
+        @Value("${auth.openid.client.detailsUri}") String detailsOpenIdUri,
+        @Value("${security.useOpenId}") boolean useOpenId
     ) {
-        return new IdamUserDetailsProvider(
-            requestUserAccessTokenProvider,
-            restTemplate,
-            baseUrl,
-            detailsUri
-        );
+        if (useOpenId) {
+
+            return new OpenIdUserDetailsProvider(
+                requestUserAccessTokenProvider,
+                restTemplate,
+                baseUrl,
+                detailsOpenIdUri
+            );
+        } else {
+
+            return new IdamUserDetailsProvider(
+                requestUserAccessTokenProvider,
+                restTemplate,
+                baseUrl,
+                detailsUri
+            );
+        }
+
     }
 
     @Bean("systemUser")

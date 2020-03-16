@@ -1,27 +1,31 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder.userWith;
 
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -32,8 +36,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.BundleReque
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixtures;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.CallbackBuilder;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.CaseDetailsBuilder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.ClassCreatorForTests;
 
 @SuppressWarnings("unchecked")
@@ -57,26 +59,19 @@ public class StitchingIntegrationTest extends SpringBootIntegrationTest {
     @Autowired
     private ClassCreatorForTests classCreatorForTests;
 
+    @Before
+    public void setupLoggedUser() {
+        given.someLoggedIn(userWith()
+            .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))
+            .forename("Case")
+            .surname("Officer"));
+    }
+
     @Test
     public void should_return_200_when_api_returns_200_with_a_stitched_bundle() throws Exception {
 
         List<IdValue<Bundle>> caseBundles = Lists.newArrayList(bundleIdValue);
         AsylumCase asylumCase = AsylumCaseFixtures.someAsylumCaseWithDefaults();
-
-        CaseDetails caseDetails =
-            CaseDetailsBuilder.caseDetailsBuilder()
-                .jurisdiction("IA")
-                .state(State.FINAL_BUNDLING)
-                .id(1L)
-                .caseData(asylumCase)
-                .createdDate(LocalDateTime.now())
-                .build();
-
-        Callback<AsylumCase> callback = CallbackBuilder.callbackBuilder()
-            .caseDetails(caseDetails)
-            .caseDetailsBefore(Optional.empty())
-            .event(Event.GENERATE_HEARING_BUNDLE)
-            .build();
 
         PreSubmitCallbackResponse<BundleCaseData> stitchServiceResponse = new PreSubmitCallbackResponse<>(bundleCaseData);
 
@@ -87,9 +82,16 @@ public class StitchingIntegrationTest extends SpringBootIntegrationTest {
         when(bundleDocument.getDocumentBinaryUrl()).thenReturn("bundle-binary-url");
         when(bundleDocument.getDocumentUrl()).thenReturn("bundle-document-url");
 
-        PreSubmitCallbackResponse<AsylumCase> response =
-            iaApiClient.aboutToSubmitWithMappedResponse(callback,
-                HttpStatus.OK);
+        PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
+            .caseDetails(someCaseDetailsWith()
+                .jurisdiction("IA")
+                .state(State.FINAL_BUNDLING)
+                .id(1L)
+                .caseData(anAsylumCase()
+                    .withCaseDetails(asylumCase)
+                ))
+            .event(Event.GENERATE_HEARING_BUNDLE)
+        );
 
         assertThat(response).isNotNull();
 
@@ -123,32 +125,23 @@ public class StitchingIntegrationTest extends SpringBootIntegrationTest {
 
         AsylumCase asylumCase = AsylumCaseFixtures.someAsylumCaseWithDefaults();
 
-        CaseDetails caseDetails =
-            CaseDetailsBuilder.caseDetailsBuilder()
-                .jurisdiction("IA")
-                .state(State.FINAL_BUNDLING)
-                .id(1L)
-                .caseData(asylumCase)
-                .createdDate(LocalDateTime.now())
-                .build();
-
-        Callback<AsylumCase> callback = CallbackBuilder.callbackBuilder()
-            .caseDetails(caseDetails)
-            .caseDetailsBefore(Optional.empty())
-            .event(Event.GENERATE_HEARING_BUNDLE)
-            .build();
-
-
         PreSubmitCallbackResponse<BundleCaseData> stitchServiceResponse = new PreSubmitCallbackResponse<>(bundleCaseData);
 
         when(bundleRequestExecutor.post(any(Callback.class), anyString())).thenReturn(stitchServiceResponse);
         when(bundleCaseData.getCaseBundles()).thenReturn(caseBundles);
 
-        MvcResult mvcResult = iaApiClient.aboutToSubmit(callback, HttpStatus.INTERNAL_SERVER_ERROR);
-
-        assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("Bundle was not created");
-
+        assertThatThrownBy(
+            () -> iaCaseDocumentsApiClient.aboutToSubmit(callback()
+                .caseDetails(someCaseDetailsWith()
+                    .jurisdiction("IA")
+                    .state(State.FINAL_BUNDLING)
+                    .id(1L)
+                    .caseData(anAsylumCase()
+                        .withCaseDetails(asylumCase)
+                    ))
+                .event(Event.GENERATE_HEARING_BUNDLE)))
+            .hasMessageContaining("500")
+            .hasMessageContaining("Bundle was not created");
     }
 
     @Test
@@ -159,33 +152,24 @@ public class StitchingIntegrationTest extends SpringBootIntegrationTest {
 
         AsylumCase asylumCase = AsylumCaseFixtures.someAsylumCaseWithDefaults();
 
-        CaseDetails caseDetails =
-            CaseDetailsBuilder.caseDetailsBuilder()
-                .jurisdiction("IA")
-                .state(State.FINAL_BUNDLING)
-                .id(1L)
-                .caseData(asylumCase)
-                .createdDate(LocalDateTime.now())
-                .build();
-
-        Callback<AsylumCase> callback = CallbackBuilder.callbackBuilder()
-            .caseDetails(caseDetails)
-            .caseDetailsBefore(Optional.empty())
-            .event(Event.GENERATE_HEARING_BUNDLE)
-            .build();
-
         PreSubmitCallbackResponse<BundleCaseData> stitchServiceResponse = new PreSubmitCallbackResponse<>(bundleCaseData);
 
         when(bundleRequestExecutor.post(any(Callback.class), anyString())).thenReturn(stitchServiceResponse);
         when(bundleCaseData.getCaseBundles()).thenReturn(caseBundles);
         when(bundleIdValue.getValue()).thenReturn(nullBundle);
 
-        MvcResult mvcResult = iaApiClient.aboutToSubmit(callback, HttpStatus.INTERNAL_SERVER_ERROR);
-        String content = mvcResult.getResponse().getContentAsString();
-
-        assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        assertThat(content).isEqualTo("Stitched document was not created");
-
+        assertThatThrownBy(
+            () -> iaCaseDocumentsApiClient.aboutToSubmit(callback()
+                .caseDetails(someCaseDetailsWith()
+                    .jurisdiction("IA")
+                    .state(State.FINAL_BUNDLING)
+                    .id(1L)
+                    .caseData(anAsylumCase()
+                        .withCaseDetails(asylumCase)
+                    ))
+                .event(Event.GENERATE_HEARING_BUNDLE)))
+            .hasMessageContaining("500")
+            .hasMessageContaining("Stitched document was not created");
     }
 
 }
