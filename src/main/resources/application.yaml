@@ -5,9 +5,19 @@ management:
   endpoint:
     health:
       show-details: "always"
+    status:
+      http-mapping:
+        UP: 200
+        DOWN: 503
   endpoints:
     web:
       base-path: "/"
+
+health:
+  services:
+    notificationService:
+      uri: "https://status.notifications.service.gov.uk"
+      response: '"status":"UP"'
 
 spring:
   application:
@@ -97,6 +107,7 @@ security:
     - "/swagger-resources/**"
     - "/v2/api-docs"
     - "/webjars/springfox-swagger-ui/**"
+    - "/favicon.ico"
   authorisedServices:
     - "ccd"
     - "ccd_data"
