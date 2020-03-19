@@ -85,6 +85,11 @@ govnotify.template.submitReasonsForAppeal.email: cd10866a-094d-43aa-bdf5-1e20fda
 govnotify.template.submitReasonsForAppeal.sms: d7b0ef96-ea54-46f1-a605-6e3855b09b91
 govnotify.template.submitReasonsForAppealCaseOfficer: 2e3d6dfb-409d-4b45-a50b-0703c47341ea
 
+govnotify.template.removeAppealFromOnlineBeforeListingHomeOffice.email: 0a9b00d5-55d1-469c-8479-c1a2df3fce6d
+govnotify.template.removeAppealFromOnlineBeforeListingLegalRep.email: 443044b9-3c96-4e62-824a-7f7294e53661
+govnotify.template.removeAppealFromOnlineAfterListingHomeOffice.email: 0845c427-387e-4587-a923-6114c60c7b5d
+govnotify.template.removeAppealFromOnlineAfterListingLegalRep.email: b22bac31-7d04-4ad0-a8b3-12ebeb381c9b
+
 govnotify.baseUrl: "https://api.notifications.service.gov.uk"
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -157,6 +162,7 @@ security:
       - "uploadAddendumEvidence"
       - "requestReasonsForAppeal"
       - "updateHearingAdjustments"
+      - "removeAppealFromOnline"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

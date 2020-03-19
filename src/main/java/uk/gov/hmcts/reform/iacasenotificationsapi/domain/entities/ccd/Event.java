@@ -41,6 +41,7 @@ public enum Event {
     REQUEST_REASONS_FOR_APPEAL("requestReasonsForAppeal"),
     SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal"),
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments"),
+    REMOVE_APPEAL_FROM_ONLINE("removeAppealFromOnline"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
