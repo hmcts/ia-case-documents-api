@@ -65,13 +65,11 @@ def secrets = [
     secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
     secret('test-homeoffice-generic-username', 'TEST_HOMEOFFICE_GENERIC_USERNAME'),
     secret('test-homeoffice-generic-password', 'TEST_HOMEOFFICE_GENERIC_PASSWORD'),
+    secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
+    secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
     secret('test-citizen-username', 'TEST_CITIZEN_USERNAME'),
     secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
     secret('test-citizen-mobile', 'TEST_CITIZEN_MOBILE'),
-
-    secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
-    secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
-
     secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
     secret('home-office-allowed-appeal-email', 'IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL'),
     secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
