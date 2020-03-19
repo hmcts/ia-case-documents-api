@@ -22,6 +22,9 @@ def secrets = [
         secret('test-citizen-username', 'TEST_CITIZEN_USERNAME'),
         secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
 
+        secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
+        secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
+
         secret('em-stitching-enabled', 'IA_EM_STITCHING_ENABLED'),
 
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),

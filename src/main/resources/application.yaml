@@ -5,15 +5,38 @@ management:
   endpoint:
     health:
       show-details: "always"
+    status:
+      http-mapping:
+        UP: 200
+        DOWN: 503
   endpoints:
     web:
       base-path: "/"
+      exposure:
+        include: "health"
+
 spring:
   main:
     allow-bean-definition-overriding: true
   application:
     name: Immigration & Asylum case documents API
   jackson.date-format: yyyy-MM-dd
+
+
+health:
+  services:
+    docmosis:
+      uri: ${DOCMOSIS_ENDPOINT:https://docmosis-development.platform.hmcts.net}/rs/status
+      response: '"message":"ready","ready":"true"'
+    stichingApi:
+      uri: ${EM_BUNDLER_URL:http://localhost:4630}/health
+      response: '"status":"UP"'
+    documentManagement:
+      uri: ${DM_URL:http://localhost:4506}/health
+      response: '"status":"UP"'
+    serviceAuth:
+      uri: ${S2S_URL:http://localhost:4502}/health
+      response: '"status":"UP"'
 
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
@@ -97,6 +120,7 @@ security:
     - "/swagger-resources/**"
     - "/v2/api-docs"
     - "/webjars/springfox-swagger-ui/**"
+    - "/favicon.ico"
   authorisedServices:
     - "ccd"
     - "ccd_data"
@@ -134,12 +158,16 @@ security:
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
+      - "sendDecisionAndReasons"
     citizen:
       - "startAppeal"
       - "editAppeal"
       - "submitAppeal"
     caseworker-ia-iacjudge:
       - "sendDirection"
+      - "generateDecisionAndReasons"
+      - "endAppeal"
+      - "sendDecisionAndReasons"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

@@ -2,6 +2,8 @@ java:
   image: 'https://hmctspublic.azurecr.io/ia/case-documents-api:latest'
   applicationPort: 8092
   aadIdentityName: ia
+  environment:
+    CCD_URL: "http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
   keyVaults:
     ia:
       resourceGroup: ia

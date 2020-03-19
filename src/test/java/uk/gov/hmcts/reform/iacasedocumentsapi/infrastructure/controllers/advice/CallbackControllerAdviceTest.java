@@ -17,6 +17,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentServiceResponseException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentStitchingErrorResponseException;
@@ -43,6 +45,9 @@ public class CallbackControllerAdviceTest {
 
     @Before
     public void setup() {
+
+        when(httpServletRequest.getAttribute("CCDCaseId")).thenReturn("Case12345");
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
 
         Logger controllerAdviceLogger = (Logger) LoggerFactory.getLogger(CallbackControllerAdvice.class);
         listAppender = new ListAppender<>();
@@ -72,7 +77,7 @@ public class CallbackControllerAdviceTest {
         assertThat(logEvents.size()).isEqualTo(1);
 
         assertThat(logEvents.get(0).getFormattedMessage())
-            .isEqualTo(logMessage + ex.getMessage() + ".");
+            .isLessThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
         verify(errorResponseLogger).maybeLogErrorsListResponse(any());
 
@@ -94,7 +99,7 @@ public class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
 
         assertThat(logEvents.size()).isEqualTo(1);
-        assertThat(logEvents.get(0).getFormattedMessage()).isEqualTo(logMessage + testExceptionMessage + ".");
+        assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + testExceptionMessage + ".");
 
         verify(errorResponseLogger).maybeLogException(any());
 
@@ -113,7 +118,7 @@ public class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
 
         assertThat(logEvents.size()).isEqualTo(1);
-        assertThat(logEvents.get(0).getFormattedMessage()).isEqualTo(logMessage + ex.getMessage() + ".");
+        assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
     }
 
