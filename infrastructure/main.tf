@@ -101,11 +101,6 @@ data "azurerm_key_vault_secret" "s2s_microservice" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "ccd_url" {
-  name      = "ccd-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
 data "azurerm_key_vault_secret" "ccd_gw_url" {
   name      = "ccd-gw-url"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -181,7 +176,6 @@ module "ia_case_documents_api" {
     IA_S2S_SECRET        = "${data.azurerm_key_vault_secret.s2s_secret.value}"
     IA_S2S_MICROSERVICE  = "${data.azurerm_key_vault_secret.s2s_microservice.value}"
 
-    CCD_URL    = "${data.azurerm_key_vault_secret.ccd_url.value}"
     CCD_GW_URL = "${data.azurerm_key_vault_secret.ccd_gw_url.value}"
     DM_URL     = "${data.azurerm_key_vault_secret.dm_url.value}"
     IDAM_URL   = "${data.azurerm_key_vault_secret.idam_url.value}"
