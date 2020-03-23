@@ -1,7 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -27,10 +31,10 @@ public class RespondentDirectionPersonalisation implements EmailNotificationPers
     private final StringProvider stringProvider;
     private final DirectionFinder directionFinder;
 
-    public RespondentDirectionPersonalisation(@Value("${govnotify.template.respondentReviewDirection}") String respondentReviewDirectionTemplateId,
-                                              @Value("${respondentEmailAddresses.respondentReviewDirection}") String respondentReviewDirectionEmailAddress,
-                                              StringProvider stringProvider,
-                                              DirectionFinder directionFinder) {
+    public RespondentDirectionPersonalisation(@Value("${govnotify.template.reviewDirection.respondent.email}") String respondentReviewDirectionTemplateId,
+        @Value("${respondentEmailAddresses.respondentReviewDirection}") String respondentReviewDirectionEmailAddress,
+        StringProvider stringProvider,
+        DirectionFinder directionFinder) {
 
         this.respondentReviewDirectionTemplateId = respondentReviewDirectionTemplateId;
         this.respondentReviewDirectionEmailAddress = respondentReviewDirectionEmailAddress;

@@ -5,35 +5,35 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
 public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation implements EmailNotificationPersonalisation {
 
-    private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    private final String legalRepNonStandardDirectionOfHomeOfficeTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
 
 
     public LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation(
-        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
+        @Value("${govnotify.template.nonStandardDirectionOfHomeOffice.legalRep.email}") String legalRepNonStandardDirectionOfHomeOfficeTemplateId,
         PersonalisationProvider personalisationProvider,
         EmailAddressFinder emailAddressFinder) {
 
-        this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
+        this.legalRepNonStandardDirectionOfHomeOfficeTemplateId = legalRepNonStandardDirectionOfHomeOfficeTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
     public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getLegalRepNonStandardDirectionOfHomeOfficeTemplateId();
+        return legalRepNonStandardDirectionOfHomeOfficeTemplateId;
     }
 
     @Override

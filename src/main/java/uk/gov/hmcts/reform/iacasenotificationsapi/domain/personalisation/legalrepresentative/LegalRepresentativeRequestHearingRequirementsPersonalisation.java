@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -10,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
@@ -17,28 +20,27 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
 public class LegalRepresentativeRequestHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
-    private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    private final String legalRepRequestHearingRequirementsTemplateId;
     private final EmailAddressFinder emailAddressFinder;
     private final DirectionFinder directionFinder;
 
     public LegalRepresentativeRequestHearingRequirementsPersonalisation(
-        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
+        @Value("${govnotify.template.requestHearingRequirements.legalRep.email}") String legalRepRequestHearingRequirementsTemplateId,
         EmailAddressFinder emailAddressFinder,
         DirectionFinder directionFinder
     ) {
-        this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
+        this.legalRepRequestHearingRequirementsTemplateId = legalRepRequestHearingRequirementsTemplateId;
         this.emailAddressFinder = emailAddressFinder;
         this.directionFinder = directionFinder;
     }
 
     @Override
     public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getCaseOfficerRequestHearingRequirementsTemplateId();
+        return legalRepRequestHearingRequirementsTemplateId;
     }
 
     @Override

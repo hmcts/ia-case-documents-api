@@ -28,12 +28,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvi
 @RunWith(MockitoJUnitRunner.class)
 public class AppellantRequestReasonsForAppealPersonalisationEmailTest {
 
-    @Mock
-    AsylumCase asylumCase;
-    @Mock
-    RecipientsFinder recipientsFinder;
-    @Mock
-    SystemDateProvider systemDateProvider;
+    @Mock AsylumCase asylumCase;
+    @Mock RecipientsFinder recipientsFinder;
+    @Mock SystemDateProvider systemDateProvider;
 
     private Long caseId = 12345L;
     private String emailTemplateId = "someEmailTemplateId";

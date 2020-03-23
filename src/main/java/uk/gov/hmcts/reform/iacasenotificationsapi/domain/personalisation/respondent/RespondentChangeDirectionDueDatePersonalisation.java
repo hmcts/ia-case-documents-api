@@ -1,9 +1,12 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
@@ -12,26 +15,25 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
 public class RespondentChangeDirectionDueDatePersonalisation implements EmailNotificationPersonalisation {
 
-    private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    private final String respondentChangeDirectionDueDateTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final String respondentEmailAddressUntilRespondentReview;
     private final String respondentEmailAddressAtRespondentReview;
     private final EmailAddressFinder respondentEmailAddressAfterRespondentReview;
 
     public RespondentChangeDirectionDueDatePersonalisation(
-        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
+        @Value("${govnotify.template.changeDirectionDueDate.respondent.email}") String respondentChangeDirectionDueDateTemplateId,
         PersonalisationProvider personalisationProvider,
         @Value("${respondentEmailAddresses.nonStandardDirectionUntilListing}") String respondentEmailAddressUntilRespondentReview,
         @Value("${respondentEmailAddresses.respondentReviewDirection}") String respondentEmailAddressAtRespondentReview,
         EmailAddressFinder respondentEmailAddressAfterRespondentReview
     ) {
 
-        this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
+        this.respondentChangeDirectionDueDateTemplateId = respondentChangeDirectionDueDateTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.respondentEmailAddressUntilRespondentReview = respondentEmailAddressUntilRespondentReview;
         this.respondentEmailAddressAtRespondentReview = respondentEmailAddressAtRespondentReview;
@@ -40,7 +42,7 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
 
     @Override
     public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getChangeDirectionDueDateTemplateId();
+        return respondentChangeDirectionDueDateTemplateId;
     }
 
     @Override

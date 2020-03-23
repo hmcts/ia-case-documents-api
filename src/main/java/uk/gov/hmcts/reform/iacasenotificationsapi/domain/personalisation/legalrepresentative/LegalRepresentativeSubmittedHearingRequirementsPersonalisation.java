@@ -5,28 +5,28 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
 public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
-    private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    private final String submittedHearingRequirementsLegalRepTemplateId;
     private final EmailAddressFinder emailAddressFinder;
     private final PersonalisationProvider personalisationProvider;
 
     public LegalRepresentativeSubmittedHearingRequirementsPersonalisation(
+        @Value("${govnotify.template.submittedHearingRequirements.legalRep.email}") String submittedHearingRequirementsLegalRepTemplateId,
         PersonalisationProvider personalisationProvider,
-        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
         EmailAddressFinder emailAddressFinder
     ) {
+        this.submittedHearingRequirementsLegalRepTemplateId = submittedHearingRequirementsLegalRepTemplateId;
         this.personalisationProvider = personalisationProvider;
-        this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
         this.emailAddressFinder = emailAddressFinder;
     }
 
@@ -39,7 +39,7 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation impl
 
     @Override
     public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getSubmittedHearingRequirementsLegalRepTemplateId();
+        return submittedHearingRequirementsLegalRepTemplateId;
     }
 
     @Override

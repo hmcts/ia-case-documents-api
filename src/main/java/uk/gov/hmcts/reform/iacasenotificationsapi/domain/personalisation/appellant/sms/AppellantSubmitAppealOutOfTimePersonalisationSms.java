@@ -24,7 +24,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSms implements SmsNoti
     private final RecipientsFinder recipientsFinder;
 
     public AppellantSubmitAppealOutOfTimePersonalisationSms(
-        @Value("${govnotify.template.appealSubmittedOutOfTimeAppellant.sms}") String appealSubmittedOutOfTimeAppellantSmsTemplateId,
+        @Value("${govnotify.template.appealSubmittedOutOfTime.appellant.sms}") String appealSubmittedOutOfTimeAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         SystemDateProvider systemDateProvider,

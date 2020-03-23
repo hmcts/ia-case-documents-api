@@ -17,7 +17,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -27,7 +26,6 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
     @Mock AsylumCase asylumCase;
 
     @Mock EmailAddressFinder emailAddressFinder;
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
     @Mock PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
@@ -44,11 +42,10 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
     @Before
     public void setUp() {
         when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
-        when(govNotifyTemplateIdConfiguration.getSubmittedHearingRequirementsCaseOfficerTemplateId()).thenReturn(templateId);
 
         caseOfficerSubmittedHearingRequirementsPersonalisation =
             new CaseOfficerSubmittedHearingRequirementsPersonalisation(
-                govNotifyTemplateIdConfiguration,
+                templateId,
                 personalisationProvider,
                 emailAddressFinder
             );

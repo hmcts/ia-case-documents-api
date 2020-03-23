@@ -20,7 +20,7 @@ public class LegalRepresentativeEditListingNoChangePersonalisation implements Em
     private final PersonalisationProvider personalisationProvider;
 
     public LegalRepresentativeEditListingNoChangePersonalisation(
-        @Value("${govnotify.template.legalRepresentativeCaseEditedNoChange}") String legalRepresentativeCaseEditedNoChangeTemplateId,
+        @Value("${govnotify.template.caseEditedNoChange.legalRep.email}") String legalRepresentativeCaseEditedNoChangeTemplateId,
         PersonalisationProvider personalisationProvider
     ) {
         this.legalRepresentativeCaseEditedNoChangeTemplateId = legalRepresentativeCaseEditedNoChangeTemplateId;

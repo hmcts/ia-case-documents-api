@@ -27,7 +27,7 @@ public class AppellantRequestRespondentEvidencePersonalisationSms implements Sms
     private final RecipientsFinder recipientsFinder;
 
     public AppellantRequestRespondentEvidencePersonalisationSms(
-        @Value("${govnotify.template.requestRespondentEvidenceDirectionAppellant.sms}") String appealSubmittedOutOfTimeAppellantSmsTemplateId,
+        @Value("${govnotify.template.requestRespondentEvidenceDirection.appellant.sms}") String appealSubmittedOutOfTimeAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         DirectionFinder directionFinder,
         RecipientsFinder recipientsFinder

@@ -20,7 +20,7 @@ public class CaseOfficerSubmitCasePersonalisation implements EmailNotificationPe
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerSubmitCasePersonalisation(
-        @Value("${govnotify.template.caseOfficerSubmitCase}") String submitCaseCaseOfficerTemplateId,
+        @Value("${govnotify.template.submitCase.caseOfficer.email}") String submitCaseCaseOfficerTemplateId,
         EmailAddressFinder emailAddressFinder
     ) {
 

@@ -5,27 +5,27 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
 public class HomeOfficeUploadAddendumEvidencePersonalisation implements EmailNotificationPersonalisation {
 
-    private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    private final String homeOfficeUploadedAddendumEvidenceTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
 
     public HomeOfficeUploadAddendumEvidencePersonalisation(
-        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
+        @Value("${govnotify.template.uploadedAddendumEvidence.homeOffice.email}") String homeOfficeUploadedAddendumEvidenceTemplateId,
         PersonalisationProvider personalisationProvider,
         EmailAddressFinder emailAddressFinder
     ) {
-        this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
+        this.homeOfficeUploadedAddendumEvidenceTemplateId = homeOfficeUploadedAddendumEvidenceTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
     }
@@ -33,7 +33,7 @@ public class HomeOfficeUploadAddendumEvidencePersonalisation implements EmailNot
 
     @Override
     public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getUploadedAddendumEvidenceTemplateId();
+        return homeOfficeUploadedAddendumEvidenceTemplateId;
     }
 
     @Override

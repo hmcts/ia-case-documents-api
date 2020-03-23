@@ -20,7 +20,7 @@ public class LegalRepresentativeEditListingPersonalisation implements EmailNotif
     private final PersonalisationProvider personalisationProvider;
 
     public LegalRepresentativeEditListingPersonalisation(
-        @Value("${govnotify.template.legalRepresentativeCaseEditedTemplateId}") String legalRepresentativeCaseEditedTemplateId,
+        @Value("${govnotify.template.caseEdited.legalRep.email}") String legalRepresentativeCaseEditedTemplateId,
         PersonalisationProvider personalisationProvider
     ) {
         this.legalRepresentativeCaseEditedTemplateId = legalRepresentativeCaseEditedTemplateId;

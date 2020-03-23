@@ -22,7 +22,7 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisation implements Ema
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public CaseOfficerHomeOfficeResponseUploadedPersonalisation(
-        @Value("${govnotify.template.homeOfficeResponseUploadedTemplateId}") String homeOfficeResponseUploadedTemplateId,
+        @Value("${govnotify.template.homeOfficeResponseUploaded.caseOfficer.email}") String homeOfficeResponseUploadedTemplateId,
         Map<HearingCentre, String> hearingCentreEmailAddresses
     ) {
         this.homeOfficeResponseUploadedTemplateId = homeOfficeResponseUploadedTemplateId;

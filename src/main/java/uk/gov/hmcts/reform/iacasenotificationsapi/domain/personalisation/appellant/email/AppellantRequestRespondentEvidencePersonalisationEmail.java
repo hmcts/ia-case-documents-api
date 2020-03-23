@@ -27,7 +27,7 @@ public class AppellantRequestRespondentEvidencePersonalisationEmail implements E
     private final RecipientsFinder recipientsFinder;
 
     public AppellantRequestRespondentEvidencePersonalisationEmail(
-        @Value("${govnotify.template.requestRespondentEvidenceDirectionAppellant.email}") String requestRespondentEvidenceDirectionAppellantEmailTemplateId,
+        @Value("${govnotify.template.requestRespondentEvidenceDirection.appellant.email}") String requestRespondentEvidenceDirectionAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         DirectionFinder directionFinder,
         RecipientsFinder recipientsFinder

@@ -20,7 +20,7 @@ public class AdminOfficerReviewHearingRequirementsPersonalisation implements Ema
     private final AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     public AdminOfficerReviewHearingRequirementsPersonalisation(
-        @NotNull(message = "reviewHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.reviewHearingRequirementsAdminOfficerTemplateId}") String reviewHearingRequirementsAdminOfficerTemplateId,
+        @NotNull(message = "reviewHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.reviewHearingRequirements.adminOfficer.email}") String reviewHearingRequirementsAdminOfficerTemplateId,
         @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
         AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider
     ) {

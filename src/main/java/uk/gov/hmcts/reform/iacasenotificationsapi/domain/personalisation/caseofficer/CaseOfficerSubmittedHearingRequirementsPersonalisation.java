@@ -5,27 +5,27 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
 public class CaseOfficerSubmittedHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
-    private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    private final String submittedHearingRequirementsCaseOfficerTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerSubmittedHearingRequirementsPersonalisation(
-        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
+        @Value("${govnotify.template.submittedHearingRequirements.caseOfficer.email}") String submittedHearingRequirementsCaseOfficerTemplateId,
         PersonalisationProvider personalisationProvider,
         EmailAddressFinder emailAddressFinder
     ) {
-        this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
+        this.submittedHearingRequirementsCaseOfficerTemplateId = submittedHearingRequirementsCaseOfficerTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
     }
@@ -50,6 +50,6 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisation implements E
 
     @Override
     public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getSubmittedHearingRequirementsCaseOfficerTemplateId();
+        return submittedHearingRequirementsCaseOfficerTemplateId;
     }
 }

@@ -20,14 +20,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HomeOfficeHearingBundleReadyPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
     @Mock EmailAddressFinder emailAddressFinder;
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -44,7 +42,6 @@ public class HomeOfficeHearingBundleReadyPersonalisationTest {
 
     @Before
     public void setUp() {
-        when(govNotifyTemplateIdConfiguration.getHearingBundleReadyHomeOfficeTemplateId()).thenReturn(templateId);
         when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -54,7 +51,7 @@ public class HomeOfficeHearingBundleReadyPersonalisationTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
         homeOfficeHearingBundleReadyPersonalisation = new HomeOfficeHearingBundleReadyPersonalisation(
-            govNotifyTemplateIdConfiguration,
+            templateId,
             emailAddressFinder
         );
     }

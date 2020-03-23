@@ -25,7 +25,7 @@ public class CaseOfficerReasonForAppealSubmittedPersonalisation implements Email
 
 
     public CaseOfficerReasonForAppealSubmittedPersonalisation(
-        @NotNull(message = "reasonsForAppealSubmittedCaseOfficerTemplateId cannot be null") @Value("${govnotify.template.submitReasonsForAppealCaseOfficer}") String reasonsForAppealSubmittedCaseOfficerTemplateId,
+        @NotNull(message = "reasonsForAppealSubmittedCaseOfficerTemplateId cannot be null") @Value("${govnotify.template.submitReasonsForAppeal.caseOfficer.email}") String reasonsForAppealSubmittedCaseOfficerTemplateId,
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
         EmailAddressFinder emailAddressFinder
     ) {

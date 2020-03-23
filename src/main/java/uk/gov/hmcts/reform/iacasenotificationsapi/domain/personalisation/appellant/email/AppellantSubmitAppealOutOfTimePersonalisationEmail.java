@@ -24,7 +24,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmail implements Email
     private final RecipientsFinder recipientsFinder;
 
     public AppellantSubmitAppealOutOfTimePersonalisationEmail(
-        @Value("${govnotify.template.appealSubmittedOutOfTimeAppellant.email}") String appealSubmittedOutOfTimeAppellantEmailTemplateId,
+        @Value("${govnotify.template.appealSubmittedOutOfTime.appellant.email}") String appealSubmittedOutOfTimeAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         SystemDateProvider systemDateProvider,

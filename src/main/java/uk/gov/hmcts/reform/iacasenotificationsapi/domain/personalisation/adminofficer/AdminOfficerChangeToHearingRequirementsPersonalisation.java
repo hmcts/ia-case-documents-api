@@ -20,7 +20,7 @@ public class AdminOfficerChangeToHearingRequirementsPersonalisation implements E
     private final AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     public AdminOfficerChangeToHearingRequirementsPersonalisation(
-        @NotNull(message = "changeToHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.changeToHearingRequirementsAdminOfficerTemplateId}") String changeToHearingRequirementsAdminOfficerTemplateId,
+        @NotNull(message = "changeToHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.changeToHearingRequirements.adminOfficer.email}") String changeToHearingRequirementsAdminOfficerTemplateId,
         @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
         AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider
     ) {

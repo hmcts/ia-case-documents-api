@@ -23,8 +23,8 @@ public class LegalRepresentativeAppealExitedOnlinePersonalisation implements Ema
     private final String appealExitedOnlineAfterListingLegalRepresentativeTemplateId;
 
     public LegalRepresentativeAppealExitedOnlinePersonalisation(
-        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineBeforeListingLegalRep.email}") String appealExitedOnlineBeforeListingLegalRepresentativeTemplateId,
-        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineAfterListingLegalRep.email}") String appealExitedOnlineAfterListingLegalRepresentativeTemplateId) {
+        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineBeforeListing.legalRep.email}") String appealExitedOnlineBeforeListingLegalRepresentativeTemplateId,
+        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineAfterListing.legalRep.email}") String appealExitedOnlineAfterListingLegalRepresentativeTemplateId) {
 
         this.appealExitedOnlineBeforeListingLegalRepresentativeTemplateId = appealExitedOnlineBeforeListingLegalRepresentativeTemplateId;
         this.appealExitedOnlineAfterListingLegalRepresentativeTemplateId = appealExitedOnlineAfterListingLegalRepresentativeTemplateId;

@@ -22,8 +22,8 @@ public class LegalRepresentativeAppealOutcomePersonalisation implements EmailNot
     private final String appealOutcomeDismissedLegalRepresentativeTemplateId;
 
     public LegalRepresentativeAppealOutcomePersonalisation(
-        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeAllowedLegalRepresentativeTemplateId}") String appealOutcomeAllowedLegalRepresentativeTemplateId,
-        @NotNull(message = "appealOutcomeDismissedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeDismissedLegalRepresentativeTemplateId}") String appealOutcomeDismissedLegalRepresentativeTemplateId) {
+        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeAllowed.legalRep.email}") String appealOutcomeAllowedLegalRepresentativeTemplateId,
+        @NotNull(message = "appealOutcomeDismissedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeDismissed.legalRep.email}") String appealOutcomeDismissedLegalRepresentativeTemplateId) {
 
         this.appealOutcomeAllowedLegalRepresentativeTemplateId = appealOutcomeAllowedLegalRepresentativeTemplateId;
         this.appealOutcomeDismissedLegalRepresentativeTemplateId = appealOutcomeDismissedLegalRepresentativeTemplateId;

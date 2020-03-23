@@ -23,7 +23,7 @@ public class LegalRepresentativeEndAppealPersonalisation implements EmailNotific
     private final String endAppealLegalRepresentativeTemplateId;
 
     public LegalRepresentativeEndAppealPersonalisation(
-        @NotNull(message = "endAppealLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.endAppealLegalRepresentativeTemplateId}") String endAppealLegalRepresentativeTemplateId) {
+        @NotNull(message = "endAppealLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.endAppeal.legalRep.email}") String endAppealLegalRepresentativeTemplateId) {
 
         this.endAppealLegalRepresentativeTemplateId = endAppealLegalRepresentativeTemplateId;
     }

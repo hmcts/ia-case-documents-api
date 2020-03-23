@@ -21,7 +21,7 @@ public class CaseOfficerEditListingPersonalisation implements EmailNotificationP
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerEditListingPersonalisation(
-        @Value("${govnotify.template.caseOfficerCaseEdited}") String caseOfficerCaseEditedTemplateId,
+        @Value("${govnotify.template.caseEdited.caseOfficer.email}") String caseOfficerCaseEditedTemplateId,
         EmailAddressFinder emailAddressFinder,
         PersonalisationProvider personalisationProvider) {
         this.caseOfficerCaseEditedTemplateId = caseOfficerCaseEditedTemplateId;

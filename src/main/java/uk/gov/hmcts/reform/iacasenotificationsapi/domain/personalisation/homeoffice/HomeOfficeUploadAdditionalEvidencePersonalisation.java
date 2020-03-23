@@ -11,21 +11,20 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @Service
 public class HomeOfficeUploadAdditionalEvidencePersonalisation implements EmailNotificationPersonalisation {
 
-    private final GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
+    private final String homeOfficeUploadedAdditionalEvidenceTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final String homeOfficeEmailAddress;
 
     public HomeOfficeUploadAdditionalEvidencePersonalisation(
-        GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration,
+        @Value("${govnotify.template.uploadedAdditionalEvidence.homeOffice.email}") String homeOfficeUploadedAdditionalEvidenceTemplateId,
         PersonalisationProvider personalisationProvider,
         @Value("${respondentEmailAddresses.respondentReviewDirection}") String homeOfficeEmailAddress
     ) {
-        this.govNotifyTemplateIdConfiguration = govNotifyTemplateIdConfiguration;
+        this.homeOfficeUploadedAdditionalEvidenceTemplateId = homeOfficeUploadedAdditionalEvidenceTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.homeOfficeEmailAddress = homeOfficeEmailAddress;
     }
@@ -33,7 +32,7 @@ public class HomeOfficeUploadAdditionalEvidencePersonalisation implements EmailN
 
     @Override
     public String getTemplateId() {
-        return govNotifyTemplateIdConfiguration.getUploadedAdditionalEvidenceTemplateId();
+        return homeOfficeUploadedAdditionalEvidenceTemplateId;
     }
 
     @Override

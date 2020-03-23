@@ -24,7 +24,7 @@ public class AppellantRequestReasonsForAppealPersonalisationSms implements SmsNo
 
 
     public AppellantRequestReasonsForAppealPersonalisationSms(
-        @Value("${govnotify.template.requestReasonsForAppeal.sms}") String submitReasonForAppealSmsTemplateId,
+        @Value("${govnotify.template.requestReasonsForAppeal.appellant.sms}") String submitReasonForAppealSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider

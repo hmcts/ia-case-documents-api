@@ -21,7 +21,7 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisation implements Em
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerRespondentEvidenceSubmittedPersonalisation(
-        @NotNull(message = "respondentEvidenceSubmittedTemplateId cannot be null") @Value("${govnotify.template.respondentEvidenceSubmittedTemplateId}") String respondentEvidenceSubmittedTemplateId,
+        @NotNull(message = "respondentEvidenceSubmittedTemplateId cannot be null") @Value("${govnotify.template.respondentEvidenceSubmitted.caseOfficer.email}") String respondentEvidenceSubmittedTemplateId,
         EmailAddressFinder emailAddressFinder
     ) {
         this.respondentEvidenceSubmittedTemplateId = respondentEvidenceSubmittedTemplateId;

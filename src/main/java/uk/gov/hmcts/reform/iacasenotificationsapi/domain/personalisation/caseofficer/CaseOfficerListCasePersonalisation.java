@@ -25,7 +25,7 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public CaseOfficerListCasePersonalisation(
-        @Value("${govnotify.template.caseOfficerCaseListed}") String caseOfficerCaseListedTemplateId,
+        @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
         StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
         Map<HearingCentre, String> hearingCentreEmailAddresses

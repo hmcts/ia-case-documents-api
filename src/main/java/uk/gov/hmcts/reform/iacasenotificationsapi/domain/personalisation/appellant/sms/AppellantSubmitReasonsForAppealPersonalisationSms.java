@@ -24,7 +24,7 @@ public class AppellantSubmitReasonsForAppealPersonalisationSms implements SmsNot
     private final SystemDateProvider systemDateProvider;
 
     public AppellantSubmitReasonsForAppealPersonalisationSms(
-        @Value("${govnotify.template.submitReasonsForAppeal.sms}") String reasonsForAppealSubmittedAppellantSmsTemplateId,
+        @Value("${govnotify.template.submitReasonsForAppeal.appellant.sms}") String reasonsForAppealSubmittedAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterReasonsForAppeal}") int daysToWaitAfterReasonsForAppeal,
         RecipientsFinder recipientsFinder,

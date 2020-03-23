@@ -25,7 +25,7 @@ public class AppellantSubmitAppealPersonalisationSms implements SmsNotificationP
 
 
     public AppellantSubmitAppealPersonalisationSms(
-        @Value("${govnotify.template.appealSubmittedAppellant.sms}") String appealSubmittedAppellantSmsTemplateId,
+        @Value("${govnotify.template.appealSubmitted.appellant.sms}") String appealSubmittedAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         RecipientsFinder recipientsFinder,

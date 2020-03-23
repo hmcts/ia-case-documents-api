@@ -19,7 +19,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisationTest {
@@ -30,7 +29,6 @@ public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisationT
     @Mock DirectionFinder directionFinder;
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -47,11 +45,10 @@ public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisationT
 
     @Before
     public void setUp() {
-        when(govNotifyTemplateIdConfiguration.getLegalRepNonStandardDirectionOfHomeOfficeTemplateId()).thenReturn(templateId);
         when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
 
         legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation = new LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation(
-            govNotifyTemplateIdConfiguration,
+            templateId,
             personalisationProvider,
             emailAddressFinder
         );

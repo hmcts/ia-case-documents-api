@@ -25,8 +25,8 @@ public class HomeOfficeAppealOutcomePersonalisation implements EmailNotification
     public HomeOfficeAppealOutcomePersonalisation(
         @Value("${allowedAppealHomeOfficeEmailAddress}") String allowedAppealHomeOfficeEmailAddress,
         @Value("${dismissedAppealHomeOfficeEmailAddress}") String dismissedAppealHomeOfficeEmailAddress,
-        @NotNull(message = "appealOutcomeAllowedHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeAllowedHomeOfficeTemplateId}") String appealOutcomeAllowedHomeOfficeTemplateId,
-        @NotNull(message = "appealOutcomeDismissedHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeDismissedHomeOfficeTemplateId}") String appealOutcomeDismissedHomeOfficeTemplateId) {
+        @NotNull(message = "appealOutcomeAllowedHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeAllowed.homeOffice.email}") String appealOutcomeAllowedHomeOfficeTemplateId,
+        @NotNull(message = "appealOutcomeDismissedHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.appealOutcomeDismissed.homeOffice.email}") String appealOutcomeDismissedHomeOfficeTemplateId) {
 
         this.appealOutcomeAllowedHomeOfficeTemplateId = appealOutcomeAllowedHomeOfficeTemplateId;
         this.appealOutcomeDismissedHomeOfficeTemplateId = appealOutcomeDismissedHomeOfficeTemplateId;

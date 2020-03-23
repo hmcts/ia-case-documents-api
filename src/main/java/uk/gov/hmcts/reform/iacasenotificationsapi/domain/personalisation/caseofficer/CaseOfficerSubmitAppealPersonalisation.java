@@ -21,7 +21,7 @@ public class CaseOfficerSubmitAppealPersonalisation implements EmailNotification
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerSubmitAppealPersonalisation(
-        @Value("${govnotify.template.appealSubmittedCaseOfficer}") String appealSubmittedCaseOfficerTemplateId,
+        @Value("${govnotify.template.appealSubmitted.caseOfficer.email}") String appealSubmittedCaseOfficerTemplateId,
         @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
         EmailAddressFinder emailAddressFinder
     ) {

@@ -1,7 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -25,9 +29,9 @@ public class LegalRepresentativeRequestResponseReviewPersonalisation implements 
     private final DirectionFinder directionFinder;
 
     public LegalRepresentativeRequestResponseReviewPersonalisation(
-            @Value("${govnotify.template.responseReviewDirection}") String legalRepresentativeRequestResponseReviewTemplateId,
-            @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
-            DirectionFinder directionFinder
+        @Value("${govnotify.template.responseReviewDirection.legalRep.email}") String legalRepresentativeRequestResponseReviewTemplateId,
+        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
+        DirectionFinder directionFinder
     ) {
         requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
 
@@ -58,25 +62,25 @@ public class LegalRepresentativeRequestResponseReviewPersonalisation implements 
         requireNonNull(asylumCase, "asylumCase must not be null");
 
         Direction direction =
-                directionFinder
-                        .findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_REVIEW)
-                        .orElseThrow(() -> new IllegalStateException("legal representative request response review is not present"));
+            directionFinder
+                .findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_REVIEW)
+                .orElseThrow(() -> new IllegalStateException("legal representative request response review is not present"));
 
         final String directionDueDate =
-                LocalDate
-                        .parse(direction.getDateDue())
-                        .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+            LocalDate
+                .parse(direction.getDateDue())
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         return
-                ImmutableMap
-                        .<String, String>builder()
-                        .put("Appeal Ref Number", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                        .put("LR reference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-                        .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                        .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                        .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
-                        .put("Explanation", direction.getExplanation())
-                        .put("due date", directionDueDate)
-                        .build();
+            ImmutableMap
+                .<String, String>builder()
+                .put("Appeal Ref Number", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("LR reference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
+                .put("Explanation", direction.getExplanation())
+                .put("due date", directionDueDate)
+                .build();
     }
 }

@@ -24,7 +24,7 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
     private final SystemDateProvider systemDateProvider;
 
     public AppellantSubmitAppealPersonalisationEmail(
-        @Value("${govnotify.template.appealSubmittedAppellant.email}") String appealSubmittedAppellantEmailTemplateId,
+        @Value("${govnotify.template.appealSubmitted.appellant.email}") String appealSubmittedAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
         RecipientsFinder recipientsFinder,

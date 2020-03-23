@@ -21,7 +21,7 @@ public class HomeOfficeEditListingPersonalisation implements EmailNotificationPe
     private EmailAddressFinder emailAddressFinder;
 
     public HomeOfficeEditListingPersonalisation(
-        @Value("${govnotify.template.homeOfficeCaseEditedTemplateId}") String homeOfficeCaseEditedTemplateId,
+        @Value("${govnotify.template.caseEdited.homeOffice.email}") String homeOfficeCaseEditedTemplateId,
         EmailAddressFinder emailAddressFinder,
         PersonalisationProvider personalisationProvider
     ) {

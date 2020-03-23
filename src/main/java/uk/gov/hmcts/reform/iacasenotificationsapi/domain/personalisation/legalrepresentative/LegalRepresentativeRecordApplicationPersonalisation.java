@@ -20,7 +20,7 @@ public class LegalRepresentativeRecordApplicationPersonalisation implements Emai
     private final String recordApplicationLegalRepresentativeTemplateId;
 
     public LegalRepresentativeRecordApplicationPersonalisation(
-        @Value("${govnotify.template.recordRefusedApplicationLegalRepresentativeTemplateId}") String recordApplicationLegalRepresentativeTemplateId) {
+        @Value("${govnotify.template.recordRefusedApplication.legalRep.email}") String recordApplicationLegalRepresentativeTemplateId) {
 
         this.recordApplicationLegalRepresentativeTemplateId = recordApplicationLegalRepresentativeTemplateId;
     }

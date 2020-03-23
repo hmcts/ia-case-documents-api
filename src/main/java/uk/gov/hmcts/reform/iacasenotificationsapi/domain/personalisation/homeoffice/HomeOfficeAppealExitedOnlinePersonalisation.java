@@ -27,8 +27,8 @@ public class HomeOfficeAppealExitedOnlinePersonalisation implements EmailNotific
     private final String homeOfficeEmailAddresses;
 
     public HomeOfficeAppealExitedOnlinePersonalisation(
-        @NotNull(message = "appealExitedOnlineBeforeListingHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineBeforeListingHomeOffice.email}") String appealExitedOnlineBeforeListingTemplateId,
-        @NotNull(message = "appealExitedOnlineAfterListingHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineAfterListingHomeOffice.email}") String appealExitedOnlineAfterListingTemplateId,
+        @NotNull(message = "appealExitedOnlineBeforeListingHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineBeforeListing.homeOffice.email}") String appealExitedOnlineBeforeListingTemplateId,
+        @NotNull(message = "appealExitedOnlineAfterListingHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineAfterListing.homeOffice.email}") String appealExitedOnlineAfterListingTemplateId,
         @NotNull(message = "home_office email cannot be null") @Value("${endAppealHomeOfficeEmailAddress}") String homeOfficeEmailAddresses,
         EmailAddressFinder emailAddressFinder) {
         this.appealExitedOnlineBeforeListingTemplateId = appealExitedOnlineBeforeListingTemplateId;

@@ -17,7 +17,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -28,7 +27,6 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
 
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -49,7 +47,7 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
     public void setUp() {
 
         respondentChangeDirectionDueDatePersonalisation = new RespondentChangeDirectionDueDatePersonalisation(
-            govNotifyTemplateIdConfiguration,
+            templateId,
             personalisationProvider,
             homeOfficeApcEmailAddress,
             homeOfficeLartEmailAddress,
@@ -59,7 +57,6 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
 
     @Test
     public void should_return_the_given_template_id() {
-        when(govNotifyTemplateIdConfiguration.getChangeDirectionDueDateTemplateId()).thenReturn(templateId);
 
         assertEquals(templateId, respondentChangeDirectionDueDatePersonalisation.getTemplateId());
     }

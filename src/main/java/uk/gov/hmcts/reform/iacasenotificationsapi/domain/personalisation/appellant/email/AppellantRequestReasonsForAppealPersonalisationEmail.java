@@ -23,7 +23,7 @@ public class AppellantRequestReasonsForAppealPersonalisationEmail implements Ema
     private final SystemDateProvider systemDateProvider;
 
     public AppellantRequestReasonsForAppealPersonalisationEmail(
-        @Value("${govnotify.template.requestReasonsForAppeal.email}") String submitReasonForAppealEmailTemplateId,
+        @Value("${govnotify.template.requestReasonsForAppeal.appellant.email}") String submitReasonForAppealEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider

@@ -20,13 +20,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeHearingBundleReadyPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -42,7 +40,6 @@ public class LegalRepresentativeHearingBundleReadyPersonalisationTest {
 
     @Before
     public void setUp() {
-        when(govNotifyTemplateIdConfiguration.getHearingBundleReadyLegalRepTemplateId()).thenReturn(templateId);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
@@ -52,7 +49,7 @@ public class LegalRepresentativeHearingBundleReadyPersonalisationTest {
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
 
         legalRepresentativeHearingBundleReadyPersonalisation = new LegalRepresentativeHearingBundleReadyPersonalisation(
-            govNotifyTemplateIdConfiguration
+            templateId
         );
     }
 

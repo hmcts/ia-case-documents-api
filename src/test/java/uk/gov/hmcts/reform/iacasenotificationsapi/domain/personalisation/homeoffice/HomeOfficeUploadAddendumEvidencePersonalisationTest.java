@@ -1,8 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -17,19 +18,22 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetail
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class HomeOfficeUploadAddendumEvidencePersonalisationTest {
 
-    @Mock Callback<AsylumCase> callback;
-    @Mock CaseDetails<AsylumCase> caseDetails;
-    @Mock AsylumCase asylumCase;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    CaseDetails<AsylumCase> caseDetails;
+    @Mock
+    AsylumCase asylumCase;
 
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
-    @Mock EmailAddressFinder emailAddressFinder;
-    @Mock PersonalisationProvider personalisationProvider;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
+    @Mock
+    PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -47,10 +51,9 @@ public class HomeOfficeUploadAddendumEvidencePersonalisationTest {
 
     @Before
     public void setUp() {
-        when(govNotifyTemplateIdConfiguration.getUploadedAddendumEvidenceTemplateId()).thenReturn(templateId);
         when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
-        homeOfficeUploadAddendumEvidencePersonalisation = new HomeOfficeUploadAddendumEvidencePersonalisation(govNotifyTemplateIdConfiguration, personalisationProvider, emailAddressFinder);
+        homeOfficeUploadAddendumEvidencePersonalisation = new HomeOfficeUploadAddendumEvidencePersonalisation(templateId, personalisationProvider, emailAddressFinder);
     }
 
     @Test

@@ -21,7 +21,7 @@ public class HomeOfficeEditListingNoChangePersonalisation implements EmailNotifi
     private EmailAddressFinder emailAddressFinder;
 
     public HomeOfficeEditListingNoChangePersonalisation(
-        @Value("${govnotify.template.homeOfficeCaseEditedNoChange}") String homeOfficeCaseEditedNoChangeTemplateId,
+        @Value("${govnotify.template.caseEditedNoChange.homeOffice.email}") String homeOfficeCaseEditedNoChangeTemplateId,
         EmailAddressFinder emailAddressFinder,
         PersonalisationProvider personalisationProvider
     ) {

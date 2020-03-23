@@ -20,7 +20,7 @@ public class AdminOfficerWithoutHearingRequirementsPersonalisation implements Em
     private final AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     public AdminOfficerWithoutHearingRequirementsPersonalisation(
-        @NotNull(message = "withoutHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.withoutHearingRequirementsAdminOfficerTemplateId}") String withoutHearingRequirementsAdminOfficerTemplateId,
+        @NotNull(message = "withoutHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.withoutHearingRequirements.adminOfficer.email}") String withoutHearingRequirementsAdminOfficerTemplateId,
         @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
         AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider
     ) {

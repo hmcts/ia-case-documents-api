@@ -1,7 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -27,10 +31,10 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
     private final StringProvider stringProvider;
     private final DirectionFinder directionFinder;
 
-    public RespondentEvidenceDirectionPersonalisation(@Value("${govnotify.template.respondentEvidenceDirection}") String respondentEvidenceDirectionTemplateId,
-                                                      @Value("${respondentEmailAddresses.respondentEvidenceDirection}") String respondentEvidenceDirectionEmailAddress,
-                                                      StringProvider stringProvider,
-                                                      DirectionFinder directionFinder) {
+    public RespondentEvidenceDirectionPersonalisation(@Value("${govnotify.template.requestRespondentEvidenceDirection.respondent.email}") String respondentEvidenceDirectionTemplateId,
+        @Value("${respondentEmailAddresses.respondentEvidenceDirection}") String respondentEvidenceDirectionEmailAddress,
+        StringProvider stringProvider,
+        DirectionFinder directionFinder) {
 
         this.respondentEvidenceDirectionTemplateId = respondentEvidenceDirectionTemplateId;
         this.respondentEvidenceDirectionEmailAddress = respondentEvidenceDirectionEmailAddress;

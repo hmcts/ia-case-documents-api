@@ -25,7 +25,7 @@ public class AppellantSubmitReasonsForAppealPersonalisationEmail implements Emai
 
 
     public AppellantSubmitReasonsForAppealPersonalisationEmail(
-        @Value("${govnotify.template.submitReasonsForAppeal.email}") String reasonsForAppealSubmittedAppellantEmailTemplateId,
+        @Value("${govnotify.template.submitReasonsForAppeal.appellant.email}") String reasonsForAppealSubmittedAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterReasonsForAppeal}") int daysToWaitAfterReasonsForAppeal,
         RecipientsFinder recipientsFinder,
