@@ -32,14 +32,9 @@
         "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
         "subject": "Immigration and Asylum appeal: change to Hearing requirements",
         "body": [
-          "HMCTS reference: PA/12345/2019",
+          "PA/12345/2019",
           "Listing reference:",
-          "Appellant name: Talha Awan",
-          "The hearing requirements for this appeal have changed.",
-          "Next steps",
-          "Review the Hearing requirements in the Hearing tab. You can also refer to the Applications tab if you need help to identify what changes the Tribunal Caseworker has agreed.",
-          "You should then update the requirements in Aria and relist if necessary. Once you've done this, you should relist the case or confirm the original listing in the online service.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "Talha Awan"
         ]
       }
     ]

@@ -48,14 +48,11 @@
         "recipient": "{$hearingCentreEmailAddresses.northShields}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
-          "HMCTS appeal reference number: PA/12345/2019",
+          "PA/12345/2019",
           "Listing reference:",
-          "# A hearing date has been booked for the appeal.",
-          "Date: 3 May 2019",
-          "Time: 14:25",
-          "Address: IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR",
-          "Hearing requirements: See Notice of Hearing in the Documents tab for the agreed hearing adjustments.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "3 May 2019",
+          "14:25",
+          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR"
         ]
       },
       {
@@ -63,22 +60,18 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: check the details of your hearing",
         "body": [
-          "Appeal reference number: PA/12345/2019",
+          "PA/12345/2019",
           "Listing reference:",
-          "Your reference: CASE001",
-          "Appellant name: Talha Awan",
-          "# A hearing date has been booked for your appeal.",
-          "Please ensure your client gets this information. The hearing details are below:",
-          "Date: 3 May 2019",
-          "Time: 14:25",
-          "Address: IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR",
-          "Hearing requirements:",
-          "* Adjustments to accommodate vulnerabilities: No special adjustments are being made to accommodate vulnerabilities",
-          "* Multimedia equipment: No multimedia equipment is being provided",
-          "* Single-sex court: The court will not be single sex",
-          "* In camera court: The hearing will be held in public court",
-          "* Other adjustments: No other adjustments are being made",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "CASE001",
+          "Talha Awan",
+          "3 May 2019",
+          "14:25",
+          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made"
         ]
       },
       {
@@ -86,22 +79,18 @@
         "recipient": "{$homeOfficeEmailAddresses.northShields}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
-          "HMCTS appeal reference number: PA/12345/2019",
+          "PA/12345/2019",
           "Listing reference:",
-          "Home office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "# A hearing date has been booked for this appeal.",
-          "The details are below:",
-          "Date: 3 May 2019",
-          "Time: 14:25",
-          "Address: IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR",
-          "Hearing requirements:",
-          "* Adjustments to accommodate vulnerabilities: No special adjustments are being made to accommodate vulnerabilities",
-          "* Multimedia equipment: No multimedia equipment is being provided",
-          "* Single-sex court: The court will not be single sex",
-          "* In camera court: The hearing will be held in public court",
-          "* Other adjustments: No other adjustments are being made",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "A1234567",
+          "Talha Awan",
+          "3 May 2019",
+          "14:25",
+          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made"
         ]
       }
     ]

@@ -36,14 +36,8 @@
         "recipient": "{$hearingCentreEmailAddresses.northShields}",
         "subject": "Immigration and Asylum appeal: Appeal Skeleton Argument submitted",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Appellant name: Talha Awan",
-          "#An Appeal Skeleton Argument has been submitted",
-          "Log in to the service to access the Appeal Skeleton Argument, then go to your case list and set the state to 'Case under review'. Select 'Apply' to see all new Appeal Skeleton Arguments.",
-          "You can also search for the case using either the appellant's name or the appeal reference number given above.",
-          "#Next steps",
-          "Review the Appeal Skeleton Argument. If it's complete, you should direct the respondent to review it. If you don't think it's complete, you should direct the legal representative to make the appropriate changes.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "Talha Awan"
         ]
       }
     ]

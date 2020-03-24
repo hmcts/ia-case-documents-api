@@ -41,16 +41,9 @@
         "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "The Tribunal has made a decision about this appeal",
-          "The appeal has been allowed.",
-          "The grounds for this decision are explained in the Decision and Reasons document.",
-          "Next steps",
-          "Visit the online service and use the reference given in this email to find the case. You can then view and download the Decision and Reasons document from the Documents tab.",
-          "If you think there's a legal error in the Tribunal's decision, you can ask for permission to appeal to the Upper Tribunal (Immigration and Asylum Chamber).",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
         ]
       },
       {
@@ -58,16 +51,9 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Your reference: CASE001",
-          "Appellant name: Talha Awan",
-          "The Tribunal has made a decision about this appeal",
-          "The appeal has been allowed.",
-          "The grounds for this decision are explained in the Decision and Reasons document. If the appeal has been allowed on some grounds and dismissed on others, overall this means the appeal is allowed and, unless the Home Office appeals, the decision should be implemented.",
-          "Next steps",
-          "Visit the online service and use the reference given in this email to find the case. You can then view and download the Decision and Reasons document from the Documents tab.",
-          "If the Home Office thinks there's a legal error in the Tribunal's decision, they can ask for permission to appeal to the Upper Tribunal (Immigration and Asylum Chamber). You'll be notified if the Home Office asks for permission to appeal.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan"
         ]
       }
     ]

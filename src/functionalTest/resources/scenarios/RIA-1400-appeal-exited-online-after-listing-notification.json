@@ -47,15 +47,10 @@
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: case removed from online service",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Listing reference: LP/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "# This appeal has been removed from the online service.",
-          "The appellant has also been informed of this decision.",
-          "Next steps",
-          "The appeal will proceed offline. The Tribunal will contact you about what happens next.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan"
         ]
       },
       {
@@ -63,15 +58,10 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: case removed from online service",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Your reference: REF54321",
-          "Listing reference: LP/12345/2019",
-          "Appellant name: Talha Awan",
-          "# This appeal has been removed from the online service.",
-          "The Home Office has also been informed of this decision.",
-          "Next steps",
-          "The appeal will proceed offline. The Tribunal will contact you about what happens next.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "REF54321",
+          "LP/12345/2019",
+          "Talha Awan"
         ]
       }
     ]

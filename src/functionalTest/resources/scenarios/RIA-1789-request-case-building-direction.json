@@ -61,10 +61,9 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Asylum appeal: build your case direction",
         "body": [
-          "HMCTS appeal reference number: PA/12345/2019",
-          "Your reference: CASE001",
-          "Appellant name: Talha Awan",
-          "You have a direction for this case",
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
           "You must now build your case by uploading your Appeal Skeleton Argument and evidence. You have 28 days from the date of this email to complete this.",
           "You must write a full skeleton argument that references:",
           "all the evidence you have (or plan) to rely on, including witness statements",
@@ -75,8 +74,7 @@
           "Next steps",
           "Once you've uploaded your appeal argument and evidence, you should submit your case. The Tribunal case worker will review everything you've added.",
           "If your case looks ready, the Tribunal case worker will send it to the respondent to review.",
-          "You must complete this direction by: {$TODAY+28|d MMM yyyy}",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "{$TODAY+28|d MMM yyyy}"
         ]
       }
     ]

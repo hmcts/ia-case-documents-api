@@ -60,15 +60,11 @@
         "recipient": "{$TEST_CITIZEN_USERNAME}",
         "subject": "Tell us why you think the Home Office is wrong",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Dear Pablo Jimenez",
-          "A Tribunal Caseworker has looked at your appeal details and decided you have the right to appeal.",
-          "You now need to tell us why you think the Home Office was wrong to refuse your claim.",
-          "Sign in to your account to do this:",
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
           "{$iaAipFrontendUrl}",
-          "You have until {$TODAY+28|d MMM yyyy} to give us this information.",
-          "# How to contact the Tribunal"
+          "{$TODAY+28|d MMM yyyy}"
         ]
       }
     ]

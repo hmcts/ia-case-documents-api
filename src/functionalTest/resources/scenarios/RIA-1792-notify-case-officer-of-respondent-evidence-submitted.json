@@ -32,11 +32,7 @@
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: Home Office evidence uploaded",
         "body": [
-          "HMCTS Appeal reference number: PA/12345/2019",
-          "The respondent has uploaded the bundle",
-          "Check the bundle, and if it complies with the Procedure Rules and Practice Directions, direct the appellant to review the evidence and build their case.",
-          "If it does not comply, you should direct the respondent to make the appropriate changes.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019"
         ]
       }
     ]

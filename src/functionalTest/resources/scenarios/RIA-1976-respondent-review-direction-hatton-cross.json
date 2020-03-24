@@ -61,13 +61,11 @@
         "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
         "subject": "Asylum appeal direction: review case – Hatton Cross",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "You have a direction for this case",
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
           "Review the built case",
-          "You must complete this direction by: {$TODAY+14|d MMM yyyy}",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "{$TODAY+14|d MMM yyyy}"
         ]
       }
     ]

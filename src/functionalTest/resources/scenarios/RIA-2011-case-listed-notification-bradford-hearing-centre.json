@@ -59,14 +59,11 @@
         "recipient": "{$hearingCentreEmailAddresses.bradford}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
-          "HMCTS appeal reference number: PA/12345/2019",
+          "PA/12345/2019",
           "Listing reference:",
-          "# A hearing date has been booked for the appeal.",
-          "Date: 3 May 2019",
-          "Time: 14:25",
-          "Address: IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
-          "Hearing requirements: See Notice of Hearing in the Documents tab for the agreed hearing adjustments.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH"
         ]
       },
       {
@@ -74,22 +71,18 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: check the details of your hearing",
         "body": [
-          "Appeal reference number: PA/12345/2019",
+          "PA/12345/2019",
           "Listing reference:",
-          "Your reference: CASE001",
-          "Appellant name: Talha Awan",
-          "# A hearing date has been booked for your appeal.",
-          "Please ensure your client gets this information. The hearing details are below:",
-          "Date: 3 May 2019",
-          "Time: 14:25",
-          "Address: IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
-          "Hearing requirements:",
-          "* Adjustments to accommodate vulnerabilities: CO reviewed vulnerabilities response",
-          "* Multimedia equipment: CO reviewed multimedia response",
-          "* Single-sex court: CO reviewed single sex court response",
-          "* In camera court: CO reviewed in camera court response",
-          "* Other adjustments: No other adjustments are being made",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "CASE001",
+          "Talha Awan",
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "CO reviewed vulnerabilities response",
+          "CO reviewed multimedia response",
+          "CO reviewed single sex court response",
+          "CO reviewed in camera court response",
+          "No other adjustments are being made"
         ]
       },
       {
@@ -97,22 +90,18 @@
         "recipient": "{$homeOfficeEmailAddresses.bradford}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
-          "HMCTS appeal reference number: PA/12345/2019",
+          "PA/12345/2019",
           "Listing reference:",
-          "Home office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "# A hearing date has been booked for this appeal.",
-          "The details are below:",
-          "Date: 3 May 2019",
-          "Time: 14:25",
-          "Address: IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
-          "Hearing requirements:",
-          "* Adjustments to accommodate vulnerabilities: CO reviewed vulnerabilities response",
-          "* Multimedia equipment: CO reviewed multimedia response",
-          "* Single-sex court: CO reviewed single sex court response",
-          "* In camera court: CO reviewed in camera court response",
-          "* Other adjustments: No other adjustments are being made",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "A1234567",
+          "Talha Awan",
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "CO reviewed vulnerabilities response",
+          "CO reviewed multimedia response",
+          "CO reviewed single sex court response",
+          "CO reviewed in camera court response",
+          "No other adjustments are being made"
         ]
       }
     ]

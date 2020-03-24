@@ -60,13 +60,9 @@
         "recipient": "{$hearingCentreEmailAddresses.manchester}",
         "subject": "Immigration and Asylum appeal: Reasons for Appeal submitted",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Appellant name: Pablo Jimenez",
-          "Link to the online service: {$iaCcdFrontendUrl}",
-          "# An appellant in person has submitted their Appeal Reasons",
-          "Log in to the service to review the Appeal Reasons",
-          "If you believe the case is ready to proceed, you should direct the respondent to review it. If you don’t think it is ready, you should direct the appellant to answer clarifying questions or attend a case management appointment.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "{$iaCcdFrontendUrl}"
         ]
       }
     ]

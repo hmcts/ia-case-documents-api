@@ -40,14 +40,8 @@
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal:hearing requirements submitted",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Appellant name: Talha Awan",
-          "# The appellant has submitted their hearing requirements.",
-          "# Next steps",
-          "Go to the Hearing tab to review and submit the hearing requirements and any requests for additional adjustments.",
-          "You should contact the appellant if you need more information.",
-          "When you've submitted the hearing requirements, the listing team will list the case.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "Talha Awan"
         ]
       },
       {
@@ -55,15 +49,9 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Asylum appeal: hearing requirements submitted",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Your reference: CASE001",
-          "Appellant name: Talha Awan",
-          "You've submitted your hearing requirements and any requests for additional adjustments. These are now available to view in the Hearing tab.",
-          "# Next steps",
-          "The Tribunal will review your hearing requirements.",
-          "If you've made any requests for additional adjustments, we'll review the information you provided and decide if the request's can be granted.",
-          "We'll then send you the Notice of Hearing.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan"
         ]
       }
     ]

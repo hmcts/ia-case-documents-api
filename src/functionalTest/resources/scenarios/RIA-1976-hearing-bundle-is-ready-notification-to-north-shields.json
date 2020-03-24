@@ -44,14 +44,10 @@
         "recipient": "{$homeOfficeEmailAddresses.northShields}",
         "subject": "Immigration and Asylum appeal: Hearing bundle is ready",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Listing reference: LP/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "The hearing bundle is ready",
-          "The Tribunal Case Worker has uploaded the hearing bundle.",
-          "You can view and download it from the 'Documents' tab.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan"
         ]
       },
       {
@@ -59,14 +55,10 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: Hearing bundle is ready",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Listing reference: LP/12345/2019",
-          "Your reference: REF54321",
-          "Appellant name: Talha Awan",
-          "The hearing bundle is ready",
-          "The Tribunal Case Worker has uploaded the hearing bundle.",
-          "You can view and download it from the 'Documents' tab.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "REF54321",
+          "Talha Awan"
         ]
       }
     ]

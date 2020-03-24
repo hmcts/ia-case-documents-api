@@ -47,16 +47,13 @@
         "recipient": "{$endAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "# The appeal has been ended",
-          "Outcome of the appeal: Withdrawn",
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "Withdrawn",
           "some outcome reason",
-          "Approved by: Judge",
-          "Outcome date: 13 Aug 2019",
-          "If a case worker has made this decision, you can ask for it to be reviewed by a judge.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "Judge",
+          "13 Aug 2019"
         ]
       },
       {
@@ -64,17 +61,13 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Your reference: CASE001",
-          "Appellant name: Talha Awan",
-          "# The appeal has been ended",
-          "Outcome of the appeal: Withdrawn",
-          "The reason for this outcome is:",
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "Withdrawn",
           "some outcome reason",
-          "Approved by: Judge",
-          "Outcome date: 13 Aug 2019",
-          "If a case worker has made this decision, you can ask for it to be reviewed by a judge.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "Judge",
+          "13 Aug 2019"
         ]
       }
     ]

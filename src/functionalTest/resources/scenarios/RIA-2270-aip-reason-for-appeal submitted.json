@@ -68,13 +68,9 @@
         "recipient": "{$hearingCentreEmailAddresses.manchester}",
         "subject": "Immigration and Asylum appeal: Reasons for Appeal submitted",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Appellant name: Pablo Jimenez",
-          "Link to the online service: {$iaCcdFrontendUrl}",
-          "# An appellant in person has submitted their Appeal Reasons",
-          "Log in to the service to review the Appeal Reasons",
-          "If you believe the case is ready to proceed, you should direct the respondent to review it. If you don’t think it is ready, you should direct the appellant to answer clarifying questions or attend a case management appointment.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "{$iaCcdFrontendUrl}"
         ]
       },
       {
@@ -82,14 +78,11 @@
         "recipient": "{$TEST_CITIZEN_USERNAME}",
         "subject": "You told us why you think the Home Office is wrong",
         "body": [
-          "Appeal reference: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Dear Pablo Jimenez",
-          "You have told the Tribunal why you think the Home Office was wrong to refuse your claim. You don’t need to do anything now.",
-          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you to tell you what to do next. This should be by {$TODAY+14|d MMM yyyy} but it might take longer than that.",
-          "Sign in to your account to see your appeal progress:",
-          "{$iaAipFrontendUrl}",
-          "# How to contact the Tribunal"
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$iaAipFrontendUrl}"
         ]
       },
       {
@@ -97,10 +90,8 @@
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
-          "Appeal reference: PA/12345/2019",
-          "You have told the Tribunal why you think the Home Office was wrong to refuse your claim.",
-          "A Tribunal Caseworker will look at your answer and any supporting evidence you provided and will contact you to tell you what to do next. This should be by {$TODAY+14|d MMM yyyy} but it might take longer than that.",
-          "Sign in to your account to see your appeal progress:",
+          "PA/12345/2019",
+          "{$TODAY+14|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
         ]
       }

@@ -95,13 +95,11 @@
         "recipient": "{$respondentEmailAddresses.respondentEvidenceDirection}",
         "subject": "Asylum appeal direction: appeal lodged – Manchester",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Pablo Jimenez",
-          "You have a direction for this case",
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
           "Send your evidence",
-          "You must complete this direction by: {$TODAY+14|d MMM yyyy}",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "{$TODAY+14|d MMM yyyy}"
         ]
       },
       {
@@ -109,14 +107,11 @@
         "recipient": "{$TEST_CITIZEN_USERNAME}",
         "subject": "The Tribunal has contacted the Home Office about your case",
         "body": [
-          "Appeal reference: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Dear Pablo Jimenez,",
-          "The Tribunal has told the Home Office to upload any documents it has about your case to the online service",
-          "The Home Office has until {$TODAY+14|d MMM yyyy} to do this.",
-          "{$iaAipFrontendUrl}",
-          "#How to contact the Tribunal",
-          "Telephone: 0300 123 1711 (Monday to Friday, 8.30am to 5pm)"
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez,",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$iaAipFrontendUrl}"
         ]
       },
       {
@@ -124,9 +119,8 @@
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
-          "Appeal reference: PA/12345/2019",
-          "The Home Office has until {$TODAY+14|d MMM yyyy} to do this.",
-          "Sign in to your account to see how your appeal is progressing:",
+          "PA/12345/2019",
+          "{$TODAY+14|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
         ]
       }

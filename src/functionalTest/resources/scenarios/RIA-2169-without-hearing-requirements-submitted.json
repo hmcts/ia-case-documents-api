@@ -32,13 +32,8 @@
         "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
         "subject": "Immigration and Asylum appeal: list case",
         "body": [
-          "Appeal reference number: PA/12345/2019",
-          "Appellant name: Talha Awan",
-          "The Tribunal Caseworker has recorded the length of the hearing. No hearing requirements or adjustments have been submitted.",
-          "Next steps",
-          "Go to the Hearing tab to view the length of the hearing and then list the case in Aria.",
-          "You should then list the case in the online service. Once you've done this, the Notice of Hearing will be sent to all parties.",
-          "First-tier Tribunal (Immigration and Asylum Chamber)"
+          "PA/12345/2019",
+          "Talha Awan"
         ]
       }
     ]

@@ -1,15 +1,16 @@
 {
-  "description": "RIA-1793 Home Office Generic user uploaded response",
+  "description": "RIA-2764 Flexible notification content",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "HomeOfficeGeneric",
+    "credentials": "LegalRepresentative",
     "input": {
-      "id": 1003,
-      "eventId": "uploadHomeOfficeAppealResponse",
-      "state": "respondentReview",
+      "id": 1001,
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "hearingCentre": "manchester"
         }
       }
     }
@@ -20,9 +21,10 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "hearingCentre": "manchester",
         "notificationsSent": [
           {
-            "id": "1003_UPLOADED_HO_RESPONSE_CASE_OFFICER",
+            "id": "1001_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -30,11 +32,13 @@
     },
     "notifications": [
       {
-        "reference": "1003_UPLOADED_HO_RESPONSE_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: Home Office response uploaded",
+        "reference": "1001_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Asylum appeal: new appeal submitted",
         "body": [
-          "PA/12345/2019"
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaCcdFrontendUrl}"
         ]
       }
     ]
