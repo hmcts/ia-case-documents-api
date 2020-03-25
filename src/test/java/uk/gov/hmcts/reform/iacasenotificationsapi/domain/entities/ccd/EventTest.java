@@ -45,11 +45,12 @@ public class EventTest {
         assertEquals("submitReasonsForAppeal", Event.SUBMIT_REASONS_FOR_APPEAL.toString());
         assertEquals("updateHearingAdjustments", Event.UPDATE_HEARING_ADJUSTMENTS.toString());
         assertEquals("removeAppealFromOnline", Event.REMOVE_APPEAL_FROM_ONLINE.toString());
+        assertEquals("changeHearingCentre", Event.CHANGE_HEARING_CENTRE.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(39, Event.values().length);
+        assertEquals(40, Event.values().length);
     }
 }

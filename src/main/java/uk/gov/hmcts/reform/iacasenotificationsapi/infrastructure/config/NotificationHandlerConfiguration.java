@@ -569,13 +569,22 @@ public class NotificationHandlerConfiguration {
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> appealExitedOnlineNotificationHandler(
         @Qualifier("appealExitedOnlineNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
-
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.REMOVE_APPEAL_FROM_ONLINE,
             notificationGenerators
+        );
+    }
 
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> changeHearingCentreNotificationHandler(
+        @Qualifier("changeHearingCentreNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.CHANGE_HEARING_CENTRE,
+            notificationGenerator
         );
     }
 }

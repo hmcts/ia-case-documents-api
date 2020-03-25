@@ -638,6 +638,20 @@ public class NotificationGeneratorConfiguration {
             new EmailNotificationGenerator(
                 newArrayList(homeOfficeAppealExitedOnlinePersonalisation, legalRepresentativeAppealExitedOnlinePersonalisation),
                 notificationSender,
+                notificationIdAppender)
+        );
+    }
+
+    @Bean("changeHearingCentreNotificationGenerator")
+    public List<NotificationGenerator> changeHearingCentreNotificationGenerator(
+        LegalRepresentativeChangeHearingCentrePersonalisation legalRepresentativeChangeHearingCentrePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeChangeHearingCentrePersonalisation),
+                notificationSender,
                 notificationIdAppender
             )
         );
