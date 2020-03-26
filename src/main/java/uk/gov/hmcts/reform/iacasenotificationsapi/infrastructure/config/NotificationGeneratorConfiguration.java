@@ -656,4 +656,23 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("changeHearingCentreNotificationGenerator")
+    public List<NotificationGenerator> changeHearingCentreNotificationGenerator(
+        LegalRepresentativeChangeHearingCentrePersonalisation legalRepresentativeChangeHearingCentrePersonalisation,
+        CaseOfficerChangeHearingCentrePersonalisation caseOfficerChangeHearingCentrePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+              newArrayList(
+                  legalRepresentativeChangeHearingCentrePersonalisation,
+                  caseOfficerChangeHearingCentrePersonalisation
+              ),
+              notificationSender,
+              notificationIdAppender
+          )
+        );
+    }
 }
