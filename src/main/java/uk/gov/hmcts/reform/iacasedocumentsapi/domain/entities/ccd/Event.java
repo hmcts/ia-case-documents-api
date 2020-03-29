@@ -32,6 +32,7 @@ public enum Event {
     ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate"),
     SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements"),
     LIST_CMA("listCma"),
+    EDIT_APPEAL_AFTER_SUBMIT("editAppealAfterSubmit"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

@@ -74,6 +74,19 @@ public class AppealSubmissionCreatorTest {
     }
 
     @Test
+    public void should_create_appeal_submission_pdf_and_append_to_legal_representative_documents_for_the_case_when_edit_appeal_after_submit() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_APPEAL_AFTER_SUBMIT);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, LEGAL_REPRESENTATIVE_DOCUMENTS, DocumentTag.APPEAL_SUBMISSION);
+    }
+
+    @Test
     public void handling_should_throw_if_cannot_actually_handle() {
 
         assertThatThrownBy(() -> appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
@@ -97,8 +110,9 @@ public class AppealSubmissionCreatorTest {
 
                 boolean canHandle = appealSubmissionCreator.canHandle(callbackStage, callback);
 
-                if (event == Event.SUBMIT_APPEAL
-                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && event == Event.SUBMIT_APPEAL
+                    || event == Event.EDIT_APPEAL_AFTER_SUBMIT) {
 
                     assertTrue(canHandle);
                 } else {
