@@ -22,7 +22,6 @@ spring:
     name: Immigration & Asylum case documents API
   jackson.date-format: yyyy-MM-dd
 
-
 health:
   services:
     docmosis:
