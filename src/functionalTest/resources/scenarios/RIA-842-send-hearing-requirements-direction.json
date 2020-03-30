@@ -64,7 +64,7 @@
           "PA/12345/2019",
           "CASE001",
           "Talha Awan",
-          "{$iaCcdFrontendUrl}",
+          "{$iaExUiFrontendUrl}",
           "Your appeal is going to a hearing",
           "{$TODAY+5|d MMM yyyy}"
         ]

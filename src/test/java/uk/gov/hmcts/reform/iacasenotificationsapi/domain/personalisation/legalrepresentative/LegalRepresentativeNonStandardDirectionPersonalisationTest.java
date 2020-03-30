@@ -34,7 +34,7 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
     private String legalRepReferenceNumber = "someLegalRepReferenceNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyNames = "someAppellantFamilyNames";
-    private String iaCcdFrontendUrl = "http://localhost";
+    private String iaExUiFrontendUrl = "http://localhost";
     private String directionExplanation = "someExplanation";
     private String directionDueDate = "2019-10-29";
 
@@ -90,7 +90,7 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
             .put("legalRepReferenceNumber", legalRepReferenceNumber)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyNames)
-            .put("iaCcdFrontendUrl", iaCcdFrontendUrl)
+            .put("iaExUiFrontendUrl", iaExUiFrontendUrl)
             .put("explanation", directionExplanation)
             .put("dueDate", directionDueDate)
             .build();

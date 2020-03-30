@@ -32,7 +32,7 @@ public class LegalRepresentativeHearingRequirementsPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-    private String iaCcdFrontendUrl = "http://somefrontendurl";
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String directionDueDate = "2019-08-27";
     private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
@@ -61,7 +61,7 @@ public class LegalRepresentativeHearingRequirementsPersonalisationTest {
 
         legalRepresentativeHearingRequirementsPersonalisation = new LegalRepresentativeHearingRequirementsPersonalisation(
             templateId,
-            iaCcdFrontendUrl,
+            iaExUiFrontendUrl,
             directionFinder
         );
     }

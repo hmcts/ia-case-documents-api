@@ -33,7 +33,7 @@ public class LegalRepresentativeRequestResponseReviewPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-    private String iaCcdFrontendUrl = "http://somefrontendurl";
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String directionDueDate = "2019-09-10";
     private String expectedDirectionDueDate = "10 Oct 2019";
     private String directionExplanation = "someExplanation";
@@ -62,7 +62,7 @@ public class LegalRepresentativeRequestResponseReviewPersonalisationTest {
 
         legalRepresentativeRequestResponseReviewPersonalisation = new LegalRepresentativeRequestResponseReviewPersonalisation(
             templateId,
-            iaCcdFrontendUrl,
+            iaExUiFrontendUrl,
             directionFinder
         );
     }
@@ -108,7 +108,7 @@ public class LegalRepresentativeRequestResponseReviewPersonalisationTest {
                 .put("appealReferenceNumber", appealReferenceNumber)
                 .put("appellantGivenNames", appellantGivenNames)
                 .put("appellantFamilyName", appellantGivenNames)
-                .put("iaCcdFrontendUrl", iaCcdFrontendUrl)
+                .put("iaExUiFrontendUrl", iaExUiFrontendUrl)
                 .put("directionExplanation", directionExplanation)
                 .put("expectedDirectionDueDate", expectedDirectionDueDate)
                 .put("legalRepRefNumber", legalRepRefNumber)
@@ -128,7 +128,7 @@ public class LegalRepresentativeRequestResponseReviewPersonalisationTest {
                 .put("appealReferenceNumber", "")
                 .put("appellantGivenNames", "")
                 .put("appellantFamilyName", "")
-                .put("iaCcdFrontendUrl", "")
+                .put("iaExUiFrontendUrl", "")
                 .put("directionExplanation", "")
                 .put("expectedDirectionDueDate", "")
                 .put("legalRepRefNumber", "")

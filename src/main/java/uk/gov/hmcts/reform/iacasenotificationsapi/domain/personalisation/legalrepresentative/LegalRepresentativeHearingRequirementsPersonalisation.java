@@ -26,18 +26,18 @@ public class LegalRepresentativeHearingRequirementsPersonalisation implements Em
 
 
     private final String legalRepresentativeHearingRequirementsDirectionTemplateId;
-    private final String iaCcdFrontendUrl;
+    private final String iaExUiFrontendUrl;
     private final DirectionFinder directionFinder;
 
     public LegalRepresentativeHearingRequirementsPersonalisation(
         @Value("${govnotify.template.hearingRequirementsDirection.legalRep.email}") String legalRepresentativeHearingRequirementsDirectionTemplateId,
-        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         DirectionFinder directionFinder
     ) {
-        requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
+        requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
 
         this.legalRepresentativeHearingRequirementsDirectionTemplateId = legalRepresentativeHearingRequirementsDirectionTemplateId;
-        this.iaCcdFrontendUrl = iaCcdFrontendUrl;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.directionFinder = directionFinder;
     }
 
@@ -80,7 +80,7 @@ public class LegalRepresentativeHearingRequirementsPersonalisation implements Em
                 .put("LR reference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
+                .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
                 .put("Explanation", direction.getExplanation())
                 .put("due date", directionDueDate)
                 .build();

@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 public class PersonalisationProvider {
 
     private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
-    private final String iaCcdFrontendUrl;
+    private final String iaExUiFrontendUrl;
     private final HearingDetailsFinder hearingDetailsFinder;
     private final DirectionFinder directionFinder;
     private final DateTimeExtractor dateTimeExtractor;
@@ -61,11 +61,11 @@ public class PersonalisationProvider {
         .build();
 
     public PersonalisationProvider(
-        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         HearingDetailsFinder hearingDetailsFinder,
         DirectionFinder directionFinder,
         DateTimeExtractor dateTimeExtractor) {
-        this.iaCcdFrontendUrl = iaCcdFrontendUrl;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.hearingDetailsFinder = hearingDetailsFinder;
         this.directionFinder = directionFinder;
         this.dateTimeExtractor = dateTimeExtractor;
@@ -96,7 +96,7 @@ public class PersonalisationProvider {
 
         final Builder<String, String> caseListingValues = ImmutableMap
             .<String, String>builder()
-            .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
+            .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
             .put("oldHearingCentre", hearingCentreNameBefore)
             .put("oldHearingDate", oldHearingDate == null || oldHearingDate.isEmpty() ? "" : dateTimeExtractor.extractHearingDate(oldHearingDate))
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
@@ -156,7 +156,7 @@ public class PersonalisationProvider {
 
         return ImmutableMap
             .<String, String>builder()
-            .put("iaCaseListHyperLink", iaCcdFrontendUrl)
+            .put("iaCaseListHyperLink", iaExUiFrontendUrl)
             .put("explanation", direction.getExplanation())
             .put("dueDate", directionDueDate)
             .build();
@@ -180,7 +180,7 @@ public class PersonalisationProvider {
 
         return ImmutableMap
             .<String, String>builder()
-            .put("iaCaseListHyperLink", iaCcdFrontendUrl)
+            .put("iaCaseListHyperLink", iaExUiFrontendUrl)
             .put("explanation", directionEditExplanation)
             .put("dueDate", directionDueDate)
             .build();

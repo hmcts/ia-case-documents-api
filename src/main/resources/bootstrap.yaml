@@ -4,7 +4,6 @@ spring:
       prefixed: false
       paths: /mnt/secrets/ia
       aliases:
-        ia-ccd-frontend-url: IA_CCD_FRONTEND_URL
         ia-gov-notify-key: IA_GOV_NOTIFY_KEY
         hearing-centre-bradford-email: IA_HEARING_CENTRE_BRADFORD_EMAIL
         hearing-centre-manchester-email: IA_HEARING_CENTRE_MANCHESTER_EMAIL

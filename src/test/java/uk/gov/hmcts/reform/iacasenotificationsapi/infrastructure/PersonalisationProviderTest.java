@@ -31,7 +31,7 @@ public class PersonalisationProviderTest {
     @Mock Direction direction;
     @Mock DirectionFinder directionFinder;
 
-    private String iaCcdFrontendUrl = "http://localhost";
+    private String iaExUiFrontendUrl = "http://localhost";
 
     private String hearingCentreAddress = "some hearing centre address";
 
@@ -111,7 +111,7 @@ public class PersonalisationProviderTest {
         when(direction.getExplanation()).thenReturn(directionExplanation);
 
         personalisationProvider = new PersonalisationProvider(
-            iaCcdFrontendUrl,
+            iaExUiFrontendUrl,
             hearingDetailsFinder,
             directionFinder,
             dateTimeExtractor

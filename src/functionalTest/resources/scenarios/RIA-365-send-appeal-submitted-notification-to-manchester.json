@@ -38,7 +38,7 @@
         "body": [
           "PA/12345/2019",
           "Talha Awan",
-          "{$iaCcdFrontendUrl}"
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

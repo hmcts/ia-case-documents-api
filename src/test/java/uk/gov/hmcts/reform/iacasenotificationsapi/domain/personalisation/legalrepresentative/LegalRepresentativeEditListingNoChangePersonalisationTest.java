@@ -32,7 +32,7 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     PersonalisationProvider personalisationProvider;
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-    private String iaCcdFrontendUrl = "http://localhost";
+    private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String hearingCentreAddress = "some hearing centre address";
 
@@ -114,7 +114,7 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     private Map<String, String> getPersonalisationMapWithGivenValues() {
         return ImmutableMap
             .<String, String>builder()
-            .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
+            .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
             .put("appealReferenceNumber", appealReferenceNumber)
             .put("ariaListingReference", ariaListingReference)
             .put("homeOfficeReferenceNumber", homeOfficeRefNumber)
@@ -133,7 +133,7 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     private Map<String, String> getPersonalisationMapWithBlankValues() {
         return ImmutableMap
             .<String, String>builder()
-            .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
+            .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
             .put("appealReferenceNumber", "")
             .put("ariaListingReference", "")
             .put("homeOfficeReferenceNumber", "")

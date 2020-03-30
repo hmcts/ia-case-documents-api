@@ -64,7 +64,7 @@
           "PA/12345/2019",
           "CASE001",
           "Talha Awan",
-          "{$iaCcdFrontendUrl}",
+          "{$iaExUiFrontendUrl}",
           "The respondent has replied to your appeal argument and evidence. You must now review their response.",
           "Next steps",
           "If you would like to respond, you must email the Tribunal caseworker within 5 days.",

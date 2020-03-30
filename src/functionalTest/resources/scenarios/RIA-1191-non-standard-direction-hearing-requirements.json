@@ -64,7 +64,7 @@
           "PA/12345/2019",
           "CASE001",
           "Talha Awan",
-          "{$iaCcdFrontendUrl}",
+          "{$iaExUiFrontendUrl}",
           "The non-standard direction explanation goes here",
           "{$TODAY+14|d MMM yyyy}"
         ]

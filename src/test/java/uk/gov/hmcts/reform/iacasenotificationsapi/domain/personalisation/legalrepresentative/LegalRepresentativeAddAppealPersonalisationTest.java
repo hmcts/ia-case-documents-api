@@ -32,7 +32,7 @@ public class LegalRepresentativeAddAppealPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-    private String iaCcdFrontendUrl = "http://somefrontendurl";
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String directionDueDate = "2019-08-27";
     private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
@@ -59,7 +59,7 @@ public class LegalRepresentativeAddAppealPersonalisationTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepRefNumber));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
 
-        legalRepresentativeAddAppealPersonalisation = new LegalRepresentativeAddAppealPersonalisation(templateId, iaCcdFrontendUrl, directionFinder);
+        legalRepresentativeAddAppealPersonalisation = new LegalRepresentativeAddAppealPersonalisation(templateId, iaExUiFrontendUrl, directionFinder);
     }
 
     @Test

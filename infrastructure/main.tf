@@ -25,11 +25,6 @@ data "azurerm_key_vault" "ia_key_vault" {
   resource_group_name = "${local.key_vault_name}"
 }
 
-data "azurerm_key_vault_secret" "ia_ccd_frontend_url" {
-  name      = "ia-ccd-frontend-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
 data "azurerm_key_vault_secret" "ia_gov_notify_key" {
   name      = "ia-gov-notify-key"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -285,7 +280,6 @@ module "ia_case_notifications_api" {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
 
-    IA_CCD_FRONTEND_URL = "${data.azurerm_key_vault_secret.ia_ccd_frontend_url.value}"
     IA_GOV_NOTIFY_KEY   = "${data.azurerm_key_vault_secret.ia_gov_notify_key.value}"
 
     IA_HEARING_CENTRE_BRADFORD_EMAIL                         = "${data.azurerm_key_vault_secret.ia_hearing_centre_bradford_email.value}"

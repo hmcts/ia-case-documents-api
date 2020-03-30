@@ -20,17 +20,17 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 public class CaseOfficerReasonForAppealSubmittedPersonalisation implements EmailNotificationPersonalisation {
 
     private final String reasonsForAppealSubmittedCaseOfficerTemplateId;
-    private final String iaCcdFrontendUrl;
+    private final String iaExUiFrontendUrl;
     private final EmailAddressFinder emailAddressFinder;
 
 
     public CaseOfficerReasonForAppealSubmittedPersonalisation(
         @NotNull(message = "reasonsForAppealSubmittedCaseOfficerTemplateId cannot be null") @Value("${govnotify.template.submitReasonsForAppeal.caseOfficer.email}") String reasonsForAppealSubmittedCaseOfficerTemplateId,
-        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         EmailAddressFinder emailAddressFinder
     ) {
         this.reasonsForAppealSubmittedCaseOfficerTemplateId = reasonsForAppealSubmittedCaseOfficerTemplateId;
-        this.iaCcdFrontendUrl = iaCcdFrontendUrl;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.emailAddressFinder = emailAddressFinder;
     }
 
@@ -59,7 +59,7 @@ public class CaseOfficerReasonForAppealSubmittedPersonalisation implements Email
                 .put("Appeal Ref Number", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Appellant Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("Appellant Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("Hyperlink to service", iaCcdFrontendUrl)
+                .put("Hyperlink to service", iaExUiFrontendUrl)
                 .build();
     }
 }

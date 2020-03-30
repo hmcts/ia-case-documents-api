@@ -70,7 +70,7 @@
         "body": [
           "PA/12345/2019",
           "Pablo Jimenez",
-          "{$iaCcdFrontendUrl}"
+          "{$iaExUiFrontendUrl}"
         ]
       },
       {

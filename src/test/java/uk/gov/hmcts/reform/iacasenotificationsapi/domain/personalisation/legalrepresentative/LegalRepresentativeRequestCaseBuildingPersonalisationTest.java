@@ -36,7 +36,7 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
     private String directionDueDate = "2019-09-10";
     private String expectedDirectionDueDate = "10 Oct 2019";
     private String directionExplanation = "someExplanation";
-    private final String iaCcdFrontendUrl = "http://localhost";
+    private final String iaExUiFrontendUrl = "http://localhost";
 
     private String legalRepEmailAddress = "legalrep@example.com";
 
@@ -62,7 +62,7 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
 
         legalRepresentativeRequestCaseBuildingPersonalisation = new LegalRepresentativeRequestCaseBuildingPersonalisation(
             templateId,
-            iaCcdFrontendUrl,
+            iaExUiFrontendUrl,
             directionFinder
         );
     }
@@ -110,7 +110,7 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
                 .put("appellantFamilyName", appellantGivenNames)
                 .put("directionExplanation", directionExplanation)
                 .put("expectedDirectionDueDate", expectedDirectionDueDate)
-                .put("iaCcdFrontendUrl", iaCcdFrontendUrl)
+                .put("iaExUiFrontendUrl", iaExUiFrontendUrl)
                 .put("legalRepRefNumber", legalRepRefNumber)
                 .build();
 

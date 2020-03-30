@@ -25,18 +25,18 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 public class LegalRepresentativeAddAppealPersonalisation implements EmailNotificationPersonalisation {
 
     private final String legalRepresentativeReviewDirectionTemplateId;
-    private final String iaCcdFrontendUrl;
+    private final String iaExUiFrontendUrl;
     private final DirectionFinder directionFinder;
 
     public LegalRepresentativeAddAppealPersonalisation(
         @Value("${govnotify.template.reviewDirection.legalRep.email}") String legalRepresentativeReviewDirectionTemplateId,
-        @Value("${iaCcdFrontendUrl}") String iaCcdFrontendUrl,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         DirectionFinder directionFinder
     ) {
-        requireNonNull(iaCcdFrontendUrl, "iaCcdFrontendUrl must not be null");
+        requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
 
         this.legalRepresentativeReviewDirectionTemplateId = legalRepresentativeReviewDirectionTemplateId;
-        this.iaCcdFrontendUrl = iaCcdFrontendUrl;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.directionFinder = directionFinder;
     }
 
@@ -78,7 +78,7 @@ public class LegalRepresentativeAddAppealPersonalisation implements EmailNotific
                 .put("LR reference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("Hyperlink to user’s case list", iaCcdFrontendUrl)
+                .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
                 .put("Explanation", direction.getExplanation())
                 .put("due date", directionDueDate)
                 .build();

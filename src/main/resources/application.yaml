@@ -190,8 +190,8 @@ govnotify:
         email: 122b7fce-23c9-4b34-9055-8329264fd757
 
 notificationSender.deduplicateSendsWithinSeconds: 60
-iaCcdFrontendUrl: ${IA_CCD_FRONTEND_URL:http://localhost:3451/}
 
+iaExUiFrontendUrl: ${IA_EXUI_FRONTEND_URL:http://localhost:3002/}
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
 tsvStringsFileLocation: strings.tsv

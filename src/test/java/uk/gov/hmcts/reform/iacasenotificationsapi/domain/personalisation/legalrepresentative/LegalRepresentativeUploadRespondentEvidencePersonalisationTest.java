@@ -31,7 +31,7 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-    private String iaCcdFrontendUrl = "http://somefrontendurl";
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String directionDueDate = "2019-08-27";
     private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
@@ -60,7 +60,7 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
 
         legalRepresentativeUploadRespondentEvidencePersonalisation = new LegalRepresentativeUploadRespondentEvidencePersonalisation(
             templateId,
-            iaCcdFrontendUrl,
+            iaExUiFrontendUrl,
             directionFinder
         );
     }
@@ -105,7 +105,7 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
         assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(appellantGivenNames, personalisation.get("Given names"));
         assertEquals(appellantFamilyName, personalisation.get("Family name"));
-        assertEquals(iaCcdFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
         assertEquals(directionExplanation, personalisation.get("Explanation"));
         assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
         assertEquals(legalRepRefNumber, personalisation.get("LR reference"));
@@ -124,7 +124,7 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals("", personalisation.get("Given names"));
         assertEquals("", personalisation.get("Family name"));
-        assertEquals(iaCcdFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
         assertEquals(directionExplanation, personalisation.get("Explanation"));
         assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
         assertEquals("", personalisation.get("LR reference"));
