@@ -22,6 +22,19 @@
                 "wantsSms": "No"
               }
             }
+          ],
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "requestReasonsForAppeal",
+                "parties": "appellant",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "explanation": "You must now tell us why you think the Home Office decision to refuse your claim is wrong.",
+                "previousDates": []
+              }
+            }
           ]
         }
       }
@@ -46,6 +59,19 @@
             }
           }
         ],
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "requestReasonsForAppeal",
+              "parties": "appellant",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "explanation": "You must now tell us why you think the Home Office decision to refuse your claim is wrong.",
+              "previousDates": []
+            }
+          }
+        ],
         "notificationsSent": [
           {
             "id": "1004_REQUEST_REASONS_FOR_APPEAL_APPELLANT_AIP_EMAIL",
@@ -64,7 +90,8 @@
           "A1234567",
           "Pablo Jimenez",
           "{$iaAipFrontendUrl}",
-          "{$TODAY+28|d MMM yyyy}"
+          "{$TODAY+14|d MMM yyyy}",
+          "# How to contact the Tribunal"
         ]
       }
     ]
