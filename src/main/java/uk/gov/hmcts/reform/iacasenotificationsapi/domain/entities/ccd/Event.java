@@ -43,6 +43,8 @@ public enum Event {
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments"),
     REMOVE_APPEAL_FROM_ONLINE("removeAppealFromOnline"),
     CHANGE_HEARING_CENTRE("changeHearingCentre"),
+    APPLY_FOR_FTPA_APPELLANT("applyForFTPAAppellant"),
+    APPLY_FOR_FTPA_RESPONDENT("applyForFTPARespondent"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

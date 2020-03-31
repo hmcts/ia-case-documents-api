@@ -34,6 +34,8 @@ java:
         - home-office-allowed-appeal-email
         - home-office-dismissed-appeal-email
         - admin-officer-review-hearing-requirements-email
+        - ctsc-admin-ftpa-submitted-email
+        - respondent-ftpa-submitted-email
         - system-username
         - system-password
         - idam-client-id

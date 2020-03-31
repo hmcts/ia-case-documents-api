@@ -58,6 +58,10 @@ public class PersonalisationProvider {
             .build())
         .put(SEND_DIRECTION, personalisationBuilder
             .build())
+        .put(APPLY_FOR_FTPA_APPELLANT, personalisationBuilder
+            .build())
+        .put(APPLY_FOR_FTPA_RESPONDENT, personalisationBuilder
+            .build())
         .build();
 
     public PersonalisationProvider(

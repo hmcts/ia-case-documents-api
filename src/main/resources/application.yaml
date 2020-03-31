@@ -188,6 +188,16 @@ govnotify:
         email: 4959d7cc-54f0-4cb4-b386-49940b89925e
       caseOfficer:
         email: 122b7fce-23c9-4b34-9055-8329264fd757
+    applyForFtpa:
+      respondent:
+        email: 01181186-e2d9-44e0-aa35-5ef5aeca0a0f
+      appellant:
+        email: 16ddedb7-c4e3-481e-bbca-bb99b84ba4a5
+      adminOfficer:
+        email: 1b5a3d80-b637-4cb7-83ba-a662aaecd3ab
+      other:
+        email: 9a93d07a-8f0e-4057-9b5d-3f567f2c5fb9
+
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -235,6 +245,7 @@ security:
       - "draftHearingRequirements"
       - "requestHearingRequirementsFeature"
       - "uploadAddendumEvidenceLegalRep"
+      - "applyForFTPAAppellant"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -276,12 +287,14 @@ security:
     caseworker-ia-homeofficepou:
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
+      - "applyForFTPARespondent"
     caseworker-ia-respondentofficer:
       - "uploadHomeOfficeBundle"
       - "addAppealResponse"
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
+      - "applyForFTPARespondent"
     caseworker-ia-iacjudge:
       - "endAppeal"
       - "sendDecisionAndReasons"
@@ -342,6 +355,10 @@ respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}
   respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondent@example.com}
   respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL:respondent-lart@example.com}
+
+ftpaSubmitted:
+  ctscAdminEmailAddress: ${IA_CTSC_ADMIN_FTPA_SUBMITTED:ctscFtpaSubmitted@example.gov.uk}
+  respondentEmailAddress: ${IA_RESPONDENT_FTPA_SUBMITTED:homeOfficeFtpaSubmitted@example.gov.uk}
 
 appellantDaysToWait:
   afterSubmission: 28

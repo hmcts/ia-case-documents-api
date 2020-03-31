@@ -185,6 +185,16 @@ data "azurerm_key_vault_secret" "ia_admin_officer_review_hearing_requirements_em
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_ctsc_admin_ftpa_submitted_email" {
+  name      = "ctsc-admin-ftpa-submitted-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_respondent_ftpa_submitted_email" {
+  name      = "respondent-ftpa-submitted-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "test_caseofficer_username" {
   name      = "test-caseofficer-username"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -309,6 +319,9 @@ module "ia_case_notifications_api" {
     IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL                    = "${data.azurerm_key_vault_secret.ia_home_office_dismissed_appeal_email.value}"
 
     IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL       = "${data.azurerm_key_vault_secret.ia_admin_officer_review_hearing_requirements_email.value}"
+
+    IA_CTSC_ADMIN_FTPA_SUBMITTED                             =  "${data.azurerm_key_vault_secret.ia_ctsc_admin_ftpa_submitted_email.value}"
+    IA_RESPONDENT_FTPA_SUBMITTED                             =  "${data.azurerm_key_vault_secret.ia_respondent_ftpa_submitted_email.value}"
 
     IA_HEARING_CENTRE_BRADFORD_TELEPHONE                     = "${data.azurerm_key_vault_secret.ia_hearing_centre_bradford_telephone.value}"
     IA_HEARING_CENTRE_MANCHESTER_TELEPHONE                   = "${data.azurerm_key_vault_secret.ia_hearing_centre_manchester_telephone.value}"
