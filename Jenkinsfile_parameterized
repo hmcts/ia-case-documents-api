@@ -80,14 +80,8 @@ def secrets = [
 
     secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
     secret('idam-secret', 'IA_IDAM_SECRET'),
-    secret('idam-redirect-uri', 'IA_IDAM_REDIRECT_URI'),
     secret('s2s-secret', 'IA_S2S_SECRET'),
-    secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
-    secret('ccd-url', 'CCD_URL'),
-    secret('dm-url', 'DM_URL'),
-    secret('idam-url', 'IDAM_URL'),
-    secret('s2s-url', 'S2S_URL')
-
+    secret('s2s-microservice', 'IA_S2S_MICROSERVICE')
     ]
 ]
 
@@ -101,6 +95,12 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
+
+    env.IA_IDAM_REDIRECT_URI = "https://ia-case-api-aat.service.core-compute-aat.internal/oauth2/callback"
+    env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
+    env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
+    env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
     loadVaultSecrets(secrets)
 
