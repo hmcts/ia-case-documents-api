@@ -12,6 +12,7 @@ locals {
   preview_vault_name           = "${var.raw_product}-aat"
   non_preview_vault_name       = "${var.raw_product}-${var.env}"
   key_vault_name               = "${var.env == "preview" || var.env == "spreview" ? local.preview_vault_name : local.non_preview_vault_name}"
+
 }
 
 resource "azurerm_resource_group" "rg" {
