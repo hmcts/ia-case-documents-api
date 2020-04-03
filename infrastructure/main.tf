@@ -71,11 +71,6 @@ data "azurerm_key_vault_secret" "idam_secret" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "idam_redirect_uri" {
-  name      = "idam-redirect-uri"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
 data "azurerm_key_vault_secret" "s2s_secret" {
   name      = "s2s-secret"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -83,36 +78,6 @@ data "azurerm_key_vault_secret" "s2s_secret" {
 
 data "azurerm_key_vault_secret" "s2s_microservice" {
   name      = "s2s-microservice"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "ccd_gw_url" {
-  name      = "ccd-gw-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "dm_url" {
-  name      = "dm-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "idam_url" {
-  name      = "idam-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "s2s_url" {
-  name      = "s2s-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "em_bundler_url" {
-  name      = "em-bundler-url"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "em_bundler_stitch_uri" {
-  name      = "em-bundler-stitch-uri"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
@@ -154,17 +119,9 @@ module "ia_case_documents_api" {
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"
     IA_IDAM_CLIENT_ID    = "${data.azurerm_key_vault_secret.idam_client_id.value}"
     IA_IDAM_SECRET       = "${data.azurerm_key_vault_secret.idam_secret.value}"
-    IA_IDAM_REDIRECT_URI = "${data.azurerm_key_vault_secret.idam_redirect_uri.value}"
     IA_S2S_SECRET        = "${data.azurerm_key_vault_secret.s2s_secret.value}"
     IA_S2S_MICROSERVICE  = "${data.azurerm_key_vault_secret.s2s_microservice.value}"
 
-    CCD_GW_URL = "${data.azurerm_key_vault_secret.ccd_gw_url.value}"
-    DM_URL     = "${data.azurerm_key_vault_secret.dm_url.value}"
-    IDAM_URL   = "${data.azurerm_key_vault_secret.idam_url.value}"
-    S2S_URL    = "${data.azurerm_key_vault_secret.s2s_url.value}"
-
-    EM_BUNDLER_URL           = "${data.azurerm_key_vault_secret.em_bundler_url.value}"
-    EM_BUNDLER_STITCH_URI    = "${data.azurerm_key_vault_secret.em_bundler_stitch_uri.value}"
     IA_EM_STITCHING_ENABLED  = "${data.azurerm_key_vault_secret.em_stitching_enabled.value}"
 
     ROOT_LOGGING_LEVEL   = "${var.root_logging_level}"
