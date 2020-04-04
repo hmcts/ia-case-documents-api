@@ -55,7 +55,7 @@ public abstract class SpringBootIntegrationTest {
     @Before
     public void setupIdamStubs() {
 
-        stubFor(get(urlEqualTo("/details"))
+        stubFor(get(urlEqualTo("/o/userinfo"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")

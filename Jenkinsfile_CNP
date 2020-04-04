@@ -55,8 +55,12 @@ withPipeline(type, product, component) {
     env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
 
     installCharts()
-    enableAksStagingDeployment()
-    disableLegacyDeployment()
+
+    if ("demo" != "${env.BRANCH_NAME}") {
+        enableAksStagingDeployment()
+        disableLegacyDeployment()
+    }
+
     loadVaultSecrets(secrets)
 
     after('functionalTest:preview') {

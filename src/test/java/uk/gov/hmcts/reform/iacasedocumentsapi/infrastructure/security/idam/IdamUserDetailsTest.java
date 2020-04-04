@@ -4,6 +4,7 @@ import static junit.framework.TestCase.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Test;
 
 public class IdamUserDetailsTest {
