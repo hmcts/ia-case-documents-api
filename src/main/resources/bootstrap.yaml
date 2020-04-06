@@ -13,5 +13,6 @@ spring:
         s2s-secret: IA_S2S_SECRET
         s2s-microservice: IA_S2S_MICROSERVICE
         em-stitching-enabled: IA_EM_STITCHING_ENABLED
+        launch-darkly-sdk-key: LAUNCH_DARKLY_SDK_KEY
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
 

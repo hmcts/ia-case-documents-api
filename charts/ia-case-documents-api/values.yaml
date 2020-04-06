@@ -25,5 +25,6 @@ java:
         - s2s-microservice
         - em-stitching-enabled
         - docmosis-access-key
+        - launch-darkly-sdk-key
         - AppInsightsInstrumentationKey
 
