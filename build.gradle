@@ -238,7 +238,7 @@ dependencies {
     compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '4.12.1'
 
     compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
-    compile 'org.projectlombok:lombok:1.18.2'
+    compile 'org.projectlombok:lombok:1.18.12'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
 
     testCompile("org.hamcrest:hamcrest-junit:2.0.0.0") {
