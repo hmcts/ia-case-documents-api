@@ -41,7 +41,7 @@ health:
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
 appealSubmissionDocument.fileName: "appeal-form"
-appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00122.docx}
+appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00262.docx}
 
 hearingRequirementsDocument.contentType: application/pdf
 hearingRequirementsDocument.fileExtension: PDF
