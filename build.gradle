@@ -297,6 +297,8 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
 
+    testCompile 'pl.pragmatists:JUnitParams:1.1.1'
+
     //pact contract testing
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version

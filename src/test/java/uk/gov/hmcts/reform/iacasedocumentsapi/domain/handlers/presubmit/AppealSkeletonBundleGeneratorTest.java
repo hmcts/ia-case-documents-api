@@ -8,20 +8,34 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import lombok.Value;
 import org.apache.commons.lang.RandomStringUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -38,22 +52,32 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
-@RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("unchecked")
+@RunWith(JUnitParamsRunner.class)
 public class AppealSkeletonBundleGeneratorTest {
+
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.LENIENT);
 
     private AppealSkeletonBundleGenerator appealSkeletonBundleGenerator;
 
-    @Mock private Callback<AsylumCase> callback;
-    @Mock private CaseDetails<AsylumCase> caseDetails;
-    @Mock private AsylumCase asylumCase;
+    @Mock
+    private Callback<AsylumCase> callback;
+    @Mock
+    private CaseDetails<AsylumCase> caseDetails;
+    @Mock
+    private AsylumCase asylumCase;
 
-    @Mock private FileNameQualifier<AsylumCase> fileNameQualifier;
-    @Mock private DocumentBundler documentBundler;
-    @Mock private DocumentHandler documentHandler;
+    @Mock
+    private FileNameQualifier<AsylumCase> fileNameQualifier;
+    @Mock
+    private DocumentBundler documentBundler;
+    @Mock
+    private DocumentHandler documentHandler;
 
-    @Mock private DocumentWithMetadata documentWithMetadata;
-    @Mock private Document appealSkeletonBundle;
+    @Mock
+    private DocumentWithMetadata documentWithMetadata;
+    @Mock
+    private Document appealSkeletonBundle;
 
     private String fileExtension = "PDF";
     private String fileName = "some-file-name";
@@ -71,6 +95,8 @@ public class AppealSkeletonBundleGeneratorTest {
                 documentHandler
             );
 
+        ReflectionTestUtils.setField(appealSkeletonBundleGenerator, "isSaveAndContinueEnabled", true);
+
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
@@ -78,26 +104,51 @@ public class AppealSkeletonBundleGeneratorTest {
     }
 
     @Test
-    public void it_can_handle_callback() {
+    @Parameters(method = "generateDifferentEventScenarios")
+    public void it_can_handle_callback(TestScenario scenario) {
+        ReflectionTestUtils.setField(appealSkeletonBundleGenerator, "isSaveAndContinueEnabled", scenario.isFlag());
+        when(callback.getEvent()).thenReturn(scenario.getEvent());
 
-        for (Event event : Event.values()) {
+        boolean canHandle = appealSkeletonBundleGenerator.canHandle(scenario.callbackStage, callback);
 
-            when(callback.getEvent()).thenReturn(event);
+        Assertions.assertThat(canHandle).isEqualTo(scenario.isExpected());
+    }
 
-            for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
+    private List<TestScenario> generateDifferentEventScenarios() {
+        return TestScenario.builder();
+    }
 
-                boolean canHandle = appealSkeletonBundleGenerator.canHandle(callbackStage, callback);
 
-                if (event == Event.SUBMIT_CASE
-                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+    @Value
+    static class TestScenario {
+        Event event;
+        boolean flag;
+        PreSubmitCallbackStage callbackStage;
+        boolean expected;
 
-                    assertTrue(canHandle);
-                } else {
-                    assertFalse(canHandle);
+        public static List<TestScenario> builder() {
+            List<TestScenario> testScenarios = new ArrayList<>();
+            for (Event e : Event.values()) {
+                if (e.equals(Event.BUILD_CASE)) {
+                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_SUBMIT, true));
+                }
+                if (e.equals(Event.SUBMIT_CASE)) {
+                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_SUBMIT, true));
+                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_SUBMIT, false));
+                }
+                if (!(e.equals(Event.BUILD_CASE) || e.equals(Event.SUBMIT_CASE))) {
+                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_SUBMIT, false));
                 }
             }
-
-            reset(callback);
+            return testScenarios;
         }
     }
 
@@ -189,7 +240,7 @@ public class AppealSkeletonBundleGeneratorTest {
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
 
-        assertThatThrownBy(() -> appealSkeletonBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> appealSkeletonBundleGenerator.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
