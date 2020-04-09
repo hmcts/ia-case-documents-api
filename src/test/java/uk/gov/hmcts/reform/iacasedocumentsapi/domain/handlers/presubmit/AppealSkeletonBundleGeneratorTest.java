@@ -3,20 +3,17 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import junitparams.JUnitParamsRunner;
@@ -170,7 +167,6 @@ public class AppealSkeletonBundleGeneratorTest {
         boolean canHandle = appealSkeletonBundleGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
-        reset(callback);
     }
 
     @Test
@@ -195,6 +191,7 @@ public class AppealSkeletonBundleGeneratorTest {
 
         assertThat(response.getData()).isEqualTo(asylumCase);
 
+        @SuppressWarnings("unchecked")
         ArgumentCaptor<List<DocumentWithMetadata>> captor = ArgumentCaptor.forClass(List.class);
 
         InOrder inOrder = inOrder(documentBundler, documentHandler);
@@ -224,6 +221,7 @@ public class AppealSkeletonBundleGeneratorTest {
 
         assertThat(response.getData()).isEqualTo(asylumCase);
 
+        @SuppressWarnings("unchecked")
         ArgumentCaptor<List<DocumentWithMetadata>> captor = ArgumentCaptor.forClass(List.class);
 
         InOrder inOrder = inOrder(documentBundler, documentHandler);
