@@ -34,6 +34,10 @@ public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<A
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
+    @Value("${featureFlag.isSaveAndContinueEnabled}")
+    private boolean isSaveAndContinueEnabled;
+
+
     public AppealSkeletonBundleGenerator(
         @Value("${appealSkeletonBundle.fileExtension}") String fileExtension,
         @Value("${appealSkeletonBundle.fileName}") String fileName,
@@ -57,8 +61,9 @@ public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<A
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
+        Event validEvent = isSaveAndContinueEnabled ? Event.SUBMIT_CASE : Event.BUILD_CASE;
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.SUBMIT_CASE
+               && callback.getEvent() == validEvent
                && isEmStitchingEnabled;
     }
 
