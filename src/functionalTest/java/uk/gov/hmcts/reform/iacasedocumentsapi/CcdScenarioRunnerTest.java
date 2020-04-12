@@ -91,13 +91,13 @@ public class CcdScenarioRunnerTest {
             Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
             boolean scenarioEnabledFlag = true;
             if (scenarioEnabled instanceof String) {
-                scenarioEnabledFlag = Boolean.valueOf((String) scenarioEnabled);
+                scenarioEnabledFlag = Boolean.parseBoolean((String) scenarioEnabled);
             }
 
             Object scenarioDisabled = MapValueExtractor.extract(scenario, "disabled");
             boolean scenarioDisabledFlag = false;
             if (scenarioDisabled instanceof String) {
-                scenarioDisabledFlag = Boolean.valueOf((String) scenarioDisabled);
+                scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
             }
 
             if (!scenarioEnabledFlag || scenarioDisabledFlag) {
