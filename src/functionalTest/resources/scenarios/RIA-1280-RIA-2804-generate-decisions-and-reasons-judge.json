@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1280: Generate decisions and reasons - Judge",
+  "description": "RIA-1280-RIA-2804: Generate decisions and reasons - Judge",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -21,7 +21,8 @@
           "anonymityOrder": "Yes",
           "appellantsLegalRepresentatives": "Bill",
           "respondentsLegalRepresentatives": "Ted",
-          "listCaseHearingCentre": "taylorHouse"
+          "listCaseHearingCentre": "taylorHouse",
+          "currentYear": "{$YEAR}"
         }
       }
     }
@@ -47,7 +48,8 @@
               "dateUploaded": "{$TODAY}"
             }
           }
-        ]
+        ],
+        "currentYear": "{$YEAR}"
       }
     }
   }

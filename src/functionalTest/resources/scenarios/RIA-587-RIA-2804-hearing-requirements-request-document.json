@@ -1,5 +1,5 @@
 {
-  "description": "RIA-587 Create hearing requirements request PDF",
+  "description": "RIA-587-RIA-2804 Create hearing requirements request PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
@@ -56,7 +56,9 @@
             }
           ],
           "uploadAdditionalEvidenceActionAvailable": "Yes",
-          "hearingDocuments": []
+          "hearingDocuments": [],
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
         }
       }
     }
@@ -129,7 +131,9 @@
               "tag": "hearingRequirements"
             }
           }
-        ]
+        ],
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

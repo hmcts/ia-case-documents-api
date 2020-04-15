@@ -1,8 +1,8 @@
 {
-  "description": "RIA-1939-send-decisions-and-reasons - Admin Officer",
+  "description": "RIA-1154-RIA-2804-send-decisions-and-reasons",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "AdminOfficer",
+    "credentials": "CaseOfficer",
     "input": {
       "eventId": "sendDecisionAndReasons",
       "state": "decision",
@@ -31,7 +31,9 @@
                 "dateUploaded": "{$TODAY}"
               }
             }
-          ]
+          ],
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
         }
       }
     }
@@ -69,7 +71,9 @@
               "dateUploaded": "{$TODAY}"
             }
           }
-        ]
+        ],
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

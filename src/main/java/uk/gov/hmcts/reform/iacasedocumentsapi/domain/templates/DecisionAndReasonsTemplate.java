@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.base.Strings;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -80,6 +81,7 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         fieldValues.put("appellantsScheduleOfIssuesDescription", asylumCase.read(APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("appellantsDisputedScheduleOfIssuesDescription", asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("scheduleOfIssuesDisagreementDescription", asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class).orElse(""));
+        fieldValues.put("currentYear", String.valueOf(LocalDate.now().getYear()));
 
         return fieldValues;
     }

@@ -13,16 +13,17 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
-public class EndAppealNoticeTemplateTest {
+public class EndAppealTemplateTest {
 
     private final String templateName = "END_APPEAL_NOTICE_TEMPLATE.docx";
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
-
+    @Mock private CustomerServicesProvider customerServicesProvider;
 
     private String appealReferenceNumber = "RP/11111/2020";
     private String appellantGivenNames = "Talha";
@@ -36,13 +37,18 @@ public class EndAppealNoticeTemplateTest {
     private String endAppealApproverName = "John Doe";
 
     private EndAppealTemplate endAppealNoticeTemplate;
-
     private String expectedEndAppealDate = "25122020";
+
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
 
     @Before
     public void setUp() {
 
-        endAppealNoticeTemplate = new EndAppealTemplate(templateName);
+        endAppealNoticeTemplate = new EndAppealTemplate(
+            templateName,
+            customerServicesProvider
+        );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -51,11 +57,12 @@ public class EndAppealNoticeTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
-
         when(asylumCase.read(END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.of(endAppealOutcome));
         when(asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class)).thenReturn(Optional.of(endAppealOutcomeReason));
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(endAppealDate));
         when(asylumCase.read(END_APPEAL_APPROVER_NAME, String.class)).thenReturn(Optional.of(endAppealApproverName));
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
     }
 
     @Test
@@ -69,18 +76,19 @@ public class EndAppealNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = endAppealNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(10, templateFieldValues.size());
+        assertEquals(12, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
-
         assertEquals(endAppealOutcome, templateFieldValues.get("outcomeOfAppeal"));
         assertEquals(endAppealOutcomeReason, templateFieldValues.get("reasonsOfOutcome"));
         assertEquals(expectedEndAppealDate, templateFieldValues.get("endAppealDate"));
         assertEquals(endAppealApproverName, templateFieldValues.get("endAppealApprover"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -91,7 +99,6 @@ public class EndAppealNoticeTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-
         when(asylumCase.read(END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.empty());
@@ -99,17 +106,18 @@ public class EndAppealNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = endAppealNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(10, templateFieldValues.size());
+        assertEquals(12, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
-
         assertEquals("", templateFieldValues.get("outcomeOfAppeal"));
         assertEquals("", templateFieldValues.get("reasonsOfOutcome"));
         assertEquals("", templateFieldValues.get("endAppealDate"));
         assertEquals("", templateFieldValues.get("endAppealApprover"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 }

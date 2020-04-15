@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1939-send-decisions-and-reasons - Judge",
+  "description": "RIA-1939-RIA-2804-send-decisions-and-reasons - Judge",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -31,7 +31,9 @@
                 "dateUploaded": "{$TODAY}"
               }
             }
-          ]
+          ],
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
         }
       }
     }
@@ -69,7 +71,9 @@
               "dateUploaded": "{$TODAY}"
             }
           }
-        ]
+        ],
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

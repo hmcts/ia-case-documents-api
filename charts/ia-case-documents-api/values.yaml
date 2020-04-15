@@ -27,4 +27,5 @@ java:
         - docmosis-access-key
         - launch-darkly-sdk-key
         - AppInsightsInstrumentationKey
-
+        - customer-services-telephone
+        - customer-services-email

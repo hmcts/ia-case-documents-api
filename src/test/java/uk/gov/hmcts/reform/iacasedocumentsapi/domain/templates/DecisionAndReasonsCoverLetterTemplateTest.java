@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -15,13 +16,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DecisionAndReasonsCoverLetterTemplateTest {
 
-    @Mock
-    private CaseDetails<AsylumCase> caseDetails;
+    @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
+    @Mock private CustomerServicesProvider customerServicesProvider;
 
     private String templateName = "some-template-name.docx";
     private String someAppealReferenceNumber = "some-appeal-ref";
@@ -30,6 +32,9 @@ public class DecisionAndReasonsCoverLetterTemplateTest {
     private String someGivenNames = "some-given-name";
     private String someFamilyName = "some-family-name";
     private AppealDecision appealAllowed = AppealDecision.ALLOWED;
+
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
 
     private DecisionAndReasonsCoverLetterTemplate decisionAndReasonsCoverLetterTemplate;
 
@@ -42,11 +47,14 @@ public class DecisionAndReasonsCoverLetterTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(someGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(someFamilyName));
         when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(appealAllowed));
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         decisionAndReasonsCoverLetterTemplate = new DecisionAndReasonsCoverLetterTemplate(
-            templateName
+            templateName,
+            customerServicesProvider
         );
     }
 
@@ -55,8 +63,7 @@ public class DecisionAndReasonsCoverLetterTemplateTest {
 
         Map<String, Object> templateValues = decisionAndReasonsCoverLetterTemplate.mapFieldValues(caseDetails);
 
-        assertThat(templateValues.size()).isEqualTo(7);
-
+        assertThat(templateValues.size()).isEqualTo(9);
         assertThat(templateValues.get("hmcts")).isEqualTo("[userImage:hmcts.png]");
         assertThat(templateValues.get("appealReferenceNumber")).isEqualTo(someAppealReferenceNumber);
         assertThat(templateValues.get("homeOfficeReferenceNumber")).isEqualTo(someHomeOfficeReferenceNumber);
@@ -64,6 +71,8 @@ public class DecisionAndReasonsCoverLetterTemplateTest {
         assertThat(templateValues.get("appellantGivenNames")).isEqualTo(someGivenNames);
         assertThat(templateValues.get("appellantFamilyName")).isEqualTo(someFamilyName);
         assertThat(templateValues.get("allowed")).isEqualTo("Yes");
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test

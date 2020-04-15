@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.DocumentManagementFilesFi
 public final class MapValueExpander {
 
     private static final Pattern TODAY_PATTERN = Pattern.compile("\\{\\$TODAY([+-]?\\d*?)}");
+    private static final Pattern YEAR_PATTERN = Pattern.compile("\\{\\$YEAR([+-]?\\d*?)}");
     private static final Pattern PROPERTY_PATTERN = Pattern.compile("\\{\\$([a-zA-Z0-9].+?)}");
     public static final Properties ENVIRONMENT_PROPERTIES = new Properties(System.getProperties());
 
@@ -55,7 +56,8 @@ public final class MapValueExpander {
 
             if (TODAY_PATTERN.matcher(value).find()) {
                 value = expandToday(value);
-
+            } else if (YEAR_PATTERN.matcher(value).find()) {
+                value = expandYear(value);
             } else if (PROPERTY_PATTERN.matcher(value).find()) {
                 value = expandProperty(value);
             }
@@ -95,6 +97,41 @@ public final class MapValueExpander {
             String token = matcher.group(0);
 
             expandedValue = expandedValue.replace(token, now.toString());
+        }
+
+        return expandedValue;
+    }
+
+    private String expandYear(String value) {
+
+        Matcher matcher = YEAR_PATTERN.matcher(value);
+
+        String expandedValue = value;
+
+        while (matcher.find()) {
+
+            char plusOrMinus = '+';
+            int yearAdjustment = 0;
+
+            if (matcher.groupCount() == 1
+                && !matcher.group(1).isEmpty()) {
+
+                plusOrMinus = matcher.group(1).charAt(0);
+                yearAdjustment = Integer.valueOf(matcher.group(1).substring(1));
+            }
+
+            LocalDate now = LocalDate.now();
+            int year;
+
+            if (plusOrMinus == '+') {
+                year = now.plusYears(yearAdjustment).getYear();
+            } else {
+                year = now.minusYears(yearAdjustment).getYear();
+            }
+
+            String token = matcher.group(0);
+
+            expandedValue = expandedValue.replace(token, String.valueOf(year));
         }
 
         return expandedValue;

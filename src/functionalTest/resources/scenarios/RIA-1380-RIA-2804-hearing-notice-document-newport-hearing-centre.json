@@ -1,5 +1,5 @@
 {
-  "description": "RIA-412 & RIA-1571 Create hearing notice PDF",
+  "description": "RIA-1380-RIA-2804 Create hearing notice PDF (Newport hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -10,7 +10,7 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "hearingDocuments": [],
-          "listCaseHearingCentre": "manchester",
+          "listCaseHearingCentre": "newport",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
           "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -18,7 +18,9 @@
           "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
-          "ariaListingReference": "AA/12345/1234"
+          "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
         }
       }
     }
@@ -44,7 +46,7 @@
             }
           }
         ],
-        "listCaseHearingCentre": "manchester",
+        "listCaseHearingCentre": "newport",
         "listCaseHearingLength": "60",
         "listCaseHearingDate": "2018-12-31T12:34:56",
         "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -52,7 +54,9 @@
         "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
         "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
         "listCaseRequirementsOther": "something around Other",
-        "ariaListingReference": "AA/12345/1234"
+        "ariaListingReference": "AA/12345/1234",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

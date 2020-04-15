@@ -15,4 +15,6 @@ spring:
         em-stitching-enabled: IA_EM_STITCHING_ENABLED
         launch-darkly-sdk-key: LAUNCH_DARKLY_SDK_KEY
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
+        customer-services-telephone: IA_CUSTOMER_SERVICES_TELEPHONE
+        customer-services-email: IA_CUSTOMER_SERVICES_EMAIL
 

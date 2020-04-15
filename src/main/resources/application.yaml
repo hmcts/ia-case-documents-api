@@ -46,12 +46,12 @@ appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-AP
 hearingRequirementsDocument.contentType: application/pdf
 hearingRequirementsDocument.fileExtension: PDF
 hearingRequirementsDocument.fileName: "hearing-requirements"
-hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-TRB-GNO-ENG-00224.docx}
+hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-GNO-ENG-00261.docx}
 
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
-hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-GNO-ENG-00237.docx}
+hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
 
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
@@ -61,22 +61,22 @@ hearingNoticeEditedDocument.templateName: ${IA_HEARING_NOTICE_EDITED_TEMPLATE:TB
 hearingNoticeUpdatedRequirementsDocument.contentType: application/pdf
 hearingNoticeUpdatedRequirementsDocument.fileExtension: PDF
 hearingNoticeUpdatedRequirementsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00231.docx}
+hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00243.docx}
 
 hearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 hearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 hearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00230.docx}
+hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00242.docx}
 
 decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
 decisionAndReasons.fileName: "decision-and-reasons-draft"
-decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00064.docx}
+decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00223.docx}
 
 decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
-decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00058.docx}
+decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00239.docx}
 
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
@@ -89,7 +89,7 @@ appealSkeletonBundle.fileName: "appeal-skeleton-argument"
 endAppeal.contentType:  application/pdf
 endAppeal.fileExtension: PDF
 endAppeal.fileName: "NoticeOfEndedAppeal"
-endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00078.docx}
+endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -186,3 +186,7 @@ launchDarkly:
   sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}
   connectionTimeout: 5
   socketTimeout: 5
+
+customerServices:
+  emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@justice.gov.uk}
+  telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}

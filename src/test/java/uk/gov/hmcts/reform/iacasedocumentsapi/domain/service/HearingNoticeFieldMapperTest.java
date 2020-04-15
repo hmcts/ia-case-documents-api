@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -27,6 +28,7 @@ public class HearingNoticeFieldMapperTest {
     @Mock private StringProvider stringProvider;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
+    @Mock private CustomerServicesProvider customerServicesProvider;
 
     private String appealReferenceNumber = "RP/11111/2020";
     private String appellantGivenNames = "Talha";
@@ -55,6 +57,9 @@ public class HearingNoticeFieldMapperTest {
     private String expectedFormattedManchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
     private String expectedFormattedTaylorHouseHearingCentreAddress = "London\n456 Somewhere\nSouth";
 
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
+
     private HearingNoticeTemplate hearingNoticeTemplate;
 
     @Before
@@ -63,7 +68,8 @@ public class HearingNoticeFieldMapperTest {
         hearingNoticeTemplate =
             new HearingNoticeTemplate(
                 templateName,
-                stringProvider
+                stringProvider,
+                customerServicesProvider
             );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -95,6 +101,9 @@ public class HearingNoticeFieldMapperTest {
         when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedOther));
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
 
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+
     }
 
     @Test
@@ -108,7 +117,7 @@ public class HearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(15, templateFieldValues.size());
+        assertEquals(17, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -124,7 +133,8 @@ public class HearingNoticeFieldMapperTest {
         assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
         assertEquals(inCamera, templateFieldValues.get("inCamera"));
         assertEquals(otherHearingRequest, templateFieldValues.get("otherHearingRequest"));
-
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -133,7 +143,7 @@ public class HearingNoticeFieldMapperTest {
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(15, templateFieldValues.size());
+        assertEquals(17, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -149,7 +159,8 @@ public class HearingNoticeFieldMapperTest {
         assertEquals(caseOfficerReviewedSingleSexCourt, templateFieldValues.get("singleSexCourt"));
         assertEquals(caseOfficerReviewedInCamera, templateFieldValues.get("inCamera"));
         assertEquals(caseOfficerReviewedOther, templateFieldValues.get("otherHearingRequest"));
-
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -180,7 +191,7 @@ public class HearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(15, templateFieldValues.size());
+        assertEquals(17, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
@@ -193,7 +204,8 @@ public class HearingNoticeFieldMapperTest {
         assertEquals("The court will not be single sex", templateFieldValues.get("singleSexCourt"));
         assertEquals("The hearing will be held in public court", templateFieldValues.get("inCamera"));
         assertEquals("No other adjustments are being made", templateFieldValues.get("otherHearingRequest"));
-
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
