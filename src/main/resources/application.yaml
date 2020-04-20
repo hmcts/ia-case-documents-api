@@ -53,6 +53,11 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
 
+hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
+hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
+hearingNoticeAdjournedWithoutDateDocument.fileName: "hearing-notice"
+hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00240.docx}
+
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
 hearingNoticeEditedDocument.fileName: "hearing-notice"
@@ -155,6 +160,7 @@ security:
       - "editCaseListing"
       - "endAppeal"
       - "updateHearingRequirements"
+      - "adjournHearingWithoutDate"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

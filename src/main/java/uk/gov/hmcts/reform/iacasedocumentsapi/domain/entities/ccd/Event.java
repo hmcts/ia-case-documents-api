@@ -29,6 +29,7 @@ public enum Event {
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
     EDIT_CASE_LISTING("editCaseListing"),
     END_APPEAL("endAppeal"),
+    ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
