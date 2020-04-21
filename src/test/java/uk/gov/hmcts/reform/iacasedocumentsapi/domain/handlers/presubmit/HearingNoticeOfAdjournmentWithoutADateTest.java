@@ -28,6 +28,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("unchecked")
 public class HearingNoticeOfAdjournmentWithoutADateTest {
     @Mock
     private DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;

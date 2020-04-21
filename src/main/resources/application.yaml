@@ -165,6 +165,7 @@ security:
       - "listCase"
       - "editCaseListing"
       - "sendDecisionAndReasons"
+      - "adjournHearingWithoutDate"
     citizen:
       - "startAppeal"
       - "editAppeal"
