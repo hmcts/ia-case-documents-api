@@ -18,18 +18,18 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeEditListingNoChangePersonalisationTest {
 
     private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
-    @Mock
-    Callback<AsylumCase> callback;
-    @Mock
-    AsylumCase asylumCase;
-    @Mock
-    PersonalisationProvider personalisationProvider;
+    @Mock Callback<AsylumCase> callback;
+    @Mock AsylumCase asylumCase;
+    @Mock PersonalisationProvider personalisationProvider;
+    @Mock CustomerServicesProvider customerServicesProvider;
+
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
@@ -49,15 +49,20 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     private String requirementsSingleSexCourt = "someRequirementsSingleSexCourt";
     private String requirementsOther = "someRequirementsOther";
 
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
+
     private LegalRepresentativeEditListingNoChangePersonalisation legalRepresentativeEditListingPersonalisation;
 
     @Before
     public void setup() {
+
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
 
         legalRepresentativeEditListingPersonalisation = new LegalRepresentativeEditListingNoChangePersonalisation(
             templateId,
-            personalisationProvider
+            personalisationProvider,
+            customerServicesProvider
         );
     }
 
@@ -114,12 +119,13 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     private Map<String, String> getPersonalisationMapWithGivenValues() {
         return ImmutableMap
             .<String, String>builder()
-            .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
+            //.put("Hyperlink to user’s case list", iaExUiFrontendUrl)
             .put("appealReferenceNumber", appealReferenceNumber)
             .put("ariaListingReference", ariaListingReference)
             .put("homeOfficeReferenceNumber", homeOfficeRefNumber)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
+            .put("linkToOnlineService", iaExUiFrontendUrl)
             .put("Hearing Requirement Vulnerabilities", requirementsVulnerabilities)
             .put("Hearing Requirement Multimedia", requirementsMultimedia)
             .put("Hearing Requirement Single Sex Court", requirementsSingleSexCourt)
@@ -127,18 +133,21 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
             .put("Hearing Requirement Other", requirementsOther)
             .put("oldHearingCentre", hearingCentreNameBefore)
             .put(HEARING_CENTRE_ADDRESS, hearingCentreAddress)
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
 
     private Map<String, String> getPersonalisationMapWithBlankValues() {
         return ImmutableMap
             .<String, String>builder()
-            .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
+            //.put("Hyperlink to user’s case list", iaExUiFrontendUrl)
             .put("appealReferenceNumber", "")
             .put("ariaListingReference", "")
             .put("homeOfficeReferenceNumber", "")
             .put("appellantGivenNames", "")
             .put("appellantFamilyName", "")
+            .put("linkToOnlineService", iaExUiFrontendUrl)
             .put("Hearing Requirement Vulnerabilities", "")
             .put("Hearing Requirement Multimedia", "")
             .put("Hearing Requirement Single Sex Court", "")
@@ -146,6 +155,8 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
             .put("Hearing Requirement Other", "")
             .put("oldHearingCentre", "")
             .put(HEARING_CENTRE_ADDRESS, "")
+            .put("customerServicesTelephone", "")
+            .put("customerServicesEmail", "")
             .build();
     }
 }

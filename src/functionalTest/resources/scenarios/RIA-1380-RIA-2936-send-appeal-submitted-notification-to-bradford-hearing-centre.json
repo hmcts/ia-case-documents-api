@@ -1,16 +1,16 @@
 {
-  "description": "RIA-365 Send appeal submitted notification to Manchester hearing centre",
+  "description": "RIA-1380-RIA-2936 Send appeal submitted notification to Phoenix House (Bradford hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "id": 1001,
+      "id": 1003,
       "eventId": "submitAppeal",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "manchester"
+          "hearingCentre": "bradford"
         }
       }
     }
@@ -21,10 +21,10 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "hearingCentre": "manchester",
+        "hearingCentre": "bradford",
         "notificationsSent": [
           {
-            "id": "1001_APPEAL_SUBMITTED_CASE_OFFICER",
+            "id": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -32,9 +32,9 @@
     },
     "notifications": [
       {
-        "reference": "1001_APPEAL_SUBMITTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.manchester}",
-        "subject": "Asylum appeal: new appeal submitted",
+        "reference": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
           "PA/12345/2019",
           "Talha Awan",

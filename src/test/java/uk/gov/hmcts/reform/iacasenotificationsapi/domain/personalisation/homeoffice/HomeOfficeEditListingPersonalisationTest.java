@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -25,10 +26,11 @@ public class HomeOfficeEditListingPersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://localhost";
     private String homeOfficeEmailAddress = "homeoffice@example.com";
 
     private String appealReferenceNumber = "someReferenceNumber";
@@ -43,6 +45,9 @@ public class HomeOfficeEditListingPersonalisationTest {
     private String requirementsInCamera = "someRequirementsInCamera";
     private String requirementsOther = "someRequirementsOther";
 
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
+
     private HomeOfficeEditListingPersonalisation homeOfficeEditListingPersonalisation;
 
     @Before
@@ -52,7 +57,8 @@ public class HomeOfficeEditListingPersonalisationTest {
         homeOfficeEditListingPersonalisation = new HomeOfficeEditListingPersonalisation(
             templateId,
             emailAddressFinder,
-            personalisationProvider
+            personalisationProvider,
+            customerServicesProvider
         );
     }
 
@@ -96,11 +102,14 @@ public class HomeOfficeEditListingPersonalisationTest {
             .put("homeOfficeReferenceNumber", homeOfficeRefNumber)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
-            .put("Hearing Requirement Vulnerabilities", requirementsVulnerabilities)
-            .put("Hearing Requirement Multimedia", requirementsMultimedia)
-            .put("Hearing Requirement Single Sex Court", requirementsSingleSexCourt)
-            .put("Hearing Requirement In Camera Court", requirementsInCamera)
-            .put("Hearing Requirement Other", requirementsOther)
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("hearingRequirementVulnerabilities", requirementsVulnerabilities)
+            .put("hearingRequirementMultimedia", requirementsMultimedia)
+            .put("hearingRequirementSingleSexCourt", requirementsSingleSexCourt)
+            .put("hearingRequirementInCameraCourt", requirementsInCamera)
+            .put("hearingRequirementOther", requirementsOther)
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
 
@@ -112,12 +121,15 @@ public class HomeOfficeEditListingPersonalisationTest {
             .put("homeOfficeReferenceNumber", "")
             .put("appellantGivenNames", "")
             .put("appellantFamilyName", "")
-            .put("Hearing Requirement Vulnerabilities", "")
-            .put("Hearing Requirement Multimedia", "")
-            .put("Hearing Requirement Single Sex Court", "")
-            .put("Hearing Requirement In Camera Court", "")
-            .put("Hearing Requirement Other", "")
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("hearingRequirementVulnerabilities", "")
+            .put("hearingRequirementMultimedia", "")
+            .put("hearingRequirementSingleSexCourt", "")
+            .put("hearingRequirementInCameraCourt", "")
+            .put("hearingRequirementOther", "")
             .put("oldHearingCentre", "")
+            .put("customerServicesTelephone", "")
+            .put("customerServicesEmail", "")
             .build();
     }
 }

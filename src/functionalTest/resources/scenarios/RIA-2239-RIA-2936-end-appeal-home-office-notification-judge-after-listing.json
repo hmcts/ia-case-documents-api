@@ -1,8 +1,8 @@
 {
-  "description": "RIA-1647-RIA-1276 End appeal notification to Home Office and legal representative",
+  "description": "RIA-2239-RIA-2936 End appeal notification to Home Office and legal representative (after listing)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "CaseOfficer",
+    "credentials": "Judge",
     "input": {
       "id": 1001,
       "eventId": "endAppeal",
@@ -10,6 +10,8 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
           "endAppealOutcome": "Withdrawn",
           "endAppealApproverType": "Judge",
           "endAppealDate": "2019-08-13",
@@ -25,6 +27,8 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
         "endAppealOutcome": "Withdrawn",
         "endAppealApproverType": "Judge",
         "endAppealDate": "2019-08-13",
@@ -48,12 +52,16 @@
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "A1234567",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Withdrawn",
           "some outcome reason",
           "Judge",
-          "13 Aug 2019"
+          "13 Aug 2019",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -62,12 +70,16 @@
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "CASE001",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Withdrawn",
           "some outcome reason",
           "Judge",
-          "13 Aug 2019"
+          "13 Aug 2019",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

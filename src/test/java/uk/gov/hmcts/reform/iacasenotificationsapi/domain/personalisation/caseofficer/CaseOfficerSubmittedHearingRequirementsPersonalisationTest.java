@@ -30,9 +30,8 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://localhost";
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
-
     private String appealReferenceNumber = "someReferenceNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
@@ -41,11 +40,13 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
 
     @Before
     public void setUp() {
+
         when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
         caseOfficerSubmittedHearingRequirementsPersonalisation =
             new CaseOfficerSubmittedHearingRequirementsPersonalisation(
                 templateId,
+                iaExUiFrontendUrl,
                 personalisationProvider,
                 emailAddressFinder
             );

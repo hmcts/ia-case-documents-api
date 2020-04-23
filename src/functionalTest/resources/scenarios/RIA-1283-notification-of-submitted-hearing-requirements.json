@@ -38,20 +38,24 @@
       {
         "reference": "1283_CASE_OFFICER_OF_SUBMITTED_HEARING_REQUIREMENTS",
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal:hearing requirements submitted",
+        "subject": "Immigration and Asylum appeal: hearing requirements submitted",
         "body": [
           "PA/12345/2019",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       },
       {
         "reference": "1283_LEGAL_REP_OF_SUBMITTED_HEARING_REQUIREMENTS",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Asylum appeal: hearing requirements submitted",
+        "subject": "Immigration and Asylum appeal: hearing requirements submitted",
         "body": [
           "PA/12345/2019",
           "CASE001",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

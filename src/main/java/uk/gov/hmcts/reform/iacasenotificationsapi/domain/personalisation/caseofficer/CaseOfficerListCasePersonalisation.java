@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -20,17 +20,20 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtract
 public class CaseOfficerListCasePersonalisation implements EmailNotificationPersonalisation {
 
     private final String caseOfficerCaseListedTemplateId;
+    private final String iaExUiFrontendUrl;
     private final StringProvider stringProvider;
     private final DateTimeExtractor dateTimeExtractor;
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public CaseOfficerListCasePersonalisation(
         @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
         Map<HearingCentre, String> hearingCentreEmailAddresses
     ) {
         this.caseOfficerCaseListedTemplateId = caseOfficerCaseListedTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.stringProvider = stringProvider;
         this.dateTimeExtractor = dateTimeExtractor;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
@@ -86,11 +89,14 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
         return
             ImmutableMap
                 .<String, String>builder()
-                .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("Listing Ref Number", asylumCase.read(AsylumCaseDefinition.ARIA_LISTING_REFERENCE, String.class).orElse(""))
-                .put("Hearing Date", dateTimeExtractor.extractHearingDate(hearingDateTime))
-                .put("Hearing Time", dateTimeExtractor.extractHearingTime(hearingDateTime))
-                .put("Hearing Centre Address", hearingCentreAddress)
+                .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("ariaListingReference", asylumCase.read(AsylumCaseDefinition.ARIA_LISTING_REFERENCE, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("linkToOnlineService", iaExUiFrontendUrl)
+                .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
+                .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
+                .put("hearingCentreAddress", hearingCentreAddress)
                 .build();
     }
 }

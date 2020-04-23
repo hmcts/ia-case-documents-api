@@ -38,6 +38,8 @@ spring:
         admin-officer-review-hearing-requirements-email: IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL
         ctsc-admin-ftpa-submitted-email: IA_CTSC_ADMIN_FTPA_SUBMITTED
         respondent-ftpa-submitted-email: IA_RESPONDENT_FTPA_SUBMITTED
+        customer-services-telephone: IA_CUSTOMER_SERVICES_TELEPHONE
+        customer-services-email: IA_CUSTOMER_SERVICES_EMAIL
         system-username: IA_SYSTEM_USERNAME
         system-password: IA_SYSTEM_PASSWORD
         idam-client-id: IA_IDAM_CLIENT_ID

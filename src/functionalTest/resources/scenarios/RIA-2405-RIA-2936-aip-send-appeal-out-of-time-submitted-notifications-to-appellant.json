@@ -1,16 +1,17 @@
 {
-  "description": "RIA-1966 AIP Send appeal submitted notifications (Email and SMS) and Email to Case worker",
+  "description": "RIA-2405-RIA-2936 AIP Send appeal out of time submitted notifications (Email and SMS) and Email to Case worker",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Citizen",
     "input": {
-      "id": 1003,
+      "id": 1004,
       "eventId": "submitAppeal",
       "state": "appealSubmitted",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
           "hearingCentre": "manchester",
+          "submissionOutOfTime": "Yes",
           "subscriptions": [
             {
               "id": "1",
@@ -34,6 +35,7 @@
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
         "hearingCentre": "manchester",
+        "submissionOutOfTime": "Yes",
         "subscriptions": [
           {
             "id": "1",
@@ -48,15 +50,15 @@
         ],
         "notificationsSent": [
           {
-            "id": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
+            "id": "1004_APPEAL_SUBMITTED_OUT_OF_TIME_APPELLANT_AIP_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+            "id": "1004_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
+            "id": "1004_APPEAL_SUBMITTED_OUT_OF_TIME_APPELLANT_AIP_SMS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -64,9 +66,9 @@
     },
     "notifications": [
       {
-        "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
+        "reference": "1004_APPEAL_SUBMITTED_OUT_OF_TIME_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Your appeal details have been sent",
+        "subject": "Your appeal details have been submitted",
         "body": [
           "PA/12345/2019",
           "A1234567",
@@ -76,9 +78,9 @@
         ]
       },
       {
-        "reference": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+        "reference": "1004_APPEAL_SUBMITTED_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.manchester}",
-        "subject": "Asylum appeal: new appeal submitted",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
           "PA/12345/2019",
           "Pablo Jimenez",
@@ -86,7 +88,7 @@
         ]
       },
       {
-        "reference": "1003_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
+        "reference": "1004_APPEAL_SUBMITTED_OUT_OF_TIME_APPELLANT_AIP_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [

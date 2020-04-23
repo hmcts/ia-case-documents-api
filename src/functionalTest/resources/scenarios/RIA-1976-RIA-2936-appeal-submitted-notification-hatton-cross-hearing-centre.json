@@ -1,16 +1,16 @@
 {
-  "description": "RIA-1380 Send appeal submitted notification to Columbus House (Newport hearing centre)",
+  "description": "RIA-1976-RIA-2936 Send appeal submitted notification (IAC Hatton Cross)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "id": 1003,
+      "id": 1007,
       "eventId": "submitAppeal",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "newport"
+          "hearingCentre": "hattonCross"
         }
       }
     }
@@ -21,10 +21,10 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "hearingCentre": "newport",
+        "hearingCentre": "hattonCross",
         "notificationsSent": [
           {
-            "id": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
+            "id": "1007_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -32,9 +32,9 @@
     },
     "notifications": [
       {
-        "reference": "1003_APPEAL_SUBMITTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.newport}",
-        "subject": "Asylum appeal: new appeal submitted",
+        "reference": "1007_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.hattonCross}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
           "PA/12345/2019",
           "Talha Awan",

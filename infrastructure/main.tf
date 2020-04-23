@@ -225,6 +225,16 @@ data "azurerm_key_vault_secret" "system_password" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_customer_services_telephone" {
+  name      = "customer-services-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_customer_services_email" {
+  name      = "customer-services-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "idam_client_id" {
   name      = "idam-client-id"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -306,6 +316,9 @@ module "ia_case_notifications_api" {
     IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE                   = "${data.azurerm_key_vault_secret.ia_hearing_centre_birmingham_telephone.value}"
     IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE                 = "${data.azurerm_key_vault_secret.ia_hearing_centre_hatton_cross_telephone.value}"
     IA_HEARING_CENTRE_GLASGOW_TELEPHONE                      = "${data.azurerm_key_vault_secret.ia_hearing_centre_glasgow_telephone.value}"
+
+    IA_CUSTOMER_SERVICES_EMAIL                               = "${data.azurerm_key_vault_secret.ia_customer_services_email.value}"
+    IA_CUSTOMER_SERVICES_TELEPHONE                           = "${data.azurerm_key_vault_secret.ia_customer_services_telephone.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"

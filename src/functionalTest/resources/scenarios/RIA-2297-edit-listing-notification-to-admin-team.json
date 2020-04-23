@@ -8,7 +8,10 @@
       "eventId": "updateHearingAdjustments",
       "state": "listing",
       "caseData": {
-        "template": "minimal-appeal-submitted.json"
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019"
+        }
       }
     }
   },
@@ -30,11 +33,12 @@
       {
         "reference": "2297_CHANGE_TO_HEARING_REQUIREMENTS_ADMIN_OFFICER",
         "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
-        "subject": "Immigration and Asylum appeal: change to Hearing requirements",
+        "subject": "Immigration and Asylum appeal: change to hearing requirements",
         "body": [
           "PA/12345/2019",
-          "Listing reference:",
-          "Talha Awan"
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

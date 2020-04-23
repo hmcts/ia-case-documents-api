@@ -1,11 +1,11 @@
 {
-  "description": "RIA-2045 Notification of home office uploaded additional evidence",
+  "description": "RIA-2046-RIA-2936 Notification of home office uploaded addendum evidence",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficeGeneric",
     "input": {
-      "id": 2045,
-      "eventId": "uploadAdditionalEvidenceHomeOffice",
+      "id": 2046,
+      "eventId": "uploadAddendumEvidenceHomeOffice",
       "state": "listing",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
@@ -23,11 +23,11 @@
       "replacements": {
         "notificationsSent": [
           {
-            "id": "2045_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
+            "id": "2046_UPLOADED_ADDENDUM_EVIDENCE_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "2045_UPLOADED_ADDITIONAL_EVIDENCE_LEGAL_REP",
+            "id": "2046_UPLOADED_ADDENDUM_EVIDENCE_LEGAL_REP",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -35,27 +35,28 @@
     },
     "notifications": [
       {
-        "reference": "2045_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
+        "reference": "2046_UPLOADED_ADDENDUM_EVIDENCE_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: additional evidence uploaded",
+        "subject": "Immigration and Asylum appeal: addendum uploaded",
         "body": [
           "PA/12345/2019",
-          "CASE001",
-          "A1234567",
           "LP/12345/2019",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       },
       {
-        "reference": "2045_UPLOADED_ADDITIONAL_EVIDENCE_LEGAL_REP",
+        "reference": "2046_UPLOADED_ADDENDUM_EVIDENCE_LEGAL_REP",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: additional evidence uploaded",
+        "subject": "Immigration and Asylum appeal: addendum uploaded",
         "body": [
           "PA/12345/2019",
-          "CASE001",
-          "A1234567",
           "LP/12345/2019",
-          "Talha Awan"
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

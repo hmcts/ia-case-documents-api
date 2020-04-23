@@ -1,16 +1,16 @@
 {
-  "description": "RIA-1976 Send appeal submitted notification (IAC Glasgow)",
+  "description": "RIA-1967-RIA-2936 AIP Send appeal submitted notifications to case worker",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "LegalRepresentative",
+    "credentials": "Citizen",
     "input": {
-      "id": 1008,
+      "id": 1004,
       "eventId": "submitAppeal",
       "state": "appealSubmitted",
       "caseData": {
-        "template": "minimal-appeal-submitted.json",
+        "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "glasgow"
+          "hearingCentre": "manchester"
         }
       }
     }
@@ -19,12 +19,12 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-submitted.json",
+      "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
-        "hearingCentre": "glasgow",
+        "hearingCentre": "manchester",
         "notificationsSent": [
           {
-            "id": "1008_APPEAL_SUBMITTED_CASE_OFFICER",
+            "id": "1004_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -32,12 +32,12 @@
     },
     "notifications": [
       {
-        "reference": "1008_APPEAL_SUBMITTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.glasgow}",
-        "subject": "Asylum appeal: new appeal submitted",
+        "reference": "1004_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
           "PA/12345/2019",
-          "Talha Awan",
+          "Pablo Jimenez",
           "{$iaExUiFrontendUrl}"
         ]
       }

@@ -28,9 +28,8 @@ public class CaseOfficerEditListingPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
-
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
     private String appellantGivenNames = "appellantGivenNames";
@@ -41,6 +40,7 @@ public class CaseOfficerEditListingPersonalisationTest {
 
     @Before
     public void setup() {
+
         when(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
         caseOfficerEditListingPersonalisation = new CaseOfficerEditListingPersonalisation(
@@ -99,6 +99,7 @@ public class CaseOfficerEditListingPersonalisationTest {
             .put("homeOfficeReferenceNumber", homeOfficeRefNumber)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
+            .put("linkToOnlineService", iaExUiFrontendUrl)
             .build();
     }
 
@@ -110,6 +111,7 @@ public class CaseOfficerEditListingPersonalisationTest {
             .put("homeOfficeReferenceNumber", "")
             .put("appellantGivenNames", "")
             .put("appellantFamilyName", "")
+            .put("linkToOnlineService", "")
             .build();
     }
 }

@@ -35,7 +35,7 @@ govnotify:
         email: 4625616a-178b-45fb-aebf-8cb945369ae0
         sms: 5b7091e5-908a-4c5b-ac66-5dc5216fc53b
       caseOfficer:
-        email: 23769f75-673c-4682-8433-d751e540e730
+        email: f90aa4d9-159d-4423-ab96-73a1e23c92d4
     appealSubmittedOutOfTime:
       appellant:
         email: b864d01f-c80c-4d91-947f-9599f0b64163
@@ -48,7 +48,7 @@ govnotify:
         email: a1fee4a6-6650-4d91-8f9e-cd15944adef4
     respondentEvidenceSubmitted:
       caseOfficer:
-        email: b71b11f6-c485-45a2-a162-c2310a094821
+        email: a1511860-2d05-42ff-8a08-778840424d83
     requestReasonsForAppeal:
       appellant:
         email: 50f1b88e-51d5-446c-b2da-1188feb7e26c
@@ -83,88 +83,105 @@ govnotify:
         email: e6694559-38be-46a5-9894-9498b047e2c6
     submitCase:
       caseOfficer:
-        email: f6c5ad6b-d585-4421-a93f-c36126f3c4ce
+        email: ceee3f8e-6657-4967-8066-4b0f40c4b4d4
     caseListed:
       caseOfficer:
-        email: 58eab057-b5c0-4a69-8f71-a21d6f02da3d
+        email: 38d28eca-f30e-4af3-b782-e30ef0e9d7ad
       homeOffice:
-        email: 86936ac9-e8d0-4a4c-8169-0948d7fb7935
+        email: 988c4d43-acea-4914-ac9a-b3ab04668dde
       legalRep:
-        email: b87a1e5b-eec7-4268-a326-059893ab5c28
+        email: 67545160-0182-4510-96d0-ba39dbe63e5e
     caseEdited:
       caseOfficer:
-        email: 3ee36e48-b824-4d80-8642-2332eeaab11b
+        email: e634be28-0cdb-42b4-82b2-a60f37ef0294
       legalRep:
-        email: 20f96361-e43a-4791-ac84-4f61f7e9ba40
+        email: 96c02198-771d-4bdc-890d-a69a063108b9
       homeOffice:
-        email: 56d6f2ac-60a1-4789-94f0-fa02354e205c
+        email: df19f2db-dab9-454c-8d67-a11ead2f716f
     caseEditedNoChange:
       legalRep:
-        email: febcbbd2-da42-49b9-b1f9-5ab19e4fc265
+        email: 9bdfb1cb-c5a8-45b8-8f6c-b81d3d331db6
       homeOffice:
-        email: 1cee9f09-ade4-4b8f-8bc7-8d1fbc3e8089
+        email: 7adee5d3-b36b-4b19-becd-cb53b0edd251
     appealOutcomeAllowed:
       homeOffice:
-        email: ba4f360b-586b-433d-b5c2-ceb0f2f5a323
+        email: 0e8c3a70-4ba3-442b-8b12-235ee69a8d20
       legalRep:
-        email: 95fa02b7-babb-444d-805c-06dff42cfea7
+        email: a5fc7b20-d69c-42ab-bd26-79c7cf9a7fda
     appealOutcomeDismissed:
       homeOffice:
-        email: ac808545-4e6f-4e87-975b-14d10a929233
+        email: c59474ab-6074-49ec-b1ec-3ca1f1a45685
       legalRep:
-        email: 811b5eba-b53d-4fa1-baa0-5f9f3d1ba68f
-    endAppeal:
+        email: 3f89b2fa-0bbd-419e-b490-89ed27f63512
+    endAppealBeforeListing:
       legalRep:
-        email: 44ae9e7a-adeb-4d78-b2ed-219f4390b166
+        email: 998bebf1-bb6c-44d6-a65b-ae7bb4ab186b
       homeOffice:
-        email: 993c1294-c6b8-4b46-ab0f-ab01b4f6607b
-    recordRefusedApplication:
+        email: 287f890a-47bc-41e1-a4a9-d143f8eecb9b
+    endAppealAfterListing:
       legalRep:
-        email: 46778cba-1db5-4f17-9437-3b2944274df2
+        email: da6ca0ff-3955-498c-8d27-0eca1fbdf006
       homeOffice:
-        email: 911d4121-1300-4c52-b8b3-bfa7526ca74d
+        email: 97b95f02-4dc3-4282-8c8c-802efb2d21ef
+    recordRefusedApplicationBeforeListing:
+      legalRep:
+        email: 8bbb1537-9856-4a3e-b6cd-b862b1e192ff
+      homeOffice:
+        email: cf88047f-150a-4abc-a11d-a87a72985bf0
+    recordRefusedApplicationAfterListing:
+      legalRep:
+        email: ee9f2f79-a2d6-42c8-a68c-1c66d9796623
+      homeOffice:
+        email: 5deb96c5-d5c5-4202-bcf1-425d4b0b1877
     requestCaseBuilding:
       legalRep:
         email: ea1a6d4c-0d6e-4d95-afb7-07ddcebaecbd
     homeOfficeResponseUploaded:
       caseOfficer:
-        email: 32584965-8374-469a-a71b-b417da7709ed
+        email: f9813209-9f1f-43d4-b6f8-98e3f07645c3
     hearingBundleReady:
       legalRep:
-        email: 03d427d1-f032-40cb-8e8e-96ea54c2f234
+        email: 4b8a8e0d-2901-411a-897c-dd2493bc8e03
       homeOffice:
-        email: d4c6352d-325a-4933-91bb-61eb56554efc
+        email: 3bb1f83d-4e4f-449d-a282-0ba2812cf88d
     requestHearingRequirements:
       legalRep:
         email: f6185789-8328-4208-8ee5-8a12d641180f
     reviewHearingRequirements:
       adminOfficer:
-        email: 58632d37-fe36-4fae-adfd-b44bf8509770
+        email: 62719354-7a95-4a5a-b42f-ae2223bd35ee
     withoutHearingRequirements:
       adminOfficer:
-        email: 435ea40a-47ac-4397-9bd8-37be50589162
+        email: 40983322-c1a5-4bb3-ba65-7307905c82a6
     submittedHearingRequirements:
       legalRep:
-        email: bfee0880-9bdd-41a1-805a-8be4818bbb6a
+        email: 0c6dab6e-5c5d-4070-bccf-c8d490be7c19
       caseOfficer:
-        email: aa36afd2-254b-4fd7-b7c8-72078176294f
-    uploadedAdditionalEvidence:
+        email: 03aa193b-ba2c-4334-bbee-0b8244a91521
+    uploadedAdditionalEvidenceBeforeListing:
       legalRep:
-        email: b012e823-c658-4d10-a7a5-95e54f73dba8
+        email: c758ab41-4baa-4909-a6ba-31980395683a
       caseOfficer:
-        email: b012e823-c658-4d10-a7a5-95e54f73dba8
+        email: 1ab1df2c-fbd7-4904-a2bb-325eeee05644
       homeOffice:
-        email: b012e823-c658-4d10-a7a5-95e54f73dba8
+        email: b5e98804-54bf-43fb-ba3d-a033d0be99c3
+    uploadedAdditionalEvidenceAfterListing:
+      legalRep:
+        email: 03abe2a5-5581-4bed-996a-6d19de352c4c
+      caseOfficer:
+        email: 8fff07bc-8f5c-4c3e-a8ce-1c7580dcc61e
+      homeOffice:
+        email: 5dadb06a-bf59-4d75-a8a0-84aa0f6bf24f
     uploadedAddendumEvidence:
       legalRep:
-        email: 271ae717-cbc4-4c6e-8011-cd8c6b1ba0b9
+        email: 51dad728-a4d3-4ae8-9a4b-2f955b0d5b41
       caseOfficer:
-        email: 271ae717-cbc4-4c6e-8011-cd8c6b1ba0b9
+        email: 61999628-3fb7-44de-a38c-304d6d765143
       homeOffice:
-        email: 271ae717-cbc4-4c6e-8011-cd8c6b1ba0b9
+        email: 6e473679-dfc7-4fa7-96e3-583d0e8ff09f
     changeDirectionDueDate:
       legalRep:
-        email: 0b7cbe04-1b76-4d17-a854-4071fa3c1d69
+        email: e8644a60-b943-438c-8ad0-ad7d947eeca1
       respondent:
         email: 0b7cbe04-1b76-4d17-a854-4071fa3c1d69
     changeDirectionDueDateOfHomeOffice:
@@ -172,17 +189,17 @@ govnotify:
         email: dd2474ca-8b5d-4f2b-9515-37f3bb506e7b
     changeToHearingRequirements:
       adminOfficer:
-        email: 6e32ccba-3c68-4b7a-a976-96c149492661
+        email: 95a45479-1a6e-413b-8d96-1ad1404ab3db
     removeAppealFromOnlineBeforeListing:
       homeOffice:
-        email: 0a9b00d5-55d1-469c-8479-c1a2df3fce6d
+        email: 910ba1e7-00fc-4d4f-b4ba-2cbb91eeb3f7
       legalRep:
-        email: 443044b9-3c96-4e62-824a-7f7294e53661
+        email: 861f0327-6339-4c7e-8ef7-060532704122
     removeAppealFromOnlineAfterListing:
       homeOffice:
-        email: 0845c427-387e-4587-a923-6114c60c7b5d
+        email: 2e896da4-03c2-4474-b5b0-1a9fb31f33e5
       legalRep:
-        email: b22bac31-7d04-4ad0-a8b3-12ebeb381c9b
+        email: 6de19b37-8f75-4388-8f22-56d9314569c6
     changeHearingCentre:
       legalRep:
         email: 4959d7cc-54f0-4cb4-b386-49940b89925e
@@ -190,18 +207,20 @@ govnotify:
         email: 122b7fce-23c9-4b34-9055-8329264fd757
     applyForFtpa:
       respondent:
-        email: 01181186-e2d9-44e0-aa35-5ef5aeca0a0f
+        email: 317498af-4da1-44c7-935e-d70009bc687f
       appellant:
-        email: 16ddedb7-c4e3-481e-bbca-bb99b84ba4a5
+        email: 28ea778a-f2fb-4447-9144-a3815c92edbc
       adminOfficer:
-        email: 1b5a3d80-b637-4cb7-83ba-a662aaecd3ab
-      other:
-        email: 9a93d07a-8f0e-4057-9b5d-3f567f2c5fb9
+        email: aa44dab0-a9cd-4129-99bd-9ba2d4c8a57b
+      otherLegalRep:
+        email: 90630010-f2ed-4a97-a307-50291b017ed1
+      otherHomeOffice:
+        email: 9bcae84a-53e4-4971-a778-906506f49527
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
-iaExUiFrontendUrl: ${IA_EXUI_FRONTEND_URL:http://localhost:3002/}
+iaExUiFrontendUrl: ${IA_EXUI_FRONTEND_URL:https://localhost:3002/}
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
 tsvStringsFileLocation: strings.tsv
@@ -359,6 +378,10 @@ respondentEmailAddresses:
 ftpaSubmitted:
   ctscAdminEmailAddress: ${IA_CTSC_ADMIN_FTPA_SUBMITTED:ctscFtpaSubmitted@example.gov.uk}
   respondentEmailAddress: ${IA_RESPONDENT_FTPA_SUBMITTED:homeOfficeFtpaSubmitted@example.gov.uk}
+
+customerServices:
+  emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
+  telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
 
 appellantDaysToWait:
   afterSubmission: 28

@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "ariaListingReference": "LP/12345/2019",
           "isDecisionAllowed": "dismissed",
           "notificationsSent": []
         }
@@ -42,8 +43,12 @@
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "A1234567",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -52,8 +57,12 @@
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "CASE001",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

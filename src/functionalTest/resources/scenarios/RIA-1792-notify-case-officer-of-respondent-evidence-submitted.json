@@ -32,7 +32,9 @@
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: Home Office evidence uploaded",
         "body": [
-          "PA/12345/2019"
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

@@ -50,7 +50,7 @@ def secrets = [
         secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
         secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
 
-        secret( 'ctsc-admin-ftpa-submitted-email', 'IA_CTSC_ADMIN_FTPA_SUBMITTED'),
+        secret('ctsc-admin-ftpa-submitted-email', 'IA_CTSC_ADMIN_FTPA_SUBMITTED'),
         secret('respondent-ftpa-submitted-email', 'IA_RESPONDENT_FTPA_SUBMITTED'),
 
         secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
@@ -79,6 +79,9 @@ def secrets = [
         secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
 
         secret('admin-officer-review-hearing-requirements-email', 'IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL'),
+
+        secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
+        secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
 
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),

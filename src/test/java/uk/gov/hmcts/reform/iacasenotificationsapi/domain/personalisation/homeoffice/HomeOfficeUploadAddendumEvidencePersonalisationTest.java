@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -23,29 +24,25 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 @SuppressWarnings("unchecked")
 public class HomeOfficeUploadAddendumEvidencePersonalisationTest {
 
-    @Mock
-    Callback<AsylumCase> callback;
-    @Mock
-    CaseDetails<AsylumCase> caseDetails;
-    @Mock
-    AsylumCase asylumCase;
+    @Mock Callback<AsylumCase> callback;
+    @Mock CaseDetails<AsylumCase> caseDetails;
+    @Mock AsylumCase asylumCase;
 
-    @Mock
-    EmailAddressFinder emailAddressFinder;
-    @Mock
-    PersonalisationProvider personalisationProvider;
+    @Mock EmailAddressFinder emailAddressFinder;
+    @Mock PersonalisationProvider personalisationProvider;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://localhost";
     private String homeOfficeEmailAddress = "homeOffice@example.com";
-
-    private String hmctsReference = "hmctsReference";
-    private String legalRepReference = "legalRepresentativeReference";
+    private String appealReferenceNumber = "hmctsReference";
+    private String ariaListingReference = "someAriaListingReference";
     private String homeOfficeReference = "homeOfficeReference";
-    private String listingReference = "listingReference";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
 
     private HomeOfficeUploadAddendumEvidencePersonalisation homeOfficeUploadAddendumEvidencePersonalisation;
 
@@ -53,7 +50,13 @@ public class HomeOfficeUploadAddendumEvidencePersonalisationTest {
     public void setUp() {
         when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
-        homeOfficeUploadAddendumEvidencePersonalisation = new HomeOfficeUploadAddendumEvidencePersonalisation(templateId, personalisationProvider, emailAddressFinder);
+        homeOfficeUploadAddendumEvidencePersonalisation = new HomeOfficeUploadAddendumEvidencePersonalisation(
+            templateId,
+            iaExUiFrontendUrl,
+            personalisationProvider,
+            emailAddressFinder,
+            customerServicesProvider
+        );
     }
 
     @Test
@@ -91,15 +94,14 @@ public class HomeOfficeUploadAddendumEvidencePersonalisationTest {
     private Map<String, String> getPersonalisationForHomeOffice() {
         return ImmutableMap
             .<String, String>builder()
-            .put("hmctsReference", hmctsReference)
-            .put("legalRepReference", legalRepReference)
+            .put("appealReferenceNumber", appealReferenceNumber)
+            .put("ariaListingReference", ariaListingReference)
             .put("homeOfficeReference", homeOfficeReference)
-            .put("listingReference", listingReference)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
-
-
 }
 

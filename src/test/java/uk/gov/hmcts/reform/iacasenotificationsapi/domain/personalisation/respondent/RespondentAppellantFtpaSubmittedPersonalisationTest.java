@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,16 +25,28 @@ public class RespondentAppellantFtpaSubmittedPersonalisationTest {
     @Mock PersonalisationProvider personalisationProvider;
     @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String tempalteId = "templateId";
+    private String iaExUiFrontendUrl = "http://localhost";
     private String respondentEmailAddress = "respondent@example.com";
+    private String ariaListingReference = "someAriaListingReference";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
 
     private RespondentAppellantFtpaSubmittedPersonalisation respondentAppellantFtpaSubmittedPersonalisation;
 
     @Before
     public void setup() {
-        respondentAppellantFtpaSubmittedPersonalisation = new RespondentAppellantFtpaSubmittedPersonalisation(tempalteId, personalisationProvider, respondentEmailAddress);
+
+        respondentAppellantFtpaSubmittedPersonalisation = new RespondentAppellantFtpaSubmittedPersonalisation(
+            tempalteId,
+            iaExUiFrontendUrl,
+            personalisationProvider,
+            respondentEmailAddress,
+            customerServicesProvider
+        );
     }
 
     @Test
@@ -76,10 +89,12 @@ public class RespondentAppellantFtpaSubmittedPersonalisationTest {
         return ImmutableMap
             .<String, String>builder()
             .put("appealReferenceNumber", "PA/12345/001")
-            .put("legalRepReferenceNumber", "CASE001")
+            .put("ariaListingReference", ariaListingReference)
             .put("homeOfficeReference", "A1234567")
             .put("appellantGivenNames", "Talha")
             .put("appellantFamilyName", "Awan")
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
 }

@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseof
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -17,15 +18,18 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class CaseOfficerSubmittedHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
     private final String submittedHearingRequirementsCaseOfficerTemplateId;
+    private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerSubmittedHearingRequirementsPersonalisation(
         @Value("${govnotify.template.submittedHearingRequirements.caseOfficer.email}") String submittedHearingRequirementsCaseOfficerTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
         EmailAddressFinder emailAddressFinder
     ) {
         this.submittedHearingRequirementsCaseOfficerTemplateId = submittedHearingRequirementsCaseOfficerTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
     }
@@ -36,14 +40,6 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisation implements E
     }
 
     @Override
-    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
-        requireNonNull(callback, "callback must not be null");
-
-        return personalisationProvider.getPersonalisation(callback);
-
-    }
-
-    @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
         return Collections.singleton(emailAddressFinder.getEmailAddress(asylumCase));
     }
@@ -51,5 +47,17 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisation implements E
     @Override
     public String getTemplateId() {
         return submittedHearingRequirementsCaseOfficerTemplateId;
+    }
+
+    @Override
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+            .<String, String>builder()
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .putAll(personalisationProvider.getPersonalisation(callback));
+
+        return listCaseFields.build();
     }
 }

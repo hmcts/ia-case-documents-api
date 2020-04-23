@@ -16,25 +16,34 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
 public class HomeOfficeAppealExitedOnlinePersonalisation implements EmailNotificationPersonalisation {
+
     private final String appealExitedOnlineBeforeListingTemplateId;
     private final String appealExitedOnlineAfterListingTemplateId;
+    private final String iaExUiFrontendUrl;
     private EmailAddressFinder emailAddressFinder;
     private final String homeOfficeEmailAddresses;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public HomeOfficeAppealExitedOnlinePersonalisation(
         @NotNull(message = "appealExitedOnlineBeforeListingHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineBeforeListing.homeOffice.email}") String appealExitedOnlineBeforeListingTemplateId,
         @NotNull(message = "appealExitedOnlineAfterListingHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineAfterListing.homeOffice.email}") String appealExitedOnlineAfterListingTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         @NotNull(message = "home_office email cannot be null") @Value("${endAppealHomeOfficeEmailAddress}") String homeOfficeEmailAddresses,
-        EmailAddressFinder emailAddressFinder) {
+        EmailAddressFinder emailAddressFinder,
+        CustomerServicesProvider customerServicesProvider
+    ) {
         this.appealExitedOnlineBeforeListingTemplateId = appealExitedOnlineBeforeListingTemplateId;
         this.appealExitedOnlineAfterListingTemplateId = appealExitedOnlineAfterListingTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.homeOfficeEmailAddresses = homeOfficeEmailAddresses;
         this.emailAddressFinder = emailAddressFinder;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
@@ -63,25 +72,25 @@ public class HomeOfficeAppealExitedOnlinePersonalisation implements EmailNotific
 
         final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
             .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
             .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("linkToOnlineService", iaExUiFrontendUrl);
+
 
         PersonalisationProvider.buildHearingRequirementsFields(asylumCase, listCaseFields);
 
         return listCaseFields.build();
     }
 
-    public boolean isAppealListed(AsylumCase asylumCase) {
-
+    protected boolean isAppealListed(AsylumCase asylumCase) {
         final Optional<HearingCentre> appealListed = asylumCase
             .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
-        if (appealListed.isPresent()) {
-            return true;
-        }
-        return false;
+
+        return appealListed.isPresent();
     }
 }
 

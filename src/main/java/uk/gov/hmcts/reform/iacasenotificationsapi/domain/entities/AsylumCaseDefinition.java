@@ -128,7 +128,7 @@ public enum AsylumCaseDefinition {
         "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),
 
     SUBMISSION_OUT_OF_TIME(
-        "submissionOutOfTime", new TypeReference<YesOrNo>(){})
+        "submissionOutOfTime", new TypeReference<YesOrNo>(){}),
 
     ;
 

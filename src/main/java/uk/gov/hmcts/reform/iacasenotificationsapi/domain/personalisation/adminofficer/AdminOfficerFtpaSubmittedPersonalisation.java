@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.admino
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -16,24 +17,20 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class AdminOfficerFtpaSubmittedPersonalisation implements EmailNotificationPersonalisation {
 
     private final String applyForFtpaTemplateId;
+    private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final String adminOfficerEmailAddress;
 
     public AdminOfficerFtpaSubmittedPersonalisation(
         @Value("${govnotify.template.applyForFtpa.adminOfficer.email}") String applyForFtpaTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
         @Value("${ftpaSubmitted.ctscAdminEmailAddress}")String adminOfficerEmailAddress
     ) {
         this.applyForFtpaTemplateId = applyForFtpaTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.adminOfficerEmailAddress = adminOfficerEmailAddress;
-    }
-
-    @Override
-    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
-        requireNonNull(callback, "callback must not be null");
-
-        return personalisationProvider.getPersonalisation(callback);
     }
 
     @Override
@@ -50,5 +47,17 @@ public class AdminOfficerFtpaSubmittedPersonalisation implements EmailNotificati
     @Override
     public String getTemplateId() {
         return applyForFtpaTemplateId;
+    }
+
+    @Override
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+            .<String, String>builder()
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .putAll(personalisationProvider.getPersonalisation(callback));
+
+        return listCaseFields.build();
     }
 }

@@ -25,14 +25,20 @@ public class AdminOfficerFtpaSubmittedPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "ftpaSubmittedTemplateId";
+    private String iaExUiFrontendUrl = "http://localhost";
     private String adminOfficerEmailAddress = "adminOfficer@example.com";
+    private String ariaListingReference = "someAriaListingReference";
 
     private AdminOfficerFtpaSubmittedPersonalisation adminOfficerFtpaSubmittedPersonalisation;
 
     @Before
     public void setUp() {
 
-        adminOfficerFtpaSubmittedPersonalisation = new AdminOfficerFtpaSubmittedPersonalisation(templateId, personalisationProvider, adminOfficerEmailAddress);
+        adminOfficerFtpaSubmittedPersonalisation = new AdminOfficerFtpaSubmittedPersonalisation(
+            templateId,
+            iaExUiFrontendUrl,
+            personalisationProvider,
+            adminOfficerEmailAddress);
     }
 
     @Test
@@ -75,8 +81,7 @@ public class AdminOfficerFtpaSubmittedPersonalisationTest {
         return ImmutableMap
             .<String, String>builder()
             .put("appealReferenceNumber", "PA/12345/001")
-            .put("legalRepReferenceNumber", "CASE001")
-            .put("homeOfficeReference", "A1234567")
+            .put("ariaListingReference", ariaListingReference)
             .put("appellantGivenNames", "Talha")
             .put("appellantFamilyName", "Awan")
             .build();

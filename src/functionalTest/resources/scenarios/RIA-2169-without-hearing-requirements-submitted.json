@@ -33,7 +33,8 @@
         "subject": "Immigration and Asylum appeal: list case",
         "body": [
           "PA/12345/2019",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

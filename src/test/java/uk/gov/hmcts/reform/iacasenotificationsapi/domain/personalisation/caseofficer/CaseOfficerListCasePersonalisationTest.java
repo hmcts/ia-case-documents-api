@@ -4,10 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +30,7 @@ public class CaseOfficerListCasePersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
     private String hearingCentreAddress = "some hearing centre address";
@@ -42,6 +40,8 @@ public class CaseOfficerListCasePersonalisationTest {
 
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
+    private String appellantGivenNames = "someAppellantGivenNames";
+    private String appellantFamilyName = "someAppellantFamilyName";
 
     private CaseOfficerListCasePersonalisation caseOfficerListCasePersonalisation;
 
@@ -52,6 +52,8 @@ public class CaseOfficerListCasePersonalisationTest {
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDateTime));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
         when(hearingCentreEmailAddressMap.get(hearingCentre)).thenReturn(hearingCentreEmailAddress);
         when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreAddress));
@@ -60,6 +62,7 @@ public class CaseOfficerListCasePersonalisationTest {
 
         caseOfficerListCasePersonalisation = new CaseOfficerListCasePersonalisation(
             templateId,
+            iaExUiFrontendUrl,
             stringProvider,
             dateTimeExtractor,
             hearingCentreEmailAddressMap
@@ -112,11 +115,14 @@ public class CaseOfficerListCasePersonalisationTest {
 
         Map<String, String> personalisation = caseOfficerListCasePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(ariaListingReference, personalisation.get("Listing Ref Number"));
-        assertEquals(hearingDate, personalisation.get("Hearing Date"));
-        assertEquals(hearingTime, personalisation.get("Hearing Time"));
-        assertEquals(hearingCentreAddress, personalisation.get("Hearing Centre Address"));
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(hearingDate, personalisation.get("hearingDate"));
+        assertEquals(hearingTime, personalisation.get("hearingTime"));
+        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
     }
 
     @Test
@@ -124,14 +130,19 @@ public class CaseOfficerListCasePersonalisationTest {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> personalisation = caseOfficerListCasePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals("", personalisation.get("Appeal Ref Number"));
-        assertEquals("", personalisation.get("Listing Ref Number"));
-        assertEquals(hearingDate, personalisation.get("Hearing Date"));
-        assertEquals(hearingTime, personalisation.get("Hearing Time"));
-        assertEquals(hearingCentreAddress, personalisation.get("Hearing Centre Address"));
+        assertEquals("", personalisation.get("appealReferenceNumber"));
+        assertEquals("", personalisation.get("ariaListingReference"));
+        assertEquals("", personalisation.get("appellantGivenNames"));
+        assertEquals("", personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(hearingDate, personalisation.get("hearingDate"));
+        assertEquals(hearingTime, personalisation.get("hearingTime"));
+        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
     }
 
     @Test

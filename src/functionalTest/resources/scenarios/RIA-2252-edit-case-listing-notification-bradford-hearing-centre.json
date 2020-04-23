@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2252: Send case re-listed notification to Home Office (Bradford hearing centre) and legal rep when no change",
+  "description": "RIA-2252 Send case re-listed notification to Home Office (Bradford hearing centre) and legal rep when no change",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "bradford",
           "listCaseHearingDate": "2019-05-03T13:30:15.000",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
@@ -18,6 +19,7 @@
       "caseDataBefore": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "bradford",
           "listCaseHearingDate": "2019-05-03T13:30:15.000",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
@@ -53,9 +55,10 @@
         "subject": "Immigration and Asylum appeal: change to Hearing requirements",
         "body": [
           "PA/12345/2019",
-          "Listing reference:",
+          "LP/12345/2019",
           "CASE001",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Bradford",
           "3 May 2019",
           "3 May 2019",
@@ -65,7 +68,9 @@
           "No multimedia equipment is being provided",
           "The court will not be single sex",
           "The hearing will be held in public court",
-          "No other adjustments are being made"
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -74,9 +79,10 @@
         "subject": "Immigration and Asylum appeal: change to Hearing requirements",
         "body": [
           "PA/12345/2019",
-          "Listing reference:",
+          "LP/12345/2019",
           "A1234567",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Bradford",
           "3 May 2019",
           "3 May 2019",
@@ -86,7 +92,9 @@
           "No multimedia equipment is being provided",
           "The court will not be single sex",
           "The hearing will be held in public court",
-          "No other adjustments are being made"
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

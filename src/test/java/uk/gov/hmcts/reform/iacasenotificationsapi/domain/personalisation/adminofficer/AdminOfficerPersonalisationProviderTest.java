@@ -10,18 +10,20 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
-
-
 @RunWith(MockitoJUnitRunner.class)
 public class AdminOfficerPersonalisationProviderTest {
 
     @Mock AsylumCase asylumCase;
+
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     @Before
     public void setUp() {
 
-        adminOfficerPersonalisationProvider = new AdminOfficerPersonalisationProvider();
+        adminOfficerPersonalisationProvider = new AdminOfficerPersonalisationProvider(
+            iaExUiFrontendUrl
+        );
     }
 
     @Test

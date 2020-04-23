@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
@@ -24,21 +23,16 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class CaseOfficerUploadAddendumEvidencePersonalisationTest {
 
     @Mock Callback<AsylumCase> callback;
-    @Mock CaseDetails<AsylumCase> caseDetails;
     @Mock AsylumCase asylumCase;
-
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://localhost";
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
-
-    private String hmctsReference = "hmctsReference";
-    private String legalRepReference = "legalRepresentativeReference";
-    private String homeOfficeReference = "homeOfficeReference";
-    private String listingReference = "listingReference";
+    private String appealReferenceNumber = "hmctsReference";
+    private String ariaListingReference = "someAriaListingReference";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
 
@@ -48,7 +42,12 @@ public class CaseOfficerUploadAddendumEvidencePersonalisationTest {
     public void setUp() {
         when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
-        caseOfficerUploadAddendumEvidencePersonalisation = new CaseOfficerUploadAddendumEvidencePersonalisation(templateId, personalisationProvider, emailAddressFinder);
+        caseOfficerUploadAddendumEvidencePersonalisation = new CaseOfficerUploadAddendumEvidencePersonalisation(
+            templateId,
+            iaExUiFrontendUrl,
+            personalisationProvider,
+            emailAddressFinder
+        );
     }
 
     @Test
@@ -86,14 +85,11 @@ public class CaseOfficerUploadAddendumEvidencePersonalisationTest {
     private Map<String, String> getPersonalisationForCaseOfficer() {
         return ImmutableMap
             .<String, String>builder()
-            .put("hmctsReference", hmctsReference)
-            .put("legalRepReference", legalRepReference)
-            .put("homeOfficeReference", homeOfficeReference)
-            .put("listingReference", listingReference)
+            .put("appealReferenceNumber", appealReferenceNumber)
+            .put("ariaListingReference", ariaListingReference)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
             .build();
     }
-
 }
 

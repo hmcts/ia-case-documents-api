@@ -2,37 +2,51 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeof
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
 public class HomeOfficeUploadAdditionalEvidencePersonalisation implements EmailNotificationPersonalisation {
 
-    private final String homeOfficeUploadedAdditionalEvidenceTemplateId;
+    private final String homeOfficeUploadedAdditionalEvidenceBeforeListingTemplateId;
+    private final String homeOfficeUploadedAdditionalEvidenceAfterListingTemplateId;
+    private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final String homeOfficeEmailAddress;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public HomeOfficeUploadAdditionalEvidencePersonalisation(
-        @Value("${govnotify.template.uploadedAdditionalEvidence.homeOffice.email}") String homeOfficeUploadedAdditionalEvidenceTemplateId,
+        @Value("${govnotify.template.uploadedAdditionalEvidenceBeforeListing.homeOffice.email}") String homeOfficeUploadedAdditionalEvidenceBeforeListingTemplateId,
+        @Value("${govnotify.template.uploadedAdditionalEvidenceAfterListing.homeOffice.email}") String homeOfficeUploadedAdditionalEvidenceAfterListingTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
-        @Value("${respondentEmailAddresses.respondentReviewDirection}") String homeOfficeEmailAddress
+        @Value("${respondentEmailAddresses.respondentReviewDirection}") String homeOfficeEmailAddress,
+        CustomerServicesProvider customerServicesProvider
     ) {
-        this.homeOfficeUploadedAdditionalEvidenceTemplateId = homeOfficeUploadedAdditionalEvidenceTemplateId;
+        this.homeOfficeUploadedAdditionalEvidenceBeforeListingTemplateId = homeOfficeUploadedAdditionalEvidenceBeforeListingTemplateId;
+        this.homeOfficeUploadedAdditionalEvidenceAfterListingTemplateId = homeOfficeUploadedAdditionalEvidenceAfterListingTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.homeOfficeEmailAddress = homeOfficeEmailAddress;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
-
     @Override
-    public String getTemplateId() {
-        return homeOfficeUploadedAdditionalEvidenceTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return isAppealListed(asylumCase)
+            ? homeOfficeUploadedAdditionalEvidenceAfterListingTemplateId : homeOfficeUploadedAdditionalEvidenceBeforeListingTemplateId;
     }
 
     @Override
@@ -49,7 +63,20 @@ public class HomeOfficeUploadAdditionalEvidencePersonalisation implements EmailN
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
 
-        return personalisationProvider.getPersonalisation(callback);
+        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .putAll(personalisationProvider.getPersonalisation(callback));
+
+        return listCaseFields.build();
+    }
+
+    protected boolean isAppealListed(AsylumCase asylumCase) {
+        final Optional<HearingCentre> appealListed = asylumCase
+            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+
+        return appealListed.isPresent();
     }
 }
 

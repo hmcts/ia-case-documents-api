@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -27,23 +27,28 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
     private String appealReferenceNumber = "someReferenceNumber";
+    private String appellantGivenNames = "someAppellantGivenNames";
+    private String appellantFamilyName = "someAppellantFamilyName";
 
     private CaseOfficerRespondentEvidenceSubmittedPersonalisation caseOfficerRespondentEvidenceSubmittedPersonalisation;
 
     @Before
     public void setUp() {
-        when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
+        when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
         caseOfficerRespondentEvidenceSubmittedPersonalisation =
             new CaseOfficerRespondentEvidenceSubmittedPersonalisation(
                 templateId,
+                iaExUiFrontendUrl,
                 emailAddressFinder
             );
-
     }
 
     @Test
@@ -61,7 +66,6 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisationTest {
         assertTrue(hearingCentreEmailAddress, caseOfficerRespondentEvidenceSubmittedPersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
     }
 
-
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
@@ -77,6 +81,9 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisationTest {
             ImmutableMap
                 .<String, String>builder()
                 .put("appealReferenceNumber", appealReferenceNumber)
+                .put("appellantGivenNames", appellantGivenNames)
+                .put("appellantFamilyName", appellantFamilyName)
+                .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build();
 
         Map<String, String> actualPersonalisation = caseOfficerRespondentEvidenceSubmittedPersonalisation.getPersonalisation(asylumCase);
@@ -91,9 +98,14 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisationTest {
             ImmutableMap
                 .<String, String>builder()
                 .put("appealReferenceNumber", "")
+                .put("appellantGivenNames", "")
+                .put("appellantFamilyName", "")
+                .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build();
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> actualPersonalisation = caseOfficerRespondentEvidenceSubmittedPersonalisation.getPersonalisation(asylumCase);
 

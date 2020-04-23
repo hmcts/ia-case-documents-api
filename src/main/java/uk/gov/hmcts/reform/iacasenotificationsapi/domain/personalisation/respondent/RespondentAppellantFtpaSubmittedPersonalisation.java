@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respon
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -10,23 +11,30 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
 public class RespondentAppellantFtpaSubmittedPersonalisation implements EmailNotificationPersonalisation {
 
-    private final PersonalisationProvider personalisationProvider;
     private final String applyForFtpaTemplateId;
+    private final String iaExUiFrontendUrl;
     private final String respondentEmailAddress;
+    private final PersonalisationProvider personalisationProvider;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public RespondentAppellantFtpaSubmittedPersonalisation(
-        @Value("${govnotify.template.applyForFtpa.other.email}") String applyForFtpaTemplateId,
+        @Value("${govnotify.template.applyForFtpa.otherHomeOffice.email}") String applyForFtpaTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
-        @Value("${ftpaSubmitted.respondentEmailAddress}") String respondentEmailAddress
+        @Value("${ftpaSubmitted.respondentEmailAddress}") String respondentEmailAddress,
+        CustomerServicesProvider customerServicesProvider
     ) {
         this.applyForFtpaTemplateId = applyForFtpaTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.respondentEmailAddress = respondentEmailAddress;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
@@ -40,14 +48,20 @@ public class RespondentAppellantFtpaSubmittedPersonalisation implements EmailNot
     }
 
     @Override
-    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
-        requireNonNull(callback, "callback must not be null");
-
-        return personalisationProvider.getPersonalisation(callback);
+    public String getTemplateId() {
+        return applyForFtpaTemplateId;
     }
 
     @Override
-    public String getTemplateId() {
-        return applyForFtpaTemplateId;
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .putAll(personalisationProvider.getPersonalisation(callback));
+
+        return listCaseFields.build();
     }
 }

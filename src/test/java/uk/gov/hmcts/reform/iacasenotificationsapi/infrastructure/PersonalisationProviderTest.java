@@ -125,11 +125,11 @@ public class PersonalisationProviderTest {
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
-        assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(requirementsVulnerabilities);
-        assertThat(personalisation.get("Hearing Requirement Multimedia")).isEqualTo(requirementsMultimedia);
-        assertThat(personalisation.get("Hearing Requirement Single Sex Court")).isEqualTo(requirementsSingleSexCourt);
-        assertThat(personalisation.get("Hearing Requirement In Camera Court")).isEqualTo(requirementsInCamera);
-        assertThat(personalisation.get("Hearing Requirement Other")).isEqualTo(requirementsOther);
+        assertThat(personalisation.get("hearingRequirementVulnerabilities")).isEqualTo(requirementsVulnerabilities);
+        assertThat(personalisation.get("hearingRequirementMultimedia")).isEqualTo(requirementsMultimedia);
+        assertThat(personalisation.get("hearingRequirementSingleSexCourt")).isEqualTo(requirementsSingleSexCourt);
+        assertThat(personalisation.get("hearingRequirementInCameraCourt")).isEqualTo(requirementsInCamera);
+        assertThat(personalisation.get("hearingRequirementOther")).isEqualTo(requirementsOther);
     }
 
     @Test
@@ -140,11 +140,11 @@ public class PersonalisationProviderTest {
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
-        assertThat(personalisation.get("Hearing Requirement Vulnerabilities")).isEqualTo(caseOfficerReviewedVulnerabilities);
-        assertThat(personalisation.get("Hearing Requirement Multimedia")).isEqualTo(caseOfficerReviewedMultimedia);
-        assertThat(personalisation.get("Hearing Requirement Single Sex Court")).isEqualTo(caseOfficerReviewedSingleSexCourt);
-        assertThat(personalisation.get("Hearing Requirement In Camera Court")).isEqualTo(caseOfficerReviewedInCamera);
-        assertThat(personalisation.get("Hearing Requirement Other")).isEqualTo(caseOfficerReviewedOther);
+        assertThat(personalisation.get("hearingRequirementVulnerabilities")).isEqualTo(caseOfficerReviewedVulnerabilities);
+        assertThat(personalisation.get("hearingRequirementMultimedia")).isEqualTo(caseOfficerReviewedMultimedia);
+        assertThat(personalisation.get("hearingRequirementSingleSexCourt")).isEqualTo(caseOfficerReviewedSingleSexCourt);
+        assertThat(personalisation.get("hearingRequirementInCameraCourt")).isEqualTo(caseOfficerReviewedInCamera);
+        assertThat(personalisation.get("hearingRequirementOther")).isEqualTo(caseOfficerReviewedOther);
     }
 
     @Test

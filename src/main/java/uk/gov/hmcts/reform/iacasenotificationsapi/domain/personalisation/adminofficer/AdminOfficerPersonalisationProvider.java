@@ -5,13 +5,21 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
 
 import com.google.common.collect.ImmutableMap;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 
-
 @Service
 public class AdminOfficerPersonalisationProvider {
+
+    private final String iaExUiFrontendUrl;
+
+    public AdminOfficerPersonalisationProvider(
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl
+    ) {
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
+    }
 
     public ImmutableMap<String, String> getDefaultPersonlisation(AsylumCase asylumCase) {
         return ImmutableMap
@@ -19,6 +27,7 @@ public class AdminOfficerPersonalisationProvider {
             .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("linkToOnlineService", iaExUiFrontendUrl)
             .build();
     }
 

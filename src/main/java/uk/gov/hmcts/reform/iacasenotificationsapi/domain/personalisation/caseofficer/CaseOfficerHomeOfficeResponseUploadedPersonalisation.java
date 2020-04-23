@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -19,13 +19,16 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 public class CaseOfficerHomeOfficeResponseUploadedPersonalisation implements EmailNotificationPersonalisation {
 
     private final String homeOfficeResponseUploadedTemplateId;
+    private final String iaExUiFrontendUrl;
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public CaseOfficerHomeOfficeResponseUploadedPersonalisation(
         @Value("${govnotify.template.homeOfficeResponseUploaded.caseOfficer.email}") String homeOfficeResponseUploadedTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         Map<HearingCentre, String> hearingCentreEmailAddresses
     ) {
         this.homeOfficeResponseUploadedTemplateId = homeOfficeResponseUploadedTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
     }
 
@@ -57,6 +60,9 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisation implements Ema
             ImmutableMap
                 .<String, String>builder()
                 .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build();
     }
 }

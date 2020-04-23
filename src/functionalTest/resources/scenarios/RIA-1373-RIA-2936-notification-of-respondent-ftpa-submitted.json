@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1373 Notification of respondent ftpa application submitted",
+  "description": "RIA-1373-RIA-2936 Notification of respondent ftpa application submitted",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficePOU",
@@ -8,7 +8,10 @@
       "eventId": "applyForFTPARespondent",
       "state": "ftpaSubmitted",
       "caseData": {
-        "template": "minimal-appeal-submitted.json"
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019"
+        }
       }
     }
   },
@@ -41,9 +44,12 @@
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",
-          "CASE001",
+          "LP/12345/2019",
           "A1234567",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -52,9 +58,9 @@
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",
-          "CASE001",
-          "A1234567",
-          "Talha Awan"
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       },
       {
@@ -63,9 +69,12 @@
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "CASE001",
-          "A1234567",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

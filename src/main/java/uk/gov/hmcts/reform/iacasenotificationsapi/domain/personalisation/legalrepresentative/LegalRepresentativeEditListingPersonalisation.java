@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
@@ -18,13 +20,17 @@ public class LegalRepresentativeEditListingPersonalisation implements EmailNotif
 
     private final String legalRepresentativeCaseEditedTemplateId;
     private final PersonalisationProvider personalisationProvider;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeEditListingPersonalisation(
         @Value("${govnotify.template.caseEdited.legalRep.email}") String legalRepresentativeCaseEditedTemplateId,
-        PersonalisationProvider personalisationProvider
+        PersonalisationProvider personalisationProvider,
+        CustomerServicesProvider customerServicesProvider
     ) {
         this.legalRepresentativeCaseEditedTemplateId = legalRepresentativeCaseEditedTemplateId;
         this.personalisationProvider = personalisationProvider;
+        this.customerServicesProvider = customerServicesProvider;
+
     }
 
     @Override
@@ -48,6 +54,11 @@ public class LegalRepresentativeEditListingPersonalisation implements EmailNotif
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
 
-        return personalisationProvider.getPersonalisation(callback);
+        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .putAll(personalisationProvider.getPersonalisation(callback));
+
+        return listCaseFields.build();
     }
 }

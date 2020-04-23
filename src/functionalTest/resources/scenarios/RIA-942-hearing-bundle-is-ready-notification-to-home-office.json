@@ -42,23 +42,29 @@
       {
         "reference": "942_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
         "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: Hearing bundle is ready",
+        "subject": "Immigration and Asylum appeal: hearing bundle is ready",
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
           "A1234567",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
         "reference": "942_HEARING_BUNDLE_IS_READY_LEGAL_REP",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: Hearing bundle is ready",
+        "subject": "Immigration and Asylum appeal: hearing bundle is ready",
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
           "REF54321",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

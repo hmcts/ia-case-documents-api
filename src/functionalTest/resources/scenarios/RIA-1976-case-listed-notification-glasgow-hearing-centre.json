@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "glasgow",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
@@ -49,7 +50,9 @@
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
           "PA/12345/2019",
-          "Listing reference:",
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "3 May 2019",
           "14:25",
           "IAC Glasgow, 4th Floor, Eagle Building, 215 Bothwell Street, Glasgow, G2 7EZ"
@@ -61,9 +64,10 @@
         "subject": "Immigration and Asylum appeal: check the details of your hearing",
         "body": [
           "PA/12345/2019",
-          "Listing reference:",
+          "LP/12345/2019",
           "CASE001",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "3 May 2019",
           "14:25",
           "IAC Glasgow, 4th Floor, Eagle Building, 215 Bothwell Street, Glasgow, G2 7EZ",
@@ -71,7 +75,9 @@
           "No multimedia equipment is being provided",
           "The court will not be single sex",
           "The hearing will be held in public court",
-          "No other adjustments are being made"
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -80,9 +86,10 @@
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
           "PA/12345/2019",
-          "Listing reference:",
+          "LP/12345/2019",
           "A1234567",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "3 May 2019",
           "14:25",
           "IAC Glasgow, 4th Floor, Eagle Building, 215 Bothwell Street, Glasgow, G2 7EZ",
@@ -90,7 +97,9 @@
           "No multimedia equipment is being provided",
           "The court will not be single sex",
           "The hearing will be held in public court",
-          "No other adjustments are being made"
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

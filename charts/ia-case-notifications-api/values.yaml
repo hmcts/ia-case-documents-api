@@ -41,6 +41,8 @@ java:
         - admin-officer-review-hearing-requirements-email
         - ctsc-admin-ftpa-submitted-email
         - respondent-ftpa-submitted-email
+        - customer-services-telephone
+        - customer-services-email
         - system-username
         - system-password
         - idam-client-id

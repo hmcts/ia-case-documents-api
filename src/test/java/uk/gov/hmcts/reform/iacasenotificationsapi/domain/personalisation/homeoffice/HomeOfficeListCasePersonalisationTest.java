@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,10 +27,11 @@ public class HomeOfficeListCasePersonalisationTest {
     @Mock StringProvider stringProvider;
     @Mock DateTimeExtractor dateTimeExtractor;
     @Mock Map<HearingCentre, String> homeOfficeEmailAddressMap;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://somefrontendurl";
     private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private String homeOfficeEmailAddress = "homeoffice@example.com";
     private String hearingCentreAddress = "some hearing centre address";
@@ -55,6 +57,9 @@ public class HomeOfficeListCasePersonalisationTest {
     private String caseOfficerReviewedSingleSexCourt = "someCaseOfficerReviewedSingleSexCourt";
     private String caseOfficerReviewedInCamera = "someCaseOfficerReviewedInCamera";
     private String caseOfficerReviewedOther = "someCaseOfficerReviewedOther";
+
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
 
     private HomeOfficeListCasePersonalisation homeOfficeListCasePersonalisation;
 
@@ -87,11 +92,16 @@ public class HomeOfficeListCasePersonalisationTest {
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
         when(dateTimeExtractor.extractHearingTime(hearingDateTime)).thenReturn(hearingTime);
 
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+
         homeOfficeListCasePersonalisation = new HomeOfficeListCasePersonalisation(
             templateId,
+            iaExUiFrontendUrl,
             stringProvider,
             dateTimeExtractor,
-            homeOfficeEmailAddressMap
+            homeOfficeEmailAddressMap,
+            customerServicesProvider
         );
     }
 
@@ -141,19 +151,22 @@ public class HomeOfficeListCasePersonalisationTest {
 
         Map<String, String> personalisation = homeOfficeListCasePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(ariaListingReference, personalisation.get("Listing Ref Number"));
-        assertEquals(homeOfficeRefNumber, personalisation.get("Home Office Ref Number"));
-        assertEquals(appellantGivenNames, personalisation.get("Appellant Given Names"));
-        assertEquals(appellantFamilyName, personalisation.get("Appellant Family Name"));
-        assertEquals(requirementsVulnerabilities, personalisation.get("Hearing Requirement Vulnerabilities"));
-        assertEquals(requirementsMultimedia, personalisation.get("Hearing Requirement Multimedia"));
-        assertEquals(requirementsSingleSexCourt, personalisation.get("Hearing Requirement Single Sex Court"));
-        assertEquals(requirementsInCamera, personalisation.get("Hearing Requirement In Camera Court"));
-        assertEquals(requirementsOther, personalisation.get("Hearing Requirement Other"));
-        assertEquals(hearingDate, personalisation.get("Hearing Date"));
-        assertEquals(hearingTime, personalisation.get("Hearing Time"));
-        assertEquals(hearingCentreAddress, personalisation.get("Hearing Centre Address"));
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
+        assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(requirementsVulnerabilities, personalisation.get("hearingRequirementVulnerabilities"));
+        assertEquals(requirementsMultimedia, personalisation.get("hearingRequirementMultimedia"));
+        assertEquals(requirementsSingleSexCourt, personalisation.get("hearingRequirementSingleSexCourt"));
+        assertEquals(requirementsInCamera, personalisation.get("hearingRequirementInCameraCourt"));
+        assertEquals(requirementsOther, personalisation.get("hearingRequirementOther"));
+        assertEquals(hearingDate, personalisation.get("hearingDate"));
+        assertEquals(hearingTime, personalisation.get("hearingTime"));
+        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -162,19 +175,22 @@ public class HomeOfficeListCasePersonalisationTest {
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
         Map<String, String> personalisation = homeOfficeListCasePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(ariaListingReference, personalisation.get("Listing Ref Number"));
-        assertEquals(homeOfficeRefNumber, personalisation.get("Home Office Ref Number"));
-        assertEquals(appellantGivenNames, personalisation.get("Appellant Given Names"));
-        assertEquals(appellantFamilyName, personalisation.get("Appellant Family Name"));
-        assertEquals(caseOfficerReviewedVulnerabilities, personalisation.get("Hearing Requirement Vulnerabilities"));
-        assertEquals(caseOfficerReviewedMultimedia, personalisation.get("Hearing Requirement Multimedia"));
-        assertEquals(caseOfficerReviewedSingleSexCourt, personalisation.get("Hearing Requirement Single Sex Court"));
-        assertEquals(caseOfficerReviewedInCamera, personalisation.get("Hearing Requirement In Camera Court"));
-        assertEquals(caseOfficerReviewedOther, personalisation.get("Hearing Requirement Other"));
-        assertEquals(hearingDate, personalisation.get("Hearing Date"));
-        assertEquals(hearingTime, personalisation.get("Hearing Time"));
-        assertEquals(hearingCentreAddress, personalisation.get("Hearing Centre Address"));
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
+        assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(caseOfficerReviewedVulnerabilities, personalisation.get("hearingRequirementVulnerabilities"));
+        assertEquals(caseOfficerReviewedMultimedia, personalisation.get("hearingRequirementMultimedia"));
+        assertEquals(caseOfficerReviewedSingleSexCourt, personalisation.get("hearingRequirementSingleSexCourt"));
+        assertEquals(caseOfficerReviewedInCamera, personalisation.get("hearingRequirementInCameraCourt"));
+        assertEquals(caseOfficerReviewedOther, personalisation.get("hearingRequirementOther"));
+        assertEquals(hearingDate, personalisation.get("hearingDate"));
+        assertEquals(hearingTime, personalisation.get("hearingTime"));
+        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -194,19 +210,22 @@ public class HomeOfficeListCasePersonalisationTest {
 
         Map<String, String> personalisation = homeOfficeListCasePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals("", personalisation.get("Appeal Ref Number"));
-        assertEquals("", personalisation.get("Listing Ref Number"));
-        assertEquals("", personalisation.get("Home Office Ref Number"));
-        assertEquals("", personalisation.get("Appellant Given Names"));
-        assertEquals("", personalisation.get("Appellant Family Name"));
-        assertEquals("No special adjustments are being made to accommodate vulnerabilities", personalisation.get("Hearing Requirement Vulnerabilities"));
-        assertEquals("No multimedia equipment is being provided", personalisation.get("Hearing Requirement Multimedia"));
-        assertEquals("The court will not be single sex", personalisation.get("Hearing Requirement Single Sex Court"));
-        assertEquals("The hearing will be held in public court", personalisation.get("Hearing Requirement In Camera Court"));
-        assertEquals("No other adjustments are being made", personalisation.get("Hearing Requirement Other"));
-        assertEquals(hearingDate, personalisation.get("Hearing Date"));
-        assertEquals(hearingTime, personalisation.get("Hearing Time"));
-        assertEquals(hearingCentreAddress, personalisation.get("Hearing Centre Address"));
+        assertEquals("", personalisation.get("appealReferenceNumber"));
+        assertEquals("", personalisation.get("ariaListingReference"));
+        assertEquals("", personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals("", personalisation.get("appellantGivenNames"));
+        assertEquals("", personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals("No special adjustments are being made to accommodate vulnerabilities", personalisation.get("hearingRequirementVulnerabilities"));
+        assertEquals("No multimedia equipment is being provided", personalisation.get("hearingRequirementMultimedia"));
+        assertEquals("The court will not be single sex", personalisation.get("hearingRequirementSingleSexCourt"));
+        assertEquals("The hearing will be held in public court", personalisation.get("hearingRequirementInCameraCourt"));
+        assertEquals("No other adjustments are being made", personalisation.get("hearingRequirementOther"));
+        assertEquals(hearingDate, personalisation.get("hearingDate"));
+        assertEquals(hearingTime, personalisation.get("hearingTime"));
+        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test

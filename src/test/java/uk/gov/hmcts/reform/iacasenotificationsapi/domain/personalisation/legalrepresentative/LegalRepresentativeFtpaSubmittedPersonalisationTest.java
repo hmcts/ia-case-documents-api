@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,10 +25,15 @@ public class LegalRepresentativeFtpaSubmittedPersonalisationTest {
     @Mock PersonalisationProvider personalisationProvider;
     @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "ftpaSumbittedTemplateId";
+    private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalrep@example.com";
+    private String ariaListingReference = "someAriaListingReference";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
 
     private LegalRepresentativeFtpaSubmittedPersonalisation legalRepresentativeFtpaSubmittedPersonalisation;
 
@@ -35,7 +41,13 @@ public class LegalRepresentativeFtpaSubmittedPersonalisationTest {
     public void setUp() {
 
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
-        legalRepresentativeFtpaSubmittedPersonalisation = new LegalRepresentativeFtpaSubmittedPersonalisation(templateId, personalisationProvider);
+
+        legalRepresentativeFtpaSubmittedPersonalisation = new LegalRepresentativeFtpaSubmittedPersonalisation(
+            templateId,
+            iaExUiFrontendUrl,
+            personalisationProvider,
+            customerServicesProvider
+        );
     }
 
     @Test
@@ -87,10 +99,12 @@ public class LegalRepresentativeFtpaSubmittedPersonalisationTest {
         return ImmutableMap
             .<String, String>builder()
             .put("appealReferenceNumber", "PA/12345/001")
+            .put("ariaListingReference", ariaListingReference)
             .put("legalRepReferenceNumber", "CASE001")
-            .put("homeOfficeReference", "A1234567")
             .put("appellantGivenNames", "Talha")
             .put("appellantFamilyName", "Awan")
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
 }

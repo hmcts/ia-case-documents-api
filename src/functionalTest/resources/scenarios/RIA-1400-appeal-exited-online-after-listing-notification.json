@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1400 appeal exited online after listing notification to Home Office and legal representative",
+  "description": "RIA-1400 appeal exited online notification to Home Office and legal representative (after listing)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -50,7 +50,10 @@
           "PA/12345/2019",
           "LP/12345/2019",
           "A1234567",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -61,7 +64,10 @@
           "PA/12345/2019",
           "REF54321",
           "LP/12345/2019",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

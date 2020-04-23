@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -24,31 +25,36 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
 
     @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
-
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalrep@something.com";
-
     private String appealReferenceNumber = "someReferenceNumber";
     private String legalRepReferenceNumber = "legalRepReferenceNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
 
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
+
     private LegalRepresentativeSubmittedHearingRequirementsPersonalisation legalRepresentativeSubmittedHearingRequirementsPersonalisation;
 
     @Before
     public void setUp() {
+
         when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
 
         legalRepresentativeSubmittedHearingRequirementsPersonalisation =
             new LegalRepresentativeSubmittedHearingRequirementsPersonalisation(
                 templateId,
+                iaExUiFrontendUrl,
                 personalisationProvider,
-                emailAddressFinder
+                emailAddressFinder,
+                customerServicesProvider
             );
     }
 
@@ -83,7 +89,6 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
             .hasMessage("callback must not be null");
     }
 
-
     private Map<String, String> getPersonalisation() {
         return ImmutableMap
             .<String, String>builder()
@@ -91,6 +96,8 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
             .put("legalRepReferenceNumber", legalRepReferenceNumber)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
 }

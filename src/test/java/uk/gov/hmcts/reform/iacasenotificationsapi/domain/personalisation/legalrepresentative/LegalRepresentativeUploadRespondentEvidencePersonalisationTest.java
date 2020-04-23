@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
@@ -28,6 +29,7 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock DirectionFinder directionFinder;
     @Mock Direction direction;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -42,6 +44,8 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
     private String legalRepRefNumber = "somelegalRepRefNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
 
     private LegalRepresentativeUploadRespondentEvidencePersonalisation legalRepresentativeUploadRespondentEvidencePersonalisation;
 
@@ -58,10 +62,14 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepRefNumber));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
 
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+
         legalRepresentativeUploadRespondentEvidencePersonalisation = new LegalRepresentativeUploadRespondentEvidencePersonalisation(
             templateId,
             iaExUiFrontendUrl,
-            directionFinder
+            directionFinder,
+            customerServicesProvider
         );
     }
 
@@ -109,6 +117,8 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
         assertEquals(directionExplanation, personalisation.get("Explanation"));
         assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
         assertEquals(legalRepRefNumber, personalisation.get("LR reference"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -128,6 +138,8 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
         assertEquals(directionExplanation, personalisation.get("Explanation"));
         assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
         assertEquals("", personalisation.get("LR reference"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -139,4 +151,5 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("build case direction is not present");
     }
+
 }

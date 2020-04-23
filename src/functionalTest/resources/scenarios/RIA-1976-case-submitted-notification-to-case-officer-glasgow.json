@@ -37,7 +37,8 @@
         "subject": "Immigration and Asylum appeal: Appeal Skeleton Argument submitted",
         "body": [
           "PA/12345/2019",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

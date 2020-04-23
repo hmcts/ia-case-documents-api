@@ -16,18 +16,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
 public class LegalRepresentativeHearingBundleReadyPersonalisation implements EmailNotificationPersonalisation {
 
 
     private final String hearingBundleReadyLegalRepTemplateId;
+    private final String iaExUiFrontendUrl;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeHearingBundleReadyPersonalisation(
-        @Value("${govnotify.template.hearingBundleReady.legalRep.email}") String hearingBundleReadyLegalRepTemplateId) {
+        @Value("${govnotify.template.hearingBundleReady.legalRep.email}") String hearingBundleReadyLegalRepTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+        CustomerServicesProvider customerServicesProvider
+    ) {
         this.hearingBundleReadyLegalRepTemplateId = hearingBundleReadyLegalRepTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
+        this.customerServicesProvider = customerServicesProvider;
     }
-
 
     @Override
     public String getTemplateId() {
@@ -52,11 +59,13 @@ public class LegalRepresentativeHearingBundleReadyPersonalisation implements Ema
 
         return ImmutableMap
             .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
             .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("linkToOnlineService", iaExUiFrontendUrl)
             .build();
     }
 }

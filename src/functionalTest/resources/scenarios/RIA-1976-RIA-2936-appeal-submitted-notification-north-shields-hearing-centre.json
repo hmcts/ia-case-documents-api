@@ -1,16 +1,16 @@
 {
-  "description": "RIA-1976 Send appeal submitted notification (IAC Hatton Cross)",
+  "description": "RIA-1976-RIA-2936 Send appeal submitted notification (IAC North Shields)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "id": 1007,
+      "id": 1005,
       "eventId": "submitAppeal",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "hattonCross"
+          "hearingCentre": "northShields"
         }
       }
     }
@@ -21,10 +21,10 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "hearingCentre": "hattonCross",
+        "hearingCentre": "northShields",
         "notificationsSent": [
           {
-            "id": "1007_APPEAL_SUBMITTED_CASE_OFFICER",
+            "id": "1005_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -32,9 +32,9 @@
     },
     "notifications": [
       {
-        "reference": "1007_APPEAL_SUBMITTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.hattonCross}",
-        "subject": "Asylum appeal: new appeal submitted",
+        "reference": "1005_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.northShields}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
           "PA/12345/2019",
           "Talha Awan",

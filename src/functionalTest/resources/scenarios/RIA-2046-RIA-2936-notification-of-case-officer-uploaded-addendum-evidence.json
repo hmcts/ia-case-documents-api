@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2046 Notification of case officer uploaded addendum evidence",
+  "description": "RIA-2046-RIA-2936 Notification of case officer uploaded addendum evidence",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "taylorHouse"
         }
       }
@@ -40,10 +41,12 @@
         "subject": "Immigration and Asylum appeal: addendum uploaded",
         "body": [
           "PA/12345/2019",
-          "CASE001",
+          "LP/12345/2019",
           "A1234567",
-          "N/A",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -52,10 +55,12 @@
         "subject": "Immigration and Asylum appeal: addendum uploaded",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "CASE001",
-          "A1234567",
-          "N/A",
-          "Talha Awan"
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]
