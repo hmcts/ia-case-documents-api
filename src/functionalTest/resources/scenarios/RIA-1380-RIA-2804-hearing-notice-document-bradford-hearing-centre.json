@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1380 Create hearing notice PDF (Bradford hearing centre)",
+  "description": "RIA-1380-RIA-2804 Create hearing notice PDF (Bradford hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -18,7 +18,9 @@
           "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
-          "ariaListingReference": "AA/12345/1234"
+          "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
         }
       }
     }
@@ -52,7 +54,9 @@
         "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
         "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
         "listCaseRequirementsOther": "something around Other",
-        "ariaListingReference": "AA/12345/1234"
+        "ariaListingReference": "AA/12345/1234",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

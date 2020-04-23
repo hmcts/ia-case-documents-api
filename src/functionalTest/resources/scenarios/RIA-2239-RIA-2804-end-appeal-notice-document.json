@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2239 generate end of appeal document PDF",
+  "description": "RIA-2239-RIA-2804 generate end of appeal document PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -14,7 +14,9 @@
           "endAppealOutcomeReason": "some reason",
           "endAppealApproverType": "Judge",
           "endAppealApproverName": "John Doe",
-          "endAppealDate": "2019-08-09"
+          "endAppealDate": "2019-08-09",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
         }
       }
     }
@@ -39,7 +41,9 @@
               "tag": "endAppeal"
             }
           }
-        ]
+        ],
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

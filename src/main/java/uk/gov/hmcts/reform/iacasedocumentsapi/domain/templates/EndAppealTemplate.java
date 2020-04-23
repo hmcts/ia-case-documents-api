@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
 public class EndAppealTemplate implements DocumentTemplate<AsylumCase> {
@@ -18,11 +19,14 @@ public class EndAppealTemplate implements DocumentTemplate<AsylumCase> {
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
 
     private final String templateName;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public EndAppealTemplate(
-        @Value("${endAppeal.templateName}") String templateName
+        @Value("${endAppeal.templateName}") String templateName,
+        CustomerServicesProvider customerServicesProvider
     ) {
         this.templateName = templateName;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     public String getName() {
@@ -48,6 +52,8 @@ public class EndAppealTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("reasonsOfOutcome", asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class).orElse(""));
         fieldValues.put("endAppealDate", formatDateForRendering(asylumCase.read(END_APPEAL_DATE, String.class).orElse("")));
         fieldValues.put("endAppealApprover", asylumCase.read(END_APPEAL_APPROVER_NAME, String.class).orElse(""));
+        fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
+        fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
 
         return fieldValues;
     }

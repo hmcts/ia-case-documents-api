@@ -81,6 +81,16 @@ data "azurerm_key_vault_secret" "s2s_microservice" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ia_customer_services_telephone" {
+  name      = "customer-services-telephone"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "ia_customer_services_email" {
+  name      = "customer-services-email"
+  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
+}
+
 data "azurerm_key_vault_secret" "em_stitching_enabled" {
   name      = "em-stitching-enabled"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -114,6 +124,9 @@ module "ia_case_documents_api" {
     WEBSITE_DNS_SERVER = "${data.azurerm_lb.consul_dns.private_ip_address}"
 
     IA_APPEAL_SUBMISSION_TEMPLATE = "${data.azurerm_key_vault_secret.appeal_submission_template.value}"
+
+    IA_CUSTOMER_SERVICES_EMAIL      = "${data.azurerm_key_vault_secret.ia_customer_services_email.value}"
+    IA_CUSTOMER_SERVICES_TELEPHONE  = "${data.azurerm_key_vault_secret.ia_customer_services_telephone.value}"
 
     IA_SYSTEM_USERNAME   = "${data.azurerm_key_vault_secret.system_username.value}"
     IA_SYSTEM_PASSWORD   = "${data.azurerm_key_vault_secret.system_password.value}"

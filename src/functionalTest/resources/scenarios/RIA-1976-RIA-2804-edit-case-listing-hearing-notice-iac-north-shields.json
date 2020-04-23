@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1380 edit case listing hearing notice PDF (Bradford hearing centre)",
+  "description": "RIA-1976-RIA-2804 edit case listing hearing notice PDF (IAC North Shields)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -9,7 +9,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "bradford",
+          "listCaseHearingCentre": "northShields",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
           "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -18,6 +18,8 @@
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
           "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
           "hearingDocuments": [
             {
               "id": "2",
@@ -38,7 +40,7 @@
       "caseDataBefore": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "bradford",
+          "listCaseHearingCentre": "northShields",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
           "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -47,6 +49,8 @@
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
           "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
           "hearingDocuments": [
             {
               "id": "1",
@@ -100,7 +104,7 @@
             }
           }
         ],
-        "listCaseHearingCentre": "bradford",
+        "listCaseHearingCentre": "northShields",
         "listCaseHearingLength": "60",
         "listCaseHearingDate": "2018-12-31T12:34:56",
         "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -108,7 +112,9 @@
         "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
         "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
         "listCaseRequirementsOther": "something around Other",
-        "ariaListingReference": "AA/12345/1234"
+        "ariaListingReference": "AA/12345/1234",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

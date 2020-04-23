@@ -8,6 +8,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.MANCHESTER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
@@ -30,6 +31,7 @@ public class DecisionAndReasonsTemplateTest {
 
     private String templateName = "decision-and-reasons-template.docx";
     private DecisionAndReasonsTemplate decisionAndReasonsTemplate;
+    private String currentYear;
 
     @Before
     public void setUp() {
@@ -63,6 +65,8 @@ public class DecisionAndReasonsTemplateTest {
 
         when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of("Manchester"));
 
+        currentYear = String.valueOf(LocalDate.now().getYear());
+
         decisionAndReasonsTemplate =
                 new DecisionAndReasonsTemplate(
                         templateName,
@@ -81,7 +85,7 @@ public class DecisionAndReasonsTemplateTest {
 
         Map<String, Object> templateFieldValues = decisionAndReasonsTemplate.mapFieldValues(caseDetails);
 
-        assertThat(templateFieldValues.size()).isEqualTo(20);
+        assertThat(templateFieldValues.size()).isEqualTo(21);
 
         assertThat(templateFieldValues.get("decisionsandreasons")).isEqualTo("[userImage:decisionsandreasons.png]");
         assertThat(templateFieldValues.get("appealReferenceNumber")).isEqualTo("some-appeal-ref");
@@ -109,6 +113,7 @@ public class DecisionAndReasonsTemplateTest {
         assertThat(templateFieldValues.get("appellantsDisputedScheduleOfIssuesDescription")).isEqualTo("some-disputed-schedule");
         assertThat(templateFieldValues.get("scheduleOfIssuesDisagreementDescription")).isEqualTo("some-schedule-disagreement");
 
+        assertThat(templateFieldValues.get("currentYear")).isEqualTo(currentYear);
     }
 
     @Test
@@ -131,7 +136,7 @@ public class DecisionAndReasonsTemplateTest {
 
         Map<String, Object> templateFieldValues = decisionAndReasonsTemplate.mapFieldValues(caseDetails);
 
-        assertThat(templateFieldValues.size()).isEqualTo(20);
+        assertThat(templateFieldValues.size()).isEqualTo(21);
 
         assertThat(templateFieldValues.get("decisionsandreasons")).isEqualTo("[userImage:decisionsandreasons.png]");
         assertThat(templateFieldValues.get("appealReferenceNumber")).isEqualTo("some-appeal-ref");
@@ -159,6 +164,7 @@ public class DecisionAndReasonsTemplateTest {
         assertThat(templateFieldValues.get("appellantsDisputedScheduleOfIssuesDescription")).isEqualTo("");
         assertThat(templateFieldValues.get("scheduleOfIssuesDisagreementDescription")).isEqualTo("");
 
+        assertThat(templateFieldValues.get("currentYear")).isEqualTo(currentYear);
     }
 
     @Test
@@ -200,5 +206,4 @@ public class DecisionAndReasonsTemplateTest {
                 .hasMessage("scheduleOfIssuesAgreement must be present")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
-
 }

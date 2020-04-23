@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,6 +28,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
     @Mock private AsylumCase asylumCase;
     @Mock private AsylumCase asylumCaseBefore;
+    @Mock private CustomerServicesProvider customerServicesProvider;
 
     private String appealReferenceNumber = "RP/11111/2020";
     private String appellantGivenNames = "Talha";
@@ -61,6 +63,9 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     private String expectedFormattedHattonCrossHearingCentreName = "Hatton Cross";
     private String expectedFormattedGlasgowHearingCentreName = "Glasgow";
 
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
+
     private HearingNoticeUpdatedTemplateProvider hearingNoticeUpdatedTemplateProvider;
 
     @Before
@@ -68,7 +73,8 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         hearingNoticeUpdatedTemplateProvider =
             new HearingNoticeUpdatedTemplateProvider(
-                stringProvider
+                stringProvider,
+                customerServicesProvider
             );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -95,6 +101,9 @@ public class HearingNoticeUpdatedTemplateProviderTest {
         when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDateBefore));
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         when(stringProvider.get("hearingCentreName", "taylorHouse")).thenReturn(Optional.of(expectedFormattedTaylorHouseHearingCentreName));
+
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
     }
 
 
@@ -103,7 +112,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
-        assertEquals(17, templateFieldValues.size());
+        assertEquals(19, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(expectedFormattedTaylorHouseHearingCentreName, templateFieldValues.get("oldHearingCentre"));
         assertEquals(expectedFormattedHearingDatePartBefore, templateFieldValues.get("oldHearingDate"));
@@ -121,6 +130,8 @@ public class HearingNoticeUpdatedTemplateProviderTest {
         assertEquals(inCamera, templateFieldValues.get("inCamera"));
         assertEquals(otherHearingRequest, templateFieldValues.get("otherHearingRequest"));
         assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -250,8 +261,9 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
-        assertEquals(17, templateFieldValues.size());
+        assertEquals(19, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals(expectedFormattedTaylorHouseHearingCentreName, templateFieldValues.get("oldHearingCentre"));
         assertEquals("", templateFieldValues.get("oldHearingDate"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
@@ -267,6 +279,8 @@ public class HearingNoticeUpdatedTemplateProviderTest {
         assertEquals("The hearing will be held in public court", templateFieldValues.get("inCamera"));
         assertEquals("No other adjustments are being made", templateFieldValues.get("otherHearingRequest"));
         assertEquals("", templateFieldValues.get("ariaListingReference"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Service
 public class HearingNoticeFieldMapper {
@@ -19,11 +20,14 @@ public class HearingNoticeFieldMapper {
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
     private final StringProvider stringProvider;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public HearingNoticeFieldMapper(
-        StringProvider stringProvider
+        StringProvider stringProvider,
+        CustomerServicesProvider customerServicesProvider
     ) {
         this.stringProvider = stringProvider;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     public Map<String, Object> mapFields(AsylumCase asylumCase) {
@@ -65,6 +69,8 @@ public class HearingNoticeFieldMapper {
             fieldValues.put("otherHearingRequest", asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class).orElse("No other adjustments are being made"));
         }
         fieldValues.put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
+        fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
+        fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
 
         return fieldValues;
     }

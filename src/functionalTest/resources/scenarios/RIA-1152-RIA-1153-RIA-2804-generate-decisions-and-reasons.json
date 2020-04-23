@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1152-1153-generate-decisions-and-reasons",
+  "description": "RIA-1152-1153-RIA-2804-generate-decisions-and-reasons",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -21,7 +21,8 @@
           "anonymityOrder": "Yes",
           "appellantsLegalRepresentatives": "Bill",
           "respondentsLegalRepresentatives": "Ted",
-          "listCaseHearingCentre": "taylorHouse"
+          "listCaseHearingCentre": "taylorHouse",
+          "currentYear": "{$YEAR}"
         }
       }
     }
@@ -47,7 +48,8 @@
               "dateUploaded": "{$TODAY}"
             }
           }
-        ]
+        ],
+        "currentYear": "{$YEAR}"
       }
     }
   }

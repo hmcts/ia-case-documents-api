@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2521 edit case listing hearing notice PDF (changed hearing date)",
+  "description": "RIA-1380-RIA-2804 edit case listing hearing notice PDF (Newport hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -18,6 +18,8 @@
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
           "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
           "hearingDocuments": [
             {
               "id": "2",
@@ -40,13 +42,15 @@
         "replacements": {
           "listCaseHearingCentre": "newport",
           "listCaseHearingLength": "60",
-          "listCaseHearingDate": "2018-10-31T12:34:56",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
           "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
           "listCaseRequirementsMultimedia": "something around Multimedia",
           "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
           "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
           "hearingDocuments": [
             {
               "id": "1",
@@ -108,7 +112,9 @@
         "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
         "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
         "listCaseRequirementsOther": "something around Other",
-        "ariaListingReference": "AA/12345/1234"
+        "ariaListingReference": "AA/12345/1234",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
       }
     }
   }

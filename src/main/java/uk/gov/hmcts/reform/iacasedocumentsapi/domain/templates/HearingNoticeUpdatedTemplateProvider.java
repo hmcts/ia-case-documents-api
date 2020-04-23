@@ -10,14 +10,20 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.HearingNoticeFieldMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
 public class HearingNoticeUpdatedTemplateProvider {
 
     private final StringProvider stringProvider;
+    private final CustomerServicesProvider customerServicesProvider;
 
-    public HearingNoticeUpdatedTemplateProvider(StringProvider stringProvider) {
+    public HearingNoticeUpdatedTemplateProvider(
+        StringProvider stringProvider,
+        CustomerServicesProvider customerServicesProvider
+    ) {
         this.stringProvider = stringProvider;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     public Map<String, Object> mapFieldValues(
@@ -31,7 +37,7 @@ public class HearingNoticeUpdatedTemplateProvider {
             caseDetailsBefore.getCaseData();
 
         final HearingNoticeFieldMapper fieldMapper
-            = new HearingNoticeFieldMapper(stringProvider);
+            = new HearingNoticeFieldMapper(stringProvider, customerServicesProvider);
 
         final Map<String, Object> fieldValues =
             fieldMapper.mapFields(asylumCase);
