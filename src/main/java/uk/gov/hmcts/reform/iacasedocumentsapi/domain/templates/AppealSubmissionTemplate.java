@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
@@ -60,6 +61,15 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse("")));
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
+
+        Optional<ContactPreference> contactPreference = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class);
+        if (contactPreference.isPresent()
+            && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+            fieldValues.put("wantsEmail", YesOrNo.YES);
+            fieldValues.put("email", asylumCase.read(EMAIL, String.class).orElse(""));
+        } else {
+            fieldValues.put("mobileNumber", asylumCase.read(MOBILE_NUMBER, String.class).orElse(""));
+        }
 
         Optional<String> optionalAppealType = asylumCase.read(APPEAL_TYPE);
 

@@ -5,6 +5,8 @@
   "appellantGivenNames": "Talha",
   "appellantFamilyName": "Awan",
   "appellantDateOfBirth": "{$TODAY-7300}",
+  "contactPreference": "wantsSms",
+  "mobileNumber": "07987654321",
   "legalRepName": "RS John",
   "legalRepCompany": "RS Consulting",
   "appellantNationalities": [

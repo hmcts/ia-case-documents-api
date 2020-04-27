@@ -5,7 +5,6 @@ spring:
       paths: /mnt/secrets/ia
       aliases:
         docmosis-access-key: DOCMOSIS_ACCESS_KEY
-        appeal-submission-template: IA_APPEAL_SUBMISSION_TEMPLATE
         system-username: IA_SYSTEM_USERNAME
         system-password: IA_SYSTEM_PASSWORD
         idam-client-id: IA_IDAM_CLIENT_ID

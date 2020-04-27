@@ -26,11 +26,6 @@ data "azurerm_key_vault" "ia_key_vault" {
   resource_group_name = "${local.key_vault_name}"
 }
 
-data "azurerm_key_vault_secret" "appeal_submission_template" {
-  name      = "appeal-submission-template"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
 data "azurerm_key_vault_secret" "test_caseofficer_username" {
   name      = "test-caseofficer-username"
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
@@ -122,8 +117,6 @@ module "ia_case_documents_api" {
     LOGBACK_REQUIRE_ERROR_CODE  = false
 
     WEBSITE_DNS_SERVER = "${data.azurerm_lb.consul_dns.private_ip_address}"
-
-    IA_APPEAL_SUBMISSION_TEMPLATE = "${data.azurerm_key_vault_secret.appeal_submission_template.value}"
 
     IA_CUSTOMER_SERVICES_EMAIL      = "${data.azurerm_key_vault_secret.ia_customer_services_email.value}"
     IA_CUSTOMER_SERVICES_TELEPHONE  = "${data.azurerm_key_vault_secret.ia_customer_services_telephone.value}"

@@ -43,6 +43,9 @@ public enum AsylumCaseDefinition {
     NEW_MATTERS(
         "newMatters", new TypeReference<String>(){}),
 
+    CONTACT_PREFERENCE(
+        "contactPreference", new TypeReference<ContactPreference>(){}),
+
     OTHER_APPEALS(
         "otherAppeals", new TypeReference<List<IdValue<Map<String, String>>>>(){}),
 
@@ -69,6 +72,12 @@ public enum AsylumCaseDefinition {
 
     LEGAL_REPRESENTATIVE_DOCUMENTS(
         "legalRepresentativeDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    EMAIL(
+        "email", new TypeReference<String>(){}),
+
+    MOBILE_NUMBER(
+        "mobileNumber", new TypeReference<String>(){}),
 
     RESPONDENT_DOCUMENTS(
         "respondentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),

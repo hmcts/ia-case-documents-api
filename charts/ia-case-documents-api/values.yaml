@@ -16,7 +16,6 @@ java:
     ia:
       resourceGroup: ia
       secrets:
-        - appeal-submission-template
         - system-username
         - system-password
         - idam-client-id
