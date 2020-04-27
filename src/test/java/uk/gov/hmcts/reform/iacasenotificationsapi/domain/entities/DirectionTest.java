@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -16,6 +17,7 @@ public class DirectionTest {
     private final String dateSent = "2018-12-25";
     private DirectionTag tag = DirectionTag.LEGAL_REPRESENTATIVE_REVIEW;
     private List<IdValue<PreviousDates>> previousDates = Collections.emptyList();
+    private final List<IdValue<ClarifyingQuestion>> question = asList(new IdValue<>("1", new ClarifyingQuestion("question")));
 
     private Direction direction = new Direction(
         explanation,
@@ -24,6 +26,16 @@ public class DirectionTest {
         dateSent,
         tag,
         previousDates
+    );
+
+    private Direction directionWithQuestion = new Direction(
+            explanation,
+            parties,
+            dateDue,
+            dateSent,
+            tag,
+            previousDates,
+            question
     );
 
     @Test
@@ -35,6 +47,14 @@ public class DirectionTest {
         assertEquals(dateSent, direction.getDateSent());
         assertEquals(tag, direction.getTag());
         assertEquals(previousDates, direction.getPreviousDates());
+
+        assertEquals(explanation, directionWithQuestion.getExplanation());
+        assertEquals(parties, directionWithQuestion.getParties());
+        assertEquals(dateDue, directionWithQuestion.getDateDue());
+        assertEquals(dateSent, directionWithQuestion.getDateSent());
+        assertEquals(tag, directionWithQuestion.getTag());
+        assertEquals(previousDates, directionWithQuestion.getPreviousDates());
+        assertEquals(question, directionWithQuestion.getClarifyingQuestions());
     }
 
     @Test

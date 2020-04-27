@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
@@ -13,9 +14,21 @@ public class Direction {
     private String dateSent;
     private DirectionTag tag;
     private List<IdValue<PreviousDates>> previousDates;
+    private List<IdValue<ClarifyingQuestion>> clarifyingQuestions;
 
     private Direction() {
         // noop -- for deserializer
+    }
+
+    public Direction(
+            String explanation,
+            Parties parties,
+            String dateDue,
+            String dateSent,
+            DirectionTag tag,
+            List<IdValue<PreviousDates>> previousDates
+    ) {
+        this(explanation, parties, dateDue, dateSent, tag, previousDates, emptyList());
     }
 
     public Direction(
@@ -24,7 +37,8 @@ public class Direction {
         String dateDue,
         String dateSent,
         DirectionTag tag,
-        List<IdValue<PreviousDates>> previousDates
+        List<IdValue<PreviousDates>> previousDates,
+        List<IdValue<ClarifyingQuestion>> clarifyingQuestions
     ) {
         requireNonNull(explanation);
         requireNonNull(parties);
@@ -39,6 +53,7 @@ public class Direction {
         this.dateSent = dateSent;
         this.tag = tag;
         this.previousDates = previousDates;
+        this.clarifyingQuestions = clarifyingQuestions;
     }
 
     public String getExplanation() {
@@ -68,5 +83,9 @@ public class Direction {
 
     public List<IdValue<PreviousDates>> getPreviousDates() {
         return previousDates;
+    }
+
+    public List<IdValue<ClarifyingQuestion>> getClarifyingQuestions() {
+        return clarifyingQuestions;
     }
 }
