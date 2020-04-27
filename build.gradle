@@ -35,7 +35,8 @@ def versions = [
     sonarPitest        : '0.5',
     springBoot         : '2.2.4.RELEASE',
     springHystrix      : '2.1.1.RELEASE',
-    springfoxSwagger   : '2.9.2'
+    springfoxSwagger   : '2.9.2',
+    pact_version       : '3.5.24'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
@@ -91,6 +92,14 @@ sourceSets {
         }
         resources.srcDir file('src/smokeTest/resources')
     }
+    contractTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/contractTest/java')
+        }
+        resources.srcDir file('src/contactTest/resources')
+    }
 }
 
 idea {
@@ -100,6 +109,7 @@ idea {
         testSourceDirs += project.sourceSets.functionalTest.java.srcDirs
         testResourceDirs += project.sourceSets.functionalTest.resources.srcDirs
         testSourceDirs += project.sourceSets.smokeTest.java.srcDirs
+        testSourceDirs += project.sourceSets.contractTest.java.srcDirs
         testResourceDirs += project.sourceSets.smokeTest.resources.srcDirs
     }
 }
@@ -108,6 +118,7 @@ configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
     functionalTestCompile.extendsFrom testCompile
+    contractTestCompile.extendsFrom testCompile
     functionalTestRuntime.extendsFrom testRuntime
 }
 
@@ -146,6 +157,15 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
 task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verification') {
     testClassesDirs = sourceSets.smokeTest.output.classesDirs
     classpath = sourceSets.smokeTest.runtimeClasspath
+}
+
+
+task contract(type: Test, description: 'Runs the pact contract tests.', group: 'Verification') {
+    description = "Runs the consumer Pact tests"
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+
 }
 
 jacoco {
@@ -271,6 +291,30 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
 
+    //pact contract testing
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
+
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+
+    testCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
+        force = true
+    }
+
+    integrationTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
+        force = true
+    }
+
+    functionalTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
+        force = true
+    }
+
+    contractTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
+        force = true
+    }
+
 
     integrationTestCompile sourceSets.main.runtimeClasspath
     integrationTestCompile sourceSets.test.runtimeClasspath
@@ -280,6 +324,10 @@ dependencies {
 
     smokeTestCompile sourceSets.main.runtimeClasspath
     smokeTestCompile sourceSets.test.runtimeClasspath
+
+    contractTestCompile sourceSets.main.runtimeClasspath
+    contractTestCompile sourceSets.test.runtimeClasspath
+
 }
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
