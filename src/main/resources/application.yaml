@@ -380,8 +380,8 @@ ftpaSubmitted:
   respondentEmailAddress: ${IA_RESPONDENT_FTPA_SUBMITTED:homeOfficeFtpaSubmitted@example.gov.uk}
 
 customerServices:
-  emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
-  telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
+  emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@justice.gov.uk}
+  telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
 
 appellantDaysToWait:
   afterSubmission: 28
