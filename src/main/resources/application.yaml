@@ -1,5 +1,5 @@
 server:
-  port: 4550
+  port: 8096
 
 management:
   endpoint:
@@ -14,25 +14,15 @@ management:
 #If you use a database then uncomment below lines and update db properties accordingly
 spring:
   application:
-    name: Spring Boot Template
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS:}
-#    username: ${DB_USER_NAME}
-#    password: ${DB_PASSWORD}
-#    properties:
-#      charSet: UTF-8
-#    hikari:
-#      minimumIdle: 2
-#      maximumPoolSize: 10
-#      idleTimeout: 10000
-#      poolName: {to-be-defined}HikariCP
-#      maxLifetime: 7200000
-#      connectionTimeout: 30000
-#  jpa:
-#    properties:
-#      hibernate:
-#        jdbc:
-#          lob:
-#            # silence the 'wall-of-text' - unnecessary exception throw about blob types
-#            non_contextual_creation: true
+    name: IA Case Payments API
+
+### dependency configuration
+auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
+auth.idam.client.detailsUri: "/details"
+auth.idam.client.id: ${IA_IDAM_CLIENT_ID:ia}
+auth.idam.client.secret: ${IA_IDAM_SECRET:something}
+auth.idam.client.redirectUri: ${IA_IDAM_REDIRECT_URI:http://localhost}
+auth.provider.service.client.baseUrl: ${S2S_URL:http://127.0.0.1:4502}
+idam.s2s-auth.totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
+idam.s2s-auth.microservice: ${IA_S2S_MICROSERVICE:something}
+idam.s2s-auth.url: ${S2S_URL:http://127.0.0.1:4502}

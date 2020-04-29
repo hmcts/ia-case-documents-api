@@ -1,6 +1,17 @@
 java:
-  applicationPort: 4550
+  applicationPort: 8096
   image: 'hmctspublic.azurecr.io/rpe/spring-boot-template:latest'
-  ingressHost: rpe-spring-boot-template-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
-  aadIdentityName: rpe
+  ingressHost: ia-case-payments-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+  aadIdentityName: ia
   environment:
+    IDAM_URL: "https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net"
+    S2S_URL: "http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+  keyVaults:
+    ia:
+      resourceGroup: ia
+      secrets:
+        - idam-client-id
+        - idam-secret
+        - s2s-secret
+        - s2s-microservice
+        - AppInsightsInstrumentationKey
