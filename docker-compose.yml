@@ -1,7 +1,7 @@
 version: '2.1'
 
 services:
-  spring-boot-template:
+  ia-case-payments-api:
     build:
       context: .
       args:
@@ -23,4 +23,4 @@ services:
       - LOGBACK_REQUIRE_ALERT_LEVEL=false
       - LOGBACK_REQUIRE_ERROR_CODE=false
     ports:
-      - $SERVER_PORT:$SERVER_PORT
+      - ${SERVER_PORT:-8096}:${SERVER_PORT:-8096}

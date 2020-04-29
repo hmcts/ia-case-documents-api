@@ -1,6 +1,6 @@
 java:
   applicationPort: 8096
-  image: 'hmctspublic.azurecr.io/rpe/spring-boot-template:latest'
+  image: 'hmctspublic.azurecr.io/ia/ia-case-payments-api:latest'
   ingressHost: ia-case-payments-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: ia
   environment:
