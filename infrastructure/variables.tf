@@ -15,3 +15,7 @@ variable "deployment_namespace" {}
 variable "common_tags" {
   type = "map"
 }
+
+variable "appinsights_instrumentation_key" {
+  default = ""
+}
