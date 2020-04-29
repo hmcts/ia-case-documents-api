@@ -113,9 +113,11 @@ project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 sonarqube {
   properties {
-    property "sonar.projectName", "Reform :: ia-case-payments-api"
-    property "sonar.projectKey", "uk.gov.hmcts.reform:ia-case-payments-api"
+    property "sonar.projectName", "IA :: Immigration & Asylum Payments API"
+    property "sonar.projectKey", "IACASEPAYMENTSAPI"
     property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
+    property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/iahomeofficeintegrationapi/infrastructure/config/**," +
+                                 "src/main/java/uk/gov/hmcts/reform/iahomeofficeintegrationapi/Application.java"
   }
 }
 
