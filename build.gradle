@@ -100,6 +100,8 @@ pmd {
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
+project.tasks['sonarqube'].dependsOn test, integration
+
 jacocoTestReport {
   executionData(test, integration)
   reports {
@@ -116,8 +118,8 @@ sonarqube {
     property "sonar.projectName", "IA :: Immigration & Asylum Payments API"
     property "sonar.projectKey", "IACASEPAYMENTSAPI"
     property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
-    property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/iahomeofficeintegrationapi/infrastructure/config/**," +
-                                 "src/main/java/uk/gov/hmcts/reform/iahomeofficeintegrationapi/Application.java"
+    property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasepaymentsnapi/infrastructure/config/**," +
+                                 "src/main/java/uk/gov/hmcts/reform/iacasepaymentsnapi/Application.java"
   }
 }
 
@@ -139,6 +141,8 @@ dependencyCheck {
   // range of 0-10 fails the build, anything greater and it doesn't fail the build
   failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
   suppressionFile = 'config/owasp/suppressions.xml'
+
+  skipConfigurations = configurations.collect { it.name }.findAll { it.contains('Test') }
 
   analyzers {
     // Disable scanning of .NET related binaries
