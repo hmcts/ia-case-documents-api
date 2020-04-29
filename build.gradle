@@ -14,8 +14,8 @@ group = 'uk.gov.hmcts.reform'
 version = '0.0.1'
 
 allprojects {
-  sourceCompatibility = '11'
-  targetCompatibility = '11'
+  sourceCompatibility = '8'
+  targetCompatibility = '8'
 }
 
 sourceSets {
@@ -92,6 +92,7 @@ checkstyle {
 
 pmd {
   toolVersion = "6.18.0"
+  ignoreFailures = true
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
