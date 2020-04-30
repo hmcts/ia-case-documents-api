@@ -212,7 +212,7 @@ dependencies {
   smokeTestImplementation sourceSets.main.runtimeClasspath
 }
 
-mainClassName = 'uk.gov.hmcts.reform.demo.Application'
+mainClassName = 'uk.gov.hmcts.reform.casepaymentsapi.Application'
 
 bootJar {
   getArchiveFileName().set(provider {
