@@ -45,4 +45,12 @@
 	   ]]></notes>
     <cve>CVE-2019-3795</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+     Suppressing as SMTP appender is not used in this project (see: https://nvd.nist.gov/vuln/detail/CVE-2020-9488)
+      ]]></notes>
+    <gav regex="true">org.apache.logging.log4j:log4j.*</gav>
+    <cpe>cpe:/a:apache:log4j:2.12.1</cpe>
+    <cve>CVE-2020-9488</cve>
+  </suppress>
 </suppressions>

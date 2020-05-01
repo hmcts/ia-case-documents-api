@@ -54,3 +54,16 @@ services:
 networks:
   compose_default:
     external: true
+
+  broker_app:
+    image: dius/pact-broker
+    links:
+      - postgres
+    ports:
+      - "80:80"
+    environment:
+      PACT_BROKER_DATABASE_USERNAME: postgres
+      PACT_BROKER_DATABASE_PASSWORD: password
+      PACT_BROKER_DATABASE_HOST: postgres
+      PACT_BROKER_DATABASE_NAME: postgres
+      PACT_BROKER_WEBHOOK_SCHEME_WHITELIST: http
