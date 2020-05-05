@@ -44,6 +44,8 @@ govnotify:
       appellant:
         email: 9c8ab848-b1f7-4dbe-9854-4922e94ece67
         sms: e805b3c5-b1e2-4ad1-9416-3298ca765738
+      legalRep:
+        email: 33430912-89d5-416d-8d49-52eae9ce82c3
       respondent:
         email: a1fee4a6-6650-4d91-8f9e-cd15944adef4
     respondentEvidenceSubmitted:

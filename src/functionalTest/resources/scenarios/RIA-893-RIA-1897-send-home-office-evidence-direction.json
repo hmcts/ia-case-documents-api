@@ -1,5 +1,5 @@
 {
-  "description": "RIA-893 Send Home Office evidence direction",
+  "description": "RIA-893 RIA-1897 Send Home Office evidence direction",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -49,6 +49,10 @@
           {
             "id": "1003_RESPONDENT_EVIDENCE_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1003_EVIDENCE_DIRECTION_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
@@ -63,6 +67,17 @@
           "A1234567",
           "Talha Awan",
           "Send your evidence",
+          "{$TODAY+14|d MMM yyyy}"
+        ]
+      },
+      {
+        "reference": "1003_EVIDENCE_DIRECTION_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: direction sent to the Home Office",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
           "{$TODAY+14|d MMM yyyy}"
         ]
       }
