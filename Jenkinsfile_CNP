@@ -3,7 +3,7 @@ properties([
         [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/ia-case-notifications-api.git'],
         pipelineTriggers([[$class: 'GitHubPushTrigger']]),
         parameters([
-                string(name: 'IA_EXUI_FRONTEND_URL', defaultValue: 'https://xui-webapp-aat.service.core-compute-aat.internal/', description: 'The ExUI frontend URL that will be included in personalisation'),
+                string(name: 'IA_EXUI_FRONTEND_URL', defaultValue: 'https://manage-case.aat.platform.hmcts.net/', description: 'The ExUI frontend URL that will be included in personalisation'),
                 string(name: 'IA_AIP_FRONTEND_URL', defaultValue: 'https://immigration-appeal.aat.platform.hmcts.net/', description: 'The AIP frontend URL that will be included in personalisation')
         ])
 ])

@@ -4,5 +4,5 @@ java:
   ingressHost: ${SERVICE_FQDN}
   environment:
     IA_AIP_FRONTEND_URL: "https://immigration-appeal.{{ .Values.global.environment }}.platform.hmcts.net/"
-    IA_EXUI_FRONTEND_URL: "https://xui-webapp-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/"
+    IA_EXUI_FRONTEND_URL: "https://manage-case.{{ .Values.global.environment }}.platform.hmcts.net/"
 
