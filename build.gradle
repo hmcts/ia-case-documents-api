@@ -60,6 +60,7 @@ tasks.withType(Test) {
 }
 
 test {
+  useJUnitPlatform()
   failFast = true
 }
 
@@ -171,7 +172,8 @@ def versions = [
   junitPlatform   : '1.6.2',
   reformLogging   : '5.1.1',
   springBoot      : springBoot.class.package.implementationVersion,
-  springfoxSwagger: '2.9.2'
+  springfoxSwagger: '2.9.2',
+  serenity        : '2.0.91'
 ]
 
 ext.libraries = [
@@ -184,6 +186,13 @@ ext.libraries = [
   ]
 ]
 
+configurations {
+  integrationTestCompile.extendsFrom testCompile
+  integrationTestRuntime.extendsFrom testRuntime
+  functionalTestCompile.extendsFrom testCompile
+  functionalTestRuntime.extendsFrom testRuntime
+}
+
 dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
@@ -192,11 +201,16 @@ dependencies {
   implementation group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.5'
 
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
 
   implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
   implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.2.RELEASE'
   implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4'
+  implementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
+
+  annotationProcessor 'org.projectlombok:lombok:1.18.12'
+  compileOnly 'org.projectlombok:lombok:1.18.12'
 
   testImplementation libraries.junit5
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
@@ -204,15 +218,21 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
 
+  testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
+  testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+  testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
+  testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
 
   functionalTestImplementation sourceSets.main.runtimeClasspath
+  functionalTestImplementation sourceSets.test.runtimeClasspath
 
   smokeTestImplementation sourceSets.main.runtimeClasspath
 }
 
-mainClassName = 'uk.gov.hmcts.reform.casepaymentsapi.Application'
+mainClassName = 'uk.gov.hmcts.reform.iacasepaymentsapi.Application'
 
 bootJar {
   getArchiveFileName().set(provider {

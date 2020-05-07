@@ -11,10 +11,9 @@ management:
       exposure:
         include: health, info, prometheus
 
-#If you use a database then uncomment below lines and update db properties accordingly
 spring:
   application:
-    name: IA Case Payments API
+    name: Immigration & Asylum case payments API
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

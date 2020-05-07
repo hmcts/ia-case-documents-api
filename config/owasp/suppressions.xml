@@ -8,14 +8,57 @@
     <cpe>cpe:/a:pivotal_software:spring_security</cpe>
     <cve>CVE-2018-1258</cve>
   </suppress>
-
-  <suppress until="2020-01-31">
+  <suppress>
     <notes><![CDATA[
-   relates to form based authentication, not relevant to us, fix will be picked up in next spring boot update
+   file name: groovy-json-2.5.10.jar
    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed.*$</packageUrl>
-    <cve>CVE-2019-17563</cve>
-    <cve>CVE-2019-12418</cve>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-json@.*$</packageUrl>
+    <cve>CVE-2016-6497</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: groovy-xml-2.5.10.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-xml@.*$</packageUrl>
+    <cve>CVE-2016-6497</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: groovy-ant-3.0.0-indy.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-ant@.*$</packageUrl>
+    <cve>CVE-2016-6497</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: org.apache.sling.javax.activation-0.1.0.jar, not used, false positive
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.sling/org\.apache\.sling\.javax\.activation@.*$</packageUrl>
+    <cve>CVE-2016-5394</cve>
+    <cve>CVE-2016-6798</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: testng-6.13.1.jar: jquery-1.7.1.min.js, not used
+   ]]></notes>
+    <packageUrl regex="true">^pkg:javascript/jquery@.*$</packageUrl>
+    <cve>CVE-2012-6708</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+         https://nvd.nist.gov/vuln/detail/CVE-2018-1258
+         False positive -- we do not use Spring Framework 5.0.5.RELEASE (5.0.8.RELEASE at the time of writing)
+         Additionally, we do not use Spring method security annotations which are the specific vulnerability
+        ]]></notes>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+  <suppress until="2030-01-01">
+    <notes><![CDATA[
+     Suppressing as SMTP appender is not used in this project (see: https://nvd.nist.gov/vuln/detail/CVE-2020-9488)
+   ]]></notes>
+    <gav regex="true">org.apache.logging.log4j:log4j.*</gav>
+    <cpe>cpe:/a:apache:log4j:2.12.1</cpe>
+    <cve>CVE-2020-9488</cve>
   </suppress>
 
 </suppressions>
