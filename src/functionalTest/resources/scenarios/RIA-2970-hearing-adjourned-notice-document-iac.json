@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1976_RIA-2804 Create hearing notice PDF (IAC Birmingham)",
+  "description": "RIA-2970 Create hearing adjourned notice PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
