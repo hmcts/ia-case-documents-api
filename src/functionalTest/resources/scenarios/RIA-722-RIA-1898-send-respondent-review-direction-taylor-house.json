@@ -1,10 +1,10 @@
 {
-  "description": "RIA-1976 Send respondent review direction (IAC Glasgow)",
+  "description": "RIA-722 RIA-1898 Send respondent review direction (Taylor House hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 1009,
+      "id": 1005,
       "eventId": "requestRespondentReview",
       "state": "caseBuilding",
       "caseData": {
@@ -23,7 +23,7 @@
             }
           ],
           "notificationsSent": [],
-          "hearingCentre": "glasgow"
+          "hearingCentre": "taylorHouse"
         }
       }
     }
@@ -48,23 +48,38 @@
         ],
         "notificationsSent": [
           {
-            "id": "1009_RESPONDENT_REVIEW_DIRECTION",
+            "id": "1005_RESPONDENT_REVIEW_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1005_LEGAL_REPRESENTATIVE_RESPONDENT_REVIEW_CASE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
-        "hearingCentre": "glasgow"
+        "hearingCentre": "taylorHouse"
       }
     },
     "notifications": [
       {
-        "reference": "1009_RESPONDENT_REVIEW_DIRECTION",
+        "reference": "1005_RESPONDENT_REVIEW_DIRECTION",
         "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
-        "subject": "Asylum appeal direction: review case – Glasgow",
+        "subject": "Asylum appeal direction: review case – Taylor House",
         "body": [
           "PA/12345/2019",
           "A1234567",
           "Talha Awan",
           "Review the built case",
+          "{$TODAY+14|d MMM yyyy}"
+        ]
+      },
+      {
+        "reference": "1005_LEGAL_REPRESENTATIVE_RESPONDENT_REVIEW_CASE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: direction sent to the Home Office",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
           "{$TODAY+14|d MMM yyyy}"
         ]
       }

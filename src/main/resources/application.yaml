@@ -218,6 +218,9 @@ govnotify:
         email: 90630010-f2ed-4a97-a307-50291b017ed1
       otherHomeOffice:
         email: 9bcae84a-53e4-4971-a778-906506f49527
+    respondentReview:
+      legalRep:
+        email: 8f028c03-60f3-4865-89df-ab6b66c82d74
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
