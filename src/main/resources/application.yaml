@@ -56,7 +56,7 @@ hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
 hearingNoticeAdjournedWithoutDateDocument.fileName: "hearing-notice"
-hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00240.docx}
+hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00376.docx}
 
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
