@@ -23,6 +23,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
@@ -30,6 +31,7 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock DirectionFinder directionFinder;
     @Mock Direction direction;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -44,6 +46,9 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
     private String legalRepRefNumber = "somelegalRepRefNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
 
     private LegalRepresentativeRequestCaseBuildingPersonalisation legalRepresentativeRequestCaseBuildingPersonalisation;
 
@@ -60,10 +65,14 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepRefNumber));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
 
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+
         legalRepresentativeRequestCaseBuildingPersonalisation = new LegalRepresentativeRequestCaseBuildingPersonalisation(
             templateId,
             iaExUiFrontendUrl,
-            directionFinder
+            directionFinder,
+            customerServicesProvider
         );
     }
 
@@ -117,6 +126,8 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
         Map<String, String> actualPersonalisation = legalRepresentativeRequestCaseBuildingPersonalisation.getPersonalisation(asylumCase);
 
         assertThat(actualPersonalisation).isEqualToComparingOnlyGivenFields(expectedPersonalisation);
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -141,6 +152,8 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisationTest {
         Map<String, String> actualPersonalisation = legalRepresentativeRequestCaseBuildingPersonalisation.getPersonalisation(asylumCase);
 
         assertThat(actualPersonalisation).isEqualToComparingOnlyGivenFields(expectedPersonalisation);
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test

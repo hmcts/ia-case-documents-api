@@ -19,23 +19,30 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
 public class LegalRepresentativeRequestHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
     private final String legalRepRequestHearingRequirementsTemplateId;
+    private final String iaExUiFrontendUrl;
     private final EmailAddressFinder emailAddressFinder;
     private final DirectionFinder directionFinder;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeRequestHearingRequirementsPersonalisation(
         @Value("${govnotify.template.requestHearingRequirements.legalRep.email}") String legalRepRequestHearingRequirementsTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         EmailAddressFinder emailAddressFinder,
-        DirectionFinder directionFinder
+        DirectionFinder directionFinder,
+        CustomerServicesProvider customerServicesProvider
     ) {
         this.legalRepRequestHearingRequirementsTemplateId = legalRepRequestHearingRequirementsTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.emailAddressFinder = emailAddressFinder;
         this.directionFinder = directionFinder;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
@@ -70,12 +77,14 @@ public class LegalRepresentativeRequestHearingRequirementsPersonalisation implem
         return
             ImmutableMap
                 .<String, String>builder()
-                .put("Appeal Ref Number", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("LR reference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("Explanation", direction.getExplanation())
-                .put("due date", directionDueDate)
+                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("linkToOnlineService", iaExUiFrontendUrl)
+                .put("explanation", direction.getExplanation())
+                .put("dueDate", directionDueDate)
                 .build();
     }
 }

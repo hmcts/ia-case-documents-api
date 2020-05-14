@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -24,20 +25,21 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
 
     @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
-
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
-
     private String hmctsReference = "hmctsReference";
+    private String ariaListingReference = "someAriaListingReference";
     private String legalRepReference = "legalRepresentativeReference";
-    private String homeOfficeReference = "homeOfficeReference";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
 
     private LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation;
 
@@ -47,8 +49,10 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
 
         legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation = new LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation(
             templateId,
+            iaExUiFrontendUrl,
             personalisationProvider,
-            emailAddressFinder
+            emailAddressFinder,
+            customerServicesProvider
         );
     }
 
@@ -86,11 +90,13 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
     private Map<String, String> getPersonalisationForLegalRep() {
         return ImmutableMap
             .<String, String>builder()
-            .put("hmctsReference", hmctsReference)
+            .put("appealReferenceNumber", hmctsReference)
+            .put("ariaListingReference", ariaListingReference)
             .put("legalRepReference", legalRepReference)
-            .put("homeOfficeReference", homeOfficeReference)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
 }

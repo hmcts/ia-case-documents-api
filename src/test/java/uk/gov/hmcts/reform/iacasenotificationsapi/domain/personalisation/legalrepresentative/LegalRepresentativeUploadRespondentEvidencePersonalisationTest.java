@@ -45,7 +45,7 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
     private String customerServicesTelephone = "555 555 555";
-    private String customerServicesEmail = "cust.services@example.com";
+    private String customerServicesEmail = "customer.services@example.com";
 
     private LegalRepresentativeUploadRespondentEvidencePersonalisation legalRepresentativeUploadRespondentEvidencePersonalisation;
 
@@ -110,13 +110,13 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeUploadRespondentEvidencePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(appellantGivenNames, personalisation.get("Given names"));
-        assertEquals(appellantFamilyName, personalisation.get("Family name"));
-        assertEquals(iaExUiFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals(legalRepRefNumber, personalisation.get("LR reference"));
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(legalRepRefNumber, personalisation.get("legalRepReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(directionExplanation, personalisation.get("explanation"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
@@ -131,13 +131,13 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeUploadRespondentEvidencePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals("", personalisation.get("Appeal Ref Number"));
-        assertEquals("", personalisation.get("Given names"));
-        assertEquals("", personalisation.get("Family name"));
-        assertEquals(iaExUiFrontendUrl, personalisation.get("Hyperlink to user’s case list"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals("", personalisation.get("LR reference"));
+        assertEquals("", personalisation.get("appealReferenceNumber"));
+        assertEquals("", personalisation.get("legalRepReferenceNumber"));
+        assertEquals("", personalisation.get("appellantGivenNames"));
+        assertEquals("", personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(directionExplanation, personalisation.get("explanation"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
@@ -151,5 +151,4 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisationTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("build case direction is not present");
     }
-
 }

@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2345 Send respondent notification of change direction due date after respondent review",
+  "description": "RIA-2345-RIA-2694 Send respondent notification of change direction due date after respondent review",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -49,11 +49,13 @@
         "subject": "Immigration and Asylum appeal: change to direction due date",
         "body": [
           "PA/12345/2019",
-          "CASE001",
           "A1234567",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Upload additional evidence",
-          "{$TODAY+14|d MMM yyyy}"
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -63,10 +65,12 @@
         "body": [
           "PA/12345/2019",
           "CASE001",
-          "A1234567",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Upload additional evidence",
-          "{$TODAY+14|d MMM yyyy}"
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

@@ -1,5 +1,5 @@
 {
-  "description": "RIA-610 Send build case direction notification",
+  "description": "RIA-610-RIA-2694 Send build case direction notification",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -59,7 +59,7 @@
       {
         "reference": "1234_BUILD_CASE_DIRECTION",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Asylum appeal direction: build your case",
+        "subject": "Immigration and Asylum appeal: review Build your case direction",
         "body": [
           "PA/12345/2019",
           "CASE001",
@@ -67,7 +67,9 @@
           "{$iaExUiFrontendUrl}",
           "You must now build your case by uploading your appeal argument and evidence",
           "Your argument must explain why you believe the respondent's decision is wrong",
-          "{$TODAY+28|d MMM yyyy}"
+          "{$TODAY+28|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

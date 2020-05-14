@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 
 import com.google.common.collect.ImmutableMap;
@@ -18,28 +17,32 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
 public class RespondentEvidenceDirectionPersonalisation implements EmailNotificationPersonalisation {
 
     private final String respondentEvidenceDirectionTemplateId;
     private final String respondentEvidenceDirectionEmailAddress;
-    private final StringProvider stringProvider;
+    private final String iaExUiFrontendUrl;
     private final DirectionFinder directionFinder;
+    private final CustomerServicesProvider customerServicesProvider;
 
-    public RespondentEvidenceDirectionPersonalisation(@Value("${govnotify.template.requestRespondentEvidenceDirection.respondent.email}") String respondentEvidenceDirectionTemplateId,
+    public RespondentEvidenceDirectionPersonalisation(
+        @Value("${govnotify.template.requestRespondentEvidenceDirection.respondent.email}") String respondentEvidenceDirectionTemplateId,
         @Value("${respondentEmailAddresses.respondentEvidenceDirection}") String respondentEvidenceDirectionEmailAddress,
-        StringProvider stringProvider,
-        DirectionFinder directionFinder) {
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+        DirectionFinder directionFinder,
+        CustomerServicesProvider customerServicesProvider
+    ) {
 
         this.respondentEvidenceDirectionTemplateId = respondentEvidenceDirectionTemplateId;
         this.respondentEvidenceDirectionEmailAddress = respondentEvidenceDirectionEmailAddress;
-        this.stringProvider = stringProvider;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.directionFinder = directionFinder;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
@@ -61,16 +64,6 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        final HearingCentre hearingCentre =
-            asylumCase
-                .read(HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
-
-        final String hearingCentreForDisplay =
-            stringProvider
-                .get("hearingCentre", hearingCentre.toString())
-                .orElseThrow(() -> new IllegalStateException("hearingCentre display string is not present"));
-
         final Direction direction =
             directionFinder
                 .findFirst(asylumCase, DirectionTag.RESPONDENT_EVIDENCE)
@@ -83,13 +76,14 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
 
         return ImmutableMap
             .<String, String>builder()
-            .put("HearingCentre", hearingCentreForDisplay)
-            .put("Appeal Ref Number", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("HORef", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-            .put("Explanation", direction.getExplanation())
-            .put("due date", directionDueDate)
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("explanation", direction.getExplanation())
+            .put("dueDate", directionDueDate)
             .build();
     }
 }

@@ -1,0 +1,84 @@
+{
+  "description": "RIA-1789-RIA-2694 Send Legal Representative review direction",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1789,
+      "eventId": "requestCaseBuilding",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "You must now build your case to enable the respondent to conduct a thorough review of their decision.\n\nYou have 28 days after the respondent’s bundle is provided, or 42 days after the Notice of Appeal, whichever is the later, to upload your Appeal Skeleton Argument and evidence.\n\nYour Appeal Skeleton Argument must be set out in three distinct parts to include:\n\n- concise summary of the appellant’s case\n- a schedule of issues\n- why those issues should be resolved in the appellant’s favour, by reference to the evidence you have (or plan to have) and any legal authorities you rely upon\n\n# Next steps\n\nOnce you've uploaded your Appeal Skeleton Argument and evidence, you should submit your case. The Tribunal Caseworker will review everything you've added.\n\nIf your case looks ready, the Tribunal will send it to the respondent to review.",
+                "parties": "legalRepresentative",
+                "dateDue": "{$TODAY+28}",
+                "dateSent": "{$TODAY}",
+                "tag": "requestCaseBuilding"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "You must now build your case to enable the respondent to conduct a thorough review of their decision.\n\nYou have 28 days after the respondent’s bundle is provided, or 42 days after the Notice of Appeal, whichever is the later, to upload your Appeal Skeleton Argument and evidence.\n\nYour Appeal Skeleton Argument must be set out in three distinct parts to include:\n\n- concise summary of the appellant’s case\n- a schedule of issues\n- why those issues should be resolved in the appellant’s favour, by reference to the evidence you have (or plan to have) and any legal authorities you rely upon\n\n# Next steps\n\nOnce you've uploaded your Appeal Skeleton Argument and evidence, you should submit your case. The Tribunal Caseworker will review everything you've added.\n\nIf your case looks ready, the Tribunal will send it to the respondent to review.",
+              "parties": "legalRepresentative",
+              "dateDue": "{$TODAY+28}",
+              "dateSent": "{$TODAY}",
+              "tag": "requestCaseBuilding"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1789_LEGAL_REPRESENTATIVE_REQUEST_CASE_BUILDING",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1789_LEGAL_REPRESENTATIVE_REQUEST_CASE_BUILDING",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: review Build your case direction",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "You must now build your case to enable the respondent to conduct a thorough review of their decision",
+          "You have 28 days after the respondent’s bundle is provided, or 42 days after the Notice of Appeal, whichever is the later, to upload your Appeal Skeleton Argument and evidence",
+          "Your Appeal Skeleton Argument must be set out in three distinct parts to include:",
+          "- concise summary of the appellant’s case",
+          "- a schedule of issues",
+          "- why those issues should be resolved in the appellant’s favour, by reference to the evidence you have (or plan to have) and any legal authorities you rely upon",
+          "# Next steps",
+          "Once you've uploaded your Appeal Skeleton Argument and evidence, you should submit your case. The Tribunal Caseworker will review everything you've added.",
+          "If your case looks ready, the Tribunal will send it to the respondent to review.",
+          "{$TODAY+28|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

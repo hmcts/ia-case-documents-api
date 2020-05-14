@@ -22,6 +22,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeHearingRequirementsPersonalisationTest {
@@ -29,20 +30,20 @@ public class LegalRepresentativeHearingRequirementsPersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock DirectionFinder directionFinder;
     @Mock Direction direction;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String directionDueDate = "2019-08-27";
-    private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
-
     private String legalRepEmailAddress = "legalrep@example.com";
-
     private String appealReferenceNumber = "someReferenceNumber";
     private String legalRepRefNumber = "somelegalRepRefNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
 
     private LegalRepresentativeHearingRequirementsPersonalisation legalRepresentativeHearingRequirementsPersonalisation;
 
@@ -58,11 +59,14 @@ public class LegalRepresentativeHearingRequirementsPersonalisationTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepRefNumber));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
         legalRepresentativeHearingRequirementsPersonalisation = new LegalRepresentativeHearingRequirementsPersonalisation(
             templateId,
             iaExUiFrontendUrl,
-            directionFinder
+            directionFinder,
+            customerServicesProvider
         );
     }
 
@@ -117,6 +121,8 @@ public class LegalRepresentativeHearingRequirementsPersonalisationTest {
         Map<String, String> personalisation = legalRepresentativeHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
         Assertions.assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test

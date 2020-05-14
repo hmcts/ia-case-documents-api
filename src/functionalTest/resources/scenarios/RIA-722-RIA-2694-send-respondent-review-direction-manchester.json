@@ -1,5 +1,5 @@
 {
-  "description": "RIA-722 RIA-1898 Send respondent review direction (Manchester hearing centre)",
+  "description": "RIA-722-RIA-2694 Send respondent review direction (Manchester hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -50,10 +50,6 @@
           {
             "id": "1004_RESPONDENT_REVIEW_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "1004_LEGAL_REPRESENTATIVE_RESPONDENT_REVIEW_CASE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
         "hearingCentre": "manchester"
@@ -63,24 +59,16 @@
       {
         "reference": "1004_RESPONDENT_REVIEW_DIRECTION",
         "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
-        "subject": "Asylum appeal direction: review case – Manchester",
+        "subject": "Immigration and Asylum appeal: review Appeal Skeleton Argument direction",
         "body": [
           "PA/12345/2019",
           "A1234567",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Review the built case",
-          "{$TODAY+14|d MMM yyyy}"
-        ]
-      },
-      {
-        "reference": "1004_LEGAL_REPRESENTATIVE_RESPONDENT_REVIEW_CASE",
-        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: direction sent to the Home Office",
-        "body": [
-          "PA/12345/2019",
-          "CASE001",
-          "Talha Awan",
-          "{$TODAY+14|d MMM yyyy}"
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

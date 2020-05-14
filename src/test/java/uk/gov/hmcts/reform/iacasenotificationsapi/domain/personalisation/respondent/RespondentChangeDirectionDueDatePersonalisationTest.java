@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -24,22 +25,23 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
 
     @Mock Callback<AsylumCase> callback;
     @Mock AsylumCase asylumCase;
-
     @Mock EmailAddressFinder emailAddressFinder;
     @Mock PersonalisationProvider personalisationProvider;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-
+    private String iaExUiFrontendUrl = "http://localhost";
     private String homeOfficeApcEmailAddress = "homeOfficeAPC@example.com";
     private String homeOfficeLartEmailAddress = "homeOfficeLART@example.com";
     private String homeOfficeBhamEmailAddress = "ho-birmingham@example.com";
-
     private String hmctsReference = "hmctsReference";
-    private String legalRepReference = "legalRepresentativeReference";
+    private String ariaListingReference = "someAriaListingReference";
     private String homeOfficeReference = "homeOfficeReference";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "cust.services@example.com";
 
     private RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation;
 
@@ -48,10 +50,12 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
 
         respondentChangeDirectionDueDatePersonalisation = new RespondentChangeDirectionDueDatePersonalisation(
             templateId,
+            iaExUiFrontendUrl,
             personalisationProvider,
             homeOfficeApcEmailAddress,
             homeOfficeLartEmailAddress,
-            emailAddressFinder
+            emailAddressFinder,
+            customerServicesProvider
         );
     }
 
@@ -117,10 +121,12 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
         return ImmutableMap
             .<String, String>builder()
             .put("hmctsReference", hmctsReference)
-            .put("legalRepReference", legalRepReference)
+            .put("ariaListingReference", ariaListingReference)
             .put("homeOfficeReference", homeOfficeReference)
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
+            .put("customerServicesTelephone", customerServicesTelephone)
+            .put("customerServicesEmail", customerServicesEmail)
             .build();
     }
 }

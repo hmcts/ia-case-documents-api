@@ -79,13 +79,13 @@ public class LegalRepresentativeUploadRespondentEvidencePersonalisation implemen
             ImmutableMap
                 .<String, String>builder()
                 .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-                .put("Appeal Ref Number", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("LR reference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("Given names", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                .put("Family name", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("Hyperlink to user’s case list", iaExUiFrontendUrl)
-                .put("Explanation", direction.getExplanation())
-                .put("due date", directionDueDate)
+                .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("linkToOnlineService", iaExUiFrontendUrl)
+                .put("explanation", direction.getExplanation())
+                .put("dueDate", directionDueDate)
                 .build();
     }
 }

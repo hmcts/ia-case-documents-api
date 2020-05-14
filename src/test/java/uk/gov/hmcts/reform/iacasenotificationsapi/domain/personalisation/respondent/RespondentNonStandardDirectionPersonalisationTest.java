@@ -1,14 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -22,31 +17,32 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RespondentNonStandardDirectionPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
-    @Mock StringProvider stringProvider;
     @Mock DirectionFinder directionFinder;
     @Mock Direction direction;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
-    private String templateId = "someTemplateId";
+    private String beforeListingTemplateId = "beforeListingTemplateId";
+    private String afterListingTemplateId = "afterListingTemplateId";
+    private String iaExUiFrontendUrl = "http://localhost";
+    private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private String respondentReviewEmailAddress = "respondentReview@example.com";
-
     private String directionDueDate = "2019-08-27";
     private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
-
-    private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
-    private String hearingCentreString = "Taylor House";
-
     private String appealReferenceNumber = "someReferenceNumber";
+    private String ariaListingReference = "someAriaListingReference";
     private String homeOfficeRefNumber = "someHomeOfficeRefNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
 
     private RespondentNonStandardDirectionPersonalisation respondentNonStandardDirectionPersonalisation;
 
@@ -58,24 +54,29 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
-        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
-
-        when(stringProvider.get("hearingCentre", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreString));
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
         respondentNonStandardDirectionPersonalisation = new RespondentNonStandardDirectionPersonalisation(
-            templateId,
+            beforeListingTemplateId,
+            afterListingTemplateId,
+            iaExUiFrontendUrl,
             respondentReviewEmailAddress,
-            stringProvider,
-            directionFinder
+            directionFinder,
+            customerServicesProvider
         );
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, respondentNonStandardDirectionPersonalisation.getTemplateId());
+        assertEquals(beforeListingTemplateId, respondentNonStandardDirectionPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
+        assertEquals(afterListingTemplateId, respondentNonStandardDirectionPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
@@ -101,37 +102,43 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
         Map<String, String> personalisation = respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(hearingCentreString, personalisation.get("HearingCentre"));
-        assertEquals(appealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(appellantGivenNames, personalisation.get("Given names"));
-        assertEquals(appellantFamilyName, personalisation.get("Family name"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals(homeOfficeRefNumber, personalisation.get("HORef"));
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
+        assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(directionExplanation, personalisation.get("explanation"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
     public void should_return_personalisation_when_all_mandatory_information_given() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> personalisation = respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals("", personalisation.get("HORef"));
-        assertEquals("", personalisation.get("Appeal Ref Number"));
-        assertEquals("", personalisation.get("Given names"));
-        assertEquals("", personalisation.get("Family name"));
-        assertEquals(directionExplanation, personalisation.get("Explanation"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
-        assertEquals(hearingCentreString, personalisation.get("HearingCentre"));
+        assertEquals("", personalisation.get("appealReferenceNumber"));
+        assertEquals("", personalisation.get("ariaListingReference"));
+        assertEquals("", personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals("", personalisation.get("appellantGivenNames"));
+        assertEquals("", personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(directionExplanation, personalisation.get("explanation"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_direction_is_empty() {
-
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase))
@@ -140,22 +147,9 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_hearing_centre_is_empty() {
-
-        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingCentre is not present");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_hearing_centre_display_name_is_empty() {
-
-        when(stringProvider.get("hearingCentre", hearingCentre.toString())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingCentre display string is not present");
+    public void should_return_false_if_appeal_not_yet_listed() {
+        assertFalse(respondentNonStandardDirectionPersonalisation.isAppealListed(asylumCase));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
+        assertTrue(respondentNonStandardDirectionPersonalisation.isAppealListed(asylumCase));
     }
 }

@@ -1,5 +1,5 @@
 {
-  "description": "RIA-414 Send Home Office non-standard direction, RIA-1191 Notify legal rep of home office direction",
+  "description": "RIA-414-RIA-2694 Send Home Office non-standard direction, RIA-1191 Notify legal rep of home office direction (after listing)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -10,6 +10,8 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
           "directions": [
             {
               "id": "1",
@@ -34,6 +36,8 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
         "directions": [
           {
             "id": "1",
@@ -63,13 +67,17 @@
       {
         "reference": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
         "recipient": "{$respondentEmailAddresses.nonStandardDirectionUntilListing}",
-        "subject": "Asylum appeal: Direction Taylor House",
+        "subject": "Immigration and Asylum appeal: direction",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "A1234567",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Do the non standard thing",
-          "{$TODAY+14|d MMM yyyy}"
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
@@ -78,10 +86,14 @@
         "subject": "Immigration and Asylum appeal: direction",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "CASE001",
           "Talha Awan",
+          "{$iaExUiFrontendUrl}",
           "Do the non standard thing",
-          "{$TODAY+14|d MMM yyyy}"
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]

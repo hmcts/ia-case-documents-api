@@ -20,6 +20,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,21 +30,21 @@ public class LegalRepresentativeRequestHearingRequirementsPersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock DirectionFinder directionFinder;
     @Mock Direction direction;
-
     @Mock EmailAddressFinder emailAddressFinder;
+    @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String directionDueDate = "2019-08-27";
-    private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
-
     private String legalRepEmailAddress = "legalrep@example.com";
-
     private String appealReferenceNumber = "someReferenceNumber";
     private String legalRepRefNumber = "somelegalRepRefNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String iaExUiFrontendUrl = "http://localhost";
+    private String customerServicesTelephone = "555 555 555";
+    private String customerServicesEmail = "customer.services@example.com";
 
     private LegalRepresentativeRequestHearingRequirementsPersonalisation legalRepresentativeRequestHearingRequirementsPersonalisation;
 
@@ -59,11 +60,15 @@ public class LegalRepresentativeRequestHearingRequirementsPersonalisationTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepRefNumber));
         when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
         legalRepresentativeRequestHearingRequirementsPersonalisation = new LegalRepresentativeRequestHearingRequirementsPersonalisation(
             templateId,
+            iaExUiFrontendUrl,
             emailAddressFinder,
-            directionFinder
+            directionFinder,
+            customerServicesProvider
         );
     }
 
@@ -96,6 +101,8 @@ public class LegalRepresentativeRequestHearingRequirementsPersonalisationTest {
         Map<String, String> personalisation = legalRepresentativeRequestHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
         Assertions.assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
@@ -107,5 +114,4 @@ public class LegalRepresentativeRequestHearingRequirementsPersonalisationTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("case officer request hearing requirements direction is not present");
     }
-
 }

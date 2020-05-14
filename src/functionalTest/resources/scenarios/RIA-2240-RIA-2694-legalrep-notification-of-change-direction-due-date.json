@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2240 Send legal rep notification of change direction due date",
+  "description": "RIA-2240-RIA-2694 Send legal rep notification of change direction due date",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

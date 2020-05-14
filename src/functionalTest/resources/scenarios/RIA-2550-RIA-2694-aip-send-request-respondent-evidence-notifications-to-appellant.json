@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2550 AIP Home Office bundle request notifications (Email and SMS) to appellant and Email to HO",
+  "description": "RIA-2550-RIA-2694 AIP Home Office bundle request notifications (Email and SMS) to appellant and Email to HO",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -93,13 +93,16 @@
       {
         "reference": "1010_RESPONDENT_EVIDENCE_DIRECTION",
         "recipient": "{$respondentEmailAddresses.respondentEvidenceDirection}",
-        "subject": "Asylum appeal direction: appeal lodged – Manchester",
+        "subject": "Immigration and Asylum appeal: submit bundle direction",
         "body": [
           "PA/12345/2019",
           "A1234567",
           "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}",
           "Send your evidence",
-          "{$TODAY+14|d MMM yyyy}"
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {

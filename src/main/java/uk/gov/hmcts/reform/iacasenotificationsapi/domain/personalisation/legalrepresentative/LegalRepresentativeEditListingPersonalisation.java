@@ -30,7 +30,6 @@ public class LegalRepresentativeEditListingPersonalisation implements EmailNotif
         this.legalRepresentativeCaseEditedTemplateId = legalRepresentativeCaseEditedTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.customerServicesProvider = customerServicesProvider;
-
     }
 
     @Override

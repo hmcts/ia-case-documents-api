@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respon
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -13,6 +14,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -20,24 +22,30 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class RespondentChangeDirectionDueDatePersonalisation implements EmailNotificationPersonalisation {
 
     private final String respondentChangeDirectionDueDateTemplateId;
+    private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final String respondentEmailAddressUntilRespondentReview;
     private final String respondentEmailAddressAtRespondentReview;
     private final EmailAddressFinder respondentEmailAddressAfterRespondentReview;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public RespondentChangeDirectionDueDatePersonalisation(
         @Value("${govnotify.template.changeDirectionDueDate.respondent.email}") String respondentChangeDirectionDueDateTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
         @Value("${respondentEmailAddresses.nonStandardDirectionUntilListing}") String respondentEmailAddressUntilRespondentReview,
         @Value("${respondentEmailAddresses.respondentReviewDirection}") String respondentEmailAddressAtRespondentReview,
-        EmailAddressFinder respondentEmailAddressAfterRespondentReview
+        EmailAddressFinder respondentEmailAddressAfterRespondentReview,
+        CustomerServicesProvider customerServicesProvider
     ) {
-
+        requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
         this.respondentChangeDirectionDueDateTemplateId = respondentChangeDirectionDueDateTemplateId;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.respondentEmailAddressUntilRespondentReview = respondentEmailAddressUntilRespondentReview;
         this.respondentEmailAddressAtRespondentReview = respondentEmailAddressAtRespondentReview;
         this.respondentEmailAddressAfterRespondentReview = respondentEmailAddressAfterRespondentReview;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
@@ -53,13 +61,6 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
     @Override
     public String getReferenceId(Long caseId) {
         return caseId + "_RESPONDENT_CHANGE_DIRECTION_DUE_DATE";
-    }
-
-    @Override
-    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
-        requireNonNull(callback, "callback must not be null");
-
-        return personalisationProvider.getPersonalisation(callback);
     }
 
     private String getRespondentEmailAddress(AsylumCase asylumCase) {
@@ -84,5 +85,18 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
                 return respondentEmailAddressAfterRespondentReview.getHomeOfficeEmailAddress(asylumCase);
             })
             .orElseThrow(() -> new IllegalStateException("currentCaseStateVisibleToHomeOfficeAll flag is not present"));
+    }
+
+    @Override
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .putAll(personalisationProvider.getPersonalisation(callback));
+
+        return listCaseFields.build();
     }
 }

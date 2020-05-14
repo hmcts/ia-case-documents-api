@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1794 Send Legal Representative response review direction",
+  "description": "RIA-1794-RIA-2694 Send Legal Representative response review direction",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -14,7 +14,7 @@
             {
               "id": "1",
               "value": {
-                "explanation": "The respondent has replied to your appeal argument and evidence. You must now review their response.\n\nNext steps\nIf you would like to respond, you must email the Tribunal caseworker within 5 days.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
+                "explanation": "The Home Office has replied to your Appeal Skeleton Argument and evidence. You should review their response.\n\n# Next steps\n\nYou have 5 days to review the Home Office response. If you want to respond to what they have said, you should email the Tribunal.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
                 "parties": "legalRepresentative",
                 "dateDue": "{$TODAY+5}",
                 "dateSent": "{$TODAY}",
@@ -38,7 +38,7 @@
           {
             "id": "1",
             "value": {
-              "explanation": "The respondent has replied to your appeal argument and evidence. You must now review their response.\n\nNext steps\nIf you would like to respond, you must email the Tribunal caseworker within 5 days.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
+              "explanation": "The Home Office has replied to your Appeal Skeleton Argument and evidence. You should review their response.\n\n# Next steps\n\nYou have 5 days to review the Home Office response. If you want to respond to what they have said, you should email the Tribunal.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
               "parties": "legalRepresentative",
               "dateDue": "{$TODAY+5}",
               "dateSent": "{$TODAY}",
@@ -59,17 +59,19 @@
       {
         "reference": "1794_LEGAL_REPRESENTATIVE_REQUEST_RESPONSE_REVIEW",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Asylum appeal direction: review direction",
+        "subject": "Immigration and Asylum appeal: review Home Office response direction",
         "body": [
           "PA/12345/2019",
           "CASE001",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
-          "The respondent has replied to your appeal argument and evidence. You must now review their response.",
-          "Next steps",
-          "If you would like to respond, you must email the Tribunal caseworker within 5 days.",
+          "The Home Office has replied to your Appeal Skeleton Argument and evidence. You should review their response.",
+          "# Next steps",
+          "You have 5 days to review the Home Office response. If you want to respond to what they have said, you should email the Tribunal.",
           "If you do not respond within 5 days, the case will automatically go to hearing.",
-          "{$TODAY+5|d MMM yyyy}"
+          "{$TODAY+5|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       }
     ]
