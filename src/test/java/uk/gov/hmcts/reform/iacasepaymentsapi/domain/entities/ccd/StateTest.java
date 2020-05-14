@@ -10,12 +10,13 @@ public class StateTest {
     public void has_correct_values() {
 
         assertEquals("appealStarted", State.APPEAL_STARTED.toString());
+        assertEquals("appealSubmitted", State.APPEAL_SUBMITTED.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
 
-        assertEquals(2, State.values().length);
+        assertEquals(3, State.values().length);
     }
 }

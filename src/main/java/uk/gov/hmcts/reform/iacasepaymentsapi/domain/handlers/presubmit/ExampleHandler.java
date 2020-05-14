@@ -20,7 +20,7 @@ public class ExampleHandler implements PreSubmitCallbackHandler<AsylumCase> {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+        return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT)
             && callback.getEvent() == Event.START_APPEAL;
     }
 

@@ -15,6 +15,18 @@ spring:
   application:
     name: Immigration & Asylum case payments API
 
+fees-register:
+  api:
+    url: ${FEES_REGISTER_API_URL:http://localhost:8991}
+  fees:
+    oralFee:
+      channel: default
+      event: issue
+      jurisdiction1: tribunal
+      jurisdiction2: immigration and asylum chamber
+      keyword: ABC
+      service: other
+
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
 auth.idam.client.detailsUri: "/details"

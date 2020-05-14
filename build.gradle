@@ -209,8 +209,11 @@ dependencies {
   implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4'
   implementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
 
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.2.RELEASE'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: 'Hoxton.SR4'
+
   annotationProcessor 'org.projectlombok:lombok:1.18.12'
-  compileOnly 'org.projectlombok:lombok:1.18.12'
+  compile 'org.projectlombok:lombok:1.18.12'
 
   testImplementation libraries.junit5
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
