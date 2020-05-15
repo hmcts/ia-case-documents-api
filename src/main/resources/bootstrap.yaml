@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    propertiesvolume:
+      prefixed: false
+      paths: /mnt/secrets/ia
+      aliases:
+        fees-register-api-url: FEES_REGISTER_API_URL
+        AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key

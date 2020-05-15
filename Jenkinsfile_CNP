@@ -32,6 +32,9 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withPipeline(type, product, component) {
+
+    env.FEES_REGISTER_API_URL = "http://fees-register-api-aat.service.core-compute-aat.internal"
+
     installCharts()
 
     enableAksStagingDeployment()

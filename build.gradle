@@ -67,6 +67,9 @@ test {
 task functional(type: Test) {
   description = "Runs functional tests"
   group = "Verification"
+
+  systemProperty "scenario", System.getProperty('scenario')
+
   testClassesDirs = sourceSets.functionalTest.output.classesDirs
   classpath = sourceSets.functionalTest.runtimeClasspath
 }
@@ -225,6 +228,8 @@ dependencies {
   testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
   testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+  testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.26.3'
+  testCompile group: 'com.github.tomakehurst', name: 'wiremock-jre8', version: '2.26.3'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath

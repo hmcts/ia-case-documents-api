@@ -12,5 +12,8 @@ def product = "ia"
 def component = "ia-case-payments-api"
 
 withNightlyPipeline(type, product, component) {
+
+  env.FEES_REGISTER_API_URL = "http://fees-register-api-aat.service.core-compute-aat.internal"
+
   enableSlackNotifications('#ia-tech')
 }

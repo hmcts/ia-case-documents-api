@@ -10,10 +10,14 @@ public class AsylumCaseDefinitionTest {
     public void has_correct_values() {
 
         assertEquals("appealReferenceNumber", AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER.value());
+        assertEquals("oralFeeAmountForDisplay", AsylumCaseDefinition.ORAL_FEE_AMOUNT_FOR_DISPLAY.value());
+        assertEquals("appealFeeDesc", AsylumCaseDefinition.APPEAL_FEE_DESC.value());
+        assertEquals("paymentStatus", AsylumCaseDefinition.PAYMENT_STATUS.value());
+        assertEquals("appealType", AsylumCaseDefinition.APPEAL_TYPE.value());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(1, AsylumCaseDefinition.values().length);
+        assertEquals(5, AsylumCaseDefinition.values().length);
     }
 }

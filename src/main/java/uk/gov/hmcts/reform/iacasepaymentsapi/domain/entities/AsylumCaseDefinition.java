@@ -5,7 +5,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public enum AsylumCaseDefinition {
 
     APPEAL_REFERENCE_NUMBER(
-        "appealReferenceNumber", new TypeReference<String>(){});
+        "appealReferenceNumber", new TypeReference<String>(){}),
+
+    APPEAL_FEE_DESC(
+        "appealFeeDesc", new TypeReference<String>(){}),
+
+    ORAL_FEE_AMOUNT_FOR_DISPLAY(
+        "oralFeeAmountForDisplay", new TypeReference<String>(){}),
+
+    PAYMENT_STATUS(
+        "paymentStatus", new TypeReference<String>(){}),
+
+    APPEAL_TYPE(
+        "appealType", new TypeReference<AppealType>(){});
 
     private final String value;
     private final TypeReference typeReference;
