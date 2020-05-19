@@ -97,9 +97,9 @@ public class DocumentDownloadClientTest {
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("Invalid url for DocumentDownloadClientApi");
 
-        verifyZeroInteractions(documentDownloadClientApi);
-        verifyZeroInteractions(serviceAuthTokenGenerator);
-        verifyZeroInteractions(accessTokenProvider);
+        verifyNoInteractions(documentDownloadClientApi);
+        verifyNoInteractions(serviceAuthTokenGenerator);
+        verifyNoInteractions(accessTokenProvider);
     }
 
     @Test
