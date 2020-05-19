@@ -745,4 +745,46 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("reviewTimeExtensionGrantedGenerator")
+    public List<NotificationGenerator> reviewTimeExtensionGrantedGenerator(
+        AppellantReviewTimeExtensionGrantedPersonalisationEmail appellantReviewTimeExtensionGrantedPersonalisationEmail,
+        AppellantReviewTimeExtensionGrantedPersonalisationSms appellantReviewTimeExtensionGrantedPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+              newArrayList(appellantReviewTimeExtensionGrantedPersonalisationEmail),
+              notificationSender,
+              notificationIdAppender
+          ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantReviewTimeExtensionGrantedPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("reviewTimeExtensionRefusedGenerator")
+    public List<NotificationGenerator> reviewTimeExtensionRefusedGenerator(
+        AppellantReviewTimeExtensionRefusedPersonalisationEmail appellantReviewTimeExtensionRefusedPersonalisationEmail,
+        AppellantReviewTimeExtensionRefusedPersonalisationSms appellantReviewTimeExtensionRefusedPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+              newArrayList(appellantReviewTimeExtensionRefusedPersonalisationEmail),
+              notificationSender,
+              notificationIdAppender
+          ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantReviewTimeExtensionRefusedPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

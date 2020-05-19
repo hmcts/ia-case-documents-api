@@ -6,13 +6,17 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Journey
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.REP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit.NotificationHandler;
@@ -630,4 +634,70 @@ public class NotificationHandlerConfiguration {
             }, notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> reviewTimeExtensionGrantedHandler(
+        @Qualifier("reviewTimeExtensionGrantedGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                State currentState = callback.getCaseDetails().getState();
+
+                boolean isAipJourney = asylumCase
+                    .read(JOURNEY_TYPE, JourneyType.class)
+                    .map(type -> type == AIP).orElse(false);
+
+                final Optional<List<IdValue<TimeExtension>>> maybeTimeExtensions = asylumCase.read(AsylumCaseDefinition.TIME_EXTENSIONS);
+
+                final Optional<IdValue<TimeExtension>> maybeTargetTimeExtension = maybeTimeExtensions
+                    .orElse(Collections.emptyList()).stream()
+                    .filter(timeExtensionIdValue ->
+                        currentState == timeExtensionIdValue.getValue().getState()
+                        && String.valueOf(maybeTimeExtensions.get().size()).equals(timeExtensionIdValue.getId())
+                        && TimeExtensionStatus.GRANTED == timeExtensionIdValue.getValue().getStatus())
+                    .findFirst();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.REVIEW_TIME_EXTENSION
+                       && isAipJourney
+                       && maybeTargetTimeExtension.isPresent();
+            }, notificationGenerators
+        );
+    }
+
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> reviewTimeExtensionRefusedHandler(
+        @Qualifier("reviewTimeExtensionRefusedGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                State currentState = callback.getCaseDetails().getState();
+
+                boolean isAipJourney = asylumCase
+                    .read(JOURNEY_TYPE, JourneyType.class)
+                    .map(type -> type == AIP).orElse(false);
+
+                final Optional<List<IdValue<TimeExtension>>> maybeTimeExtensions = asylumCase.read(AsylumCaseDefinition.TIME_EXTENSIONS);
+
+                final Optional<IdValue<TimeExtension>> maybeTargetTimeExtension = maybeTimeExtensions
+                    .orElse(Collections.emptyList()).stream()
+                    .filter(timeExtensionIdValue ->
+                        currentState == timeExtensionIdValue.getValue().getState()
+                        && String.valueOf(maybeTimeExtensions.get().size()).equals(timeExtensionIdValue.getId())
+                        && TimeExtensionStatus.REFUSED == timeExtensionIdValue.getValue().getStatus())
+                    .findFirst();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.REVIEW_TIME_EXTENSION
+                       && isAipJourney
+                       && maybeTargetTimeExtension.isPresent();
+            }, notificationGenerators
+        );
+    }
+
 }

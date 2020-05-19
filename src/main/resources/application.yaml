@@ -235,6 +235,14 @@ govnotify:
         sms: 9f0dce67-f8ef-46aa-a2a5-edb7fb19b6fd
       caseOfficer:
         email: 89540f93-a31b-4803-a83e-35cacd0c2415
+    reviewTimeExtensionGranted:
+      appellant:
+        email: c445e51c-c41b-4bac-ba54-2fc576e5a100
+        sms: d31c018c-ec16-410d-9a5d-6869044862f4
+    reviewTimeExtensionRefused:
+      appellant:
+        email: 349fe4e3-1e71-4ddc-bf23-671d086a2204
+        sms: 88117492-03e8-4c88-83b1-a172c114e354
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -311,6 +319,7 @@ security:
       - "updateHearingAdjustments"
       - "removeAppealFromOnline"
       - "changeHearingCentre"
+      - "reviewTimeExtension"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
