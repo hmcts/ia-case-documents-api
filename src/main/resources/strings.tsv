@@ -3,7 +3,7 @@ appealGrounds	protectionHumanitarianProtection	Removing the appellant from the U
 appealGrounds	protectionHumanRights	Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998
 appealGrounds	revocationRefugeeConvention	Revocation of the appellant's protection status breaches the United Kingdom's obligations under the Refugee Convention
 appealGrounds	revocationHumanitarianProtection	Revocation of the appellant's protection status breaches the United Kingdom's obligations in relation to persons eligible for humanitarian protection
-appealGrounds	appealGroundsEuRefusal	The decision breaches the appellant's rights under the EEA regulations / EU settlement scheme(in respect of entry to or residence in the United Kingdom)
+appealGrounds	appealGroundsEuRefusal	The decision breaches the appellant's rights under the EEA regulations
 appealGrounds	unlawfulDeprivation	The decision is unlawful because discretion should have been exercised differently
 appealGrounds	disproportionateDeprivation	Deprivation would have a disproportionate effect
 appealGroundsProtection	HumanitarianProtection	Removing the appellant from the UK would breach the UK's obligation in relation to persons eligible for a grant of humanitarian protection
@@ -12,14 +12,14 @@ appealGroundsHumanRights	protectionHumanRights	Removing the appellant from the U
 appealGroundsRevocation	revocationHumanitarianProtection	Revocation of the appellant's protection status breaches the United Kingdom's obligations in relation to persons eligible for humanitarian protection
 appealGroundsRevocation	revocationRefugeeConvention	Revocation of the appellant's protection status breaches the United Kingdom's obligations under the Refugee Convention
 appealGroundsHumanRightsRefusal	protectionHumanRights	Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998
-appealGroundsEuRefusal	appealGroundsEuRefusal	The decision breaches the appellant's rights under the EEA regulations / EU settlement scheme(in respect of entry to or residence in the United Kingdom)
+appealGroundsEuRefusal	appealGroundsEuRefusal	The decision breaches the appellant's rights under the EEA regulations
 appealGroundsDeprivation	disproportionateDeprivation	Deprivation would have a disproportionate effect
 appealGroundsDeprivation	unlawfulDeprivation	The decision is unlawful because discretion should have been exercised differently
 appealGroundsDeprivationHumanRights	protectionHumanRights	Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998
 appealType	protection	The refusal of a protection claim
 appealType	revocationOfProtection	The revocation of a protection status
 appealType	refusalOfHumanRights	Refusal of a human rights claim
-appealType	refusalOfEu	Refusal of application under the EEA regulations / EU settlement scheme
+appealType	refusalOfEu	Refusal of application under the EEA regulations
 appealType	deprivation	Deprivation of citizenship
 hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH
 hearingCentreAddress	manchester	IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH
