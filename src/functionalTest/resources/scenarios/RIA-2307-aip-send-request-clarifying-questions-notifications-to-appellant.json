@@ -1,0 +1,141 @@
+{
+  "description": "RIA-2307 AIP CaseOfficer Sends request to submit clarifying questions to appellant",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1005,
+      "eventId": "sendDirectionWithQuestions",
+      "state": "reasonsForAppealSubmitted",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "directions": [
+            {
+              "id": "3",
+              "value": {
+                "tag": "requestClarifyingQuestions",
+                "dateDue": "{$TODAY+14}",
+                "parties": "appellant",
+                "dateSent": "{$TODAY}\"",
+                "explanation": "You need to answer some questions about your appeal.",
+                "previousDates": [],
+                "clarifyingQuestions": [
+                  {
+                    "id": "947398d5-bd81-4e7f-b3ed-1be73be5ba56",
+                    "value": {
+                      "question": "Give us some more information about:\n- What are their ages?\n- What are their names?"
+                    }
+                  },
+                  {
+                    "id": "ddc8a194-30b3-40d9-883e-d034a7451170",
+                    "value": {
+                      "question": "Tell us more about your health issues\n- How long have you suffered from this problem?\n- How does it affect your daily life?"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "directions": [
+          {
+            "id": "3",
+            "value": {
+              "tag": "requestClarifyingQuestions",
+              "dateDue": "{$TODAY+14}",
+              "parties": "appellant",
+              "dateSent": "{$TODAY}\"",
+              "explanation": "You need to answer some questions about your appeal.",
+              "previousDates": [],
+              "clarifyingQuestions": [
+                {
+                  "id": "947398d5-bd81-4e7f-b3ed-1be73be5ba56",
+                  "value": {
+                    "question": "Give us some more information about:\n- What are their ages?\n- What are their names?"
+                  }
+                },
+                {
+                  "id": "ddc8a194-30b3-40d9-883e-d034a7451170",
+                  "value": {
+                    "question": "Tell us more about your health issues\n- How long have you suffered from this problem?\n- How does it affect your daily life?"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1005_REQUEST_CLARIFYING_QUESTIONS_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1005_REQUEST_CLARIFYING_QUESTIONS_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1005_REQUEST_CLARIFYING_QUESTIONS_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "You need to answers some questions about your appeal",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$iaAipFrontendUrl}",
+          "{$TODAY+14|d MMM yyyy}",
+          "# How to contact the Tribunal"
+        ]
+      },
+      {
+        "reference": "1005_REQUEST_CLARIFYING_QUESTIONS_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "{$iaAipFrontendUrl}",
+          "{$TODAY+14|d MMM yyyy}"
+        ]
+      }
+    ]
+  }
+}

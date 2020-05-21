@@ -50,11 +50,12 @@ public class EventTest {
         assertEquals("applyForFTPARespondent", Event.APPLY_FOR_FTPA_RESPONDENT.toString());
         assertEquals("submitTimeExtension", Event.SUBMIT_TIME_EXTENSION.toString());
         assertEquals("reviewTimeExtension", Event.REVIEW_TIME_EXTENSION.toString());
+        assertEquals("sendDirectionWithQuestions", Event.SEND_DIRECTION_WITH_QUESTIONS.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(44, Event.values().length);
+        assertEquals(45, Event.values().length);
     }
 }

@@ -15,11 +15,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseoff
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.*;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.EditListingEmailNotificationGenerator;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.EmailNotificationGenerator;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGenerator;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.SmsNotificationGenerator;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.*;
 
 @Configuration
 public class NotificationGeneratorConfiguration {
@@ -670,13 +666,13 @@ public class NotificationGeneratorConfiguration {
 
         return Arrays.asList(
             new EmailNotificationGenerator(
-              newArrayList(
-                  legalRepresentativeChangeHearingCentrePersonalisation,
-                  caseOfficerChangeHearingCentrePersonalisation
-              ),
-              notificationSender,
-              notificationIdAppender
-          )
+                newArrayList(
+                    legalRepresentativeChangeHearingCentrePersonalisation,
+                    caseOfficerChangeHearingCentrePersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
         );
     }
 
@@ -787,4 +783,26 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("requestClarifyingQuestionsAipNotificationGenerator")
+    public List<NotificationGenerator> requestClarifyingQuestionsAipNotificationGenerator(
+        AppellantRequestClarifyingQuestionsPersonalisationEmail appellantRequestClarifyingQuestionsPersonalisationEmail,
+        AppellantRequestClarifyingQuestionsPersonalisationSms appellantRequestClarifyingQuestionsPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantRequestClarifyingQuestionsPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantRequestClarifyingQuestionsPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
 }

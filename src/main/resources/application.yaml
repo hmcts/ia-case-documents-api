@@ -243,6 +243,10 @@ govnotify:
       appellant:
         email: 349fe4e3-1e71-4ddc-bf23-671d086a2204
         sms: 88117492-03e8-4c88-83b1-a172c114e354
+    requestClarifyingQuestions:
+      appellant:
+        email: 500c6a6f-7d4f-4833-86c4-a07b43bbe717
+        sms: bcfbd5a8-fc88-4c7f-ad16-e28d62dfbe73
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -320,6 +324,7 @@ security:
       - "removeAppealFromOnline"
       - "changeHearingCentre"
       - "reviewTimeExtension"
+      - "sendDirectionWithQuestions"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

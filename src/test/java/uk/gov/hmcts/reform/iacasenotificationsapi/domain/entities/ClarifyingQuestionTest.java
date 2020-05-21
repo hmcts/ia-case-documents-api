@@ -1,16 +1,28 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static junit.framework.TestCase.assertEquals;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.Test;
 
 public class ClarifyingQuestionTest {
-    private final String expectedQuestion = "question";
-    private final ClarifyingQuestion clarifyingQuestion = new ClarifyingQuestion(expectedQuestion);
+
+    private final String question = "When did this happen?";
+
+    private ClarifyingQuestion clarifyingQuestions = new ClarifyingQuestion(
+        question
+    );
 
     @Test
-    public void pointlessTestToGetCodeCoverageUp() {
-        assertThat(clarifyingQuestion.getQuestion(), is(expectedQuestion));
+    public void should_hold_onto_values() {
+        assertEquals(question, clarifyingQuestions.getQuestion());
+    }
+
+    @Test
+    public void should_not_allow_null_arguments() {
+
+        assertThatThrownBy(() -> new ClarifyingQuestion(null))
+            .isExactlyInstanceOf(NullPointerException.class);
+
     }
 }
