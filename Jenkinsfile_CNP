@@ -58,7 +58,6 @@ withPipeline(type, product, component) {
     env.EM_BUNDLER_URL = "http://em-ccd-orchestrator-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
 
-    installCharts()
     enableAksStagingDeployment()
     disableLegacyDeployment()
     loadVaultSecrets(secrets)
