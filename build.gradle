@@ -161,6 +161,12 @@ dependencyManagement {
     dependencySet(group: 'com.google.guava', version: '29.0-jre') {
       entry 'guava'
     }
+
+    // CVE-2020-9484 present in 9.0.34
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.35') {
+      entry 'tomcat-embed-core'
+      entry 'tomcat-embed-websocket'
+    }
   }
 }
 
@@ -238,6 +244,7 @@ dependencies {
   functionalTestImplementation sourceSets.test.runtimeClasspath
 
   smokeTestImplementation sourceSets.main.runtimeClasspath
+  smokeTestImplementation sourceSets.test.runtimeClasspath
 }
 
 mainClassName = 'uk.gov.hmcts.reform.iacasepaymentsapi.Application'
