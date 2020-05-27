@@ -15,7 +15,11 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseoff
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.*;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.EditListingEmailNotificationGenerator;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.EmailNotificationGenerator;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGenerator;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationIdAppender;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.SmsNotificationGenerator;
 
 @Configuration
 public class NotificationGeneratorConfiguration {
@@ -804,5 +808,28 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("submitClarifyingQuestionAnswersNotificationGenerator")
+    public List<NotificationGenerator> submitClarifyingQuestionAnswersNotificationGenerator(
+        CaseOfficerClarifyingQuestionsAnswersSubmittedPersonalisation caseOfficerClarifyingQuestionsAnswersSubmittedPersonalisation,
+        AppellantSubmitClarifyingQuestionAnswersPersonalisationSms appellantSubmitClarifyingQuestionAnswersPersonalisationSms,
+        AppellantSubmitClarifyingQuestionAnswersPersonalisationEmail appellantSubmitClarifyingQuestionAnswersPersonalisationEmail,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantSubmitClarifyingQuestionAnswersPersonalisationEmail, caseOfficerClarifyingQuestionsAnswersSubmittedPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantSubmitClarifyingQuestionAnswersPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
 
 }

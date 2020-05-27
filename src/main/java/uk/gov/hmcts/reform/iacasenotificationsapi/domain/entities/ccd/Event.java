@@ -48,6 +48,7 @@ public enum Event {
     SUBMIT_TIME_EXTENSION("submitTimeExtension"),
     REVIEW_TIME_EXTENSION("reviewTimeExtension"),
     SEND_DIRECTION_WITH_QUESTIONS("sendDirectionWithQuestions"),
+    SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

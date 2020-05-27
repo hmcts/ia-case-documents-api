@@ -247,7 +247,12 @@ govnotify:
       appellant:
         email: 500c6a6f-7d4f-4833-86c4-a07b43bbe717
         sms: bcfbd5a8-fc88-4c7f-ad16-e28d62dfbe73
-
+    submitClarifyingQuestionAnswers:
+      caseOfficer:
+        email: 988461af-9111-4b4a-abba-6dfb3a40b422
+      appellant:
+        email: 6e439fce-aee0-45e8-97a5-4a79c9baac07
+        sms: 9af78520-ffdb-4d08-b93f-3e6357fe0394
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -286,6 +291,7 @@ security:
       - "submitAppeal"
       - "submitReasonsForAppeal"
       - "submitTimeExtension"
+      - "submitClarifyingQuestionAnswers"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -420,4 +426,5 @@ customerServices:
 appellantDaysToWait:
   afterSubmission: 28
   afterReasonsForAppeal: 14
+  afterClarifyingQuestionsAnswers: 5
 
