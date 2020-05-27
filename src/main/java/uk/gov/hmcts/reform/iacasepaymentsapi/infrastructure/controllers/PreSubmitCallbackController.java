@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -46,13 +47,27 @@ public class PreSubmitCallbackController {
         this.callbackDispatcher = callbackDispatcher;
     }
 
-    @ApiOperation("Handles 'AboutToStartEvent' callbacks from CCD")
+    @ApiOperation(
+        value = "Handles 'AboutToStartEvent' callbacks from CCD",
+        authorizations = {
+            @Authorization(value = "Authorization"),
+            @Authorization(value = "ServiceAuthorization")
+        }
+    )
     @ApiResponses({
         @ApiResponse(
             code = 200,
             message = "Transformed Asylum case data, with any identified error or warning messages",
             response = PreSubmitCallbackResponse.class
-        )
+        ),
+        @ApiResponse(
+            code = 401,
+            message = "An error occurred while attempting to decode the Jwt: Invalid token"
+        ),
+        @ApiResponse(
+            code = 403,
+            message = "Forbidden"
+        ),
     })
     @PostMapping(path = "/ccdAboutToStart")
     public ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> ccdAboutToStart(
@@ -61,12 +76,22 @@ public class PreSubmitCallbackController {
         return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_START, callback);
     }
 
-    @ApiOperation("Handles 'AboutToSubmitEvent' callbacks from CCD")
+    @ApiOperation(
+        value = "Handles 'AboutToSubmitEvent' callbacks from CCD",
+        authorizations = {
+            @Authorization(value = "Authorization"),
+            @Authorization(value = "ServiceAuthorization")
+        }
+    )
     @ApiResponses({
         @ApiResponse(
             code = 200,
             message = "Transformed Asylum case data, with any identified error or warning messages",
             response = PreSubmitCallbackResponse.class
+        ),
+        @ApiResponse(
+            code = 403,
+            message = "Forbidden"
         )
     })
     @PostMapping(path = "/ccdAboutToSubmit")

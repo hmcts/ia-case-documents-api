@@ -11,16 +11,22 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Dispat
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.CcdEventAuthorizor;
 
 @Component
 public class PreSubmitCallbackDispatcher<T extends CaseData> {
 
+    private final CcdEventAuthorizor ccdEventAuthorizor;
     private final List<PreSubmitCallbackHandler<T>> callbackHandlers;
 
     public PreSubmitCallbackDispatcher(
+        CcdEventAuthorizor ccdEventAuthorizor,
         List<PreSubmitCallbackHandler<T>> callbackHandlers
     ) {
+        requireNonNull(ccdEventAuthorizor, "ccdEventAuthorizor must not be null");
         requireNonNull(callbackHandlers, "callbackHandlers must not be null");
+
+        this.ccdEventAuthorizor = ccdEventAuthorizor;
         this.callbackHandlers = callbackHandlers;
     }
 
@@ -30,6 +36,8 @@ public class PreSubmitCallbackDispatcher<T extends CaseData> {
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
+
+        ccdEventAuthorizor.throwIfNotAuthorized(callback.getEvent());
 
         T caseData =
             callback

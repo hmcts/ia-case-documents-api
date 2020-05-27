@@ -4,5 +4,9 @@ spring:
       prefixed: false
       paths: /mnt/secrets/ia
       aliases:
-        fees-register-api-url: FEES_REGISTER_API_URL
+        idam-client-id: IA_IDAM_CLIENT_ID
+        idam-secret: IA_IDAM_SECRET
+        idam-redirect-uri: IA_IDAM_REDIRECT_URI
+        s2s-secret: IA_S2S_SECRET
+        s2s-microservice: IA_S2S_MICROSERVICE
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key

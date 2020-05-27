@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
+import io.restassured.http.Headers;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -30,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasepaymentsapi.util.AuthorizationHeadersProvider;
 import uk.gov.hmcts.reform.iacasepaymentsapi.util.MapMerger;
 import uk.gov.hmcts.reform.iacasepaymentsapi.util.MapSerializer;
 import uk.gov.hmcts.reform.iacasepaymentsapi.util.MapValueExpander;
@@ -47,6 +49,8 @@ public class CcdScenarioRunnerTest {
     @Autowired private Environment environment;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private List<Verifier> verifiers;
+
+    @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
 
     @BeforeEach
     public void setUp() {
@@ -128,12 +132,14 @@ public class CcdScenarioRunnerTest {
                 templatesByFilename
             );
 
+            final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
             final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
             final int expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
 
             String actualResponseBody =
                 SerenityRest
                     .given()
+                    .headers(authorizationHeaders)
                     .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                     .body(requestBody)
                     .when()
@@ -282,5 +288,18 @@ public class CcdScenarioRunnerTest {
 
             return objectMapper.writeValueAsString(preSubmitCallbackResponse);
         }
+    }
+
+    private Headers getAuthorizationHeaders(Map<String, Object> scenario) {
+
+        String credentials = MapValueExtractor.extract(scenario, "request.credentials");
+
+        if ("LegalRepresentative".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getLegalRepresentativeAuthorization();
+        }
+
+        return new Headers();
     }
 }

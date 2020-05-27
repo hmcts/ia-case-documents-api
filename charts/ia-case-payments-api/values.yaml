@@ -4,7 +4,7 @@ java:
   ingressHost: ia-case-payments-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: ia
   environment:
-    IDAM_URL: "https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net"
+    IDAM_URL: "https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net"
     S2S_URL: "http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     FEES_REGISTER_API_URL: "http://fees-register-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
   keyVaults:
@@ -13,6 +13,7 @@ java:
       secrets:
         - idam-client-id
         - idam-secret
+        - idam-redirect-uri
         - s2s-secret
         - s2s-microservice
         - AppInsightsInstrumentationKey

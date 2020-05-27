@@ -2,6 +2,7 @@
   "description": "RIA-3006 Should display the fee amount for EA appeal type",
   "request": {
     "uri": "/asylum/ccdAboutToStart",
+    "credentials": "LegalRepresentative",
     "input": {
       "eventId": "submitAppeal",
       "state": "appealStarted",

@@ -14,6 +14,33 @@ management:
 spring:
   application:
     name: Immigration & Asylum case payments API
+  main:
+    allow-bean-definition-overriding: true
+  jackson.date-format: yyyy-MM-dd
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${IDAM_URL:http://127.0.0.1:5000}/o
+        registration:
+          oidc:
+            client-id: ${IA_IDAM_CLIENT_ID:ia}
+            client-secret: ${IA_IDAM_SECRET:something}
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${IDAM_URL:http://127.0.0.1:5000}/o/jwks
+
+
+idam:
+  baseUrl: ${IDAM_URL:http://127.0.0.1:5000}
+  redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
+  s2s-auth:
+    totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
+    microservice: ${IA_S2S_MICROSERVICE:ia}
+    url: ${S2S_URL:http://127.0.0.1:4502}
+  s2s-authorised:
+    services: ${IA_S2S_AUTHORIZED_SERVICES:iac}
 
 fees-register:
   api:
@@ -26,6 +53,23 @@ fees-register:
       jurisdiction2: immigration and asylum chamber
       keyword: ABC
       service: other
+
+security:
+  anonymousPaths:
+    - "/"
+    - "/health"
+    - "/health/liveness"
+    - "/loggers/**"
+    - "/swagger-ui.html"
+    - "/swagger-resources/**"
+    - "/v2/api-docs"
+    - "/webjars/springfox-swagger-ui/**"
+    - "/favicon.ico"
+    - "/csrf"
+    - "/testing-support/**"
+  roleEventAccess:
+    caseworker-ia-legalrep-solicitor:
+    - "submitAppeal"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

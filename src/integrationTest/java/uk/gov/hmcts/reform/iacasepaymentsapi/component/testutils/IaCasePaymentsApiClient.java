@@ -1,84 +1,91 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.component.testutils;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import groovy.util.logging.Slf4j;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.fixtures.CallbackForTest;
-import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.fixtures.PreSubmitCallbackResponseForTest;
 
 @Slf4j
 public class IaCasePaymentsApiClient {
 
+    private final MockMvc mockMvc;
     private final RestTemplate restTemplate;
     private final String aboutToSubmitUrl;
     private final String aboutToStartUrl;
     private final String ccdSubmittedUrl;
 
-    public IaCasePaymentsApiClient(int port) {
+    private final HttpHeaders httpHeaders = new HttpHeaders();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public IaCasePaymentsApiClient(MockMvc mockMvc, int port) {
+        this.mockMvc = mockMvc;
         restTemplate = new RestTemplate();
         this.aboutToSubmitUrl = "http://localhost:" + port + "/asylum/ccdAboutToSubmit";
         this.aboutToStartUrl = "http://localhost:" + port + "/asylum/ccdAboutToStart";
         this.ccdSubmittedUrl = "http://localhost:" + port + "/asylum/ccdSubmitted";
     }
 
-    public PreSubmitCallbackResponseForTest aboutToSubmit(CallbackForTest.CallbackForTestBuilder callback) {
+    public PreSubmitCallbackResponseForTest aboutToSubmit(
+        CallbackForTest.CallbackForTestBuilder callback
+    ) throws Exception {
 
-        HttpEntity<CallbackForTest> requestEntity =
-            new HttpEntity<>(callback.build(), getHeaders());
+        final MockHttpServletResponse response = mockMvc.perform(post(aboutToSubmitUrl)
+            .headers(httpHeaders)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(callback.build())))
+            .andExpect(status().isOk()).andReturn().getResponse();
 
-        ResponseEntity<PreSubmitCallbackResponseForTest> responseEntity =
-            restTemplate.exchange(
-                aboutToSubmitUrl,
-                HttpMethod.POST,
-                requestEntity,
-                PreSubmitCallbackResponseForTest.class
-            );
-
-        return responseEntity.getBody();
+        return translateException(() -> objectMapper
+            .readValue(response.getContentAsByteArray(), PreSubmitCallbackResponseForTest.class));
     }
 
-    public PreSubmitCallbackResponseForTest aboutToStart(CallbackForTest.CallbackForTestBuilder callback) {
+    public PreSubmitCallbackResponseForTest aboutToStart(
+        CallbackForTest.CallbackForTestBuilder callback
+    ) throws Exception {
 
-        HttpEntity<CallbackForTest> requestEntity =
-            new HttpEntity<>(callback.build(), getHeaders());
+        final MockHttpServletResponse response = mockMvc.perform(post(aboutToStartUrl)
+            .headers(httpHeaders)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(callback.build())))
+            .andReturn().getResponse();
 
-        ResponseEntity<PreSubmitCallbackResponseForTest> responseEntity =
-            restTemplate.exchange(
-                aboutToStartUrl,
-                HttpMethod.POST,
-                requestEntity,
-                PreSubmitCallbackResponseForTest.class
-            );
-
-        return responseEntity.getBody();
+        return translateException(() -> objectMapper
+            .readValue(response.getContentAsByteArray(), PreSubmitCallbackResponseForTest.class));
     }
 
-    public PreSubmitCallbackResponseForTest ccdSubmitted(CallbackForTest.CallbackForTestBuilder callback) {
+    public PreSubmitCallbackResponseForTest ccdSubmitted(
+        CallbackForTest.CallbackForTestBuilder callback
+    ) throws Exception {
 
-        HttpEntity<CallbackForTest> requestEntity =
-            new HttpEntity<>(callback.build(), getHeaders());
+        final MockHttpServletResponse response = mockMvc.perform(post(ccdSubmittedUrl)
+            .headers(httpHeaders)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(callback.build())))
+            .andExpect(status().isOk()).andReturn().getResponse();
 
-        ResponseEntity<PreSubmitCallbackResponseForTest> responseEntity =
-            restTemplate.exchange(
-                ccdSubmittedUrl,
-                HttpMethod.POST,
-                requestEntity,
-                PreSubmitCallbackResponseForTest.class
-            );
-
-        return responseEntity.getBody();
+        return translateException(() -> objectMapper
+            .readValue(response.getContentAsByteArray(), PreSubmitCallbackResponseForTest.class));
     }
 
+    private String toJson(Object o) {
+        return translateException(() -> objectMapper.writeValueAsString(o));
+    }
 
-    private HttpHeaders getHeaders() {
+    private <T> T translateException(CallableWithException<T> callable) {
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        return headers;
+    interface CallableWithException<T> {
+        T call() throws Exception;
     }
 }

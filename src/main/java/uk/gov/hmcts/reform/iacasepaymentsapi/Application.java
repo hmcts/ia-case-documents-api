@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableFeignClients(basePackages = {
+    "uk.gov.hmcts.reform.authorisation",
     "uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients"
 })
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
