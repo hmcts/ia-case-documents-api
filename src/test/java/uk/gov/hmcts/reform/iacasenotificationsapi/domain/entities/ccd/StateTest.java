@@ -24,10 +24,12 @@ public class StateTest {
         assertEquals("decided", State.DECIDED.toString());
         assertEquals("unknown", State.UNKNOWN.toString());
         assertEquals("awaitingReasonsForAppeal", State.AWAITING_REASONS_FOR_APPEAL.toString());
+        assertEquals("awaitingClarifyingQuestionsAnswers", State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS.toString());
+        assertEquals("awaitingCmaRequirements", State.AWAITING_CMA_REQUIREMENTS.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(17, State.values().length);
+        assertEquals(19, State.values().length);
     }
 }

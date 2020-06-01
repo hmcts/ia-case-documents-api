@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2873 AIP TCW Approves time extension requests (Email and SMS) to appellant",
+  "description": "RIA-2873 AIP - [Reasons for appeal] Time extension Granted (Email and SMS) to appellant",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -97,7 +97,7 @@
           "PA/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
-          "why you think the Home Office decision is wrong",
+          "tell us why you think the Home Office decision is wrong",
           "{$TODAY+14|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
         ]
@@ -108,6 +108,7 @@
         "subject": "",
         "body": [
           "PA/12345/2019",
+          "tell us why you think the Home Office decision is wrong",
           "{$TODAY+14|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
         ]

@@ -1,16 +1,17 @@
 {
-  "description": "RIA-2873 AIP - [Reasons for appeal] Time extension Refused (Email and SMS) to appellant",
+  "description": "RIA-2828 AIP - [Reasons for appeal] Request Time extension notifications (Email and SMS) to appellant and Email to Case Officer",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "CaseOfficer",
+    "credentials": "Citizen",
     "input": {
-      "id": 1011,
-      "eventId": "reviewTimeExtension",
+      "id": 1010,
+      "eventId": "submitTimeExtension",
       "state": "awaitingReasonsForAppeal",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
           "hearingCentre": "manchester",
+          "submissionOutOfTime": "Yes",
           "subscriptions": [
             {
               "id": "1",
@@ -20,20 +21,6 @@
                 "wantsEmail": "Yes",
                 "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
                 "wantsSms": "Yes"
-              }
-            }
-          ],
-          "timeExtensions": [
-            {
-              "id": "1",
-              "value": {
-                "requestDate": "{$TODAY}",
-                "state": "awaitingReasonsForAppeal",
-                "status": "refused",
-                "evidence":  null,
-                "decision": "refused",
-                "decisionReason": "Not enough information",
-                "decisionOutcomeDate": "{$TODAY}"
               }
             }
           ],
@@ -49,7 +36,7 @@
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
         "hearingCentre": "manchester",
-        "submissionOutOfTime": "No",
+        "submissionOutOfTime": "Yes",
         "subscriptions": [
           {
             "id": "1",
@@ -62,27 +49,17 @@
             }
           }
         ],
-        "timeExtensions": [
-          {
-            "id": "1",
-            "value": {
-              "requestDate": "{$TODAY}",
-              "state": "awaitingReasonsForAppeal",
-              "status": "refused",
-              "evidence":  null,
-              "decision": "refused",
-              "decisionReason": "Not enough information",
-              "decisionOutcomeDate": "{$TODAY}"
-            }
-          }
-        ],
         "notificationsSent": [
           {
-            "id": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_EMAIL",
+            "id": "1010_SUBMIT_TIME_EXTENSION_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_SMS",
+            "id": "1010_SUBMIT_TIME_EXTENSION_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1010_SUBMIT_TIME_EXTENSION_APPELLANT_AIP_SMS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -90,27 +67,32 @@
     },
     "notifications": [
       {
-        "reference": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_EMAIL",
+        "reference": "1010_SUBMIT_TIME_EXTENSION_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: Request for more time submitted",
+        "body": [
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1010_SUBMIT_TIME_EXTENSION_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Your request for more time has been refused",
+        "subject": "Your request for more time has been sent",
         "body": [
           "PA/12345/2019",
           "A1234567",
-          "Pablo Jimenez,",
-          "Not enough information",
-          "tell us why you think the Home Office decision is wrong",
-          "{$TODAY|d MMM yyyy}",
+          "Pablo Jimenez",
           "{$iaAipFrontendUrl}"
         ]
       },
       {
-        "reference": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_SMS",
+        "reference": "1010_SUBMIT_TIME_EXTENSION_APPELLANT_AIP_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
           "PA/12345/2019",
-          "tell us why you think the Home Office decision is wrong",
-          "{$TODAY|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
         ]
       }

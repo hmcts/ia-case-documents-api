@@ -1,12 +1,12 @@
 {
-  "description": "RIA-2873 AIP - [Reasons for appeal] Time extension Refused (Email and SMS) to appellant",
+  "description": "RIA-2976 AIP - [Clarifying questions] Time extension Granted (Email and SMS) to appellant",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 1011,
+      "id": 1021,
       "eventId": "reviewTimeExtension",
-      "state": "awaitingReasonsForAppeal",
+      "state": "awaitingClarifyingQuestionsAnswers",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
@@ -28,12 +28,12 @@
               "id": "1",
               "value": {
                 "requestDate": "{$TODAY}",
-                "state": "awaitingReasonsForAppeal",
-                "status": "refused",
+                "state": "awaitingClarifyingQuestionsAnswers",
+                "status": "granted",
                 "evidence":  null,
-                "decision": "refused",
-                "decisionReason": "Not enough information",
-                "decisionOutcomeDate": "{$TODAY}"
+                "decision": "granted",
+                "decisionReason": "Request has been approved I have allowed an extra 14 days.",
+                "decisionOutcomeDate": "{$TODAY+14}"
               }
             }
           ],
@@ -67,22 +67,22 @@
             "id": "1",
             "value": {
               "requestDate": "{$TODAY}",
-              "state": "awaitingReasonsForAppeal",
-              "status": "refused",
+              "state": "awaitingClarifyingQuestionsAnswers",
+              "status": "granted",
               "evidence":  null,
-              "decision": "refused",
-              "decisionReason": "Not enough information",
-              "decisionOutcomeDate": "{$TODAY}"
+              "decision": "granted",
+              "decisionReason": "Request has been approved I have allowed an extra 14 days.",
+              "decisionOutcomeDate": "{$TODAY+14}"
             }
           }
         ],
         "notificationsSent": [
           {
-            "id": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_EMAIL",
+            "id": "1021_REVIEW_TIME_EXTENSION_GRANTED_APPELLANT_AIP_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_SMS",
+            "id": "1021_REVIEW_TIME_EXTENSION_GRANTED_APPELLANT_AIP_SMS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -90,27 +90,26 @@
     },
     "notifications": [
       {
-        "reference": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_EMAIL",
+        "reference": "1021_REVIEW_TIME_EXTENSION_GRANTED_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Your request for more time has been refused",
+        "subject": "Your request for more time has been granted",
         "body": [
           "PA/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
-          "Not enough information",
-          "tell us why you think the Home Office decision is wrong",
-          "{$TODAY|d MMM yyyy}",
+          "answer the Tribunal's questions",
+          "{$TODAY+14|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
         ]
       },
       {
-        "reference": "1011_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_SMS",
+        "reference": "1021_REVIEW_TIME_EXTENSION_GRANTED_APPELLANT_AIP_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
           "PA/12345/2019",
-          "tell us why you think the Home Office decision is wrong",
-          "{$TODAY|d MMM yyyy}",
+          "answer the Tribunal's questions",
+          "{$TODAY+14|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
         ]
       }

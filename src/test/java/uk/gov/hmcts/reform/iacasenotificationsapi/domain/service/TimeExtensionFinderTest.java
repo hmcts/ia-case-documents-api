@@ -158,12 +158,22 @@ public class TimeExtensionFinderTest {
 
     @Test
     public void should_return_correct_text_description() {
+        State currentState;
+        String result;
 
-        State currentState = State.AWAITING_REASONS_FOR_APPEAL;
+        currentState = State.AWAITING_REASONS_FOR_APPEAL;
+        result = timeExtensionFinder.findNextActionText(currentState);
+        assertEquals(result, "tell us why you think the Home Office decision is wrong");
 
-        String result = timeExtensionFinder.findNextActionText(currentState);
 
-        assertEquals(result, "why you think the Home Office decision is wrong");
+        currentState = State.AWAITING_CMA_REQUIREMENTS;
+        result = timeExtensionFinder.findNextActionText(currentState);
+        assertEquals(result, "tell us if you will need anything at your appointment");
+
+
+        currentState = State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS;
+        result = timeExtensionFinder.findNextActionText(currentState);
+        assertEquals(result, "answer the Tribunal's questions");
 
     }
 

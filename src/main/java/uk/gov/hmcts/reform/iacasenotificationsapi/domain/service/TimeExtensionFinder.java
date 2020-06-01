@@ -55,9 +55,11 @@ public class TimeExtensionFinder {
 
         switch (currentState) {
             case AWAITING_REASONS_FOR_APPEAL:
-                return "why you think the Home Office decision is wrong";
-
-            // TODO: Add Case Building and CMA
+                return "tell us why you think the Home Office decision is wrong";
+            case AWAITING_CLARIFYING_QUESTIONS_ANSWERS:
+                return "answer the Tribunal's questions";
+            case AWAITING_CMA_REQUIREMENTS:
+                return "tell us if you will need anything at your appointment";
             default:
                 throw new IllegalArgumentException("No next step text description value found for state: " + currentState);
 
