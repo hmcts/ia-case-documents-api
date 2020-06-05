@@ -253,6 +253,9 @@ govnotify:
       appellant:
         email: 6e439fce-aee0-45e8-97a5-4a79c9baac07
         sms: 9af78520-ffdb-4d08-b93f-3e6357fe0394
+    requestCaseEdit:
+      legalRep:
+        email: 194e0a44-4fab-4e75-94a9-6d910dc4879a
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
