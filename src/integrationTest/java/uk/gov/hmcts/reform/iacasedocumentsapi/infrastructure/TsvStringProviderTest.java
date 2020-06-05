@@ -191,6 +191,12 @@ public class TsvStringProviderTest {
             Optional.of("Zimbabwe"),
             tsvStringProvider.get("isoCountries", "ZW")
         );
+
+
+        assertEquals(
+                Optional.of("Stateless"),
+                tsvStringProvider.get("isoCountries", "ZZ")
+        );
     }
 
     @Test
