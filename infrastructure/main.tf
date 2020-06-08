@@ -96,4 +96,3 @@ data "azurerm_lb" "consul_dns" {
   resource_group_name = "${var.consul_dns_resource_group_name}"
 }
 
-}
