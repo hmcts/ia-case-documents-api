@@ -54,6 +54,13 @@ fees-register:
       keyword: ABC
       service: other
 
+payment:
+  api:
+    url: ${PAYMENT_API_URL:http://localhost:8991}
+  params:
+    organisationUrn: immigration and asylum chamber
+    siteId: ABA3
+
 security:
   anonymousPaths:
     - "/"
@@ -69,6 +76,7 @@ security:
     - "/testing-support/**"
   roleEventAccess:
     caseworker-ia-legalrep-solicitor:
+    - "startAppeal"
     - "submitAppeal"
 
 ### dependency configuration

@@ -4,12 +4,16 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertNotNull;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import java.io.IOException;
@@ -41,7 +45,8 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.component.testutils.TestConfigurati
     "S2S_URL=http://127.0.0.1:8990/s2s",
     "IA_IDAM_CLIENT_ID=ia",
     "IA_IDAM_SECRET=something",
-    "FEES_REGISTER_API_URL=http://localhost:8990"
+    "FEES_REGISTER_API_URL=http://localhost:8990",
+    "PAYMENT_API_URL=http://localhost:8990"
 })
 @SpringBootTest(classes = {
     TestConfiguration.class,
@@ -57,11 +62,21 @@ public abstract class SpringBootIntegrationTest {
 
     private String feeRegisterApiUri = "/fees-register/fees/lookup";
 
+    private String paymentApiUri = "/credit-account-payments";
+
     @Value("classpath:fees-register-api-response.json")
     private Resource resourceFile;
 
+    @Value("classpath:payment-api-response.json")
+    private Resource paymentResponseResourceFile;
+
+    @Value("classpath:credit-account-payment-request.json")
+    private Resource creditAccountPaymentRequestResourceFile;
+
     @LocalServerPort
     protected int port;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private WireMockServer wireMockServer;
 
@@ -75,6 +90,23 @@ public abstract class SpringBootIntegrationTest {
     @BeforeEach
     public void setUpApiClient() {
         iaCasePaymentsApiClient = new IaCasePaymentsApiClient(mockMvc, port);
+    }
+
+    @BeforeEach
+    public void setupServiceAuthStub() {
+
+        stubFor(get(urlEqualTo("/s2s/details"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("ia")));
+
+        stubFor(post(urlEqualTo("/s2s/lease"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ."
+                          + "L8i6g3PfcHlioHCCPURC9pmXT7gdJpx3kOoyAfNUwCc")));
     }
 
     @BeforeEach
@@ -95,6 +127,25 @@ public abstract class SpringBootIntegrationTest {
                     .withBody(feeResponseJson)));
     }
 
+    @BeforeEach
+    public void setUpPaymentApiStub() throws IOException {
+
+        String paymentResponseJson =
+            new String(Files.readAllBytes(Paths.get(paymentResponseResourceFile.getURI())));
+
+        String creditAccountPaymentJson =
+            new String(Files.readAllBytes(Paths.get(creditAccountPaymentRequestResourceFile.getURI())));
+
+        assertNotNull(paymentResponseJson);
+
+        stubFor(post(urlPathEqualTo(paymentApiUri))
+            .withRequestBody(equalToJson(creditAccountPaymentJson))
+            .willReturn(aResponse()
+                .withStatus(201)
+                .withHeader("Content-type", "Application/json")
+                .withBody(paymentResponseJson)));
+    }
+
     private Map<String, StringValuePattern> getOralFeeRequestParams() {
 
         Map<String, StringValuePattern> queryParams = new HashMap<>();
@@ -112,5 +163,4 @@ public abstract class SpringBootIntegrationTest {
     public void tearDown() {
         wireMockServer.stop();
     }
-
 }
