@@ -750,4 +750,16 @@ public class NotificationHandlerConfiguration {
             }, notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> forceCaseProgressionToCaseUnderReviewHandler(
+        @Qualifier("forceCaseProgressionToCaseUnderReviewNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.FORCE_CASE_TO_CASE_UNDER_REVIEW,
+            notificationGenerator
+        );
+    }
 }

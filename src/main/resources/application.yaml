@@ -30,6 +30,10 @@ govnotify:
   baseUrl: "https://api.notifications.service.gov.uk"
   key: ${IA_GOV_NOTIFY_KEY}
   template:
+    forceCaseProgression:
+      caseBuilding.to.caseUnderReview:
+        legalRep:
+          email: e8197293-3db9-4af9-95d2-067e217c03c2
     appealSubmitted:
       appellant:
         email: 4625616a-178b-45fb-aebf-8cb945369ae0
@@ -334,6 +338,7 @@ security:
       - "changeHearingCentre"
       - "reviewTimeExtension"
       - "sendDirectionWithQuestions"
+      - "forceCaseToCaseUnderReview"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

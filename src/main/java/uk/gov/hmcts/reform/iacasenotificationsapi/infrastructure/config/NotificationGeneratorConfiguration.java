@@ -848,5 +848,22 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("forceCaseProgressionToCaseUnderReviewNotificationGenerator")
+    public List<NotificationGenerator> forceCaseProgressionToCaseUnderReviewNotificationGenerator(
+        LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisation forceCaseProgressionToCaseUnderReviewPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    forceCaseProgressionToCaseUnderReviewPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 
 }
