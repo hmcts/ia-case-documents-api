@@ -40,6 +40,8 @@ govnotify:
         sms: 5b7091e5-908a-4c5b-ac66-5dc5216fc53b
       caseOfficer:
         email: f90aa4d9-159d-4423-ab96-73a1e23c92d4
+      homeOffice:
+        email: 0f9c8b34-f9d2-4796-804a-a9cd0ab5359d
     appealSubmittedOutOfTime:
       appellant:
         email: b864d01f-c80c-4d91-947f-9599f0b64163
