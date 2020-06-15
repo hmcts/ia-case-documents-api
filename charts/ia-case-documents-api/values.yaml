@@ -4,6 +4,7 @@ java:
   aadIdentityName: ia
   environment:
     CCD_URL: "http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+    IA_AIP_FRONTEND_URL: https://immigration-appeal.platform.hmcts.net/
   keyVaults:
     ia:
       resourceGroup: ia

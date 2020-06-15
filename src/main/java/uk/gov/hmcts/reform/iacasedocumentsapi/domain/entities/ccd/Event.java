@@ -29,6 +29,8 @@ public enum Event {
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
     EDIT_CASE_LISTING("editCaseListing"),
     END_APPEAL("endAppeal"),
+    LIST_CMA("listCma"),
+
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
@@ -44,5 +46,5 @@ public enum Event {
     public String toString() {
         return id;
     }
-    
+
 }

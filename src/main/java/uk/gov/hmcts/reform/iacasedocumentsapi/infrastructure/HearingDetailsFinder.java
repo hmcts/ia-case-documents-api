@@ -48,5 +48,6 @@ public class HearingDetailsFinder {
             .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
             .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
     }
+
 }
 

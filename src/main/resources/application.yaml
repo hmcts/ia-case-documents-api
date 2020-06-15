@@ -78,6 +78,11 @@ decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00058.docx}
 
+aipAppointmentNotice.contentType:  application/pdf
+aipAppointmentNotice.fileExtension: PDF
+aipAppointmentNotice.fileName: "Appointment-notice"
+aipAppointmentNotice.templateName: ${IA_AIP_APPOINTMENT_NOTICE_TEMPLATE:TB-IAC-XXX-ENG-00000.docx}
+
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
 hearingBundle.fileExtension: PDF
@@ -92,6 +97,7 @@ endAppeal.fileName: "NoticeOfEndedAppeal"
 endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00078.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
+iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
 docmosis.endpoint: ${DOCMOSIS_ENDPOINT}

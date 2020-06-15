@@ -2,3 +2,5 @@ java:
   # Don't modify below here
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  environment:
+    IA_AIP_FRONTEND_URL: "https://immigration-appeal.{{ .Values.global.environment }}.platform.hmcts.net/"

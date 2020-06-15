@@ -1,7 +1,10 @@
 #!groovy
 properties([
     [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/ia-case-documents-api.git'],
-    pipelineTriggers([[$class: 'GitHubPushTrigger']])
+    pipelineTriggers([[$class: 'GitHubPushTrigger']]),
+    parameters([
+        string(name: 'IA_AIP_FRONTEND_URL', defaultValue: 'https://immigration-appeal.aat.platform.hmcts.net/', description: 'The AIP frontend URL that will be included in personalisation')
+    ])
 ])
 
 @Library("Infrastructure")
@@ -50,6 +53,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withPipeline(type, product, component) {
+
+    env.IA_AIP_FRONTEND_URL = params.IA_AIP_FRONTEND_URL
 
     installCharts()
     enableAksStagingDeployment()

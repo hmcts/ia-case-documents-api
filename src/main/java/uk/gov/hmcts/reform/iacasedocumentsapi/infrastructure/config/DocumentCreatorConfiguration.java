@@ -55,6 +55,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("aipAppointmentNotice")
+    public DocumentCreator<AsylumCase> getAipAppointmentNoticeDocumentCreator(
+        @Value("${aipAppointmentNotice.contentType}") String contentType,
+        @Value("${aipAppointmentNotice.fileExtension}") String fileExtension,
+        @Value("${aipAppointmentNotice.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        AppointmentNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("hearingNotice")
     public DocumentCreator<AsylumCase> getHearingNoticeDocumentCreator(
         @Value("${hearingNoticeDocument.contentType}") String contentType,

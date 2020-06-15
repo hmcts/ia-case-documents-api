@@ -277,6 +277,12 @@ public enum AsylumCaseDefinition {
     SUBMIT_HEARING_REQUIREMENTS_AVAILABLE(
         "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),
 
+    JOURNEY_TYPE(
+        "journeyType", new TypeReference<JourneyType>(){}),
+
+    DIRECTIONS(
+        "directions", new TypeReference<List<IdValue<Direction>>>(){}),
+
     ;
 
     private final String value;
