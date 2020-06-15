@@ -50,6 +50,7 @@ public enum Event {
     SEND_DIRECTION_WITH_QUESTIONS("sendDirectionWithQuestions"),
     SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers"),
     FORCE_CASE_TO_CASE_UNDER_REVIEW("forceCaseToCaseUnderReview"),
+    FORCE_CASE_TO_SUBMIT_HEARING_REQUIREMENTS("forceCaseToSubmitHearingRequirements"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

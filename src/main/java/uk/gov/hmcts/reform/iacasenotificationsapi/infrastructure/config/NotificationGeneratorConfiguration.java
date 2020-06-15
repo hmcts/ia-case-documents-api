@@ -882,4 +882,22 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("forceCaseToSubmitHearingRequirementsNotificationGenerator")
+    public List<NotificationGenerator> forceCaseToSubmitHearingRequirementsNotificationGenerator(
+        RespondentForceCaseToSubmitHearingRequirementsPersonalisation respondentForceCaseToSubmitHearingRequirementsPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    respondentForceCaseToSubmitHearingRequirementsPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
 }
