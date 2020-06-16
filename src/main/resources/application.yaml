@@ -91,11 +91,17 @@ endAppeal.fileExtension: PDF
 endAppeal.fileName: "NoticeOfEndedAppeal"
 endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
 
+cmaRequirements.contentType:  application/pdf
+cmaRequirements.fileExtension: PDF
+cmaRequirements.fileName: "Case-management-appointment-requirements"
+cmaRequirements.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-CMA-ENG-00000.docx}
+
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
 docmosis.endpoint: ${DOCMOSIS_ENDPOINT}
-docmosis.render.uri: /rs/render
+docmosis.render.uri: /api/render
 docmosis.status.uri: /rs/status
 docmosis.convert.uri: /rs/convert
 
@@ -163,6 +169,7 @@ security:
       - "startAppeal"
       - "editAppeal"
       - "submitAppeal"
+      - "submitCmaRequirements"
     caseworker-ia-iacjudge:
       - "generateDecisionAndReasons"
       - "endAppeal"

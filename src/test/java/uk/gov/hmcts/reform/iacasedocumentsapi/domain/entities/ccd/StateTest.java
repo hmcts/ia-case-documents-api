@@ -25,10 +25,11 @@ public class StateTest {
         assertEquals("decided", State.DECIDED.toString());
         assertEquals("ended", State.ENDED.toString());
         assertEquals("unknown", State.UNKNOWN.toString());
+        assertEquals("awaitingCmaRequirements", State.AWAITING_CMA_REQUIREMENTS.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(17, State.values().length);
+        assertEquals(18, State.values().length);
     }
 }
