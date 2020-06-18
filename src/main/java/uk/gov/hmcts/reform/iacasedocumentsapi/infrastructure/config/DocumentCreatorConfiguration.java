@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,7 +62,28 @@ public class DocumentCreatorConfiguration {
         @Value("${hearingNoticeDocument.fileExtension}") String fileExtension,
         @Value("${hearingNoticeDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        HearingNoticeTemplate documentTemplate,
+        @Qualifier("hearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("hearingNoticeAdjournedWithoutDate")
+    public DocumentCreator<AsylumCase> getHearingNoticeAdjournedWithoutDateDocumentCreator(
+        @Value("${hearingNoticeAdjournedWithoutDateDocument.contentType}") String contentType,
+        @Value("${hearingNoticeAdjournedWithoutDateDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeAdjournedWithoutDateDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("hearingNoticeAdjournedWithoutDateTemplate") HearingNoticeTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
