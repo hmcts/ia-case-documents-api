@@ -46,12 +46,19 @@ fees-register:
   api:
     url: ${FEES_REGISTER_API_URL:http://localhost:8991}
   fees:
-    oralFee:
+    feeWithHearing:
       channel: default
       event: issue
       jurisdiction1: tribunal
       jurisdiction2: immigration and asylum chamber
       keyword: ABC
+      service: other
+    feeWithoutHearing:
+      channel: default
+      event: issue
+      jurisdiction1: tribunal
+      jurisdiction2: immigration and asylum chamber
+      keyword: DEF
       service: other
 
 payment:
@@ -77,7 +84,8 @@ security:
   roleEventAccess:
     caseworker-ia-legalrep-solicitor:
     - "startAppeal"
-    - "submitAppeal"
+    - "editAppeal"
+    - "paymentAppeal"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

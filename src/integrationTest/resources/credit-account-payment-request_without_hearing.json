@@ -1,19 +1,19 @@
 {
   "account_number": "PBA0066906",
-  "amount": 140.00,
+  "amount": 80.00,
   "ccd_case_number": "0",
   "currency": "GBP",
   "customer_reference": "CustRef123",
-  "description": "A test pba payment",
+  "description": "The fee for this type of appeal without a hearing is £80.00",
   "organisation_name": "immigration and asylum chamber",
   "service": "IAC",
   "site_id": "ABA3",
   "fees": [
     {
-      "code": "FEE0238",
-      "description": "Appeal determined with a hearing",
-      "version": 2,
-      "calculated_amount": 140.00
+      "calculated_amount": 80.00,
+      "description": "Appeal determined without a hearing",
+      "version": "2",
+      "code": "FEE0456"
     }
   ]
 }

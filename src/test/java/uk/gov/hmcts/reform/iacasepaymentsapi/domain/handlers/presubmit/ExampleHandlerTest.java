@@ -50,7 +50,7 @@ public class ExampleHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Cannot handle callback");
 
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
         assertThatThrownBy(() -> exampleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Cannot handle callback");

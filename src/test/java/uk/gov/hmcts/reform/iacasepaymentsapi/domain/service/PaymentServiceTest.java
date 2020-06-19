@@ -83,6 +83,6 @@ class PaymentServiceTest {
         return new CreditAccountPayment("PBA0066906", new BigDecimal("140.00"),
             "caseReference", "ccdCaseNumber",
             Currency.GBP, "customerReference", "Some description",
-            Arrays.asList(new Fee("FEE0123", "Fee description", 1, new BigDecimal("140.00"))));
+            Arrays.asList(new Fee("FEE0123", "Fee description", "1", new BigDecimal("140.00"))));
     }
 }

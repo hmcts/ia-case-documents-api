@@ -67,7 +67,7 @@ public class PreSubmitCallbackDispatcherTest {
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-            when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+            when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(caseData);
 
@@ -94,7 +94,7 @@ public class PreSubmitCallbackDispatcherTest {
             assertThat(caseData).isEqualTo(callbackResponse.getData());
             assertThat(callbackResponse.getErrors(), Matchers.is(expectedErrors));
 
-            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPEAL);
+            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.PAYMENT_APPEAL);
 
             InOrder inOrder = inOrder(handler1, handler2, handler3);
 
@@ -115,7 +115,7 @@ public class PreSubmitCallbackDispatcherTest {
     public void should_only_dispatch_callback_to_handlers_that_can_handle_it() {
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-            when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+            when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(caseData);
 
@@ -138,7 +138,7 @@ public class PreSubmitCallbackDispatcherTest {
             assertThat(caseData).isEqualTo(callbackResponse.getData());
             assertThat(callbackResponse.getErrors().isEmpty());
 
-            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPEAL);
+            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.PAYMENT_APPEAL);
 
             verify(handler1, times(1)).canHandle(callbackStage, callback);
             verify(handler1, times(0)).handle(callbackStage, callback);
@@ -162,7 +162,7 @@ public class PreSubmitCallbackDispatcherTest {
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
             try {
-                when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+                when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
                 when(callback.getCaseDetails()).thenReturn(caseDetails);
                 when(caseDetails.getCaseData()).thenReturn(caseData);
 
@@ -173,7 +173,7 @@ public class PreSubmitCallbackDispatcherTest {
                 assertThat(caseData).isEqualTo(callbackResponse.getData());
                 assertThat(callbackResponse.getErrors()).isEmpty();
 
-                verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPEAL);
+                verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.PAYMENT_APPEAL);
 
                 reset(ccdEventAuthorizor);
             } catch (Exception e) {

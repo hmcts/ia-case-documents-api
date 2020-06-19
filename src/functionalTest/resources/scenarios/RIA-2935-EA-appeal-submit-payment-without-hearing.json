@@ -1,25 +1,22 @@
 {
-  "description": "RIA-3006-RIA-3002 Make a payment now for EA appeal type",
+  "description": "RIA-2935 Make a payment now for EA appeal type",
   "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "eventId": "submitAppeal",
+      "eventId": "paymentAppeal",
       "state": "appealStarted",
       "caseData": {
         "template": "minimal-appeal-started.json",
         "replacements": {
-          "payForTheAppeal": "payNow",
           "appealType": "refusalOfEu",
+          "decisionHearingFeeOption": "decisionWithoutHearing",
           "homeOfficeDecisionDate": "{$TODAY-14}",
-          "accountNumber": "PBA0072626",
+          "PBANumber": "PBA0072626",
+          "homeOfficeReferenceNumber": "A123456",
           "paymentDescription": "An IA pba test payment",
-          "customerReference": "543232",
-          "feeCode": "FEE0238",
-          "feeDescription": "Appeal determined with a hearing",
-          "feeVersion": 2,
-          "feeAmount": 140.0
+          "customerReference": "543232"
         }
       }
     }
@@ -32,7 +29,13 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "paymentStatus":"Success"
+        "paymentStatus":"Paid",
+        "PBANumber":"PBA0072626",
+        "feeCode":"FEE0456",
+        "feeVersion":"2",
+        "feeAmount":"80.00",
+        "feeDescription":"Appeal determined without a hearing",
+        "paymentDescription":"The fee for this type of appeal without a hearing is £80.00"
       }
     }
   }

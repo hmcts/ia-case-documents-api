@@ -1,0 +1,42 @@
+{
+  "description": "RIA-3006-RIA-3002 Make a payment now for EA appeal type",
+  "enabled": false,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "eventId": "paymentAppeal",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "appealType": "refusalOfEu",
+          "decisionHearingFeeOption": "decisionWithHearing",
+          "homeOfficeDecisionDate": "{$TODAY-14}",
+          "PBANumber": "PBA0072626",
+          "homeOfficeReferenceNumber": "A123456",
+          "paymentDescription": "An IA pba test payment",
+          "customerReference": "543232"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+        "appealType": "refusalOfEu",
+        "homeOfficeDecisionDate": "{$TODAY-14}",
+        "paymentStatus":"Paid",
+        "PBANumber":"PBA0072626",
+        "feeCode":"FEE0238",
+        "feeVersion":"2",
+        "feeAmount":"140.00",
+        "feeDescription":"Appeal determined with a hearing",
+        "paymentDescription":"The fee for this type of appeal with a hearing is £140.00"
+      }
+    }
+  }
+}

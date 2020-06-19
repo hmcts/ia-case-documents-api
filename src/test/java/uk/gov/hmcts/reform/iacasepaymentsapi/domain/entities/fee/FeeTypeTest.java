@@ -12,12 +12,13 @@ public class FeeTypeTest {
     @Test
     public void should_have_correct_values() {
 
-        assertThat("oralFee", is(FeeType.ORAL_FEE.toString()));
+        assertThat("feeWithHearing", is(FeeType.FEE_WITH_HEARING.toString()));
+        assertThat("feeWithoutHearing", is(FeeType.FEE_WITHOUT_HEARING.toString()));
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
 
-        assertEquals(1, FeeType.values().length);
+        assertEquals(2, FeeType.values().length);
     }
 }

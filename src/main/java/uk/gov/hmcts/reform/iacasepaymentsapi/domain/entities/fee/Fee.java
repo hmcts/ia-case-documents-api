@@ -11,14 +11,14 @@ public class Fee {
 
     private BigDecimal calculatedAmount;
     private String description;
-    private Integer version;
+    private String version;
     private String code;
 
     private Fee() {
 
     }
 
-    public Fee(String code, String description, Integer version, BigDecimal calculatedAmount) {
+    public Fee(String code, String description, String version, BigDecimal calculatedAmount) {
 
         this.calculatedAmount = calculatedAmount;
         this.description = description;
@@ -36,7 +36,7 @@ public class Fee {
         return description;
     }
 
-    public Integer getVersion() {
+    public String getVersion() {
         requireNonNull(version);
         return version;
     }
@@ -46,4 +46,11 @@ public class Fee {
         return code;
     }
 
+    @Override
+    public String toString() {
+        return "Fee{ calculatedAmount=" + calculatedAmount
+            + ", description='" + description + '\''
+            + ", version=" + version
+            + ", code='" + code + '\'' + '}';
+    }
 }

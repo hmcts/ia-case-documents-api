@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FeeType {
 
-    ORAL_FEE("oralFee");
+    FEE_WITH_HEARING("feeWithHearing"),
+    FEE_WITHOUT_HEARING("feeWithoutHearing");
 
     @JsonValue
     private final String value;

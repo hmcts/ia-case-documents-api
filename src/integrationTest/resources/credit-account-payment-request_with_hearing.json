@@ -1,0 +1,19 @@
+{
+  "account_number": "PBA0066906",
+  "amount": 140.00,
+  "ccd_case_number": "0",
+  "currency": "GBP",
+  "customer_reference": "CustRef123",
+  "description": "The fee for this type of appeal with a hearing is £140.00",
+  "organisation_name": "immigration and asylum chamber",
+  "service": "IAC",
+  "site_id": "ABA3",
+  "fees": [
+    {
+      "calculated_amount": 140.00,
+      "description": "Appeal determined with a hearing",
+      "version": "2",
+      "code": "FEE0238"
+    }
+  ]
+}

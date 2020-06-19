@@ -23,7 +23,7 @@ class CreditAccountPaymentTest {
     private Service service = Service.IAC;
     private String siteId = "AA001";
     private List<Fee> fees = Arrays.asList(new Fee("FEE0123",
-        "Fee description", 1, new BigDecimal("140.00")));
+        "Fee description", "1", new BigDecimal("140.00")));
 
     private CreditAccountPayment creditAccountPayment;
 

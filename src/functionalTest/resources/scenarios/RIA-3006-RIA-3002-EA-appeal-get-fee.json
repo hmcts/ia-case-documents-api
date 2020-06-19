@@ -1,7 +1,8 @@
 {
   "description": "RIA-3006-RIA-3002 Should display the fee amount for EA appeal type",
+  "enabled": false,
   "request": {
-    "uri": "/asylum/ccdAboutToSubmit",
+    "uri": "/asylum/ccdAboutToStart",
     "credentials": "LegalRepresentative",
     "input": {
       "eventId": "startAppeal",
@@ -23,8 +24,10 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "appealFeeDesc": "The fee for this type of appeal with a hearing is £140.00",
-        "oralFeeAmountForDisplay": "£140.00"
+        "appealFeeHearingDesc": "The fee for this type of appeal with a hearing is £140.00",
+        "feeHearingAmountForDisplay": "£140.00",
+        "appealFeeWithoutHearingDesc": "The fee for this type of appeal without a hearing is £80.00",
+        "feeWithoutHearingAmountForDisplay": "£80.00"
       }
     }
   }

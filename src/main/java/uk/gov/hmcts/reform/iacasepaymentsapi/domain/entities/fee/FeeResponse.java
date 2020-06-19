@@ -13,7 +13,7 @@ public class FeeResponse {
 
     private String code;
     private String description;
-    private Integer version;
+    private String version;
 
     @JsonProperty(value = "fee_amount")
     private BigDecimal amount;
@@ -22,7 +22,7 @@ public class FeeResponse {
 
     }
 
-    public FeeResponse(String code, String description, Integer version, BigDecimal amount) {
+    public FeeResponse(String code, String description, String version, BigDecimal amount) {
 
         this.code = code;
         this.description = description;
@@ -40,7 +40,7 @@ public class FeeResponse {
         return description;
     }
 
-    public Integer getVersion() {
+    public String getVersion() {
         requireNonNull(version);
         return version;
     }

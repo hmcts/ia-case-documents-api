@@ -15,6 +15,7 @@ public class ExampleHandler implements PreSubmitCallbackHandler<AsylumCase> {
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
     ) {
+
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
