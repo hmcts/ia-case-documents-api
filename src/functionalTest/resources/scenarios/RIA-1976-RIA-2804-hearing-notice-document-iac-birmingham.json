@@ -4,7 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "eventId": "adjournHearingWithoutDate",
+      "eventId": "listCase",
       "state": "listing",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
