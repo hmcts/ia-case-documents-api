@@ -11,19 +11,22 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DecisionAndReasonsTemplateTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class DecisionAndReasonsTemplateTest {
 
     @Mock private StringProvider stringProvider;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -33,7 +36,7 @@ public class DecisionAndReasonsTemplateTest {
     private DecisionAndReasonsTemplate decisionAndReasonsTemplate;
     private String currentYear;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
@@ -75,13 +78,13 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void should_return_template_name() {
+    void should_return_template_name() {
 
         assertEquals(templateName, decisionAndReasonsTemplate.getName());
     }
 
     @Test
-    public void should_map_case_data_to_template_field_values() {
+    void should_map_case_data_to_template_field_values() {
 
         Map<String, Object> templateFieldValues = decisionAndReasonsTemplate.mapFieldValues(caseDetails);
 
@@ -117,7 +120,7 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void should_be_tolerant_of_missing_data() {
+    void should_be_tolerant_of_missing_data() {
 
         when(asylumCase.read(CASE_INTRODUCTION_DESCRIPTION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_CASE_SUMMARY_DESCRIPTION, String.class)).thenReturn(Optional.empty());
@@ -168,7 +171,7 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void handling_should_throw_if_hearing_centre_not_present() {
+    void handling_should_throw_if_hearing_centre_not_present() {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
@@ -178,7 +181,7 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void handling_should_throw_if_anonymity_order_not_present() {
+    void handling_should_throw_if_anonymity_order_not_present() {
 
         when(asylumCase.read(ANONYMITY_ORDER, YesOrNo.class)).thenReturn(Optional.empty());
 
@@ -188,7 +191,7 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void handling_should_throw_if_immigration_history_agreement_not_present() {
+    void handling_should_throw_if_immigration_history_agreement_not_present() {
 
         when(asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class)).thenReturn(Optional.empty());
 
@@ -198,7 +201,7 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void handling_should_throw_if_schedule_of_issues_agreement_not_present() {
+    void handling_should_throw_if_schedule_of_issues_agreement_not_present() {
 
         when(asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)).thenReturn(Optional.empty());
 

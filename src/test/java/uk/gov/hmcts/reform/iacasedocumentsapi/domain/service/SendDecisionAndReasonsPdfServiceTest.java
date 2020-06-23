@@ -103,8 +103,8 @@ public class SendDecisionAndReasonsPdfServiceTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("finalDecisionAndReasonsDocument must be present");
 
-        verifyZeroInteractions(documentDownloadClient);
-        verifyZeroInteractions(documentUploader);
-        verifyZeroInteractions(wordDocumentToPdfConverter);
+        verifyNoInteractions(documentDownloadClient);
+        verifyNoInteractions(documentUploader);
+        verifyNoInteractions(wordDocumentToPdfConverter);
     }
 }
