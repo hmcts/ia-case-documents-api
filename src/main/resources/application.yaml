@@ -265,6 +265,18 @@ govnotify:
     requestCaseEdit:
       legalRep:
         email: 194e0a44-4fab-4e75-94a9-6d910dc4879a
+    adjournHearingWithoutDate:
+      respondent:
+        email: 080b563c-7311-4082-bed9-de67bbca14ee
+      caseOfficer:
+        email: eba2cb81-042c-4af6-90ea-5391a382177c
+      legalRep:
+        email: f5e4cbca-4fc8-4e39-bb92-9fe915aa8c61
+      adminOfficer:
+        email: 5469078a-4ccf-4579-b72b-37900e091455
+    reListCase:
+      adminOfficer:
+        email: efec8c6f-38ea-46b6-ad00-9e6870935a4b
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -345,10 +357,14 @@ security:
       - "sendDirectionWithQuestions"
       - "forceCaseToCaseUnderReview"
       - "forceCaseToSubmitHearingRequirements"
+      - "adjournHearingWithoutDate"
+      - "restoreStateFromAdjourn"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
       - "sendDecisionAndReasons"
+      - "adjournHearingWithoutDate"
+      - "restoreStateFromAdjourn"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

@@ -28,6 +28,19 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGen
 public class NotificationHandlerConfiguration {
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> reListCaseNotificationHandler(
+        @Qualifier("reListCaseNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.RESTORE_STATE_FROM_ADJOURN,
+            notificationGenerators
+        );
+    }
+
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> requestCaseEditNotificationHandler(
         @Qualifier("requestCaseEditNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
         return new NotificationHandler(
@@ -656,8 +669,8 @@ public class NotificationHandlerConfiguration {
                     .map(type -> type == AIP).orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.SUBMIT_TIME_EXTENSION
-                       && isAipJourney;
+                    && callback.getEvent() == Event.SUBMIT_TIME_EXTENSION
+                    && isAipJourney;
             }, notificationGenerators
         );
     }
@@ -786,6 +799,18 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && callback.getEvent() == Event.FORCE_CASE_TO_SUBMIT_HEARING_REQUIREMENTS,
+            notificationGenerator
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> adjournHearingWithoutDateHandler(
+        @Qualifier("adjournHearingWithoutDateNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.ADJOURN_HEARING_WITHOUT_DATE,
             notificationGenerator
         );
     }

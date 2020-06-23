@@ -29,7 +29,7 @@ public class AdminOfficerPersonalisationProviderTest {
     @Test
     public void should_return_default_personalisation() {
 
-        Map<String, String> personalisation = adminOfficerPersonalisationProvider.getDefaultPersonlisation(asylumCase);
+        Map<String, String> personalisation = adminOfficerPersonalisationProvider.getDefaultPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

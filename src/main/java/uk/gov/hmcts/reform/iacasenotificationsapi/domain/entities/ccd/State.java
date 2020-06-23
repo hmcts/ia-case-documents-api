@@ -23,6 +23,7 @@ public enum State {
     FTPA_SUBMITTED("ftpaSubmitted"),
     AWAITING_CLARIFYING_QUESTIONS_ANSWERS("awaitingClarifyingQuestionsAnswers"),
     AWAITING_CMA_REQUIREMENTS("awaitingCmaRequirements"),
+    ADJOURNED("adjourned"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

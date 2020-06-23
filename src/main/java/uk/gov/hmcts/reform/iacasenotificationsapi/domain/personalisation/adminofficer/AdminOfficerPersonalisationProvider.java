@@ -21,7 +21,7 @@ public class AdminOfficerPersonalisationProvider {
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
     }
 
-    public ImmutableMap<String, String> getDefaultPersonlisation(AsylumCase asylumCase) {
+    public ImmutableMap<String, String> getDefaultPersonalisation(AsylumCase asylumCase) {
         return ImmutableMap
             .<String, String>builder()
             .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
@@ -32,12 +32,12 @@ public class AdminOfficerPersonalisationProvider {
     }
 
     public ImmutableMap<String, String> getReviewedHearingRequirementsPersonalisation(AsylumCase asylumCase) {
-        return getDefaultPersonlisation(asylumCase);
+        return getDefaultPersonalisation(asylumCase);
     }
 
     public ImmutableMap<String, String> getChangeToHearingRequirementsPersonalisation(AsylumCase asylumCase) {
         return ImmutableMap.<String, String>builder()
-            .putAll(getDefaultPersonlisation(asylumCase))
+            .putAll(getDefaultPersonalisation(asylumCase))
             .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
             .build();
     }
