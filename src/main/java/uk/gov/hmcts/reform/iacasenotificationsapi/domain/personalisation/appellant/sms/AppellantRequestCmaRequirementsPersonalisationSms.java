@@ -9,31 +9,27 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 
 @Service
-public class AppellantRequestReasonsForAppealPersonalisationSms implements SmsNotificationPersonalisation {
+public class AppellantRequestCmaRequirementsPersonalisationSms implements SmsNotificationPersonalisation {
 
-    private final String requestReasonForAppealSmsTemplateId;
+    private final String requestCmaRequirementsSmsTemplateId;
     private final String iaAipFrontendUrl;
     private final RecipientsFinder recipientsFinder;
     private final DirectionFinder directionFinder;
 
 
-    public AppellantRequestReasonsForAppealPersonalisationSms(
-        @Value("${govnotify.template.requestReasonsForAppeal.appellant.sms}") String requestReasonForAppealSmsTemplateId,
+    public AppellantRequestCmaRequirementsPersonalisationSms(
+        @Value("${govnotify.template.requestCmaRequirements.appellant.sms}") String requestCmaRequirementsSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         RecipientsFinder recipientsFinder,
         DirectionFinder directionFinder
     ) {
-        this.requestReasonForAppealSmsTemplateId = requestReasonForAppealSmsTemplateId;
+        this.requestCmaRequirementsSmsTemplateId = requestCmaRequirementsSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.recipientsFinder = recipientsFinder;
         this.directionFinder = directionFinder;
@@ -43,7 +39,7 @@ public class AppellantRequestReasonsForAppealPersonalisationSms implements SmsNo
 
     @Override
     public String getTemplateId() {
-        return requestReasonForAppealSmsTemplateId;
+        return requestCmaRequirementsSmsTemplateId;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class AppellantRequestReasonsForAppealPersonalisationSms implements SmsNo
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_REQUEST_REASONS_FOR_APPEAL_APPELLANT_AIP_SMS";
+        return caseId + "_REQUEST_CMA_REQUIREMENTS_APPELLANT_AIP_SMS";
     }
 
     @Override
@@ -61,8 +57,8 @@ public class AppellantRequestReasonsForAppealPersonalisationSms implements SmsNo
         requireNonNull(asylumCase, "asylumCase must not be null");
         final Direction direction =
             directionFinder
-                .findFirst(asylumCase, DirectionTag.REQUEST_REASONS_FOR_APPEAL)
-                .orElseThrow(() -> new IllegalStateException("direction '" + DirectionTag.REQUEST_REASONS_FOR_APPEAL + "' is not present"));
+                .findFirst(asylumCase, DirectionTag.REQUEST_CMA_REQUIREMENTS)
+                .orElseThrow(() -> new IllegalStateException("direction '" + DirectionTag.REQUEST_CMA_REQUIREMENTS + "' is not present"));
 
         final String dueDate =
             LocalDate
@@ -73,6 +69,7 @@ public class AppellantRequestReasonsForAppealPersonalisationSms implements SmsNo
             ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("reason", direction.getExplanation())
                 .put("Hyperlink to service", iaAipFrontendUrl)
                 .put("due date", dueDate)
                 .build();

@@ -277,6 +277,10 @@ govnotify:
     reListCase:
       adminOfficer:
         email: efec8c6f-38ea-46b6-ad00-9e6870935a4b
+    requestCmaRequirements:
+      appellant:
+        email: 84c2958e-cea0-4a5f-a1e2-7099673d8aa1
+        sms: 1c9085de-bc91-4907-a03b-ca63aed01b85
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -359,6 +363,7 @@ security:
       - "forceCaseToSubmitHearingRequirements"
       - "adjournHearingWithoutDate"
       - "restoreStateFromAdjourn"
+      - "requestCmaRequirements"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
