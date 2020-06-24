@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentResp
 @FeignClient(name = "payment-api", url = "${payment.api.url}")
 public interface PaymentApi {
 
-    @PostMapping("/credit-account-payments")
+    @PostMapping(value = "/credit-account-payments", produces = "application/json", consumes = "application/json")
     PaymentResponse creditAccountPaymentRequest(
         @RequestHeader(AUTHORIZATION) String authorization,
         @RequestHeader(SERVICE_AUTHORIZATION) String serviceAuthorization,
