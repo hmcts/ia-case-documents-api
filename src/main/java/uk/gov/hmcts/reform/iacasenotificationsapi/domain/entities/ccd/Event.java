@@ -54,6 +54,7 @@ public enum Event {
     ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate"),
     RESTORE_STATE_FROM_ADJOURN("restoreStateFromAdjourn"),
     REQUEST_CMA_REQUIREMENTS("requestCmaRequirements"),
+    SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
