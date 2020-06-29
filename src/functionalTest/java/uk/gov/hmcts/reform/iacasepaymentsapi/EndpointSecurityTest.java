@@ -51,7 +51,7 @@ public class EndpointSecurityTest {
                 .extract().body().asString();
 
         assertThat(response)
-            .contains("Immigration & Asylum case payments API");
+            .contains("Welcome to Case Payment Service");
     }
 
     @Test

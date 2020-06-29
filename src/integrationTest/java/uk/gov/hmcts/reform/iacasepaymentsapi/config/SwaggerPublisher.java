@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasepaymentsapi.component.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.SpringBootIntegrationTest;
 
 /**
  * Built-in feature which saves service's swagger specs in temporary directory.

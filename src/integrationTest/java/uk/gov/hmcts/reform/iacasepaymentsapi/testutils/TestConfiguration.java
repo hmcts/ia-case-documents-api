@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasepaymentsapi.component.testutils;
+package uk.gov.hmcts.reform.iacasepaymentsapi.testutils;
 
 import static uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.oauth2.IdamAuthoritiesConverter.REGISTRATION_ID;
 

@@ -13,7 +13,7 @@ management:
 
 spring:
   application:
-    name: Immigration & Asylum case payments API
+    name: Welcome to Case Payment Service
   main:
     allow-bean-definition-overriding: true
   jackson.date-format: yyyy-MM-dd

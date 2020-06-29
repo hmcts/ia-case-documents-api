@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasepaymentsapi.component.testutils;
+package uk.gov.hmcts.reform.iacasepaymentsapi.testutils;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,7 +13,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 @Slf4j
-public class IaCasePaymentsApiClient {
+public class IaCasePaymentApiClient {
 
     private final MockMvc mockMvc;
     private final String aboutToSubmitUrl;
@@ -23,11 +23,11 @@ public class IaCasePaymentsApiClient {
     private final HttpHeaders httpHeaders = new HttpHeaders();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public IaCasePaymentsApiClient(MockMvc mockMvc, int port) {
+    public IaCasePaymentApiClient(MockMvc mockMvc) {
         this.mockMvc = mockMvc;
-        this.aboutToSubmitUrl = "http://localhost:" + port + "/asylum/ccdAboutToSubmit";
-        this.aboutToStartUrl = "http://localhost:" + port + "/asylum/ccdAboutToStart";
-        this.ccdSubmittedUrl = "http://localhost:" + port + "/asylum/ccdSubmitted";
+        this.aboutToSubmitUrl = "/asylum/ccdAboutToSubmit";
+        this.aboutToStartUrl = "/asylum/ccdAboutToStart";
+        this.ccdSubmittedUrl = "/asylum/ccdSubmitted";
 
         httpHeaders.add(AUTHORIZATION, "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiMWVyMFdSd2dJT1RBRm9q"
                                        + "RTRyQy9mYmVLdTNJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJpYS5sZWdhbHJlcC5hLmNjZE"

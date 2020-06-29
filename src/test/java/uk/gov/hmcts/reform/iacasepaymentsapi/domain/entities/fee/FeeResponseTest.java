@@ -11,7 +11,7 @@ public class FeeResponseTest {
 
     private BigDecimal amount = new BigDecimal("140.00");
     private String description = "Appeal determined with a hearing";
-    private String version = "1";
+    private String version = "2";
     private String code = "FEE0123";
 
     private FeeResponse feeResponse;
