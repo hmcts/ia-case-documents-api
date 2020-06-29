@@ -94,7 +94,7 @@ endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
 cmaRequirements.contentType:  application/pdf
 cmaRequirements.fileExtension: PDF
 cmaRequirements.fileName: "Case-management-appointment-requirements"
-cmaRequirements.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-CMA-ENG-00000.docx}
+cmaRequirements.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HRN-ENG-00496}
 
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
