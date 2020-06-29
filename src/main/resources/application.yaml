@@ -101,7 +101,7 @@ ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
 docmosis.endpoint: ${DOCMOSIS_ENDPOINT}
-docmosis.render.uri: /api/render
+docmosis.render.uri: /rs/render
 docmosis.status.uri: /rs/status
 docmosis.convert.uri: /rs/convert
 
