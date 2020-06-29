@@ -103,6 +103,8 @@ govnotify:
     submitCase:
       caseOfficer:
         email: ceee3f8e-6657-4967-8066-4b0f40c4b4d4
+      legalRep:
+        email: a1df610c-cd9a-494a-9100-15ed94f6fe66
     caseListed:
       caseOfficer:
         email: 38d28eca-f30e-4af3-b782-e30ef0e9d7ad
