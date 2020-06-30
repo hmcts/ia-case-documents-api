@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToLegalRepresentative": "submitHearingRequirements",
           "ariaListingReference": "LP/12345/2019",
           "directionEditExplanation": "Please submit your hearing requirements",
           "directionEditDateDue": "{$TODAY+5}",
@@ -45,7 +46,6 @@
         "subject": "Immigration and Asylum appeal: change to direction due date",
         "body": [
           "PA/12345/2019",
-          "LP/12345/2019",
           "CASE001",
           "Talha Awan",
           "{$TODAY+5|d MMM yyyy}",

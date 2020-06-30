@@ -30,7 +30,8 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
     @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
-    private String templateId = "someTemplateId";
+    private String afterListingTemplateId = "afterListingTemplateId";
+    private String beforeListingTemplateId = "beforeListingTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String homeOfficeApcEmailAddress = "homeOfficeAPC@example.com";
     private String homeOfficeLartEmailAddress = "homeOfficeLART@example.com";
@@ -49,7 +50,8 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
     public void setUp() {
 
         respondentChangeDirectionDueDatePersonalisation = new RespondentChangeDirectionDueDatePersonalisation(
-            templateId,
+            afterListingTemplateId,
+            beforeListingTemplateId,
             iaExUiFrontendUrl,
             personalisationProvider,
             homeOfficeApcEmailAddress,
@@ -60,9 +62,27 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
     }
 
     @Test
-    public void should_return_the_given_template_id() {
+    public void should_return_the_given_before_listing_template_id() {
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+            .thenReturn(Optional.of(State.CASE_BUILDING));
 
-        assertEquals(templateId, respondentChangeDirectionDueDatePersonalisation.getTemplateId());
+        assertEquals(beforeListingTemplateId, respondentChangeDirectionDueDatePersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_the_given_after_listing_template_id() {
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+            .thenReturn(Optional.of(State.FINAL_BUNDLING));
+
+        assertEquals(afterListingTemplateId, respondentChangeDirectionDueDatePersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_throw_exception_if_current_visible_state_to_home_office_all_is_not_present() {
+
+        assertThatThrownBy(() -> respondentChangeDirectionDueDatePersonalisation.getTemplateId(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("currentCaseStateVisibleToHomeOfficeAll flag is not present");
     }
 
     @Test

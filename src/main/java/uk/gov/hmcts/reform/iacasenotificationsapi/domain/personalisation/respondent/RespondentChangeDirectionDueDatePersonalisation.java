@@ -21,7 +21,8 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 @Service
 public class RespondentChangeDirectionDueDatePersonalisation implements EmailNotificationPersonalisation {
 
-    private final String respondentChangeDirectionDueDateTemplateId;
+    private final String respondentChangeDirectionDueDateBeforeListingTemplateId;
+    private final String respondentChangeDirectionDueDateAfterListingTemplateId;
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final String respondentEmailAddressUntilRespondentReview;
@@ -30,7 +31,8 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
     private final CustomerServicesProvider customerServicesProvider;
 
     public RespondentChangeDirectionDueDatePersonalisation(
-        @Value("${govnotify.template.changeDirectionDueDate.respondent.email}") String respondentChangeDirectionDueDateTemplateId,
+        @Value("${govnotify.template.changeDirectionDueDate.respondent.afterListing.email}") String respondentChangeDirectionDueDateAfterListingTemplateId,
+        @Value("${govnotify.template.changeDirectionDueDate.respondent.beforeListing.email}") String respondentChangeDirectionDueDateBeforeListingTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
         @Value("${respondentEmailAddresses.nonStandardDirectionUntilListing}") String respondentEmailAddressUntilRespondentReview,
@@ -39,7 +41,8 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
         CustomerServicesProvider customerServicesProvider
     ) {
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
-        this.respondentChangeDirectionDueDateTemplateId = respondentChangeDirectionDueDateTemplateId;
+        this.respondentChangeDirectionDueDateAfterListingTemplateId = respondentChangeDirectionDueDateAfterListingTemplateId;
+        this.respondentChangeDirectionDueDateBeforeListingTemplateId = respondentChangeDirectionDueDateBeforeListingTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.respondentEmailAddressUntilRespondentReview = respondentEmailAddressUntilRespondentReview;
@@ -49,8 +52,25 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
     }
 
     @Override
-    public String getTemplateId() {
-        return respondentChangeDirectionDueDateTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+
+        return asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)
+            .map(s -> {
+                if (Arrays.asList(
+                    State.APPEAL_SUBMITTED,
+                    State.APPEAL_SUBMITTED_OUT_OF_TIME,
+                    State.AWAITING_RESPONDENT_EVIDENCE,
+                    State.CASE_BUILDING,
+                    State.CASE_UNDER_REVIEW,
+                    State.RESPONDENT_REVIEW,
+                    State.SUBMIT_HEARING_REQUIREMENTS
+                ).contains(s)) {
+                    return respondentChangeDirectionDueDateBeforeListingTemplateId;
+                }
+
+                return respondentChangeDirectionDueDateAfterListingTemplateId;
+            })
+            .orElseThrow(() -> new IllegalStateException("currentCaseStateVisibleToHomeOfficeAll flag is not present"));
     }
 
     @Override

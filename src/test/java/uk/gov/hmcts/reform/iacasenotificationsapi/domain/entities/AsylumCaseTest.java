@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 
 @SuppressWarnings("OperatorWrap")
 public class AsylumCaseTest {
@@ -36,7 +35,7 @@ public class AsylumCaseTest {
         String caseData = "{\"hearingCentre\": \"manchester\"}";
         AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
 
-        Optional<YesOrNo> maybeHearingCentre = asylumCase.read(HEARING_CENTRE);
+        Optional<HearingCentre> maybeHearingCentre = asylumCase.read(HEARING_CENTRE, HearingCentre.class);
 
         assertThat(maybeHearingCentre.get()).isEqualTo(MANCHESTER);
     }

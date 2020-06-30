@@ -4,16 +4,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
@@ -30,7 +33,8 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
     @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
-    private String templateId = "someTemplateId";
+    private String afterListingTemplateId = "afterListingTemplateId";
+    private String beforeListingTemplateId = "beforeListingTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String hmctsReference = "hmctsReference";
@@ -48,7 +52,8 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
         when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
 
         legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation = new LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation(
-            templateId,
+            afterListingTemplateId,
+            beforeListingTemplateId,
             iaExUiFrontendUrl,
             personalisationProvider,
             emailAddressFinder,
@@ -62,8 +67,25 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
     }
 
     @Test
-    public void should_return_the_given_template_id() {
-        assertEquals(templateId, legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation.getTemplateId());
+    public void should_return_the_given_before_listing_template_id() {
+        when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE, State.class))
+            .thenReturn(Optional.of(State.CASE_BUILDING));
+        assertEquals(beforeListingTemplateId, legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_the_given_after_listing_template_id() {
+        when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE, State.class))
+            .thenReturn(Optional.of(State.FINAL_BUNDLING));
+        assertEquals(afterListingTemplateId, legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_throw_exception_if_current_visible_state_to_legal_rep_is_not_present() {
+
+        assertThatThrownBy(() -> legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation.getTemplateId(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("currentCaseStateVisibleToLegalRepresentative flag is not present");
     }
 
     @Test

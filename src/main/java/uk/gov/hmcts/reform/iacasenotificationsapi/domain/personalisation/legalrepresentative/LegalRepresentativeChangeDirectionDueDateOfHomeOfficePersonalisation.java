@@ -1,14 +1,17 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -18,21 +21,25 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 @Service
 public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation implements EmailNotificationPersonalisation {
 
-    private final String legalRepChangeDirectionDueDateOfHomeOfficeTemplateId;
+    private final String afterListingTemplateId;
+    private final String beforeListingTempalteId;
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation(
-        @Value("${govnotify.template.changeDirectionDueDateOfHomeOffice.legalRep.email}") String legalRepChangeDirectionDueDateOfHomeOfficeTemplateId,
+        @Value("${govnotify.template.changeDirectionDueDateOfHomeOffice.legalRep.afterListing.email}") String afterListingTemplateId,
+        @Value("${govnotify.template.changeDirectionDueDateOfHomeOffice.legalRep.beforeListing.email}") String beforeListingTempalteId,
+
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
         EmailAddressFinder emailAddressFinder,
         CustomerServicesProvider customerServicesProvider
     ) {
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
-        this.legalRepChangeDirectionDueDateOfHomeOfficeTemplateId = legalRepChangeDirectionDueDateOfHomeOfficeTemplateId;
+        this.afterListingTemplateId = afterListingTemplateId;
+        this.beforeListingTempalteId = beforeListingTempalteId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
@@ -40,8 +47,24 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
     }
 
     @Override
-    public String getTemplateId() {
-        return legalRepChangeDirectionDueDateOfHomeOfficeTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE, State.class)
+            .map(s -> {
+                if (Arrays.asList(
+                    State.APPEAL_SUBMITTED,
+                    State.APPEAL_SUBMITTED_OUT_OF_TIME,
+                    State.AWAITING_RESPONDENT_EVIDENCE,
+                    State.CASE_BUILDING,
+                    State.CASE_UNDER_REVIEW,
+                    State.RESPONDENT_REVIEW,
+                    State.SUBMIT_HEARING_REQUIREMENTS
+                ).contains(s)) {
+                    return beforeListingTempalteId;
+                }
+
+                return afterListingTemplateId;
+            })
+            .orElseThrow(() -> new IllegalStateException("currentCaseStateVisibleToLegalRepresentative flag is not present"));
     }
 
     @Override

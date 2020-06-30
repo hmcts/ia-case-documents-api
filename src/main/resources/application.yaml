@@ -202,12 +202,21 @@ govnotify:
         email: 6e473679-dfc7-4fa7-96e3-583d0e8ff09f
     changeDirectionDueDate:
       legalRep:
-        email: e8644a60-b943-438c-8ad0-ad7d947eeca1
+        afterListing:
+          email: 3353372a-de99-40ef-b841-02fd3ac76dd0
+        beforeListing:
+          email: a21a2749-c1fa-45c3-81ed-5fc79072c83c
       respondent:
-        email: 9b383a96-3be7-4fb4-bbd0-39169b00a936
+        afterListing:
+          email: 354ec5cf-542d-48b4-b2cf-0e4882a014c5
+        beforeListing:
+          email: 9b383a96-3be7-4fb4-bbd0-39169b00a936
     changeDirectionDueDateOfHomeOffice:
       legalRep:
-        email: e6a69f4d-48be-40ce-9c5f-10de47cd9dd3
+        afterListing:
+          email: e299ceb6-1d1e-49d4-82f1-429ff32a7c2f
+        beforeListing:
+          email: e6a69f4d-48be-40ce-9c5f-10de47cd9dd3
     changeToHearingRequirements:
       adminOfficer:
         email: 95a45479-1a6e-413b-8d96-1ad1404ab3db

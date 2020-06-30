@@ -32,6 +32,9 @@ public enum AsylumCaseDefinition {
     CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL(
             "currentCaseStateVisibleToHomeOfficeAll", new TypeReference<State>(){}),
 
+    CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE(
+        "currentCaseStateVisibleToLegalRepresentative", new TypeReference<State>(){}),
+
     DIRECTION_EDIT_DATE_DUE(
             "directionEditDateDue", new TypeReference<String>(){}),
 

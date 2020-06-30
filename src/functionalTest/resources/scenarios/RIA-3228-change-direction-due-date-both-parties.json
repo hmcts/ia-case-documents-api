@@ -1,20 +1,21 @@
 {
-  "description": "RIA-2345-RIA-2694 Send legal rep notification of change direction due date",
+  "description": "RIA-3228 Both parties notification of change direction due date",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 2345,
+      "id": 3228,
       "eventId": "changeDirectionDueDate",
       "state": "submitHearingRequirements",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "ariaListingReference": "LP/12345/2019",
-          "directionEditExplanation": "Please submit your hearing requirements",
+          "directionEditExplanation": "Amending the direction due date.",
           "directionEditDateDue": "{$TODAY+5}",
-          "directionEditParties": "legalRepresentative",
+          "directionEditParties": "both",
           "currentCaseStateVisibleToLegalRepresentative": "submitHearingRequirements",
+          "currentCaseStateVisibleToHomeOfficeAll": "submitHearingRequirements",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
         }
       }
@@ -27,12 +28,16 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "ariaListingReference": "LP/12345/2019",
-        "directionEditExplanation": "Please submit your hearing requirements",
+        "directionEditExplanation": "Amending the direction due date.",
         "directionEditDateDue": "{$TODAY+5}",
-        "directionEditParties": "legalRepresentative",
+        "directionEditParties": "both",
         "notificationsSent": [
           {
-            "id": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
+            "id": "3228_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "3228_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
@@ -41,14 +46,29 @@
     },
     "notifications": [
       {
-        "reference": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
+        "reference": "3228_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: change to direction due date",
         "body": [
           "PA/12345/2019",
           "CASE001",
           "Talha Awan",
-          "Please submit your hearing requirements",
+          "Amending the direction due date.",
+          "{$TODAY+5|d MMM yyyy}",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "3228_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+        "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+        "subject": "Immigration and Asylum appeal: change to direction due date",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "Amending the direction due date.",
           "{$TODAY+5|d MMM yyyy}",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
