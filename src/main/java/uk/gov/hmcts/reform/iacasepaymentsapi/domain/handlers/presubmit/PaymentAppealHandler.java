@@ -32,6 +32,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.CreditAccountPayment;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Currency;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentResponse;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Service;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.PaymentService;
@@ -140,6 +141,9 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             Currency.GBP,
             customerReference,
             paymentDescription,
+            "ia-legal-rep-org",
+            Service.IAC,
+            "BFA1",
             Arrays.asList(
                 new Fee(
                     feeCode,

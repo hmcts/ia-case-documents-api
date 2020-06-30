@@ -33,6 +33,9 @@ public class CreditAccountPayment {
                                 Currency currency,
                                 String customerReference,
                                 String description,
+                                String organisationName,
+                                Service service,
+                                String siteId,
                                 List<Fee> fees) {
         this.accountNumber = accountNumber;
         this.amount = amount;
@@ -41,6 +44,9 @@ public class CreditAccountPayment {
         this.currency = currency;
         this.customerReference = customerReference;
         this.description = description;
+        this.organisationName = organisationName;
+        this.service = service;
+        this.siteId = siteId;
         this.fees = fees;
     }
 

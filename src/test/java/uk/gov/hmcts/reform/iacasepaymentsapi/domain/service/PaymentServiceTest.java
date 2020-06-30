@@ -18,6 +18,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.CreditAccountPayment;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Currency;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentResponse;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Service;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.StatusHistories;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.PaymentApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.PaymentProperties;
@@ -83,6 +84,9 @@ class PaymentServiceTest {
         return new CreditAccountPayment("PBA0066906", new BigDecimal("140.00"),
             "caseReference", "ccdCaseNumber",
             Currency.GBP, "customerReference", "Some description",
+                                        "ia-legal-rep-org",
+                                        Service.IAC,
+                                        "BFA1",
             Arrays.asList(new Fee("FEE0123", "Fee description", "1", new BigDecimal("140.00"))));
     }
 }

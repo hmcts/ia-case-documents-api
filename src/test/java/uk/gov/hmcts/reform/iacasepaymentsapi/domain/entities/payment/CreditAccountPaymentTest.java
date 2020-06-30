@@ -32,7 +32,9 @@ class CreditAccountPaymentTest {
 
         creditAccountPayment = new CreditAccountPayment(
             accountNumber, amount, caseReference, ccdCaseNumber,
-            currency, customerReference, description, fees);
+            currency, customerReference, description, "ia-legal-rep-org",
+            Service.IAC,
+            "BFA1", fees);
         creditAccountPayment.setOrganisationName(organisationName);
         creditAccountPayment.setService(service);
         creditAccountPayment.setSiteId(siteId);
@@ -59,7 +61,7 @@ class CreditAccountPaymentTest {
 
         creditAccountPayment = new CreditAccountPayment(
             null, null, null, null,
-            null, null, null, null);
+            null, null, null, null, null, null, null);
 
         assertThatThrownBy(creditAccountPayment::getAccountNumber)
             .isExactlyInstanceOf(NullPointerException.class);
