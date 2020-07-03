@@ -18,7 +18,7 @@ public class DocumentWithMetadataTest {
             document,
             description,
             dateUploaded,
-            tag
+            tag,"test"
         );
 
     @Test

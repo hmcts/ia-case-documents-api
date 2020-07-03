@@ -39,7 +39,7 @@ public class DocumentReceiver {
             document,
             description,
             dateUploaded,
-            tag
+            tag,""
         );
     }
 
@@ -62,7 +62,7 @@ public class DocumentReceiver {
                     document,
                     documentWithDescription.getDescription().orElse(""),
                     dateUploaded,
-                    tag
+                    tag,""
                 )
             );
         }
