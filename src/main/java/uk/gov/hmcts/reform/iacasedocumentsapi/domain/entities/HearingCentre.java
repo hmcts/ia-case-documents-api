@@ -14,7 +14,9 @@ public enum HearingCentre {
     NORTH_SHIELDS("northShields"),
     BIRMINGHAM("birmingham"),
     HATTON_CROSS("hattonCross"),
-    GLASGOW("glasgow");
+    GLASGOW("glasgow"),
+    NOTTINGHAM("nottingham"),
+    BELFAST("belfast");
 
     @JsonValue
     private final String value;

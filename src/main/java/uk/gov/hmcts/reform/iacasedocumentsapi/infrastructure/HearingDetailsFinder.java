@@ -30,8 +30,7 @@ public class HearingDetailsFinder {
     }
 
     public String getHearingCentreName(AsylumCase asylumCase) {
-        final HearingCentre listCaseHearingCentre =
-            getHearingCentre(asylumCase);
+        final HearingCentre listCaseHearingCentre = getHearingCentre(asylumCase);
 
         return stringProvider.get("hearingCentreName", listCaseHearingCentre.toString())
             .orElseThrow(() -> new IllegalStateException("listCaseHearingCentreName is not present"));
@@ -48,5 +47,41 @@ public class HearingDetailsFinder {
             .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
             .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
     }
+
+    public String getHearingCentreUrl(HearingCentre hearingCentre) {
+        String hearingCentreUrl = null;
+        switch (hearingCentre) {
+            case BIRMINGHAM:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/birmingham-immigration-and-asylum-chamber-first-tier-tribunal";
+                break;
+            case BRADFORD:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/bradford-tribunal-hearing-centre";
+                break;
+            case GLASGOW:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/glasgow-employment-and-immigration-tribunals-eagle-building";
+                break;
+            case HATTON_CROSS:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/hatton-cross-tribunal-hearing-centre";
+                break;
+            case TAYLOR_HOUSE:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/taylor-house-tribunal-hearing-centre";
+                break;
+            case MANCHESTER:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/manchester-tribunal-hearing-centre";
+                break;
+            case NEWPORT:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newport-south-wales-immigration-and-asylum-tribunal";
+                break;
+            case NOTTINGHAM:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/nottingham-magistrates-court";
+                break;
+            case NORTH_SHIELDS:
+                hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
+                break;
+        }
+
+        return hearingCentreUrl;
+    }
+
 }
 

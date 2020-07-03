@@ -21,6 +21,7 @@ public enum DocumentTag {
     APPEAL_SKELETON_BUNDLE("submitCaseBundle"),
     END_APPEAL("endAppeal"),
     CMA_REQUIREMENTS("cmaRequirements"),
+    CMA_NOTICE("cmaNotice"),
 
     @JsonEnumDefaultValue
     NONE("");

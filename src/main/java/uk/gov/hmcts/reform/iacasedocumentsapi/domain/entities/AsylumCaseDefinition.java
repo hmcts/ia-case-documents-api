@@ -283,8 +283,17 @@ public enum AsylumCaseDefinition {
     ADDITIONAL_TRIBUNAL_RESPONSE(
         "additionalTribunalResponse", new TypeReference<String>(){}),
 
+    HEALTH_CONDITIONS_TRIBUNAL_RESPONSE(
+        "healthConditionsTribunalResponse", new TypeReference<String>(){}),
+
+    PAST_EXPERIENCES_TRIBUNAL_RESPONSE(
+        "pastExperiencesTribunalResponse", new TypeReference<String>(){}),
+
     SUBMIT_HEARING_REQUIREMENTS_AVAILABLE(
         "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),
+
+    DIRECTIONS(
+        "directions", new TypeReference<List<IdValue<Direction>>>(){}),
 
     ;
 

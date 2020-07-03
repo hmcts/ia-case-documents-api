@@ -21,24 +21,24 @@ public class Direction {
     }
 
     public Direction(
-            String explanation,
-            Parties parties,
-            String dateDue,
-            String dateSent,
-            DirectionTag tag,
-            List<IdValue<PreviousDates>> previousDates
+        String explanation,
+        Parties parties,
+        String dateDue,
+        String dateSent,
+        DirectionTag tag,
+        List<IdValue<PreviousDates>> previousDates
     ) {
         this(explanation, parties, dateDue, dateSent, tag, previousDates, emptyList());
     }
 
     public Direction(
-            String explanation,
-            Parties parties,
-            String dateDue,
-            String dateSent,
-            DirectionTag tag,
-            List<IdValue<PreviousDates>> previousDates,
-            List<IdValue<ClarifyingQuestion>> clarifyingQuestions
+        String explanation,
+        Parties parties,
+        String dateDue,
+        String dateSent,
+        DirectionTag tag,
+        List<IdValue<PreviousDates>> previousDates,
+        List<IdValue<ClarifyingQuestion>> clarifyingQuestions
     ) {
         requireNonNull(explanation);
         requireNonNull(parties);
@@ -46,6 +46,7 @@ public class Direction {
         requireNonNull(dateSent);
         requireNonNull(tag);
         requireNonNull(previousDates);
+        requireNonNull(clarifyingQuestions);
 
         this.explanation = explanation;
         this.parties = parties;

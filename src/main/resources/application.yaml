@@ -101,6 +101,11 @@ cmaRequirements.fileExtension: PDF
 cmaRequirements.fileName: "Case-management-appointment-requirements"
 cmaRequirements.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HRN-ENG-00500.docx}
 
+cmaAppointmentNotice.contentType:  application/pdf
+cmaAppointmentNotice.fileExtension: PDF
+cmaAppointmentNotice.fileName: "Case-management-appointment-notice"
+cmaAppointmentNotice.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00504.docx}
+
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -204,3 +209,5 @@ launchDarkly:
 customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
+
+iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
