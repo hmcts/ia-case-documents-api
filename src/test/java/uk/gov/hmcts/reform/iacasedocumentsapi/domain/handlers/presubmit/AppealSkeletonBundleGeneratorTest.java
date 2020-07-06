@@ -3,10 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
@@ -32,7 +29,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
-import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -89,10 +85,7 @@ public class AppealSkeletonBundleGeneratorTest {
                 true,
                 fileNameQualifier,
                 documentBundler,
-                documentHandler
-            );
-
-        ReflectionTestUtils.setField(appealSkeletonBundleGenerator, "isSaveAndContinueEnabled", true);
+                documentHandler);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -103,7 +96,6 @@ public class AppealSkeletonBundleGeneratorTest {
     @Test
     @Parameters(method = "generateDifferentEventScenarios")
     public void it_can_handle_callback(TestScenario scenario) {
-        ReflectionTestUtils.setField(appealSkeletonBundleGenerator, "isSaveAndContinueEnabled", scenario.isFlag());
         when(callback.getEvent()).thenReturn(scenario.getEvent());
 
         boolean canHandle = appealSkeletonBundleGenerator.canHandle(scenario.callbackStage, callback);
@@ -119,30 +111,20 @@ public class AppealSkeletonBundleGeneratorTest {
     @Value
     static class TestScenario {
         Event event;
-        boolean flag;
         PreSubmitCallbackStage callbackStage;
         boolean expected;
 
         public static List<TestScenario> builder() {
             List<TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
-                if (e.equals(Event.BUILD_CASE)) {
-                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_SUBMIT, true));
-                }
-                if (e.equals(Event.SUBMIT_CASE)) {
-                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_SUBMIT, true));
-                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_SUBMIT, false));
-                }
-                if (!(e.equals(Event.BUILD_CASE) || e.equals(Event.SUBMIT_CASE))) {
-                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, true, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, false, ABOUT_TO_SUBMIT, false));
+                if (e.equals(Event.BUILD_CASE) || e.equals(Event.SUBMIT_CASE)) {
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, true));
+                } else {
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, false));
                 }
             }
             return testScenarios;
@@ -161,8 +143,7 @@ public class AppealSkeletonBundleGeneratorTest {
                 false,
                 fileNameQualifier,
                 documentBundler,
-                documentHandler
-            );
+                documentHandler);
 
         boolean canHandle = appealSkeletonBundleGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
