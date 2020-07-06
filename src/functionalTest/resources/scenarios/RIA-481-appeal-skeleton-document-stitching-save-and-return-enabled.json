@@ -1,6 +1,5 @@
 {
   "description": "RIA-481 Create appeal skeleton document bundle - enable save and return",
-  "enabled": "{$featureFlag.isSaveAndContinueEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
