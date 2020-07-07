@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1976 Send case submitted notification to case officer (IAC Birmingham)",
+  "description": "RIA-1976 Send case submitted notification to case officer (IAC Birmingham) (save and continue enabled)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

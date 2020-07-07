@@ -26,6 +26,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+
 govnotify:
   baseUrl: "https://api.notifications.service.gov.uk"
   key: ${IA_GOV_NOTIFY_KEY}

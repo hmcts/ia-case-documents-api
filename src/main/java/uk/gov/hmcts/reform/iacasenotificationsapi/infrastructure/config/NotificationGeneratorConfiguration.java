@@ -242,7 +242,7 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
-        return Arrays.asList(
+        return Collections.singletonList(
             new EmailNotificationGenerator(
                 newArrayList(caseOfficerSubmitCasePersonalisation),
                 notificationSender,
