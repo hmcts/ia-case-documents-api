@@ -1,11 +1,10 @@
 {
-  "description": "RIA-481 Create appeal skeleton document bundle - enable stitching",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "description": "RIA-481 Create appeal skeleton document bundle - disable save and return",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "eventId": "submitCase",
+      "eventId": "buildCase",
       "state": "caseUnderReview",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
