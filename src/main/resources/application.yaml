@@ -177,6 +177,7 @@ security:
       - "editCaseListing"
       - "sendDecisionAndReasons"
       - "adjournHearingWithoutDate"
+      - "listCma"
     citizen:
       - "startAppeal"
       - "editAppeal"

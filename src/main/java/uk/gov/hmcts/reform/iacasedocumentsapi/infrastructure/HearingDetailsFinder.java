@@ -78,6 +78,10 @@ public class HearingDetailsFinder {
             case NORTH_SHIELDS:
                 hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
                 break;
+            default:
+                hearingCentreUrl = null;
+                break;
+
         }
 
         return hearingCentreUrl;

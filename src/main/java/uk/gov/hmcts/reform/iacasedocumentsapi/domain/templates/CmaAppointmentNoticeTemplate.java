@@ -69,7 +69,7 @@ public class CmaAppointmentNoticeTemplate implements DocumentTemplate<AsylumCase
                 .orElseThrow(() -> new IllegalStateException("direction '" + DirectionTag.REQUEST_CMA_REQUIREMENTS + "' is not present"));
 
 
-        fieldValues.put("healthConditions", asylumCase.read(HEALTH_CONDITIONS_TRIBUNAL_RESPONSE, String.class)
+        fieldValues.put("healthConditions", asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)
             .orElse("No physical or mental health conditions"));
         fieldValues.put("pastExperiences", asylumCase.read(PAST_EXPERIENCES_TRIBUNAL_RESPONSE, String.class)
             .orElse("No special adjustments are being made to accommodate past experiences"));
@@ -79,7 +79,7 @@ public class CmaAppointmentNoticeTemplate implements DocumentTemplate<AsylumCase
         fieldValues.put("hearingCentreName", listedHearingCentre.toString());
         fieldValues.put("hearingCentreUrl", hearingDetailsFinder.getHearingCentreUrl(listedHearingCentre));
 
-        return fieldMapper.mapFields(asylumCase);
+        return fieldValues;
     }
 }
 

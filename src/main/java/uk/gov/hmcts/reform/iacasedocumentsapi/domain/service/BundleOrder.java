@@ -61,8 +61,11 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case CMA_REQUIREMENTS:
                 log.warn("CMA_REQUIREMENTS tag should not be checked for cma ordering, document desc: {}", document.getDescription());
                 return 16;
-            case NONE:
+            case CMA_NOTICE:
+                log.warn("CMA_NOTICE tag should not be checked for cma ordering, document desc: {}", document.getDescription());
                 return 17;
+            case NONE:
+                return 18;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

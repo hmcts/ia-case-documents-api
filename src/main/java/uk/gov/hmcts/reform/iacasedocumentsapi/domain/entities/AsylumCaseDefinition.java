@@ -283,11 +283,11 @@ public enum AsylumCaseDefinition {
     ADDITIONAL_TRIBUNAL_RESPONSE(
         "additionalTribunalResponse", new TypeReference<String>(){}),
 
-    HEALTH_CONDITIONS_TRIBUNAL_RESPONSE(
-        "healthConditionsTribunalResponse", new TypeReference<String>(){}),
-
     PAST_EXPERIENCES_TRIBUNAL_RESPONSE(
         "pastExperiencesTribunalResponse", new TypeReference<String>(){}),
+
+    DATES_TO_AVOID_TRIBUNAL_RESPONSE(
+        "datesToAvoidTribunalResponse", new TypeReference<String>(){}),
 
     SUBMIT_HEARING_REQUIREMENTS_AVAILABLE(
         "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),

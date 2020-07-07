@@ -34,7 +34,7 @@ public class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .collect(Collectors.toList());
 
-        assertEquals(19, sortedTags.size());
+        assertEquals(20, sortedTags.size());
         assertEquals(DocumentTag.CASE_SUMMARY, sortedTags.get(0));
         assertEquals(DocumentTag.HEARING_NOTICE, sortedTags.get(1));
         assertEquals(DocumentTag.APPEAL_SUBMISSION, sortedTags.get(2));
@@ -53,6 +53,7 @@ public class BundleOrderTest {
         assertEquals(DocumentTag.END_APPEAL, sortedTags.get(15));
         assertEquals(DocumentTag.HEARING_REQUIREMENTS, sortedTags.get(16));
         assertEquals(DocumentTag.CMA_REQUIREMENTS, sortedTags.get(17));
+        assertEquals(DocumentTag.CMA_NOTICE, sortedTags.get(18));
         assertEquals(DocumentTag.NONE, sortedTags.get(18));
     }
 }
