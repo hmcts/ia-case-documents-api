@@ -14,12 +14,17 @@ public class DirectionTagTest {
         assertEquals("legalRepresentativeHearingRequirements", DirectionTag.LEGAL_REPRESENTATIVE_HEARING_REQUIREMENTS.toString());
         assertEquals("respondentEvidence", DirectionTag.RESPONDENT_EVIDENCE.toString());
         assertEquals("respondentReview", DirectionTag.RESPONDENT_REVIEW.toString());
+        assertEquals("requestCaseBuilding", DirectionTag.REQUEST_CASE_BUILDING.toString());
+        assertEquals("requestResponseReview", DirectionTag.REQUEST_RESPONSE_REVIEW.toString());
+        assertEquals("requestResponseAmend", DirectionTag.REQUEST_RESPONSE_AMEND.toString());
+        assertEquals("requestReasonsForAppeal", DirectionTag.REQUEST_REASONS_FOR_APPEAL.toString());
+        assertEquals("requestClarifyingQuestions", DirectionTag.REQUEST_CLARIFYING_QUESTIONS.toString());
         assertEquals("requestCmaRequirements", DirectionTag.REQUEST_CMA_REQUIREMENTS.toString());
         assertEquals("", DirectionTag.NONE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(8, DirectionTag.values().length);
+        assertEquals(13, DirectionTag.values().length);
     }
 }

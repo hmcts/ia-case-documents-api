@@ -54,6 +54,6 @@ public class BundleOrderTest {
         assertEquals(DocumentTag.HEARING_REQUIREMENTS, sortedTags.get(16));
         assertEquals(DocumentTag.CMA_REQUIREMENTS, sortedTags.get(17));
         assertEquals(DocumentTag.CMA_NOTICE, sortedTags.get(18));
-        assertEquals(DocumentTag.NONE, sortedTags.get(18));
+        assertEquals(DocumentTag.NONE, sortedTags.get(19));
     }
 }
