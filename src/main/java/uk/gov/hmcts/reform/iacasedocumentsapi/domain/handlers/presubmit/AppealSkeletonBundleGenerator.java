@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -57,9 +58,10 @@ public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<A
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
+        List<Event> validEvents = Arrays.asList(Event.SUBMIT_CASE, Event.BUILD_CASE);
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.SUBMIT_CASE
-               && isEmStitchingEnabled;
+                && validEvents.contains(callback.getEvent())
+                && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
