@@ -61,6 +61,10 @@ fees-register:
       keyword: DEF
       service: other
 
+rd-professional:
+  api:
+    url: ${REF_DATA_API_URL:http://localhost:8991}
+
 payment:
   api:
     url: ${PAYMENT_API_URL:http://localhost:8991}

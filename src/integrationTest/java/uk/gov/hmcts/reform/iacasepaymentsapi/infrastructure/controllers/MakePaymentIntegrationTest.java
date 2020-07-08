@@ -17,6 +17,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.CaseDetailsForTest
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.Resource;
 import org.springframework.security.test.context.support.WithMockUser;
 import ru.lanwen.wiremock.ext.WiremockResolver;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
@@ -26,11 +27,16 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.PreSubmitCallbackResponse
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.SpringBootIntegrationTest;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.StaticPortWiremockFactory;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithFeeStub;
+import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithIdamStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithPaymentStub;
+import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithRefDataStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithServiceAuthStub;
 
 public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
-                                        implements WithServiceAuthStub, WithFeeStub, WithPaymentStub {
+        implements WithServiceAuthStub, WithFeeStub, WithPaymentStub, WithIdamStub, WithRefDataStub {
+
+    @org.springframework.beans.factory.annotation.Value("classpath:organisation-response.json")
+    Resource resourceFile;
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia-legalrep-solicitor"})
@@ -40,6 +46,8 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
         addServiceAuthStub(server);
         addFeesRegisterStub(server);
         addPaymentStub(server);
+        addUserInfoStub(server);
+        addRefDataStub(server, resourceFile);
 
         IaCasePaymentApiClient iaCasePaymentApiClient = new IaCasePaymentApiClient(mockMvc);
 

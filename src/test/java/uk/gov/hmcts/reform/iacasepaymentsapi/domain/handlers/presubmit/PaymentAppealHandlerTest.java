@@ -40,10 +40,13 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSub
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeType;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationEntityResponse;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.CreditAccountPayment;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.PaymentService;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.RefDataService;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -55,12 +58,13 @@ class PaymentAppealHandlerTest {
     @Mock private FeeService feeService;
     @Mock private Fee fee;
     @Mock private PaymentService paymentService;
+    @Mock private RefDataService refDataService;
 
     private PaymentAppealHandler appealFeePaymentHandler;
 
     @BeforeEach
     public void setUp() {
-        appealFeePaymentHandler = new PaymentAppealHandler(feeService, paymentService);
+        appealFeePaymentHandler = new PaymentAppealHandler(feeService, paymentService, refDataService);
     }
 
     @Test
@@ -120,6 +124,9 @@ class PaymentAppealHandlerTest {
                                             "Success",
                                             "2020-1590674823325", null
             ));
+
+        when(refDataService.getOrganisationResponse()).thenReturn(
+            new OrganisationResponse(new OrganisationEntityResponse("ia-legal-rep-org")));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse = appealFeePaymentHandler
             .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

@@ -23,7 +23,8 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.Application;
     "IA_IDAM_CLIENT_ID=ia",
     "IA_IDAM_SECRET=something",
     "FEES_REGISTER_API_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/fees",
-    "PAYMENT_API_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/payment"
+    "PAYMENT_API_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/payment",
+    "REF_DATA_API_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/refdata"
 })
 @ExtendWith({
     WiremockResolver.class

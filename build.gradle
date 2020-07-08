@@ -163,7 +163,7 @@ dependencyManagement {
     }
 
     // CVE-2020-9484 present in 9.0.34
-    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.35') {
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.36') {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-websocket'
     }

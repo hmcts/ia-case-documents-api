@@ -36,6 +36,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Service;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.PaymentService;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.RefDataService;
 
 @Component
 public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase> {
@@ -43,13 +44,16 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
     private final FeeService feeService;
     private Fee fee;
     private final PaymentService paymentService;
+    private final RefDataService refDataService;
 
     public PaymentAppealHandler(
         FeeService feeService,
-        PaymentService paymentService
+        PaymentService paymentService,
+        RefDataService refDataService
     ) {
         this.feeService = feeService;
         this.paymentService = paymentService;
+        this.refDataService = refDataService;
     }
 
     @Override
@@ -141,7 +145,7 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             Currency.GBP,
             customerReference,
             paymentDescription,
-            "ia-legal-rep-org",
+                refDataService.getOrganisationResponse().getOrganisationEntityResponse().getName(),
             Service.IAC,
             "BFA1",
             Arrays.asList(
