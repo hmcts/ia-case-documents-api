@@ -99,15 +99,15 @@ public class HearingDetailsFinderTest {
     @Test
     public void should_return_hearing_centres_urls() {
 
-        String birminghamHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/birmingham-immigration-and-asylum-chamber-first-tier-tribunal";
-        String bradfordHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/bradford-tribunal-hearing-centre";
-        String glasgowHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/glasgow-employment-and-immigration-tribunals-eagle-building";
-        String hattonCrossHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/hatton-cross-tribunal-hearing-centre";
-        String taylorHouseHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/taylor-house-tribunal-hearing-centre";
-        String manchesterHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/manchester-tribunal-hearing-centre";
-        String newportHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newport-south-wales-immigration-and-asylum-tribunal";
-        String nottinghamHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/nottingham-magistrates-court";
-        String northShieldsHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
+        final String birminghamHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/birmingham-immigration-and-asylum-chamber-first-tier-tribunal";
+        final String bradfordHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/bradford-tribunal-hearing-centre";
+        final String glasgowHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/glasgow-employment-and-immigration-tribunals-eagle-building";
+        final String hattonCrossHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/hatton-cross-tribunal-hearing-centre";
+        final String taylorHouseHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/taylor-house-tribunal-hearing-centre";
+        final String manchesterHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/manchester-tribunal-hearing-centre";
+        final String newportHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newport-south-wales-immigration-and-asylum-tribunal";
+        final String nottinghamHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/nottingham-magistrates-court";
+        final String northShieldsHearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
 
         assertEquals(birminghamHearingCentreUrl, hearingDetailsFinder.getHearingCentreUrl(BIRMINGHAM));
         assertEquals(bradfordHearingCentreUrl, hearingDetailsFinder.getHearingCentreUrl(BRADFORD));
