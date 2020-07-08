@@ -33,11 +33,12 @@ public class EventTest {
         assertEquals("editCaseListing", Event.EDIT_CASE_LISTING.toString());
         assertEquals("endAppeal", Event.END_APPEAL.toString());
         assertEquals("adjournHearingWithoutDate", Event.ADJOURN_HEARING_WITHOUT_DATE.toString());
+        assertEquals("submitCmaRequirements", Event.SUBMIT_CMA_REQUIREMENTS.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(26, Event.values().length);
+        assertEquals(27, Event.values().length);
     }
 }

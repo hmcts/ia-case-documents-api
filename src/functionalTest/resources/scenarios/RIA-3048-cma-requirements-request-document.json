@@ -1,0 +1,110 @@
+{
+  "description": "RIA-3048 Create cma requirements request PDF",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "eventId": "submitCmaRequirements",
+      "state": "awaitingCmaRequirements",
+      "caseData": {
+        "template": "minimal-aip-appeal-submitted.json",
+        "replacements": {
+          "isInterpreterServicesNeeded": "Yes",
+          "interpreterLanguage": [
+            {
+              "id": "1",
+              "value": {
+                "language": "zulu",
+                "languageDialect": "opt"
+              }
+            }
+          ],
+          "isHearingRoomNeeded": "Yes",
+          "isHearingLoopNeeded": "Yes",
+          "physicalOrMentalHealthIssues": "Yes",
+          "physicalOrMentalHealthIssuesDescription": "Physical or mental health issues description",
+          "pastExperiences": "Yes",
+          "pastExperiencesDescription": "Past experiences",
+          "multimediaEvidence": "Yes",
+          "multimediaEvidenceDescription": "Multimedia evidence",
+          "singleSexCourt": "Yes",
+          "singleSexCourtType": "All female",
+          "singleSexCourtTypeDescription": "Requirement for single sex court",
+          "inCameraCourt": "Yes",
+          "inCameraCourtDescription": "In camera court description",
+          "additionalRequests": "Yes",
+          "additionalRequestsDescription": "Additional requests description",
+          "datesToAvoid": [
+            {
+              "id": "1",
+              "value": {
+                "dateToAvoid": "2019-12-25",
+                "dateToAvoidReason": "Xmas"
+              }
+            }
+          ],
+          "hearingDocuments": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-aip-appeal-submitted.json",
+      "replacements": {
+        "isInterpreterServicesNeeded": "Yes",
+        "interpreterLanguage": [
+          {
+            "id": "1",
+            "value": {
+              "language": "zulu",
+              "languageDialect": "opt"
+            }
+          }
+        ],
+        "isHearingRoomNeeded": "Yes",
+        "isHearingLoopNeeded": "Yes",
+        "physicalOrMentalHealthIssues": "Yes",
+        "physicalOrMentalHealthIssuesDescription": "Physical or mental health issues description",
+        "pastExperiences": "Yes",
+        "pastExperiencesDescription": "Past experiences",
+        "multimediaEvidence": "Yes",
+        "multimediaEvidenceDescription": "Multimedia evidence",
+        "singleSexCourt": "Yes",
+        "singleSexCourtType": "All female",
+        "singleSexCourtTypeDescription": "Requirement for single sex court",
+        "inCameraCourt": "Yes",
+        "inCameraCourtDescription": "In camera court description",
+        "additionalRequests": "Yes",
+        "additionalRequestsDescription": "Additional requests description",
+        "datesToAvoid": [
+          {
+            "id": "1",
+            "value": {
+              "dateToAvoid": "2019-12-25",
+              "dateToAvoidReason": "Xmas"
+            }
+          }
+        ],
+        "hearingDocuments": [],
+        "hearingRequirements": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 12345 2018-Awan-Case-management-appointment-requirements.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "cmaRequirements"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

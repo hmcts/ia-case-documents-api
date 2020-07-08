@@ -30,6 +30,7 @@ public enum Event {
     EDIT_CASE_LISTING("editCaseListing"),
     END_APPEAL("endAppeal"),
     ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate"),
+    SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
@@ -45,5 +46,5 @@ public enum Event {
     public String toString() {
         return id;
     }
-    
+
 }

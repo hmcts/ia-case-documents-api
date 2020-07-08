@@ -224,4 +224,26 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+
+    @Bean("cmaRequirements")
+    public DocumentCreator<AsylumCase> getCmaRequirementsDocumentCreator(
+        @Value("${cmaRequirements.contentType}") String contentType,
+        @Value("${cmaRequirements.fileExtension}") String fileExtension,
+        @Value("${cmaRequirements.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        CmaRequirementsTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 }

@@ -21,11 +21,12 @@ public class DocumentTagTest {
         assertEquals("decisionAndReasons", DocumentTag.DECISION_AND_REASONS_DRAFT.toString());
         assertEquals("submitCaseBundle", DocumentTag.APPEAL_SKELETON_BUNDLE.toString());
         assertEquals("endAppeal", DocumentTag.END_APPEAL.toString());
+        assertEquals("cmaRequirements", DocumentTag.CMA_REQUIREMENTS.toString());
         assertEquals("", DocumentTag.NONE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(16, DocumentTag.values().length);
+        assertEquals(17, DocumentTag.values().length);
     }
 }
