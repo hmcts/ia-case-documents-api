@@ -299,6 +299,14 @@ govnotify:
         sms: fb5987c6-78ad-4583-8123-f793a39bbe2f
       caseOfficer:
         email: 5bba5bcb-9da1-4e0b-aa48-7a94e14e1e9a
+    listCma:
+      appellant:
+        email: e059c898-8bd8-4e8b-a5db-8af2ea6ebac7
+        sms: febb1351-c870-4ec8-85f9-43d2108d07cd
+      caseOfficer:
+        email: 3db5f56c-ea9f-4c77-a826-e670fea96404
+      homeOffice:
+        email: 9b750e75-6701-43e7-abaf-9fd3e6cf7af6
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -389,6 +397,7 @@ security:
       - "sendDecisionAndReasons"
       - "adjournHearingWithoutDate"
       - "restoreStateFromAdjourn"
+      - "listCma"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

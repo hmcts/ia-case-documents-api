@@ -907,4 +907,19 @@ public class NotificationHandlerConfiguration {
             notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> listCmaAipNotificationHandler(
+        @Qualifier("listCmaAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.LIST_CMA
+                && callback.getCaseDetails().getCaseData()
+                    .read(JOURNEY_TYPE, JourneyType.class)
+                    .map(type -> type == AIP).orElse(false),
+            notificationGenerators
+        );
+    }
 }

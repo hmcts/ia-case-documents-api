@@ -1023,4 +1023,26 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("listCmaAipNotificationGenerator")
+    public List<NotificationGenerator> listCmaAipNotificationGenerator(
+        AppellantListCmaPersonalisationEmail appellantListCmaPersonalisationEmail,
+        AppellantListCmaPersonalisationSms appellantListCmaPersonalisationSms,
+        HomeOfficeListCmaPersonalisation homeOfficeListCmaPersonalisation,
+        CaseOfficerListCmaPersonalisation caseOfficerListCmaPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantListCmaPersonalisationEmail, homeOfficeListCmaPersonalisation, caseOfficerListCmaPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantListCmaPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

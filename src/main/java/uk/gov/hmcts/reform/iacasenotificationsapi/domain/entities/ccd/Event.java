@@ -55,6 +55,7 @@ public enum Event {
     RESTORE_STATE_FROM_ADJOURN("restoreStateFromAdjourn"),
     REQUEST_CMA_REQUIREMENTS("requestCmaRequirements"),
     SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements"),
+    LIST_CMA("listCma"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

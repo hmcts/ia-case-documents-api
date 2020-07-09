@@ -58,11 +58,12 @@ public class EventTest {
         assertEquals("restoreStateFromAdjourn", Event.RESTORE_STATE_FROM_ADJOURN.toString());
         assertEquals("requestCmaRequirements", Event.REQUEST_CMA_REQUIREMENTS.toString());
         assertEquals("submitCmaRequirements", Event.SUBMIT_CMA_REQUIREMENTS.toString());
+        assertEquals("listCma", Event.LIST_CMA.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(52, Event.values().length);
+        assertEquals(53, Event.values().length);
     }
 }
