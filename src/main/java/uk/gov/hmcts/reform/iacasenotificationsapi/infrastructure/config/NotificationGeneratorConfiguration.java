@@ -205,12 +205,12 @@ public class NotificationGeneratorConfiguration {
             NotificationSender notificationSender,
             NotificationIdAppender notificationIdAppender) {
 
-        return Arrays.asList(
-                new EmailNotificationGenerator(
-                        newArrayList(legalRepresentativeSubmitAppealPersonalisation),
-                        notificationSender,
-                        notificationIdAppender
-                )
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeSubmitAppealPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
         );
     }
 

@@ -296,8 +296,9 @@ public class NotificationHandlerConfiguration {
     ) {
         return new NotificationHandler(
             (callbackStage, callback) -> {
+                List<Event> validEvent = Arrays.asList(Event.SUBMIT_CASE, BUILD_CASE);
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                        && callback.getEvent() == Event.SUBMIT_CASE
+                        && validEvent.contains(callback.getEvent())
                         && callback.getCaseDetails().getCaseData()
                         .read(JOURNEY_TYPE, JourneyType.class)
                         .map(type -> type == REP).orElse(true);
@@ -311,12 +312,8 @@ public class NotificationHandlerConfiguration {
     ) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> {
-                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
-
-                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                        && callback.getEvent() == Event.SUBMIT_APPEAL;
-            }, notificationGenerators
+            (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.SUBMIT_APPEAL, notificationGenerators
         );
     }
 
