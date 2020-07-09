@@ -56,7 +56,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "hearingNotice"
+              "tag": "cmaNotice"
             }
           }
         ],
