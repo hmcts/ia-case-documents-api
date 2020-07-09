@@ -22,6 +22,7 @@ public enum State {
     DECIDED("decided"),
     ENDED("ended"),
     AWAITING_CMA_REQUIREMENTS("awaitingCmaRequirements"),
+    CMA_ADJUSTMENTS_AGREED("cmaAdjustmentsAgreed"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

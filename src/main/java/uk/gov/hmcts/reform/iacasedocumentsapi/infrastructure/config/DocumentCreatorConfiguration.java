@@ -246,4 +246,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("cmaAppointmentNotice")
+    public DocumentCreator<AsylumCase> getCmaAppointmentNoticeDocumentCreator(
+        @Value("${cmaAppointmentNotice.contentType}") String contentType,
+        @Value("${cmaAppointmentNotice.fileExtension}") String fileExtension,
+        @Value("${cmaAppointmentNotice.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        CmaAppointmentNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 }
