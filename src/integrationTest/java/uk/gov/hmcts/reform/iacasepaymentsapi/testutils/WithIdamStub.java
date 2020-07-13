@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.matching.RequestPatternBuilder.newRequestPattern;
 
@@ -17,7 +16,6 @@ public interface WithIdamStub {
         server.addStubMapping(
             new StubMapping(
                 newRequestPattern(RequestMethod.GET, urlEqualTo("/idam/o/userinfo"))
-                    .withHeader("Content-Type", equalTo("application/json"))
                     .build(),
                 aResponse()
                     .withStatus(200)

@@ -63,7 +63,7 @@ fees-register:
 
 rd-professional:
   api:
-    url: ${REF_DATA_API_URL:http://localhost:8991}
+    url: ${PROF_REF_DATA_URL:http://localhost:8991}
 
 payment:
   api:

@@ -16,7 +16,7 @@ public interface WithRefDataStub {
 
     default void addRefDataStub(WireMockServer server, Resource resourceFile) throws IOException {
 
-        String refDataUrl = "/refdata/external/v1/organisations/pbas";
+        String refDataUrl = "/refdata/refdata/external/v1/organisations/pbas";
         String emailQuery = "?email=ia.legalrep.orgcreator%40gmail.com";
 
         String refDataResponseJson =

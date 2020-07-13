@@ -12,7 +12,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationRes
 @FeignClient(name = "rd-professional-api", url = "${rd-professional.api.url}")
 public interface RefDataApi {
 
-    @GetMapping("/external/v1/organisations/pbas")
+    @GetMapping("/refdata/external/v1/organisations/pbas")
     OrganisationResponse findOrganisation(
         @RequestHeader(AUTHORIZATION) String authorization,
         @RequestHeader(SERVICE_AUTHORIZATION) String serviceAuthorization,

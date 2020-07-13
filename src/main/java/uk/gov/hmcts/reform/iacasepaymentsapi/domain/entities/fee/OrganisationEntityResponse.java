@@ -20,15 +20,15 @@ public class OrganisationEntityResponse {
     private String companyNumber;
     private String companyUrl;
     private SuperUser superUser;
-    private List<String> pbaAccountList;
+    private List<String> paymentAccount;
     private String contactInformation;
 
     public OrganisationEntityResponse(String name) {
         this.name = name;
     }
 
-    public List<String> getPbaAccountList() {
-        return pbaAccountList;
+    public List<String> getPaymentAccount() {
+        return paymentAccount;
     }
 
 }

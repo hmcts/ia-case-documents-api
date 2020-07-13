@@ -75,8 +75,8 @@ class RefDataServiceTest {
         assertEquals("sraReg", mockResponse.getOrganisationEntityResponse().getSraRegulated());
         assertEquals("CO123", mockResponse.getOrganisationEntityResponse().getCompanyNumber());
         assertEquals("some-url", mockResponse.getOrganisationEntityResponse().getCompanyUrl());
-        assertEquals("PBA123456", mockResponse.getOrganisationEntityResponse().getPbaAccountList().get(0));
-        assertEquals("PBA765432", mockResponse.getOrganisationEntityResponse().getPbaAccountList().get(1));
+        assertEquals("PBA123456", mockResponse.getOrganisationEntityResponse().getPaymentAccount().get(0));
+        assertEquals("PBA765432", mockResponse.getOrganisationEntityResponse().getPaymentAccount().get(1));
         assertEquals("contactInfo", mockResponse.getOrganisationEntityResponse().getContactInformation());
     }
 }

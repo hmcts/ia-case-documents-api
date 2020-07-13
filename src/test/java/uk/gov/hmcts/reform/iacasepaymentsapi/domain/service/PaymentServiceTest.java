@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.when;
@@ -21,7 +20,6 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentResp
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Service;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.StatusHistories;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.PaymentApi;
-import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.PaymentProperties;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +27,6 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.RequestUser
 class PaymentServiceTest {
 
     @Mock private PaymentApi paymentApi;
-    @Mock private PaymentProperties paymentProperties;
     @Mock private RequestUserAccessTokenProvider userAuthorizationProvider;
     @Mock private AuthTokenGenerator serviceAuthorizationProvider;
 
@@ -42,7 +39,6 @@ class PaymentServiceTest {
 
         paymentService = new PaymentService(
             paymentApi,
-            paymentProperties,
             userAuthorizationProvider,
             serviceAuthorizationProvider);
     }
@@ -70,13 +66,6 @@ class PaymentServiceTest {
 
         assertEquals("RC-1590-6748-2373-9129", paymentResponse.getReference());
         assertEquals("Success", paymentResponse.getStatus());
-    }
-
-    @Test
-    void should_throw_for_null_request() {
-
-        assertThatThrownBy(() -> paymentService.creditAccountPayment(null))
-            .isExactlyInstanceOf(NullPointerException.class);
     }
 
     private CreditAccountPayment getCreditAccountPaymentRequest() throws Exception {

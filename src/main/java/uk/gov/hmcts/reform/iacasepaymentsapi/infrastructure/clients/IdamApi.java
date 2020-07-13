@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.Token;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.UserInfo;
 
+
 @FeignClient(
     name = "idam-api",
     url = "${idam.baseUrl}",
@@ -19,7 +20,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.U
 )
 public interface IdamApi {
 
-    @GetMapping(value = "/o/userinfo", produces = "application/json", consumes = "application/json")
+    @GetMapping(value = "/o/userinfo", produces = "application/json")
     UserInfo userInfo(@RequestHeader(AUTHORIZATION) String userToken);
 
     @PostMapping(value = "/o/token", produces = "application/json", consumes = "application/x-www-form-urlencoded")

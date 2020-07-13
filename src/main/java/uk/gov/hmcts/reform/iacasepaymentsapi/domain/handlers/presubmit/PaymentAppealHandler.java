@@ -10,7 +10,6 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_DESCRIPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_PAYMENT_APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DESCRIPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
@@ -19,6 +18,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
@@ -39,10 +39,10 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.PaymentService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.RefDataService;
 
 @Component
+@Slf4j
 public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final FeeService feeService;
-    private Fee fee;
     private final PaymentService paymentService;
     private final RefDataService refDataService;
 
@@ -126,8 +126,6 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             .orElseThrow(() -> new IllegalStateException("PBA account number is not present"));
         String paymentDescription = asylumCase.read(PAYMENT_DESCRIPTION, String.class)
             .orElseThrow(() -> new IllegalStateException("Payment description is not present"));
-        String customerReference = asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)
-            .orElseThrow(() -> new IllegalStateException("Customer payment reference is not present"));
         String feeCode = asylumCase.read(FEE_CODE, String.class)
             .orElseThrow(() -> new IllegalStateException("Fee code is not present"));
         String feeDescription = asylumCase.read(FEE_DESCRIPTION, String.class)
@@ -137,15 +135,17 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         BigDecimal feeAmount = asylumCase.read(FEE_AMOUNT, BigDecimal.class)
             .orElseThrow(() -> new IllegalStateException("Fee amount is not present"));
 
+        String orgName = refDataService.getOrganisationResponse().getOrganisationEntityResponse().getName();
+        String caseId = String.valueOf(callback.getCaseDetails().getId());
         CreditAccountPayment creditAccountPayment = new CreditAccountPayment(
             pbaAccountNumber,
             feeAmount,
-            null,
-            Long.toString(callback.getCaseDetails().getId()),
+            caseId,
+            caseId,
             Currency.GBP,
-            customerReference,
+            caseId,
             paymentDescription,
-                refDataService.getOrganisationResponse().getOrganisationEntityResponse().getName(),
+            orgName,
             Service.IAC,
             "BFA1",
             Arrays.asList(

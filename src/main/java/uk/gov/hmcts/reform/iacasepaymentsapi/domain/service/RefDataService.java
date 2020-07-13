@@ -33,10 +33,10 @@ public class RefDataService {
     public OrganisationResponse getOrganisationResponse() {
 
         String userToken = userAuthorizationProvider.getAccessToken();
-        UserInfo userInfo = idamApi.userInfo("Bearer " + userToken);
+        UserInfo userInfo = idamApi.userInfo(userToken);
 
         return refDataApi.findOrganisation(
-            userAuthorizationProvider.getAccessToken(),
+            userToken,
             serviceAuthorizationProvider.generate(),
             userInfo.getEmail());
     }
