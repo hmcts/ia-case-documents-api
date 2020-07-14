@@ -172,6 +172,7 @@ security:
       - "endAppeal"
       - "updateHearingRequirements"
       - "adjournHearingWithoutDate"
+      - "editAppealAfterSubmit"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
