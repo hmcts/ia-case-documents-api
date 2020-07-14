@@ -7,15 +7,19 @@ import java.util.Optional;
 
 public enum HearingCentre {
 
+
+    BIRMINGHAM("birmingham"),
     BRADFORD("bradford"),
+    COVENTRY("coventry"),
+    GLASGOW("glasgow"),
+    GLASGOW_TRIBUNAL_CENTRE("glasgowTribunalsCentre"),
+    HATTON_CROSS("hattonCross"),
     MANCHESTER("manchester"),
     NEWPORT("newport"),
-    TAYLOR_HOUSE("taylorHouse"),
     NORTH_SHIELDS("northShields"),
-    BIRMINGHAM("birmingham"),
-    HATTON_CROSS("hattonCross"),
-    GLASGOW("glasgow"),
+    NEWCASTLE("newcastle"),
     NOTTINGHAM("nottingham"),
+    TAYLOR_HOUSE("taylorHouse"),
     BELFAST("belfast");
 
     @JsonValue

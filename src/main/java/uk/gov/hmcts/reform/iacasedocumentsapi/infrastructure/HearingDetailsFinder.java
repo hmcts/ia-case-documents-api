@@ -49,7 +49,7 @@ public class HearingDetailsFinder {
     }
 
     public String getHearingCentreUrl(HearingCentre hearingCentre) {
-        String hearingCentreUrl = null;
+        String hearingCentreUrl;
         switch (hearingCentre) {
             case BIRMINGHAM:
                 hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/birmingham-immigration-and-asylum-chamber-first-tier-tribunal";
@@ -79,9 +79,8 @@ public class HearingDetailsFinder {
                 hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
                 break;
             default:
-                hearingCentreUrl = null;
+                hearingCentreUrl = "Hearing centre url not available";
                 break;
-
         }
 
         return hearingCentreUrl;
