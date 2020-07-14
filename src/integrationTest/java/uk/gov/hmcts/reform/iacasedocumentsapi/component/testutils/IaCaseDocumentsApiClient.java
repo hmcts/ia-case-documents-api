@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.CallbackForTest.CallbackForTestBuilder;
 
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.CallbackForTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.PreSubmitCallbackResponseForTest;
 
 public class IaCaseDocumentsApiClient {
 

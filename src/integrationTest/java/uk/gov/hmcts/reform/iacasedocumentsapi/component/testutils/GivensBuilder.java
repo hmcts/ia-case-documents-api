@@ -1,13 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixtures.someUploadResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.RandomStringUtils;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.Builder;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.Builder;
 
 public class GivensBuilder {
 

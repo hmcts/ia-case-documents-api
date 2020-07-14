@@ -2,23 +2,24 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.component;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder.userWith;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.DECISION_AND_REASONS_DRAFT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.DECISION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder.userWith;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WiremockSpringBootIntegrationTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures.PreSubmitCallbackResponseForTest;
 
 public class GenerateDecisionAndReasonsTestWiremock extends WiremockSpringBootIntegrationTest {
 
@@ -27,6 +28,8 @@ public class GenerateDecisionAndReasonsTestWiremock extends WiremockSpringBootIn
 
         given.someLoggedIn(userWith()
             .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))
+            .id("1")
+            .email("some-email@email.com")
             .forename("Case")
             .surname("Officer"));
 
@@ -36,7 +39,10 @@ public class GenerateDecisionAndReasonsTestWiremock extends WiremockSpringBootIn
         PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.GENERATE_DECISION_AND_REASONS)
             .caseDetails(someCaseDetailsWith()
+                .id(1)
                 .state(DECISION)
+                .createdDate(LocalDateTime.now())
+                .jurisdiction("IA")
                 .caseData(anAsylumCase()
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
                     .with(APPELLANT_FAMILY_NAME, "some-fname")

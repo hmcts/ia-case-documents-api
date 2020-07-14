@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures;
 
 import java.util.Map;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;

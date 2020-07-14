@@ -1,9 +1,11 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.testutils.fixtures;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Set;
 import lombok.Data;
 
 @Data
+@JsonSerialize
 public class UserDetailsForTest {
 
     private String id;
