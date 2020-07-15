@@ -56,6 +56,7 @@ public enum Event {
     REQUEST_CMA_REQUIREMENTS("requestCmaRequirements"),
     SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements"),
     LIST_CMA("listCma"),
+    EDIT_APPEAL_AFTER_SUBMIT("editAppealAfterSubmit"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

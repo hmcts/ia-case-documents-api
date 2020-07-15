@@ -1045,4 +1045,21 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("editAppealAfterSubmitNotificationGenerator")
+    public List<NotificationGenerator> editAppealAfterSubmitNotificationGenerator(
+        LegalRepresentativeEditAppealAfterSubmitPersonalisation legalRepresentativeEditAppealAfterSubmitPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeEditAppealAfterSubmitPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

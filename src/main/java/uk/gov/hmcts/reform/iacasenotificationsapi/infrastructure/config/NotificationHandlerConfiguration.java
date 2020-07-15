@@ -922,4 +922,15 @@ public class NotificationHandlerConfiguration {
             notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> editAppealAfterSubmitNotificationHandler(
+        @Qualifier("editAppealAfterSubmitNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.EDIT_APPEAL_AFTER_SUBMIT,
+            notificationGenerator
+        );
+    }
 }

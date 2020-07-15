@@ -307,6 +307,12 @@ govnotify:
         email: 3db5f56c-ea9f-4c77-a826-e670fea96404
       homeOffice:
         email: 9b750e75-6701-43e7-abaf-9fd3e6cf7af6
+    editAppealAfterSubmitBeforeListing:
+      legalRep:
+        email: 77d13640-e7f2-45e2-abec-56f34f2a26af
+    editAppealAfterSubmitAfterListing:
+      legalRep:
+        email: 9e3d4485-4b36-4f83-aad7-4896e9dfc97b
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -391,6 +397,7 @@ security:
       - "adjournHearingWithoutDate"
       - "restoreStateFromAdjourn"
       - "requestCmaRequirements"
+      - "editAppealAfterSubmit"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
