@@ -30,6 +30,28 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGen
 public class NotificationHandlerConfiguration {
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> unlinkAppealNotificationHandler(
+        @Qualifier("unlinkAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && Event.UNLINK_APPEAL.equals(callback.getEvent()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> linkAppealNotificationHandler(
+        @Qualifier("linkAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && Event.LINK_APPEAL.equals(callback.getEvent()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> reListCaseNotificationHandler(
         @Qualifier("reListCaseNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
@@ -40,7 +62,6 @@ public class NotificationHandlerConfiguration {
             notificationGenerators
         );
     }
-
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> requestCaseEditNotificationHandler(

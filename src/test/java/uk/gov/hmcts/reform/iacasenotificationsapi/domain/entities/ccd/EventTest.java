@@ -60,11 +60,13 @@ public class EventTest {
         assertEquals("submitCmaRequirements", Event.SUBMIT_CMA_REQUIREMENTS.toString());
         assertEquals("listCma", Event.LIST_CMA.toString());
         assertEquals("editAppealAfterSubmit", Event.EDIT_APPEAL_AFTER_SUBMIT.toString());
+        assertEquals("linkAppeal", Event.LINK_APPEAL.toString());
+        assertEquals("unlinkAppeal", Event.UNLINK_APPEAL.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(54, Event.values().length);
+        assertEquals(56, Event.values().length);
     }
 }

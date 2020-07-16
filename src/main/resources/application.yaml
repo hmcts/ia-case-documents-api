@@ -317,6 +317,18 @@ govnotify:
         email: 9e3d4485-4b36-4f83-aad7-4896e9dfc97b
       respondent:
         email: c4c21317-04a8-457a-a9cc-0f028eaa8e8c
+    linkAppealBeforeListing:
+      legalRep:
+        email: 51d5c671-2edd-4bf9-86b3-ab1d38f00b38
+    linkAppealAfterListing:
+      legalRep:
+        email: 588e2447-b10d-4970-827a-7e4275d0dec2
+    unlinkAppealBeforeListing:
+      legalRep:
+        email: 98eebdab-fcba-4ef7-b4ff-509651c18a6c
+    unlinkAppealAfterListing:
+      legalRep:
+        email: 50652202-52d0-494e-8e14-1e7093a808d6
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -402,6 +414,8 @@ security:
       - "restoreStateFromAdjourn"
       - "requestCmaRequirements"
       - "editAppealAfterSubmit"
+      - "linkAppeal"
+      - "unlinkAppeal"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -409,6 +423,8 @@ security:
       - "adjournHearingWithoutDate"
       - "restoreStateFromAdjourn"
       - "listCma"
+      - "linkAppeal"
+      - "unlinkAppeal"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

@@ -14,11 +14,43 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appella
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.linkunlinkappeal.LegalRepresentativeLinkAppealPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.linkunlinkappeal.LegalRepresentativeUnlinkAppealPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.*;
 
 @Configuration
 public class NotificationGeneratorConfiguration {
+
+    @Bean("unlinkAppealNotificationGenerator")
+    public List<NotificationGenerator> unlinkAppealNotificationGenerator(
+        LegalRepresentativeUnlinkAppealPersonalisation legalRepresentativeUnlinkAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeUnlinkAppealPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("linkAppealNotificationGenerator")
+    public List<NotificationGenerator> linkAppealNotificationGenerator(
+        LegalRepresentativeLinkAppealPersonalisation legalRepresentativeLinkAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeLinkAppealPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 
     @Bean("reListCaseNotificationGenerator")
     public List<NotificationGenerator> reListCaseNotificationGenerator(

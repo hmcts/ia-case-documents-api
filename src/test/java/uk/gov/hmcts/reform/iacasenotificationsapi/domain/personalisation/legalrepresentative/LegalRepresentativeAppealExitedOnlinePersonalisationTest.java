@@ -1,7 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -13,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,24 +23,24 @@ public class LegalRepresentativeAppealExitedOnlinePersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock CustomerServicesProvider customerServicesProvider;
 
-    private Long caseId = 12345L;
-    private String beforeListingTemplateId = "beforeListingTemplateId";
-    private String afterListingTemplateId = "afterListingTemplateId";
-    private String iaExUiFrontendUrl = "http://localhost";
-    private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
-    private String emailAddress = "legal@example.com";
+    private final String beforeListingTemplateId = "beforeListingTemplateId";
+    private final String afterListingTemplateId = "afterListingTemplateId";
+    private final String iaExUiFrontendUrl = "http://localhost";
+    private final String emailAddress = "legal@example.com";
 
-    private String appealReferenceNumber = "someReferenceNumber";
-    private String ariaListingReference = "someAriaListingReference";
-    private String legalRefNumber = "someLegalRefNumber";
-    private String appellantGivenNames = "someAppellantGivenNames";
-    private String appellantFamilyName = "someAppellantFamilyName";
+    private final String appealReferenceNumber = "someReferenceNumber";
+    private final String ariaListingReference = "someAriaListingReference";
+    private final String legalRefNumber = "someLegalRefNumber";
+    private final String appellantGivenNames = "someAppellantGivenNames";
+    private final String appellantFamilyName = "someAppellantFamilyName";
 
-    private String customerServicesTelephone = "555 555 555";
-    private String customerServicesEmail = "cust.services@example.com";
+    private final String customerServicesTelephone = "555 555 555";
+    private final String customerServicesEmail = "cust.services@example.com";
 
     private LegalRepresentativeAppealExitedOnlinePersonalisation legalRepresentativeAppealExitedOnlinePersonalisation;
-    
+    @Mock
+    private AppealService appealService;
+
     @Before
     public void setup() {
 
@@ -56,20 +57,24 @@ public class LegalRepresentativeAppealExitedOnlinePersonalisationTest {
             beforeListingTemplateId,
             afterListingTemplateId,
             iaExUiFrontendUrl,
-            customerServicesProvider
-        );
+            customerServicesProvider,
+            appealService);
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(beforeListingTemplateId, legalRepresentativeAppealExitedOnlinePersonalisation.getTemplateId(asylumCase));
+        when(appealService.isAppealListed(asylumCase)).thenReturn(false);
+        assertEquals(beforeListingTemplateId,
+            legalRepresentativeAppealExitedOnlinePersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
-        assertEquals(afterListingTemplateId, legalRepresentativeAppealExitedOnlinePersonalisation.getTemplateId(asylumCase));
+        when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+        assertEquals(afterListingTemplateId,
+            legalRepresentativeAppealExitedOnlinePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
+        Long caseId = 12345L;
         assertEquals(caseId + "_APPEAL_EXITED_ONLINE_LEGAL_REPRESENTATIVE", legalRepresentativeAppealExitedOnlinePersonalisation.getReferenceId(caseId));
     }
 
@@ -123,10 +128,4 @@ public class LegalRepresentativeAppealExitedOnlinePersonalisationTest {
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
-    @Test
-    public void should_return_false_if_appeal_not_yet_listed() {
-        assertFalse(legalRepresentativeAppealExitedOnlinePersonalisation.isAppealListed(asylumCase));
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
-        assertTrue(legalRepresentativeAppealExitedOnlinePersonalisation.isAppealListed(asylumCase));
-    }
 }

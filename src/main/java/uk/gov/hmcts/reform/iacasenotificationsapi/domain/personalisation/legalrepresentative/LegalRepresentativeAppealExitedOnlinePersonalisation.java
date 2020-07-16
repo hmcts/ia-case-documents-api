@@ -1,20 +1,20 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
@@ -24,24 +24,30 @@ public class LegalRepresentativeAppealExitedOnlinePersonalisation implements Ema
     private final String appealExitedOnlineAfterListingLegalRepresentativeTemplateId;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
+    private final AppealService appealService;
 
     public LegalRepresentativeAppealExitedOnlinePersonalisation(
-        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineBeforeListing.legalRep.email}") String appealExitedOnlineBeforeListingLegalRepresentativeTemplateId,
-        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null") @Value("${govnotify.template.removeAppealFromOnlineAfterListing.legalRep.email}") String appealExitedOnlineAfterListingLegalRepresentativeTemplateId,
+        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null")
+        @Value("${govnotify.template.removeAppealFromOnlineBeforeListing.legalRep.email}")
+            String appealExitedOnlineBeforeListingLegalRepresentativeTemplateId,
+        @NotNull(message = "appealOutcomeAllowedLegalRepresentativeTemplateId cannot be null")
+        @Value("${govnotify.template.removeAppealFromOnlineAfterListing.legalRep.email}")
+            String appealExitedOnlineAfterListingLegalRepresentativeTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        CustomerServicesProvider customerServicesProvider
-    ) {
+        CustomerServicesProvider customerServicesProvider,
+        AppealService appealService) {
 
         this.appealExitedOnlineBeforeListingLegalRepresentativeTemplateId = appealExitedOnlineBeforeListingLegalRepresentativeTemplateId;
         this.appealExitedOnlineAfterListingLegalRepresentativeTemplateId = appealExitedOnlineAfterListingLegalRepresentativeTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;
+        this.appealService = appealService;
     }
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        return isAppealListed(asylumCase)
-            ? appealExitedOnlineAfterListingLegalRepresentativeTemplateId : appealExitedOnlineBeforeListingLegalRepresentativeTemplateId;
+        return appealService.isAppealListed(asylumCase) ? appealExitedOnlineAfterListingLegalRepresentativeTemplateId
+            : appealExitedOnlineBeforeListingLegalRepresentativeTemplateId;
     }
 
     @Override
@@ -72,11 +78,4 @@ public class LegalRepresentativeAppealExitedOnlinePersonalisation implements Ema
             .build();
     }
 
-    protected boolean isAppealListed(AsylumCase asylumCase) {
-
-        final Optional<HearingCentre> appealListed = asylumCase
-            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
-
-        return appealListed.isPresent();
-    }
 }
