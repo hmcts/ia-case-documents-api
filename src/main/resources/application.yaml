@@ -320,15 +320,23 @@ govnotify:
     linkAppealBeforeListing:
       legalRep:
         email: 51d5c671-2edd-4bf9-86b3-ab1d38f00b38
+      homeOffice:
+        email: 3cd6c3c4-6512-4fa8-ad3b-a455cbfda9fa
     linkAppealAfterListing:
       legalRep:
         email: 588e2447-b10d-4970-827a-7e4275d0dec2
+      homeOffice:
+        email: eaec4a03-15fe-4d8a-9d74-19a8e6e225ef
     unlinkAppealBeforeListing:
       legalRep:
         email: 98eebdab-fcba-4ef7-b4ff-509651c18a6c
+      homeOffice:
+        email: 2dbd0ae9-9fda-4b98-a9a8-0887e05dd3c3
     unlinkAppealAfterListing:
       legalRep:
         email: 50652202-52d0-494e-8e14-1e7093a808d6
+      homeOffice:
+        email: 9d289019-12d4-4815-8461-80cc3b890406
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 

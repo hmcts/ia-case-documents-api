@@ -13,6 +13,8 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appella
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.linkunlinkappeal.HomeOfficeLinkAppealPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.linkunlinkappeal.HomeOfficeUnlinkAppealPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.linkunlinkappeal.LegalRepresentativeLinkAppealPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.linkunlinkappeal.LegalRepresentativeUnlinkAppealPersonalisation;
@@ -25,12 +27,13 @@ public class NotificationGeneratorConfiguration {
     @Bean("unlinkAppealNotificationGenerator")
     public List<NotificationGenerator> unlinkAppealNotificationGenerator(
         LegalRepresentativeUnlinkAppealPersonalisation legalRepresentativeUnlinkAppealPersonalisation,
+        HomeOfficeUnlinkAppealPersonalisation homeOfficeUnlinkAppealPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(legalRepresentativeUnlinkAppealPersonalisation),
+                newArrayList(legalRepresentativeUnlinkAppealPersonalisation, homeOfficeUnlinkAppealPersonalisation),
                 notificationSender,
                 notificationIdAppender
             )
@@ -40,12 +43,13 @@ public class NotificationGeneratorConfiguration {
     @Bean("linkAppealNotificationGenerator")
     public List<NotificationGenerator> linkAppealNotificationGenerator(
         LegalRepresentativeLinkAppealPersonalisation legalRepresentativeLinkAppealPersonalisation,
+        HomeOfficeLinkAppealPersonalisation homeOfficeLinkAppealPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(legalRepresentativeLinkAppealPersonalisation),
+                newArrayList(legalRepresentativeLinkAppealPersonalisation, homeOfficeLinkAppealPersonalisation),
                 notificationSender,
                 notificationIdAppender
             )
