@@ -310,9 +310,13 @@ govnotify:
     editAppealAfterSubmitBeforeListing:
       legalRep:
         email: 77d13640-e7f2-45e2-abec-56f34f2a26af
+      respondent:
+        email: 23fe5914-7061-4b98-9bea-e3e107853d04
     editAppealAfterSubmitAfterListing:
       legalRep:
         email: 9e3d4485-4b36-4f83-aad7-4896e9dfc97b
+      respondent:
+        email: c4c21317-04a8-457a-a9cc-0f028eaa8e8c
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 

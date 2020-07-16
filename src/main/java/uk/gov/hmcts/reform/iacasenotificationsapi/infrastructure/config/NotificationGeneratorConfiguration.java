@@ -1049,13 +1049,15 @@ public class NotificationGeneratorConfiguration {
     @Bean("editAppealAfterSubmitNotificationGenerator")
     public List<NotificationGenerator> editAppealAfterSubmitNotificationGenerator(
         LegalRepresentativeEditAppealAfterSubmitPersonalisation legalRepresentativeEditAppealAfterSubmitPersonalisation,
+        RespondentEditAppealAfterSubmitPersonalisation respondentEditAppealAfterSubmitPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(
             new EmailNotificationGenerator(
                 newArrayList(
-                    legalRepresentativeEditAppealAfterSubmitPersonalisation
+                    legalRepresentativeEditAppealAfterSubmitPersonalisation,
+                    respondentEditAppealAfterSubmitPersonalisation
                 ),
                 notificationSender,
                 notificationIdAppender
