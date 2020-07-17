@@ -35,7 +35,7 @@
         "feeVersion":"2",
         "feeAmount":"80.00",
         "feeDescription":"Appeal determined without a hearing",
-        "paymentDescription":"The fee for this type of appeal without a hearing is £80.00"
+        "paymentDescription":"The fee for this type of appeal without a hearing is £80"
       }
     }
   }

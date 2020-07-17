@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PBA_NUMBER;
@@ -66,6 +67,8 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
         assertEquals("PBA1234567", response.getAsylumCase().read(PBA_NUMBER, String.class).orElse(""));
         assertEquals("RC-1590-6786-1063-9996", response.getAsylumCase()
                             .read(PAYMENT_REFERENCE, String.class).orElse(""));
+        assertEquals("29 May 2020", response.getAsylumCase()
+            .read(PAYMENT_DATE, String.class).orElse(""));
         assertEquals("140.00", response.getAsylumCase().read(FEE_AMOUNT, BigDecimal.class)
                             .orElse(BigDecimal.valueOf(140.00)).toString());
         assertEquals("2", response.getAsylumCase().read(FEE_VERSION, String.class).orElse(""));

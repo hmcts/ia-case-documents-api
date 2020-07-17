@@ -82,14 +82,14 @@ public class PaymentAppealFeePreparer implements PreSubmitCallbackHandler<Asylum
 
         asylumCase.write(
             APPEAL_FEE_HEARING_DESC,
-            "The fee for this type of appeal with a hearing is £" + feeHearing.getCalculatedAmount()
+            "The fee for this type of appeal with a hearing is " + feeHearing.getFeeForDisplay()
         );
-        asylumCase.write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£" + feeHearing.getCalculatedAmount());
+        asylumCase.write(FEE_HEARING_AMOUNT_FOR_DISPLAY, feeHearing.getFeeForDisplay());
         asylumCase.write(
             APPEAL_FEE_WITHOUT_HEARING_DESC,
-            "The fee for this type of appeal without a hearing is £" + feeWithoutHearing.getCalculatedAmount()
+            "The fee for this type of appeal without a hearing is " + feeWithoutHearing.getFeeForDisplay()
         );
-        asylumCase.write(FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY, "£" + feeWithoutHearing.getCalculatedAmount());
+        asylumCase.write(FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY, feeWithoutHearing.getFeeForDisplay());
         asylumCase.write(PAYMENT_STATUS, "Payment due");
 
         return new PreSubmitCallbackResponse<>(asylumCase);

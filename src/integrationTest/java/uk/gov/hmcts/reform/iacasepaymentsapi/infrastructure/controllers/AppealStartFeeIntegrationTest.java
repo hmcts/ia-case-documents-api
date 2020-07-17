@@ -47,13 +47,13 @@ public class AppealStartFeeIntegrationTest extends SpringBootIntegrationTest
                                                .with(APPEAL_TYPE, "refusalOfEu")))
         );
 
-        assertEquals("£140.00", response.getAsylumCase()
+        assertEquals("£140", response.getAsylumCase()
                     .read(FEE_HEARING_AMOUNT_FOR_DISPLAY, String.class).orElse(""));
-        assertEquals("£80.00", response.getAsylumCase()
+        assertEquals("£80", response.getAsylumCase()
                     .read(FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY, String.class).orElse(""));
-        assertEquals("The fee for this type of appeal with a hearing is £140.00",
+        assertEquals("The fee for this type of appeal with a hearing is £140",
                      response.getAsylumCase().read(APPEAL_FEE_HEARING_DESC, String.class).orElse(""));
-        assertEquals("The fee for this type of appeal without a hearing is £80.00",
+        assertEquals("The fee for this type of appeal without a hearing is £80",
                      response.getAsylumCase().read(APPEAL_FEE_WITHOUT_HEARING_DESC, String.class).orElse(""));
         assertEquals("Payment due",
                      response.getAsylumCase().read(PAYMENT_STATUS, String.class).orElse(""));

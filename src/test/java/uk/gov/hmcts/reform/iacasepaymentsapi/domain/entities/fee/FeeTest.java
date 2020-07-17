@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,5 +48,16 @@ public class FeeTest {
 
         assertThatThrownBy(fee::getCalculatedAmount)
             .isExactlyInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void should_format_fee_for_display() {
+
+        Assertions.assertEquals("£100", new Fee("ABC", "desc", "1", new BigDecimal(100.00)).getFeeForDisplay());
+        Assertions.assertEquals("£100.50", new Fee("ABC", "desc", "1", new BigDecimal(100.50)).getFeeForDisplay());
+        Assertions.assertEquals("£100.05", new Fee("ABC", "desc", "1", new BigDecimal(100.05)).getFeeForDisplay());
+        Assertions.assertEquals("£100.55", new Fee("ABC", "desc", "1", new BigDecimal(100.55)).getFeeForDisplay());
+        Assertions.assertEquals("£100.50", new Fee("ABC", "desc", "1", new BigDecimal(100.5)).getFeeForDisplay());
+        Assertions.assertEquals("£100", new Fee("ABC", "desc", "1", new BigDecimal(100)).getFeeForDisplay());
     }
 }

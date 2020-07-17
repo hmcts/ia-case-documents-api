@@ -24,10 +24,10 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "appealFeeHearingDesc": "The fee for this type of appeal with a hearing is £140.00",
-        "feeHearingAmountForDisplay": "£140.00",
-        "appealFeeWithoutHearingDesc": "The fee for this type of appeal without a hearing is £80.00",
-        "feeWithoutHearingAmountForDisplay": "£80.00"
+        "appealFeeHearingDesc": "The fee for this type of appeal with a hearing is £140",
+        "feeHearingAmountForDisplay": "£140",
+        "appealFeeWithoutHearingDesc": "The fee for this type of appeal without a hearing is £80",
+        "feeWithoutHearingAmountForDisplay": "£80"
       }
     }
   }

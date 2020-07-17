@@ -59,14 +59,14 @@ class PaymentAppealFeePreparerTest {
                 "FEE0238",
                 "Appeal determined with a hearing",
                 "2",
-                new BigDecimal("140.00")
+                new BigDecimal("140")
             ));
         when(feeService.getFee(FeeType.FEE_WITHOUT_HEARING))
             .thenReturn(new Fee(
                 "FEE0456",
                 "Appeal determined without a hearing",
                 "2",
-                new BigDecimal("80.00")
+                new BigDecimal("80")
             ));
         PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealFeePreparer
             .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
@@ -74,11 +74,11 @@ class PaymentAppealFeePreparerTest {
         assertNotNull(callbackResponse);
 
         verify(asylumCase, times(1))
-            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140.00");
+            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140");
         verify(asylumCase, times(1))
-            .write(APPEAL_FEE_HEARING_DESC, "The fee for this type of appeal with a hearing is £140.00");
+            .write(APPEAL_FEE_HEARING_DESC, "The fee for this type of appeal with a hearing is £140");
         verify(asylumCase, times(1))
-            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140.00");
+            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140");
     }
 
     @Test
@@ -92,14 +92,14 @@ class PaymentAppealFeePreparerTest {
                 "FEE0238",
                 "Appeal determined with a hearing",
                 "2",
-                new BigDecimal("140.00")
+                new BigDecimal("140")
             ));
         when(feeService.getFee(FeeType.FEE_WITHOUT_HEARING))
             .thenReturn(new Fee(
                 "FEE0456",
                 "Appeal determined without a hearing",
                 "2",
-                new BigDecimal("80.00")
+                new BigDecimal("80")
             ));
         PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealFeePreparer
             .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
@@ -107,11 +107,11 @@ class PaymentAppealFeePreparerTest {
         assertNotNull(callbackResponse);
 
         verify(asylumCase, times(1))
-            .write(FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY, "£80.00");
+            .write(FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY, "£80");
         verify(asylumCase, times(1))
-            .write(APPEAL_FEE_WITHOUT_HEARING_DESC, "The fee for this type of appeal without a hearing is £80.00");
+            .write(APPEAL_FEE_WITHOUT_HEARING_DESC, "The fee for this type of appeal without a hearing is £80");
         verify(asylumCase, times(1))
-            .write(FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY, "£80.00");
+            .write(FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY, "£80");
     }
 
     @Test
@@ -141,7 +141,7 @@ class PaymentAppealFeePreparerTest {
                 "FEE0238",
                 "Appeal determined with a hearing",
                 "2",
-                new BigDecimal("140.00")
+                new BigDecimal("140")
             ));
         when(feeService.getFee(FeeType.FEE_WITHOUT_HEARING)).thenReturn(null);
 
@@ -165,14 +165,14 @@ class PaymentAppealFeePreparerTest {
                 "FEE0238",
                 "Appeal determined with a hearing",
                 "2",
-                new BigDecimal("140.00")
+                new BigDecimal("140")
             ));
         when(feeService.getFee(FeeType.FEE_WITHOUT_HEARING))
             .thenReturn(new Fee(
                 "FEE0456",
                 "Appeal determined without a hearing",
                 "2",
-                new BigDecimal("80.00")
+                new BigDecimal("80")
             ));
         PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealFeePreparer
             .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
@@ -180,11 +180,11 @@ class PaymentAppealFeePreparerTest {
         assertNotNull(callbackResponse);
 
         verify(asylumCase, times(1))
-            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140.00");
+            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140");
         verify(asylumCase, times(1))
-            .write(APPEAL_FEE_HEARING_DESC, "The fee for this type of appeal with a hearing is £140.00");
+            .write(APPEAL_FEE_HEARING_DESC, "The fee for this type of appeal with a hearing is £140");
         verify(asylumCase, times(1))
-            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140.00");
+            .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140");
     }
 
     @Test
