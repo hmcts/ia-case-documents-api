@@ -19,6 +19,8 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+
 
 @Service
 public class HomeOfficeEndAppealPersonalisation implements EmailNotificationPersonalisation {
@@ -28,30 +30,36 @@ public class HomeOfficeEndAppealPersonalisation implements EmailNotificationPers
     private final String endAppealEmailAddresses;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
+    private EmailAddressFinder emailAddressFinder;
 
     public HomeOfficeEndAppealPersonalisation(
-        @NotNull(message = "endAppealHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.endAppealBeforeListing.homeOffice.email}") String endAppealHomeOfficeBeforeListingTemplateId,
-        @NotNull(message = "endAppealHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.endAppealAfterListing.homeOffice.email}") String endAppealHomeOfficeAfterListingTemplateId,
-        @Value("${endAppealHomeOfficeEmailAddress}") String endAppealEmailAddresses,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        CustomerServicesProvider customerServicesProvider
+            @NotNull(message = "endAppealHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.endAppealBeforeListing.homeOffice.email}") String endAppealHomeOfficeBeforeListingTemplateId,
+            @NotNull(message = "endAppealHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.endAppealAfterListing.homeOffice.email}") String endAppealHomeOfficeAfterListingTemplateId,
+            @Value("${endAppealHomeOfficeEmailAddress}") String endAppealEmailAddresses,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            CustomerServicesProvider customerServicesProvider,
+            EmailAddressFinder emailAddressFinder
     ) {
         this.endAppealHomeOfficeBeforeListingTemplateId = endAppealHomeOfficeBeforeListingTemplateId;
         this.endAppealHomeOfficeAfterListingTemplateId = endAppealHomeOfficeAfterListingTemplateId;
         this.endAppealEmailAddresses = endAppealEmailAddresses;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
         return isAppealListed(asylumCase)
-            ? endAppealHomeOfficeAfterListingTemplateId : endAppealHomeOfficeBeforeListingTemplateId;
+                ? endAppealHomeOfficeAfterListingTemplateId : endAppealHomeOfficeBeforeListingTemplateId;
     }
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(endAppealEmailAddresses);
+        return (isAppealListed(asylumCase))
+                ? Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)) :
+                Collections.singleton(endAppealEmailAddresses);
+
     }
 
     @Override
@@ -64,30 +72,30 @@ public class HomeOfficeEndAppealPersonalisation implements EmailNotificationPers
         requireNonNull(asylumCase, "asylumCase must not be null");
 
         return ImmutableMap
-            .<String, String>builder()
-            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-            .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-            .put("linkToOnlineService", iaExUiFrontendUrl)
-            .put("outcomeOfAppeal", asylumCase.read(AsylumCaseDefinition.END_APPEAL_OUTCOME, String.class).orElse(""))
-            .put("reasonsOfOutcome", asylumCase.read(AsylumCaseDefinition.END_APPEAL_OUTCOME_REASON, String.class)
-                .filter(StringUtils::isNotBlank)
-                .orElse("No reason")
-            )
-            .put("endAppealApprover", asylumCase.read(AsylumCaseDefinition.END_APPEAL_APPROVER_TYPE, String.class).orElse(""))
-            .put("endAppealDate", asylumCase.read(AsylumCaseDefinition.END_APPEAL_DATE, String.class)
-                .map(date -> LocalDate.parse(date).format(DateTimeFormatter.ofPattern("d MMM yyyy")))
-                .orElse("")
-            )
-            .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-            .build();
+                .<String, String>builder()
+                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("linkToOnlineService", iaExUiFrontendUrl)
+                .put("outcomeOfAppeal", asylumCase.read(AsylumCaseDefinition.END_APPEAL_OUTCOME, String.class).orElse(""))
+                .put("reasonsOfOutcome", asylumCase.read(AsylumCaseDefinition.END_APPEAL_OUTCOME_REASON, String.class)
+                        .filter(StringUtils::isNotBlank)
+                        .orElse("No reason")
+                )
+                .put("endAppealApprover", asylumCase.read(AsylumCaseDefinition.END_APPEAL_APPROVER_TYPE, String.class).orElse(""))
+                .put("endAppealDate", asylumCase.read(AsylumCaseDefinition.END_APPEAL_DATE, String.class)
+                        .map(date -> LocalDate.parse(date).format(DateTimeFormatter.ofPattern("d MMM yyyy")))
+                        .orElse("")
+                )
+                .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+                .build();
     }
 
     protected boolean isAppealListed(AsylumCase asylumCase) {
         final Optional<HearingCentre> appealListed = asylumCase
-            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+                .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
 
         return appealListed.isPresent();
     }
