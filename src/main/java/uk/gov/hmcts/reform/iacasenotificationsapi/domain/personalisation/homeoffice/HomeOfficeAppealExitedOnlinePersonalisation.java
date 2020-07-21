@@ -89,7 +89,6 @@ public class HomeOfficeAppealExitedOnlinePersonalisation implements EmailNotific
     protected boolean isAppealListed(AsylumCase asylumCase) {
         final Optional<HearingCentre> appealListed = asylumCase
             .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
-
         return appealListed.isPresent();
     }
 }

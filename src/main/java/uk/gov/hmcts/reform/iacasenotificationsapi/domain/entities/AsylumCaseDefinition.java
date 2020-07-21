@@ -8,6 +8,33 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesO
 
 public enum AsylumCaseDefinition {
 
+    TRIBUNAL_DOCUMENTS(
+        "tribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>() {}),
+
+    HEARING_RECORDING_DOCUMENTS(
+        "hearingRecordingDocuments", new TypeReference<List<IdValue<HearingRecordingDocument>>>(){}),
+
+    FINAL_DECISION_AND_REASONS_DOCUMENTS(
+        "finalDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    DRAFT_DECISION_AND_REASONS_DOCUMENTS(
+        "draftDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    RESPONDENT_DOCUMENTS(
+        "respondentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    ADDENDUM_EVIDENCE_DOCUMENTS(
+        "addendumEvidenceDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LEGAL_REPRESENTATIVE_DOCUMENTS(
+        "legalRepresentativeDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    ADDITIONAL_EVIDENCE_DOCUMENTS(
+        "additionalEvidenceDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    HEARING_DOCUMENTS(
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     HOME_OFFICE_REFERENCE_NUMBER(
             "homeOfficeReferenceNumber", new TypeReference<String>(){}),
 
@@ -151,6 +178,11 @@ public enum AsylumCaseDefinition {
 
     REASON_FOR_LINK_APPEAL(
         "reasonForLinkAppeal", new TypeReference<ReasonForLinkAppealOptions>() {}),
+    EDIT_DOCUMENTS_REASON(
+        "editDocumentsReason", new TypeReference<String>(){}),
+
+    CASE_NOTES(
+        "caseNotes", new TypeReference<List<IdValue<CaseNote>>>(){}),
 
     ;
 

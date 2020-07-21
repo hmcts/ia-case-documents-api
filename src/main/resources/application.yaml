@@ -337,6 +337,9 @@ govnotify:
         email: 50652202-52d0-494e-8e14-1e7093a808d6
       homeOffice:
         email: 9d289019-12d4-4815-8461-80cc3b890406
+    appealDocumentDeleted:
+      caseOfficer:
+        email: 62513161-34ae-473e-a6cd-e5f38bef9d47
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -424,6 +427,7 @@ security:
       - "editAppealAfterSubmit"
       - "linkAppeal"
       - "unlinkAppeal"
+      - "editDocuments"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

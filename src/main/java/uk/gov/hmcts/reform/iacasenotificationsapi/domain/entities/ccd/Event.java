@@ -59,6 +59,7 @@ public enum Event {
     EDIT_APPEAL_AFTER_SUBMIT("editAppealAfterSubmit"),
     LINK_APPEAL("linkAppeal"),
     UNLINK_APPEAL("unlinkAppeal"),
+    EDIT_DOCUMENTS("editDocuments"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
