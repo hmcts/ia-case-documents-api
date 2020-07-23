@@ -117,7 +117,7 @@ public class DocumentHandlerTest {
             document,
             RandomStringUtils.random(20),
             "31-01-1987",
-            tag
+            tag,"test"
         );
     }
 }

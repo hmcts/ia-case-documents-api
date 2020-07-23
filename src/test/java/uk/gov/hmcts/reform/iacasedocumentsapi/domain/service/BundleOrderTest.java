@@ -29,7 +29,7 @@ public class BundleOrderTest {
         Collections.shuffle(tags);
 
         List<DocumentTag> sortedTags = tags.stream()
-            .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag))
+            .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag,"test"))
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)
             .collect(Collectors.toList());

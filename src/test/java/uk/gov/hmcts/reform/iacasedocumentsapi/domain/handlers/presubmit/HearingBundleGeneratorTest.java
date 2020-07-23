@@ -232,7 +232,7 @@ public class HearingBundleGeneratorTest {
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
                 RandomStringUtils.randomAlphabetic(20),
-                new SystemDateProvider().now().toString(), documentTag);
+                new SystemDateProvider().now().toString(), documentTag,"test");
 
     }
 

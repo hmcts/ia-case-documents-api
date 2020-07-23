@@ -58,7 +58,7 @@ public class AsylumCaseFixtures {
         return new DocumentWithMetadata(someDocumentWithDefaults(),
             "some-description",
             "",
-            documentTag);
+            documentTag,"test");
     }
 
     public static Document someDocumentWithDefaults() {
