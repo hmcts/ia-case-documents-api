@@ -155,6 +155,7 @@ security:
       - "submitCase"
       - "uploadAdditionalEvidence"
       - "draftHearingRequirements"
+      - "payAndSubmitAppeal"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"

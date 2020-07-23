@@ -8,6 +8,7 @@ public enum Event {
     START_APPEAL("startAppeal"),
     EDIT_APPEAL("editAppeal"),
     SUBMIT_APPEAL("submitAppeal"),
+    PAY_AND_SUBMIT_APPEAL("payAndSubmitAppeal"),
     SEND_DIRECTION("sendDirection"),
     REQUEST_RESPONDENT_EVIDENCE("requestRespondentEvidence"),
     UPLOAD_RESPONDENT_EVIDENCE("uploadRespondentEvidence"),
