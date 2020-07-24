@@ -22,9 +22,9 @@
     "errors": [],
     "caseData": {
       "template": "minimal-appeal-submitted.json",
-      "listCaseHearingCentre": "taylorHouse",
-      "ariaListingReference": "LP/12345/2019",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
         "notificationsSent": [
           {
             "id": "1234_LEGAL_REPRESENTATIVE_UNLINK_APPEAL",
