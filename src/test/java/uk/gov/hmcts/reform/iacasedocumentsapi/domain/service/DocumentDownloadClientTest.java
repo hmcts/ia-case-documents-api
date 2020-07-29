@@ -112,4 +112,5 @@ public class DocumentDownloadClientTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Document could not be downloaded");
     }
+
 }
