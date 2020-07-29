@@ -53,9 +53,6 @@ public class SendDecisionAndReasonsOrchestratorTest {
             .hasMessage("Cover letter creation failed")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        verifyNoInteractions(documentHandler);
-        verifyNoInteractions(sendDecisionAndReasonsPdfService);
-
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
     }
@@ -68,9 +65,6 @@ public class SendDecisionAndReasonsOrchestratorTest {
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
             .isExactlyInstanceOf(DocumentServiceResponseException.class);
-
-        verifyNoInteractions(documentHandler);
-        verifyNoInteractions(sendDecisionAndReasonsPdfService);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
@@ -89,8 +83,6 @@ public class SendDecisionAndReasonsOrchestratorTest {
             .hasMessage("Document to pdf conversion failed")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        verifyNoInteractions(documentHandler);
-
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
     }
@@ -106,8 +98,6 @@ public class SendDecisionAndReasonsOrchestratorTest {
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
             .isInstanceOf(RuntimeException.class);
-
-        verifyNoInteractions(documentHandler);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
