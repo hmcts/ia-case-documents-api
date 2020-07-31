@@ -32,6 +32,7 @@ public enum Event {
     END_APPEAL("endAppeal"),
     RECORD_APPLICATION("recordApplication"),
     REQUEST_CASE_BUILDING("requestCaseBuilding"),
+    FORCE_REQUEST_CASE_BUILDING("forceRequestCaseBuilding"),
     UPLOAD_HOME_OFFICE_APPEAL_RESPONSE("uploadHomeOfficeAppealResponse"),
     UPLOAD_ADDENDUM_EVIDENCE("uploadAddendumEvidence"),
     UPLOAD_ADDENDUM_EVIDENCE_LEGAL_REP("uploadAddendumEvidenceLegalRep"),

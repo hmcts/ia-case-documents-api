@@ -38,6 +38,9 @@ govnotify:
       respondentReview.to.submitHearingRequirements:
         respondent:
           email: a0cb0ac3-62e2-473d-a487-7ffd46f80ace
+      awaitingRespondentEvidence.to.caseBuilding:
+        respondent:
+          email: 3c1a0790-864d-4881-bb62-e9c346c0450f
     appealSubmitted:
       appellant:
         email: 4625616a-178b-45fb-aebf-8cb945369ae0
@@ -414,6 +417,7 @@ security:
       - "endAppeal"
       - "recordApplication"
       - "requestCaseBuilding"
+      - "forceRequestCaseBuilding"
       - "requestResponseReview"
       - "sendDecisionAndReasons"
       - "uploadAddendumEvidence"

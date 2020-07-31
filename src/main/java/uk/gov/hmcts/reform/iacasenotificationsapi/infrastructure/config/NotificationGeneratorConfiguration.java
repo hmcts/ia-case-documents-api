@@ -25,6 +25,17 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.*;
 @Configuration
 public class NotificationGeneratorConfiguration {
 
+    @Bean("forceCaseProgressionNotificationGenerator")
+    public List<NotificationGenerator> forceCaseProgressionNotificationGenerator(
+        RespondentForceCaseProgressionPersonalisation personalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(newArrayList(personalisation), notificationSender, notificationIdAppender)
+        );
+    }
+
     @Bean("editDocumentsNotificationGenerator")
     public List<NotificationGenerator> editDocumentsNotificationGenerator(
         CaseOfficerEditDocumentsPersonalisation personalisation,
