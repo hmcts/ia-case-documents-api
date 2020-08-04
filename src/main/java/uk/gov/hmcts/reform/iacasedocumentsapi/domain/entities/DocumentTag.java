@@ -22,6 +22,7 @@ public enum DocumentTag {
     END_APPEAL("endAppeal"),
     CMA_REQUIREMENTS("cmaRequirements"),
     CMA_NOTICE("cmaNotice"),
+    HO_DECISION_LETTER("homeOfficeDecisionLetter"),
 
     @JsonEnumDefaultValue
     NONE("");

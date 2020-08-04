@@ -14,8 +14,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
     @Override
     public int compare(DocumentWithMetadata d1, DocumentWithMetadata d2) {
 
-        return bundlePositionIndex(d1) == bundlePositionIndex(d2) ? 0 :
-            bundlePositionIndex(d1) > bundlePositionIndex(d2) ? 1 : -1;
+        return Integer.compare(bundlePositionIndex(d1), bundlePositionIndex(d2));
     }
 
     private int bundlePositionIndex(DocumentWithMetadata document) {
@@ -64,8 +63,10 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case CMA_NOTICE:
                 log.warn("CMA_NOTICE tag should not be checked for cma ordering, document desc: {}", document.getDescription());
                 return 17;
-            case NONE:
+            case HO_DECISION_LETTER:
                 return 18;
+            case NONE:
+                return 19;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
