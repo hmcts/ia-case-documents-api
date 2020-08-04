@@ -27,12 +27,15 @@ public class NotificationGeneratorConfiguration {
 
     @Bean("forceCaseProgressionNotificationGenerator")
     public List<NotificationGenerator> forceCaseProgressionNotificationGenerator(
-        RespondentForceCaseProgressionPersonalisation personalisation,
+        RespondentForceCaseProgressionPersonalisation homeOfficePersonalisation,
+        LegalRepresentativeRequestCaseBuildingPersonalisation legalRepresentativeRequestCaseBuildingPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
-        return Collections.singletonList(
-            new EmailNotificationGenerator(newArrayList(personalisation), notificationSender, notificationIdAppender)
+        return Collections.singletonList(new EmailNotificationGenerator(
+                newArrayList(homeOfficePersonalisation, legalRepresentativeRequestCaseBuildingPersonalisation),
+                notificationSender,
+                notificationIdAppender)
         );
     }
 
