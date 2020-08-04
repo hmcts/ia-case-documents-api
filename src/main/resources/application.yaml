@@ -346,7 +346,54 @@ govnotify:
     appealDocumentDeletedAfterListing:
       caseOfficer:
         email: aef0bfa4-03ed-431b-87d0-c77124bd5f68
-
+    applicationGranted:
+      admin:
+        email: d6a02baf-f0a1-44e3-8238-b982e886ad2f
+      applicant:
+        legalRep:
+          email: ff724fb9-2daa-4ed1-9405-5ed389c4df7a
+        homeOffice:
+          email: d97f959e-7d5f-462a-9b71-2f20086ab44f
+      otherParty:
+        legalRep:
+          email: bd848684-72e9-4c85-a845-dac52de75bf4
+        homeOffice:
+          email: bf8caa99-b3b7-4fae-bb0c-2c25f919fb65
+    applicationPartiallyGranted:
+      admin:
+        email: b4907a53-4c98-4870-9528-ec9e7827ef22
+      applicant:
+        legalRep:
+          email: 91a8351f-8c6f-425f-9ca6-f41e4055cd71
+        homeOffice:
+          email: 8dc2a7c2-9cbe-472f-b04a-c0bf2073a43e
+      otherParty:
+        legalRep:
+          email: 3856665e-53b3-4efa-bedf-25c08d8f01b7
+        homeOffice:
+          email: f6ff1df5-c6b5-4f77-b500-5c461e35dc43
+    applicationNotAdmitted:
+      applicant:
+        legalRep:
+          email: f22b0a18-9487-4f86-9bf5-45ebfa6c882c
+        homeOffice:
+          email: 9cd8317c-3c89-43cc-b106-5c44041e9298
+      otherParty:
+        legalRep:
+          email: 755da55a-85ec-40b9-9f1c-7e382bdf7c9e
+        homeOffice:
+          email: 9c70eced-4423-4426-b550-7f858771417d
+    applicationRefused:
+      applicant:
+        legalRep:
+          email: 5e031048-eeed-4754-98c1-b6cff789d407
+        homeOffice:
+          email: fcbe9da1-628b-4661-9128-4e57f1f5e21d
+      otherParty:
+        legalRep:
+          email: ce7523f4-9244-4b14-b4aa-aa91457e02ce
+        homeOffice:
+          email: 14d4a6cc-cca3-4718-b1a1-c222b4043ddf
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -469,6 +516,7 @@ security:
       - "sendDecisionAndReasons"
       - "changeDirectionDueDate"
       - "sendDirection"
+      - "leadershipJudgeFtpaDecision"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
 

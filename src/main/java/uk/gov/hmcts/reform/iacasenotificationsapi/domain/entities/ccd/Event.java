@@ -61,6 +61,7 @@ public enum Event {
     LINK_APPEAL("linkAppeal"),
     UNLINK_APPEAL("unlinkAppeal"),
     EDIT_DOCUMENTS("editDocuments"),
+    LEADERSHIP_JUDGE_FTPA_DECISION("leadershipJudgeFtpaDecision"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

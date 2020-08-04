@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -17,6 +18,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PersonalisationProviderTest {
@@ -30,6 +32,7 @@ public class PersonalisationProviderTest {
     @Mock DateTimeExtractor dateTimeExtractor;
     @Mock Direction direction;
     @Mock DirectionFinder directionFinder;
+    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private String iaExUiFrontendUrl = "http://localhost";
 
@@ -67,6 +70,24 @@ public class PersonalisationProviderTest {
 
     private String directionExplanation = "someExplanation";
     private String directionDueDate = "2019-10-29";
+
+    private String applicantGrantedTemplateId = "applicantGrantedTemplateId";
+    private String applicantPartiallyGrantedTemplateId = "applicantPartiallyGrantedTemplateId";
+    private String applicantNotAdmittedTemplateId = "applicantNotAdmittedTemplateId";
+    private String applicantRefusedTemplateId = "applicantRefusedTemplateId";
+
+    private String otherPartyGrantedTemplateId = "otherPartyGrantedTemplateId";
+    private String otherPartyPartiallyGrantedTemplateId = "otherPartyPartiallyGrantedTemplateId";
+    private String otherPartyNotAdmittedTemplateId = "otherPartyNotAdmittedTemplateId";
+    private String otherPartyRefusedTemplateId = "otherPartyRefusedTemplateId";
+
+    private FtpaDecisionOutcomeType granted = FtpaDecisionOutcomeType.FTPA_GRANTED;
+    private FtpaDecisionOutcomeType partiallyGranted = FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
+    private FtpaDecisionOutcomeType notAdmitted = FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
+    private FtpaDecisionOutcomeType refused = FtpaDecisionOutcomeType.FTPA_REFUSED;
+
+    private YesOrNo yes = YesOrNo.YES;
+    private YesOrNo no = YesOrNo.NO;
 
     private PersonalisationProvider personalisationProvider;
 
@@ -183,5 +204,40 @@ public class PersonalisationProviderTest {
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+    }
+
+    @Test
+    public void should_return_legal_rep_header_personalisation_when_all_information_given() {
+
+        Map<String, String> personalisation = personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
+        assertEquals(legalRepReferenceNumber, personalisation.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    public void should_return_home_office_header_personalisation_when_all_information_given() {
+
+        Map<String, String> personalisation = personalisationProvider.getHomeOfficeHeaderPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
+    }
+
+    @Test
+    public void should_return_personalisation_when_all_information_given() {
+
+        Map<String, String> personalisation = personalisationProvider.getTribunalHeaderPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
     }
 }
