@@ -33,12 +33,18 @@ public class LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation
     private String otherPartyPartiallyGrantedTemplateId = "otherPartyPartiallyGrantedTemplateId";
     private String otherPartyNotAdmittedTemplateId = "otherPartyNotAdmittedTemplateId";
     private String otherPartyRefusedTemplateId = "otherPartyRefusedTemplateId";
+    private String otherPartyReheardTemplateId = "otherPartyReheardTemplateId";
+    private String allowedTemplateId = "allowedTemplateId";
+    private String dismissedTemplateId = "dismissedTemplateId";
 
 
     private FtpaDecisionOutcomeType granted = FtpaDecisionOutcomeType.FTPA_GRANTED;
     private FtpaDecisionOutcomeType partiallyGranted = FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
     private FtpaDecisionOutcomeType notAdmitted = FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
     private FtpaDecisionOutcomeType refused = FtpaDecisionOutcomeType.FTPA_REFUSED;
+    private FtpaDecisionOutcomeType reheard = FtpaDecisionOutcomeType.FTPA_REHEARD;
+    private FtpaDecisionOutcomeType allowed = FtpaDecisionOutcomeType.FTPA_ALLOWED;
+    private FtpaDecisionOutcomeType dismissed = FtpaDecisionOutcomeType.FTPA_DISMISSED;
 
     private LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation;
 
@@ -49,6 +55,9 @@ public class LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation
             otherPartyPartiallyGrantedTemplateId,
             otherPartyNotAdmittedTemplateId,
             otherPartyRefusedTemplateId,
+            otherPartyReheardTemplateId,
+            allowedTemplateId,
+            dismissedTemplateId,
             personalisationProvider
         );
     }
@@ -64,6 +73,15 @@ public class LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation
 
         when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(notAdmitted));
         assertEquals(otherPartyNotAdmittedTemplateId, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(reheard));
+        assertEquals(otherPartyReheardTemplateId, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(allowed));
+        assertEquals(allowedTemplateId, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(dismissed));
+        assertEquals(dismissedTemplateId, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
 
         when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(refused));
         assertEquals(otherPartyRefusedTemplateId, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));

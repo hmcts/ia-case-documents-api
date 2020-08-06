@@ -987,11 +987,13 @@ public class NotificationHandlerConfiguration {
                 boolean isNegative = asylumCase
                     .read(AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
                     .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED.toString())
-                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString()))
+                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString())
+                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_ALLOWED.toString())
+                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_DISMISSED.toString()))
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION
+                       && (callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION || callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION)
                        && isNegative;
             },
             notificationGenerators
@@ -1013,8 +1015,29 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION
+                       && (callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION || callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION)
                        && isPositive;
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> ftpaApplicationDecisionReheardAppellantNotificationHandler(
+        @Qualifier("ftpaApplicationDecisionReheardAppellantNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                boolean isReheardDecisionOutcome = asylumCase
+                    .read(AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                    .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD.toString()))
+                    .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION
+                       && isReheardDecisionOutcome;
             },
             notificationGenerators
         );
@@ -1031,11 +1054,13 @@ public class NotificationHandlerConfiguration {
                 boolean isNegative = asylumCase
                     .read(AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
                     .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED.toString())
-                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString()))
+                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString())
+                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_ALLOWED.toString())
+                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_DISMISSED.toString()))
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION
+                       && (callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION || callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION)
                        && isNegative;
             },
             notificationGenerators
@@ -1057,8 +1082,29 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION
+                       && (callback.getEvent() == Event.LEADERSHIP_JUDGE_FTPA_DECISION || callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION)
                        && isPositive;
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> ftpaApplicationDecisionReheardRespondentNotificationHandler(
+        @Qualifier("ftpaApplicationDecisionReheardRespondentNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                boolean isReheardDecisionOutcome = asylumCase
+                    .read(AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                    .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD.toString()))
+                    .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION
+                       && isReheardDecisionOutcome;
             },
             notificationGenerators
         );

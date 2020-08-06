@@ -21,17 +21,26 @@ public class LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation
     private final String applicationPartiallyGrantedOtherPartyLegalRepTemplateId;
     private final String applicationNotAdmittedOtherPartyLegalRepTemplateId;
     private final String applicationRefusedGrantedOtherPartyLegalRepTemplateId;
+    private final String applicationReheardOtherPartyLegalRepTemplateId;
+    private final String applicationAllowedLegalRepTemplateId;
+    private final String applicationDismissedLegalRepTemplateId;
 
     public LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation(
         @Value("${govnotify.template.applicationGranted.otherParty.legalRep.email}") String applicationGrantedOtherPartyLegalRepTemplateId,
         @Value("${govnotify.template.applicationPartiallyGranted.otherParty.legalRep.email}") String applicationPartiallyGrantedOtherPartyLegalRepTemplateId,
         @Value("${govnotify.template.applicationNotAdmitted.otherParty.legalRep.email}") String applicationNotAdmittedOtherPartyLegalRepTemplateId,
         @Value("${govnotify.template.applicationRefused.otherParty.legalRep.email}") String applicationRefusedGrantedOtherPartyLegalRepTemplateId,
+        @Value("${govnotify.template.applicationReheard.otherParty.legalRep.email}") String applicationReheardOtherPartyLegalRepTemplateId,
+        @Value("${govnotify.template.applicationAllowed.legalRep.email}") String applicationAllowedLegalRepTemplateId,
+        @Value("${govnotify.template.applicationDismissed.legalRep.email}") String applicationDismissedLegalRepTemplateId,
         PersonalisationProvider personalisationProvider) {
         this.applicationGrantedOtherPartyLegalRepTemplateId = applicationGrantedOtherPartyLegalRepTemplateId;
         this.applicationPartiallyGrantedOtherPartyLegalRepTemplateId = applicationPartiallyGrantedOtherPartyLegalRepTemplateId;
         this.applicationNotAdmittedOtherPartyLegalRepTemplateId = applicationNotAdmittedOtherPartyLegalRepTemplateId;
         this.applicationRefusedGrantedOtherPartyLegalRepTemplateId = applicationRefusedGrantedOtherPartyLegalRepTemplateId;
+        this.applicationReheardOtherPartyLegalRepTemplateId = applicationReheardOtherPartyLegalRepTemplateId;
+        this.applicationAllowedLegalRepTemplateId = applicationAllowedLegalRepTemplateId;
+        this.applicationDismissedLegalRepTemplateId = applicationDismissedLegalRepTemplateId;;
         this.personalisationProvider = personalisationProvider;
     }
 
@@ -47,6 +56,12 @@ public class LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation
             return applicationPartiallyGrantedOtherPartyLegalRepTemplateId;
         } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString())) {
             return applicationRefusedGrantedOtherPartyLegalRepTemplateId;
+        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD.toString())) {
+            return applicationReheardOtherPartyLegalRepTemplateId;
+        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_ALLOWED.toString())) {
+            return applicationAllowedLegalRepTemplateId;
+        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_DISMISSED.toString())) {
+            return applicationDismissedLegalRepTemplateId;
         } else {
             return applicationNotAdmittedOtherPartyLegalRepTemplateId;
         }

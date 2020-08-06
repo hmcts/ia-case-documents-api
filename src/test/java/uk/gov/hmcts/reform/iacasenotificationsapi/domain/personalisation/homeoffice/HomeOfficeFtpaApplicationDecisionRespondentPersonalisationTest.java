@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeof
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -34,12 +34,18 @@ public class HomeOfficeFtpaApplicationDecisionRespondentPersonalisationTest {
     private String applicantPartiallyGrantedTemplateId = "applicantPartiallyGrantedTemplateId";
     private String applicantNotAdmittedTemplateId = "applicantNotAdmittedTemplateId";
     private String applicantRefusedTemplateId = "applicantRefusedTemplateId";
+    private String applicantReheardTemplateId = "otherPartyReheardTemplateId";
+    private String allowedTemplateId = "allowedTemplateId";
+    private String dismissedTemplateId = "dismissedTemplateId";
 
 
     private FtpaDecisionOutcomeType granted = FtpaDecisionOutcomeType.FTPA_GRANTED;
     private FtpaDecisionOutcomeType partiallyGranted = FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
     private FtpaDecisionOutcomeType notAdmitted = FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
     private FtpaDecisionOutcomeType refused = FtpaDecisionOutcomeType.FTPA_REFUSED;
+    private FtpaDecisionOutcomeType reheard = FtpaDecisionOutcomeType.FTPA_REHEARD;
+    private FtpaDecisionOutcomeType allowed = FtpaDecisionOutcomeType.FTPA_ALLOWED;
+    private FtpaDecisionOutcomeType dismissed = FtpaDecisionOutcomeType.FTPA_DISMISSED;
 
     private HomeOfficeFtpaApplicationDecisionRespondentPersonalisation homeOfficeFtpaApplicationDecisionRespondentPersonalisation;
 
@@ -50,6 +56,9 @@ public class HomeOfficeFtpaApplicationDecisionRespondentPersonalisationTest {
             applicantPartiallyGrantedTemplateId,
             applicantNotAdmittedTemplateId,
             applicantRefusedTemplateId,
+            applicantReheardTemplateId,
+            allowedTemplateId,
+            dismissedTemplateId,
             personalisationProvider,
             homeOfficeEmailAddress
         );
@@ -66,6 +75,15 @@ public class HomeOfficeFtpaApplicationDecisionRespondentPersonalisationTest {
 
         when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(notAdmitted));
         assertEquals(applicantNotAdmittedTemplateId, homeOfficeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(reheard));
+        assertEquals(applicantReheardTemplateId, homeOfficeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(allowed));
+        assertEquals(allowedTemplateId, homeOfficeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(dismissed));
+        assertEquals(dismissedTemplateId, homeOfficeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));
 
         when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(refused));
         assertEquals(applicantRefusedTemplateId, homeOfficeFtpaApplicationDecisionRespondentPersonalisation.getTemplateId(asylumCase));

@@ -15,14 +15,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
     @Mock PersonalisationProvider personalisationProvider;
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private Long caseId = 12345L;
     private String appealReferenceNumber = "someReferenceNumber";
@@ -35,12 +33,18 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisationT
     private String applicantPartiallyGrantedTemplateId = "applicantPartiallyGrantedTemplateId";
     private String applicantNotAdmittedTemplateId = "applicantNotAdmittedTemplateId";
     private String applicantRefusedTemplateId = "applicantRefusedTemplateId";
+    private String applicantReheardTemplateId = "otherPartyReheardTemplateId";
+    private String allowedTemplateId = "allowedTemplateId";
+    private String dismissedTemplateId = "dismissedTemplateId";
 
 
     private FtpaDecisionOutcomeType granted = FtpaDecisionOutcomeType.FTPA_GRANTED;
     private FtpaDecisionOutcomeType partiallyGranted = FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
     private FtpaDecisionOutcomeType notAdmitted = FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
     private FtpaDecisionOutcomeType refused = FtpaDecisionOutcomeType.FTPA_REFUSED;
+    private FtpaDecisionOutcomeType reheard = FtpaDecisionOutcomeType.FTPA_REHEARD;
+    private FtpaDecisionOutcomeType allowed = FtpaDecisionOutcomeType.FTPA_ALLOWED;
+    private FtpaDecisionOutcomeType dismissed = FtpaDecisionOutcomeType.FTPA_DISMISSED;
 
     private LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation;
 
@@ -51,6 +55,9 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisationT
             applicantPartiallyGrantedTemplateId,
             applicantNotAdmittedTemplateId,
             applicantRefusedTemplateId,
+            applicantReheardTemplateId,
+            allowedTemplateId,
+            dismissedTemplateId,
             personalisationProvider
         );
     }
@@ -65,6 +72,15 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisationT
 
         when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(notAdmitted));
         assertEquals(applicantNotAdmittedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(reheard));
+        assertEquals(applicantReheardTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(allowed));
+        assertEquals(allowedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(dismissed));
+        assertEquals(dismissedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
         when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(refused));
         assertEquals(applicantRefusedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));

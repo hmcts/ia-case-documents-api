@@ -21,18 +21,27 @@ public class HomeOfficeFtpaApplicationDecisionRespondentPersonalisation  impleme
     private final String applicationPartiallyGrantedApplicantHomeOfficeTemplateId;
     private final String applicationNotAdmittedApplicantHomeOfficeTemplateId;
     private final String applicationRefusedGrantedApplicantHomeOfficeTemplateId;
+    private final String applicationReheardApplicantHomeHomeOfficeTemplateId;
+    private final String applicationAllowedHomeOfficeTemplateId;
+    private final String applicationDismissedHomeOfficeTemplateId;
 
     public HomeOfficeFtpaApplicationDecisionRespondentPersonalisation(
         @Value("${govnotify.template.applicationGranted.applicant.homeOffice.email}") String applicationGrantedApplicantHomeOfficeTemplateId,
         @Value("${govnotify.template.applicationPartiallyGranted.applicant.homeOffice.email}") String applicationPartiallyGrantedApplicantHomeOfficeTemplateId,
         @Value("${govnotify.template.applicationNotAdmitted.applicant.homeOffice.email}") String applicationNotAdmittedApplicantHomeOfficeTemplateId,
         @Value("${govnotify.template.applicationRefused.applicant.homeOffice.email}") String applicationRefusedGrantedApplicantHomeOfficeTemplateId,
+        @Value("${govnotify.template.applicationReheard.applicant.homeOffice.email}") String applicationReheardApplicantHomeHomeOfficeTemplateId,
+        @Value("${govnotify.template.applicationAllowed.homeOffice.email}") String applicationAllowedHomeOfficeTemplateId,
+        @Value("${govnotify.template.applicationDismissed.homeOffice.email}") String applicationDismissedHomeOfficeTemplateId,
         PersonalisationProvider personalisationProvider,
         @Value("${allowedAppealHomeOfficeEmailAddress}") String homeOfficeEmailAddress) {
         this.applicationGrantedApplicantHomeOfficeTemplateId = applicationGrantedApplicantHomeOfficeTemplateId;
         this.applicationPartiallyGrantedApplicantHomeOfficeTemplateId = applicationPartiallyGrantedApplicantHomeOfficeTemplateId;
         this.applicationNotAdmittedApplicantHomeOfficeTemplateId = applicationNotAdmittedApplicantHomeOfficeTemplateId;
         this.applicationRefusedGrantedApplicantHomeOfficeTemplateId = applicationRefusedGrantedApplicantHomeOfficeTemplateId;
+        this.applicationReheardApplicantHomeHomeOfficeTemplateId = applicationReheardApplicantHomeHomeOfficeTemplateId;
+        this.applicationAllowedHomeOfficeTemplateId = applicationAllowedHomeOfficeTemplateId;
+        this.applicationDismissedHomeOfficeTemplateId = applicationDismissedHomeOfficeTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.homeOfficeEmailAddress = homeOfficeEmailAddress;
     }
@@ -49,6 +58,12 @@ public class HomeOfficeFtpaApplicationDecisionRespondentPersonalisation  impleme
             return applicationPartiallyGrantedApplicantHomeOfficeTemplateId;
         } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString())) {
             return applicationRefusedGrantedApplicantHomeOfficeTemplateId;
+        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD.toString())) {
+            return applicationReheardApplicantHomeHomeOfficeTemplateId;
+        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_ALLOWED.toString())) {
+            return applicationAllowedHomeOfficeTemplateId;
+        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_DISMISSED.toString())) {
+            return applicationDismissedHomeOfficeTemplateId;
         } else {
             return applicationNotAdmittedApplicantHomeOfficeTemplateId;
         }

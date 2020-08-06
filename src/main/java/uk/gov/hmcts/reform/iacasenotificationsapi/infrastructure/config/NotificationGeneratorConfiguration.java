@@ -1192,4 +1192,38 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("ftpaApplicationDecisionReheardAppellantNotificationGenerator")
+    public List<NotificationGenerator> ftpaApplicationDecisionReheardAppellantNotificationGenerator(
+        HomeOfficeFtpaApplicationDecisionAppellantPersonalisation homeOfficeFtpaApplicationDecisionAppellantPersonalisation,
+        LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation,
+        CaseOfficerFtpaDecisionPersonalisation caseOfficerFtpaDecisionPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(homeOfficeFtpaApplicationDecisionAppellantPersonalisation, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation, caseOfficerFtpaDecisionPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("ftpaApplicationDecisionReheardRespondentNotificationGenerator")
+    public List<NotificationGenerator> ftpaApplicationDecisionReheardRespondentNotificationGenerator(
+        HomeOfficeFtpaApplicationDecisionRespondentPersonalisation homeOfficeFtpaApplicationDecisionRespondentPersonalisation,
+        LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation,
+        CaseOfficerFtpaDecisionPersonalisation caseOfficerFtpaDecisionPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, caseOfficerFtpaDecisionPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

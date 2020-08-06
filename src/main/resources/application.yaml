@@ -394,6 +394,29 @@ govnotify:
           email: ce7523f4-9244-4b14-b4aa-aa91457e02ce
         homeOffice:
           email: 14d4a6cc-cca3-4718-b1a1-c222b4043ddf
+    applicationReheard:
+      caseOfficer:
+        email: d4420fd2-52be-444b-a3f1-db9f01c988b6
+      applicant:
+        legalRep:
+          email: 19526679-84a5-40ba-8424-5aff005a59a7
+        homeOffice:
+          email: ed551251-c4ab-4d1f-9b4b-c6cd3430252b
+      otherParty:
+        legalRep:
+          email: 677fa289-e7a7-46af-8817-72f95a8d7771
+        homeOffice:
+          email: 11fd1fca-8755-4409-8b8f-9fd66d2925d0
+    applicationAllowed:
+      legalRep:
+        email: 2b4b4b48-8c80-4895-b679-251fa0ed18cd
+      homeOffice:
+        email: df979325-6bc1-4c36-a12e-143ad62e4de7
+    applicationDismissed:
+      legalRep:
+        email: 8f29632d-4468-49b0-ade4-72c5f86bd1a8
+      homeOffice:
+        email: e20144a9-e51e-41b8-bb37-53dcddfaa216
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -517,6 +540,7 @@ security:
       - "changeDirectionDueDate"
       - "sendDirection"
       - "leadershipJudgeFtpaDecision"
+      - "residentJudgeFtpaDecision"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
 
