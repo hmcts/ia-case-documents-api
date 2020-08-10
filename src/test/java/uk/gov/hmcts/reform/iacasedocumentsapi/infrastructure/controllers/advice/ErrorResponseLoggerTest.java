@@ -111,7 +111,7 @@ public class ErrorResponseLoggerTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertThat(logEvents.size()).isEqualTo(0);
 
-        verifyZeroInteractions(restClientResponseException);
+        verifyNoInteractions(restClientResponseException);
 
     }
 
