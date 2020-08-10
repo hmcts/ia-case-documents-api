@@ -23,19 +23,24 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 @Service
 public class PersonalisationProvider {
 
-    private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
+    private static final String HEARING_CENTRE_ADDRESS_CONST = "hearingCentreAddress";
+    private static final String APPEAL_REFERENCE_NUMBER_CONST = "appealReferenceNumber";
+    private static final String ARIA_LISTING_REFERENCE_CONST = "ariaListingReference";
+    private static final String APPELLANT_GIVEN_NAMES_CONST = "appellantGivenNames";
+    private static final String APPELLANT_FAMILY_NAME_CONST = "appellantFamilyName";
+    private static final String ASYLUM_NOT_NULL_MESSAGE = "asylumCase must not be null";
     private final String iaExUiFrontendUrl;
     private final HearingDetailsFinder hearingDetailsFinder;
     private final DirectionFinder directionFinder;
     private final DateTimeExtractor dateTimeExtractor;
 
     ImmutableMap.Builder<String, AsylumCaseDefinition> personalisationBuilder = new ImmutableMap.Builder<String, AsylumCaseDefinition>()
-        .put("appealReferenceNumber", APPEAL_REFERENCE_NUMBER)
+        .put(APPEAL_REFERENCE_NUMBER_CONST, APPEAL_REFERENCE_NUMBER)
         .put("legalRepReferenceNumber", LEGAL_REP_REFERENCE_NUMBER)
-        .put("ariaListingReference", ARIA_LISTING_REFERENCE)
+        .put(ARIA_LISTING_REFERENCE_CONST, ARIA_LISTING_REFERENCE)
         .put("homeOfficeReferenceNumber", HOME_OFFICE_REFERENCE_NUMBER)
-        .put("appellantGivenNames", APPELLANT_GIVEN_NAMES)
-        .put("appellantFamilyName", APPELLANT_FAMILY_NAME);
+        .put(APPELLANT_GIVEN_NAMES_CONST, APPELLANT_GIVEN_NAMES)
+        .put(APPELLANT_FAMILY_NAME_CONST, APPELLANT_FAMILY_NAME);
 
     Map<Event, Map<String, AsylumCaseDefinition>> eventDefinition = new ImmutableMap.Builder<Event, Map<String, AsylumCaseDefinition>>()
         .put(CHANGE_DIRECTION_DUE_DATE, personalisationBuilder
@@ -103,7 +108,7 @@ public class PersonalisationProvider {
             .put("oldHearingDate", oldHearingDate == null || oldHearingDate.isEmpty() ? "" : dateTimeExtractor.extractHearingDate(oldHearingDate))
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
-            .put(HEARING_CENTRE_ADDRESS, hearingCentreAddress);
+            .put(HEARING_CENTRE_ADDRESS_CONST, hearingCentreAddress);
 
         buildHearingRequirementsFields(asylumCase, caseListingValues);
 
@@ -212,9 +217,9 @@ public class PersonalisationProvider {
     public Map<String, String> getReviewedHearingRequirementsPersonalisation(AsylumCase asylumCase) {
         return ImmutableMap
             .<String, String>builder()
-            .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put(APPEAL_REFERENCE_NUMBER_CONST, asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put(APPELLANT_GIVEN_NAMES_CONST, asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put(APPELLANT_FAMILY_NAME_CONST, asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .build();
     }
 
@@ -225,40 +230,40 @@ public class PersonalisationProvider {
     }
 
     public Map<String, String> getHomeOfficeHeaderPersonalisation(AsylumCase asylumCase) {
-        requireNonNull(asylumCase, "asylumCase must not be null");
+        requireNonNull(asylumCase, ASYLUM_NOT_NULL_MESSAGE);
 
         return ImmutableMap
             .<String, String>builder()
-            .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
+            .put(APPEAL_REFERENCE_NUMBER_CONST, asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put(ARIA_LISTING_REFERENCE_CONST, asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
             .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put(APPELLANT_GIVEN_NAMES_CONST, asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put(APPELLANT_FAMILY_NAME_CONST, asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .build();
     }
 
     public Map<String, String> getLegalRepHeaderPersonalisation(AsylumCase asylumCase) {
-        requireNonNull(asylumCase, "asylumCase must not be null");
+        requireNonNull(asylumCase, ASYLUM_NOT_NULL_MESSAGE);
 
         return ImmutableMap
             .<String, String>builder()
-            .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
+            .put(APPEAL_REFERENCE_NUMBER_CONST, asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put(ARIA_LISTING_REFERENCE_CONST, asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
             .put("legalRepReferenceNumber", asylumCase.read(AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put(APPELLANT_GIVEN_NAMES_CONST, asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put(APPELLANT_FAMILY_NAME_CONST, asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .build();
     }
 
     public Map<String, String> getTribunalHeaderPersonalisation(AsylumCase asylumCase) {
-        requireNonNull(asylumCase, "asylumCase must not be null");
+        requireNonNull(asylumCase, ASYLUM_NOT_NULL_MESSAGE);
 
         return ImmutableMap
             .<String, String>builder()
-            .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put(APPEAL_REFERENCE_NUMBER_CONST, asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put(ARIA_LISTING_REFERENCE_CONST, asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
+            .put(APPELLANT_GIVEN_NAMES_CONST, asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put(APPELLANT_FAMILY_NAME_CONST, asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .build();
     }
 }

@@ -1,0 +1,64 @@
+{
+  "description": "RIA-1432-RIA-2974-RIA-3003 FTPA Applicant Application Decision Refused Respondent",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 1008,
+      "eventId": "leadershipJudgeFtpaDecision",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ftpaRespondentDecisionOutcomeType": "refused",
+          "ftpaApplicantType": "respondent",
+          "ariaListingReference": "987654321",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "1008_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1008_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1008_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "recipient": "{$dismissedAppealHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal refused",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "987654321",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "1008_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal refused",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "987654321",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

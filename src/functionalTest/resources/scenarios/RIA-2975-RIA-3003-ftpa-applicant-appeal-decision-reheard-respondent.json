@@ -1,26 +1,20 @@
 {
-  "description": "RIA-2999 Appellant FTPA Application is reheard after the respondent application already granted",
+  "description": "RIA-2975-RIA-3003 FTPA Applicant Application Decision Granted Respondent (Taylor House hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 9009,
+      "id": 1010,
       "eventId": "residentJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "ftpaAppellantRjDecisionOutcomeType": "reheardRule32",
-          "ftpaRespondentRjDecisionOutcomeType": "granted",
-          "ftpaApplicantType": "appellant",
+          "ftpaRespondentDecisionOutcomeType": "reheardRule32",
+          "ftpaApplicantType": "respondent",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "987654321",
-          "notificationsSent": [
-            {
-              "id": "9009_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-              "value": "34e146c9-6050-4894-a64e-acd461a5f934"
-            }
-          ]
+          "notificationsSent": []
         }
       }
     }
@@ -31,13 +25,26 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "notificationsSent": []
+        "notificationsSent": [
+          {
+            "id": "1010_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1010_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1010_FTPA_APPLICATION_DECISION_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
       }
     },
     "notifications": [
       {
-        "reference": "9009_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "reference": "1010_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",
@@ -47,7 +54,7 @@
         ]
       },
       {
-        "reference": "9009_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+        "reference": "1010_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
@@ -58,7 +65,7 @@
         ]
       },
       {
-        "reference": "9009_FTPA_APPLICATION_DECISION_CASE_OFFICER",
+        "reference": "1010_FTPA_APPLICATION_DECISION_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [

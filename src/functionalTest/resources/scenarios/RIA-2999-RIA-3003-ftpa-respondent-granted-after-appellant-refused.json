@@ -1,22 +1,22 @@
 {
-  "description": "RIA-2999 Respondent FTPA Application is not admitted after the appellant application already partially granted",
+  "description": "RIA-2999-RIA-3003 Respondent FTPA Application is granted after the appellant application already refused",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 9006,
+      "id": 9004,
       "eventId": "leadershipJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "ftpaRespondentRjDecisionOutcomeType": "notAdmitted",
-          "ftpaAppellantRjDecisionOutcomeType": "partiallyGranted",
+          "ftpaRespondentRjDecisionOutcomeType": "granted",
+          "ftpaAppellantRjDecisionOutcomeType": "refused",
           "ftpaApplicantType": "respondent",
           "ariaListingReference": "987654321",
           "notificationsSent": [
             {
-              "id": "9006_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+              "id": "9004_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
               "value": "34e146c9-6050-4894-a64e-acd461a5f934"
             }
           ]
@@ -35,9 +35,9 @@
     },
     "notifications": [
       {
-        "reference": "9006_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "reference": "9004_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
         "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
-        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
           "PA/12345/2019",
           "A1234567",
@@ -46,12 +46,22 @@
         ]
       },
       {
-        "reference": "9006_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+        "reference": "9004_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
           "PA/12345/2019",
           "CASE001",
+          "987654321",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "9004_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+        "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
+        "body": [
+          "PA/12345/2019",
           "987654321",
           "Talha Awan"
         ]

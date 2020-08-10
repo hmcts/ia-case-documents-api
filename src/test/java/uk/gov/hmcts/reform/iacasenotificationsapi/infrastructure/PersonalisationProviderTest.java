@@ -18,7 +18,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.GovNotifyTemplateIdConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PersonalisationProviderTest {
@@ -32,7 +31,6 @@ public class PersonalisationProviderTest {
     @Mock DateTimeExtractor dateTimeExtractor;
     @Mock Direction direction;
     @Mock DirectionFinder directionFinder;
-    @Mock GovNotifyTemplateIdConfiguration govNotifyTemplateIdConfiguration;
 
     private String iaExUiFrontendUrl = "http://localhost";
 
@@ -70,24 +68,6 @@ public class PersonalisationProviderTest {
 
     private String directionExplanation = "someExplanation";
     private String directionDueDate = "2019-10-29";
-
-    private String applicantGrantedTemplateId = "applicantGrantedTemplateId";
-    private String applicantPartiallyGrantedTemplateId = "applicantPartiallyGrantedTemplateId";
-    private String applicantNotAdmittedTemplateId = "applicantNotAdmittedTemplateId";
-    private String applicantRefusedTemplateId = "applicantRefusedTemplateId";
-
-    private String otherPartyGrantedTemplateId = "otherPartyGrantedTemplateId";
-    private String otherPartyPartiallyGrantedTemplateId = "otherPartyPartiallyGrantedTemplateId";
-    private String otherPartyNotAdmittedTemplateId = "otherPartyNotAdmittedTemplateId";
-    private String otherPartyRefusedTemplateId = "otherPartyRefusedTemplateId";
-
-    private FtpaDecisionOutcomeType granted = FtpaDecisionOutcomeType.FTPA_GRANTED;
-    private FtpaDecisionOutcomeType partiallyGranted = FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
-    private FtpaDecisionOutcomeType notAdmitted = FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
-    private FtpaDecisionOutcomeType refused = FtpaDecisionOutcomeType.FTPA_REFUSED;
-
-    private YesOrNo yes = YesOrNo.YES;
-    private YesOrNo no = YesOrNo.NO;
 
     private PersonalisationProvider personalisationProvider;
 

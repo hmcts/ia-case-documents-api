@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1432 and RIA-2974 FTPA Applicant Application Decision Granted Respondent",
+  "description": "RIA-1432-RIA-2974 FTPA Applicant Application Decision Granted Respondent",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

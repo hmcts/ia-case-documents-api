@@ -9,15 +9,19 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
 public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implements EmailNotificationPersonalisation {
 
     private final PersonalisationProvider personalisationProvider;
-    private final String homeOfficeEmailAddress;
+    private final String homeOfficeEmailAddressFtpaGranted;
+    private final String homeOfficeEmailAddressFtpaRefused;
+    private final EmailAddressFinder emailAddressFinder;
     private final String applicationGrantedOtherPartyHomeOfficeTemplateId;
     private final String applicationPartiallyGrantedOtherPartyHomeOfficeTemplateId;
     private final String applicationNotAdmittedOtherPartyHomeOfficeTemplateId;
@@ -35,7 +39,10 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implement
         @Value("${govnotify.template.applicationAllowed.homeOffice.email}") String applicationAllowedHomeOfficeTemplateId,
         @Value("${govnotify.template.applicationDismissed.homeOffice.email}") String applicationDismissedHomeOfficeTemplateId,
         PersonalisationProvider personalisationProvider,
-        @Value("${allowedAppealHomeOfficeEmailAddress}") String homeOfficeEmailAddress) {
+        @Value("${allowedAppealHomeOfficeEmailAddress}") String homeOfficeEmailAddressFtpaGranted,
+        @Value("${dismissedAppealHomeOfficeEmailAddress}") String homeOfficeEmailAddressFtpaRefused,
+        EmailAddressFinder emailAddressFinder
+    ) {
         this.applicationGrantedOtherPartyHomeOfficeTemplateId = applicationGrantedOtherPartyHomeOfficeTemplateId;
         this.applicationPartiallyGrantedOtherPartyHomeOfficeTemplateId = applicationPartiallyGrantedOtherPartyHomeOfficeTemplateId;
         this.applicationNotAdmittedOtherPartyHomeOfficeTemplateId = applicationNotAdmittedOtherPartyHomeOfficeTemplateId;
@@ -44,7 +51,9 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implement
         this.applicationAllowedHomeOfficeTemplateId = applicationAllowedHomeOfficeTemplateId;
         this.applicationDismissedHomeOfficeTemplateId = applicationDismissedHomeOfficeTemplateId;
         this.personalisationProvider = personalisationProvider;
-        this.homeOfficeEmailAddress = homeOfficeEmailAddress;
+        this.homeOfficeEmailAddressFtpaGranted = homeOfficeEmailAddressFtpaGranted;
+        this.homeOfficeEmailAddressFtpaRefused = homeOfficeEmailAddressFtpaRefused;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
@@ -66,7 +75,7 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implement
         } else if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString())) {
             return applicationRefusedOtherPartyHomeOfficeTemplateId;
         } else if (ftpaDecisionOutcomeType.isPresent() && (ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD35.toString())
-                   || ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD32.toString()))) {
+                                                           || ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD32.toString()))) {
             return applicationReheardOtherPartyHomeHomeOfficeTemplateId;
         } else if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REMADE32.toString())) {
             FtpaDecisionOutcomeType ftpaDecisionRemade = asylumCase
@@ -83,7 +92,15 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implement
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(homeOfficeEmailAddress);
+
+        if (getFtpaApplicationDecision(asylumCase).equals(FtpaDecisionOutcomeType.FTPA_GRANTED)
+            || getFtpaApplicationDecision(asylumCase).equals(FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED)) {
+            return Collections.singleton(homeOfficeEmailAddressFtpaGranted);
+        } else if (getFtpaApplicationDecision(asylumCase).equals(FtpaDecisionOutcomeType.FTPA_REFUSED)) {
+            return Collections.singleton(homeOfficeEmailAddressFtpaRefused);
+        } else {
+            return Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+        }
     }
 
     @Override
@@ -94,5 +111,16 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implement
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         return this.personalisationProvider.getHomeOfficeHeaderPersonalisation(asylumCase);
+    }
+
+    protected Object getFtpaApplicationDecision(AsylumCase asylumCase) {
+
+        return asylumCase.read(AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class).isPresent()
+            ? asylumCase
+                .read(AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                .orElseThrow(() -> new IllegalStateException("ftpaApplicationDecision is not present"))
+            : asylumCase
+                .read(AsylumCaseDefinition.FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                .orElseThrow(() -> new IllegalStateException("ftpaApplicationDecision is not present"));
     }
 }

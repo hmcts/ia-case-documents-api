@@ -1,17 +1,17 @@
 {
-  "description": "RIA-2975 FTPA Applicant Application Decision Dismissed Appellant",
+  "description": "RIA-2975-RIA-3003 FTPA Applicant Application Decision Not Admitted Appellant (Bradford hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 1013,
+      "id": 1022,
       "eventId": "residentJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
-          "ftpaAppellantDecisionRemadeRule32": "dismissed",
+          "listCaseHearingCentre": "bradford",
+          "ftpaAppellantDecisionOutcomeType": "notAdmitted",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
           "notificationsSent": []
@@ -27,11 +27,11 @@
       "replacements": {
         "notificationsSent": [
           {
-            "id": "1013_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+            "id": "1022_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1013_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+            "id": "1022_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -39,8 +39,8 @@
     },
     "notifications": [
       {
-        "reference": "1013_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "reference": "1022_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+        "recipient": "{$homeOfficeEmailAddresses.bradford}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",
@@ -50,7 +50,7 @@
         ]
       },
       {
-        "reference": "1013_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+        "reference": "1022_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [

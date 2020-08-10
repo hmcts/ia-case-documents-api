@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1432 and RIA-2974 FTPA Applicant Application Decision Partially Granted Appellant",
+  "description": "RIA-1432-RIA-2974 FTPA Applicant Application Decision Partially Granted Appellant",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
