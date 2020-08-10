@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
@@ -45,6 +46,14 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisationTest {
             adminOfficeEmailAddress,
             personalisationProvider
         );
+    }
+
+    @Test
+    public void should_return_given_template_id_when_outcome_is_empty() {
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> adminOfficerFtpaDecisionAppellantPersonalisation.getTemplateId(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("ftpaRespondentDecisionOutcomeType is not present");
     }
 
     @Test

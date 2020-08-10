@@ -1,19 +1,25 @@
 {
-  "description": "RIA-2975 FTPA Applicant Application Decision Refused Appellant",
+  "description": "RIA-2999 Appellant FTPA Application is refused after the respondent application already granted",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 1004,
+      "id": 9003,
       "eventId": "residentJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "ftpaAppellantDecisionOutcomeType": "refused",
+          "ftpaAppellantRjDecisionOutcomeType": "refused",
+          "ftpaRespondentRjDecisionOutcomeType": "granted",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
-          "notificationsSent": []
+          "notificationsSent": [
+            {
+              "id": "9003_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+              "value": "34e146c9-6050-4894-a64e-acd461a5f934"
+            }
+          ]
         }
       }
     }
@@ -24,21 +30,12 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "notificationsSent": [
-          {
-            "id": "1004_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "1004_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ]
+        "notificationsSent": []
       }
     },
     "notifications": [
       {
-        "reference": "1004_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+        "reference": "9003_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
         "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal refused",
         "body": [
@@ -49,7 +46,7 @@
         ]
       },
       {
-        "reference": "1004_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+        "reference": "9003_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal refused",
         "body": [

@@ -1,9 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,11 +35,16 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisation implements EmailN
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        FtpaDecisionOutcomeType ftpaDecisionOutcomeType = asylumCase
-            .read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
-            .orElseThrow(() -> new IllegalStateException("ftpaAppellantDecisionOutcomeType is not present"));
+        Optional<FtpaDecisionOutcomeType> ftpaDecisionOutcomeType = asylumCase
+            .read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
 
-        if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_GRANTED.toString())) {
+        if (!ftpaDecisionOutcomeType.isPresent()) {
+            ftpaDecisionOutcomeType = Optional.ofNullable(asylumCase
+                .read(FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                .orElseThrow(() -> new IllegalStateException("ftpaRespondentDecisionOutcomeType is not present")));
+        }
+
+        if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_GRANTED.toString())) {
             return applicationGrantedAdminTemplateId;
         } else {
             return applicationPartiallyGrantedAdminTemplateId;

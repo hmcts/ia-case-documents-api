@@ -1,19 +1,25 @@
 {
-  "description": "RIA-2975 FTPA Applicant Application Decision Granted Respondent",
+  "description": "RIA-2999 Respondent FTPA Application is granted  after the appellant application already granted",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 1005,
-      "eventId": "residentJudgeFtpaDecision",
+      "id": 9002,
+      "eventId": "leadershipJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "ftpaRespondentDecisionOutcomeType": "granted",
+          "ftpaRespondentRjDecisionOutcomeType": "granted",
+          "ftpaAppellantRjDecisionOutcomeType": "granted",
           "ftpaApplicantType": "respondent",
           "ariaListingReference": "987654321",
-          "notificationsSent": []
+          "notificationsSent": [
+            {
+              "id": "9002_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+              "value": "34e146c9-6050-4894-a64e-acd461a5f934"
+            }
+          ]
         }
       }
     }
@@ -24,25 +30,12 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "notificationsSent": [
-          {
-            "id": "1005_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "1005_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "1005_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ]
+        "notificationsSent": []
       }
     },
     "notifications": [
       {
-        "reference": "1005_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "reference": "9002_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
         "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
@@ -53,7 +46,7 @@
         ]
       },
       {
-        "reference": "1005_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+        "reference": "9002_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
@@ -64,7 +57,7 @@
         ]
       },
       {
-        "reference": "1005_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+        "reference": "9002_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
         "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [

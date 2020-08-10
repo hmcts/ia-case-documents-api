@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,21 +47,32 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation 
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        FtpaDecisionOutcomeType ftpaDecisionOutcomeType = asylumCase
-            .read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
-            .orElseThrow(() -> new IllegalStateException("ftpaAppellaneDecisionOutcomeType is not present"));
 
-        if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_GRANTED.toString())) {
+        Optional<FtpaDecisionOutcomeType> ftpaDecisionOutcomeType = asylumCase
+            .read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
+
+        if (!ftpaDecisionOutcomeType.isPresent()) {
+            ftpaDecisionOutcomeType = Optional.ofNullable(asylumCase
+                .read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                .orElseThrow(() -> new IllegalStateException("ftpaAppellantDecisionOutcomeType is not present")));
+        }
+
+        if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_GRANTED.toString())) {
             return applicationGrantedApplicantLegalRepTemplateId;
-        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED.toString())) {
+        } else if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED.toString())) {
             return applicationPartiallyGrantedApplicantLegalRepTemplateId;
-        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString())) {
+        } else if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REFUSED.toString())) {
             return applicationRefusedGrantedApplicantLegalRepTemplateId;
-        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD.toString())) {
+        } else if (ftpaDecisionOutcomeType.isPresent() && (ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD35.toString())
+                   || ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD32.toString()))) {
             return applicationReheardApplicantLegalRepTemplateId;
-        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_ALLOWED.toString())) {
-            return applicationAllowedLegalRepTemplateId;
-        } else if (ftpaDecisionOutcomeType.toString().equals(FtpaDecisionOutcomeType.FTPA_DISMISSED.toString())) {
+        } else if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_REMADE32.toString())) {
+            FtpaDecisionOutcomeType ftpaDecisionRemade = asylumCase
+                .read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class)
+                .orElseThrow(() -> new IllegalStateException("ftpaDecisionRemade is not present"));
+            if (ftpaDecisionRemade.toString().equals(FtpaDecisionOutcomeType.FTPA_ALLOWED.toString())) {
+                return applicationAllowedLegalRepTemplateId;
+            }
             return applicationDismissedLegalRepTemplateId;
         } else {
             return applicationNotAdmittedApplicantLegalRepTemplateId;

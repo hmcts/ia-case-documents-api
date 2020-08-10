@@ -187,8 +187,21 @@ public enum AsylumCaseDefinition {
     FTPA_APPELLANT_DECISION_OUTCOME_TYPE(
         "ftpaAppellantDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
+    FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE(
+        "ftpaAppellantRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
     FTPA_RESPONDENT_DECISION_OUTCOME_TYPE(
         "ftpaRespondentDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
+    FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE(
+        "ftpaRespondentRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
+    FTPA_APPELLANT_DECISION_REMADE_RULE_32(
+        "ftpaAppellantDecisionRemadeRule32", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
+    FTPA_RESPONDENT_DECISION_REMADE_RULE_32(
+        "ftpaRespondentDecisionRemadeRule32", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
 
     FTPA_APPELLANT_SUBMITTED(
         "ftpaAppellantSubmitted", new TypeReference<YesOrNo>(){}),

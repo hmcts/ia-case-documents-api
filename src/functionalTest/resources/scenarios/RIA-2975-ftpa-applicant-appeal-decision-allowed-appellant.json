@@ -10,7 +10,8 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "ftpaAppellantDecisionOutcomeType": "allowed",
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+          "ftpaAppellantDecisionRemadeRule32": "allowed",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
           "notificationsSent": []
@@ -39,7 +40,7 @@
     "notifications": [
       {
         "reference": "1011_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$respondentEmailAddresses.respondentEvidenceDirection}",
+        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",
@@ -47,9 +48,7 @@
           "987654321",
           "Talha Awan"
         ]
-      }
-    ],
-    "notifications": [
+      },
       {
         "reference": "1011_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",

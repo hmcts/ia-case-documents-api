@@ -1,5 +1,5 @@
 {
-  "description": "RIA-297 FTPA Applicant Application Decision Refused Respondent",
+  "description": "RIA-2975 FTPA Applicant Application Decision Refused Respondent",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -39,7 +39,7 @@
     "notifications": [
       {
         "reference": "1008_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-        "recipient": "{$respondentEmailAddresses.respondentEvidenceDirection}",
+        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal refused",
         "body": [
           "PA/12345/2019",
@@ -47,9 +47,7 @@
           "987654321",
           "Talha Awan"
         ]
-      }
-    ],
-    "notifications": [
+      },
       {
         "reference": "1008_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
