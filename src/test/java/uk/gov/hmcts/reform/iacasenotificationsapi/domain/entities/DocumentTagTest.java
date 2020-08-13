@@ -22,11 +22,12 @@ public class DocumentTagTest {
         assertEquals("finalDecisionAndReasonsPdf", DocumentTag.FINAL_DECISION_AND_REASONS_PDF.toString());
         assertEquals("submitCaseBundle", DocumentTag.APPEAL_SKELETON_BUNDLE.toString());
         assertEquals("endAppeal", DocumentTag.END_APPEAL.toString());
+        assertEquals("homeOfficeDecisionLetter", DocumentTag.HO_DECISION_LETTER.toString());
         assertEquals("", DocumentTag.NONE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(15, DocumentTag.values().length);
+        assertEquals(16, DocumentTag.values().length);
     }
 }

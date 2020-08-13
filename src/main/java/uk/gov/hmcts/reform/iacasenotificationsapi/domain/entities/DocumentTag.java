@@ -18,6 +18,7 @@ public enum DocumentTag {
     DECISION_AND_REASONS_COVER_LETTER("decisionAndReasonsCoverLetter"),
     FINAL_DECISION_AND_REASONS_PDF("finalDecisionAndReasonsPdf"),
     APPEAL_SKELETON_BUNDLE("submitCaseBundle"),
+    HO_DECISION_LETTER("homeOfficeDecisionLetter"),
     END_APPEAL("endAppeal"),
 
     @JsonEnumDefaultValue
