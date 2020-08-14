@@ -4,10 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singleton;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -175,8 +172,8 @@ public class NotificationGeneratorTest {
         notificationGenerator = new EmailNotificationGenerator(emptyList(), notificationSender, notificationIdAppender);
         notificationGenerator.generate(callback);
 
-        verifyZeroInteractions(notificationSender);
-        verifyZeroInteractions(notificationIdAppender);
+        verifyNoInteractions(notificationSender);
+        verifyNoInteractions(notificationIdAppender);
 
         verify(asylumCase, times(0)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
     }
@@ -186,8 +183,8 @@ public class NotificationGeneratorTest {
         notificationGenerator = new SmsNotificationGenerator(emptyList(), notificationSender, notificationIdAppender);
         notificationGenerator.generate(callback);
 
-        verifyZeroInteractions(notificationSender);
-        verifyZeroInteractions(notificationIdAppender);
+        verifyNoInteractions(notificationSender);
+        verifyNoInteractions(notificationIdAppender);
 
         verify(asylumCase, times(0)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
     }

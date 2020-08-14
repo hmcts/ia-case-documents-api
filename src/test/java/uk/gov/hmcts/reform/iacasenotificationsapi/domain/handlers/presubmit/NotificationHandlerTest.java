@@ -59,7 +59,7 @@ public class NotificationHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Cannot handle callback");
 
-        verifyZeroInteractions(notificationGenerator);
+        verifyNoInteractions(notificationGenerator);
     }
 
     @Test
