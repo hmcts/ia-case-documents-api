@@ -254,7 +254,7 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '29.0-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     compileOnly 'org.projectlombok:lombok:1.18.12'
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
 
     testCompile("org.hamcrest:hamcrest-junit:2.0.0.0") {
         exclude group: "org.hamcrest", module: "hamcrest-core"
@@ -271,7 +271,7 @@ dependencies {
     testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.3.0'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
-    testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+    testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
 
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
@@ -281,15 +281,15 @@ dependencies {
 
     testCompile 'pl.pragmatists:JUnitParams:1.1.1'
 
-    testCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.23') {
+    testCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
         force = true
     }
 
-    integrationTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.23') {
+    integrationTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
         force = true
     }
 
-    functionalTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.23') {
+    functionalTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
         force = true
     }
 
