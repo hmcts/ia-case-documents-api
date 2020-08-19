@@ -152,4 +152,5 @@ public class SendDecisionAndReasonsOrchestratorTest {
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_DOCUMENT);
         verify(asylumCase, times(1)).clear(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
     }
+
 }
