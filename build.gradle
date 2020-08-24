@@ -283,7 +283,7 @@ dependencies {
         exclude group: "org.hamcrest", module: "hamcrest-core"
         exclude group: "org.hamcrest", module: "hamcrest-library"
     }
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.5.0'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.5.5'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 
