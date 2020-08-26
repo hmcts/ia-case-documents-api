@@ -4,10 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -38,6 +35,7 @@ public class CaseOfficerHearingBundleFailedPersonalisationTest {
     private String appealReferenceNumber = "someReferenceNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String ariaListingRef = "someAriaListingRef";
 
     private CaseOfficerHearingBundleFailedPersonalisation caseOfficerHearingBundleFailedPersonalisation;
 
@@ -48,6 +46,7 @@ public class CaseOfficerHearingBundleFailedPersonalisationTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingRef));
 
         when(hearingCentreEmailAddressMap.get(hearingCentre)).thenReturn(hearingCentreEmailAddress);
 
@@ -117,12 +116,14 @@ public class CaseOfficerHearingBundleFailedPersonalisationTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> personalisation = caseOfficerHearingBundleFailedPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("appealReferenceNumber"));
         assertEquals("", personalisation.get("appellantGivenNames"));
         assertEquals("", personalisation.get("appellantFamilyName"));
+        assertEquals("", personalisation.get("ariaListingReference"));
         assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
     }
 

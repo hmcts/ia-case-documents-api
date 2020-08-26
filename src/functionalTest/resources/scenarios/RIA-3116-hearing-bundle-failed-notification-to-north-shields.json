@@ -44,7 +44,7 @@
       {
         "reference": "3116_HEARING_BUNDLE_FAILED_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.northShields}",
-        "subject": "Immigration and Asylum appeal: The hearing bundle has failed to generate",
+        "subject": "Immigration and Asylum appeal: hearing bundle failed to generate",
         "body": [
           "PA/12345/2019",
           "{$iaExUiFrontendUrl}"
