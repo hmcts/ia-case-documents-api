@@ -618,6 +618,21 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("hearingBundleFailedNotificationGenerator")
+    public List<NotificationGenerator> hearingBundleFailedNotificationGenerator(
+        CaseOfficerHearingBundleFailedPersonalisation caseOfficerHearingBundleFailedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(caseOfficerHearingBundleFailedPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("submittedHearingRequirementsNotificationGenerator")
     public List<NotificationGenerator> submittedHearingRequirementsNotificationGenerator(
         CaseOfficerSubmittedHearingRequirementsPersonalisation caseOfficerSubmittedHearingRequirementsPersonalisation,

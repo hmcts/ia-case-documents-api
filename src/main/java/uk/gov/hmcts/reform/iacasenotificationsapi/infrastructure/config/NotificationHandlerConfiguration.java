@@ -9,6 +9,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.fie
 
 import java.util.*;
 import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit.NotificationHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
@@ -79,6 +81,7 @@ public class NotificationHandlerConfiguration {
             notificationGenerators
         );
     }
+
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> requestCaseEditNotificationHandler(
@@ -586,11 +589,48 @@ public class NotificationHandlerConfiguration {
         @Qualifier("hearingBundleReadyNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
-            (callbackStage, callback) ->
-                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.GENERATE_HEARING_BUNDLE,
+            (callbackStage, callback) -> {
+
+                final String stitchStatus = getStitchStatus(callback);
+
+                return
+                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.ASYNC_STITCHING_COMPLETE
+                        && stitchStatus.equalsIgnoreCase("DONE");
+            },
             notificationGenerators
         );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> hearingBundleFailedNotificationHandler(
+        @Qualifier("hearingBundleFailedNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+
+                final String stitchStatus = getStitchStatus(callback);
+
+                return
+                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.ASYNC_STITCHING_COMPLETE
+                        && stitchStatus.equalsIgnoreCase("FAILED");
+            },
+            notificationGenerators
+        );
+    }
+
+    private String getStitchStatus(Callback<AsylumCase> callback) {
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+        Optional<List<IdValue<Bundle>>> maybeCaseBundles = asylumCase.read(AsylumCaseDefinition.CASE_BUNDLES);
+
+        final List<Bundle> caseBundles = maybeCaseBundles.isPresent() ? maybeCaseBundles.get()
+            .stream()
+            .map(IdValue::getValue)
+            .collect(Collectors.toList()) : Collections.emptyList();
+
+        return caseBundles.isEmpty() ? "" : caseBundles.get(0).getStitchStatus().orElse("");
     }
 
     @Bean

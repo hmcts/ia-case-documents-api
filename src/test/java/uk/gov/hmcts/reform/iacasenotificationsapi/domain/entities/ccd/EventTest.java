@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd;
 
 import static junit.framework.TestCase.assertEquals;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.*;
 
 import org.junit.Test;
 
@@ -31,6 +32,8 @@ public class EventTest {
         assertEquals("createCaseSummary", Event.CREATE_CASE_SUMMARY.toString());
         assertEquals("revertStateToAwaitingRespondentEvidence", Event.REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE.toString());
         assertEquals("generateHearingBundle", Event.GENERATE_HEARING_BUNDLE.toString());
+        assertEquals("asyncStitchingComplete", Event.ASYNC_STITCHING_COMPLETE.toString());
+        assertEquals("customiseHearingBundle", CUSTOMISE_HEARING_BUNDLE.toString());
         assertEquals("editCaseListing", Event.EDIT_CASE_LISTING.toString());
         assertEquals("endAppeal", Event.END_APPEAL.toString());
         assertEquals("recordApplication", Event.RECORD_APPLICATION.toString());
@@ -71,6 +74,6 @@ public class EventTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(60, Event.values().length);
+        assertEquals(62, Event.values().length);
     }
 }

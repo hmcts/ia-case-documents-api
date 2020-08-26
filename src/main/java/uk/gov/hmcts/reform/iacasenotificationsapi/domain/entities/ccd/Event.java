@@ -28,6 +28,8 @@ public enum Event {
     CREATE_CASE_SUMMARY("createCaseSummary"),
     REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence"),
     GENERATE_HEARING_BUNDLE("generateHearingBundle"),
+    ASYNC_STITCHING_COMPLETE("asyncStitchingComplete"),
+    CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle"),
     EDIT_CASE_LISTING("editCaseListing"),
     END_APPEAL("endAppeal"),
     RECORD_APPLICATION("recordApplication"),

@@ -5,6 +5,7 @@ import java.util.List;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
 
 public enum AsylumCaseDefinition {
 
@@ -153,6 +154,9 @@ public enum AsylumCaseDefinition {
 
     ADDITIONAL_TRIBUNAL_RESPONSE(
         "additionalTribunalResponse", new TypeReference<String>(){}),
+
+    CASE_BUNDLES(
+        "caseBundles", new TypeReference<List<IdValue<Bundle>>>(){}),
 
     SUBMIT_HEARING_REQUIREMENTS_AVAILABLE(
         "submitHearingRequirementsAvailable", new TypeReference<YesOrNo>(){}),

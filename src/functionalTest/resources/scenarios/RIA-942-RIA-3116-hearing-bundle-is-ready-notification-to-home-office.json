@@ -1,18 +1,24 @@
 {
-  "description": "RIA-1976 Hearing bundle is ready notification to home office (North Shields)",
+  "description": "RIA-942 RIA-3116 Hearing bundle is ready notification to home office",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 1976,
-      "eventId": "generateHearingBundle",
+      "id": 942,
+      "eventId": "asyncStitchingComplete",
       "state": "preHearing",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "northShields",
+          "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321"
+          "legalRepReferenceNumber": "REF54321",
+          "caseBundles": [{
+            "id": "1",
+            "value": {
+              "stitchStatus": "DONE"
+            }
+          }]
         }
       }
     }
@@ -23,16 +29,16 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "listCaseHearingCentre": "northShields",
+        "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
         "legalRepReferenceNumber": "REF54321",
         "notificationsSent": [
           {
-            "id": "1976_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
+            "id": "942_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1976_HEARING_BUNDLE_IS_READY_LEGAL_REP",
+            "id": "942_HEARING_BUNDLE_IS_READY_LEGAL_REP",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -40,8 +46,8 @@
     },
     "notifications": [
       {
-        "reference": "1976_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
-        "recipient": "{$homeOfficeEmailAddresses.northShields}",
+        "reference": "942_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: hearing bundle is ready",
         "body": [
           "PA/12345/2019",
@@ -54,7 +60,7 @@
         ]
       },
       {
-        "reference": "1976_HEARING_BUNDLE_IS_READY_LEGAL_REP",
+        "reference": "942_HEARING_BUNDLE_IS_READY_LEGAL_REP",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: hearing bundle is ready",
         "body": [

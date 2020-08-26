@@ -169,6 +169,9 @@ govnotify:
         email: 4b8a8e0d-2901-411a-897c-dd2493bc8e03
       homeOffice:
         email: 3bb1f83d-4e4f-449d-a282-0ba2812cf88d
+    hearingBundleFailed:
+      caseOfficer:
+        email: c2af5875-f8ab-486d-a766-4a8cba223b36
     requestHearingRequirements:
       legalRep:
         email: d86a45df-5c3d-41e6-9370-3b962d8711fa
@@ -483,6 +486,8 @@ security:
       - "addAppealResponse"
       - "createCaseSummary"
       - "generateHearingBundle"
+      - "asyncStitchingComplete"
+      - "customiseHearingBundle"
       - "editCaseListing"
       - "endAppeal"
       - "recordApplication"
