@@ -45,6 +45,7 @@ public class EndpointSecurityTest {
 
         String response =
             SerenityRest
+                .given()
                 .when()
                 .get("/")
                 .then()
@@ -61,6 +62,7 @@ public class EndpointSecurityTest {
 
         String response =
             SerenityRest
+                .given()
                 .when()
                 .get("/health")
                 .then()
