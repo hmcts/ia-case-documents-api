@@ -40,4 +40,10 @@
     <gav regex="true">^com\.google\.guava:guava:.*$</gav>
     <cve>CVE-2018-10237</cve>
   </suppress>
+  <suppress until="2030-01-01">
+        <notes><![CDATA[
+     It is transitive dependency from Launch Darkly Client
+   ]]></notes>
+        <cve>CVE-2017-18640</cve>
+   </suppress>
 </suppressions>
