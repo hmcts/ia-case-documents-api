@@ -596,6 +596,7 @@ hearingCentreTelephoneNumber:
 endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ho-end-appeal@example.com}
 allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:ho-allowed-appeal@example.com}
 dismissedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL:ho-dismissed-appeal@example.com}
+apcPrivateHomeOfficeEmailAddress: ${IA_HOME_OFFICE_APC_EMAIL}
 
 reviewHearingRequirementsAdminOfficerEmailAddress: ${IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL:ao-review@example.com}
 

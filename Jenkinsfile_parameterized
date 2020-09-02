@@ -35,6 +35,7 @@ def secrets = [
     secret('home-office-birmingham-email', 'IA_HOME_OFFICE_BIRMINGHAM_EMAIL'),
     secret('home-office-hatton-cross-email', 'IA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
     secret('home-office-glasgow-email', 'IA_HOME_OFFICE_GLASGOW_EMAIL'),
+    secret('home-office-apc-email', 'IA_HOME_OFFICE_APC_EMAIL'),
 
     secret('hearing-centre-bradford-telephone', 'IA_HEARING_CENTRE_BRADFORD_TELEPHONE'),
     secret('hearing-centre-manchester-telephone', 'IA_HEARING_CENTRE_MANCHESTER_TELEPHONE'),

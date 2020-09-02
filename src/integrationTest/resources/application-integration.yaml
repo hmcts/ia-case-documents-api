@@ -5,6 +5,8 @@ respondentEmailAddresses:
   respondentEvidenceDirection: not-used-in-integration
   respondentReviewDirection: not-used-in-integration
 
+apcPrivateHomeOfficeEmailAddress: not-used-in-integration
+
 security:
   authorisedServices:
     - "ia"

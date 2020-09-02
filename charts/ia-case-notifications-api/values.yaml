@@ -32,6 +32,7 @@ java:
         - home-office-birmingham-email
         - home-office-hatton-cross-email
         - home-office-glasgow-email
+        - home-office-apc-email
         - respondent-evidence-direction-email
         - respondent-review-direction-email
         - respondent-non-standard-direction-until-listing-email

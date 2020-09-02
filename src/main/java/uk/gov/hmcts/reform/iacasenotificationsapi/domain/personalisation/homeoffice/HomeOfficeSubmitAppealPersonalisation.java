@@ -24,7 +24,7 @@ public class HomeOfficeSubmitAppealPersonalisation  implements EmailNotification
     private final String iaExUiFrontendUrl;
 
     public HomeOfficeSubmitAppealPersonalisation(
-            @Value("${endAppealHomeOfficeEmailAddress}") String apcPrivateBetaInboxHomeOfficeEmailAddress,
+            @Value("${apcPrivateHomeOfficeEmailAddress}") String apcPrivateBetaInboxHomeOfficeEmailAddress,
             @NotNull(message = "appealSubmittedHomeOfficeTemplateId cannot be null") @Value("${govnotify.template.appealSubmitted.homeOffice.email}") String appealSubmittedHomeOfficeTemplateId,
             @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
             CustomerServicesProvider customerServicesProvider

@@ -47,7 +47,7 @@
       },
       {
         "reference": "1001_APPEAL_SUBMITTED_HOME_OFFICE",
-        "recipient": "{$endAppealHomeOfficeEmailAddress}",
+        "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
           "PA/12345/2019",

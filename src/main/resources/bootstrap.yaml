@@ -21,6 +21,7 @@ spring:
         home-office-birmingham-email: IA_HOME_OFFICE_BIRMINGHAM_EMAIL
         home-office-hatton-cross-email: IA_HOME_OFFICE_HATTON_CROSS_EMAIL
         home-office-glasgow-email: IA_HOME_OFFICE_GLASGOW_EMAIL
+        home-office-apc-email: IA_HOME_OFFICE_APC_EMAIL
         hearing-centre-bradford-telephone: IA_HEARING_CENTRE_BRADFORD_TELEPHONE
         hearing-centre-manchester-telephone: IA_HEARING_CENTRE_MANCHESTER_TELEPHONE
         hearing-centre-newport-telephone: IA_HEARING_CENTRE_NEWPORT_TELEPHONE
