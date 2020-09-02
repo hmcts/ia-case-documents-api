@@ -36,4 +36,7 @@ public class AsylumCase extends HashMap<String, Object> implements CaseData {
         this.put(asylumCaseDefinition.value(), value);
     }
 
+    public void clear(AsylumCaseDefinition asylumCaseDefinition) {
+        this.put(asylumCaseDefinition.value(), null);
+    }
 }

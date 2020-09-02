@@ -57,7 +57,7 @@ class PaymentServiceTest {
             ))
             .thenReturn(new PaymentResponse("RC-1590-6748-2373-9129", new Date(),
             "Success", "2020-1590674823325",
-                Arrays.asList(new StatusHistories("Success", null, null))));
+                Arrays.asList(new StatusHistories("Success", null, null, null, null))));
 
 
         PaymentResponse paymentResponse = paymentService.creditAccountPayment(creditAccountPayment);

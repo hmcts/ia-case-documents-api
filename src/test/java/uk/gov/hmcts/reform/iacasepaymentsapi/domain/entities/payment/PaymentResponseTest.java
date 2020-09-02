@@ -16,7 +16,7 @@ class PaymentResponseTest {
     private String status = "Success";
     private String paymentGroupReference = "2020-1590678609071";
     private List<StatusHistories> statusHistories =
-        Arrays.asList(new StatusHistories("Success", null, null));
+        Arrays.asList(new StatusHistories("Success", null, null, null, null));
 
     private PaymentResponse paymentResponse;
 

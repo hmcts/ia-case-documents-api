@@ -35,7 +35,7 @@
         "feeVersion":"2",
         "feeAmount":"140.00",
         "feeDescription":"Appeal determined with a hearing",
-        "paymentDescription":"The fee for this type of appeal with a hearing is £140"
+        "paymentDescription":"The fee for an appeal with a hearing is £140"
       }
     }
   }

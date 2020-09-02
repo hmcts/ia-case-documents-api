@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-public class AsylumCaseTest {
+class AsylumCaseTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void read_string() throws IOException {
+    void read_string() throws IOException {
 
         String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
         AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
@@ -24,7 +24,7 @@ public class AsylumCaseTest {
     }
 
     @Test
-    public void read_using_parameters_type_generics() throws IOException {
+    void read_using_parameters_type_generics() throws IOException {
 
         String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
         AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
@@ -35,12 +35,23 @@ public class AsylumCaseTest {
     }
 
     @Test
-    public void writes_simple_types() {
+    void writes_simple_types() {
 
         AsylumCase asylumCase = new AsylumCase();
         asylumCase.write(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number");
 
         assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get())
             .isEqualTo("some-appeal-reference-number");
+    }
+
+    @Test
+    void clears_value() throws IOException {
+
+        String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
+        AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
+
+        asylumCase.clear(APPEAL_REFERENCE_NUMBER);
+
+        assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).isEmpty();
     }
 }

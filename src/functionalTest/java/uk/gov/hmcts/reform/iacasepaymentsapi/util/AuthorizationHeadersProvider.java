@@ -27,6 +27,33 @@ public class AuthorizationHeadersProvider {
             new Header("Authorization", accessToken),
             new Header("ServiceAuthorization", serviceToken)
         );
+    }
 
+    public Headers getLegalRepresentativeOrgSuccessAuthorization() {
+
+        String serviceToken = serviceAuthTokenGenerator.generate();
+        String accessToken = idamAuthProvider.getUserToken(
+            System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_PASSWORD")
+        );
+
+        return new Headers(
+            new Header("Authorization", accessToken),
+            new Header("ServiceAuthorization", serviceToken)
+        );
+    }
+
+    public Headers getLegalRepresentativeOrgDeletedAuthorization() {
+
+        String serviceToken = serviceAuthTokenGenerator.generate();
+        String accessToken = idamAuthProvider.getUserToken(
+            System.getenv("TEST_LAW_FIRM_ORG_DELETED_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_ORG_DELETED_PASSWORD")
+        );
+
+        return new Headers(
+            new Header("Authorization", accessToken),
+            new Header("ServiceAuthorization", serviceToken)
+        );
     }
 }

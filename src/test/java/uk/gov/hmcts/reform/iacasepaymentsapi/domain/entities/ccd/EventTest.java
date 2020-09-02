@@ -12,6 +12,7 @@ public class EventTest {
         assertEquals("startAppeal", Event.START_APPEAL.toString());
         assertEquals("editAppeal", Event.EDIT_APPEAL.toString());
         assertEquals("paymentAppeal", Event.PAYMENT_APPEAL.toString());
+        assertEquals("payAndSubmitAppeal", Event.PAY_AND_SUBMIT_APPEAL.toString());
         assertEquals("submitAppeal", Event.SUBMIT_APPEAL.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
@@ -19,6 +20,6 @@ public class EventTest {
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
 
-        assertEquals(5, Event.values().length);
+        assertEquals(6, Event.values().length);
     }
 }

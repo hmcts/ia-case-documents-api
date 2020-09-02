@@ -300,6 +300,18 @@ public class CcdScenarioRunnerTest {
                 .getLegalRepresentativeAuthorization();
         }
 
+        if ("LegalRepresentativeOrgSuccess".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getLegalRepresentativeOrgSuccessAuthorization();
+        }
+
+        if ("LegalRepresentativeOrgDeleted".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getLegalRepresentativeOrgDeletedAuthorization();
+        }
+
         return new Headers();
     }
 }

@@ -1,11 +1,11 @@
 {
-  "description": "RIA-2935 Make a payment now for EA appeal type",
+  "description": "RIA-3082 Account on hold for pay and submit now without a hearing (EA appeal type) - PBA0087442",
   "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "eventId": "paymentAppeal",
+      "eventId": "payAndSubmitAppeal",
       "state": "appealStarted",
       "caseData": {
         "template": "minimal-appeal-started.json",
@@ -13,7 +13,7 @@
           "appealType": "refusalOfEu",
           "decisionHearingFeeOption": "decisionWithoutHearing",
           "homeOfficeDecisionDate": "{$TODAY-14}",
-          "pbaNumber": "PBA0072626",
+          "paymentAccountList": "PBA0087442",
           "homeOfficeReferenceNumber": "A123456",
           "paymentDescription": "An IA pba test payment",
           "customerReference": "543232"
@@ -29,13 +29,15 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "paymentStatus":"Paid",
-        "pbaNumber":"PBA0072626",
-        "feeCode":"FEE0456",
-        "feeVersion":"2",
-        "feeAmount":"80.00",
-        "feeDescription":"Appeal determined without a hearing",
-        "paymentDescription":"The fee for an appeal without a hearing is £80"
+        "paymentAccountList": "PBA0087442",
+        "feeCode": "FEE0373",
+        "feeVersion": "1",
+        "feeAmount": "80.00",
+        "feeDescription": "Notice of Appeal - appellant consents without hearing A",
+        "paymentStatus": "Failed",
+        "paymentErrorCode": "CA-E0004",
+        "paymentErrorMessage": "Your account is on hold",
+        "paymentFailedForDisplay": "Pending"
       }
     }
   }

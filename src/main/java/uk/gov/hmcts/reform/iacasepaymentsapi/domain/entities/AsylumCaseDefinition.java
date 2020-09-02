@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.math.BigDecimal;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus;
 
 public enum AsylumCaseDefinition {
 
@@ -26,11 +27,15 @@ public enum AsylumCaseDefinition {
     FEE_AMOUNT_FOR_DISPLAY(
         "feeAmountForDisplay", new TypeReference<String>(){}),
     PAYMENT_STATUS(
-        "paymentStatus", new TypeReference<String>(){}),
+        "paymentStatus", new TypeReference<PaymentStatus>(){}),
+    PAYMENT_FAILED_FOR_DISPLAY(
+        "paymentFailedForDisplay", new TypeReference<String>(){}),
     FEE_PAYMENT_APPEAL_TYPE(
         "feePaymentAppealType", new TypeReference<String>(){}),
     PBA_NUMBER(
         "pbaNumber", new TypeReference<String>(){}),
+    PAYMENT_ACCOUNT_LIST(
+        "paymentAccountList", new TypeReference<DynamicList>(){}),
     PAYMENT_DESCRIPTION(
         "paymentDescription", new TypeReference<String>(){}),
     HOME_OFFICE_REFERENCE_NUMBER(

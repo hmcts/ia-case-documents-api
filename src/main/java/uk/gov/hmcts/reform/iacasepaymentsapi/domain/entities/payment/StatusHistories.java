@@ -14,13 +14,27 @@ public class StatusHistories {
     @JsonProperty("error_message")
     private String errorMessage;
 
+    @JsonProperty("date_created")
+    private String dateCreated;
+
+    @JsonProperty("date_updated")
+    private String dateUpdated;
+
     private StatusHistories() {
     }
 
-    public StatusHistories(String status, String errorCode, String errorMessage) {
+    public StatusHistories(
+        String status,
+        String errorCode,
+        String errorMessage,
+        String dateCreated,
+        String dateUpdated
+    ) {
         this.status = status;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
     }
 
     public String getStatus() {
@@ -34,5 +48,13 @@ public class StatusHistories {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public String getDateUpdated() {
+        return dateUpdated;
     }
 }

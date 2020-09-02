@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee;
 
 import static java.util.Objects.requireNonNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
@@ -47,6 +48,7 @@ public class Fee {
         return code;
     }
 
+    @JsonIgnore
     public String getFeeForDisplay() {
 
         DecimalFormat df = new DecimalFormat("0.00");

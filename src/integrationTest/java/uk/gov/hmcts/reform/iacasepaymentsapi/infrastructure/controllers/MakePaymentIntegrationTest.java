@@ -7,10 +7,11 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PBA_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAID;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.AsylumCaseForTest.anAsylumCase;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.CallbackForTest.CallbackForTestBuilder.callback;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
@@ -21,8 +22,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.security.test.context.support.WithMockUser;
 import ru.lanwen.wiremock.ext.WiremockResolver;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.IaCasePaymentApiClient;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.SpringBootIntegrationTest;
@@ -60,11 +64,13 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
                     .with(APPEAL_TYPE, "refusalOfEu")
                     .with(DECISION_HEARING_FEE_OPTION, "decisionWithHearing")
-                    .with(PBA_NUMBER, "PBA1234567")
+                    .with(PAYMENT_ACCOUNT_LIST,
+                          new DynamicList(new Value("PBA1234567", "PBA1234588"), null))
                     .with(HOME_OFFICE_REFERENCE_NUMBER, "A123456/003"))));
 
-        assertEquals("Paid", response.getAsylumCase().read(PAYMENT_STATUS, String.class).orElse(""));
-        assertEquals("PBA1234567", response.getAsylumCase().read(PBA_NUMBER, String.class).orElse(""));
+        assertEquals(PAID, response.getAsylumCase().read(PAYMENT_STATUS, PaymentStatus.class).get());
+        assertEquals(new DynamicList(new Value("PBA1234567", "PBA1234588"), null),
+                     response.getAsylumCase().read(PAYMENT_ACCOUNT_LIST, String.class).orElse(""));
         assertEquals("RC-1590-6786-1063-9996", response.getAsylumCase()
                             .read(PAYMENT_REFERENCE, String.class).orElse(""));
         assertEquals("29 May 2020", response.getAsylumCase()
@@ -82,13 +88,14 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
                     .with(APPEAL_TYPE, "refusalOfEu")
                     .with(DECISION_HEARING_FEE_OPTION, "decisionWithoutHearing")
-                    .with(PBA_NUMBER, "PBA1234567")
+                    .with(PAYMENT_ACCOUNT_LIST,
+                          new DynamicList(new Value("PBA1234567", "PBA1234588"), null))
                     .with(HOME_OFFICE_REFERENCE_NUMBER, "A123456/003"))));
 
-        assertEquals("Paid", responseNoHearing.getAsylumCase()
-                        .read(PAYMENT_STATUS, String.class).orElse(""));
-        assertEquals("PBA1234567", responseNoHearing.getAsylumCase()
-                        .read(PBA_NUMBER, String.class).orElse(""));
+        assertEquals(PAID, responseNoHearing.getAsylumCase()
+                        .read(PAYMENT_STATUS, PaymentStatus.class).get());
+        assertEquals(new DynamicList(new Value("PBA1234567", "PBA1234588"), null),
+                     responseNoHearing.getAsylumCase().read(PAYMENT_ACCOUNT_LIST, String.class).orElse(""));
         assertEquals("RC-1590-6786-1063-9996", responseNoHearing.getAsylumCase()
                         .read(PAYMENT_REFERENCE, String.class).orElse(""));
         assertEquals("80.00", responseNoHearing.getAsylumCase()

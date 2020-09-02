@@ -70,7 +70,7 @@ payment:
     url: ${PAYMENT_API_URL:http://localhost:8991}
   params:
     organisationUrn: immigration and asylum chamber
-    siteId: ABA3
+    siteId: BFA1
 
 security:
   anonymousPaths:
@@ -90,6 +90,7 @@ security:
     - "startAppeal"
     - "editAppeal"
     - "paymentAppeal"
+    - "payAndSubmitAppeal"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

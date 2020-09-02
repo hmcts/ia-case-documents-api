@@ -12,21 +12,29 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_PAYMENT_APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HEARING_DECISION_SELECTED;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DESCRIPTION;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ERROR_CODE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ERROR_MESSAGE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_FAILED_FOR_DISPLAY;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PBA_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.FAILED;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAID;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_DUE;
 
-import java.math.BigDecimal;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -42,6 +50,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PreSubmitCallbackHa
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.PaymentService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.RefDataService;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.PaymentProperties;
 
 @Component
 @Slf4j
@@ -50,15 +59,21 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
     private final FeeService feeService;
     private final PaymentService paymentService;
     private final RefDataService refDataService;
+    private final PaymentProperties paymentProperties;
+    private final ObjectMapper objectMapper;
 
     public PaymentAppealHandler(
         FeeService feeService,
         PaymentService paymentService,
-        RefDataService refDataService
+        RefDataService refDataService,
+        PaymentProperties paymentProperties,
+        ObjectMapper objectMapper
     ) {
         this.feeService = feeService;
         this.paymentService = paymentService;
         this.refDataService = refDataService;
+        this.paymentProperties = paymentProperties;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -71,7 +86,8 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         requireNonNull(callback, "callback must not be null");
 
         return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT)
-                && (callback.getEvent() == Event.PAYMENT_APPEAL);
+               && (callback.getEvent() == Event.PAYMENT_APPEAL
+                   || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL);
     }
 
     @Override
@@ -80,101 +96,62 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         Callback<AsylumCase> callback
     ) {
 
-
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
 
-        final AsylumCase asylumCase =
-            callback
-                .getCaseDetails()
-                .getCaseData();
+        final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         AppealType appealType = asylumCase.read(APPEAL_TYPE, AppealType.class)
             .orElseThrow(() -> new IllegalStateException("AppealType is not present"));
         asylumCase.write(FEE_PAYMENT_APPEAL_TYPE, YesOrNo.NO);
 
-        if (appealType.equals(AppealType.EA)
-            || appealType.equals(AppealType.HU)
-            || appealType.equals(AppealType.PA)) {
+        Fee feeSelected = getFeeTypeWriteAppealPaymentDetailsToCaseData(appealType, asylumCase);
 
-            String hearingFeeOption = asylumCase
-                .read(DECISION_HEARING_FEE_OPTION, String.class)
-                .orElse("");
+        log.info("Fee: {}", feeSelected);
 
-            Fee feeSelected = null;
-
-            if (hearingFeeOption.equals(DECISION_WITH_HEARING.value())) {
-                feeSelected = feeService.getFee(FeeType.FEE_WITH_HEARING);
-                asylumCase.write(
-                    PAYMENT_DESCRIPTION, "The fee for this type of appeal with a hearing is £"
-                        + feeSelected.getCalculatedAmount());
-                asylumCase.write(
-                    HEARING_DECISION_SELECTED, "Decision with a hearing");
-
-            } else if (hearingFeeOption.equals(DECISION_WITHOUT_HEARING.value())) {
-                feeSelected = feeService.getFee(FeeType.FEE_WITHOUT_HEARING);
-                asylumCase.write(
-                    PAYMENT_DESCRIPTION, "The fee for this type of appeal without a hearing is £"
-                        + feeSelected.getCalculatedAmount());
-                asylumCase.write(
-                    HEARING_DECISION_SELECTED, "Decision without a hearing");
-            }
-
-            if (feeSelected == null) {
-                PreSubmitCallbackResponse<AsylumCase> response =
-                    new PreSubmitCallbackResponse<>(callback.getCaseDetails().getCaseData());
-                response.addErrors(Collections.singleton("Cannot retrieve the fee from fees-register."));
-
-                return response;
-            }
+        if (feeSelected != null) {
 
             writeFeeDetailsToCaseData(asylumCase, feeSelected);
 
+            DynamicList pbaAccountNumber = asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class)
+                .orElseThrow(() -> new IllegalStateException("PBA account number is not present"));
+
+            String paymentDescription = asylumCase.read(PAYMENT_DESCRIPTION, String.class)
+                .orElseThrow(() -> new IllegalStateException("Payment description is not present"));
+
+            String orgName = refDataService.getOrganisationResponse().getOrganisationEntityResponse().getName();
+            String caseId = String.valueOf(callback.getCaseDetails().getId());
+
+            CreditAccountPayment creditAccountPayment = new CreditAccountPayment(
+                pbaAccountNumber.getValue().getCode(),
+                feeSelected.getCalculatedAmount(),
+                caseId,
+                caseId,
+                Currency.GBP,
+                caseId,
+                paymentDescription,
+                orgName,
+                Service.IAC,
+                paymentProperties.getSiteId(),
+                Arrays.asList(feeSelected)
+            );
+
+            log.info("CreditAccountPayment: {}", creditAccountPayment);
+
+            PaymentResponse paymentResponse = makePayment(creditAccountPayment);
+
+            writePaymentResponseStatusToCaseData(paymentResponse, asylumCase);
+
+            asylumCase.write(PAYMENT_REFERENCE, paymentResponse.getReference());
+            asylumCase.write(PBA_NUMBER, pbaAccountNumber.getValue().getCode());
+
+            String pattern = "d MMM yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            asylumCase.write(PAYMENT_DATE, simpleDateFormat.format(paymentResponse.getDateCreated()));
+        } else {
+            throw new IllegalStateException("Cannot retrieve the fee from fees-register.");
         }
-        String pbaAccountNumber = asylumCase.read(PBA_NUMBER, String.class)
-            .orElseThrow(() -> new IllegalStateException("PBA account number is not present"));
-        String paymentDescription = asylumCase.read(PAYMENT_DESCRIPTION, String.class)
-            .orElseThrow(() -> new IllegalStateException("Payment description is not present"));
-        String customerReference = asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)
-            .orElseThrow(() -> new IllegalStateException("Customer payment reference is not present"));
-        String feeCode = asylumCase.read(FEE_CODE, String.class)
-            .orElseThrow(() -> new IllegalStateException("Fee code is not present"));
-        String feeDescription = asylumCase.read(FEE_DESCRIPTION, String.class)
-            .orElseThrow(() -> new IllegalStateException("Fee description is not present"));
-        String feeVersion = asylumCase.read(FEE_VERSION, String.class)
-            .orElseThrow(() -> new IllegalStateException("Fee version is not present"));
-        BigDecimal feeAmount = asylumCase.read(FEE_AMOUNT, BigDecimal.class)
-            .orElseThrow(() -> new IllegalStateException("Fee amount is not present"));
-
-        String orgName =  refDataService.getOrganisationResponse().getOrganisationEntityResponse().getName();
-        String caseId = String.valueOf(callback.getCaseDetails().getId());
-        CreditAccountPayment creditAccountPayment = new CreditAccountPayment(
-            pbaAccountNumber,
-            feeAmount,
-            caseId,
-            caseId,
-            Currency.GBP,
-            caseId,
-            paymentDescription,
-            orgName,
-            Service.IAC,
-            "BFA1",
-            Arrays.asList(
-                new Fee(
-                    feeCode,
-                    feeDescription,
-                    feeVersion,
-                    feeAmount
-                ))
-        );
-        PaymentResponse paymentResponse = makePayment(creditAccountPayment);
-        asylumCase.write(PAYMENT_STATUS, (paymentResponse.getStatus().equals("Success") ?  "Paid" : "Payment due"));
-        asylumCase.write(PAYMENT_REFERENCE, paymentResponse.getReference());
-
-        String pattern = "d MMM yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        asylumCase.write(PAYMENT_DATE, simpleDateFormat.format(paymentResponse.getDateCreated()));
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
@@ -189,8 +166,79 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         asylumCase.write(FEE_PAYMENT_APPEAL_TYPE, YesOrNo.YES);
     }
 
-    private PaymentResponse makePayment(CreditAccountPayment creditAccountPayment) {
+    public PaymentResponse makePayment(CreditAccountPayment creditAccountPayment) {
 
-        return paymentService.creditAccountPayment(creditAccountPayment);
+        requireNonNull(creditAccountPayment, "creditAccountPayment must not be null");
+
+        try {
+            return paymentService.creditAccountPayment(creditAccountPayment);
+        } catch (FeignException fe) {
+            log.error("Payment failed: {}", fe.getMessage());
+            try {
+                return objectMapper.readValue(fe.contentUTF8(), PaymentResponse.class);
+            } catch (JsonProcessingException je) {
+                log.error("Error parsing the failed payment response: {}", je.getMessage());
+            }
+        }
+        return null;
+    }
+
+    public void writePaymentResponseStatusToCaseData(PaymentResponse paymentResponse, AsylumCase asylumCase) {
+
+        requireNonNull(paymentResponse, "paymentResponse must not be null");
+
+        if (paymentResponse.getStatus().equals("Failed")) {
+
+            asylumCase.write(PAYMENT_STATUS, FAILED);
+            asylumCase.write(PAYMENT_FAILED_FOR_DISPLAY, "Pending");
+
+            asylumCase.write(PAYMENT_ERROR_CODE, paymentResponse
+                .getStatusHistories()
+                .get(paymentResponse.getStatusHistories().size() - 1)
+                .getErrorCode());
+
+            asylumCase.write(PAYMENT_ERROR_MESSAGE, paymentResponse
+                .getStatusHistories()
+                .get(paymentResponse.getStatusHistories().size() - 1)
+                .getErrorMessage());
+
+        } else {
+            asylumCase.write(
+                PAYMENT_STATUS,
+                (paymentResponse.getStatus().equals("Success") ? PAID : PAYMENT_DUE)
+            );
+            asylumCase.clear(PAYMENT_FAILED_FOR_DISPLAY);
+        }
+    }
+
+    public Fee getFeeTypeWriteAppealPaymentDetailsToCaseData(AppealType appealType, AsylumCase asylumCase) {
+
+        if (appealType.equals(AppealType.EA)
+            || appealType.equals(AppealType.HU)
+            || appealType.equals(AppealType.PA)) {
+
+            String hearingFeeOption = asylumCase
+                .read(DECISION_HEARING_FEE_OPTION, String.class).orElse("");
+
+            if (hearingFeeOption.equals(DECISION_WITH_HEARING.value())) {
+
+                asylumCase.write(PAYMENT_DESCRIPTION, "Appeal determined with a hearing");
+                asylumCase.write(
+                    HEARING_DECISION_SELECTED,
+                    "Decision with a hearing. The fee for this type of appeal is £140"
+                );
+                return feeService.getFee(FeeType.FEE_WITH_HEARING);
+
+            } else if (hearingFeeOption.equals(DECISION_WITHOUT_HEARING.value())) {
+
+                asylumCase.write(PAYMENT_DESCRIPTION, "Appeal determined without a hearing");
+                asylumCase.write(
+                    HEARING_DECISION_SELECTED,
+                    "Decision without a hearing. The fee for this type of appeal is £80"
+                );
+                return feeService.getFee(FeeType.FEE_WITHOUT_HEARING);
+            }
+        }
+        return null;
     }
 }
