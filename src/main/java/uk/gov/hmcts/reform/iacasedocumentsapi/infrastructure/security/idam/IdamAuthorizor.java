@@ -105,19 +105,20 @@ public class IdamAuthorizor {
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
 
-        Map<String, String> response;
-
         try {
 
-            response =
-                restTemplate
+            return Optional
+                .of(restTemplate
                     .exchange(
                         baseUrl + "/oauth2/token",
                         HttpMethod.POST,
                         requestEntity,
                         new ParameterizedTypeReference<Map<String, String>>() {
                         }
-                    ).getBody();
+                    ))
+                .map(ResponseEntity::getBody)
+                .map(res -> res.getOrDefault("access_token", ""))
+                .orElse("");
 
         } catch (RestClientResponseException e) {
 
@@ -126,7 +127,5 @@ public class IdamAuthorizor {
                 e
             );
         }
-
-        return response.getOrDefault("access_token", "");
     }
 }
