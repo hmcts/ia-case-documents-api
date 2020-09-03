@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,6 +88,19 @@ public class AppealSubmissionCreatorTest {
     }
 
     @Test
+    public void should_create_appeal_submission_pdf_and_append_to_legal_representative_documents_for_the_case_when_pay_and_submit_appeal() {
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, LEGAL_REPRESENTATIVE_DOCUMENTS, DocumentTag.APPEAL_SUBMISSION);
+    }
+
+    @Test
     public void handling_should_throw_if_cannot_actually_handle() {
 
         assertThatThrownBy(() -> appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
@@ -111,8 +125,11 @@ public class AppealSubmissionCreatorTest {
                 boolean canHandle = appealSubmissionCreator.canHandle(callbackStage, callback);
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && event == Event.SUBMIT_APPEAL
-                    || event == Event.EDIT_APPEAL_AFTER_SUBMIT) {
+                    && Arrays.asList(
+                            Event.SUBMIT_APPEAL,
+                            Event.EDIT_APPEAL_AFTER_SUBMIT,
+                            Event.PAY_AND_SUBMIT_APPEAL)
+                        .contains(callback.getEvent())) {
 
                     assertTrue(canHandle);
                 } else {
