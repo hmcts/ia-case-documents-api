@@ -74,14 +74,4 @@ public class RequestUserAccessTokenProviderTest {
 
         assertFalse(optionalAccessToken.isPresent());
     }
-
-    @Test
-    public void when_no_current_http_request_exists_it_throws() {
-
-        RequestContextHolder.resetRequestAttributes();
-
-        assertThatThrownBy(() -> requestUserAccessTokenProvider.tryGetAccessToken())
-            .hasMessage("No current HTTP request")
-            .isExactlyInstanceOf(IllegalStateException.class);
-    }
 }

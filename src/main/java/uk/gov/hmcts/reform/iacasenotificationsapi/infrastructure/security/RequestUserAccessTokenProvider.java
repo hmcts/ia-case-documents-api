@@ -19,14 +19,9 @@ public class RequestUserAccessTokenProvider implements AccessTokenProvider {
 
     public Optional<String> tryGetAccessToken() {
 
-        if (RequestContextHolder.getRequestAttributes() != null) {
-            return Optional.ofNullable(
-                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                    .getRequest()
-                    .getHeader(AUTHORIZATION)
-            );
-        }
-
-        throw new IllegalStateException("No current HTTP request");
+        return Optional
+            .ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+            .map(ServletRequestAttributes::getRequest)
+            .map(request -> request.getHeader(AUTHORIZATION));
     }
 }
