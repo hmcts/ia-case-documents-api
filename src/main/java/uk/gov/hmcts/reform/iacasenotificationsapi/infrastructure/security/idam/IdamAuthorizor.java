@@ -67,11 +67,11 @@ public class IdamAuthorizor {
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
 
-        Map<String, String> response;
+        Map<String, String> authCode;
 
         try {
 
-            response =
+            authCode =
                 restTemplate
                     .exchange(
                         baseUrl + "/oauth2/authorize",
@@ -81,6 +81,10 @@ public class IdamAuthorizor {
                         }
                     ).getBody();
 
+            if (authCode == null) {
+                throw new IllegalStateException("Error in getting auth code from IDAM");
+            }
+
         } catch (RestClientException e) {
 
             throw new IdentityManagerResponseException(
@@ -89,7 +93,7 @@ public class IdamAuthorizor {
             );
         }
 
-        return response.getOrDefault("code", "");
+        return authCode.getOrDefault("code", "");
     }
 
     private String fetchTokenAuthorization(
@@ -107,11 +111,11 @@ public class IdamAuthorizor {
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
 
-        Map<String, String> response;
+        Map<String, String> authToken;
 
         try {
 
-            response =
+            authToken =
                 restTemplate
                     .exchange(
                         baseUrl + "/oauth2/token",
@@ -121,6 +125,10 @@ public class IdamAuthorizor {
                         }
                     ).getBody();
 
+            if (authToken == null) {
+                throw new IllegalStateException("Error in getting auth token from IDAM");
+            }
+
         } catch (RestClientException e) {
 
             throw new IdentityManagerResponseException(
@@ -129,6 +137,6 @@ public class IdamAuthorizor {
             );
         }
 
-        return response.getOrDefault("access_token", "");
+        return authToken.getOrDefault("access_token", "");
     }
 }

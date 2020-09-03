@@ -60,6 +60,10 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
                         }
                     ).getBody();
 
+            if (response == null) {
+                throw new IllegalStateException("Error in getting user details from IDAM");
+            }
+
         } catch (RestClientException ex) {
 
             throw new IdentityManagerResponseException(

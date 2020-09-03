@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -140,6 +141,29 @@ public class IdamAuthorizorTest {
             .isExactlyInstanceOf(IdentityManagerResponseException.class)
             .hasMessage("Could not get auth code with IDAM");
 
+    }
+
+    @Test
+    public void should_throw_if_code_is_null() {
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "authorization_code");
+        body.add("redirect_uri", "clientRedirectUri");
+        body.add("client_id", "clientId");
+        body.add("client_secret", "clientSecret");
+
+        doReturn(new ResponseEntity<>(body, HttpStatus.OK))
+            .when(restTemplate)
+            .exchange(
+                eq(BASE_URL + "/oauth2/authorize"),
+                eq(HttpMethod.POST),
+                any(HttpEntity.class),
+                any(ParameterizedTypeReference.class)
+            );
+
+        assertThatThrownBy(() -> idamAuthorizor.exchangeForAccessToken("username", "password"))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("Error in getting auth code from IDAM");
     }
 
     @Test
