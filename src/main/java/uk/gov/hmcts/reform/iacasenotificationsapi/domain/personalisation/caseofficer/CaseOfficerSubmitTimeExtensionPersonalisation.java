@@ -40,7 +40,7 @@ public class CaseOfficerSubmitTimeExtensionPersonalisation implements EmailNotif
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getEmailAddress(asylumCase));
+        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
     }
 
     @Override

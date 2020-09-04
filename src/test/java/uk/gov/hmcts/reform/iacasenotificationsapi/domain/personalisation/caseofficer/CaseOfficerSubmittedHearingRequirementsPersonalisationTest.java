@@ -41,7 +41,7 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
     @Before
     public void setUp() {
 
-        when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
+        when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
         caseOfficerSubmittedHearingRequirementsPersonalisation =
             new CaseOfficerSubmittedHearingRequirementsPersonalisation(

@@ -88,7 +88,7 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
 
     @Test
     public void getRecipientsList() {
-        given(emailAddressFinder.getEmailAddress(any(AsylumCase.class))).willReturn("hearingCentre@email.com");
+        given(emailAddressFinder.getHearingCentreEmailAddress(any(AsylumCase.class))).willReturn("hearingCentre@email.com");
 
         assertTrue(personalisation.getRecipientsList(new AsylumCase()).contains("hearingCentre@email.com"));
     }

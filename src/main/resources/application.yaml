@@ -570,6 +570,7 @@ hearingCentreEmailAddresses:
   newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport@example.com}
   taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse@example.com}
   northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
+  newcastle: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
   birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham@example.com}
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
@@ -580,6 +581,7 @@ homeOfficeEmailAddresses:
   newport: ${IA_HOME_OFFICE_NEWPORT_EMAIL:ho-newport@example.com}
   taylorHouse: ${IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ho-taylorhouse@example.com}
   northShields: ${IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL:ho-north-shields@example.com}
+  newcastle: ${IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL:ho-north-shields@example.com}
   birmingham: ${IA_HOME_OFFICE_BIRMINGHAM_EMAIL:ho-birmingham@example.com}
   hattonCross: ${IA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-hatton-cross@example.com}
   glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
@@ -590,6 +592,7 @@ hearingCentreTelephoneNumber:
   newport: ${IA_HEARING_CENTRE_NEWPORT_TELEPHONE:0300 123 1711}
   taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE:0300 123 1711}
   northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE:0300 123 1711}
+  newcastle: ${IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE:0300 123 1711}
   birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE:0300 123 1711}
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE:0300 123 1711}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_TELEPHONE:0300 123 1711}

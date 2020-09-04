@@ -42,7 +42,7 @@ public class RespondentAdjournHearingWithoutDatePersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
-        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(respondentReviewEmailAddress);
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(respondentReviewEmailAddress);
 
         respondentAdjournHearingWithoutDatePersonalisation = new RespondentAdjournHearingWithoutDatePersonalisation(
             templateId,

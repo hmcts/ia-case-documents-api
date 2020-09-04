@@ -23,7 +23,7 @@ public class EmailAddressFinder {
         this.homeOfficeEmailAddresses = homeOfficeEmailAddresses;
     }
 
-    public String getEmailAddress(AsylumCase asylumCase) {
+    public String getHearingCentreEmailAddress(AsylumCase asylumCase) {
 
         final HearingCentre hearingCentre =
             getHearingCentre(asylumCase, AsylumCaseDefinition.HEARING_CENTRE);
@@ -45,25 +45,20 @@ public class EmailAddressFinder {
             .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
     }
 
-    public String getHomeOfficeEmailAddress(AsylumCase asylumCase) {
-        final HearingCentre listCaseHearingCentre =
-            getHearingCentre(asylumCase, AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE);
+    public String getListCaseHomeOfficeEmailAddress(AsylumCase asylumCase) {
+        return asylumCase
+            .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+            .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeEmailAddresses, it))
+                .orElseThrow(() -> new IllegalStateException("List case hearing centre email address not found: " + it.toString()))
+            )
+            .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
-        final String homeOfficeEmailAddress =
-            homeOfficeEmailAddresses
-                .get(listCaseHearingCentre);
-
-        if (homeOfficeEmailAddress == null) {
-            throw new IllegalStateException("List case hearing centre email address not found: " + listCaseHearingCentre.toString());
-        }
-
-        return homeOfficeEmailAddress;
     }
 
     public String getListCaseHearingCentreEmailAddress(AsylumCase asylumCase) {
         return asylumCase
             .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-            .map(it -> Optional.ofNullable(hearingCentreEmailAddresses.get(it))
+            .map(it -> Optional.ofNullable(getEmailAddress(hearingCentreEmailAddresses, it))
                 .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
             )
             .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
@@ -75,4 +70,17 @@ public class EmailAddressFinder {
             .read(asylumCaseDefinition, HearingCentre.class)
             .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
     }
+
+    private String getEmailAddress(Map<HearingCentre, String> emailAddressesMap, HearingCentre hearingCentre) {
+        switch (hearingCentre) {
+            case GLASGOW_TRIBUNAL_CENTRE:
+                return emailAddressesMap.get(HearingCentre.GLASGOW);
+            case NOTTINGHAM:
+            case COVENTRY:
+                return emailAddressesMap.get(HearingCentre.BRADFORD);
+            default:
+                return emailAddressesMap.get(hearingCentre);
+        }
+    }
+
 }

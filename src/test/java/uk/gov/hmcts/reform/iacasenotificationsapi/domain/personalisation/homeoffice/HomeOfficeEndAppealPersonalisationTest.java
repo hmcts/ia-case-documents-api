@@ -64,7 +64,7 @@ public class HomeOfficeEndAppealPersonalisationTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(afterListingEmailAddress);
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(afterListingEmailAddress);
 
         homeOfficeEndAppealPersonalisation = new HomeOfficeEndAppealPersonalisation(
                 beforeListingTemplateId,
@@ -162,6 +162,4 @@ public class HomeOfficeEndAppealPersonalisationTest {
 
         assertTrue(homeOfficeEndAppealPersonalisation.isAppealListed(asylumCase));
     }
-
-
 }

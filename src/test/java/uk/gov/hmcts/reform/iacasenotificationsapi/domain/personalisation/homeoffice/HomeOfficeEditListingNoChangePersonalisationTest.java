@@ -52,7 +52,7 @@ public class HomeOfficeEditListingNoChangePersonalisationTest {
 
     @Before
     public void setup() {
-        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
         homeOfficeEditListingNoChangePersonalisation = new HomeOfficeEditListingNoChangePersonalisation(
             templateId,

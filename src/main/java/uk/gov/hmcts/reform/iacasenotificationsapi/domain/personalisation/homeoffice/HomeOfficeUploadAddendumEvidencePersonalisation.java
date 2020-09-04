@@ -45,7 +45,7 @@ public class HomeOfficeUploadAddendumEvidencePersonalisation implements EmailNot
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+        return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
     }
 
     @Override

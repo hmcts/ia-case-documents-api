@@ -84,7 +84,6 @@ public class NotificationHandlerConfiguration {
         );
     }
 
-
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> requestCaseEditNotificationHandler(
         @Qualifier("requestCaseEditNotificationGenerator") List<NotificationGenerator> notificationGenerators) {

@@ -1,0 +1,107 @@
+{
+  "description": "RIA-2323 Send case listed notification to case officer, legal rep and home office (IAC Coventry)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1106,
+      "eventId": "listCase",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "coventry",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "coventry",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "1106_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1106_CASE_LISTED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1106_CASE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1106_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "Coventry Magistrates Court, Little Park Street, Coventry, West Midlands, CV1 2SQ"
+        ]
+      },
+      {
+        "reference": "1106_CASE_LISTED_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: check the details of your hearing",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "Coventry Magistrates Court, Little Park Street, Coventry, West Midlands, CV1 2SQ",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "1106_CASE_LISTED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "Coventry Magistrates Court, Little Park Street, Coventry, West Midlands, CV1 2SQ",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

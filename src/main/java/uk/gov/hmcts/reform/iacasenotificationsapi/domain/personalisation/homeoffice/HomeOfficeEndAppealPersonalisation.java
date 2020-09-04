@@ -57,7 +57,7 @@ public class HomeOfficeEndAppealPersonalisation implements EmailNotificationPers
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
         return (isAppealListed(asylumCase))
-                ? Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)) :
+                ? Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)) :
                 Collections.singleton(endAppealEmailAddresses);
 
     }

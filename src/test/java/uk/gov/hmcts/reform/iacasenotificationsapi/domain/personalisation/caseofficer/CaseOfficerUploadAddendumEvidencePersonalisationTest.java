@@ -40,7 +40,7 @@ public class CaseOfficerUploadAddendumEvidencePersonalisationTest {
 
     @Before
     public void setUp() {
-        when(emailAddressFinder.getEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
+        when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
         caseOfficerUploadAddendumEvidencePersonalisation = new CaseOfficerUploadAddendumEvidencePersonalisation(
             templateId,

@@ -69,8 +69,8 @@ public class EventTest {
         assertEquals("unlinkAppeal", Event.UNLINK_APPEAL.toString());
         assertEquals("leadershipJudgeFtpaDecision", Event.LEADERSHIP_JUDGE_FTPA_DECISION.toString());
         assertEquals("residentJudgeFtpaDecision", Event.RESIDENT_JUDGE_FTPA_DECISION.toString());
-        assertEquals("unknown", Event.UNKNOWN.toString());
         assertEquals("editDocuments", Event.EDIT_DOCUMENTS.toString());
+        assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test

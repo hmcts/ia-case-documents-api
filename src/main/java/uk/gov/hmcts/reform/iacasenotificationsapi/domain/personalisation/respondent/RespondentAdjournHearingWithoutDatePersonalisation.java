@@ -60,6 +60,6 @@ public class RespondentAdjournHearingWithoutDatePersonalisation implements Email
 
     private String getRespondentEmailAddress(AsylumCase asylumCase) {
 
-        return respondentEmailAddressAfterRespondentReview.getHomeOfficeEmailAddress(asylumCase);
+        return respondentEmailAddressAfterRespondentReview.getListCaseHomeOfficeEmailAddress(asylumCase);
     }
 }

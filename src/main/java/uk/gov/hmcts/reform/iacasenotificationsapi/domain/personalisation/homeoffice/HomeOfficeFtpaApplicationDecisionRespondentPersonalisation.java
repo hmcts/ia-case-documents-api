@@ -98,7 +98,7 @@ public class HomeOfficeFtpaApplicationDecisionRespondentPersonalisation implemen
         } else if (getFtpaApplicationDecision(asylumCase).equals(FtpaDecisionOutcomeType.FTPA_REFUSED)) {
             return Collections.singleton(homeOfficeEmailAddressFtpaRefused);
         } else {
-            return Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+            return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
         }
     }
 

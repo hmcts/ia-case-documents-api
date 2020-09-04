@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
 public class CaseOfficerListCasePersonalisation implements EmailNotificationPersonalisation {
@@ -23,20 +24,20 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
     private final String iaExUiFrontendUrl;
     private final StringProvider stringProvider;
     private final DateTimeExtractor dateTimeExtractor;
-    private final Map<HearingCentre, String> hearingCentreEmailAddresses;
+    private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerListCasePersonalisation(
         @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
-        Map<HearingCentre, String> hearingCentreEmailAddresses
+        EmailAddressFinder emailAddressFinder
     ) {
         this.caseOfficerCaseListedTemplateId = caseOfficerCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.stringProvider = stringProvider;
         this.dateTimeExtractor = dateTimeExtractor;
-        this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
@@ -46,20 +47,7 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        final HearingCentre listCaseHearingCentre =
-            asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-
-        final String hearingCentreEmailAddress =
-            hearingCentreEmailAddresses
-                .get(listCaseHearingCentre);
-
-        if (hearingCentreEmailAddress == null) {
-            throw new IllegalStateException("Hearing centre email address not found: " + listCaseHearingCentre.toString());
-        }
-
-        return Collections.singleton(hearingCentreEmailAddress);
+        return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
     }
 
     @Override

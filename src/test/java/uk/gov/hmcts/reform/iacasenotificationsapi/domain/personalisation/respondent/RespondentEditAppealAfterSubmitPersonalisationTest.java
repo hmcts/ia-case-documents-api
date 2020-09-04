@@ -97,7 +97,7 @@ public class RespondentEditAppealAfterSubmitPersonalisationTest {
     @Test
     public void should_return_the_ho_hearing_centre_email_address_after_listing() {
         String homeOfficeBhamEmailAddress = "ho-birmingham@example.com";
-        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeBhamEmailAddress);
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeBhamEmailAddress);
         when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
             .thenReturn(Optional.of(State.PRE_HEARING));
 

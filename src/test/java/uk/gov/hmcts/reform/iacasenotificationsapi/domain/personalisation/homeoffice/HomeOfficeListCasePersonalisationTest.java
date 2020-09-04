@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesO
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HomeOfficeListCasePersonalisationTest {
@@ -26,7 +27,7 @@ public class HomeOfficeListCasePersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock StringProvider stringProvider;
     @Mock DateTimeExtractor dateTimeExtractor;
-    @Mock Map<HearingCentre, String> homeOfficeEmailAddressMap;
+    @Mock EmailAddressFinder emailAddressFinder;
     @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
@@ -87,7 +88,7 @@ public class HomeOfficeListCasePersonalisationTest {
         when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedOther));
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
 
-        when(homeOfficeEmailAddressMap.get(hearingCentre)).thenReturn(homeOfficeEmailAddress);
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
         when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreAddress));
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
         when(dateTimeExtractor.extractHearingTime(hearingDateTime)).thenReturn(hearingTime);
@@ -100,7 +101,7 @@ public class HomeOfficeListCasePersonalisationTest {
             iaExUiFrontendUrl,
             stringProvider,
             dateTimeExtractor,
-            homeOfficeEmailAddressMap,
+            emailAddressFinder,
             customerServicesProvider
         );
     }
@@ -118,32 +119,6 @@ public class HomeOfficeListCasePersonalisationTest {
     @Test
     public void should_return_given_email_address_from_lookup_map() {
         assertTrue(homeOfficeListCasePersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddress));
-    }
-
-    @Test
-    public void should_throw_exception_on_email_address_when_home_office_is_empty() {
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getRecipientsList(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("listCaseHearingCentre is not present");
-    }
-
-    @Test
-    public void should_throw_exception_when_cannot_find_email_address_for_home_office() {
-        when(homeOfficeEmailAddressMap.get(hearingCentre)).thenReturn(null);
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getRecipientsList(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("Hearing centre email address not found: " + hearingCentre.toString());
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getPersonalisation((AsylumCase) null))
-            .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("asylumCase must not be null");
     }
 
     @Test

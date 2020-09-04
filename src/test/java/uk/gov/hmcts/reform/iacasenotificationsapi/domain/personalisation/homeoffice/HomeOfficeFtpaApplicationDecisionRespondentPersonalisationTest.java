@@ -59,7 +59,7 @@ public class HomeOfficeFtpaApplicationDecisionRespondentPersonalisationTest {
     @Before
     public void setup() {
 
-        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
         homeOfficeFtpaApplicationDecisionRespondentPersonalisation = new HomeOfficeFtpaApplicationDecisionRespondentPersonalisation(
             applicantGrantedTemplateId,

@@ -1,12 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -22,6 +17,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
@@ -31,7 +27,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
     private final String iaExUiFrontendUrl;
     private final StringProvider stringProvider;
     private final DateTimeExtractor dateTimeExtractor;
-    private final Map<HearingCentre, String> homeOfficeEmailAddresses;
+    private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
     public HomeOfficeListCasePersonalisation(
@@ -39,14 +35,14 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
-        Map<HearingCentre, String> homeOfficeEmailAddresses,
+        EmailAddressFinder emailAddressFinder,
         CustomerServicesProvider customerServicesProvider
     ) {
         this.homeOfficeCaseListedTemplateId = homeOfficeCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.stringProvider = stringProvider;
         this.dateTimeExtractor = dateTimeExtractor;
-        this.homeOfficeEmailAddresses = homeOfficeEmailAddresses;
+        this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
     }
 
@@ -57,20 +53,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        final HearingCentre listCaseHearingCentre =
-            asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-
-        final String hearingCentreEmailAddress =
-            homeOfficeEmailAddresses
-                .get(listCaseHearingCentre);
-
-        if (hearingCentreEmailAddress == null) {
-            throw new IllegalStateException("Hearing centre email address not found: " + listCaseHearingCentre.toString());
-        }
-
-        return Collections.singleton(hearingCentreEmailAddress);
+        return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
     }
 
     @Override

@@ -48,7 +48,7 @@ public class HomeOfficeUploadAddendumEvidencePersonalisationTest {
 
     @Before
     public void setUp() {
-        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
         homeOfficeUploadAddendumEvidencePersonalisation = new HomeOfficeUploadAddendumEvidencePersonalisation(
             templateId,

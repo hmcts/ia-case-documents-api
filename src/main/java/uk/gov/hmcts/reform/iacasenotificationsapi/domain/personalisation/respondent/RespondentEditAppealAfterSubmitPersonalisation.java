@@ -105,7 +105,7 @@ public class RespondentEditAppealAfterSubmitPersonalisation implements EmailNoti
                     return respondentEmailAddressAtRespondentReview;
                 }
 
-                return respondentEmailAddressAfterRespondentReview.getHomeOfficeEmailAddress(asylumCase);
+                return respondentEmailAddressAfterRespondentReview.getListCaseHomeOfficeEmailAddress(asylumCase);
             })
             .orElseThrow(() -> new IllegalStateException("currentCaseStateVisibleToHomeOfficeAll flag is not present"));
     }

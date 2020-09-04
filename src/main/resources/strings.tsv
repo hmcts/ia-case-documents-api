@@ -1,24 +1,36 @@
-hearingCentre	bradford	Bradford
-hearingCentre	manchester	Manchester
-hearingCentre	newport	Newport
-hearingCentre	taylorHouse	Taylor House
-hearingCentre	northShields	North Shields
 hearingCentre	birmingham	Birmingham
+hearingCentre	bradford	Bradford
+hearingCentre	coventry	Coventry Magistrates Court
+hearingCentre	glasgow	Glasgow (Eagle Building)
+hearingCentre	glasgowTribunalsCentre	Glasgow Tribunals Centre
 hearingCentre	hattonCross	Hatton Cross
-hearingCentre	glasgow	Glasgow
-hearingCentreName	bradford	Bradford
-hearingCentreName	manchester	Manchester
-hearingCentreName	newport	Newport
-hearingCentreName	taylorHouse	Taylor House
-hearingCentreName	northShields	North Shields
+hearingCentre	manchester	Manchester
+hearingCentre	newcastle	Newcastle Civil & Family Courts and Tribunals Centre
+hearingCentre	newport	Newport
+hearingCentre	northShields	North Shields
+hearingCentre	nottingham	Nottingham Justice Centre
+hearingCentre	taylorHouse	Taylor House
 hearingCentreName	birmingham	Birmingham
+hearingCentreName	bradford	Bradford
+hearingCentreName	coventry	Coventry Magistrates Court
+hearingCentreName	glasgow	Glasgow (Eagle Building)
+hearingCentreName	glasgowTribunalsCentre	Glasgow Tribunals Centre
 hearingCentreName	hattonCross	Hatton Cross
-hearingCentreName	glasgow	Glasgow
-hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH
-hearingCentreAddress	manchester	IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH
-hearingCentreAddress	newport	IAC Newport, Columbus House, Langstone Business Park, Chepstow Road, Newport, NP18 2LX
-hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
-hearingCentreAddress	northShields	IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR
+hearingCentreName	manchester	Manchester
+hearingCentreName	newcastle	Newcastle Civil & Family Courts and Tribunals Centre
+hearingCentreName	newport	Newport
+hearingCentreName	northShields	North Shields
+hearingCentreName	nottingham	Nottingham Justice Centre
+hearingCentreName	taylorHouse	Taylor House
 hearingCentreAddress	birmingham	IAC Birmingham, Birmingham Justice Centre, 33 Bull Street, Birmingham, B4 6DS
-hearingCentreAddress	hattonCross	IAC Hatton Cross, York House, 2-3 Dukes Green Avenue, Feltham, Middlesex, TW14 0LS
+hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH
+hearingCentreAddress	coventry	Coventry Magistrates Court, Little Park Street, Coventry, West Midlands, CV1 2SQ
 hearingCentreAddress	glasgow	IAC Glasgow, 4th Floor, Eagle Building, 215 Bothwell Street, Glasgow, G2 7EZ
+hearingCentreAddress	glasgowTribunalsCentre	IAC Glasgow, 1st Floor, The Glasgow Tribunals Centre, Atlantic Quay, 20 York Street, Glasgow, G2 8GT
+hearingCentreAddress	hattonCross	IAC Hatton Cross, York House, 2-3 Dukes Green Avenue, Feltham, Middlesex, TW14 0LS
+hearingCentreAddress	manchester	IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH
+hearingCentreAddress	newcastle	Newcastle Civil & Family Courts and Tribunals Centre, Barras Bridge, Newcastle upon Tyne, NE1 8QF
+hearingCentreAddress	newport	IAC Newport, Columbus House, Langstone Business Park, Chepstow Road, Newport, NP18 2LX
+hearingCentreAddress	northShields	IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR
+hearingCentreAddress	nottingham	Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE
+hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
