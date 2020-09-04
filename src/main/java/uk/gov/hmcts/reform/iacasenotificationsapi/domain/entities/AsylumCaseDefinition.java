@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
 
@@ -220,7 +221,10 @@ public enum AsylumCaseDefinition {
         "isFtpaAppellantDecided", new TypeReference<YesOrNo>(){}),
 
     IS_FTPA_RESPONDENT_DECIDED(
-        "isFtpaRespondentDecided", new TypeReference<YesOrNo>(){});
+        "isFtpaRespondentDecided", new TypeReference<YesOrNo>(){}),
+
+    PAYMENT_STATUS(
+        "paymentStatus", new TypeReference<PaymentStatus>(){});
 
     private final String value;
     private final TypeReference typeReference;
