@@ -63,7 +63,7 @@ class PayAndSubmitAppealAccountPreparerTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
         when(refDataService.getOrganisationResponse())
-                 .thenReturn(organisationResponse);
+            .thenReturn(organisationResponse);
 
         when(organisationEntityResponse.getPaymentAccount()).thenReturn(accountsFromOrg);
 
@@ -155,7 +155,8 @@ class PayAndSubmitAppealAccountPreparerTest {
 
                 boolean canHandle = payAndSubmitAppealAccountPreparer.canHandle(callbackStage, callback);
 
-                if (callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL
+                if ((callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL
+                     || callback.getEvent() == Event.PAYMENT_APPEAL)
                     && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_START)) {
 
                     assertTrue(canHandle);

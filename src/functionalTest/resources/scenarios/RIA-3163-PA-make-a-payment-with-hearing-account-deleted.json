@@ -1,0 +1,42 @@
+{
+  "description": "RIA-3163 Account deleted for make a payment with a hearing (EA appeal type) at respondent review state - PBA0087240",
+  "enabled": true,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentativeOrgDeleted",
+    "input": {
+      "eventId": "paymentAppeal",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "appealType": "protection",
+          "decisionHearingFeeOption": "decisionWithHearing",
+          "homeOfficeDecisionDate": "{$TODAY-14}",
+          "paymentAccountList": "PBA0087240",
+          "homeOfficeReferenceNumber": "A123456",
+          "paymentDescription": "An IA pba test payment",
+          "customerReference": "543232",
+          "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_DELETED_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+        "appealType": "protection",
+        "homeOfficeDecisionDate": "{$TODAY-14}",
+        "paymentAccountList":"PBA0087240",
+        "feeCode":"FEE0239",
+        "feeVersion":"1",
+        "feeAmount":"140.00",
+        "feeDescription":"Appeal determined with a hearing",
+        "paymentStatus":"Failed"
+      }
+    }
+  }
+}

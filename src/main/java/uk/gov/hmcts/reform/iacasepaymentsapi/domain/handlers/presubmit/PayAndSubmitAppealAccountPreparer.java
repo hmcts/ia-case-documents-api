@@ -38,7 +38,8 @@ public class PayAndSubmitAppealAccountPreparer implements PreSubmitCallbackHandl
         requireNonNull(callback, "callback must not be null");
 
         return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_START
-               && (callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL));
+                && (callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL
+                    || callback.getEvent() == Event.PAYMENT_APPEAL));
     }
 
     @Override

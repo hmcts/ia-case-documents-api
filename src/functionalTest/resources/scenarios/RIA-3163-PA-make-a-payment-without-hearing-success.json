@@ -1,0 +1,42 @@
+{
+  "description": "RIA-3163 Success for make a payment without a hearing (PA appeal type) at case building state - PBA0087535",
+  "enabled": true,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentativeOrgSuccess",
+    "input": {
+      "eventId": "paymentAppeal",
+      "state": "caseBuilding",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "appealType": "protection",
+          "decisionHearingFeeOption": "decisionWithoutHearing",
+          "homeOfficeDecisionDate": "{$TODAY-14}",
+          "paymentAccountList": "PBA0087535",
+          "homeOfficeReferenceNumber": "A123456",
+          "paymentDescription": "An IA pba test payment",
+          "customerReference": "543232",
+          "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_SUCCESS_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+        "appealType": "protection",
+        "homeOfficeDecisionDate": "{$TODAY-14}",
+        "paymentAccountList":"PBA0087535",
+        "feeCode":"FEE0373",
+        "feeVersion":"1",
+        "feeAmount":"80.00",
+        "feeDescription":"Notice of Appeal - appellant consents without hearing A",
+        "paymentStatus":"Paid"
+      }
+    }
+  }
+}

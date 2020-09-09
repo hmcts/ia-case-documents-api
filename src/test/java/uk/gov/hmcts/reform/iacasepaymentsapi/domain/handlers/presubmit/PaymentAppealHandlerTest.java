@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_FOR_DISPLAY;
@@ -433,6 +434,20 @@ class PaymentAppealHandlerTest {
         verify(asylumCase, times(1)).write(
             HEARING_DECISION_SELECTED,
             "Decision with a hearing. The fee for this type of appeal is £140"
+        );
+    }
+
+    @Test
+    void should_write_appeal_hearing_payment_details_for_pa_appeal_type_without_hearing() {
+
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(DECISION_WITHOUT_HEARING.value()));
+
+        appealFeePaymentHandler.getFeeTypeWriteAppealPaymentDetailsToCaseData(AppealType.PA, asylumCase);
+
+        verify(asylumCase, times(1)).write(
+            HEARING_DECISION_SELECTED,
+            "Decision without a hearing. The fee for this type of appeal is £80"
         );
     }
 }
