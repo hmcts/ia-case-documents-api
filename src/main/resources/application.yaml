@@ -524,6 +524,7 @@ security:
       - "listCma"
       - "linkAppeal"
       - "unlinkAppeal"
+      - "uploadAddendumEvidenceAdminOfficer"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

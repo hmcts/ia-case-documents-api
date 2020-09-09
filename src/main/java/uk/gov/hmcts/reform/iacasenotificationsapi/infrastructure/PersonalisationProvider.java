@@ -59,6 +59,8 @@ public class PersonalisationProvider {
             .build())
         .put(UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE, personalisationBuilder
             .build())
+        .put(UPLOAD_ADDENDUM_EVIDENCE_ADMIN_OFFICER, personalisationBuilder
+            .build())
         .put(SEND_DIRECTION, personalisationBuilder
             .build())
         .put(APPLY_FOR_FTPA_APPELLANT, personalisationBuilder

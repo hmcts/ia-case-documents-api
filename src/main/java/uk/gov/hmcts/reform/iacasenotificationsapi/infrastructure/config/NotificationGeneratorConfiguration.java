@@ -33,9 +33,9 @@ public class NotificationGeneratorConfiguration {
         NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(new EmailNotificationGenerator(
-                newArrayList(homeOfficePersonalisation, legalRepresentativeRequestCaseBuildingPersonalisation),
-                notificationSender,
-                notificationIdAppender)
+            newArrayList(homeOfficePersonalisation, legalRepresentativeRequestCaseBuildingPersonalisation),
+            notificationSender,
+            notificationIdAppender)
         );
     }
 
@@ -248,24 +248,24 @@ public class NotificationGeneratorConfiguration {
 
     @Bean("submitAppealHoNotificationGenerator")
     public List<NotificationGenerator> submitAppealHoNotificationGenerator(
-            HomeOfficeSubmitAppealPersonalisation homeOfficeSubmitAppealPersonalisation,
-            NotificationSender notificationSender,
-            NotificationIdAppender notificationIdAppender) {
+        HomeOfficeSubmitAppealPersonalisation homeOfficeSubmitAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
 
         return Arrays.asList(
-                new EmailNotificationGenerator(
-                        newArrayList(homeOfficeSubmitAppealPersonalisation),
-                        notificationSender,
-                        notificationIdAppender
-                )
+            new EmailNotificationGenerator(
+                newArrayList(homeOfficeSubmitAppealPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
         );
     }
 
     @Bean("submitCaseRepSubmitToRepNotificationGenerator")
     public List<NotificationGenerator> submitCaseRepSubmitToRepNotificationGenerator(
-            LegalRepresentativeSubmitCasePersonalisation legalRepresentativeSubmitAppealPersonalisation,
-            NotificationSender notificationSender,
-            NotificationIdAppender notificationIdAppender) {
+        LegalRepresentativeSubmitCasePersonalisation legalRepresentativeSubmitAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(
             new EmailNotificationGenerator(
@@ -766,6 +766,26 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+
+    @Bean("uploadAddendumEvidenceAdminOfficer")
+    public List<NotificationGenerator> uploadAddendumEvidenceAdminOfficer(
+        CaseOfficerUploadAddendumEvidencePersonalisation caseOfficerUploadAddendumEvidencePersonalisation,
+        HomeOfficeUploadAddendumEvidencePersonalisation homeOfficeUploadAddendumEvidencePersonalisation,
+        LegalRepresentativeUploadAddendumEvidencePersonalisation legalRepresentativeUploadAddendumEvidencePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(caseOfficerUploadAddendumEvidencePersonalisation, homeOfficeUploadAddendumEvidencePersonalisation, legalRepresentativeUploadAddendumEvidencePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("changeToHearingRequirementsNotificationGenerator")
     public List<NotificationGenerator> changeToHearingRequirementsNotificationGenerator(
         AdminOfficerChangeToHearingRequirementsPersonalisation adminOfficerChangeToHearingRequirementsPersonalisation,
@@ -905,10 +925,10 @@ public class NotificationGeneratorConfiguration {
 
         return Arrays.asList(
             new EmailNotificationGenerator(
-              newArrayList(appellantReviewTimeExtensionGrantedPersonalisationEmail),
-              notificationSender,
-              notificationIdAppender
-          ),
+                newArrayList(appellantReviewTimeExtensionGrantedPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
             new SmsNotificationGenerator(
                 newArrayList(appellantReviewTimeExtensionGrantedPersonalisationSms),
                 notificationSender,
@@ -926,10 +946,10 @@ public class NotificationGeneratorConfiguration {
 
         return Arrays.asList(
             new EmailNotificationGenerator(
-              newArrayList(appellantReviewTimeExtensionRefusedPersonalisationEmail),
-              notificationSender,
-              notificationIdAppender
-          ),
+                newArrayList(appellantReviewTimeExtensionRefusedPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
             new SmsNotificationGenerator(
                 newArrayList(appellantReviewTimeExtensionRefusedPersonalisationSms),
                 notificationSender,

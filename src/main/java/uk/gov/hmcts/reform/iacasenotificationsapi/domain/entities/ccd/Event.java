@@ -40,6 +40,7 @@ public enum Event {
     UPLOAD_ADDENDUM_EVIDENCE("uploadAddendumEvidence"),
     UPLOAD_ADDENDUM_EVIDENCE_LEGAL_REP("uploadAddendumEvidenceLegalRep"),
     UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE("uploadAddendumEvidenceHomeOffice"),
+    UPLOAD_ADDENDUM_EVIDENCE_ADMIN_OFFICER("uploadAddendumEvidenceAdminOfficer"),
     REQUEST_RESPONSE_REVIEW("requestResponseReview"),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
     REQUEST_REASONS_FOR_APPEAL("requestReasonsForAppeal"),
