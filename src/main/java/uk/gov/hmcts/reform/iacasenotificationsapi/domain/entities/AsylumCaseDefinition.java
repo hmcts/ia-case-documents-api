@@ -232,6 +232,8 @@ public enum AsylumCaseDefinition {
     SUBMIT_NOTIFICATION_STATUS(
         "submitNotificationStatus", new TypeReference<String>(){}),
 
+    PA_APPEAL_TYPE_PAYMENT_OPTION(
+        "paAppealTypePaymentOption", new TypeReference<String>(){})
     ;
 
     private final String value;

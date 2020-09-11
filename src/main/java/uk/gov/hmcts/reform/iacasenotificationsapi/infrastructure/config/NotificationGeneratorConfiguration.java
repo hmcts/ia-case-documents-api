@@ -1279,4 +1279,41 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("submitAppealLegalRepPayLaterNotificationGenerator")
+    public List<NotificationGenerator> submitAppealLegalRepPayLaterNotificationHandler(
+        LegalRepresentativeAppealSubmittedPayLaterPersonalisation legalRepresentativeAppealSubmittedPayLaterPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                        legalRepresentativeAppealSubmittedPayLaterPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("submitAppealLegalRepNotificationGenerator")
+    public List<NotificationGenerator> submitAppealLegalRepNotificationHandler(
+        LegalRepresentativeAppealSubmittedPersonalisation legalRepresentativeAppealSubmittedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                        legalRepresentativeAppealSubmittedPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
 }

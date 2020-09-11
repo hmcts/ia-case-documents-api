@@ -1183,6 +1183,63 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealLegalRepPayLaterNotificationHandler(
+        @Qualifier("submitAppealLegalRepPayLaterNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isPaAppealType = asylumCase
+                        .read(APPEAL_TYPE, AppealType.class)
+                        .map(type -> type == PA).orElse(false);
+
+                String paAppealTypePaymentOption = asylumCase
+                    .read(AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
+
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.SUBMIT_APPEAL
+                       && (isPaAppealType && paAppealTypePaymentOption.equals("payLater"));
+            },
+                notificationGenerators,
+            (callback, e) -> {
+                callback
+                    .getCaseDetails()
+                    .getCaseData()
+                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
+            }
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealLegalRepNotificationHandler(
+        @Qualifier("submitAppealLegalRepNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isRpAndDcAppealType = asylumCase
+                        .read(APPEAL_TYPE, AppealType.class)
+                        .map(type -> type == RP || type == DC).orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.SUBMIT_APPEAL
+                       && isRpAndDcAppealType;
+            },
+                notificationGenerators,
+            (callback, e) -> {
+                callback
+                    .getCaseDetails()
+                    .getCaseData()
+                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
+            }
+        );
+    }
+
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> ftpaApplicationDecisionRefusedOrNotAdmittedRespondentNotificationHandler(
         @Qualifier("ftpaApplicationDecisionRefusedOrNotAdmittedRespondentNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
