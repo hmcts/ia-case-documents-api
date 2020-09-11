@@ -77,7 +77,7 @@ public class DocmosisDocumentConversionClientTest {
             .extracting("file")
             .isEqualTo(tempSourceFile);
 
-        assertThat(convertedBytes).isEqualTo(convertedBytes);
+        assertThat(convertedBytes).isEqualTo(someRandomBytes);
     }
 
     @Test
