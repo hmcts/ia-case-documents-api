@@ -56,6 +56,15 @@ govnotify:
       appellant:
         email: b864d01f-c80c-4d91-947f-9599f0b64163
         sms: c52f3074-4b5a-47e0-8dec-154ac5fc0513
+    pendingPayment:
+      legalRep:
+        paid:
+          email: 91cf84fe-55f0-41a4-9d0f-fe13ae45fb8c
+        paidAfterAppealSubmitted:
+          beforeListing:
+            email: da72f9c7-5654-40b3-b9e6-c474281b023e
+          afterListing:
+            email: 933df53d-5700-4ec5-8488-aa33b1541aaa
     requestRespondentEvidenceDirection:
       appellant:
         email: 9c8ab848-b1f7-4dbe-9854-4922e94ece67
@@ -475,6 +484,7 @@ security:
       - "uploadAddendumEvidenceLegalRep"
       - "applyForFTPAAppellant"
       - "payAndSubmitAppeal"
+      - "paymentAppeal"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"

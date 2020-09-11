@@ -1346,5 +1346,37 @@ public class NotificationHandlerConfiguration {
                    .filter(notification -> notification.getId().equals(callback.getCaseDetails().getId() + notificationReference))
                    .count() > 0 ? true : false;
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> paymentPaidLegalRepNotificationHandler(
+        @Qualifier("paymentPaidNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                State currentState = callback.getCaseDetails().getState();
+
+                boolean isCorrectAppealType = asylumCase
+                    .read(APPEAL_TYPE, AppealType.class)
+                    .map(type -> type == PA).orElse(false);
+
+                boolean isCorrectAppealTypeAndState =
+                    isCorrectAppealType
+                    && (currentState != State.APPEAL_STARTED
+                        || currentState != State.APPEAL_SUBMITTED
+                    );
+
+                Optional<PaymentStatus> paymentStatus = asylumCase
+                    .read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.PAYMENT_APPEAL
+                       && isCorrectAppealTypeAndState
+                       && !paymentStatus.equals(Optional.empty())
+                       && paymentStatus.get().equals(PaymentStatus.PAID);
+            }, notificationGenerators
+        );
+    }
 }
 

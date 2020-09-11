@@ -67,6 +67,7 @@ public enum Event {
     EDIT_DOCUMENTS("editDocuments"),
     LEADERSHIP_JUDGE_FTPA_DECISION("leadershipJudgeFtpaDecision"),
     RESIDENT_JUDGE_FTPA_DECISION("residentJudgeFtpaDecision"),
+    PAYMENT_APPEAL("paymentAppeal"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
