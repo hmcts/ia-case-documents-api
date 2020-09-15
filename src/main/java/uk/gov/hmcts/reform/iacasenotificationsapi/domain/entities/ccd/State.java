@@ -27,6 +27,8 @@ public enum State {
     AWAITING_CMA_REQUIREMENTS("awaitingCmaRequirements"),
     ADJOURNED("adjourned"),
     DECISION("decision"),
+    ENDED("ended"),
+    APPEAL_TAKEN_OFFLINE("appealTakenOffline"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
