@@ -12,6 +12,7 @@
         "replacements": {
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
+          "currentCaseStateVisibleToHomeOfficeAll": "finalBundling",
           "directions": [
             {
               "id": "1",
@@ -38,6 +39,7 @@
       "replacements": {
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
+        "currentCaseStateVisibleToHomeOfficeAll": "finalBundling",
         "directions": [
           {
             "id": "1",
@@ -66,7 +68,7 @@
     "notifications": [
       {
         "reference": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
-        "recipient": "{$respondentEmailAddresses.nonStandardDirectionUntilListing}",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: direction",
         "body": [
           "PA/12345/2019",

@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1191-RIA-2694 Send a non-standard direction to legal representative (before listing)",
+  "description": "RIA-1191-RIA-2694 Send a non-standard direction to legal representative and HO APC (before listing)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "directions": [
             {
               "id": "1",
@@ -34,6 +35,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
         "directions": [
           {
             "id": "1",
@@ -48,6 +50,10 @@
         ],
         "notificationsSent": [
           {
+            "id": "1191_RESPONDENT_NON_STANDARD_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
             "id": "1191_LEGAL_REP_NON_STANDARD_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
@@ -56,6 +62,20 @@
       }
     },
     "notifications": [
+      {
+        "reference": "1191_RESPONDENT_NON_STANDARD_DIRECTION",
+        "recipient": "{$endAppealHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: direction",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "The non-standard direction explanation goes here",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
       {
         "reference": "1191_LEGAL_REP_NON_STANDARD_DIRECTION",
         "recipient": "RIA-1191-test-case-1@example.com",

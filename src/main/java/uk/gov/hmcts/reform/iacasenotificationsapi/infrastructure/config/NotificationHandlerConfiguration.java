@@ -33,6 +33,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallb
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.presubmit.NotificationHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGenerator;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
 
 @Configuration
 public class NotificationHandlerConfiguration {
@@ -563,7 +564,8 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> recordApplicationNotificationHandler(
-        @Qualifier("recordApplicationNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+            @Qualifier("recordApplicationNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+            RecordApplicationRespondentFinder recordApplicationRespondentFinder) {
 
         return new NotificationHandler(
             (callbackStage, callback) -> {
@@ -575,9 +577,12 @@ public class NotificationHandlerConfiguration {
                     .map(decision -> decision.equals(ApplicationDecision.REFUSED.toString()))
                     .orElse(false);
 
+                boolean requiresEmail = recordApplicationRespondentFinder.requiresEmail(asylumCase);
+
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.RECORD_APPLICATION
-                       && isApplicationRefused;
+                    && callback.getEvent() == Event.RECORD_APPLICATION
+                    && isApplicationRefused
+                    && requiresEmail;
             },
             notificationGenerators
         );

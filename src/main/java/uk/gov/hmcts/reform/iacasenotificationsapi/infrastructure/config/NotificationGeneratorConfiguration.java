@@ -494,13 +494,14 @@ public class NotificationGeneratorConfiguration {
 
     @Bean("legalRepDirectionNotificationGenerator")
     public List<NotificationGenerator> legalRepDirectionNotificationGenerator(
+        RespondentNonStandardDirectionPersonalisation respondentNonStandardDirectionPersonalisation,
         LegalRepresentativeNonStandardDirectionPersonalisation legalRepresentativeNonStandardDirectionPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(legalRepresentativeNonStandardDirectionPersonalisation),
+                newArrayList(respondentNonStandardDirectionPersonalisation, legalRepresentativeNonStandardDirectionPersonalisation),
                 notificationSender,
                 notificationIdAppender
             )

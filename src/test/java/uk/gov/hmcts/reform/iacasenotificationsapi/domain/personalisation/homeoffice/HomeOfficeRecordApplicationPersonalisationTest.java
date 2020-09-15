@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,6 +24,7 @@ public class HomeOfficeRecordApplicationPersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock Map<HearingCentre, String> homeOfficeEmailAddressMap;
     @Mock CustomerServicesProvider customerServicesProvider;
+    RecordApplicationRespondentFinder recordApplicationRespondentFinder;
 
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
@@ -30,6 +33,7 @@ public class HomeOfficeRecordApplicationPersonalisationTest {
     private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private String homeOfficeEmailAddress = "homeoffice@example.com";
     private String defaultHomeOfficeEmailAddress = "defaulthomeoffice@example.com";
+    private String respondentReviewEmailAddress = "respondentReview@example.com";
 
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
@@ -63,13 +67,18 @@ public class HomeOfficeRecordApplicationPersonalisationTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
+        recordApplicationRespondentFinder = new RecordApplicationRespondentFinder(defaultHomeOfficeEmailAddress, respondentReviewEmailAddress,
+                homeOfficeEmailAddressMap);
+
         homeOfficeRecordApplicationPersonalisation = new HomeOfficeRecordApplicationPersonalisation(
             beforeListingTemplateId,
             afterListingTemplateId,
             defaultHomeOfficeEmailAddress,
+            respondentReviewEmailAddress,
             iaExUiFrontendUrl,
             homeOfficeEmailAddressMap,
-            customerServicesProvider
+            customerServicesProvider,
+            recordApplicationRespondentFinder
         );
     }
 
@@ -85,20 +94,6 @@ public class HomeOfficeRecordApplicationPersonalisationTest {
     @Test
     public void should_return_given_reference_id() {
         assertEquals(caseId + "_RECORD_APPLICATION_HOME_OFFICE", homeOfficeRecordApplicationPersonalisation.getReferenceId(caseId));
-    }
-
-    @Test
-    public void should_return_given_email_address_from_lookup_map() {
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
-
-        assertTrue(homeOfficeRecordApplicationPersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddress));
-    }
-
-    @Test
-    public void should_return_default_email_address_when_home_office_is_empty() {
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertTrue(homeOfficeRecordApplicationPersonalisation.getRecipientsList(asylumCase).contains(defaultHomeOfficeEmailAddress));
     }
 
     @Test
@@ -161,5 +156,57 @@ public class HomeOfficeRecordApplicationPersonalisationTest {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
 
         assertTrue(homeOfficeRecordApplicationPersonalisation.isAppealListed(asylumCase));
+    }
+
+    @Test
+    public void test_email_address_for_states() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        List<State> noEmailStates = newArrayList(
+                State.APPEAL_STARTED,
+                State.FTPA_SUBMITTED,
+                State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS
+        );
+
+        List<State> apcEmail = newArrayList(
+                State.APPEAL_SUBMITTED,
+                State.AWAITING_RESPONDENT_EVIDENCE,
+                State.CASE_BUILDING,
+                State.CASE_UNDER_REVIEW,
+                State.AWAITING_REASONS_FOR_APPEAL,
+                State.REASONS_FOR_APPEAL_SUBMITTED,
+                State.SUBMIT_HEARING_REQUIREMENTS,
+                State.LISTING
+        );
+
+        List<State> lartEmail = newArrayList(
+                State.RESPONDENT_REVIEW
+        );
+
+        List<State> pouEmail = newArrayList(
+                State.PREPARE_FOR_HEARING,
+                State.FINAL_BUNDLING,
+                State.PRE_HEARING,
+                State.DECISION,
+                State.DECIDED
+        );
+
+        Map<String, List<State>> states = new HashMap<>();
+
+        states.put("defaulthomeoffice@example.com", apcEmail);
+        states.put("respondentReview@example.com", lartEmail);
+        states.put("homeoffice@example.com", pouEmail);
+        states.put(null, noEmailStates);
+
+        Set<String> emailAddresses = states.keySet();
+
+        for (String emailAddress: emailAddresses) {
+            List<State> statesList = states.get(emailAddress);
+            for (State state: statesList) {
+                when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(state));
+                assertEquals(emailAddress, homeOfficeRecordApplicationPersonalisation.getRespondentEmailAddress(asylumCase));
+            }
+        }
+
     }
 }

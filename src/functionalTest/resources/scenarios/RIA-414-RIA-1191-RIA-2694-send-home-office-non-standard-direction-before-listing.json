@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "directions": [
             {
               "id": "1",
@@ -34,6 +35,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
         "directions": [
           {
             "id": "1",
@@ -62,7 +64,7 @@
     "notifications": [
       {
         "reference": "1004_RESPONDENT_NON_STANDARD_DIRECTION",
-        "recipient": "{$respondentEmailAddresses.nonStandardDirectionUntilListing}",
+        "recipient": "{$endAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: direction",
         "body": [
           "PA/12345/2019",

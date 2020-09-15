@@ -1,47 +1,46 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import com.microsoft.applicationinsights.core.dependencies.apachecommons.lang3.StringUtils;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
+@Slf4j
 @Service
 public class HomeOfficeRecordApplicationPersonalisation implements EmailNotificationPersonalisation {
 
     private final String recordRefusedApplicationHomeOfficeBeforeListingTemplateId;
     private final String recordRefusedApplicationHomeOfficeAfterListingTemplateId;
-    private final String recordApplicationHomeOfficeEmailAddress;
-    private final Map<HearingCentre, String> homeOfficeEmailAddresses;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
+    private final RecordApplicationRespondentFinder recordApplicationRespondentFinder;
 
     public HomeOfficeRecordApplicationPersonalisation(
         @Value("${govnotify.template.recordRefusedApplicationBeforeListing.homeOffice.email}") String recordRefusedApplicationHomeOfficeBeforeListingTemplateId,
         @Value("${govnotify.template.recordRefusedApplicationAfterListing.homeOffice.email}") String recordRefusedApplicationHomeOfficeAfterListingTemplateId,
         @Value("${endAppealHomeOfficeEmailAddress}") String recordApplicationHomeOfficeEmailAddress,
+        @Value("${respondentEmailAddresses.respondentReviewDirection}") String respondentReviewEmailAddress,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         Map<HearingCentre, String> homeOfficeEmailAddresses,
-        CustomerServicesProvider customerServicesProvider
+        CustomerServicesProvider customerServicesProvider,
+        RecordApplicationRespondentFinder recordApplicationRespondentFinder
     ) {
         this.recordRefusedApplicationHomeOfficeBeforeListingTemplateId = recordRefusedApplicationHomeOfficeBeforeListingTemplateId;
         this.recordRefusedApplicationHomeOfficeAfterListingTemplateId = recordRefusedApplicationHomeOfficeAfterListingTemplateId;
-        this.recordApplicationHomeOfficeEmailAddress = recordApplicationHomeOfficeEmailAddress;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
-        this.homeOfficeEmailAddresses = homeOfficeEmailAddresses;
         this.customerServicesProvider = customerServicesProvider;
+        this.recordApplicationRespondentFinder = recordApplicationRespondentFinder;
     }
 
     @Override
@@ -50,12 +49,13 @@ public class HomeOfficeRecordApplicationPersonalisation implements EmailNotifica
             ? recordRefusedApplicationHomeOfficeAfterListingTemplateId : recordRefusedApplicationHomeOfficeBeforeListingTemplateId;
     }
 
+    protected String getRespondentEmailAddress(AsylumCase asylumCase) {
+        return recordApplicationRespondentFinder.getRespondentEmail(asylumCase);
+    }
+
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-            .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-            .map(homeOfficeEmailAddresses::get)
-            .orElse(recordApplicationHomeOfficeEmailAddress));
+        return Collections.singleton(getRespondentEmailAddress(asylumCase));
     }
 
     @Override

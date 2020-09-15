@@ -16,7 +16,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,6 +28,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     @Mock DirectionFinder directionFinder;
     @Mock Direction direction;
     @Mock CustomerServicesProvider customerServicesProvider;
+    RecordApplicationRespondentFinder recordApplicationRespondentFinder;
 
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
@@ -43,11 +46,17 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     private String appellantFamilyName = "someAppellantFamilyName";
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "customer.services@example.com";
+    private String defaultHomeOfficeEmailAddress = "defaulthomeoffice@example.com";
+    @Mock Map<HearingCentre, String> homeOfficeEmailAddressMap;
+    private String homeOfficeEmailAddress = "homeoffice@example.com";
+
 
     private RespondentNonStandardDirectionPersonalisation respondentNonStandardDirectionPersonalisation;
 
     @Before
     public void setup() {
+        recordApplicationRespondentFinder = new RecordApplicationRespondentFinder(defaultHomeOfficeEmailAddress, respondentReviewEmailAddress,
+                homeOfficeEmailAddressMap);
 
         when((direction.getDateDue())).thenReturn(directionDueDate);
         when((direction.getExplanation())).thenReturn(directionExplanation);
@@ -61,13 +70,16 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
+
+
         respondentNonStandardDirectionPersonalisation = new RespondentNonStandardDirectionPersonalisation(
             beforeListingTemplateId,
             afterListingTemplateId,
             iaExUiFrontendUrl,
             respondentReviewEmailAddress,
             directionFinder,
-            customerServicesProvider
+            customerServicesProvider,
+            recordApplicationRespondentFinder
         );
     }
 
@@ -86,6 +98,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
+        when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(State.RESPONDENT_REVIEW));
         assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase).contains(respondentReviewEmailAddress));
     }
 

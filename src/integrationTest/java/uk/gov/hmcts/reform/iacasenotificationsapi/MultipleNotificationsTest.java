@@ -117,6 +117,7 @@ public class MultipleNotificationsTest {
         caseData.write(NOTIFICATIONS_SENT, existingNotifications);
         caseData.write(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, "someone@somewhere.com");
         caseData.write(HEARING_CENTRE, HearingCentre.MANCHESTER);
+        caseData.write(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.APPEAL_SUBMITTED);
 
         CaseDetails<AsylumCase> caseDetails = new CaseDetails<>(
             caseDetailsId,

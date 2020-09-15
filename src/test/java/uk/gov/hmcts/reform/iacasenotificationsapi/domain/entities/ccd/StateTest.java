@@ -27,10 +27,12 @@ public class StateTest {
         assertEquals("awaitingClarifyingQuestionsAnswers", State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS.toString());
         assertEquals("awaitingCmaRequirements", State.AWAITING_CMA_REQUIREMENTS.toString());
         assertEquals("adjourned", State.ADJOURNED.toString());
+        assertEquals("ftpaSubmitted", State.FTPA_SUBMITTED.toString());
+        assertEquals("ftpaDecided", State.FTPA_DECIDED.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(20, State.values().length);
+        assertEquals(23, State.values().length);
     }
 }

@@ -20,10 +20,13 @@ public enum State {
     HEARING_AND_OUTCOME("hearingAndOutcome"),
     DECIDED("decided"),
     AWAITING_REASONS_FOR_APPEAL("awaitingReasonsForAppeal"),
+    REASONS_FOR_APPEAL_SUBMITTED("reasonsForAppealSubmitted"),
     FTPA_SUBMITTED("ftpaSubmitted"),
+    FTPA_DECIDED("ftpaDecided"),
     AWAITING_CLARIFYING_QUESTIONS_ANSWERS("awaitingClarifyingQuestionsAnswers"),
     AWAITING_CMA_REQUIREMENTS("awaitingCmaRequirements"),
     ADJOURNED("adjourned"),
+    DECISION("decision"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

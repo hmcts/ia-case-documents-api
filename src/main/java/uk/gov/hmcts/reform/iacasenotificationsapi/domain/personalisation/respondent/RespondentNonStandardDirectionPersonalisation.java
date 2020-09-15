@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
@@ -26,6 +27,7 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
     private final String respondentNonStandardDirectionEmailAddress;
     private final DirectionFinder directionFinder;
     private final CustomerServicesProvider customerServicesProvider;
+    private final RecordApplicationRespondentFinder recordApplicationRespondentFinder;
 
     public RespondentNonStandardDirectionPersonalisation(
         @Value("${govnotify.template.nonStandardDirectionBeforeListing.respondent.email}") String respondentNonStandardDirectionBeforeListingTemplateId,
@@ -33,7 +35,8 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         @Value("${respondentEmailAddresses.nonStandardDirectionUntilListing}") String respondentNonStandardDirectionEmailAddress,
         DirectionFinder directionFinder,
-        CustomerServicesProvider customerServicesProvider
+        CustomerServicesProvider customerServicesProvider,
+        RecordApplicationRespondentFinder recordApplicationRespondentFinder
     ) {
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.respondentNonStandardDirectionBeforeListingTemplateId = respondentNonStandardDirectionBeforeListingTemplateId;
@@ -41,6 +44,7 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
         this.respondentNonStandardDirectionEmailAddress = respondentNonStandardDirectionEmailAddress;
         this.directionFinder = directionFinder;
         this.customerServicesProvider = customerServicesProvider;
+        this.recordApplicationRespondentFinder = recordApplicationRespondentFinder;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(respondentNonStandardDirectionEmailAddress);
+        return Collections.singleton(recordApplicationRespondentFinder.getRespondentEmail(asylumCase));
     }
 
     @Override
