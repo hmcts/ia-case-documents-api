@@ -3,27 +3,22 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Arrays;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
@@ -38,11 +33,6 @@ public class AppealSubmissionCreatorTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
-    @Mock private DocumentWithMetadata documentWithMetadata;
-    @Mock private List<IdValue<DocumentWithMetadata>> existingLegalRepresentativeDocuments;
-    @Mock private List<IdValue<DocumentWithMetadata>> allLegalRepresentativeDocuments;
-
-    @Captor private ArgumentCaptor<List<IdValue<DocumentWithMetadata>>> legalRepresentativeDocumentsCaptor;
 
     private AppealSubmissionCreator appealSubmissionCreator;
 
@@ -114,11 +104,67 @@ public class AppealSubmissionCreatorTest {
     }
 
     @Test
+    public void should_not_handle_callback_if_payment_failed_during_pay_and_submit() {
+
+        AsylumCase asylumCase = new AsylumCase();
+        asylumCase.write(PAYMENT_STATUS, "Failed");
+
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        assertFalse(appealSubmissionCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
+    public void should_handle_callback_if_payment_success_during_pay_and_submit() {
+
+        AsylumCase asylumCase = new AsylumCase();
+        asylumCase.write(PAYMENT_STATUS, "Paid");
+
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        assertTrue(appealSubmissionCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
+    public void should_handle_callback_if_payment_failed_during_pay_and_submit_and_then_pay_offline_selected() {
+
+        AsylumCase asylumCase = new AsylumCase();
+        asylumCase.write(PAYMENT_STATUS, "Failed");
+        asylumCase.write(PA_APPEAL_TYPE_PAYMENT_OPTION, "payOffline");
+
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        assertTrue(appealSubmissionCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
+    public void should_handle_callback_if_payment_failed_during_pay_and_submit_and_then_pay_later_selected() {
+
+        AsylumCase asylumCase = new AsylumCase();
+        asylumCase.write(PAYMENT_STATUS, "Failed");
+        asylumCase.write(PA_APPEAL_TYPE_PAYMENT_OPTION, "payLater");
+
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        assertTrue(appealSubmissionCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
     public void it_can_handle_callback() {
 
         for (Event event : Event.values()) {
 
             when(callback.getEvent()).thenReturn(event);
+            when(callback.getCaseDetails()).thenReturn(caseDetails);
+            when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
@@ -126,9 +172,9 @@ public class AppealSubmissionCreatorTest {
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && Arrays.asList(
-                            Event.SUBMIT_APPEAL,
-                            Event.EDIT_APPEAL_AFTER_SUBMIT,
-                            Event.PAY_AND_SUBMIT_APPEAL)
+                    Event.SUBMIT_APPEAL,
+                    Event.EDIT_APPEAL_AFTER_SUBMIT,
+                    Event.PAY_AND_SUBMIT_APPEAL)
                         .contains(callback.getEvent())) {
 
                     assertTrue(canHandle);

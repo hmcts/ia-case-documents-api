@@ -295,7 +295,12 @@ public enum AsylumCaseDefinition {
     DIRECTIONS(
         "directions", new TypeReference<List<IdValue<Direction>>>(){}),
 
-    ;
+    PAYMENT_STATUS(
+        "paymentStatus", new TypeReference<PaymentStatus>(){}),
+
+    PA_APPEAL_TYPE_PAYMENT_OPTION(
+        "paAppealTypePaymentOption", new TypeReference<String>() {});
+
 
     private final String value;
     private final TypeReference typeReference;
