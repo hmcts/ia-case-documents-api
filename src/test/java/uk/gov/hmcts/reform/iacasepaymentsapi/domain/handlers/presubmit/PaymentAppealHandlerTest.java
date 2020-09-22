@@ -11,11 +11,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_FOR_DISPLAY;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HEARING_DECISION_SELECTED;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DESCRIPTION;
@@ -146,8 +144,6 @@ class PaymentAppealHandlerTest {
 
         verify(asylumCase, times(1))
             .write(PAYMENT_DATE, simpleDateFormat.format(new Date()));
-        verify(asylumCase, times(1))
-            .write(HEARING_DECISION_SELECTED, "Decision with a hearing. The fee for this type of appeal is £140");
         verify(asylumCase, times(1))
             .write(FEE_AMOUNT, "140.0");
         verify(asylumCase, times(1))
@@ -393,61 +389,5 @@ class PaymentAppealHandlerTest {
         verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_DUE);
 
         verify(asylumCase, times(1)).clear(PAYMENT_FAILED_FOR_DISPLAY);
-    }
-
-    @Test
-    void should_write_appeal_hearing_payment_details_for_ea_appeal_type() {
-
-        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
-            .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
-
-        appealFeePaymentHandler.getFeeTypeWriteAppealPaymentDetailsToCaseData(AppealType.EA, asylumCase);
-
-        verify(asylumCase, times(1)).write(
-            HEARING_DECISION_SELECTED,
-            "Decision with a hearing. The fee for this type of appeal is £140"
-        );
-    }
-
-    @Test
-    void should_write_appeal_hearing_payment_details_for_hu_appeal_type() {
-
-        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
-            .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
-
-        appealFeePaymentHandler.getFeeTypeWriteAppealPaymentDetailsToCaseData(AppealType.HU, asylumCase);
-
-        verify(asylumCase, times(1)).write(
-            HEARING_DECISION_SELECTED,
-            "Decision with a hearing. The fee for this type of appeal is £140"
-        );
-    }
-
-    @Test
-    void should_write_appeal_hearing_payment_details_for_pa_appeal_type() {
-
-        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
-            .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
-
-        appealFeePaymentHandler.getFeeTypeWriteAppealPaymentDetailsToCaseData(AppealType.PA, asylumCase);
-
-        verify(asylumCase, times(1)).write(
-            HEARING_DECISION_SELECTED,
-            "Decision with a hearing. The fee for this type of appeal is £140"
-        );
-    }
-
-    @Test
-    void should_write_appeal_hearing_payment_details_for_pa_appeal_type_without_hearing() {
-
-        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
-            .thenReturn(Optional.of(DECISION_WITHOUT_HEARING.value()));
-
-        appealFeePaymentHandler.getFeeTypeWriteAppealPaymentDetailsToCaseData(AppealType.PA, asylumCase);
-
-        verify(asylumCase, times(1)).write(
-            HEARING_DECISION_SELECTED,
-            "Decision without a hearing. The fee for this type of appeal is £80"
-        );
     }
 }

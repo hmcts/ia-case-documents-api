@@ -49,11 +49,12 @@ class PaymentAppealFeePreparerTest {
     }
 
     @Test
-    void should_retrieve_the_fee_with_hearing_for_appeal_type_EA() {
+    void should_retrieve_the_fee_with_hearing_for_appeal_type_ea() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getEvent()).thenReturn(Event.START_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING))
             .thenReturn(new Fee(
                 "FEE0238",
@@ -82,11 +83,12 @@ class PaymentAppealFeePreparerTest {
     }
 
     @Test
-    void should_retrieve_the_fee_without_hearing_for_appeal_type_EA() {
+    void should_retrieve_the_fee_without_hearing_for_appeal_type_ea() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getEvent()).thenReturn(Event.START_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING))
             .thenReturn(new Fee(
                 "FEE0238",
@@ -119,7 +121,8 @@ class PaymentAppealFeePreparerTest {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getEvent()).thenReturn(Event.START_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(null);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealFeePreparer
@@ -135,7 +138,8 @@ class PaymentAppealFeePreparerTest {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getEvent()).thenReturn(Event.START_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING))
             .thenReturn(new Fee(
                 "FEE0238",
@@ -154,7 +158,7 @@ class PaymentAppealFeePreparerTest {
     }
 
     @Test
-    void should_allow_valid_Appeal_type_for_payment_appeal_Event() {
+    void should_allow_valid_Appeal_type_for_payment_appeal_event() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);

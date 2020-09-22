@@ -11,7 +11,6 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_DESCRIPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_PAYMENT_APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HEARING_DECISION_SELECTED;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DESCRIPTION;
@@ -223,19 +222,11 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             if (hearingFeeOption.equals(DECISION_WITH_HEARING.value())) {
 
                 asylumCase.write(PAYMENT_DESCRIPTION, "Appeal determined with a hearing");
-                asylumCase.write(
-                    HEARING_DECISION_SELECTED,
-                    "Decision with a hearing. The fee for this type of appeal is £140"
-                );
                 return feeService.getFee(FeeType.FEE_WITH_HEARING);
 
             } else if (hearingFeeOption.equals(DECISION_WITHOUT_HEARING.value())) {
 
                 asylumCase.write(PAYMENT_DESCRIPTION, "Appeal determined without a hearing");
-                asylumCase.write(
-                    HEARING_DECISION_SELECTED,
-                    "Decision without a hearing. The fee for this type of appeal is £80"
-                );
                 return feeService.getFee(FeeType.FEE_WITHOUT_HEARING);
             }
         }

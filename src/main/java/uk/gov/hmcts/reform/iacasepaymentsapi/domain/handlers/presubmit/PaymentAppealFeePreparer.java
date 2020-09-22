@@ -43,7 +43,7 @@ public class PaymentAppealFeePreparer implements PreSubmitCallbackHandler<Asylum
         requireNonNull(callback, "callback must not be null");
 
         return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_START
-               && (callback.getEvent() == Event.START_APPEAL
+                && (callback.getEvent() == Event.START_APPEAL
                     || callback.getEvent() == Event.EDIT_APPEAL
                     || callback.getEvent() == Event.PAYMENT_APPEAL
                     || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL));
@@ -64,11 +64,10 @@ public class PaymentAppealFeePreparer implements PreSubmitCallbackHandler<Asylum
                 .getCaseDetails()
                 .getCaseData();
 
-        if ((callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL  || callback.getEvent() == Event.PAYMENT_APPEAL)
+        if ((callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL || callback.getEvent() == Event.PAYMENT_APPEAL)
             && isNotValidAppealType(asylumCase)) {
 
             throw new IllegalStateException("AppealType is not valid");
-
         }
 
         Fee feeHearing = feeService.getFee(FeeType.FEE_WITH_HEARING);
@@ -114,5 +113,4 @@ public class PaymentAppealFeePreparer implements PreSubmitCallbackHandler<Asylum
         }
         return isNotValidAppealType;
     }
-
 }
