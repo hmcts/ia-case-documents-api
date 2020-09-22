@@ -53,10 +53,6 @@ variable "log_level_ia" {
   default = "INFO"
 }
 
-variable "consul_dns_resource_group_name" {
-  type = "string"
-}
-
 variable "enable_ase" {
   default = false
 }
