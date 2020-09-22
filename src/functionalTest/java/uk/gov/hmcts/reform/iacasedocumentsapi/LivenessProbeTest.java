@@ -30,6 +30,7 @@ public class LivenessProbeTest {
     public void should_ping_liveness_endpoint_and_get_ok() {
 
         String response = SerenityRest
+            .given()
             .when()
             .get("/health/liveness")
             .then()
