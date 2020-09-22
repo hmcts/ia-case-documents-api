@@ -91,8 +91,3 @@ data "azurerm_key_vault_secret" "em_stitching_enabled" {
   vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
-data "azurerm_lb" "consul_dns" {
-  name                = "consul-server_dns"
-  resource_group_name = "${var.consul_dns_resource_group_name}"
-}
-

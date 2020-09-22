@@ -15,6 +15,3 @@ output "vaultUri" {
   value = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
 }
 
-output "consulDnsIp" {
-  value = "${data.azurerm_lb.consul_dns.private_ip_address}"
-}
