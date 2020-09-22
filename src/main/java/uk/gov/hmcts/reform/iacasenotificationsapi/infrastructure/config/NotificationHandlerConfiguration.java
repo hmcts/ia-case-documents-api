@@ -336,12 +336,18 @@ public class NotificationHandlerConfiguration {
                     .read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)
                     .map(paymentStatus -> paymentStatus == FAILED).orElse(false);
 
+                boolean payLater = asylumCase
+                    .read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)
+                    .map(paymentOption -> paymentOption.equals("payOffline") || paymentOption.equals("payLater")).orElse(false);
+
+                boolean paymentFailedChangedToPayLater = paymentFailed && payLater;
+
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && (callback.getEvent() == Event.SUBMIT_APPEAL || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL)
                        && callback.getCaseDetails().getCaseData()
                            .read(JOURNEY_TYPE, JourneyType.class)
                            .map(type -> type == REP).orElse(true)
-                       && !paymentFailed;
+                       && (!paymentFailed || paymentFailedChangedToPayLater);
             }, notificationGenerators,
             (callback, e) -> {
                 callback
@@ -381,9 +387,15 @@ public class NotificationHandlerConfiguration {
                     .read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)
                     .map(paymentStatus -> paymentStatus == FAILED).orElse(false);
 
+                boolean payLater = asylumCase
+                    .read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)
+                    .map(paymentOption -> paymentOption.equals("payOffline") || paymentOption.equals("payLater")).orElse(false);
+
+                boolean paymentFailedChangedToPayLater = paymentFailed && payLater;
+
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && (callback.getEvent() == Event.SUBMIT_APPEAL || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL)
-                       && !paymentFailed;
+                       && (!paymentFailed || paymentFailedChangedToPayLater);
             }, notificationGenerators,
             (callback, e) -> {
                 callback
