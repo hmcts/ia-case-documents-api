@@ -6,6 +6,7 @@ respondentEmailAddresses:
   respondentReviewDirection: not-used-in-integration
 
 apcPrivateHomeOfficeEmailAddress: not-used-in-integration
+feesAdminOfficerEmailAddress: not-used-in-integration
 
 security:
   authorisedServices:

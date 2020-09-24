@@ -35,7 +35,7 @@ public class AsylumCaseTest {
         String caseData = "{\"hearingCentre\": \"manchester\"}";
         AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
 
-        Optional<HearingCentre> maybeHearingCentre = asylumCase.read(HEARING_CENTRE, HearingCentre.class);
+        Optional<HearingCentre> maybeHearingCentre = asylumCase.read(HEARING_CENTRE);
 
         assertThat(maybeHearingCentre.get()).isEqualTo(MANCHESTER);
     }

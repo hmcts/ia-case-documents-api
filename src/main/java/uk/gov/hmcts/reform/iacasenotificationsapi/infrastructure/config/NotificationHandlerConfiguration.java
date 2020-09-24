@@ -1322,29 +1322,29 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> ftpaApplicationDecisionReheardRespondentNotificationHandler(
-        @Qualifier("ftpaApplicationDecisionReheardRespondentNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+            @Qualifier("ftpaApplicationDecisionReheardRespondentNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
                 boolean isReheardDecisionOutcome = asylumCase
-                    .read(AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
-                    .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD35.toString())
-                                     || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD32.toString()))
-                    .orElse(false);
+                        .read(AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                        .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD35.toString())
+                                || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD32.toString()))
+                        .orElse(false);
                 if (!isReheardDecisionOutcome) {
                     isReheardDecisionOutcome = asylumCase
-                        .read(AsylumCaseDefinition.FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
-                        .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD35.toString())
-                                         || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD32.toString()))
-                        .orElse(false);
+                            .read(AsylumCaseDefinition.FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)
+                            .map(decision -> decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD35.toString())
+                                    || decision.toString().equals(FtpaDecisionOutcomeType.FTPA_REHEARD32.toString()))
+                            .orElse(false);
                 }
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION
-                       && isReheardDecisionOutcome
-                       && !hasThisNotificationSentBefore(asylumCase, callback, "_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT");
+                        && callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION
+                        && isReheardDecisionOutcome
+                        && !hasThisNotificationSentBefore(asylumCase, callback, "_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT");
             },
             notificationGenerators
         );
@@ -1395,5 +1395,29 @@ public class NotificationHandlerConfiguration {
             }, notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealPayOfflineNotificationHandler(
+            @Qualifier("submitAppealPayOfflineNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                String paymentOption = asylumCase
+                        .read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
+
+                boolean isCorrectAppealType = asylumCase
+                            .read(APPEAL_TYPE, AppealType.class)
+                        .map(type -> type == PA).orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.SUBMIT_APPEAL
+                        && isCorrectAppealType
+                        && paymentOption.equals("payOffline");
+            }, notificationGenerators
+        );
+    }
 }
+
 

@@ -53,3 +53,4 @@ spring:
         idam-url: IDAM_URL
         s2s-url: S2S_URL
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
+        fees-admin-officer-email: FEES_ADMIN_OFFICER_EMAIL

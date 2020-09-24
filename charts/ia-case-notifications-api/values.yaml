@@ -51,3 +51,4 @@ java:
         - s2s-secret
         - s2s-microservice
         - AppInsightsInstrumentationKey
+        - fees-admin-officer-email

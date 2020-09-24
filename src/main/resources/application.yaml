@@ -52,6 +52,9 @@ govnotify:
         email: f90aa4d9-159d-4423-ab96-73a1e23c92d4
       homeOffice:
         email: 0f9c8b34-f9d2-4796-804a-a9cd0ab5359d
+      adminOfficer:
+        pendingPaymentPa:
+          email: b90bbc57-1ee9-40cb-9037-fe5a2552a136
     appealSubmittedOutOfTime:
       appellant:
         email: b864d01f-c80c-4d91-947f-9599f0b64163
@@ -617,6 +620,7 @@ dismissedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL:h
 apcPrivateHomeOfficeEmailAddress: ${IA_HOME_OFFICE_APC_EMAIL}
 
 reviewHearingRequirementsAdminOfficerEmailAddress: ${IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL:ao-review@example.com}
+feesAdminOfficerEmailAddress: ${FEES_ADMIN_OFFICER_EMAIL}
 
 respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}
