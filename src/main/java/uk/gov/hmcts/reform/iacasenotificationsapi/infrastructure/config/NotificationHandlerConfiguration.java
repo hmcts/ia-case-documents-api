@@ -316,9 +316,10 @@ public class NotificationHandlerConfiguration {
                     .map(outOfTime -> outOfTime == NO).orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.SUBMIT_APPEAL
-                       && isAipJourney
-                       && isAppealOnTime;
+                    && callback.getEvent() == Event.SUBMIT_APPEAL
+                    && isAipJourney
+                    && isAppealOnTime
+                    && !isPaymentPendingForEaOrHuAppeal(callback);
             }, notificationGenerators
         );
     }
@@ -347,7 +348,8 @@ public class NotificationHandlerConfiguration {
                        && callback.getCaseDetails().getCaseData()
                            .read(JOURNEY_TYPE, JourneyType.class)
                            .map(type -> type == REP).orElse(true)
-                       && (!paymentFailed || paymentFailedChangedToPayLater);
+                       && (!paymentFailed || paymentFailedChangedToPayLater)
+                        && !isPaymentPendingForEaOrHuAppeal(callback);
             }, notificationGenerators,
             (callback, e) -> {
                 callback
@@ -378,7 +380,6 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> submitAppealHoNotificationHandler(
             @Qualifier("submitAppealHoNotificationGenerator") List<NotificationGenerator> notificationGenerators
     ) {
-
         return new NotificationHandler(
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
@@ -395,7 +396,8 @@ public class NotificationHandlerConfiguration {
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && (callback.getEvent() == Event.SUBMIT_APPEAL || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL)
-                       && (!paymentFailed || paymentFailedChangedToPayLater);
+                       && (!paymentFailed || paymentFailedChangedToPayLater)
+                       && !isPaymentPendingForEaOrHuAppeal(callback);
             }, notificationGenerators,
             (callback, e) -> {
                 callback
@@ -426,7 +428,8 @@ public class NotificationHandlerConfiguration {
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.SUBMIT_APPEAL
                        && isAipJourney
-                       && isOutOfTimeAppeal;
+                       && isOutOfTimeAppeal
+                       && !isPaymentPendingForEaOrHuAppeal(callback);
             }, notificationGenerators
         );
     }
@@ -1417,6 +1420,41 @@ public class NotificationHandlerConfiguration {
                         && paymentOption.equals("payOffline");
             }, notificationGenerators
         );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealPendingPaymentNotificationHandler(
+        @Qualifier("submitAppealPendingPaymentNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.SUBMIT_APPEAL
+                        && isPaymentPendingForEaOrHuAppeal(callback),
+            notificationGenerators,
+            (callback, e) -> {
+                callback
+                    .getCaseDetails()
+                    .getCaseData()
+                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
+            }
+        );
+    }
+
+    private boolean isPaymentPendingForEaOrHuAppeal(Callback<AsylumCase> callback) {
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+        boolean isEaAndHuAppealType = asylumCase
+                .read(APPEAL_TYPE, AppealType.class)
+                .map(type -> type == EA || type == HU).orElse(false);
+
+        String eaHuAppealTypePaymentOption = asylumCase
+                .read(AsylumCaseDefinition.EA_HU_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
+
+        State asylumCaseState = callback.getCaseDetails().getState();
+        return asylumCaseState == State.PENDING_PAYMENT
+                && isEaAndHuAppealType
+                && eaHuAppealTypePaymentOption.equals("payOffline");
     }
 }
 

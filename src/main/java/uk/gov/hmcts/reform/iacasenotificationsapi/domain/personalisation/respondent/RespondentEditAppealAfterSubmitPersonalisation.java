@@ -92,6 +92,7 @@ public class RespondentEditAppealAfterSubmitPersonalisation implements EmailNoti
             .map(s -> {
                 if (Arrays.asList(
                     State.APPEAL_SUBMITTED,
+                    State.PENDING_PAYMENT,
                     State.AWAITING_RESPONDENT_EVIDENCE,
                     State.CASE_BUILDING,
                     State.CASE_UNDER_REVIEW

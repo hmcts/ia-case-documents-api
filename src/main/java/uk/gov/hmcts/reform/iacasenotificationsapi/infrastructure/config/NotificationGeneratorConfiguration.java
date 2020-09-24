@@ -1355,4 +1355,27 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("submitAppealPendingPaymentNotificationGenerator")
+    public List<NotificationGenerator> submitAppealPendingPaymentNotificationHandler(
+            LegalRepresentativeAppealSubmittedPendingPaymentPersonalisation legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
+            HomeOfficeAppealSubmittedPendingPaymentPersonalisation homeOfficeAppealSubmittedPendingPaymentPersonalisation,
+            AdminOfficerAppealSubmittedPendingPaymentPersonalisation adminOfficerAppealSubmittedPendingPaymentPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                        legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
+                        homeOfficeAppealSubmittedPendingPaymentPersonalisation,
+                        adminOfficerAppealSubmittedPendingPaymentPersonalisation
+
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

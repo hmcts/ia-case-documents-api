@@ -35,6 +35,7 @@ public class RecordApplicationRespondentFinder {
         }
 
         if (state.equals(State.APPEAL_SUBMITTED)
+            || state.equals(State.PENDING_PAYMENT)
             || state.equals(State.AWAITING_RESPONDENT_EVIDENCE)
             || state.equals(State.CASE_BUILDING)
             || state.equals(State.CASE_UNDER_REVIEW)

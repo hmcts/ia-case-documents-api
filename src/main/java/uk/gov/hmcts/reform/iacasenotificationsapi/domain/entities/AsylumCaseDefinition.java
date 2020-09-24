@@ -233,7 +233,9 @@ public enum AsylumCaseDefinition {
         "submitNotificationStatus", new TypeReference<String>(){}),
 
     PA_APPEAL_TYPE_PAYMENT_OPTION(
-        "paAppealTypePaymentOption", new TypeReference<String>(){})
+        "paAppealTypePaymentOption", new TypeReference<String>(){}),
+    EA_HU_APPEAL_TYPE_PAYMENT_OPTION(
+            "eaHuAppealTypePaymentOption", new TypeReference<String>() {}),
     ;
 
     private final String value;

@@ -45,6 +45,8 @@ govnotify:
       legalRep:
         paid:
           email: e767a7ab-adc7-4784-9542-547ebe717fa4
+        pendingPayment:
+          email: ad63843e-7633-4410-bf4c-b7dbbfae1759
       appellant:
         email: 4625616a-178b-45fb-aebf-8cb945369ae0
         sms: 5b7091e5-908a-4c5b-ac66-5dc5216fc53b
@@ -52,9 +54,13 @@ govnotify:
         email: f90aa4d9-159d-4423-ab96-73a1e23c92d4
       homeOffice:
         email: 0f9c8b34-f9d2-4796-804a-a9cd0ab5359d
+        pendingPaymentEaHu:
+          email: b7a7a868-adc2-445a-94f9-9b2b00efc36c
       adminOfficer:
         pendingPaymentPa:
           email: b90bbc57-1ee9-40cb-9037-fe5a2552a136
+        pendingPaymentEaHu:
+          email: f4521175-17ac-4ea9-9196-1769bea29d10
     appealSubmittedOutOfTime:
       appellant:
         email: b864d01f-c80c-4d91-947f-9599f0b64163

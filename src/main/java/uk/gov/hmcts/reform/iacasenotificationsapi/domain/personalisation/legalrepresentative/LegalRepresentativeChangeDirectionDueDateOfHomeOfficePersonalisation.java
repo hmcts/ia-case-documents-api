@@ -52,6 +52,7 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
             .map(s -> {
                 if (Arrays.asList(
                     State.APPEAL_SUBMITTED,
+                    State.PENDING_PAYMENT,
                     State.APPEAL_SUBMITTED_OUT_OF_TIME,
                     State.AWAITING_RESPONDENT_EVIDENCE,
                     State.CASE_BUILDING,
