@@ -4,3 +4,7 @@ docmosis.endpoint: unused
 security:
   authorisedServices:
     - "ia"
+
+idam:
+  s2s-authorised:
+    services: ia

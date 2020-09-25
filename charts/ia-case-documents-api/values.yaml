@@ -13,7 +13,7 @@ java:
     EM_BUNDLER_URL: "http://em-ccd-orchestrator-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     EM_BUNDLER_STITCH_URI: /api/stitch-ccd-bundles
     IA_AIP_FRONTEND_URL: https://immigration-appeal.platform.hmcts.net/
-
+    OPEN_ID_IDAM_URL: "https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net"
   keyVaults:
     ia:
       resourceGroup: ia

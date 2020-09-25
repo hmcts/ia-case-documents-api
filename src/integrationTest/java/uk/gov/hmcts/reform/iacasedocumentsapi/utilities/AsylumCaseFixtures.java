@@ -113,18 +113,16 @@ public class AsylumCaseFixtures {
 
     public static String someUserDetails() {
         return "{\n"
-               +
-               "  \"id\": \"1\",\n"
-               +
-               "  \"roles\": [\"caseworker-ia-caseofficer\"],\n"
-               +
-               "  \"email\": \"someone@somewhere.com\",\n"
-               +
-               "  \"forename\": \"some-fname\",\n"
-               +
-               "  \"surname\": \"some-sname\"\n"
-               +
-               "}";
+               + "  \"sub\": \"ia-caseofficer@fake.hmcts.net\",\n"
+               + "  \"uid\": \"27ff8bb2-8bd3-4577-8ee1-33099acd50a5\",\n"
+               + "  \"roles\": [\n"
+               + "    \"caseworker-ia\",\n"
+               + "    \"caseworker-ia-caseofficer\"\n"
+               + "  ],\n"
+               + "  \"name\": \"Officer\",\n"
+               + "  \"given_name\": \"Case\",\n"
+               + "  \"family_name\": \"Case Worker\"\n"
+               + "}";
     }
 
     private AsylumCaseFixtures() {

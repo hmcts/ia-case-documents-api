@@ -15,7 +15,7 @@ public class GivensBuilder {
 
     public GivensBuilder someLoggedIn(UserDetailsForTestBuilder userDetailsForTestBuilder) {
 
-        stubFor(get(urlEqualTo("/userAuth/details"))
+        stubFor(get(urlEqualTo("/userAuth/o/userinfo"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")

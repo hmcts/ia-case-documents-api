@@ -21,6 +21,19 @@ spring:
   application:
     name: Immigration & Asylum case documents API
   jackson.date-format: yyyy-MM-dd
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o
+        registration:
+          oidc:
+            client-id: ${IA_IDAM_CLIENT_ID:ia}
+            client-secret: ${IA_IDAM_SECRET:something}
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o/jwks
 
 
 health:
@@ -137,12 +150,6 @@ security:
     - "/v2/api-docs"
     - "/webjars/springfox-swagger-ui/**"
     - "/favicon.ico"
-  authorisedServices:
-    - "ccd"
-    - "ccd_data"
-    - "ccd_gw"
-    - "ccd_ps"
-    - "iac"
   authorisedRoles:
     - "caseworker-ia"
     - "citizen"
@@ -192,17 +199,17 @@ security:
 
 
 ### dependency configuration
-auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
-auth.idam.client.detailsUri: "/details"
-auth.idam.client.id: ${IA_IDAM_CLIENT_ID:ia}
-auth.idam.client.secret: ${IA_IDAM_SECRET:something}
-auth.idam.client.redirectUri: ${IA_IDAM_REDIRECT_URI:http://localhost}
-auth.provider.service.client.baseUrl: ${S2S_URL:http://127.0.0.1:4502}
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
-idam.s2s-auth.totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
-idam.s2s-auth.microservice: ${IA_S2S_MICROSERVICE:ia}
-idam.s2s-auth.url: ${S2S_URL:http://127.0.0.1:4502}
+
+idam:
+  baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}
+  s2s-auth:
+    totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
+    microservice: ${IA_S2S_MICROSERVICE:ia}
+    url: ${S2S_URL:http://127.0.0.1:4502}
+  s2s-authorised:
+    services: ccd,ccd_data,ccd_gw,ccd_ps,iac
 
 launchDarkly:
   sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}

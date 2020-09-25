@@ -3,8 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.restassured.RestAssured;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
 
 @RunWith(SpringRunner.class)
@@ -27,8 +35,7 @@ public class EndpointSecurityTest {
     private final List<String> callbackEndpoints =
         Arrays.asList(
             "/asylum/ccdAboutToStart",
-            "/asylum/ccdAboutToSubmit",
-            "/asylum/ccdSubmitted"
+            "/asylum/ccdAboutToSubmit"
         );
 
     @Autowired
@@ -76,21 +83,23 @@ public class EndpointSecurityTest {
     }
 
     @Test
-    public void should_not_allow_unauthenticated_requests_and_return_403_response_code() {
+    public void should_not_allow_unauthenticated_requests_and_return_401_response_code() {
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
             SerenityRest
                 .given()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .body(someCallback())
                 .when()
-                .get(callbackEndpoint)
+                .post(callbackEndpoint)
                 .then()
-                .statusCode(HttpStatus.FORBIDDEN.value())
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
         );
     }
 
     @Test
-    public void should_not_allow_requests_without_valid_service_authorisation_and_return_403_response_code() {
+    public void should_not_allow_requests_without_valid_service_authorisation_and_return_401_response_code() {
 
         String invalidServiceToken = "invalid";
 
@@ -103,16 +112,18 @@ public class EndpointSecurityTest {
 
             SerenityRest
                 .given()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .header("ServiceAuthorization", invalidServiceToken)
                 .header("Authorization", accessToken)
+                .body(someCallback())
                 .when()
-                .get(callbackEndpoint)
+                .post(callbackEndpoint)
                 .then()
-                .statusCode(HttpStatus.FORBIDDEN.value()));
+                .statusCode(HttpStatus.UNAUTHORIZED.value()));
     }
 
     @Test
-    public void should_not_allow_requests_without_valid_user_authorisation_and_return_403_response_code() {
+    public void should_not_allow_requests_without_valid_user_authorisation_and_return_401_response_code() {
 
         String serviceToken =
             authorizationHeadersProvider
@@ -125,12 +136,21 @@ public class EndpointSecurityTest {
 
             SerenityRest
                 .given()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .header("ServiceAuthorization", serviceToken)
                 .header("Authorization", invalidAccessToken)
+                .body(someCallback())
                 .when()
-                .get(callbackEndpoint)
+                .post(callbackEndpoint)
                 .then()
-                .statusCode(HttpStatus.FORBIDDEN.value())
+                .statusCode(HttpStatus.UNAUTHORIZED.value()));
+    }
+
+    private Callback<AsylumCase> someCallback() {
+        return new Callback<>(
+            new CaseDetails<>(1, "IA", State.APPEAL_STARTED, new AsylumCase(), LocalDateTime.now()),
+            Optional.empty(),
+            Event.SUBMIT_APPEAL
         );
     }
 }
