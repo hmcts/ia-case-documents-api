@@ -228,14 +228,18 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: versions.springBoot
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: versions.springBoot
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.2.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix
+
+    // CVE-2019-17195
+    compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.9'
 
     compile group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.6.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.2'
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
-    compile group: 'io.github.openfeign.form', name: 'feign-form', version: '3.4.0'
-    compile group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.4.0'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
     compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
@@ -246,7 +250,6 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'
     compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
     compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: versions.reformHealthStarter
-    compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
     compile group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.17.0-RELEASE'
@@ -272,6 +275,7 @@ dependencies {
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
     testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test'
 
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity

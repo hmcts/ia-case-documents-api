@@ -8,6 +8,6 @@ respondentEmailAddresses:
 apcPrivateHomeOfficeEmailAddress: not-used-in-integration
 feesAdminOfficerEmailAddress: not-used-in-integration
 
-security:
-  authorisedServices:
-    - "ia"
+idam:
+  s2s-authorised:
+    services: ia

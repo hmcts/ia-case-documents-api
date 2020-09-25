@@ -1,12 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.component;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures.AsylumCaseCollectionForTest.someListOf;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder.userWith;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.SEND_DIRECTION;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State.APPEAL_SUBMITTED;
@@ -16,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.Test;
+import org.springframework.security.test.context.support.WithMockUser;
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.SpringBootIntegrationTest;
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
@@ -30,10 +29,8 @@ public class SendsDirectionTest extends SpringBootIntegrationTest {
     private final String someNotificationId = UUID.randomUUID().toString();
 
     @Test
+    @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
     public void sends_notification() {
-
-        given.someLoggedIn(userWith()
-            .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer")));
 
         given.govNotifyWillHandleEmailNotificationAndReturnNotificationId(someNotificationId);
 

@@ -5,4 +5,6 @@ java:
   environment:
     IA_AIP_FRONTEND_URL: "https://immigration-appeal.{{ .Values.global.environment }}.platform.hmcts.net/"
     IA_EXUI_FRONTEND_URL: "https://manage-case.{{ .Values.global.environment }}.platform.hmcts.net/"
+    OPEN_ID_IDAM_URL: "https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net"
+
 
