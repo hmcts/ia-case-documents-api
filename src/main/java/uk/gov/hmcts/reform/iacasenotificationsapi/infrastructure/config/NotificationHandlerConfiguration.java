@@ -503,6 +503,18 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> requestResponseAmendDirectionhandler(
+        @Qualifier("requestResponseAmendDirectionGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.REQUEST_RESPONSE_AMEND,
+            notificationGenerators
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> requestCaseBuildingNotificationHandler(
         @Qualifier("requestCaseBuildingNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 

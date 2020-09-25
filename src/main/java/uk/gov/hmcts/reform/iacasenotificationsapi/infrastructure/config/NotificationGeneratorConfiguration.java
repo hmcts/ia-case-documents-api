@@ -1121,6 +1121,21 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("requestResponseAmendDirectionGenerator")
+    public List<NotificationGenerator> requestResponseAmendDirectionGenerator(
+            RespondentRequestResponseAmendPersonalisation respondentRequestResponseAmendPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+                new EmailNotificationGenerator(
+                        newArrayList(respondentRequestResponseAmendPersonalisation),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
     @Bean("listCmaAipNotificationGenerator")
     public List<NotificationGenerator> listCmaAipNotificationGenerator(
         AppellantListCmaPersonalisationEmail appellantListCmaPersonalisationEmail,
