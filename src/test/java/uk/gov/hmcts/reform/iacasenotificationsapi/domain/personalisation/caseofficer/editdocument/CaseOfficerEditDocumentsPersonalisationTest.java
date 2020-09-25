@@ -39,9 +39,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 @RunWith(JUnitParamsRunner.class)
 public class CaseOfficerEditDocumentsPersonalisationTest {
 
-    public static final String DOC_ID = "d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65";
-    public static final String DOC_ID2 = "ba21d046-6edf-42c4-9b17-1511488a57da";
-    public static final String DOC_ID3 = "9e04bf7e-2d99-4fa1-8fa9-741727b48991";
     @Rule
     public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.LENIENT);
     @Mock
@@ -97,7 +94,7 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
     @Parameters(method = "generateDifferentCaseNotesScenarios")
     public void getPersonalisation(Callback<AsylumCase> callback, String expectedReason) {
         FormattedDocument formattedDocument = new FormattedDocument("some file name", "some desc");
-        given(editDocumentService.getFormattedDocumentsGivenCaseAndDocIds(any(), any()))
+        given(editDocumentService.getFormattedDocumentsGivenCaseAndDocNames(any(), any()))
             .willReturn(new FormattedDocumentList(Collections.singletonList(formattedDocument)));
 
         Map<String, String> actualPersonalisation = personalisation.getPersonalisation(callback);
@@ -109,10 +106,10 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
         assertEquals(expectedReason, actualPersonalisation.get("reasonForEditingOrDeletingDocuments"));
 
         then(editDocumentService).should(times(1))
-            .getFormattedDocumentsGivenCaseAndDocIds(any(AsylumCase.class), argCaptor.capture());
+            .getFormattedDocumentsGivenCaseAndDocNames(any(AsylumCase.class), argCaptor.capture());
 
-        List<String> actualDocsIds = argCaptor.getValue();
-        assertThat(actualDocsIds).containsOnly(DOC_ID, DOC_ID2);
+        List<String> actualDocNames = argCaptor.getValue();
+        assertThat(actualDocNames).containsOnly("some doc name", "some other doc name");
     }
 
     private Object[] generateDifferentCaseNotesScenarios() {
@@ -174,8 +171,8 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
     }
 
     private String buildCaseNoteDescription(String reason) {
-        return String.format("documentIds: %s" + System.lineSeparator() + "reason: %s" + System.lineSeparator(),
-            Arrays.asList(DOC_ID, DOC_ID2), reason);
+        return String.format("Document names: %s" + System.lineSeparator() + "reason: %s" + System.lineSeparator(),
+            Arrays.asList("some doc name", "some other doc name"), reason);
     }
 
     @Test

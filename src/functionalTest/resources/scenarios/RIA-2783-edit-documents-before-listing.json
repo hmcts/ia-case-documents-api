@@ -17,7 +17,7 @@
                 "caseNoteSubject": "Edit documents audit note",
                 "user": "Case Officer",
                 "dateAdded": "{$TODAY}",
-                "caseNoteDescription": "documentIds: [d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65, e1c202b3-099c-452b-a7f0-b1ad7a231a36]\nreason: some reasons to update the documents"
+                "caseNoteDescription": "Document names: [new evidence.pdf, new other evidence.pdf]\nreason: some reasons to update the documents"
               }
             }
           ],
@@ -28,7 +28,7 @@
                 "document": {
                   "document_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65",
                   "document_binary_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65/binary",
-                  "document_filename": "new-evidence.pdf"
+                  "document_filename": "new evidence.pdf"
                 },
                 "description": "some updated description",
                 "dateUploaded": "2018-12-25",
@@ -48,7 +48,7 @@
                 "document": {
                   "document_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65",
                   "document_binary_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65/binary",
-                  "document_filename": "new-evidence.pdf"
+                  "document_filename": "new evidence.pdf"
                 },
                 "description": "some original description",
                 "dateUploaded": "2018-12-25",
@@ -61,7 +61,7 @@
                 "document": {
                   "document_url": "http://document-store/e1c202b3-099c-452b-a7f0-b1ad7a231a36",
                   "document_binary_url": "http://document-store/e1c202b3-099c-452b-a7f0-b1ad7a231a36/binary",
-                  "document_filename": "new-other-evidence.pdf"
+                  "document_filename": "new other evidence.pdf"
                 },
                 "description": "some other original description",
                 "dateUploaded": "2018-12-26",
@@ -96,9 +96,9 @@
         "body": [
           "PA/12345/2019",
           "Talha Awan",
-          "new-evidence.pdf",
+          "new evidence.pdf",
           "some original description",
-          "new-other-evidence.pdf",
+          "new other evidence.pdf",
           "some other original description",
           "some reasons to update the documents",
           "{$iaExUiFrontendUrl}"

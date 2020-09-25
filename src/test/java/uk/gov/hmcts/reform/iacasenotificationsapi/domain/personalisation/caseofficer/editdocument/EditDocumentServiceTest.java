@@ -3,9 +3,6 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseof
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_RECORDING_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer.editdocument.CaseOfficerEditDocumentsPersonalisationTest.DOC_ID;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer.editdocument.CaseOfficerEditDocumentsPersonalisationTest.DOC_ID2;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer.editdocument.CaseOfficerEditDocumentsPersonalisationTest.DOC_ID3;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -32,29 +29,30 @@ public class EditDocumentServiceTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
 
-    private EditDocumentService editDocumentService = new EditDocumentService();
+    private final EditDocumentService editDocumentService = new EditDocumentService();
 
     @Test
     @Parameters(method = "generateOneFileEditedScenarios, generateMultipleFilesEditedScenarios")
-    public void getFormattedDocumentsGivenCaseAndDocIds(AsylumCase asylumCase, List<String> docIds,
-                                                        FormattedDocumentList expectedFormattedDocumentList) {
+    public void getFormattedDocumentsGivenCaseAndDocIds(AsylumCase asylumCase,
+                                                        List<String> docNamesFromCaseNote,
+                                                        FormattedDocumentList expectedFormattedDocumentList
+    ) {
         FormattedDocumentList actualFormattedDocumentList =
-            editDocumentService.getFormattedDocumentsGivenCaseAndDocIds(asylumCase, docIds);
+            editDocumentService.getFormattedDocumentsGivenCaseAndDocNames(asylumCase, docNamesFromCaseNote);
 
-        System.out.println(actualFormattedDocumentList.toString());
         assertThat(actualFormattedDocumentList.toString()).isEqualTo(expectedFormattedDocumentList.toString());
     }
 
     private Object[] generateOneFileEditedScenarios() {
         AsylumCase asylumCase = new AsylumCase();
         IdValue<DocumentWithMetadata> idDoc = getDocumentWithMetadata(
-            DOC_ID, "some name", "some desc");
+            "id1", "some name", "some desc");
         IdValue<DocumentWithMetadata> idDoc2 = getDocumentWithMetadata(
-            DOC_ID2, "some other name", "some other desc");
+            "id2", "some other name", "some other desc");
         asylumCase.write(LEGAL_REPRESENTATIVE_DOCUMENTS, Arrays.asList(idDoc, idDoc2));
 
-        List<String> doc2IsEdited = Collections.singletonList(DOC_ID2);
-        List<String> doc1IsEdited = Collections.singletonList(DOC_ID);
+        List<String> doc2IsEditedInCaseNote = Collections.singletonList("some other name");
+        List<String> doc1IsEditedInCaseNote = Collections.singletonList("some name");
 
         FormattedDocument expectedFormattedDocumentIsDoc2 =
             new FormattedDocument("some other name", "some other desc");
@@ -62,28 +60,35 @@ public class EditDocumentServiceTest {
         FormattedDocument expectedFormattedDocumentIsDoc1 =
             new FormattedDocument("some name", "some desc");
 
-        return new Object[]{
-            new Object[]{asylumCase, doc2IsEdited,
-                new FormattedDocumentList(Collections.singletonList(expectedFormattedDocumentIsDoc2))},
-            new Object[]{asylumCase, doc1IsEdited,
-                new FormattedDocumentList(Collections.singletonList(expectedFormattedDocumentIsDoc1))}
+        return new Object[] {
+            new Object[] {
+                asylumCase,
+                doc2IsEditedInCaseNote,
+                new FormattedDocumentList(Collections.singletonList(expectedFormattedDocumentIsDoc2))
+            },
+            new Object[] {
+                asylumCase,
+                doc1IsEditedInCaseNote,
+                new FormattedDocumentList(Collections.singletonList(expectedFormattedDocumentIsDoc1))
+            }
         };
     }
 
     private Object[] generateMultipleFilesEditedScenarios() {
         AsylumCase asylumCase = new AsylumCase();
         IdValue<DocumentWithMetadata> idDoc = getDocumentWithMetadata(
-            DOC_ID, "some name", "some desc");
+            "id1", "some name", "some desc");
         IdValue<DocumentWithMetadata> idDoc2 = getDocumentWithMetadata(
-            DOC_ID2, "some other name", "some other desc");
+            "id2", "some other name", "some other desc");
         asylumCase.write(LEGAL_REPRESENTATIVE_DOCUMENTS, Arrays.asList(idDoc, idDoc2));
 
         IdValue<HearingRecordingDocument> idDoc3 = getHearingRecordingDocument(
-            DOC_ID3, "some hearing doc name", "some hearing desc");
+        );
         asylumCase.write(HEARING_RECORDING_DOCUMENTS, Collections.singletonList(idDoc3));
 
-        List<String> doc1AndDoc2AreEdited = Arrays.asList(DOC_ID, DOC_ID2);
-        List<String> doc1AndDoc2AndDoc3AreEdited = Arrays.asList(DOC_ID, DOC_ID2, DOC_ID3);
+        List<String> doc1AndDoc2AreEditedInCaseNote = Arrays.asList("some name", "some other name");
+        List<String> doc1AndDoc2AndDoc3AreEditedInCaseNote =
+            Arrays.asList("some name", "some other name", "some hearing doc name");
 
         FormattedDocument expectedFormattedDocumentIsDoc2 =
             new FormattedDocument("some other name", "some other desc");
@@ -94,11 +99,26 @@ public class EditDocumentServiceTest {
         FormattedDocument expectedFormattedDocumentIsDoc3 =
             new FormattedDocument("some hearing doc name", "some hearing desc");
 
-        return new Object[]{
-            new Object[]{asylumCase, doc1AndDoc2AreEdited, new FormattedDocumentList(
-                Arrays.asList(expectedFormattedDocumentIsDoc1, expectedFormattedDocumentIsDoc2))},
-            new Object[]{asylumCase, doc1AndDoc2AndDoc3AreEdited, new FormattedDocumentList(
-                Arrays.asList(expectedFormattedDocumentIsDoc1, expectedFormattedDocumentIsDoc2, expectedFormattedDocumentIsDoc3))}
+        return new Object[] {
+            new Object[] {
+                asylumCase,
+                doc1AndDoc2AreEditedInCaseNote,
+                new FormattedDocumentList(
+                    Arrays.asList(
+                        expectedFormattedDocumentIsDoc1,
+                        expectedFormattedDocumentIsDoc2
+                    ))
+            },
+            new Object[] {
+                asylumCase,
+                doc1AndDoc2AndDoc3AreEditedInCaseNote,
+                new FormattedDocumentList(
+                    Arrays.asList(
+                        expectedFormattedDocumentIsDoc1,
+                        expectedFormattedDocumentIsDoc2,
+                        expectedFormattedDocumentIsDoc3
+                    ))
+            }
         };
     }
 
@@ -109,10 +129,10 @@ public class EditDocumentServiceTest {
         return new IdValue<>("1", docWithMetadata);
     }
 
-    private IdValue<HearingRecordingDocument> getHearingRecordingDocument(String docId, String filename,
-                                                                          String description) {
-        HearingRecordingDocument hearingRecordingDocument = new HearingRecordingDocument(buildDocument(docId, filename),
-            description);
+    private IdValue<HearingRecordingDocument> getHearingRecordingDocument() {
+        HearingRecordingDocument hearingRecordingDocument =
+            new HearingRecordingDocument(buildDocument("id3", "some hearing doc name"),
+                "some hearing desc");
         return new IdValue<>("1", hearingRecordingDocument);
     }
 

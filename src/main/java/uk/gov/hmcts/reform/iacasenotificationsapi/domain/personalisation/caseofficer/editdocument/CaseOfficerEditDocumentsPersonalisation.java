@@ -88,13 +88,13 @@ public class CaseOfficerEditDocumentsPersonalisation implements EmailNotificatio
         if (caseDetailsBefore == null) {
             return StringUtils.EMPTY;
         }
-        return editDocumentService.getFormattedDocumentsGivenCaseAndDocIds(caseDetailsBefore.getCaseData(),
-            getCaseNoteDocIdsFromCaseNote(asylumCase)).toString();
+        return editDocumentService.getFormattedDocumentsGivenCaseAndDocNames(caseDetailsBefore.getCaseData(),
+            getDocNamesFromCaseNote(asylumCase)).toString();
     }
 
-    private List<String> getCaseNoteDocIdsFromCaseNote(AsylumCase asylumCase) {
+    private List<String> getDocNamesFromCaseNote(AsylumCase asylumCase) {
         String caseNoteDescription = getCaseNoteDescriptionFromCaseNote(asylumCase);
-        String[] temp = StringUtils.substringBetween(caseNoteDescription, "documentIds: [", "]")
+        String[] temp = StringUtils.substringBetween(caseNoteDescription, "Document names: [", "]")
             .split(",");
         return Stream.of(temp).map(String::trim).collect(Collectors.toList());
     }
