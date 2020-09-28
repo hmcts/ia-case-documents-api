@@ -32,6 +32,7 @@ public class StateTest {
         assertEquals("ftpaDecided", State.FTPA_DECIDED.toString());
         assertEquals("ended", State.ENDED.toString());
         assertEquals("appealTakenOffline", State.APPEAL_TAKEN_OFFLINE.toString());
+        assertEquals("pendingPayment", State.PENDING_PAYMENT.toString());
     }
 
     @Test
