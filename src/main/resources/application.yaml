@@ -187,6 +187,7 @@ security:
       - "sendDecisionAndReasons"
       - "adjournHearingWithoutDate"
       - "listCma"
+      - "endAppeal"
     citizen:
       - "startAppeal"
       - "editAppeal"
