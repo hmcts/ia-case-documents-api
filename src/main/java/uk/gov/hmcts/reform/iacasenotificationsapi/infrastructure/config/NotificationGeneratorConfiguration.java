@@ -1393,4 +1393,22 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("paymentPendingPaidNotificationGenerator")
+    public List<NotificationGenerator> paymentPendingPaidLegalRepNotificationHandler(
+            LegalRepresentativePendingPaymentPaidPersonalisation legalRepresentativePendingPaymentPaidPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                legalRepresentativePendingPaymentPaidPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
 }

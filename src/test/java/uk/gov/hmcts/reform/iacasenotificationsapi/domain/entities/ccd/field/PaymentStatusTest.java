@@ -10,6 +10,7 @@ public class PaymentStatusTest {
     public void has_correct_values() {
         assertEquals("Paid", PaymentStatus.PAID.toString());
         assertEquals("Payment due", PaymentStatus.PAYMENT_DUE.toString());
+        assertEquals("Payment pending", PaymentStatus.PAYMENT_PENDING.toString());
         assertEquals("Failed", PaymentStatus.FAILED.toString());
         assertEquals("Payment pending", PaymentStatus.PAYMENT_PENDING.toString());
     }

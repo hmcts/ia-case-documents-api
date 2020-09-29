@@ -74,5 +74,4 @@ public class LegalRepresentativeUnlinkAppealPersonalisation implements EmailNoti
                 .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build();
     }
-
 }

@@ -87,6 +87,14 @@ govnotify:
             email: da72f9c7-5654-40b3-b9e6-c474281b023e
           afterListing:
             email: 933df53d-5700-4ec5-8488-aa33b1541aaa
+    pendingPaymentBeforeListing:
+      legalRep:
+        paid:
+          email: cc80808b-9fa8-4c08-9886-8326aa6bdfba
+    pendingPaymentAfterListing:
+      legalRep:
+        paid:
+          email: a483cf29-c64e-495c-af74-b9e81c3f4a19
     requestRespondentEvidenceDirection:
       appellant:
         email: 9c8ab848-b1f7-4dbe-9854-4922e94ece67
@@ -553,6 +561,7 @@ security:
       - "unlinkAppeal"
       - "uploadAddendumEvidenceAdminOfficer"
       - "endAppeal"
+      - "markAppealPaid"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

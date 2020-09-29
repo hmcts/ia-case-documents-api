@@ -1453,20 +1453,44 @@ public class NotificationHandlerConfiguration {
         );
     }
 
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> paymentPendingPaidLegalRepNotificationHandler(
+            @Qualifier("paymentPendingPaidNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isCorrectAppealTypePA = asylumCase
+                        .read(APPEAL_TYPE, AppealType.class)
+                        .map(type -> type == PA).orElse(false);
+
+                Optional<PaymentStatus> paymentStatus = asylumCase
+                        .read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.MARK_APPEAL_PAID
+                        && isCorrectAppealTypePA
+                        && !paymentStatus.equals(Optional.empty())
+                        && paymentStatus.get().equals(PaymentStatus.PAID);
+            }, notificationGenerators
+        );
+    }
+
     private boolean isPaymentPendingForEaOrHuAppeal(Callback<AsylumCase> callback) {
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         boolean isEaAndHuAppealType = asylumCase
-                .read(APPEAL_TYPE, AppealType.class)
-                .map(type -> type == EA || type == HU).orElse(false);
+            .read(APPEAL_TYPE, AppealType.class)
+            .map(type -> type == EA || type == HU).orElse(false);
 
         String eaHuAppealTypePaymentOption = asylumCase
-                .read(AsylumCaseDefinition.EA_HU_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
+            .read(AsylumCaseDefinition.EA_HU_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
 
         State asylumCaseState = callback.getCaseDetails().getState();
         return asylumCaseState == State.PENDING_PAYMENT
-                && isEaAndHuAppealType
-                && eaHuAppealTypePaymentOption.equals("payOffline");
+               && isEaAndHuAppealType
+               && eaHuAppealTypePaymentOption.equals("payOffline");
     }
 }
 

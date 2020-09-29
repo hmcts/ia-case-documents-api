@@ -73,11 +73,12 @@ public class EventTest {
         assertEquals("editDocuments", Event.EDIT_DOCUMENTS.toString());
         assertEquals("paymentAppeal", Event.PAYMENT_APPEAL.toString());
         assertEquals("requestResponseAmend", Event.REQUEST_RESPONSE_AMEND.toString());
+        assertEquals("markAppealPaid", Event.MARK_APPEAL_PAID.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(66, Event.values().length);
+        assertEquals(67, Event.values().length);
     }
 }

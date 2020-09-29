@@ -31,6 +31,7 @@ public enum State {
     ENDED("ended"),
     APPEAL_TAKEN_OFFLINE("appealTakenOffline"),
 
+
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
 
