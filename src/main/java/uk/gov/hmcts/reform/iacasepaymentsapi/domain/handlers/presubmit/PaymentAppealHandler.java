@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITHOUT_HEARING;
@@ -11,6 +12,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_DESCRIPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_PAYMENT_APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DESCRIPTION;
@@ -122,13 +124,18 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             String orgName = refDataService.getOrganisationResponse().getOrganisationEntityResponse().getName();
             String caseId = String.valueOf(callback.getCaseDetails().getId());
 
+            String appealReferenceNumber = asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)
+                .orElseThrow(() -> new IllegalStateException("Appeal reference number is not present"));
+            String customerReference = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+                .orElseThrow(() -> new IllegalStateException("Legal rep reference number is not present"));
+
             CreditAccountPayment creditAccountPayment = new CreditAccountPayment(
                 pbaAccountNumber.getValue().getCode(),
                 feeSelected.getCalculatedAmount(),
-                caseId,
+                appealReferenceNumber,
                 caseId,
                 Currency.GBP,
-                caseId,
+                customerReference,
                 paymentDescription,
                 orgName,
                 Service.IAC,

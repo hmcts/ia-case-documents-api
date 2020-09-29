@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
@@ -37,6 +38,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithPaymentStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithRefDataStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithServiceAuthStub;
 
+
 public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
         implements WithServiceAuthStub, WithFeeStub, WithPaymentStub, WithIdamStub, WithRefDataStub {
 
@@ -62,6 +64,7 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                 .state(State.APPEAL_STARTED)
                 .caseData(anAsylumCase()
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
+                    .with(LEGAL_REP_REFERENCE_NUMBER, "some-legal-reference")
                     .with(APPEAL_TYPE, "refusalOfEu")
                     .with(DECISION_HEARING_FEE_OPTION, "decisionWithHearing")
                     .with(PAYMENT_ACCOUNT_LIST,
@@ -86,6 +89,7 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                 .state(State.APPEAL_STARTED)
                 .caseData(anAsylumCase()
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
+                    .with(LEGAL_REP_REFERENCE_NUMBER, "some-legal-reference")
                     .with(APPEAL_TYPE, "refusalOfEu")
                     .with(DECISION_HEARING_FEE_OPTION, "decisionWithoutHearing")
                     .with(PAYMENT_ACCOUNT_LIST,

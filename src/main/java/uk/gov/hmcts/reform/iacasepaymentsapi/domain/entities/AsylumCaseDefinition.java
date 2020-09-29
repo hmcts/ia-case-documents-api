@@ -8,6 +8,8 @@ public enum AsylumCaseDefinition {
 
     APPEAL_REFERENCE_NUMBER(
         "appealReferenceNumber", new TypeReference<String>(){}),
+    LEGAL_REP_REFERENCE_NUMBER(
+        "legalRepReferenceNumber", new TypeReference<String>(){}),
     FEE_HEARING_AMOUNT_FOR_DISPLAY(
         "feeHearingAmountForDisplay", new TypeReference<String>(){}),
     FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY(

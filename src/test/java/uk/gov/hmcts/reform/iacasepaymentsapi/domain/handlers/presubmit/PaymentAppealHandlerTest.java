@@ -9,11 +9,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_FOR_DISPLAY;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DESCRIPTION;
@@ -106,6 +108,8 @@ class PaymentAppealHandlerTest {
         when(callback.getCaseDetails().getId()).thenReturn(Long.valueOf("112233445566"));
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("LegRep001"));
         when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
@@ -172,6 +176,8 @@ class PaymentAppealHandlerTest {
         when(callback.getCaseDetails().getId()).thenReturn(Long.valueOf("112233445566"));
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("LegRep001"));
         when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
@@ -389,5 +395,60 @@ class PaymentAppealHandlerTest {
         verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_DUE);
 
         verify(asylumCase, times(1)).clear(PAYMENT_FAILED_FOR_DISPLAY);
+    }
+
+    @Test
+    void should_throw_on_appeal_reference_number_is_null() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(PAYMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("PaymentDescription"));
+        when(refDataService.getOrganisationResponse()).thenReturn(
+            new OrganisationResponse(new OrganisationEntityResponse("ia-legal-rep-org")));
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCode()).thenReturn("FEE0123");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getDescription())
+            .thenReturn("Appeal determined with a hearing");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getVersion()).thenReturn("1");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCalculatedAmount()).thenReturn(BigDecimal.valueOf(140.00));
+
+        when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
+            .thenReturn(Optional.of(new DynamicList("PBA1234567")));
+
+        assertThatThrownBy(() -> appealFeePaymentHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("Appeal reference number is not present");
+    }
+
+    @Test
+    void should_throw_on_legal_rep_reference_is_null() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(PAYMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("PaymentDescription"));
+        when(refDataService.getOrganisationResponse()).thenReturn(
+            new OrganisationResponse(new OrganisationEntityResponse("ia-legal-rep-org")));
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCode()).thenReturn("FEE0123");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getDescription())
+            .thenReturn("Appeal determined with a hearing");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getVersion()).thenReturn("1");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCalculatedAmount()).thenReturn(BigDecimal.valueOf(140.00));
+
+        when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
+            .thenReturn(Optional.of(new DynamicList("PBA1234567")));
+
+        assertThatThrownBy(() -> appealFeePaymentHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("Legal rep reference number is not present");
     }
 }

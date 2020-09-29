@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-started.json",
         "replacements": {
+          "appealReferenceNumber": "PA/50001/2020",
           "appealType": "protection",
           "decisionHearingFeeOption": "decisionWithHearing",
           "homeOfficeDecisionDate": "{$TODAY-14}",

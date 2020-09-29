@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-started.json",
         "replacements": {
+          "appealReferenceNumber": "EA/50001/2020",
           "appealType": "refusalOfEu",
           "decisionHearingFeeOption": "decisionWithHearing",
           "homeOfficeDecisionDate": "{$TODAY-14}",
