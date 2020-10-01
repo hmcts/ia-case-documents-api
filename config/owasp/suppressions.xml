@@ -32,4 +32,11 @@
     <cpe>cpe:/a:apache:log4j:2.12.1</cpe>
     <cve>CVE-2020-9488</cve>
   </suppress>
+  <suppress until="2030-01-01">
+    <notes><![CDATA[
+     Suppressing because application is not exposed to browser and we do not use jsession parameter https://nvd.nist.gov/vuln/detail/CVE-2020-5421
+   ]]></notes>
+    <cpe>cpe:2.3:a:pivotal_software:spring_framework:5.2.3</cpe>
+    <cve>CVE-2020-5421</cve>
+  </suppress>
 </suppressions>
