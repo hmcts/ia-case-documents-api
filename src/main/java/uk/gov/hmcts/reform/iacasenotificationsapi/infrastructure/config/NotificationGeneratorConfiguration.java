@@ -1394,8 +1394,8 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("paymentPendingPaidNotificationGenerator")
-    public List<NotificationGenerator> paymentPendingPaidLegalRepNotificationHandler(
+    @Bean("paymentPendingPaidLegalRepNotificationGenerator")
+    public List<NotificationGenerator> paymentPendingPaidNotificationHandler(
             LegalRepresentativePendingPaymentPaidPersonalisation legalRepresentativePendingPaymentPaidPersonalisation,
             NotificationSender notificationSender,
             NotificationIdAppender notificationIdAppender
@@ -1405,6 +1405,24 @@ public class NotificationGeneratorConfiguration {
                 new EmailNotificationGenerator(
                         newArrayList(
                                 legalRepresentativePendingPaymentPaidPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
+    @Bean("paymentPendingPaidCaseOfficerNotificationGenerator")
+    public List<NotificationGenerator> paymentPendingPaidCaseOfficerNotificationHandler(
+            CaseOfficerPendingPaymentPaidPersonalisation caseOfficerPendingPaymentPaidPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                caseOfficerPendingPaymentPaidPersonalisation
                         ),
                         notificationSender,
                         notificationIdAppender

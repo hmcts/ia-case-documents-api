@@ -95,6 +95,12 @@ govnotify:
       legalRep:
         paid:
           email: a483cf29-c64e-495c-af74-b9e81c3f4a19
+    pendingPaymentEaHu:
+      legalRep:
+        paid:
+          email: cf8eeb5d-f80c-47d9-97e2-48cf3b76b832
+      caseOfficer:
+        email: 759e7336-11ac-437c-be03-a2da44da49ba
     requestRespondentEvidenceDirection:
       appellant:
         email: 9c8ab848-b1f7-4dbe-9854-4922e94ece67

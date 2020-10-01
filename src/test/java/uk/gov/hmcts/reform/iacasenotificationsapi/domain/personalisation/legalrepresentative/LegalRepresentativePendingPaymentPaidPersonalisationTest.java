@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -27,6 +28,7 @@ public class LegalRepresentativePendingPaymentPaidPersonalisationTest {
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "someTemplateId";
     private String afterListingtemplateId = "someTemplateId";
+    private String eaHuTemplateId = "someTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String appealReferenceNumber = "someReferenceNumber";
@@ -36,12 +38,16 @@ public class LegalRepresentativePendingPaymentPaidPersonalisationTest {
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
     private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
+    private AppealType appealTypePa = AppealType.PA;
+    private AppealType appealTypeHu = AppealType.HU;
+    private AppealType appealTypeEa = AppealType.EA;
 
     private LegalRepresentativePendingPaymentPaidPersonalisation legalRepresentativeAppealPendingPaymentPaidPersonalisation;
 
     @Before
     public void setup() {
 
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealTypePa));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
@@ -53,6 +59,7 @@ public class LegalRepresentativePendingPaymentPaidPersonalisationTest {
         legalRepresentativeAppealPendingPaymentPaidPersonalisation = new LegalRepresentativePendingPaymentPaidPersonalisation(
                 beforeListingTemplateId,
                 afterListingtemplateId,
+                eaHuTemplateId,
                 iaExUiFrontendUrl,
                 customerServicesProvider
         );

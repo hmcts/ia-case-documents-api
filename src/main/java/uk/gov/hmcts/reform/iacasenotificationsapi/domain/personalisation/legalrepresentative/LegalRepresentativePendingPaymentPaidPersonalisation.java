@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
@@ -21,18 +22,21 @@ public class LegalRepresentativePendingPaymentPaidPersonalisation implements Ema
 
     private final String legalRepresentativePendingPaymentPaidBeforeListingTemplateId;
     private final String legalRepresentativePendingPaymentPaidAfterListingTemplateId;
+    private final String legalRepresentativePendingPaymentPaidEaHuTemplateId;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativePendingPaymentPaidPersonalisation(
             @Value("${govnotify.template.pendingPaymentBeforeListing.legalRep.paid.email}") String legalRepresentativePendingPaymentPaidBeforeListingTemplateId,
             @Value("${govnotify.template.pendingPaymentAfterListing.legalRep.paid.email}") String legalRepresentativePendingPaymentPaidAfterListingTemplateId,
+            @Value("${govnotify.template.pendingPaymentEaHu.legalRep.paid.email}") String legalRepresentativePendingPaymentPaidEaHuTemplateId,
             @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
             CustomerServicesProvider customerServicesProvider
     ) {
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
         this.legalRepresentativePendingPaymentPaidBeforeListingTemplateId = legalRepresentativePendingPaymentPaidBeforeListingTemplateId;
         this.legalRepresentativePendingPaymentPaidAfterListingTemplateId = legalRepresentativePendingPaymentPaidAfterListingTemplateId;
+        this.legalRepresentativePendingPaymentPaidEaHuTemplateId = legalRepresentativePendingPaymentPaidEaHuTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;
     }
@@ -40,8 +44,24 @@ public class LegalRepresentativePendingPaymentPaidPersonalisation implements Ema
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        return isAppealListed(asylumCase)
-                ? legalRepresentativePendingPaymentPaidAfterListingTemplateId : legalRepresentativePendingPaymentPaidBeforeListingTemplateId;
+        AppealType appealType = asylumCase.read(APPEAL_TYPE, AppealType.class)
+                .orElseThrow(() -> new IllegalStateException("AppealType is not present"));
+
+        String template = "";
+
+        switch (appealType) {
+            case EA:
+            case HU:
+                template = legalRepresentativePendingPaymentPaidEaHuTemplateId;
+                break;
+            case PA:
+                template = isAppealListed(asylumCase)
+                        ? legalRepresentativePendingPaymentPaidAfterListingTemplateId : legalRepresentativePendingPaymentPaidBeforeListingTemplateId;
+                break;
+            default:
+                template = "";
+        }
+        return template;
     }
 
     @Override
