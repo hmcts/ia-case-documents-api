@@ -24,7 +24,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PBA_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.FAILED;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAID;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_DUE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -211,7 +211,7 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         } else {
             asylumCase.write(
                 PAYMENT_STATUS,
-                (paymentResponse.getStatus().equals("Success") ? PAID : PAYMENT_DUE)
+                (paymentResponse.getStatus().equals("Success") ? PAID : PAYMENT_PENDING)
             );
             asylumCase.clear(PAYMENT_FAILED_FOR_DISPLAY);
         }

@@ -26,7 +26,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.FAILED;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAID;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_DUE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -388,11 +388,11 @@ class PaymentAppealHandlerTest {
     @Test
     void should_write_payment_due_when_payment_response_success() {
 
-        when(paymentResponse.getStatus()).thenReturn(("Payment due"));
+        when(paymentResponse.getStatus()).thenReturn(("Payment pending"));
 
         appealFeePaymentHandler.writePaymentResponseStatusToCaseData(paymentResponse, asylumCase);
 
-        verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_DUE);
+        verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_PENDING);
 
         verify(asylumCase, times(1)).clear(PAYMENT_FAILED_FOR_DISPLAY);
     }

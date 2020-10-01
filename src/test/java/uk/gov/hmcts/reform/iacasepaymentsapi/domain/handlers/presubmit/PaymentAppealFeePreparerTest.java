@@ -13,6 +13,8 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_HEARING_AMOUNT_FOR_DISPLAY;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -80,6 +82,8 @@ class PaymentAppealFeePreparerTest {
             .write(APPEAL_FEE_HEARING_DESC, "The fee for an appeal with a hearing is £140");
         verify(asylumCase, times(1))
             .write(FEE_HEARING_AMOUNT_FOR_DISPLAY, "£140");
+        verify(asylumCase, times(1))
+            .write(PAYMENT_STATUS, PAYMENT_PENDING);
     }
 
     @Test
