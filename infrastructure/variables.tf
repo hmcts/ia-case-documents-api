@@ -22,7 +22,7 @@ variable "subscription" {
 variable "ilbIp" {}
 
 variable "common_tags" {
-  type = map(string)
+  type = "map"
 }
 
 variable "capacity" {
