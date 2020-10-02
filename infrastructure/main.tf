@@ -1,6 +1,6 @@
-# Temporary fix for template API version error on deployment
 provider "azurerm" {
-  version = "1.21.0"
+  version = "~> 2.25"
+  features {}
 }
 
 locals {
@@ -26,68 +26,4 @@ data "azurerm_key_vault" "ia_key_vault" {
   resource_group_name = "${local.key_vault_name}"
 }
 
-data "azurerm_key_vault_secret" "test_caseofficer_username" {
-  name      = "test-caseofficer-username"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "test_caseofficer_password" {
-  name      = "test-caseofficer-password"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "test_law_firm_a_username" {
-  name      = "test-law-firm-a-username"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "test_law_firm_a_password" {
-  name      = "test-law-firm-a-password"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "system_username" {
-  name      = "system-username"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "system_password" {
-  name      = "system-password"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "idam_client_id" {
-  name      = "idam-client-id"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "idam_secret" {
-  name      = "idam-secret"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "s2s_secret" {
-  name      = "s2s-secret"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "s2s_microservice" {
-  name      = "s2s-microservice"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "ia_customer_services_telephone" {
-  name      = "customer-services-telephone"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "ia_customer_services_email" {
-  name      = "customer-services-email"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "em_stitching_enabled" {
-  name      = "em-stitching-enabled"
-  vault_uri = "${data.azurerm_key_vault.ia_key_vault.vault_uri}"
-}
 
