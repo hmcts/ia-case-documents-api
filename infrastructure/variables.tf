@@ -1,5 +1,4 @@
 variable "product" {
-  type = "string"
 }
 
 variable "raw_product" {
@@ -7,26 +6,22 @@ variable "raw_product" {
 }
 
 variable "component" {
-  type = "string"
 }
 
 variable "location" {
-  type    = "string"
   default = "UK South"
 }
 
 variable "env" {
-  type = "string"
 }
 
 variable "subscription" {
-  type = "string"
 }
 
 variable "ilbIp" {}
 
 variable "common_tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "capacity" {
@@ -51,8 +46,4 @@ variable "log_level_spring_web" {
 
 variable "log_level_ia" {
   default = "INFO"
-}
-
-variable "enable_ase" {
-  default = false
 }
