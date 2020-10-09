@@ -1,15 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_ARGUMENT_EVIDENCE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
@@ -20,7 +20,7 @@ public class AsylumCaseTest {
 
     private AsylumCase asylumCase;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
     }
@@ -30,7 +30,7 @@ public class AsylumCaseTest {
 
         Optional<String> maybeAppealReferenceNumber = asylumCase.read(APPEAL_REFERENCE_NUMBER);
 
-        assertThat(maybeAppealReferenceNumber.get()).isEqualTo("PA/50222/2019");
+        assertEquals(maybeAppealReferenceNumber.get(), "PA/50222/2019");
     }
 
     @Test
@@ -40,31 +40,26 @@ public class AsylumCaseTest {
 
         IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeCaseArgumentEvidence.get().get(0);
 
-        assertThat(documentWithDescriptionIdValue.getId())
-                .isEqualTo("d019091d-806c-49cf-af64-669fb3d21361");
-        assertThat(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentUrl())
-                .isEqualTo("http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2");
-        assertThat(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentBinaryUrl())
-                .isEqualTo("http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2/binary");
-        assertThat(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentFilename())
-                .isEqualTo("test.doc");
-        assertThat(documentWithDescriptionIdValue.getValue().getDescription().get())
-                .isEqualTo("desc");
+        assertEquals(documentWithDescriptionIdValue.getId(), "d019091d-806c-49cf-af64-669fb3d21361");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentUrl(),
+                "http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentBinaryUrl(),
+                "http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2/binary");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentFilename(), "test.doc");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDescription().get(),"desc");
     }
 
     @Test
     public void reads_simple_type_with_parameter_type_generics() {
 
-        assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get())
-                .isEqualTo("PA/50222/2019");
+        assertEquals(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get(),"PA/50222/2019");
     }
 
     @Test
     public void writes_simple_type() {
         asylumCase.write(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number");
 
-        assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get())
-                .isEqualTo("some-appeal-reference-number");
+        assertEquals(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get(),"some-appeal-reference-number");
     }
 
     @Test
@@ -87,25 +82,19 @@ public class AsylumCaseTest {
         IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeCaseArgumentEvidence.get().get(0);
 
 
-        assertThat(maybeCaseArgumentEvidence.get().size())
-                .isEqualTo(1);
-        assertThat(documentWithDescriptionIdValue.getId())
-                .isEqualTo("some-id");
-        assertThat(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentUrl())
-                .isEqualTo("some-doc-url");
-        assertThat(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentBinaryUrl())
-                .isEqualTo("some-doc-binary-url");
-        assertThat(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentFilename())
-                .isEqualTo("some-doc-filename");
-        assertThat(documentWithDescriptionIdValue.getValue().getDescription().get())
-                .isEqualTo("some-description");
+        assertEquals(maybeCaseArgumentEvidence.get().size(),1);
+        assertEquals(documentWithDescriptionIdValue.getId(),"some-id");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentUrl(),"some-doc-url");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentBinaryUrl(),"some-doc-binary-url");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentFilename(),"some-doc-filename");
+        assertEquals(documentWithDescriptionIdValue.getValue().getDescription().get(),"some-description");
     }
 
     @Test
     public void clears_value() {
         asylumCase.clear(APPEAL_REFERENCE_NUMBER);
 
-        assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).isEmpty();
+        assertEquals(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class), Optional.empty());
     }
 
 }

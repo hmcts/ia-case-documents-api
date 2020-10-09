@@ -1,20 +1,20 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.health;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class ServiceHealthIndicatorTest {
 
@@ -30,7 +30,7 @@ public class ServiceHealthIndicatorTest {
 
     private ServiceHealthIndicator serviceHealthIndicator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         serviceHealthIndicator = new ServiceHealthIndicator(uri, matcher, restTemplate);
     }

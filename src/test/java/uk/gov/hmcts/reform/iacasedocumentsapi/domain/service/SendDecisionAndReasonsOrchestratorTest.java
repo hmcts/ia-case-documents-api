@@ -6,11 +6,11 @@ import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -19,7 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentServiceResponseException;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SendDecisionAndReasonsOrchestratorTest {
 
     @Mock private DocumentHandler documentHandler;
@@ -33,7 +33,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
     private SendDecisionAndReasonsOrchestrator sendDecisionAndReasonsOrchestrator;
     private List<IdValue<DocumentWithMetadata>> existingDecisionAnReasonsDocuments = emptyList();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         sendDecisionAndReasonsOrchestrator =
             new SendDecisionAndReasonsOrchestrator(

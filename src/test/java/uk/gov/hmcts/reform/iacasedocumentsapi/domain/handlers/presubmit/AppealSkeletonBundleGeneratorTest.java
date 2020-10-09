@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
@@ -13,21 +13,19 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 import lombok.Value;
 import org.apache.commons.lang.RandomStringUtils;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
@@ -45,11 +43,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
-@RunWith(JUnitParamsRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AppealSkeletonBundleGeneratorTest {
-
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.LENIENT);
 
     private AppealSkeletonBundleGenerator appealSkeletonBundleGenerator;
 
@@ -75,7 +71,7 @@ public class AppealSkeletonBundleGeneratorTest {
     private String fileExtension = "PDF";
     private String fileName = "some-file-name";
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         appealSkeletonBundleGenerator =
@@ -86,24 +82,19 @@ public class AppealSkeletonBundleGeneratorTest {
                 fileNameQualifier,
                 documentBundler,
                 documentHandler);
-
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_CASE);
     }
 
-    @Test
-    @Parameters(method = "generateDifferentEventScenarios")
+    @ParameterizedTest
+    @MethodSource("generateDifferentEventScenarios")
     public void it_can_handle_callback(TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
 
         boolean canHandle = appealSkeletonBundleGenerator.canHandle(scenario.callbackStage, callback);
 
-        Assertions.assertThat(canHandle).isEqualTo(scenario.isExpected());
+        assertEquals(canHandle, scenario.isExpected());
     }
 
-    private List<TestScenario> generateDifferentEventScenarios() {
+    private static List<TestScenario> generateDifferentEventScenarios() {
         return TestScenario.builder();
     }
 
@@ -133,6 +124,7 @@ public class AppealSkeletonBundleGeneratorTest {
 
     @Test
     public void it_should_not_handle_callback_when_stitching_flag_is_false() {
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_CASE);
 
         when(callback.getEvent()).thenReturn(Event.SUBMIT_CASE);
 
@@ -152,8 +144,11 @@ public class AppealSkeletonBundleGeneratorTest {
 
     @Test
     public void should_call_document_bundler_with_correct_params_and_attach_to_case() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_CASE);
 
-        int expectedBundleSize = 1;
         IdValue<DocumentWithMetadata> legalRepDoc1 = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.APPEAL_SUBMISSION));
         IdValue<DocumentWithMetadata> legalRepDoc2 = new IdValue<>("2", createDocumentWithMetadata(DocumentTag.CASE_ARGUMENT));
 
@@ -170,7 +165,7 @@ public class AppealSkeletonBundleGeneratorTest {
         PreSubmitCallbackResponse<AsylumCase> response =
             appealSkeletonBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
-        assertThat(response.getData()).isEqualTo(asylumCase);
+        assertEquals(response.getData(), asylumCase);
 
         @SuppressWarnings("unchecked")
         ArgumentCaptor<List<DocumentWithMetadata>> captor = ArgumentCaptor.forClass(List.class);
@@ -180,15 +175,19 @@ public class AppealSkeletonBundleGeneratorTest {
         inOrder.verify(documentHandler).addWithMetadata(any(AsylumCase.class), any(Document.class), any(AsylumCaseDefinition.class), any(DocumentTag.class));
 
         List<DocumentWithMetadata> value = captor.getValue();
-        assertThat(value.size()).isEqualTo(expectedBundleSize);
+        int expectedBundleSize = 1;
+        assertEquals(value.size(), expectedBundleSize);
 
         assertThat(value).containsOnlyOnce(legalRepDoc2.getValue());
     }
 
     @Test
     public void should_call_document_bundler_with_when_there_are_no_documents() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_CASE);
 
-        int expectedBundleSize = 0;
         when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.empty());
 
         when(documentBundler.bundle(
@@ -200,7 +199,7 @@ public class AppealSkeletonBundleGeneratorTest {
         PreSubmitCallbackResponse<AsylumCase> response =
             appealSkeletonBundleGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
-        assertThat(response.getData()).isEqualTo(asylumCase);
+        assertEquals(response.getData(), asylumCase);
 
         @SuppressWarnings("unchecked")
         ArgumentCaptor<List<DocumentWithMetadata>> captor = ArgumentCaptor.forClass(List.class);
@@ -210,7 +209,8 @@ public class AppealSkeletonBundleGeneratorTest {
         inOrder.verify(documentHandler).addWithMetadata(any(AsylumCase.class), any(Document.class), any(AsylumCaseDefinition.class), any(DocumentTag.class));
 
         List<DocumentWithMetadata> value = captor.getValue();
-        assertThat(value.size()).isEqualTo(expectedBundleSize);
+        int expectedBundleSize = 0;
+        assertEquals(value.size(), expectedBundleSize);
 
         assertThat(value).isEmpty();
 

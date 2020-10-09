@@ -1,15 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class WitnessDetailsTest {
 
     private final String witnessName = "Some Name";
     private WitnessDetails witnessDetails;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         witnessDetails = new WitnessDetails();
         witnessDetails.setWitnessName(witnessName);

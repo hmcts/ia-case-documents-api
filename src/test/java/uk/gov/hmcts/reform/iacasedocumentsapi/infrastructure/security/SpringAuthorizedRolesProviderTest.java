@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Lists;
@@ -8,17 +8,17 @@ import com.google.common.collect.Sets;
 import java.util.Collections;
 import java.util.List;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SpringAuthorizedRolesProviderTest {
 
     @Mock
@@ -28,7 +28,7 @@ public class SpringAuthorizedRolesProviderTest {
 
     private final AuthorizedRolesProvider authorizedRolesProvider = new SpringAuthorizedRolesProvider();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         SecurityContextHolder.setContext(securityContext);
     }

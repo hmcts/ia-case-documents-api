@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
 import java.util.Optional;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AddressUkTest {
 

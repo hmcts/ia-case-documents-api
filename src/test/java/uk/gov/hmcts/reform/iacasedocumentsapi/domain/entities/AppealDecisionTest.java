@@ -1,17 +1,17 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AppealDecisionTest {
 
     @Test
     public void correct_values_mapped_to_enum() {
 
-        assertThat(AppealDecision.ALLOWED.getValue()).isEqualTo("allowed");
-        assertThat(AppealDecision.DISMISSED.getValue()).isEqualTo("dismissed");
+        assertEquals(AppealDecision.ALLOWED.getValue(), "allowed");
+        assertEquals(AppealDecision.DISMISSED.getValue(), "dismissed");
     }
 
     @Test

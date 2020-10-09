@@ -3,16 +3,17 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import static org.apache.commons.lang.RandomStringUtils.randomAlphabetic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -26,7 +27,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class BundleRequestExecutorTest {
 
@@ -47,21 +48,21 @@ public class BundleRequestExecutorTest {
 
     private BundleRequestExecutor bundleRequestExecutor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         bundleRequestExecutor = new BundleRequestExecutor(
                 restTemplate,
                 serviceAuthTokenGenerator,
                 userDetailsProvider
         );
-
-        when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
-        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
-        when(userDetails.getAccessToken()).thenReturn(ACCESS_TOKEN);
     }
 
     @Test
     public void should_invoke_endpoint_with_given_payload_and_return_200_with_no_errors() {
+
+        when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
+        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
+        when(userDetails.getAccessToken()).thenReturn(ACCESS_TOKEN);
 
         when(restTemplate
                 .exchange(
@@ -81,7 +82,7 @@ public class BundleRequestExecutorTest {
                 );
 
         assertThat(response).isNotNull();
-        assertThat(response).isEqualTo(callbackResponse);
+        assertEquals(response, callbackResponse);
 
         ArgumentCaptor<HttpEntity> requestEntityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
@@ -100,11 +101,11 @@ public class BundleRequestExecutorTest {
         final String actualAuthorizationHeader = actualRequestEntity.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         final Callback<AsylumCase> actualPostBody = (Callback<AsylumCase>) actualRequestEntity.getBody();
 
-        assertThat(actualContentTypeHeader).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
-        assertThat(actualAcceptHeader).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
-        assertThat(actualServiceAuthorizationHeader).isEqualTo(SERVICE_TOKEN);
-        assertThat(actualAuthorizationHeader).isEqualTo(ACCESS_TOKEN);
-        assertThat(actualPostBody).isEqualTo(callback);
+        assertEquals(actualContentTypeHeader, MediaType.APPLICATION_JSON_VALUE);
+        assertEquals(actualAcceptHeader, MediaType.APPLICATION_JSON_VALUE);
+        assertEquals(actualServiceAuthorizationHeader, SERVICE_TOKEN);
+        assertEquals(actualAuthorizationHeader, ACCESS_TOKEN);
+        assertEquals(actualPostBody, callback);
 
     }
 
@@ -122,6 +123,10 @@ public class BundleRequestExecutorTest {
 
     @Test
     public void should_handle_http_server_exception_when_calling_api() {
+
+        when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
+        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
+        when(userDetails.getAccessToken()).thenReturn(ACCESS_TOKEN);
 
         HttpServerErrorException underlyingException = mock(HttpServerErrorException.class);
 
@@ -142,6 +147,10 @@ public class BundleRequestExecutorTest {
 
     @Test
     public void should_handle_http_client_exception_when_calling_api() {
+
+        when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
+        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
+        when(userDetails.getAccessToken()).thenReturn(ACCESS_TOKEN);
         HttpClientErrorException underlyingException = mock(HttpClientErrorException.class);
 
         when(restTemplate

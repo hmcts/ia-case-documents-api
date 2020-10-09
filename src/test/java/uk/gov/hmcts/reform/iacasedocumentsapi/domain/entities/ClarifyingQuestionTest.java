@@ -1,9 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ClarifyingQuestionTest {
     private final String expectedQuestion = "question";
@@ -11,7 +10,7 @@ public class ClarifyingQuestionTest {
 
     @Test
     public void pointlessTestToGetCodeCoverageUp() {
-        assertThat(clarifyingQuestion.getQuestion(), is(expectedQuestion));
+        assertEquals(clarifyingQuestion.getQuestion(), expectedQuestion);
     }
 }
 

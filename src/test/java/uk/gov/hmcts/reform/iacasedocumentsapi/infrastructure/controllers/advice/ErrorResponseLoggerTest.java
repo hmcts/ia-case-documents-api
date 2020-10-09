@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import ch.qos.logback.classic.Logger;
@@ -8,18 +9,18 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import com.google.common.collect.ImmutableSet;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClientResponseException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class ErrorResponseLoggerTest {
 
@@ -34,7 +35,7 @@ public class ErrorResponseLoggerTest {
 
     private ListAppender<ILoggingEvent> listAppender;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         Logger responseLogger = (Logger) LoggerFactory.getLogger(ErrorResponseLogger.class);
@@ -55,10 +56,10 @@ public class ErrorResponseLoggerTest {
         errorResponseLogger.maybeLogErrorsListResponse(preSubmitCallbackResponse);
 
         List<ILoggingEvent> logEvents = this.listAppender.list;
-        assertThat(logEvents.size()).isEqualTo(2);
+        assertEquals(logEvents.size(), 2);
 
-        assertThat(logEvents.get(0).getFormattedMessage()).isEqualTo(error1);
-        assertThat(logEvents.get(1).getFormattedMessage()).isEqualTo(error2);
+        assertEquals(logEvents.get(0).getFormattedMessage(), error1);
+        assertEquals(logEvents.get(1).getFormattedMessage(), error2);
 
         verify(preSubmitCallbackResponse).getErrors();
 
@@ -72,7 +73,7 @@ public class ErrorResponseLoggerTest {
         errorResponseLogger.maybeLogErrorsListResponse(preSubmitCallbackResponse);
 
         List<ILoggingEvent> logEvents = this.listAppender.list;
-        assertThat(logEvents.size()).isEqualTo(0);
+        assertEquals(logEvents.size(), 0);
 
         verify(preSubmitCallbackResponse).getErrors();
 
@@ -89,7 +90,7 @@ public class ErrorResponseLoggerTest {
         errorResponseLogger.maybeLogException(restClientResponseException);
 
         List<ILoggingEvent> logEvents = this.listAppender.list;
-        assertThat(logEvents.size()).isEqualTo(1);
+        assertEquals(logEvents.size(), 1);
 
         assertThat(logEvents.get(0).getFormattedMessage())
             .startsWith("Error returned with status: "
@@ -109,7 +110,7 @@ public class ErrorResponseLoggerTest {
         errorResponseLogger.maybeLogException(exception);
 
         List<ILoggingEvent> logEvents = this.listAppender.list;
-        assertThat(logEvents.size()).isEqualTo(0);
+        assertEquals(logEvents.size(), 0);
 
         verifyNoInteractions(restClientResponseException);
 

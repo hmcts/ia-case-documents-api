@@ -10,30 +10,42 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.DECISION_AND_REASONS_DRAFT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.DECISION;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
+import ru.lanwen.wiremock.ext.WiremockResolver;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
 
-public class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest {
+public class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest implements WithServiceAuthStub,
+        WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder {
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
-    public void generates_decision_and_reasons() {
+    public void generates_decision_and_reasons(
+            @WiremockResolver.Wiremock(factory = StaticPortWiremockFactory.class) WireMockServer server
+    ) {
 
-        given.someLoggedIn(userWith()
+        addServiceAuthStub(server);
+        addDocumentUploadStub(server);
+        addDocumentUploadStub(server);
+        withDefaults(server);
+        //addUserInfoStub(server);
+
+        someLoggedIn(userWith()
             .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))
             .forename("Case")
-            .surname("Officer"));
+            .surname("Officer"), server);
 
-        given.docmosisWillReturnSomeDocument();
-        given.theDocoumentsManagementApiIsAvailable();
+        docmosisWillReturnSomeDocument(server);
+        theDocoumentsManagementApiIsAvailable(server);
 
         PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.GENERATE_DECISION_AND_REASONS)

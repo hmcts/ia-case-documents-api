@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em;
 
 import static java.util.Collections.singletonList;
 import static org.apache.commons.lang.RandomStringUtils.randomAlphabetic;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Constructor;
@@ -10,8 +10,8 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -32,7 +32,7 @@ public class BundleTest {
     private String filename = someRandomString();
     private Bundle bundle;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         bundle = new Bundle(
             id,
@@ -50,16 +50,16 @@ public class BundleTest {
 
     @Test
     public void buildsObjectCorrectly() {
-        assertThat(bundle.getId()).isEqualTo(id);
-        assertThat(bundle.getTitle()).isEqualTo(title);
-        assertThat(bundle.getDescription()).isEqualTo(description);
-        assertThat(bundle.getEligibleForStitching()).isEqualTo(eligibleForStitching);
-        assertThat(bundle.getDocuments()).isEqualTo(documents);
-        assertThat(bundle.getStitchStatus()).isEqualTo(stitchStatus);
-        assertThat(bundle.getStitchedDocument()).isEqualTo(stitchedDocument);
-        assertThat(bundle.getHasCoversheets()).isEqualTo(hasCoversheets);
-        assertThat(bundle.getHasTableOfContents()).isEqualTo(hasTableOfContents);
-        assertThat(bundle.getFilename()).isEqualTo(filename);
+        assertEquals(bundle.getId(), id);
+        assertEquals(bundle.getTitle(), title);
+        assertEquals(bundle.getDescription(), description);
+        assertEquals(bundle.getEligibleForStitching(), eligibleForStitching);
+        assertEquals(bundle.getDocuments(), documents);
+        assertEquals(bundle.getStitchStatus(), stitchStatus);
+        assertEquals(bundle.getStitchedDocument(), stitchedDocument);
+        assertEquals(bundle.getHasCoversheets(), hasCoversheets);
+        assertEquals(bundle.getHasTableOfContents(), hasTableOfContents);
+        assertEquals(bundle.getFilename(), filename);
     }
 
     @Test
@@ -77,8 +77,8 @@ public class BundleTest {
             filename
         );
 
-        assertThat(bundle.getStitchStatus()).isEqualTo(Optional.empty());
-        assertThat(bundle.getStitchedDocument()).isEqualTo(Optional.empty());
+        assertEquals(bundle.getStitchStatus(), Optional.empty());
+        assertEquals(bundle.getStitchedDocument(), Optional.empty());
 
     }
 
@@ -87,8 +87,8 @@ public class BundleTest {
 
         bundle = findPrivateNoArgsConstructor(Bundle.class).newInstance();
 
-        assertThat(bundle.getStitchStatus()).isEqualTo(Optional.empty());
-        assertThat(bundle.getStitchedDocument()).isEqualTo(Optional.empty());
+        assertEquals(bundle.getStitchStatus(), Optional.empty());
+        assertEquals(bundle.getStitchedDocument(), Optional.empty());
 
     }
 

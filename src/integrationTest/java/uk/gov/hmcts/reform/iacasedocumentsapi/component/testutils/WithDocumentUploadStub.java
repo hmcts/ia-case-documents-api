@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.utilities;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.matching.RequestPatternBuilder.newRequestPattern;
@@ -8,12 +8,12 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 
-public interface DocmosisStub {
+public interface WithDocumentUploadStub {
 
-    default void withDefaults(WireMockServer server) {
+    default void addDocumentUploadStub(WireMockServer server) {
         server.addStubMapping(
                 new StubMapping(
-                        newRequestPattern(RequestMethod.POST, urlEqualTo("/docmosis"))
+                        newRequestPattern(RequestMethod.POST, urlEqualTo("/documents"))
                                 .build(),
                         aResponse()
                                 .withStatus(201)

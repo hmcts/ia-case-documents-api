@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -25,7 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class AppealSubmissionTemplateTest {
 
@@ -56,6 +56,17 @@ public class AppealSubmissionTemplateTest {
     private String newMatters = "Some new matters";
     private String email = "someone@something.com";
     private String mobileNumber = "07987654321";
+    private String appellantTitle = "Mr";
+
+    private AddressUk addressUk = new AddressUk(
+            appellantAddressLine1,
+            appellantAddressLine2,
+            appellantAddressLine3,
+            appellantAddressPostTown,
+            appellantAddressCounty,
+            appellantAddressPostCode,
+            appellantAddressCountry
+    );
 
     private List<String> appealGroundsForDisplay = Arrays.asList(
             "protectionRefugeeConvention",
@@ -81,7 +92,7 @@ public class AppealSubmissionTemplateTest {
 
     private AppealSubmissionTemplate appealSubmissionTemplate;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         appealSubmissionTemplate =
@@ -89,49 +100,6 @@ public class AppealSubmissionTemplateTest {
                         templateName,
                         stringProvider
                 );
-
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
-
-        when(applicationOutOfTimeDocument.getDocumentFilename()).thenReturn(outOfTimeDocumentFileName);
-
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
-        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.of(homeOfficeDecisionDate));
-        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
-        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
-        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
-        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
-        when(asylumCase.read(EMAIL, String.class)).thenReturn(Optional.of(email));
-
-        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(APPELLANT_ADDRESS)).thenReturn(Optional.of(
-                new AddressUk(
-                        appellantAddressLine1,
-                        appellantAddressLine2,
-                        appellantAddressLine3,
-                        appellantAddressPostTown,
-                        appellantAddressCounty,
-                        appellantAddressPostCode,
-                        appellantAddressCountry
-                )
-        ));
-
-        when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
-        when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
-        when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.of(otherAppeals));
-        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.of(outOfTimeExplanation));
-        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.of(applicationOutOfTimeDocument));
-
-        when(stringProvider.get("appealType", appealType)).thenReturn(Optional.of("The revocation of a protection status"));
-        when(stringProvider.get("isoCountries", "FI")).thenReturn(Optional.of("Finland"));
-        when(stringProvider.get("isoCountries", "IS")).thenReturn(Optional.of("Iceland"));
-        when(stringProvider.get("appealGrounds", "protectionRefugeeConvention")).thenReturn(Optional.of("Refugee convention"));
-        when(stringProvider.get("appealGrounds", "protectionHumanRights")).thenReturn(Optional.of("Human rights"));
     }
 
     @Test
@@ -142,6 +110,46 @@ public class AppealSubmissionTemplateTest {
 
     @Test
     public void should_map_case_data_to_template_field_values() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.of(homeOfficeDecisionDate));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+        when(asylumCase.read(EMAIL, String.class)).thenReturn(Optional.of(email));
+        when(asylumCase.read(APPELLANT_ADDRESS)).thenReturn(Optional.of(addressUk));
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
+        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
+        when(asylumCase.read(APPELLANT_TITLE, String.class)).thenReturn(Optional.of(appellantTitle));
+
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(stringProvider.get("appealType", appealType)).thenReturn(Optional.of(appealType));
+
+
+        when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
+        when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
+        when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.of(otherAppeals));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.of(outOfTimeExplanation));
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.of(applicationOutOfTimeDocument));
+
+        when(stringProvider.get("isoCountries", "IS")).thenReturn(Optional.of("Iceland"));
+        when(stringProvider.get("isoCountries", "FI")).thenReturn(Optional.of("Finland"));
+
+        when(stringProvider.get("appealGrounds", "protectionRefugeeConvention")).thenReturn(Optional.of("Refugee convention"));
+
+        when(stringProvider.get("appealGrounds", "protectionHumanRights")).thenReturn(Optional.of("Human rights"));
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -155,7 +163,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals("31121999", templateFieldValues.get("appellantDateOfBirth"));
-        assertEquals("The revocation of a protection status", templateFieldValues.get("appealType"));
+        assertEquals(appealType, templateFieldValues.get("appealType"));
         assertEquals(newMatters, templateFieldValues.get("newMatters"));
 
         assertEquals(7, ((Map) templateFieldValues.get("appellantAddress")).size());
@@ -179,7 +187,7 @@ public class AppealSubmissionTemplateTest {
 
         assertEquals(outOfTimeExplanation, templateFieldValues.get("applicationOutOfTimeExplanation"));
         assertEquals(YesOrNo.YES, templateFieldValues.get("submissionOutOfTime"));
-        assertEquals(outOfTimeDocumentFileName, templateFieldValues.get("applicationOutOfTimeDocumentName"));
+        assertEquals("", templateFieldValues.get("applicationOutOfTimeDocumentName"));
 
         assertEquals(wantsEmail, templateFieldValues.get("wantsEmail"));
         assertEquals(email, templateFieldValues.get("email"));
@@ -188,27 +196,31 @@ public class AppealSubmissionTemplateTest {
     @Test
     public void should_not_add_appeal_type_if_not_present() {
 
-        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
 
-        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.of(homeOfficeDecisionDate));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
+        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_TITLE, String.class)).thenReturn(Optional.of(appellantTitle));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of(mobileNumber));
 
-        assertEquals(24, templateFieldValues.size());
-        assertFalse(templateFieldValues.containsKey("appealType"));
-    }
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-    @Test
-    public void should_not_add_address_if_no_fixed_address_exists() {
-
-        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-
-        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(24, templateFieldValues.size());
-        assertFalse(templateFieldValues.containsKey("appellantAddress"));
-    }
-
-    @Test
-    public void should_be_tolerant_of_missing_data() {
+        when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
+        when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
+        when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.of(otherAppeals));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.of(outOfTimeExplanation));
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.of(applicationOutOfTimeDocument));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -216,7 +228,125 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
+        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.empty());
+        when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(22, templateFieldValues.size());
+        assertFalse(templateFieldValues.containsKey("appealType"));
+    }
+
+    @Test
+    public void should_not_add_address_if_no_fixed_address_exists() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.of(homeOfficeDecisionDate));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
+        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_TITLE, String.class)).thenReturn(Optional.of(appellantTitle));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of(mobileNumber));
+
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
+        when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
+        when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.of(otherAppeals));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.of(outOfTimeExplanation));
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.of(applicationOutOfTimeDocument));
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
+        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.empty());
+        when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(22, templateFieldValues.size());
+        assertFalse(templateFieldValues.containsKey("appellantAddress"));
+    }
+
+    @Test
+    public void should_be_tolerant_of_missing_data() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.of(homeOfficeDecisionDate));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
+        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_TITLE, String.class)).thenReturn(Optional.of(appellantTitle));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of(mobileNumber));
+
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
+        when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
+        when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.of(otherAppeals));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.of(outOfTimeExplanation));
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.of(applicationOutOfTimeDocument));
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+
         when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
@@ -255,6 +385,6 @@ public class AppealSubmissionTemplateTest {
         assertEquals("", templateFieldValues.get("applicationOutOfTimeExplanation"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("submissionOutOfTime"));
         assertEquals("", templateFieldValues.get("applicationOutOfTimeDocumentName"));
-        assertEquals("", templateFieldValues.get("mobileNumber"));
+        assertEquals("07987654321", templateFieldValues.get("mobileNumber"));
     }
 }

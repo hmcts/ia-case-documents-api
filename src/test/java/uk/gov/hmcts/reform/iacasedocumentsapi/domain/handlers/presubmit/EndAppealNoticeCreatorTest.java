@@ -1,16 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
 
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -24,7 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class EndAppealNoticeCreatorTest {
 
@@ -41,7 +41,7 @@ public class EndAppealNoticeCreatorTest {
 
     private EndAppealNoticeCreator endAppealNoticeCreator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         endAppealNoticeCreator =
@@ -49,16 +49,15 @@ public class EndAppealNoticeCreatorTest {
                 endAppealNoticeDocumentCreator,
                 documentHandler
             );
+    }
 
+    @Test
+    public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.END_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(endAppealNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-    }
-
-    @Test
-    public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

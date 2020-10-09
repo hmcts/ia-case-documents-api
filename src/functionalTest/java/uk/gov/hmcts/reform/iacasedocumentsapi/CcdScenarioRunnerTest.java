@@ -46,7 +46,7 @@ public class CcdScenarioRunnerTest {
     @Autowired private List<Verifier> verifiers;
 
     @Before
-    public void setUp() {
+    public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
@@ -62,8 +62,8 @@ public class CcdScenarioRunnerTest {
         }
 
         assertFalse(
-            "Verifiers are configured",
-            verifiers.isEmpty()
+                "Verifiers are configured",
+                verifiers.isEmpty()
         );
 
         String scenarioPattern = System.getProperty("scenario");

@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.restassured.RestAssured;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,18 +16,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("functional")
-public class LivenessProbeTest {
+class LivenessProbeTest {
 
     @Value("${targetInstance}") private String targetInstance;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
-    public void should_ping_liveness_endpoint_and_get_ok() {
+    void should_ping_liveness_endpoint_and_get_ok() {
 
         String response = SerenityRest
             .given()

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import ch.qos.logback.classic.Logger;
@@ -8,12 +9,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentServiceResponseException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentStitchingErrorResponseException;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class CallbackControllerAdviceTest {
 
@@ -43,10 +44,9 @@ public class CallbackControllerAdviceTest {
 
     private String testExceptionMessage;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
-        when(httpServletRequest.getAttribute("CCDCaseId")).thenReturn("Case12345");
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
 
         Logger controllerAdviceLogger = (Logger) LoggerFactory.getLogger(CallbackControllerAdvice.class);
@@ -56,13 +56,13 @@ public class CallbackControllerAdviceTest {
 
         testExceptionMessage = "Test exception message!";
 
-        doNothing().when(errorResponseLogger).maybeLogErrorsListResponse(any());
-        doNothing().when(errorResponseLogger).maybeLogException(any());
-
     }
 
     @Test
     public void should_handle_stitching_exception_and_log_message_correctly() {
+        when(httpServletRequest.getAttribute("CCDCaseId")).thenReturn("Case12345");
+
+        doNothing().when(errorResponseLogger).maybeLogErrorsListResponse(any());
 
         DocumentStitchingErrorResponseException ex =
             new DocumentStitchingErrorResponseException(testExceptionMessage, preSubmitCallbackResponse);
@@ -71,10 +71,10 @@ public class CallbackControllerAdviceTest {
         ResponseEntity<String> responseEntity =
             callbackControllerAdvice.handleDocumentStitchingErrorResponseException(httpServletRequest, ex);
 
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         List<ILoggingEvent> logEvents = this.listAppender.list;
-        assertThat(logEvents.size()).isEqualTo(1);
+        assertEquals(logEvents.size(), 1);
 
         assertThat(logEvents.get(0).getFormattedMessage())
             .isLessThanOrEqualTo(logMessage + ex.getMessage() + ".");
@@ -87,18 +87,18 @@ public class CallbackControllerAdviceTest {
     public void should_handle_document_service_exception() {
 
         DocumentServiceResponseException ex = mock(DocumentServiceResponseException.class);
-        String logMessage = "Document service Exception with message: ";
 
         when(ex.getMessage()).thenReturn(testExceptionMessage);
 
         ResponseEntity<String> responseEntity =
             callbackControllerAdvice.handleDocumentServiceResponseException(httpServletRequest, ex);
 
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         List<ILoggingEvent> logEvents = this.listAppender.list;
 
-        assertThat(logEvents.size()).isEqualTo(1);
+        assertEquals(logEvents.size(), 1);
+        String logMessage = "Document service Exception with message: ";
         assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + testExceptionMessage + ".");
 
         verify(errorResponseLogger).maybeLogException(any());
@@ -113,11 +113,11 @@ public class CallbackControllerAdviceTest {
         ResponseEntity<String> responseEntity =
             callbackControllerAdvice.handleDocumentServiceResponseException(httpServletRequest, ex);
 
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         List<ILoggingEvent> logEvents = this.listAppender.list;
 
-        assertThat(logEvents.size()).isEqualTo(1);
+        assertEquals(logEvents.size(), 1);
         assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
     }
