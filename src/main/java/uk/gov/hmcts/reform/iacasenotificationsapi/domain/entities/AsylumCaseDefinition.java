@@ -236,6 +236,18 @@ public enum AsylumCaseDefinition {
         "paAppealTypePaymentOption", new TypeReference<String>(){}),
     EA_HU_APPEAL_TYPE_PAYMENT_OPTION(
             "eaHuAppealTypePaymentOption", new TypeReference<String>() {}),
+
+    STATE_BEFORE_END_APPEAL(
+            "stateBeforeEndAppeal", new TypeReference<State>(){}),
+
+    REINSTATE_APPEAL_DATE(
+            "reinstateAppealDate", new TypeReference<String>(){}),
+
+    REINSTATE_APPEAL_REASON(
+            "reinstateAppealReason", new TypeReference<String>(){}),
+
+    REINSTATED_DECISION_MAKER(
+            "reinstatedDecisionMaker", new TypeReference<String>(){}),
     ;
 
     private final String value;

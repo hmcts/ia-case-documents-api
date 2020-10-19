@@ -7,6 +7,8 @@ respondentEmailAddresses:
 
 apcPrivateHomeOfficeEmailAddress: not-used-in-integration
 feesAdminOfficerEmailAddress: not-used-in-integration
+apcHomeOfficeEmailAddress: not-used-in-integration
+lartHomeOfficeEmailAddress: not-used-in-integration
 
 idam:
   s2s-authorised:

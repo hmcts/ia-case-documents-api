@@ -53,3 +53,5 @@ java:
         - s2s-microservice
         - AppInsightsInstrumentationKey
         - fees-admin-officer-email
+        - home-office-email-apc
+        - home-office-email-lart

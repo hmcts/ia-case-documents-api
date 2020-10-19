@@ -1429,4 +1429,24 @@ public class NotificationGeneratorConfiguration {
                 )
         );
     }
+
+    @Bean("reinstateAppealNotificationGenerator")
+    public List<NotificationGenerator> reinstateAppealNotificationHandler(
+            LegalRepresentativeReinstateAppealPersonalisation legalRepresentativeReinstateAppealPersonalisation,
+            HomeOfficeReinstateAppealPersonalisation homeOfficeReinstateAppealPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                legalRepresentativeReinstateAppealPersonalisation,
+                                homeOfficeReinstateAppealPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
 }

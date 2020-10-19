@@ -1532,6 +1532,17 @@ public class NotificationHandlerConfiguration {
                && isEaAndHuAppealType
                && eaHuAppealTypePaymentOption.equals("payOffline");
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> reinstateAppealNotificationHandler(
+            @Qualifier("reinstateAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->  callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.REINSTATE_APPEAL,
+            notificationGenerators
+        );
+    }
 }
 
 
