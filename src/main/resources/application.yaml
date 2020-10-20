@@ -196,6 +196,7 @@ security:
     caseworker-ia-iacjudge:
       - "generateDecisionAndReasons"
       - "endAppeal"
+      - "changeDirectionDueDate"
       - "sendDecisionAndReasons"
 
 
