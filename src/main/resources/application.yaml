@@ -607,7 +607,11 @@ security:
       - "sendDirection"
       - "leadershipJudgeFtpaDecision"
       - "residentJudgeFtpaDecision"
+      - "linkAppeal"
+      - "unlinkAppeal"
+      - "updateHearingAdjustments"
       - "reinstateAppeal"
+      - "editAppealAfterSubmit"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
 
