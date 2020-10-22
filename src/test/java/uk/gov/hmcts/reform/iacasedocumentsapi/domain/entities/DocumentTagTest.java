@@ -15,6 +15,7 @@ public class DocumentTagTest {
         assertEquals("additionalEvidence", DocumentTag.ADDITIONAL_EVIDENCE.toString());
         assertEquals("hearingRequirements", DocumentTag.HEARING_REQUIREMENTS.toString());
         assertEquals("hearingNotice", DocumentTag.HEARING_NOTICE.toString());
+        assertEquals("reheardHearingNotice", DocumentTag.REHEARD_HEARING_NOTICE.toString());
         assertEquals("caseSummary", DocumentTag.CASE_SUMMARY.toString());
         assertEquals("hearingBundle", DocumentTag.HEARING_BUNDLE.toString());
         assertEquals("addendumEvidence", DocumentTag.ADDENDUM_EVIDENCE.toString());
@@ -29,6 +30,6 @@ public class DocumentTagTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(19, DocumentTag.values().length);
+        assertEquals(20, DocumentTag.values().length);
     }
 }

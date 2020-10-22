@@ -61,6 +61,9 @@ public enum AsylumCaseDefinition {
     HEARING_DOCUMENTS(
         "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    REHEARD_HEARING_DOCUMENTS(
+        "reheardHearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     LEGAL_REPRESENTATIVE_EMAIL_ADDRESS(
         "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
 
@@ -299,7 +302,15 @@ public enum AsylumCaseDefinition {
         "paymentStatus", new TypeReference<PaymentStatus>(){}),
 
     PA_APPEAL_TYPE_PAYMENT_OPTION(
-        "paAppealTypePaymentOption", new TypeReference<String>() {});
+        "paAppealTypePaymentOption", new TypeReference<String>() {}),
+
+    IS_REHEARD_APPEAL_ENABLED(
+        "isReheardAppealEnabled", new TypeReference<YesOrNo>() {}),
+
+    CASE_FLAG_SET_ASIDE_REHEARD_EXISTS(
+        "caseFlagSetAsideReheardExists", new TypeReference<YesOrNo>() {}),
+
+    ;
 
 
     private final String value;

@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,13 +20,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class HearingNoticeEditedCreatorTest {
+class HearingNoticeEditedCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator;
@@ -56,7 +57,7 @@ public class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
+    void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -82,11 +83,77 @@ public class HearingNoticeEditedCreatorTest {
 
         verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
-        //verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
-    public void should_create_hearing_notice_pdf_for_updated_hearing_date_and_append_to_legal_representative_documents_for_the_case() {
+    void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_feature_flag_enabled() {
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        final String listCaseHearingCentre = hearingCentreNameBefore;
+        final String hearingDate = oldHearingDate;
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+    }
+
+    @Test
+    void should_create_reheard_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        final String listCaseHearingCentre = hearingCentreNameBefore;
+        final String hearingDate = oldHearingDate;
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
+    }
+
+    @Test
+    void should_create_hearing_notice_pdf_for_updated_hearing_date_and_append_to_legal_representative_documents_for_the_case() {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -115,7 +182,7 @@ public class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    public void should_create_hearing_notice_pdf_for_updated_hearing_centre_and_append_to_legal_representative_documents_for_the_case() {
+    void should_create_hearing_notice_pdf_for_updated_hearing_centre_and_append_to_legal_representative_documents_for_the_case() {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -144,7 +211,7 @@ public class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    public void should_throw_when_no_previous_case_data_exists() {
+    void should_throw_when_no_previous_case_data_exists() {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -163,7 +230,7 @@ public class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    public void handling_should_throw_if_cannot_actually_handle() {
+    void handling_should_throw_if_cannot_actually_handle() {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
 
@@ -178,7 +245,7 @@ public class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    public void it_can_handle_callback() {
+    void it_can_handle_callback() {
 
         for (Event event : Event.values()) {
 
@@ -201,7 +268,7 @@ public class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    public void should_not_allow_null_arguments() {
+    void should_not_allow_null_arguments() {
         assertThatThrownBy(() -> hearingNoticeEditedCreator.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
