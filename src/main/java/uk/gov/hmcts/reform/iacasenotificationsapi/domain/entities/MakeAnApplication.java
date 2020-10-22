@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;

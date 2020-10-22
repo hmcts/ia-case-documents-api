@@ -510,6 +510,53 @@ govnotify:
             email: e28932bc-9052-47b9-a5a4-b8bc49305302
           homeOffice:
             email: c2cb4dd6-4cc2-4d06-a1eb-5d42e31ad9d2
+    decideAnApplication:
+        granted:
+          applicant:
+            legalRep:
+              beforeListing:
+                email: b9ec482d-d3f6-4e36-b756-c6d1e29eb482
+              afterListing:
+                email: 472896a3-2acc-4af7-b4b1-f65c5f53abe2
+            homeOffice:
+              beforeListing:
+                email: cd1b4b5f-cf65-45f1-9717-806b1abe4ab1
+              afterListing:
+                email: 2b712882-6377-4195-83d0-8ec0dc684828
+          otherParty:
+            legalRep:
+              beforeListing:
+                email: b682f9d6-3e3b-417f-a7e6-40e1799fedff
+              afterListing:
+                email: 16e9a378-42ba-47f6-8a77-54a6bd014479
+            homeOffice:
+              beforeListing:
+                email: 749aef0b-29f3-4942-bafc-21472a661646
+              afterListing:
+                  email: d9e0eef7-da80-4afa-b961-5cd362aa0880
+        refused:
+          applicant:
+            legalRep:
+              beforeListing:
+                email: a60a249e-15da-43d3-a779-c669d6daf5a0
+              afterListing:
+                email: 43714ecc-fd55-459b-bf32-9e447f532937
+            homeOffice:
+              beforeListing:
+                email: 213d2ec4-fe7a-4e73-8941-f98738ed4cb8
+              afterListing:
+                email: e11411e8-4360-480c-a3f9-0716f7e2e376
+          otherParty:
+            legalRep:
+              beforeListing:
+                email: 710094df-7e93-44f3-b3f6-8d52845e22f6
+              afterListing:
+                email: 79bd9411-09ce-4724-8a89-17dbbed3317b
+            homeOffice:
+              beforeListing:
+                email: 850a3cff-a60c-4eec-9e94-a2dc42cfbaeb
+              afterListing:
+                email: f5f65291-9440-4af7-897b-3c9fa957e51a
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -600,6 +647,7 @@ security:
       - "editDocuments"
       - "requestResponseAmend"
       - "reinstateAppeal"
+      - "decideAnApplication"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -648,6 +696,7 @@ security:
       - "updateHearingAdjustments"
       - "reinstateAppeal"
       - "editAppealAfterSubmit"
+      - "decideAnApplication"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
 

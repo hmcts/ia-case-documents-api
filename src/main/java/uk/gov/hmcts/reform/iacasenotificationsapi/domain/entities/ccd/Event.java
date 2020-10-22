@@ -72,6 +72,7 @@ public enum Event {
     MARK_APPEAL_PAID("markAppealPaid"),
     REINSTATE_APPEAL("reinstateAppeal"),
     MAKE_AN_APPLICATION("makeAnApplication"),
+    DECIDE_AN_APPLICATION("decideAnApplication"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

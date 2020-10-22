@@ -1555,6 +1555,19 @@ public class NotificationHandlerConfiguration {
                 notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> decideAnApplicationHomeOfficeNotificationHandler(
+            @Qualifier("decideAnApplicationNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.DECIDE_AN_APPLICATION,
+                notificationGenerators
+        );
+    }
+
 }
 
 

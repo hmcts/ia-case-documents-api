@@ -46,6 +46,22 @@
                 "decisionDate":"",
                 "decisionMaker": ""
               }
+            },
+            {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Refused",
+                "state":"decision",
+                "applicantRole":"caseworker-ia-homeofficeapc",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
             }
           ]
         }
@@ -93,6 +109,22 @@
               "decisionReason":"",
               "decisionDate":"",
               "decisionMaker": ""
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "type":"Other",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"{$TODAY}",
+              "decision":"Refused",
+              "state":"decision",
+              "applicantRole":"caseworker-ia-homeofficeapc",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "Judge"
             }
           }
         ],
