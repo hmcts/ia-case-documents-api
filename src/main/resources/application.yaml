@@ -479,6 +479,37 @@ govnotify:
           email: 3c293506-bd4b-4479-9ae4-8ce602c69bd5
         afterListing:
           email: 5ba35971-b621-4968-9c5e-ef483101b22e
+    makeAnApplication:
+      beforeListing:
+        legalRep:
+          email: 926e4c68-352f-4aa0-9f7b-37df4af280cf
+        homeOffice:
+          email: fb398ba1-39d0-4105-a916-88e318fd447e
+        caseOfficer:
+          judgeReview:
+            email: 87056fad-f245-42b2-9e9b-399feb6563fb
+          other:
+            email: 34e69468-be7a-47d8-9606-e1eadaa8746a
+        otherParty:
+          legalRep:
+            email: 8605ec44-1b10-4a78-90f8-48bf0ce75d55
+          homeOffice:
+            email: be3f8b34-a3a1-4277-a8dc-60c8bcf99159
+      afterListing:
+        caseOfficer:
+          judgeReview:
+            email: 06453add-192d-47b8-951c-37a7ecba48e2
+          other:
+            email: b1f1736d-3361-4cb0-9a42-9253a01cfe75
+        legalRep:
+          email: a85f5305-cd0e-43e8-8cad-e4363e7ed1d4
+        homeOffice:
+          email: 4640c711-dba9-4a25-aabe-07b5a952e5f3
+        otherParty:
+          legalRep:
+            email: e28932bc-9052-47b9-a5a4-b8bc49305302
+          homeOffice:
+            email: c2cb4dd6-4cc2-4d06-a1eb-5d42e31ad9d2
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -526,6 +557,7 @@ security:
       - "applyForFTPAAppellant"
       - "payAndSubmitAppeal"
       - "paymentAppeal"
+      - "makeAnApplication"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -567,7 +599,6 @@ security:
       - "unlinkAppeal"
       - "editDocuments"
       - "requestResponseAmend"
-      - "reinstateAppeal"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -585,14 +616,17 @@ security:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
+      - "makeAnApplication"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
+      - "makeAnApplication"
     caseworker-ia-homeofficepou:
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
       - "applyForFTPARespondent"
+      - "makeAnApplication"
     caseworker-ia-respondentofficer:
       - "uploadHomeOfficeBundle"
       - "addAppealResponse"
@@ -600,6 +634,7 @@ security:
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
       - "applyForFTPARespondent"
+      - "makeAnApplication"
     caseworker-ia-iacjudge:
       - "endAppeal"
       - "sendDecisionAndReasons"
@@ -667,7 +702,6 @@ endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ho-end-appeal
 allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:ho-allowed-appeal@example.com}
 dismissedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL:ho-dismissed-appeal@example.com}
 apcPrivateHomeOfficeEmailAddress: ${IA_HOME_OFFICE_APC_EMAIL}
-
 reviewHearingRequirementsAdminOfficerEmailAddress: ${IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL:ao-review@example.com}
 feesAdminOfficerEmailAddress: ${FEES_ADMIN_OFFICER_EMAIL}
 apcHomeOfficeEmailAddress: ${HOME_OFFICE_EMAIL_APC}
@@ -677,6 +711,7 @@ respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}
   respondentEvidenceDirection: ${IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:respondent@example.com}
   respondentReviewDirection: ${IA_RESPONDENT_REVIEW_DIRECTION_EMAIL:respondent-lart@example.com}
+
 
 ftpaSubmitted:
   ctscAdminEmailAddress: ${IA_CTSC_ADMIN_FTPA_SUBMITTED:ctscFtpaSubmitted@example.gov.uk}

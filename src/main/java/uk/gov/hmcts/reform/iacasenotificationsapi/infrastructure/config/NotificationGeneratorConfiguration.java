@@ -1449,4 +1449,26 @@ public class NotificationGeneratorConfiguration {
                 )
         );
     }
+
+    @Bean("makeAnApplicationNotificationGenerator")
+    public List<NotificationGenerator> makeAnApplicationNotificationHandler(
+            LegalRepresentativeMakeAnApplicationPersonalisation legalRepresentativeMakeApplicationPersonalisation,
+            HomeOfficeMakeAnApplicationPersonalisation homeOfficeMakeAnApplicationPersonalisation,
+            CaseOfficerMakeAnApplicationPersonalisation caseOfficerMakeAnApplicationPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                legalRepresentativeMakeApplicationPersonalisation,
+                                homeOfficeMakeAnApplicationPersonalisation,
+                                caseOfficerMakeAnApplicationPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
 }

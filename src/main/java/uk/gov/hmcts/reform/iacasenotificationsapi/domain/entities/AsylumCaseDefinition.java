@@ -248,6 +248,9 @@ public enum AsylumCaseDefinition {
 
     REINSTATED_DECISION_MAKER(
             "reinstatedDecisionMaker", new TypeReference<String>(){}),
+
+    MAKE_AN_APPLICATIONS(
+            "makeAnApplications", new TypeReference<List<IdValue<MakeAnApplication>>>(){}),
     ;
 
     private final String value;

@@ -1543,6 +1543,18 @@ public class NotificationHandlerConfiguration {
             notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> makeAnApplicationNotificationHandler(
+            @Qualifier("makeAnApplicationNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.MAKE_AN_APPLICATION,
+                notificationGenerators
+        );
+    }
 }
 
 
