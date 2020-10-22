@@ -122,7 +122,11 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
                     State.DECIDED,
                     State.FTPA_SUBMITTED,
                     State.FTPA_DECIDED).contains(currentState)))) {
-            return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+            if (appealService.isAppealListed(asylumCase)) {
+                return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+            } else {
+                return  Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+            }
         } else {
             throw new IllegalStateException("homeOffice email Address cannot be found");
         }

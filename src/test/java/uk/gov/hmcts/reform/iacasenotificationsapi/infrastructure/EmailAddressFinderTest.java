@@ -100,34 +100,44 @@ public class EmailAddressFinderTest {
     @Test
     public void should_return_correct_list_case_hearing_Centre_given_email_address_from_lookup_map() {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(GLASGOW_TRIBUNAL_CENTRE));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(GLASGOW_TRIBUNAL_CENTRE));
         when(hearingCentreEmailAddresses.get(GLASGOW)).thenReturn("hc-glassgow@example.com");
         when(homeOfficeEmailAddresses.get(GLASGOW)).thenReturn("ho-glassgow@example.com");
         assertEquals("hc-glassgow@example.com", emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
         assertEquals("ho-glassgow@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        assertEquals("ho-glassgow@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NOTTINGHAM));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NOTTINGHAM));
         when(hearingCentreEmailAddresses.get(BRADFORD)).thenReturn("hc-bradford@example.com");
         when(homeOfficeEmailAddresses.get(BRADFORD)).thenReturn("ho-bradford@example.com");
         assertEquals("hc-bradford@example.com", emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
         assertEquals("ho-bradford@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        assertEquals("ho-bradford@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(COVENTRY));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(COVENTRY));
         when(hearingCentreEmailAddresses.get(BRADFORD)).thenReturn("hc-bradford@example.com");
         when(homeOfficeEmailAddresses.get(BRADFORD)).thenReturn("ho-bradford@example.com");
         assertEquals("hc-bradford@example.com", emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
         assertEquals("ho-bradford@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        assertEquals("ho-bradford@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NEWCASTLE));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NEWCASTLE));
         when(hearingCentreEmailAddresses.get(NEWCASTLE)).thenReturn("hc-north-shields@example.com");
         when(homeOfficeEmailAddresses.get(NEWCASTLE)).thenReturn("ho-north-shields@example.com");
         assertEquals("hc-north-shields@example.com", emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
         assertEquals("ho-north-shields@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        assertEquals("ho-north-shields@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NORTH_SHIELDS));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NORTH_SHIELDS));
         when(hearingCentreEmailAddresses.get(NORTH_SHIELDS)).thenReturn("hc-north-shields@example.com");
         when(homeOfficeEmailAddresses.get(NORTH_SHIELDS)).thenReturn("ho-north-shields@example.com");
         assertEquals("hc-north-shields@example.com", emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
         assertEquals("ho-north-shields@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        assertEquals("ho-north-shields@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
 
     }
 

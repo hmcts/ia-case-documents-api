@@ -83,4 +83,13 @@ public class EmailAddressFinder {
         }
     }
 
+    public String getHomeOfficeEmailAddress(AsylumCase asylumCase) {
+        return asylumCase
+                .read(AsylumCaseDefinition.HEARING_CENTRE, HearingCentre.class)
+                .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeEmailAddresses, it))
+                        .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
+                )
+                .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
+    }
+
 }

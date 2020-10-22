@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
@@ -143,7 +144,14 @@ public class HomeOfficeDecideAnApplicationPersonalisation implements EmailNotifi
             } else if (HOME_OFFICE_POU.equals(applicantRole)
                     || (Arrays.asList(ROLE_LEGAL_REP, HOME_OFFICE_RESPONDENT_OFFICER).contains(applicantRole)
                     &&  isAppealListed)) {
-                return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+                final Optional<HearingCentre> maybeCaseIsListed = asylumCase
+                        .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+
+                if (maybeCaseIsListed.isPresent()) {
+                    return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+                } else {
+                    return  Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+                }
             } else {
                 throw new IllegalStateException("homeOffice email Address cannot be found");
             }
