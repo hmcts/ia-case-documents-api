@@ -599,6 +599,7 @@ security:
       - "unlinkAppeal"
       - "editDocuments"
       - "requestResponseAmend"
+      - "reinstateAppeal"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
