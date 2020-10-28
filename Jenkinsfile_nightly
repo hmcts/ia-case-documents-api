@@ -20,12 +20,14 @@ def component = "ia-case-payments-api"
 withNightlyPipeline(type, product, component) {
 
   env.TEST_URL = params.URL_TO_TEST
+  env.Rules = params.SecurityRules
 
   env.IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
   env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
 
   enableSecurityScan()
+  enableMutationTest()
 
   enableSlackNotifications('#ia-tech')
 }
