@@ -2,7 +2,13 @@
 
 properties([
   // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-  pipelineTriggers([cron('H 05 * * *')])
+  pipelineTriggers([cron('H 05 * * *')]),
+  parameters([
+    string(name: 'URL_TO_TEST', defaultValue: 'http://ia-case-payments-api-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
+    string(name: 'SecurityRules',
+      defaultValue: 'http://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
+      description: 'The URL you want to run these tests against'),
+  ])
 ])
 
 @Library("Infrastructure")
@@ -12,6 +18,14 @@ def product = "ia"
 def component = "ia-case-payments-api"
 
 withNightlyPipeline(type, product, component) {
+
+  env.TEST_URL = params.URL_TO_TEST
+
+  env.IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
+  env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+
+
+  enableSecurityScan()
 
   enableSlackNotifications('#ia-tech')
 }
