@@ -1,73 +1,57 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.StaticPortWiremockFactory.WIREMOCK_PORT;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.runner.RunWith;
+import com.microsoft.applicationinsights.web.internal.WebRequestTrackingFilter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
+import ru.lanwen.wiremock.ext.WiremockResolver;
 import uk.gov.hmcts.reform.iacasenotificationsapi.Application;
 
-@ActiveProfiles("integration")
-@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {
+    TestConfiguration.class,
+    Application.class
+})
 @TestPropertySource(properties = {
-    "S2S_URL=http://127.0.0.1:8990/serviceAuth",
-    "IDAM_URL=http://127.0.0.1:8990/userAuth",
-    "OPEN_ID_IDAM_URL=http://127.0.0.1:8990/userAuth",
-    "IA_CASE_DOCUMENTS_API_URL=http://localhost:8990/ia-case-documents-api",
-    "govnotify.baseUrl=http://localhost:8990",
+    "CCD_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/ccd",
+    "IDAM_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/userAuth",
+    "OPEN_ID_IDAM_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/userAuth",
+    "S2S_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/serviceAuth",
+    "IA_CASE_DOCUMENTS_API_URL=http://localhost:" + WIREMOCK_PORT + "/ia-case-documents-api",
+    "govnotify.baseUrl=http://localhost:" + WIREMOCK_PORT,
     "govnotify.key=test_key-7f72d0fb-2bc4-421b-bceb-1bf5bf350ff9-3df5a74b-f25b-4052-b00f-3f71d33cd0eb"
 })
+@ExtendWith({
+    WiremockResolver.class
+})
 @AutoConfigureMockMvc(addFilters = false)
-@SpringBootTest(classes = { TestConfiguration.class, Application.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class SpringBootIntegrationTest {
+@ActiveProfiles("integration")
+public class SpringBootIntegrationTest {
 
     @Autowired
     protected MockMvc mockMvc;
-
     @Autowired
     protected ObjectMapper objectMapper;
+    @Autowired
+    private WebApplicationContext wac;
 
-    protected GivensBuilder given;
-    protected IaCaseNotificationApiClient iaCaseNotificationApiClient;
-    protected GovNotifyApiVerifications then;
-
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(
-        wireMockConfig()
-            .port(8990));
-
-    @Before
-    public void setUpGivens() {
-        given = new GivensBuilder();
+    @BeforeEach
+    void setUp() {
+        WebRequestTrackingFilter filter;
+        filter = new WebRequestTrackingFilter();
+        filter.init(new MockFilterConfig());
+        mockMvc = webAppContextSetup(wac).addFilters(filter).build();
     }
 
-    @Before
-    public void setUpVerifications() {
-        then = new GovNotifyApiVerifications();
-    }
-
-    @Before
-    public void setUpApiClient() {
-        iaCaseNotificationApiClient = new IaCaseNotificationApiClient(objectMapper, mockMvc);
-    }
-
-    @Before
-    public void setupServiceAuthStub() {
-
-        stubFor(post(urlEqualTo("/serviceAuth/lease"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withHeader("Content-Type", "application/json")
-                .withBody("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.L8i6g3PfcHlioHCCPURC9pmXT7gdJpx3kOoyAfNUwCc")));
-    }
 }
+

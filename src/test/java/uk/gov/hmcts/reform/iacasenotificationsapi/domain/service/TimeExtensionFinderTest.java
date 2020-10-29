@@ -2,18 +2,18 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static junit.framework.TestCase.assertEquals;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.TIME_EXTENSIONS;
 
 import java.util.Collections;
 import java.util.Optional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.TimeExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.TimeExtensionDecision;
@@ -21,7 +21,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.TimeExtensionS
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TimeExtensionFinderTest {
 
     private final TimeExtensionFinder timeExtensionFinder = new TimeExtensionFinder();
@@ -31,7 +31,8 @@ public class TimeExtensionFinderTest {
     private final TimeExtensionStatus status = TimeExtensionStatus.SUBMITTED;
     String decisionReason = "this is the decision reason";
     String decisionOutcomeDate = "2020-03-02";
-    @Mock private AsylumCase asylumCase;
+    @Mock
+    private AsylumCase asylumCase;
 
     @Test
     public void should_find_target_granted_time_extension() {
@@ -47,11 +48,13 @@ public class TimeExtensionFinderTest {
             decisionOutcomeDate
         );
 
-        when(asylumCase.read(TIME_EXTENSIONS)).thenReturn(Optional.of(Collections.singletonList(new IdValue<>("1", timeExtension))));
+        when(asylumCase.read(TIME_EXTENSIONS))
+            .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("1", timeExtension))));
 
         State currentState = State.AWAITING_REASONS_FOR_APPEAL;
 
-        final IdValue<TimeExtension> timeExtensionIdValue = timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.GRANTED, asylumCase);
+        final IdValue<TimeExtension> timeExtensionIdValue =
+            timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.GRANTED, asylumCase);
 
         assertNotNull(timeExtensionIdValue);
         assertNotNull(timeExtensionIdValue.getValue());
@@ -79,11 +82,13 @@ public class TimeExtensionFinderTest {
             decisionOutcomeDate
         );
 
-        when(asylumCase.read(TIME_EXTENSIONS)).thenReturn(Optional.of(Collections.singletonList(new IdValue<>("1", timeExtension))));
+        when(asylumCase.read(TIME_EXTENSIONS))
+            .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("1", timeExtension))));
 
         State currentState = State.AWAITING_REASONS_FOR_APPEAL;
 
-        final IdValue<TimeExtension> timeExtensionIdValue = timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.REFUSED, asylumCase);
+        final IdValue<TimeExtension> timeExtensionIdValue =
+            timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.REFUSED, asylumCase);
 
         assertNotNull(timeExtensionIdValue);
         assertNotNull(timeExtensionIdValue.getValue());
@@ -122,11 +127,13 @@ public class TimeExtensionFinderTest {
             decisionOutcomeDate
         );
 
-        when(asylumCase.read(TIME_EXTENSIONS)).thenReturn(Optional.of(asList(new IdValue<>("1", timeExtension1), new IdValue<>("2", timeExtension2))));
+        when(asylumCase.read(TIME_EXTENSIONS))
+            .thenReturn(Optional.of(asList(new IdValue<>("1", timeExtension1), new IdValue<>("2", timeExtension2))));
 
         State currentState = State.AWAITING_REASONS_FOR_APPEAL;
 
-        final IdValue<TimeExtension> timeExtensionIdValue = timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.REFUSED, asylumCase);
+        final IdValue<TimeExtension> timeExtensionIdValue =
+            timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.REFUSED, asylumCase);
 
         assertNotNull(timeExtensionIdValue);
         assertNotNull(timeExtensionIdValue.getValue());
@@ -147,11 +154,13 @@ public class TimeExtensionFinderTest {
 
         State currentState = State.AWAITING_REASONS_FOR_APPEAL;
 
-        assertThatThrownBy(() -> timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.GRANTED, asylumCase))
+        assertThatThrownBy(
+            () -> timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.GRANTED, asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("No time extension found with state: 'awaitingReasonsForAppeal' and status: 'granted'");
 
-        assertThatThrownBy(() -> timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.REFUSED, asylumCase))
+        assertThatThrownBy(
+            () -> timeExtensionFinder.findCurrentTimeExtension(currentState, TimeExtensionStatus.REFUSED, asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("No time extension found with state: 'awaitingReasonsForAppeal' and status: 'refused'");
     }

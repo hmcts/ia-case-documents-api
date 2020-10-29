@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBSCRIPTIONS;
@@ -12,11 +12,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
@@ -27,12 +29,16 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinde
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock RecipientsFinder recipientsFinder;
-    @Mock SystemDateProvider systemDateProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    RecipientsFinder recipientsFinder;
+    @Mock
+    SystemDateProvider systemDateProvider;
 
     private Long caseId = 12345L;
     private String smsTemplateId = "someSmsTemplateId";
@@ -43,11 +49,13 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
 
     private AppellantSubmitAppealOutOfTimePersonalisationSms appellantSubmitAppealOutOfTimePersonalisationSms;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(mockedAppealReferenceNumber));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(mockedAppealReferenceNumber));
 
         appellantSubmitAppealOutOfTimePersonalisationSms = new AppellantSubmitAppealOutOfTimePersonalisationSms(
             smsTemplateId,
@@ -64,7 +72,8 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_APPEAL_SUBMITTED_OUT_OF_TIME_APPELLANT_AIP_SMS", appellantSubmitAppealOutOfTimePersonalisationSms.getReferenceId(caseId));
+        assertEquals(caseId + "_APPEAL_SUBMITTED_OUT_OF_TIME_APPELLANT_AIP_SMS",
+            appellantSubmitAppealOutOfTimePersonalisationSms.getReferenceId(caseId));
     }
 
     @Test
@@ -89,7 +98,8 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
         );
 
         when(recipientsFinder.findAll(asylumCase, NotificationType.SMS)).thenCallRealMethod();
-        when(asylumCase.read(SUBSCRIPTIONS)).thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
+        when(asylumCase.read(SUBSCRIPTIONS))
+            .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
 
         assertTrue(appellantSubmitAppealOutOfTimePersonalisationSms.getRecipientsList(asylumCase)
             .contains(mockedAppellantMobilePhone));
@@ -106,11 +116,12 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
         final String dueDate = LocalDate.now().plusDays(28)
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+            .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
 
-        Map<String, String> personalisation = appellantSubmitAppealOutOfTimePersonalisationSms.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            appellantSubmitAppealOutOfTimePersonalisationSms.getPersonalisation(asylumCase);
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(dueDate, personalisation.get("due date"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
@@ -125,7 +136,8 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
 
-        Map<String, String> personalisation = appellantSubmitAppealOutOfTimePersonalisationSms.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            appellantSubmitAppealOutOfTimePersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals(dueDate, personalisation.get("due date"));

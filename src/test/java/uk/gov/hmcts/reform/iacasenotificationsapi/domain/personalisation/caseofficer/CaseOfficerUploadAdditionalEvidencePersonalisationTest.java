@@ -2,7 +2,9 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseof
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
@@ -10,25 +12,32 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
 
-    @Mock Callback<AsylumCase> callback;
-    @Mock AsylumCase asylumCase;
-    @Mock EmailAddressFinder emailAddressFinder;
-    @Mock PersonalisationProvider personalisationProvider;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
+    @Mock
+    PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
@@ -43,7 +52,7 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
 
     private CaseOfficerUploadAdditionalEvidencePersonalisation caseOfficerUploadAdditionalEvidencePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
@@ -58,28 +67,33 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(beforeListingTemplateId, caseOfficerUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
+        assertEquals(beforeListingTemplateId,
+            caseOfficerUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
 
-        assertEquals(afterListingTemplateId, caseOfficerUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
+        assertEquals(afterListingTemplateId,
+            caseOfficerUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(hearingCentreEmailAddress), caseOfficerUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(hearingCentreEmailAddress),
+            caseOfficerUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER", caseOfficerUploadAdditionalEvidencePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
+            caseOfficerUploadAdditionalEvidencePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationForCaseOfficer());
 
-        Map<String, String> personalisation = caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -87,7 +101,8 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisationTest {
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(
+            () -> caseOfficerUploadAdditionalEvidencePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }

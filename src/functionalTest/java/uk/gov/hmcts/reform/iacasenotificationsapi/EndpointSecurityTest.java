@@ -6,23 +6,18 @@ import io.restassured.RestAssured;
 import java.util.Arrays;
 import java.util.List;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.util.AuthorizationHeadersProvider;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("functional")
 public class EndpointSecurityTest {
-
-    @Value("${targetInstance}") private String targetInstance;
 
     private final List<String> callbackEndpoints =
         Arrays.asList(
@@ -30,14 +25,16 @@ public class EndpointSecurityTest {
             "/asylum/ccdAboutToSubmit",
             "/asylum/ccdSubmitted"
         );
+    @Value("${targetInstance}")
+    private String targetInstance;
+    @Autowired
+    private AuthorizationHeadersProvider authorizationHeadersProvider;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
     }
-
-    @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
 
     @Test
     public void should_allow_unauthenticated_requests_to_welcome_message_and_return_200_response_code() {

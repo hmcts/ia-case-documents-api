@@ -1,27 +1,37 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_ALLOWED;
 
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealDecision;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class HomeOfficeAppealOutcomePersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateAllowedId = "someTemplateAllowedId";
@@ -41,7 +51,7 @@ public class HomeOfficeAppealOutcomePersonalisationTest {
 
     private HomeOfficeAppealOutcomePersonalisation homeOfficeAppealOutcomePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -49,7 +59,8 @@ public class HomeOfficeAppealOutcomePersonalisationTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.ALLOWED));
+        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class))
+            .thenReturn(Optional.of(AppealDecision.ALLOWED));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
@@ -70,33 +81,39 @@ public class HomeOfficeAppealOutcomePersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_APPEAL_OUTCOME_HOME_OFFICE", homeOfficeAppealOutcomePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_APPEAL_OUTCOME_HOME_OFFICE",
+            homeOfficeAppealOutcomePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_for_allowed_appeal_outcome() {
-        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.ALLOWED));
+        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class))
+            .thenReturn(Optional.of(AppealDecision.ALLOWED));
 
         assertTrue(homeOfficeAppealOutcomePersonalisation.getRecipientsList(asylumCase).contains(allowedEmailAddress));
     }
 
     @Test
     public void should_return_given_email_address_for_dismissed_appeal_outcome() {
-        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.DISMISSED));
+        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class))
+            .thenReturn(Optional.of(AppealDecision.DISMISSED));
 
-        assertTrue(homeOfficeAppealOutcomePersonalisation.getRecipientsList(asylumCase).contains(dismissedEmailAddress));
+        assertTrue(
+            homeOfficeAppealOutcomePersonalisation.getRecipientsList(asylumCase).contains(dismissedEmailAddress));
     }
 
     @Test
     public void should_return_dismissed_appeal_outcome_decision() {
-        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.DISMISSED));
+        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class))
+            .thenReturn(Optional.of(AppealDecision.DISMISSED));
 
         assertEquals("dismissed", homeOfficeAppealOutcomePersonalisation.getAppealDecision(asylumCase));
     }
 
     @Test
     public void should_return_allowed_appeal_outcome_decision() {
-        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.ALLOWED));
+        when(asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class))
+            .thenReturn(Optional.of(AppealDecision.ALLOWED));
 
         assertEquals("allowed", homeOfficeAppealOutcomePersonalisation.getAppealDecision(asylumCase));
     }

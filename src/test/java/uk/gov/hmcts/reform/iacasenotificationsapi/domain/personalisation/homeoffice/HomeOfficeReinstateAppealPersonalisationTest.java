@@ -2,29 +2,50 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeof
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REINSTATED_DECISION_MAKER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REINSTATE_APPEAL_DATE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REINSTATE_APPEAL_REASON;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.STATE_BEFORE_END_APPEAL;
 
-import java.util.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class HomeOfficeReinstateAppealPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock CustomerServicesProvider customerServicesProvider;
-    @Mock AppealService appealService;
-    @Mock EmailAddressFinder emailAddressFinder;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
+    @Mock
+    AppealService appealService;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
 
 
     private Long caseId = 12345L;
@@ -52,7 +73,7 @@ public class HomeOfficeReinstateAppealPersonalisationTest {
 
     private HomeOfficeReinstateAppealPersonalisation homeOfficeReinstateAppealPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -67,47 +88,48 @@ public class HomeOfficeReinstateAppealPersonalisationTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
-        when((emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeHearingCentreEmail);
+        when((emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)))
+            .thenReturn(homeOfficeHearingCentreEmail);
 
         homeOfficeReinstateAppealPersonalisation = new HomeOfficeReinstateAppealPersonalisation(
-                homeOfficeReinstateAppealBeforeListingTemplateId,
-                homeOfficeReinstateAppealAfterListingTemplateId,
-                apcPrivateBetaInboxHomeOfficeEmailAddress,
-                lartHomeOfficeEmailAddress,
-                iaExUiFrontendUrl,
-                customerServicesProvider,
-                appealService,
-                emailAddressFinder);
+            homeOfficeReinstateAppealBeforeListingTemplateId,
+            homeOfficeReinstateAppealAfterListingTemplateId,
+            apcPrivateBetaInboxHomeOfficeEmailAddress,
+            lartHomeOfficeEmailAddress,
+            iaExUiFrontendUrl,
+            customerServicesProvider,
+            appealService,
+            emailAddressFinder);
     }
 
     @Test
     public void should_return_given_email_address() {
 
         List<State> apcEmail = newArrayList(
-                State.APPEAL_SUBMITTED,
-                State.AWAITING_RESPONDENT_EVIDENCE,
-                State.PENDING_PAYMENT
+            State.APPEAL_SUBMITTED,
+            State.AWAITING_RESPONDENT_EVIDENCE,
+            State.PENDING_PAYMENT
 
 
         );
 
         List<State> lartEmail = newArrayList(
-                State.CASE_BUILDING,
-                State.CASE_UNDER_REVIEW,
-                State.RESPONDENT_REVIEW,
-                State.LISTING,
-                State.SUBMIT_HEARING_REQUIREMENTS
+            State.CASE_BUILDING,
+            State.CASE_UNDER_REVIEW,
+            State.RESPONDENT_REVIEW,
+            State.LISTING,
+            State.SUBMIT_HEARING_REQUIREMENTS
         );
 
         List<State> pouEmail = newArrayList(
-                State.ADJOURNED,
-                State.PREPARE_FOR_HEARING,
-                State.FINAL_BUNDLING,
-                State.PRE_HEARING,
-                State.DECISION,
-                State.DECIDED,
-                State.FTPA_SUBMITTED,
-                State.FTPA_DECIDED
+            State.ADJOURNED,
+            State.PREPARE_FOR_HEARING,
+            State.FINAL_BUNDLING,
+            State.PRE_HEARING,
+            State.DECISION,
+            State.DECIDED,
+            State.FTPA_SUBMITTED,
+            State.FTPA_DECIDED
         );
 
         Map<String, List<State>> states = new HashMap<>();
@@ -118,11 +140,12 @@ public class HomeOfficeReinstateAppealPersonalisationTest {
 
         Set<String> emailAddresses = states.keySet();
 
-        for (String emailAddress: emailAddresses) {
+        for (String emailAddress : emailAddresses) {
             List<State> statesList = states.get(emailAddress);
-            for (State state: statesList) {
+            for (State state : statesList) {
                 when(asylumCase.read(STATE_BEFORE_END_APPEAL, State.class)).thenReturn(Optional.of(state));
-                assertTrue(homeOfficeReinstateAppealPersonalisation.getRecipientsList(asylumCase).contains(emailAddress));
+                assertTrue(
+                    homeOfficeReinstateAppealPersonalisation.getRecipientsList(asylumCase).contains(emailAddress));
             }
         }
     }
@@ -131,29 +154,32 @@ public class HomeOfficeReinstateAppealPersonalisationTest {
     public void should_return_given_template_id() {
 
         when(appealService.isAppealListed(asylumCase)).thenReturn(false);
-        assertEquals(homeOfficeReinstateAppealBeforeListingTemplateId, homeOfficeReinstateAppealPersonalisation.getTemplateId(asylumCase));
+        assertEquals(homeOfficeReinstateAppealBeforeListingTemplateId,
+            homeOfficeReinstateAppealPersonalisation.getTemplateId(asylumCase));
 
         when(appealService.isAppealListed(asylumCase)).thenReturn(true);
-        assertEquals(homeOfficeReinstateAppealAfterListingTemplateId, homeOfficeReinstateAppealPersonalisation.getTemplateId(asylumCase));
+        assertEquals(homeOfficeReinstateAppealAfterListingTemplateId,
+            homeOfficeReinstateAppealPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_REINSTATE_APPEAL_HOME_OFFICE", homeOfficeReinstateAppealPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_REINSTATE_APPEAL_HOME_OFFICE",
+            homeOfficeReinstateAppealPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_null_on_personalisation_when_case_is_state_before_reinstate_is_not_present() {
         when(asylumCase.read(STATE_BEFORE_END_APPEAL, State.class)).thenReturn(Optional.empty());
-        assertEquals(Collections.emptySet(),homeOfficeReinstateAppealPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.emptySet(), homeOfficeReinstateAppealPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
         when(asylumCase.read(STATE_BEFORE_END_APPEAL, State.class)).thenReturn(Optional.of(State.UNKNOWN));
         assertThatThrownBy(() -> homeOfficeReinstateAppealPersonalisation.getRecipientsList(asylumCase))
-                .isExactlyInstanceOf(IllegalStateException.class)
-                .hasMessage("homeOffice email Address cannot be found");
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("homeOffice email Address cannot be found");
     }
 
 
@@ -195,9 +221,9 @@ public class HomeOfficeReinstateAppealPersonalisationTest {
         assertEquals("", personalisation.get("homeOfficeReferenceNumber"));
         assertEquals("", personalisation.get("appellantGivenNames"));
         assertEquals("", personalisation.get("appellantFamilyName"));
-        assertEquals("",personalisation.get("reinstateAppealDate"));
-        assertEquals("No reason given",personalisation.get("reinstateAppealReason"));
-        assertEquals("",personalisation.get("reinstatedDecisionMaker"));
+        assertEquals("", personalisation.get("reinstateAppealDate"));
+        assertEquals("No reason given", personalisation.get("reinstateAppealReason"));
+        assertEquals("", personalisation.get("reinstatedDecisionMaker"));
         assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());

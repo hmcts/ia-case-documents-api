@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
@@ -16,11 +16,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.TimeExtension;
@@ -33,7 +35,8 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinde
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.TimeExtensionFinder;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AppellantReviewTimeExtensionGrantedPersonalisationEmailTest {
 
     @Mock
@@ -63,9 +66,10 @@ public class AppellantReviewTimeExtensionGrantedPersonalisationEmailTest {
 
     private IdValue<TimeExtension> mockedTimeExtension;
 
-    private AppellantReviewTimeExtensionGrantedPersonalisationEmail appellantReviewTimeExtensionGrantedPersonalisationEmail;
+    private AppellantReviewTimeExtensionGrantedPersonalisationEmail
+        appellantReviewTimeExtensionGrantedPersonalisationEmail;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         mockedTimeExtension = new IdValue<>("someId", new TimeExtension(
@@ -79,17 +83,20 @@ public class AppellantReviewTimeExtensionGrantedPersonalisationEmailTest {
             timeExtensionNewDate)
         );
 
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
-        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealHomeOfficeReferenceNumber));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(mockedAppealReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(mockedAppealHomeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(mockedAppellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(mockedAppellantFamilyName));
 
-        appellantReviewTimeExtensionGrantedPersonalisationEmail = new AppellantReviewTimeExtensionGrantedPersonalisationEmail(
-            smsTemplateId,
-            iaAipFrontendUrl,
-            recipientsFinder,
-            timeExtensionFinder
-        );
+        appellantReviewTimeExtensionGrantedPersonalisationEmail =
+            new AppellantReviewTimeExtensionGrantedPersonalisationEmail(
+                smsTemplateId,
+                iaAipFrontendUrl,
+                recipientsFinder,
+                timeExtensionFinder
+            );
     }
 
     @Test
@@ -99,7 +106,8 @@ public class AppellantReviewTimeExtensionGrantedPersonalisationEmailTest {
 
     @Test
     public void should_return_given_reference_id() {
-        Assert.assertEquals(caseId + "_REVIEW_TIME_EXTENSION_GRANTED_APPELLANT_AIP_EMAIL", appellantReviewTimeExtensionGrantedPersonalisationEmail.getReferenceId(caseId));
+        Assert.assertEquals(caseId + "_REVIEW_TIME_EXTENSION_GRANTED_APPELLANT_AIP_EMAIL",
+            appellantReviewTimeExtensionGrantedPersonalisationEmail.getReferenceId(caseId));
     }
 
     @Test
@@ -116,15 +124,18 @@ public class AppellantReviewTimeExtensionGrantedPersonalisationEmailTest {
     @Test
     public void should_return_given_mobile_mobile_list_from_subscribers_in_asylum_case() {
 
-        when(recipientsFinder.findAll(asylumCase, NotificationType.EMAIL)).thenReturn(Collections.singleton(mockedAppellantEmailAddress));
+        when(recipientsFinder.findAll(asylumCase, NotificationType.EMAIL))
+            .thenReturn(Collections.singleton(mockedAppellantEmailAddress));
 
-        assertTrue(appellantReviewTimeExtensionGrantedPersonalisationEmail.getRecipientsList(asylumCase).contains(mockedAppellantEmailAddress));
+        assertTrue(appellantReviewTimeExtensionGrantedPersonalisationEmail.getRecipientsList(asylumCase)
+            .contains(mockedAppellantEmailAddress));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> appellantReviewTimeExtensionGrantedPersonalisationEmail.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(() -> appellantReviewTimeExtensionGrantedPersonalisationEmail
+            .getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
@@ -134,11 +145,16 @@ public class AppellantReviewTimeExtensionGrantedPersonalisationEmailTest {
 
         String awaitingReasonsForAppealNextActionText = "why you think the Home Office decision is wrong";
 
-        when(callback.getCaseDetails()).thenReturn(new CaseDetails<>(1L, "IA", AWAITING_REASONS_FOR_APPEAL, asylumCase, LocalDateTime.now()));
-        when(timeExtensionFinder.findCurrentTimeExtension(AWAITING_REASONS_FOR_APPEAL, TimeExtensionStatus.GRANTED, asylumCase)).thenReturn(mockedTimeExtension);
-        when(timeExtensionFinder.findNextActionText(AWAITING_REASONS_FOR_APPEAL)).thenReturn(awaitingReasonsForAppealNextActionText);
+        when(callback.getCaseDetails())
+            .thenReturn(new CaseDetails<>(1L, "IA", AWAITING_REASONS_FOR_APPEAL, asylumCase, LocalDateTime.now()));
+        when(timeExtensionFinder
+            .findCurrentTimeExtension(AWAITING_REASONS_FOR_APPEAL, TimeExtensionStatus.GRANTED, asylumCase))
+            .thenReturn(mockedTimeExtension);
+        when(timeExtensionFinder.findNextActionText(AWAITING_REASONS_FOR_APPEAL))
+            .thenReturn(awaitingReasonsForAppealNextActionText);
 
-        Map<String, String> personalisation = appellantReviewTimeExtensionGrantedPersonalisationEmail.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            appellantReviewTimeExtensionGrantedPersonalisationEmail.getPersonalisation(callback);
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(mockedAppealHomeOfficeReferenceNumber, personalisation.get("HO Ref Number"));
         assertEquals(mockedAppellantGivenNames, personalisation.get("Given names"));
@@ -154,15 +170,20 @@ public class AppellantReviewTimeExtensionGrantedPersonalisationEmailTest {
 
         String awaitingReasonsForAppealNextActionText = "why you think the Home Office decision is wrong";
 
-        when(callback.getCaseDetails()).thenReturn(new CaseDetails<>(1L, "IA", AWAITING_REASONS_FOR_APPEAL, asylumCase, LocalDateTime.now()));
+        when(callback.getCaseDetails())
+            .thenReturn(new CaseDetails<>(1L, "IA", AWAITING_REASONS_FOR_APPEAL, asylumCase, LocalDateTime.now()));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
-        when(timeExtensionFinder.findCurrentTimeExtension(AWAITING_REASONS_FOR_APPEAL, TimeExtensionStatus.GRANTED,  asylumCase)).thenReturn(mockedTimeExtension);
-        when(timeExtensionFinder.findNextActionText(AWAITING_REASONS_FOR_APPEAL)).thenReturn(awaitingReasonsForAppealNextActionText);
+        when(timeExtensionFinder
+            .findCurrentTimeExtension(AWAITING_REASONS_FOR_APPEAL, TimeExtensionStatus.GRANTED, asylumCase))
+            .thenReturn(mockedTimeExtension);
+        when(timeExtensionFinder.findNextActionText(AWAITING_REASONS_FOR_APPEAL))
+            .thenReturn(awaitingReasonsForAppealNextActionText);
 
-        Map<String, String> personalisation = appellantReviewTimeExtensionGrantedPersonalisationEmail.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            appellantReviewTimeExtensionGrantedPersonalisationEmail.getPersonalisation(callback);
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals("", personalisation.get("HO Ref Number"));
         assertEquals("", personalisation.get("Given names"));

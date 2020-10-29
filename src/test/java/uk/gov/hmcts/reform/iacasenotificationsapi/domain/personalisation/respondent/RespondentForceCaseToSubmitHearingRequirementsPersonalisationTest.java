@@ -1,22 +1,31 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 
-import java.util.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class RespondentForceCaseToSubmitHearingRequirementsPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
+    @Mock
+    AsylumCase asylumCase;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -27,19 +36,21 @@ public class RespondentForceCaseToSubmitHearingRequirementsPersonalisationTest {
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
 
-    private RespondentForceCaseToSubmitHearingRequirementsPersonalisation respondentForceCaseToSubmitHearingRequirementsPersonalisation;
+    private RespondentForceCaseToSubmitHearingRequirementsPersonalisation
+        respondentForceCaseToSubmitHearingRequirementsPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(hmctsReference));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReference));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
-        respondentForceCaseToSubmitHearingRequirementsPersonalisation = new RespondentForceCaseToSubmitHearingRequirementsPersonalisation(
-            templateId,
-            homeOfficeLartEmailAddress
-        );
+        respondentForceCaseToSubmitHearingRequirementsPersonalisation =
+            new RespondentForceCaseToSubmitHearingRequirementsPersonalisation(
+                templateId,
+                homeOfficeLartEmailAddress
+            );
     }
 
     @Test
@@ -50,18 +61,21 @@ public class RespondentForceCaseToSubmitHearingRequirementsPersonalisationTest {
 
     @Test
     public void should_return_the_ho_lart_email_address_at_respondent_review() {
-        assertEquals(Collections.singleton(homeOfficeLartEmailAddress), respondentForceCaseToSubmitHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeLartEmailAddress),
+            respondentForceCaseToSubmitHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_FORCE_CASE_TO_SUBMIT_HEARING_REQUIREMENTS_RESPONDENT", respondentForceCaseToSubmitHearingRequirementsPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_FORCE_CASE_TO_SUBMIT_HEARING_REQUIREMENTS_RESPONDENT",
+            respondentForceCaseToSubmitHearingRequirementsPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = respondentForceCaseToSubmitHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            respondentForceCaseToSubmitHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(hmctsReference, personalisation.get("appealReferenceNumber"));
         assertEquals(homeOfficeReference, personalisation.get("homeOfficeReferenceNumber"));
@@ -71,7 +85,8 @@ public class RespondentForceCaseToSubmitHearingRequirementsPersonalisationTest {
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
-        assertThatThrownBy(() -> respondentForceCaseToSubmitHearingRequirementsPersonalisation.getPersonalisation((AsylumCase) null))
+        assertThatThrownBy(
+            () -> respondentForceCaseToSubmitHearingRequirementsPersonalisation.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }

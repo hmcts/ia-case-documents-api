@@ -1,33 +1,36 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.idam;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import feign.FeignException;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.AccessTokenProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class IdamUserDetailsProviderTest {
 
-    @Mock private AccessTokenProvider accessTokenProvider;
-    @Mock private IdamApi idamApi;
+    @Mock
+    private AccessTokenProvider accessTokenProvider;
+    @Mock
+    private IdamApi idamApi;
 
     private IdamUserDetailsProvider idamUserDetailsProvider;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         idamUserDetailsProvider =

@@ -1,27 +1,34 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock Map<HearingCentre, String> hearingCentreEmailAddressMap;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    Map<HearingCentre, String> hearingCentreEmailAddressMap;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -34,7 +41,7 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
 
     private CaseOfficerHomeOfficeResponseUploadedPersonalisation caseOfficerHomeOfficeResponseUploadedPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
@@ -57,12 +64,14 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_UPLOADED_HO_RESPONSE_CASE_OFFICER", caseOfficerHomeOfficeResponseUploadedPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_UPLOADED_HO_RESPONSE_CASE_OFFICER",
+            caseOfficerHomeOfficeResponseUploadedPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_lookup_map() {
-        assertTrue(caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
+        assertTrue(caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase)
+            .contains(hearingCentreEmailAddress));
     }
 
     @Test
@@ -86,7 +95,8 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> caseOfficerHomeOfficeResponseUploadedPersonalisation.getPersonalisation((AsylumCase) null))
+        assertThatThrownBy(
+            () -> caseOfficerHomeOfficeResponseUploadedPersonalisation.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -94,7 +104,8 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = caseOfficerHomeOfficeResponseUploadedPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            caseOfficerHomeOfficeResponseUploadedPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
@@ -109,7 +120,8 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
-        Map<String, String> personalisation = caseOfficerHomeOfficeResponseUploadedPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            caseOfficerHomeOfficeResponseUploadedPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("appealReferenceNumber"));
         assertEquals("", personalisation.get("appellantGivenNames"));

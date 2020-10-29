@@ -2,30 +2,37 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respon
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 public class RespondentAppellantFtpaSubmittedPersonalisationTest {
 
-    @Mock PersonalisationProvider personalisationProvider;
-    @Mock Callback<AsylumCase> callback;
-    @Mock AsylumCase asylumCase;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    PersonalisationProvider personalisationProvider;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String tempalteId = "templateId";
@@ -37,7 +44,7 @@ public class RespondentAppellantFtpaSubmittedPersonalisationTest {
 
     private RespondentAppellantFtpaSubmittedPersonalisation respondentAppellantFtpaSubmittedPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         respondentAppellantFtpaSubmittedPersonalisation = new RespondentAppellantFtpaSubmittedPersonalisation(
@@ -52,7 +59,8 @@ public class RespondentAppellantFtpaSubmittedPersonalisationTest {
     @Test
     public void should_return_give_reference_id() {
 
-        assertEquals(caseId + "_RESPONDENT_APPELLANT_FTPA_SUBMITTED", respondentAppellantFtpaSubmittedPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_RESPONDENT_APPELLANT_FTPA_SUBMITTED",
+            respondentAppellantFtpaSubmittedPersonalisation.getReferenceId(caseId));
     }
 
     @Test
@@ -64,13 +72,15 @@ public class RespondentAppellantFtpaSubmittedPersonalisationTest {
     @Test
     public void should_return_given_recipient_email_id() {
 
-        assertEquals(Collections.singleton(respondentEmailAddress), respondentAppellantFtpaSubmittedPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(respondentEmailAddress),
+            respondentAppellantFtpaSubmittedPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_personalisation() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisation());
-        Map<String, String> expectedPersonalisation = respondentAppellantFtpaSubmittedPersonalisation.getPersonalisation(callback);
+        Map<String, String> expectedPersonalisation =
+            respondentAppellantFtpaSubmittedPersonalisation.getPersonalisation(callback);
 
         assertThat(expectedPersonalisation).isEqualToComparingOnlyGivenFields(getPersonalisation());
     }
@@ -78,7 +88,8 @@ public class RespondentAppellantFtpaSubmittedPersonalisationTest {
     @Test
     public void should_throw_exception_when_personalisation_when_callback_is_null() {
 
-        assertThatThrownBy(() -> respondentAppellantFtpaSubmittedPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(
+            () -> respondentAppellantFtpaSubmittedPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 

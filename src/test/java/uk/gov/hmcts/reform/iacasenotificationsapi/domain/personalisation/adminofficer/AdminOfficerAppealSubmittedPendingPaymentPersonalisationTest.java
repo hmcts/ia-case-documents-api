@@ -1,24 +1,29 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     private String templateId = "someTemplateId";
     private String appealReferenceNumber = "someReferenceNumber";
@@ -28,11 +33,13 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
     private String adminOfficerEmailAddress = "adminOfficer@example.com";
     private String iaExUiFrontendUrl = "http://localhost";
 
-    private AdminOfficerAppealSubmittedPendingPaymentPersonalisation adminOfficerAppealSubmittedPendingPaymentPersonalisation;
+    private AdminOfficerAppealSubmittedPendingPaymentPersonalisation
+        adminOfficerAppealSubmittedPendingPaymentPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        when(adminOfficerPersonalisationProvider.getChangeToHearingRequirementsPersonalisation(asylumCase)).thenReturn(ImmutableMap
+        when(adminOfficerPersonalisationProvider.getChangeToHearingRequirementsPersonalisation(asylumCase))
+            .thenReturn(ImmutableMap
                 .<String, String>builder()
                 .put("appealReferenceNumber", appealReferenceNumber)
                 .put("appellantGivenNames", appellantGivenNames)
@@ -41,7 +48,8 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
                 .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build());
 
-        adminOfficerAppealSubmittedPendingPaymentPersonalisation = new AdminOfficerAppealSubmittedPendingPaymentPersonalisation(
+        adminOfficerAppealSubmittedPendingPaymentPersonalisation =
+            new AdminOfficerAppealSubmittedPendingPaymentPersonalisation(
                 templateId,
                 adminOfficerEmailAddress,
                 adminOfficerPersonalisationProvider);
@@ -55,26 +63,30 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
     @Test
     public void should_return_given_reference_id() {
         Long caseId = 12345L;
-        assertEquals(caseId + "_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER", adminOfficerAppealSubmittedPendingPaymentPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER",
+            adminOfficerAppealSubmittedPendingPaymentPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        assertTrue(adminOfficerAppealSubmittedPendingPaymentPersonalisation.getRecipientsList(asylumCase).contains(adminOfficerEmailAddress));
+        assertTrue(adminOfficerAppealSubmittedPendingPaymentPersonalisation.getRecipientsList(asylumCase)
+            .contains(adminOfficerEmailAddress));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> adminOfficerAppealSubmittedPendingPaymentPersonalisation.getPersonalisation((AsylumCase) null))
-                .isExactlyInstanceOf(NullPointerException.class)
-                .hasMessage("asylumCase must not be null");
+        assertThatThrownBy(
+            () -> adminOfficerAppealSubmittedPendingPaymentPersonalisation.getPersonalisation((AsylumCase) null))
+            .isExactlyInstanceOf(NullPointerException.class)
+            .hasMessage("asylumCase must not be null");
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = adminOfficerAppealSubmittedPendingPaymentPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            adminOfficerAppealSubmittedPendingPaymentPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));

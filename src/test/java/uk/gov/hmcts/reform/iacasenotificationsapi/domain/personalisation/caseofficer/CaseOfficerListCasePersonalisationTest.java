@@ -1,19 +1,25 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
@@ -21,13 +27,18 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtract
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CaseOfficerListCasePersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock StringProvider stringProvider;
-    @Mock DateTimeExtractor dateTimeExtractor;
-    @Mock EmailAddressFinder emailAddressFinder;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    StringProvider stringProvider;
+    @Mock
+    DateTimeExtractor dateTimeExtractor;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -46,7 +57,7 @@ public class CaseOfficerListCasePersonalisationTest {
 
     private CaseOfficerListCasePersonalisation caseOfficerListCasePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
@@ -57,7 +68,8 @@ public class CaseOfficerListCasePersonalisationTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
         when(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
-        when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreAddress));
+        when(stringProvider.get("hearingCentreAddress", hearingCentre.toString()))
+            .thenReturn(Optional.of(hearingCentreAddress));
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
         when(dateTimeExtractor.extractHearingTime(hearingDateTime)).thenReturn(hearingTime);
 
@@ -82,7 +94,8 @@ public class CaseOfficerListCasePersonalisationTest {
 
     @Test
     public void should_return_given_email_address_from_lookup_map() {
-        assertTrue(caseOfficerListCasePersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
+        assertTrue(
+            caseOfficerListCasePersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
     }
 
     @Test

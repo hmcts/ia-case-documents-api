@@ -2,24 +2,28 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.*;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
@@ -28,11 +32,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
-@RunWith(JUnitParamsRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class LegalRepresentativeRequestCaseEditPersonalisationTest {
-
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.LENIENT);
 
     private static final String DIRECTION_DUE_DATE = "2020-05-03";
     private static final String TEMPLATE_ID = "someTemplateId";
@@ -47,17 +49,20 @@ public class LegalRepresentativeRequestCaseEditPersonalisationTest {
     private static final String CUSTOMER_SERVICES_PROVIDER_EMAIL = "customer.services@example.com";
 
     @Mock
-    private DirectionFinder directionFinder;
-    @Mock
-    private CustomerServicesProvider customerServicesProvider;
-    @Mock
     AsylumCase asylumCase;
     @Mock
     Direction direction;
-
+    @Mock
+    private DirectionFinder directionFinder;
+    @Mock
+    private CustomerServicesProvider customerServicesProvider;
     private LegalRepresentativeRequestCaseEditPersonalisation personalisation;
 
-    @Before
+    private static List<Scenario> generateScenarios() {
+        return Scenario.builder();
+    }
+
+    @BeforeEach
     public void setUp() {
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class))
             .thenReturn(getExpectedValue(LEGAL_REP_EMAIL_ADDRESS));
@@ -85,8 +90,8 @@ public class LegalRepresentativeRequestCaseEditPersonalisationTest {
             personalisation.getReferenceId(1234L));
     }
 
-    @Test
-    @Parameters(method = "generateScenarios")
+    @ParameterizedTest
+    @MethodSource("generateScenarios")
     public void getPersonalisation(Scenario scenario) {
 
         ImmutableMap<String, String> expectedPersonalisation = ImmutableMap
@@ -136,8 +141,31 @@ public class LegalRepresentativeRequestCaseEditPersonalisationTest {
         return Optional.of(expectedValue);
     }
 
-    private List<Scenario> generateScenarios() {
-        return Scenario.builder();
+    @Test
+    public void should_throw_exception_when_cannot_find_email_address_for_legal_rep() {
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> personalisation.getRecipientsList(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("legalRepresentativeEmailAddress is not present");
+    }
+
+    @Test
+    public void should_throw_exception_on_personalisation_when_case_is_null() {
+
+        assertThatThrownBy(() -> personalisation.getPersonalisation((AsylumCase) null))
+            .isExactlyInstanceOf(NullPointerException.class)
+            .hasMessage("asylumCase must not be null");
+    }
+
+    @Test
+    public void should_throw_exception_on_personalisation_when_direction_is_empty() {
+
+        when(directionFinder.findFirst(asylumCase, DirectionTag.CASE_EDIT)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> personalisation.getPersonalisation(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("legal representative request case edit direction is not present");
     }
 
     @Value
@@ -167,33 +195,6 @@ public class LegalRepresentativeRequestCaseEditPersonalisationTest {
 
             return scenarios;
         }
-    }
-
-    @Test
-    public void should_throw_exception_when_cannot_find_email_address_for_legal_rep() {
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> personalisation.getRecipientsList(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("legalRepresentativeEmailAddress is not present");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
-
-        assertThatThrownBy(() -> personalisation.getPersonalisation((AsylumCase) null))
-            .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("asylumCase must not be null");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_direction_is_empty() {
-
-        when(directionFinder.findFirst(asylumCase, DirectionTag.CASE_EDIT)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> personalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("legal representative request case edit direction is not present");
     }
 
 }

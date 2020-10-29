@@ -1,6 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
@@ -8,26 +11,30 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class DirectionFinderTest {
 
-    @Mock private AsylumCase asylumCase;
-    @Mock private IdValue<Direction> existingDirectionById1;
-    @Mock private IdValue<Direction> existingDirectionById2;
-    @Mock private Direction existingDirection1 = mock(Direction.class);
-    @Mock private Direction existingDirection2 = mock(Direction.class);
-
     private final DirectionFinder directionFinder = new DirectionFinder();
+    @Mock
+    private AsylumCase asylumCase;
+    @Mock
+    private IdValue<Direction> existingDirectionById1;
+    @Mock
+    private IdValue<Direction> existingDirectionById2;
+    @Mock
+    private Direction existingDirection1 = mock(Direction.class);
+    @Mock
+    private Direction existingDirection2 = mock(Direction.class);
 
     @Test
     public void should_find_first_tagged_direction() {

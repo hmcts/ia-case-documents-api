@@ -1,26 +1,24 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AppealTypeTest {
 
     @Test
     public void has_correct_asylum_appeal_types() {
-        assertThat(AppealType.from("revocationOfProtection").get(), is(AppealType.RP));
-        assertThat(AppealType.from("protection").get(), is(AppealType.PA));
-        assertThat(AppealType.from("refusalOfEu").get(), is(AppealType.EA));
-        assertThat(AppealType.from("refusalOfHumanRights").get(), is(AppealType.HU));
-        assertThat(AppealType.from("deprivation").get(), is(AppealType.DC));
+        assertEquals(AppealType.from("revocationOfProtection").get(), AppealType.RP);
+        assertEquals(AppealType.from("protection").get(), AppealType.PA);
+        assertEquals(AppealType.from("refusalOfEu").get(), AppealType.EA);
+        assertEquals(AppealType.from("refusalOfHumanRights").get(), AppealType.HU);
+        assertEquals(AppealType.from("deprivation").get(), AppealType.DC);
     }
 
     @Test
     public void returns_optional_for_unknown_appeal_type() {
-        assertThat(AppealType.from("some_unknown_type"), is(Optional.empty()));
+        assertEquals(AppealType.from("some_unknown_type"), Optional.empty());
     }
 
     @Test

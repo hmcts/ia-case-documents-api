@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
 import static java.util.Collections.emptyList;
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 
 public class TimeExtensionTest {

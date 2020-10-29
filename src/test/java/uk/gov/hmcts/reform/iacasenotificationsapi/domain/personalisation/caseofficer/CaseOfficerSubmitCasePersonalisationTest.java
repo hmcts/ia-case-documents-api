@@ -1,27 +1,34 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CaseOfficerSubmitCasePersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock EmailAddressFinder emailAddressFinder;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
 
 
     private Long caseId = 12345L;
@@ -34,7 +41,7 @@ public class CaseOfficerSubmitCasePersonalisationTest {
 
     private CaseOfficerSubmitCasePersonalisation caseOfficerSubmitCasePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
@@ -56,12 +63,14 @@ public class CaseOfficerSubmitCasePersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_CASE_SUBMITTED_CASE_OFFICER", caseOfficerSubmitCasePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_CASE_SUBMITTED_CASE_OFFICER",
+            caseOfficerSubmitCasePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_lookup_map() {
-        assertTrue(caseOfficerSubmitCasePersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
+        assertTrue(
+            caseOfficerSubmitCasePersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
     }
 
     @Test

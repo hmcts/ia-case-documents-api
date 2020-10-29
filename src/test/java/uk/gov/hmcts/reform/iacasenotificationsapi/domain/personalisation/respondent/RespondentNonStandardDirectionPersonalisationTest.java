@@ -1,17 +1,27 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
@@ -21,15 +31,21 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class RespondentNonStandardDirectionPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock DirectionFinder directionFinder;
-    @Mock Direction direction;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    DirectionFinder directionFinder;
+    @Mock
+    Direction direction;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
     RecordApplicationRespondentFinder recordApplicationRespondentFinder;
-
+    @Mock
+    Map<HearingCentre, String> homeOfficeEmailAddressMap;
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
     private String afterListingTemplateId = "afterListingTemplateId";
@@ -47,15 +63,15 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "customer.services@example.com";
     private String defaultHomeOfficeEmailAddress = "defaulthomeoffice@example.com";
-    @Mock Map<HearingCentre, String> homeOfficeEmailAddressMap;
     private String homeOfficeEmailAddress = "homeoffice@example.com";
 
 
     private RespondentNonStandardDirectionPersonalisation respondentNonStandardDirectionPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        recordApplicationRespondentFinder = new RecordApplicationRespondentFinder(defaultHomeOfficeEmailAddress, respondentReviewEmailAddress,
+        recordApplicationRespondentFinder =
+            new RecordApplicationRespondentFinder(defaultHomeOfficeEmailAddress, respondentReviewEmailAddress,
                 homeOfficeEmailAddressMap);
 
         when((direction.getDateDue())).thenReturn(directionDueDate);
@@ -69,7 +85,6 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
 
 
         respondentNonStandardDirectionPersonalisation = new RespondentNonStandardDirectionPersonalisation(
@@ -93,13 +108,16 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_RESPONDENT_NON_STANDARD_DIRECTION", respondentNonStandardDirectionPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_RESPONDENT_NON_STANDARD_DIRECTION",
+            respondentNonStandardDirectionPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(State.RESPONDENT_REVIEW));
-        assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase).contains(respondentReviewEmailAddress));
+        when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+            .thenReturn(Optional.of(State.RESPONDENT_REVIEW));
+        assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase)
+            .contains(respondentReviewEmailAddress));
     }
 
     @Test
@@ -113,7 +131,8 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
@@ -136,7 +155,8 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
-        Map<String, String> personalisation = respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("appealReferenceNumber"));
         assertEquals("", personalisation.get("ariaListingReference"));

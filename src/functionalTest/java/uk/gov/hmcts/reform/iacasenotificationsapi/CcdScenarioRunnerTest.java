@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +8,11 @@ import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.StreamSupport;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
@@ -27,7 +31,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.util.AuthorizationHeadersProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapMerger;
+import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapSerializer;
+import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapValueExpander;
+import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapValueExtractor;
+import uk.gov.hmcts.reform.iacasenotificationsapi.util.StringResourceLoader;
 import uk.gov.hmcts.reform.iacasenotificationsapi.verifiers.Verifier;
 
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -35,12 +44,17 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.verifiers.Verifier;
 @ActiveProfiles("functional")
 public class CcdScenarioRunnerTest {
 
-    @Value("${targetInstance}") private String targetInstance;
+    @Value("${targetInstance}")
+    private String targetInstance;
 
-    @Autowired private Environment environment;
-    @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
-    @Autowired private ObjectMapper objectMapper;
-    @Autowired private List<Verifier> verifiers;
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private AuthorizationHeadersProvider authorizationHeadersProvider;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private List<Verifier> verifiers;
 
     @Before
     public void setUp() {
@@ -53,8 +67,8 @@ public class CcdScenarioRunnerTest {
     public void scenarios_should_behave_as_specified() throws IOException {
 
         assertFalse(
-            "Verifiers are configured",
-            verifiers.isEmpty()
+            verifiers.isEmpty(),
+            "Verifiers are configured"
         );
 
         loadPropertiesIntoMapValueExpander();

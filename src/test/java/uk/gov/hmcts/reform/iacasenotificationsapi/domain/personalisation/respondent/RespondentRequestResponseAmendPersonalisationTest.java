@@ -1,17 +1,26 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
@@ -19,13 +28,18 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class RespondentRequestResponseAmendPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock DirectionFinder directionFinder;
-    @Mock Direction direction;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    DirectionFinder directionFinder;
+    @Mock
+    Direction direction;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
@@ -45,7 +59,7 @@ public class RespondentRequestResponseAmendPersonalisationTest {
 
     private RespondentRequestResponseAmendPersonalisation respondentRequestResponseAmendPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when((direction.getDateDue())).thenReturn(directionDueDate);
@@ -75,12 +89,14 @@ public class RespondentRequestResponseAmendPersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_REQUEST_RESPONDENT_AMEND_DIRECTION", respondentRequestResponseAmendPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_REQUEST_RESPONDENT_AMEND_DIRECTION",
+            respondentRequestResponseAmendPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        assertTrue(respondentRequestResponseAmendPersonalisation.getRecipientsList(asylumCase).contains(respondentReviewEmailAddress));
+        assertTrue(respondentRequestResponseAmendPersonalisation.getRecipientsList(asylumCase)
+            .contains(respondentReviewEmailAddress));
     }
 
     @Test
@@ -94,8 +110,10 @@ public class RespondentRequestResponseAmendPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_AMEND)).thenReturn(Optional.of(direction));
-        Map<String, String> personalisation = respondentRequestResponseAmendPersonalisation.getPersonalisation(asylumCase);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_AMEND))
+            .thenReturn(Optional.of(direction));
+        Map<String, String> personalisation =
+            respondentRequestResponseAmendPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
@@ -112,14 +130,16 @@ public class RespondentRequestResponseAmendPersonalisationTest {
     @Test
     public void should_return_personalisation_when_all_mandatory_information_given() {
 
-        when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_AMEND)).thenReturn(Optional.of(direction));
+        when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_AMEND))
+            .thenReturn(Optional.of(direction));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
-        Map<String, String> personalisation = respondentRequestResponseAmendPersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            respondentRequestResponseAmendPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("appealReferenceNumber"));
         assertEquals("", personalisation.get("ariaListingReference"));

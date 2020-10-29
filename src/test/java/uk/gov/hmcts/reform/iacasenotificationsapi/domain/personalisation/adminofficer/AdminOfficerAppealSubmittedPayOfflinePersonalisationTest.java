@@ -3,36 +3,37 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.admino
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
 
     @Mock
     AsylumCase asylumCase;
-    @Mock AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
+    @Mock
+    AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String changeToHearingRequirementsAdminOfficerEmailAddress = "fees-ao@example.com";
     private AdminOfficerAppealSubmittedPayOfflinePersonalisation adminOfficerAppealSubmittedPayOfflinePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         adminOfficerAppealSubmittedPayOfflinePersonalisation = new AdminOfficerAppealSubmittedPayOfflinePersonalisation(
-                templateId,
-                changeToHearingRequirementsAdminOfficerEmailAddress,
-                adminOfficerPersonalisationProvider
+            templateId,
+            changeToHearingRequirementsAdminOfficerEmailAddress,
+            adminOfficerPersonalisationProvider
         );
     }
 
@@ -44,33 +45,35 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
     @Test
     public void should_return_given_reference_id() {
 
-        assertEquals(caseId + "_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER", adminOfficerAppealSubmittedPayOfflinePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
+            adminOfficerAppealSubmittedPayOfflinePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation((AsylumCase) null))
-                .isExactlyInstanceOf(NullPointerException.class)
-                .hasMessage("asylumCase must not be null");
+        assertThatThrownBy(
+            () -> adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation((AsylumCase) null))
+            .isExactlyInstanceOf(NullPointerException.class)
+            .hasMessage("asylumCase must not be null");
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
 
     }
 
-    @org.junit.Test
+    @Test
     public void should_return_personalisation_when_all_mandatory_information_given() {
 
-        Map<String, String> personalisation = adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
-
-
     }
 }

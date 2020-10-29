@@ -2,7 +2,9 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeof
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
@@ -10,25 +12,32 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 public class HomeOfficeUploadAdditionalEvidencePersonalisationTest {
 
-    @Mock Callback<AsylumCase> callback;
-    @Mock AsylumCase asylumCase;
-    @Mock PersonalisationProvider personalisationProvider;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    PersonalisationProvider personalisationProvider;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
@@ -46,7 +55,7 @@ public class HomeOfficeUploadAdditionalEvidencePersonalisationTest {
 
     private HomeOfficeUploadAdditionalEvidencePersonalisation homeOfficeUploadAdditionalEvidencePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         homeOfficeUploadAdditionalEvidencePersonalisation = new HomeOfficeUploadAdditionalEvidencePersonalisation(
@@ -61,28 +70,33 @@ public class HomeOfficeUploadAdditionalEvidencePersonalisationTest {
 
     @Test
     public void should_return_given_email_address() {
-        assertEquals(Collections.singleton(homeOfficeEmailAddress), homeOfficeUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeEmailAddress),
+            homeOfficeUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(beforeListingTemplateId, homeOfficeUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
+        assertEquals(beforeListingTemplateId,
+            homeOfficeUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
 
-        assertEquals(afterListingTemplateId, homeOfficeUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
+        assertEquals(afterListingTemplateId,
+            homeOfficeUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE", homeOfficeUploadAdditionalEvidencePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
+            homeOfficeUploadAdditionalEvidencePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationForHomeOffice());
 
-        Map<String, String> personalisation = homeOfficeUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            homeOfficeUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -90,7 +104,8 @@ public class HomeOfficeUploadAdditionalEvidencePersonalisationTest {
     @Test
     public void should_throw_exception_when_callback_is_null() {
 
-        assertThatThrownBy(() -> homeOfficeUploadAdditionalEvidencePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(
+            () -> homeOfficeUploadAdditionalEvidencePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }

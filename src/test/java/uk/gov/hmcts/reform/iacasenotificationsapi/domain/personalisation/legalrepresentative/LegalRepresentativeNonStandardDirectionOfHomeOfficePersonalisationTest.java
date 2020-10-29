@@ -2,18 +2,22 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
@@ -21,14 +25,20 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerService
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisationTest {
 
-    @Mock Callback<AsylumCase> callback;
-    @Mock AsylumCase asylumCase;
-    @Mock EmailAddressFinder emailAddressFinder;
-    @Mock PersonalisationProvider personalisationProvider;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
+    @Mock
+    PersonalisationProvider personalisationProvider;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
@@ -46,47 +56,54 @@ public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisationT
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "customer.services@example.com";
 
-    private LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation;
+    private LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation
+        legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
-        legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation = new LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation(
-            beforeListingTemplateId,
-            afterListingTemplateId,
-            iaExUiFrontendUrl,
-            personalisationProvider,
-            emailAddressFinder,
-            customerServicesProvider
-        );
+        legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation =
+            new LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation(
+                beforeListingTemplateId,
+                afterListingTemplateId,
+                iaExUiFrontendUrl,
+                personalisationProvider,
+                emailAddressFinder,
+                customerServicesProvider
+            );
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(beforeListingTemplateId, legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getTemplateId(asylumCase));
+        assertEquals(beforeListingTemplateId,
+            legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getTemplateId(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
-        assertEquals(afterListingTemplateId, legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getTemplateId(asylumCase));
+        assertEquals(afterListingTemplateId,
+            legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_LEGAL_REP_NON_STANDARD_DIRECTION_OF_HOME_OFFICE", legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_LEGAL_REP_NON_STANDARD_DIRECTION_OF_HOME_OFFICE",
+            legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        assertTrue(legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getRecipientsList(asylumCase).contains(legalRepEmailAddress));
+        assertTrue(legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getRecipientsList(asylumCase)
+            .contains(legalRepEmailAddress));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(() -> legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation
+            .getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
@@ -95,7 +112,8 @@ public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisationT
     public void should_return_personalisation_when_all_information_given() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
-        Map<String, String> personalisation = legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());

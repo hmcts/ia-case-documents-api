@@ -3,22 +3,23 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.admino
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AdminOfficerPersonalisationProviderTest {
 
-    @Mock AsylumCase asylumCase;
+    @Mock
+    AsylumCase asylumCase;
 
     private String iaExUiFrontendUrl = "http://somefrontendurl";
     private AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         adminOfficerPersonalisationProvider = new AdminOfficerPersonalisationProvider(
@@ -37,7 +38,8 @@ public class AdminOfficerPersonalisationProviderTest {
     @Test
     public void should_return_reviewed_hearing_requirements_personalisation() {
 
-        Map<String, String> personalisation = adminOfficerPersonalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            adminOfficerPersonalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -45,7 +47,8 @@ public class AdminOfficerPersonalisationProviderTest {
     @Test
     public void should_return_change_to_hearing_requirements_personalisation() {
 
-        Map<String, String> personalisation = adminOfficerPersonalisationProvider.getChangeToHearingRequirementsPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            adminOfficerPersonalisationProvider.getChangeToHearingRequirementsPersonalisation(asylumCase);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

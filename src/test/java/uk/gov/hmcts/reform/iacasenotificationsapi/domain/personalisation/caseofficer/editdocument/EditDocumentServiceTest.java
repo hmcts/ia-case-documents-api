@@ -8,13 +8,11 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag;
@@ -23,27 +21,13 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingRecordi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
-@RunWith(JUnitParamsRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.STRICT_STUBS)
 public class EditDocumentServiceTest {
-
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
 
     private final EditDocumentService editDocumentService = new EditDocumentService();
 
-    @Test
-    @Parameters(method = "generateOneFileEditedScenarios, generateMultipleFilesEditedScenarios")
-    public void getFormattedDocumentsGivenCaseAndDocIds(AsylumCase asylumCase,
-                                                        List<String> docNamesFromCaseNote,
-                                                        FormattedDocumentList expectedFormattedDocumentList
-    ) {
-        FormattedDocumentList actualFormattedDocumentList =
-            editDocumentService.getFormattedDocumentsGivenCaseAndDocNames(asylumCase, docNamesFromCaseNote);
-
-        assertThat(actualFormattedDocumentList.toString()).isEqualTo(expectedFormattedDocumentList.toString());
-    }
-
-    private Object[] generateOneFileEditedScenarios() {
+    private static Object[] generateOneFileEditedScenarios() {
         AsylumCase asylumCase = new AsylumCase();
         IdValue<DocumentWithMetadata> idDoc = getDocumentWithMetadata(
             "id1", "some name", "some desc");
@@ -74,7 +58,7 @@ public class EditDocumentServiceTest {
         };
     }
 
-    private Object[] generateMultipleFilesEditedScenarios() {
+    private static Object[] generateMultipleFilesEditedScenarios() {
         AsylumCase asylumCase = new AsylumCase();
         IdValue<DocumentWithMetadata> idDoc = getDocumentWithMetadata(
             "id1", "some name", "some desc");
@@ -122,23 +106,35 @@ public class EditDocumentServiceTest {
         };
     }
 
-    private IdValue<DocumentWithMetadata> getDocumentWithMetadata(String docId, String filename,
-                                                                  String description) {
+    private static IdValue<DocumentWithMetadata> getDocumentWithMetadata(String docId, String filename,
+                                                                         String description) {
         DocumentWithMetadata docWithMetadata = new DocumentWithMetadata(buildDocument(docId, filename), description,
             LocalDate.now().toString(), DocumentTag.NONE);
         return new IdValue<>("1", docWithMetadata);
     }
 
-    private IdValue<HearingRecordingDocument> getHearingRecordingDocument() {
+    private static IdValue<HearingRecordingDocument> getHearingRecordingDocument() {
         HearingRecordingDocument hearingRecordingDocument =
             new HearingRecordingDocument(buildDocument("id3", "some hearing doc name"),
                 "some hearing desc");
         return new IdValue<>("1", hearingRecordingDocument);
     }
 
-    private Document buildDocument(String docId, String filename) {
+    private static Document buildDocument(String docId, String filename) {
         String documentUrl = "http://dm-store/" + docId;
         return new Document(documentUrl, documentUrl + "/binary", filename);
+    }
+
+    @ParameterizedTest
+    @MethodSource({"generateOneFileEditedScenarios", "generateMultipleFilesEditedScenarios"})
+    public void getFormattedDocumentsGivenCaseAndDocIds(AsylumCase asylumCase,
+                                                        List<String> docNamesFromCaseNote,
+                                                        FormattedDocumentList expectedFormattedDocumentList
+    ) {
+        FormattedDocumentList actualFormattedDocumentList =
+            editDocumentService.getFormattedDocumentsGivenCaseAndDocNames(asylumCase, docNamesFromCaseNote);
+
+        assertThat(actualFormattedDocumentList.toString()).isEqualTo(expectedFormattedDocumentList.toString());
     }
 
 }

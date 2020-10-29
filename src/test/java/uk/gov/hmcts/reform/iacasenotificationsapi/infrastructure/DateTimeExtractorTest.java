@@ -1,23 +1,23 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.format.DateTimeParseException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 public class DateTimeExtractorTest {
-
-    @Mock private DateTimeExtractor dateTimeExtractor;
 
     final String listCaseHearingDate = "2019-05-03T14:25:15.000";
     final String invalidIso8601HearingDate = "2019-05-03 14:25:15";
     final String extractedHearingDateFormatted = "3 May 2019";
     final String extractedHearingTime = "14:25";
+    @Mock
+    private DateTimeExtractor dateTimeExtractor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dateTimeExtractor = new DateTimeExtractor();
     }

@@ -2,33 +2,40 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class LegalRepresentativeEditListingNoChangePersonalisationTest {
 
     private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
-    @Mock Callback<AsylumCase> callback;
-    @Mock AsylumCase asylumCase;
-    @Mock PersonalisationProvider personalisationProvider;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    PersonalisationProvider personalisationProvider;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -54,10 +61,11 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
 
     private LegalRepresentativeEditListingNoChangePersonalisation legalRepresentativeEditListingPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class))
+            .thenReturn(Optional.of(legalRepEmailAddress));
 
         legalRepresentativeEditListingPersonalisation = new LegalRepresentativeEditListingNoChangePersonalisation(
             templateId,
@@ -73,12 +81,14 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_CASE_RE_LISTED_NO_CHANGE_LEGAL_REPRESENTATIVE", legalRepresentativeEditListingPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_CASE_RE_LISTED_NO_CHANGE_LEGAL_REPRESENTATIVE",
+            legalRepresentativeEditListingPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-        assertTrue(legalRepresentativeEditListingPersonalisation.getRecipientsList(asylumCase).contains(legalRepEmailAddress));
+        assertTrue(
+            legalRepresentativeEditListingPersonalisation.getRecipientsList(asylumCase).contains(legalRepEmailAddress));
     }
 
     @Test
@@ -93,7 +103,8 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> legalRepresentativeEditListingPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(
+            () -> legalRepresentativeEditListingPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
@@ -102,7 +113,8 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     public void should_return_personalisation_when_all_information_given() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
-        Map<String, String> personalisation = legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
@@ -111,7 +123,8 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
     public void should_return_personalisation_when_optional_fields_are_blank() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithBlankValues());
 
-        Map<String, String> personalisation = legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            legalRepresentativeEditListingPersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }

@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EventTest {
 

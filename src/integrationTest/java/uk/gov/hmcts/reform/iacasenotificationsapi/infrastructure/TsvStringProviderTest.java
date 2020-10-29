@@ -3,20 +3,18 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Optional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.iacasenotificationsapi.Application;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("integration")
 public class TsvStringProviderTest {
 
-    @Autowired private TsvStringProvider tsvStringProvider;
+    @Autowired
+    private TsvStringProvider tsvStringProvider;
 
     @Test
     public void should_load_strings_from_resources_and_return() {
@@ -162,7 +160,8 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
-            Optional.of("IAC Glasgow, 1st Floor, The Glasgow Tribunals Centre, Atlantic Quay, 20 York Street, Glasgow, G2 8GT"),
+            Optional
+                .of("IAC Glasgow, 1st Floor, The Glasgow Tribunals Centre, Atlantic Quay, 20 York Street, Glasgow, G2 8GT"),
             tsvStringProvider.get("hearingCentreAddress", "glasgowTribunalsCentre")
         );
 
@@ -172,7 +171,8 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
-            Optional.of("IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
+            Optional
+                .of("IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
             tsvStringProvider.get("hearingCentreAddress", "manchester")
         );
 
@@ -192,7 +192,8 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
-            Optional.of("Newcastle Civil & Family Courts and Tribunals Centre, Barras Bridge, Newcastle upon Tyne, NE1 8QF"),
+            Optional
+                .of("Newcastle Civil & Family Courts and Tribunals Centre, Barras Bridge, Newcastle upon Tyne, NE1 8QF"),
             tsvStringProvider.get("hearingCentreAddress", "newcastle")
         );
 

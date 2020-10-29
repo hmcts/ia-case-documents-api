@@ -1,27 +1,29 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AdminOfficerFtpaDecisionAppellantPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock PersonalisationProvider personalisationProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String adminOfficeEmailAddress = "some-email@example.com";
@@ -38,7 +40,7 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisationTest {
 
     private AdminOfficerFtpaDecisionAppellantPersonalisation adminOfficerFtpaDecisionAppellantPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
         adminOfficerFtpaDecisionAppellantPersonalisation = new AdminOfficerFtpaDecisionAppellantPersonalisation(
             grantedTemplateId,
@@ -50,7 +52,8 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisationTest {
 
     @Test
     public void should_return_given_template_id_when_outcome_is_empty() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.empty());
         assertThatThrownBy(() -> adminOfficerFtpaDecisionAppellantPersonalisation.getTemplateId(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("ftpaRespondentDecisionOutcomeType is not present");
@@ -58,23 +61,29 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(granted));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(granted));
         assertEquals(grantedTemplateId, adminOfficerFtpaDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(partiallyGranted));
-        assertEquals(partiallyGrantedTemplateId, adminOfficerFtpaDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(partiallyGranted));
+        assertEquals(partiallyGrantedTemplateId,
+            adminOfficerFtpaDecisionAppellantPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT", adminOfficerFtpaDecisionAppellantPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
+            adminOfficerFtpaDecisionAppellantPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_personalisation_of_all_information_given() {
-        when(personalisationProvider.getTribunalHeaderPersonalisation(asylumCase)).thenReturn(getPersonalisationMapWithGivenValues());
-        Map<String, String> personalisation = adminOfficerFtpaDecisionAppellantPersonalisation.getPersonalisation(asylumCase);
+        when(personalisationProvider.getTribunalHeaderPersonalisation(asylumCase))
+            .thenReturn(getPersonalisationMapWithGivenValues());
+        Map<String, String> personalisation =
+            adminOfficerFtpaDecisionAppellantPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));

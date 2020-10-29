@@ -2,29 +2,35 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseof
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CASE_NOTES;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.CaseNote;
@@ -36,11 +42,13 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
-@RunWith(JUnitParamsRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CaseOfficerEditDocumentsPersonalisationTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.LENIENT);
+    private final String beforeListingTemplateId = "beforeListingTemplateId";
+    private final String afterListingTemplateId = "afterListingTemplateId";
+
     @Mock
     private EmailAddressFinder emailAddressFinder;
     @Mock
@@ -49,16 +57,74 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
     private AppealService appealService;
     @Mock
     private AsylumCase asylumCase;
-
     private CaseOfficerEditDocumentsPersonalisation personalisation;
-
-    private final String beforeListingTemplateId = "beforeListingTemplateId";
-    private final String afterListingTemplateId = "afterListingTemplateId";
-
     @Captor
     private ArgumentCaptor<List<String>> argCaptor;
 
-    @Before
+    private static Object[] generateDifferentCaseNotesScenarios() {
+        String multiLineReason = "line 1 reason" + System.lineSeparator() + "line 2 reason";
+        String singleLine = "line 1 reason";
+        return new Object[] {
+            new Object[] {generateSingleCaseNoteWithMultiLineReason(), multiLineReason},
+            new Object[] {generateSingleCaseNoteWithSingleLineReason(), singleLine},
+            new Object[] {generateTwoCaseNotesWithMultiLineReasons(), multiLineReason},
+        };
+    }
+
+    private static Callback<AsylumCase> generateTwoCaseNotesWithMultiLineReasons() {
+        String multiLineReason = "line 1 reason" + System.lineSeparator() + "line 2 reason";
+        IdValue<CaseNote> idCaseNote1 = buildCaseNote(multiLineReason);
+
+        String singleLine = "line 1 reason";
+        IdValue<CaseNote> idCaseNote2 = buildCaseNote(singleLine);
+        AsylumCase asylumCase = new AsylumCase();
+        writeCaseNote(asylumCase, Arrays.asList(idCaseNote1, idCaseNote2));
+        return buildTestCallback(asylumCase);
+    }
+
+    private static Callback<AsylumCase> generateSingleCaseNoteWithMultiLineReason() {
+        String multiLineReason = "line 1 reason" + System.lineSeparator() + "line 2 reason";
+        IdValue<CaseNote> idCaseNote = buildCaseNote(multiLineReason);
+        AsylumCase asylumCase = new AsylumCase();
+        writeCaseNote(asylumCase, Collections.singletonList(idCaseNote));
+        return buildTestCallback(asylumCase);
+    }
+
+    private static Callback<AsylumCase> generateSingleCaseNoteWithSingleLineReason() {
+        String singleLine = "line 1 reason";
+        IdValue<CaseNote> idCaseNote = buildCaseNote(singleLine);
+        AsylumCase asylumCase = new AsylumCase();
+        writeCaseNote(asylumCase, Collections.singletonList(idCaseNote));
+        return buildTestCallback(asylumCase);
+    }
+
+    private static Callback<AsylumCase> buildTestCallback(AsylumCase asylumCase) {
+        CaseDetails<AsylumCase> caseDetails = new CaseDetails<>(1L, "IA", State.APPEAL_SUBMITTED,
+            asylumCase, LocalDateTime.now());
+        CaseDetails<AsylumCase> caseDetailsBefore = new CaseDetails<>(1L, "IA", State.APPEAL_SUBMITTED,
+            new AsylumCase(), LocalDateTime.now());
+        return new Callback<>(caseDetails, Optional.of(caseDetailsBefore), Event.EDIT_DOCUMENTS);
+    }
+
+    private static void writeCaseNote(AsylumCase asylumCase, List<IdValue<CaseNote>> caseNoteList) {
+        asylumCase.write(CASE_NOTES, caseNoteList);
+        asylumCase.write(APPEAL_REFERENCE_NUMBER, "RP/50001/2020");
+        asylumCase.write(APPELLANT_GIVEN_NAMES, "Lacy Dawson");
+        asylumCase.write(APPELLANT_FAMILY_NAME, "Venus Blevins");
+    }
+
+    private static IdValue<CaseNote> buildCaseNote(String reason) {
+        CaseNote caseNote = new CaseNote("subject", buildCaseNoteDescription(reason), "user",
+            LocalDate.now().toString());
+        return new IdValue<>("1", caseNote);
+    }
+
+    private static String buildCaseNoteDescription(String reason) {
+        return String.format("Document names: %s" + System.lineSeparator() + "reason: %s" + System.lineSeparator(),
+            Arrays.asList("some doc name", "some other doc name"), reason);
+    }
+
+    @BeforeEach
     public void setUp() {
         personalisation = new CaseOfficerEditDocumentsPersonalisation(
             beforeListingTemplateId,
@@ -85,13 +151,14 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
 
     @Test
     public void getRecipientsList() {
-        given(emailAddressFinder.getHearingCentreEmailAddress(any(AsylumCase.class))).willReturn("hearingCentre@email.com");
+        given(emailAddressFinder.getHearingCentreEmailAddress(any(AsylumCase.class)))
+            .willReturn("hearingCentre@email.com");
 
         assertTrue(personalisation.getRecipientsList(new AsylumCase()).contains("hearingCentre@email.com"));
     }
 
-    @Test
-    @Parameters(method = "generateDifferentCaseNotesScenarios")
+    @ParameterizedTest
+    @MethodSource("generateDifferentCaseNotesScenarios")
     public void getPersonalisation(Callback<AsylumCase> callback, String expectedReason) {
         FormattedDocument formattedDocument = new FormattedDocument("some file name", "some desc");
         given(editDocumentService.getFormattedDocumentsGivenCaseAndDocNames(any(), any()))
@@ -110,69 +177,6 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
 
         List<String> actualDocNames = argCaptor.getValue();
         assertThat(actualDocNames).containsOnly("some doc name", "some other doc name");
-    }
-
-    private Object[] generateDifferentCaseNotesScenarios() {
-        String multiLineReason = "line 1 reason" + System.lineSeparator() + "line 2 reason";
-        String singleLine = "line 1 reason";
-        return new Object[] {
-            new Object[] {generateSingleCaseNoteWithMultiLineReason(), multiLineReason},
-            new Object[] {generateSingleCaseNoteWithSingleLineReason(), singleLine},
-            new Object[] {generateTwoCaseNotesWithMultiLineReasons(), multiLineReason},
-        };
-    }
-
-    private Callback<AsylumCase> generateTwoCaseNotesWithMultiLineReasons() {
-        String multiLineReason = "line 1 reason" + System.lineSeparator() + "line 2 reason";
-        IdValue<CaseNote> idCaseNote1 = buildCaseNote(multiLineReason);
-
-        String singleLine = "line 1 reason";
-        IdValue<CaseNote> idCaseNote2 = buildCaseNote(singleLine);
-        AsylumCase asylumCase = new AsylumCase();
-        writeCaseNote(asylumCase, Arrays.asList(idCaseNote1, idCaseNote2));
-        return buildTestCallback(asylumCase);
-    }
-
-    private Callback<AsylumCase> generateSingleCaseNoteWithMultiLineReason() {
-        String multiLineReason = "line 1 reason" + System.lineSeparator() + "line 2 reason";
-        IdValue<CaseNote> idCaseNote = buildCaseNote(multiLineReason);
-        AsylumCase asylumCase = new AsylumCase();
-        writeCaseNote(asylumCase, Collections.singletonList(idCaseNote));
-        return buildTestCallback(asylumCase);
-    }
-
-    private Callback<AsylumCase> generateSingleCaseNoteWithSingleLineReason() {
-        String singleLine = "line 1 reason";
-        IdValue<CaseNote> idCaseNote = buildCaseNote(singleLine);
-        AsylumCase asylumCase = new AsylumCase();
-        writeCaseNote(asylumCase, Collections.singletonList(idCaseNote));
-        return buildTestCallback(asylumCase);
-    }
-
-    private Callback<AsylumCase> buildTestCallback(AsylumCase asylumCase) {
-        CaseDetails<AsylumCase> caseDetails = new CaseDetails<>(1L, "IA", State.APPEAL_SUBMITTED,
-            asylumCase, LocalDateTime.now());
-        CaseDetails<AsylumCase> caseDetailsBefore = new CaseDetails<>(1L, "IA", State.APPEAL_SUBMITTED,
-            new AsylumCase(), LocalDateTime.now());
-        return new Callback<>(caseDetails, Optional.of(caseDetailsBefore), Event.EDIT_DOCUMENTS);
-    }
-
-    private void writeCaseNote(AsylumCase asylumCase, List<IdValue<CaseNote>> caseNoteList) {
-        asylumCase.write(CASE_NOTES, caseNoteList);
-        asylumCase.write(APPEAL_REFERENCE_NUMBER, "RP/50001/2020");
-        asylumCase.write(APPELLANT_GIVEN_NAMES, "Lacy Dawson");
-        asylumCase.write(APPELLANT_FAMILY_NAME, "Venus Blevins");
-    }
-
-    private IdValue<CaseNote> buildCaseNote(String reason) {
-        CaseNote caseNote = new CaseNote("subject", buildCaseNoteDescription(reason), "user",
-            LocalDate.now().toString());
-        return new IdValue<>("1", caseNote);
-    }
-
-    private String buildCaseNoteDescription(String reason) {
-        return String.format("Document names: %s" + System.lineSeparator() + "reason: %s" + System.lineSeparator(),
-            Arrays.asList("some doc name", "some other doc name"), reason);
     }
 
     @Test

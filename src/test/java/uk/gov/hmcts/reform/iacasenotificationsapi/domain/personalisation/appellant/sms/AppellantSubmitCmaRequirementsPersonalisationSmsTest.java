@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 
@@ -12,23 +12,29 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AppellantSubmitCmaRequirementsPersonalisationSmsTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock RecipientsFinder recipientsFinder;
-    @Mock SystemDateProvider systemDateProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    RecipientsFinder recipientsFinder;
+    @Mock
+    SystemDateProvider systemDateProvider;
 
     private Long caseId = 12345L;
     private String smsTemplateId = "someSmsTemplateId";
@@ -39,11 +45,13 @@ public class AppellantSubmitCmaRequirementsPersonalisationSmsTest {
 
     private AppellantSubmitCmaRequirementsPersonalisationSms appellantCmaRequirementsSubmittedPersonalisationSms;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(mockedAppealReferenceNumber));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(mockedAppealReferenceNumber));
 
         appellantCmaRequirementsSubmittedPersonalisationSms = new AppellantSubmitCmaRequirementsPersonalisationSms(
             smsTemplateId,
@@ -61,7 +69,8 @@ public class AppellantSubmitCmaRequirementsPersonalisationSmsTest {
 
     @Test
     public void should_return_given_reference_id() {
-        Assert.assertEquals(caseId + "_SUBMIT_CMA_REQUIREMENTS_APPELLANT_AIP_SMS", appellantCmaRequirementsSubmittedPersonalisationSms.getReferenceId(caseId));
+        Assert.assertEquals(caseId + "_SUBMIT_CMA_REQUIREMENTS_APPELLANT_AIP_SMS",
+            appellantCmaRequirementsSubmittedPersonalisationSms.getReferenceId(caseId));
     }
 
     @Test
@@ -78,15 +87,18 @@ public class AppellantSubmitCmaRequirementsPersonalisationSmsTest {
     @Test
     public void should_return_given_mobile_mobile_list_from_subscribers_in_asylum_case() {
 
-        when(recipientsFinder.findAll(asylumCase, NotificationType.SMS)).thenReturn(Collections.singleton(mockedAppellantMobilePhone));
+        when(recipientsFinder.findAll(asylumCase, NotificationType.SMS))
+            .thenReturn(Collections.singleton(mockedAppellantMobilePhone));
 
-        assertTrue(appellantCmaRequirementsSubmittedPersonalisationSms.getRecipientsList(asylumCase).contains(mockedAppellantMobilePhone));
+        assertTrue(appellantCmaRequirementsSubmittedPersonalisationSms.getRecipientsList(asylumCase)
+            .contains(mockedAppellantMobilePhone));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
 
-        assertThatThrownBy(() -> appellantCmaRequirementsSubmittedPersonalisationSms.getPersonalisation((AsylumCase) null))
+        assertThatThrownBy(
+            () -> appellantCmaRequirementsSubmittedPersonalisationSms.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -98,7 +110,8 @@ public class AppellantSubmitCmaRequirementsPersonalisationSmsTest {
 
         when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
 
-        Map<String, String> personalisation = appellantCmaRequirementsSubmittedPersonalisationSms.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            appellantCmaRequirementsSubmittedPersonalisationSms.getPersonalisation(asylumCase);
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(dueDate, personalisation.get("due date"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
@@ -113,7 +126,8 @@ public class AppellantSubmitCmaRequirementsPersonalisationSmsTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(systemDateProvider.dueDate(14)).thenReturn(dueDate);
 
-        Map<String, String> personalisation = appellantCmaRequirementsSubmittedPersonalisationSms.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            appellantCmaRequirementsSubmittedPersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals(dueDate, personalisation.get("due date"));

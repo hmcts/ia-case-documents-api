@@ -1,18 +1,18 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MakeAnApplicationTest {
 
     private final String type = "Adjourn";
@@ -25,16 +25,16 @@ public class MakeAnApplicationTest {
     private final String applicantRole = UserRole.LEGAL_REPRESENTATIVE.toString();
 
     public MakeAnApplication makeAnApplication =
-            new MakeAnApplication(
-                    applicant,
-                    type,
-                    details,
-                    evidence,
-                    date,
-                    decision,
-                    state,
-                    applicantRole
-            );
+        new MakeAnApplication(
+            applicant,
+            type,
+            details,
+            evidence,
+            date,
+            decision,
+            state,
+            applicantRole
+        );
 
     @Test
     public void should_hold_onto_values() {
@@ -52,44 +52,44 @@ public class MakeAnApplicationTest {
     public void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                null, type, details, evidence,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            null, type, details, evidence,
+            date, decision, state, applicantRole))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, null, details, evidence,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, null, details, evidence,
+            date, decision, state, applicantRole))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, null, evidence,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, null, evidence,
+            date, decision, state, applicantRole))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, null,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, null,
+            date, decision, state, applicantRole))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                null, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            null, decision, state, applicantRole))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                date, null, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            date, null, state, applicantRole))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                date, decision, null, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            date, decision, null, applicantRole))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                date, decision, state, null))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            date, decision, state, null))
+            .isExactlyInstanceOf(NullPointerException.class);
 
     }
 }

@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBSCRIPTIONS;
@@ -10,11 +10,13 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
@@ -27,13 +29,18 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AppellantRequestRespondentEvidencePersonalisationSmsTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock DirectionFinder directionFinder;
-    @Mock RecipientsFinder recipientsFinder;
-    @Mock Direction direction;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    DirectionFinder directionFinder;
+    @Mock
+    RecipientsFinder recipientsFinder;
+    @Mock
+    Direction direction;
 
     private Long caseId = 12345L;
     private String emailTemplateId = "someEmailTemplateId";
@@ -48,13 +55,15 @@ public class AppellantRequestRespondentEvidencePersonalisationSmsTest {
 
     private AppellantRequestRespondentEvidencePersonalisationSms appellantRequestRespondentEvidencePersonalisationSms;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when((direction.getDateDue())).thenReturn(directionDueDate);
-        when(directionFinder.findFirst(asylumCase, DirectionTag.RESPONDENT_EVIDENCE)).thenReturn(Optional.of(direction));
+        when(directionFinder.findFirst(asylumCase, DirectionTag.RESPONDENT_EVIDENCE))
+            .thenReturn(Optional.of(direction));
 
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(mockedAppealReferenceNumber));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(mockedAppealReferenceNumber));
 
         appellantRequestRespondentEvidencePersonalisationSms = new AppellantRequestRespondentEvidencePersonalisationSms(
             emailTemplateId,
@@ -70,7 +79,8 @@ public class AppellantRequestRespondentEvidencePersonalisationSmsTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_REQUEST_RESPONDENT_EVIDENCE_DIRECTION_APPELLANT_AIP_SMS", appellantRequestRespondentEvidencePersonalisationSms.getReferenceId(caseId));
+        assertEquals(caseId + "_REQUEST_RESPONDENT_EVIDENCE_DIRECTION_APPELLANT_AIP_SMS",
+            appellantRequestRespondentEvidencePersonalisationSms.getReferenceId(caseId));
     }
 
     @Test
@@ -85,9 +95,11 @@ public class AppellantRequestRespondentEvidencePersonalisationSmsTest {
         );
 
         when(recipientsFinder.findAll(asylumCase, NotificationType.SMS)).thenCallRealMethod();
-        when(asylumCase.read(SUBSCRIPTIONS)).thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
+        when(asylumCase.read(SUBSCRIPTIONS))
+            .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
 
-        assertTrue(appellantRequestRespondentEvidencePersonalisationSms.getRecipientsList(asylumCase).contains(mockedAppellantMobilePhone));
+        assertTrue(appellantRequestRespondentEvidencePersonalisationSms.getRecipientsList(asylumCase)
+            .contains(mockedAppellantMobilePhone));
     }
 
     @Test
@@ -114,7 +126,8 @@ public class AppellantRequestRespondentEvidencePersonalisationSmsTest {
     @Test
     public void should_return_personalisation_when_all_information_given() {
 
-        Map<String, String> personalisation = appellantRequestRespondentEvidencePersonalisationSms.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            appellantRequestRespondentEvidencePersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(expectedDirectionDueDate, personalisation.get("direction due date"));
@@ -127,7 +140,8 @@ public class AppellantRequestRespondentEvidencePersonalisationSmsTest {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
-        Map<String, String> personalisation = appellantRequestRespondentEvidencePersonalisationSms.getPersonalisation(asylumCase);
+        Map<String, String> personalisation =
+            appellantRequestRespondentEvidencePersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals(expectedDirectionDueDate, personalisation.get("direction due date"));

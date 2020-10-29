@@ -1,16 +1,21 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
@@ -19,15 +24,21 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerService
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 public class RespondentChangeDirectionDueDatePersonalisationTest {
 
-    @Mock Callback<AsylumCase> callback;
-    @Mock AsylumCase asylumCase;
-    @Mock EmailAddressFinder emailAddressFinder;
-    @Mock PersonalisationProvider personalisationProvider;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
+    @Mock
+    PersonalisationProvider personalisationProvider;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String afterListingTemplateId = "afterListingTemplateId";
@@ -46,7 +57,7 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
 
     private RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         respondentChangeDirectionDueDatePersonalisation = new RespondentChangeDirectionDueDatePersonalisation(
@@ -66,7 +77,8 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
         when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
             .thenReturn(Optional.of(State.CASE_BUILDING));
 
-        assertEquals(beforeListingTemplateId, respondentChangeDirectionDueDatePersonalisation.getTemplateId(asylumCase));
+        assertEquals(beforeListingTemplateId,
+            respondentChangeDirectionDueDatePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
@@ -87,29 +99,36 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
 
     @Test
     public void should_return_the_ho_apc_email_address_until_respondent_review() {
-        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(State.CASE_BUILDING));
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+            .thenReturn(Optional.of(State.CASE_BUILDING));
 
-        assertEquals(Collections.singleton(homeOfficeApcEmailAddress), respondentChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeApcEmailAddress),
+            respondentChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_the_ho_lart_email_address_at_respondent_review() {
-        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(State.RESPONDENT_REVIEW));
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+            .thenReturn(Optional.of(State.RESPONDENT_REVIEW));
 
-        assertEquals(Collections.singleton(homeOfficeLartEmailAddress), respondentChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeLartEmailAddress),
+            respondentChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_the_ho_hearing_centre_email_address_after_respondent_review() {
         when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeBhamEmailAddress);
-        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(State.FINAL_BUNDLING));
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+            .thenReturn(Optional.of(State.FINAL_BUNDLING));
 
-        assertEquals(Collections.singleton(homeOfficeBhamEmailAddress), respondentChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeBhamEmailAddress),
+            respondentChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_throw_exception_when_home_office_is_missing_in_the_case_data() {
-        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+            .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> respondentChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
@@ -118,21 +137,24 @@ public class RespondentChangeDirectionDueDatePersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_RESPONDENT_CHANGE_DIRECTION_DUE_DATE", respondentChangeDirectionDueDatePersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+            respondentChangeDirectionDueDatePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_personalisation_when_all_information_given() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisation());
 
-        Map<String, String> personalisation = respondentChangeDirectionDueDatePersonalisation.getPersonalisation(callback);
+        Map<String, String> personalisation =
+            respondentChangeDirectionDueDatePersonalisation.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
-        assertThatThrownBy(() -> respondentChangeDirectionDueDatePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(
+            () -> respondentChangeDirectionDueDatePersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }

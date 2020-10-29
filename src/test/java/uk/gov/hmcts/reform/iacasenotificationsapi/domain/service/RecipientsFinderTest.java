@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBSCRIPTIONS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType.EMAIL;
@@ -12,21 +12,22 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Notific
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.SubscriberType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RecipientsFinderTest {
 
     private final RecipientsFinder recipientsFinder = new RecipientsFinder();
-    @Mock private AsylumCase asylumCase;
+    @Mock
+    private AsylumCase asylumCase;
 
     private String mockedAppellantEmailAddress = "appelant@example.net";
     private String mockedAppellantMobilePhone = "07123456789";
@@ -42,7 +43,8 @@ public class RecipientsFinderTest {
             YesOrNo.NO // wants sms
         );
 
-        when(asylumCase.read(SUBSCRIPTIONS)).thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
+        when(asylumCase.read(SUBSCRIPTIONS))
+            .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
 
         Set<String> result = recipientsFinder.findAll(asylumCase, EMAIL);
 
@@ -72,7 +74,8 @@ public class RecipientsFinderTest {
             YesOrNo.YES // wants sms
         );
 
-        when(asylumCase.read(SUBSCRIPTIONS)).thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
+        when(asylumCase.read(SUBSCRIPTIONS))
+            .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
 
         Set<String> result = recipientsFinder.findAll(asylumCase, SMS);
 

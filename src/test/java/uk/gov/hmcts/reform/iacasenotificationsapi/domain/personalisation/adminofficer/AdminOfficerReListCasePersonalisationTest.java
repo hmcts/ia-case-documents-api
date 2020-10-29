@@ -2,27 +2,28 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.admino
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AdminOfficerReListCasePersonalisationTest {
 
     @Mock
     AsylumCase asylumCase;
-    @Mock AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
+    @Mock
+    AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
     private String templateId = "someTemplateId";
     private AdminOfficerReListCasePersonalisation adminOfficerReListCasePersonalisation;
 
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         String changeToHearingRequirementsAdminOfficerEmailAddress =

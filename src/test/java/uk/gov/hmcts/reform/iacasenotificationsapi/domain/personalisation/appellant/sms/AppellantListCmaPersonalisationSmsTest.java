@@ -1,19 +1,23 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
@@ -21,13 +25,18 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinde
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AppellantListCmaPersonalisationSmsTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock StringProvider stringProvider;
-    @Mock DateTimeExtractor dateTimeExtractor;
-    @Mock RecipientsFinder recipientsFinder;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    StringProvider stringProvider;
+    @Mock
+    DateTimeExtractor dateTimeExtractor;
+    @Mock
+    RecipientsFinder recipientsFinder;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -43,14 +52,15 @@ public class AppellantListCmaPersonalisationSmsTest {
     private String mockedAppellantMobilePhone = "07123456789";
     private AppellantListCmaPersonalisationSms appellantListCmaPersonalisationSms;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDateTime));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
 
-        when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreAddress));
+        when(stringProvider.get("hearingCentreAddress", hearingCentre.toString()))
+            .thenReturn(Optional.of(hearingCentreAddress));
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
         when(dateTimeExtractor.extractHearingTime(hearingDateTime)).thenReturn(hearingTime);
 
@@ -75,9 +85,11 @@ public class AppellantListCmaPersonalisationSmsTest {
 
     @Test
     public void should_return_given_sms_address_list_from_subscribers_in_asylum_case() {
-        when(recipientsFinder.findAll(asylumCase, NotificationType.SMS)).thenReturn(Collections.singleton(mockedAppellantMobilePhone));
+        when(recipientsFinder.findAll(asylumCase, NotificationType.SMS))
+            .thenReturn(Collections.singleton(mockedAppellantMobilePhone));
 
-        assertTrue(appellantListCmaPersonalisationSms.getRecipientsList(asylumCase).contains(mockedAppellantMobilePhone));
+        assertTrue(
+            appellantListCmaPersonalisationSms.getRecipientsList(asylumCase).contains(mockedAppellantMobilePhone));
     }
 
     @Test

@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.verifiers;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.google.common.base.Strings;
 import java.util.Collections;
@@ -21,7 +21,8 @@ import uk.gov.service.notify.NotificationClientException;
 @SuppressWarnings("unchecked")
 public class NotificationVerifier implements Verifier {
 
-    @Autowired private NotificationClient notificationClient;
+    @Autowired
+    private NotificationClient notificationClient;
 
     public void verify(
         long testCaseId,
@@ -44,8 +45,8 @@ public class NotificationVerifier implements Verifier {
 
         if (notificationsSent.isEmpty()) {
             assertFalse(
-                description + ": Notifications were delivered",
-                notificationsSent.isEmpty()
+                notificationsSent.isEmpty(),
+                description + ": Notifications were delivered"
             );
         }
 
@@ -68,8 +69,9 @@ public class NotificationVerifier implements Verifier {
                 final String deliveredNotificationId = notificationsSentMap.get(expectedReference);
                 if (Strings.isNullOrEmpty(deliveredNotificationId)) {
                     assertFalse(
-                        description + ": Notification " + expectedReference + " was delivered successfully",
-                        true
+                        true,
+                        description
+                            + ": Notification " + expectedReference + " was delivered successfully"
                     );
                 }
 
@@ -78,24 +80,34 @@ public class NotificationVerifier implements Verifier {
                     Notification notification = notificationClient.getNotificationById(deliveredNotificationId);
 
                     final String actualReference = notification.getReference().orElse("");
-                    final String actualRecipient = notification.getEmailAddress().orElse(notification.getPhoneNumber().orElse(""));
+                    final String actualRecipient =
+                        notification.getEmailAddress().orElse(notification.getPhoneNumber().orElse(""));
                     final String actualSubject = notification.getSubject().orElse("");
                     final String actualBody = notification.getBody();
 
                     assertThat(
-                        description + ": Notification " + expectedReference + " was delivered with correct reference",
+                        description
+                            + ": Notification "
+                            + expectedReference
+                            + " was delivered with correct reference",
                         actualReference,
                         equalTo(expectedReference)
                     );
 
                     assertThat(
-                        description + ": Notification " + expectedReference + " was delivered to correct recipient",
+                        description
+                            + ": Notification "
+                            + expectedReference
+                            + " was delivered to correct recipient",
                         actualRecipient,
                         equalTo(expectedRecipient)
                     );
 
                     assertThat(
-                        description + ": Notification " + expectedReference + " was delivered with correct subject content",
+                        description
+                            + ": Notification "
+                            + expectedReference
+                            + " was delivered with correct subject content",
                         actualSubject,
                         equalTo(expectedSubject)
                     );
@@ -103,7 +115,10 @@ public class NotificationVerifier implements Verifier {
                     if (expectedBodyUnknownType instanceof String) {
 
                         assertThat(
-                            description + ": Notification " + expectedReference + " was delivered with correct body content",
+                            description
+                                + ": Notification "
+                                + expectedReference
+                                + " was delivered with correct body content",
                             actualBody,
                             equalTo((String) expectedBodyUnknownType)
                         );
@@ -115,7 +130,10 @@ public class NotificationVerifier implements Verifier {
                         expectedBodyMatches.forEach(expectedBodyMatch -> {
 
                             assertThat(
-                                description + ": Notification " + expectedReference + " was delivered with correct body content match",
+                                description
+                                    + ": Notification "
+                                    + expectedReference
+                                    + " was delivered with correct body content match",
                                 actualBody,
                                 containsString(expectedBodyMatch)
                             );
@@ -124,8 +142,8 @@ public class NotificationVerifier implements Verifier {
 
                 } catch (NotificationClientException e) {
                     assertFalse(
-                        description + ": Notification " + deliveredNotificationId + " was found on GovNotify",
-                        true
+                        true,
+                        description + ": Notification " + deliveredNotificationId + " was found on GovNotify"
                     );
                 }
             });

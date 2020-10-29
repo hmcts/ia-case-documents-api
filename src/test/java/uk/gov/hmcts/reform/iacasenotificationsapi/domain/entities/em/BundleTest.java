@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
@@ -26,7 +26,9 @@ public class BundleTest {
     private static final YesOrNo HAS_TABLE_OF_CONTENTS = YesOrNo.YES;
     private static final String FILE_NAME = "bundle file name";
 
-    private Bundle bundle = new Bundle(ID, TITLE, DESCRIPTION, ELIGIBLE_FOR_STITCHING, DOCUMENTS, STITCH_STATUS, STITCHED_DOCUMENT, HAS_COVER_SHEETS, HAS_TABLE_OF_CONTENTS, FILE_NAME);
+    private Bundle bundle =
+        new Bundle(ID, TITLE, DESCRIPTION, ELIGIBLE_FOR_STITCHING, DOCUMENTS, STITCH_STATUS, STITCHED_DOCUMENT,
+            HAS_COVER_SHEETS, HAS_TABLE_OF_CONTENTS, FILE_NAME);
 
 
     @Test

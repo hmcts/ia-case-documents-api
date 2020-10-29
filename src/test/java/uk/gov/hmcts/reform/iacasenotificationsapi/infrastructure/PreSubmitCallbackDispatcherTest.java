@@ -1,20 +1,33 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.access.AccessDeniedException;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
@@ -26,27 +39,41 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.CcdEventAuthorizor;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 public class PreSubmitCallbackDispatcherTest {
 
-    @Mock private CcdEventAuthorizor ccdEventAuthorizor;
-    @Mock private PreSubmitCallbackHandler<CaseData> handler1;
-    @Mock private PreSubmitCallbackHandler<CaseData> handler2;
-    @Mock private PreSubmitCallbackHandler<CaseData> handler3;
-    @Mock private Callback<CaseData> callback;
-    @Mock private CaseDetails<CaseData> caseDetails;
-    @Mock private CaseData caseData;
-    @Mock private CaseData caseDataMutation1;
-    @Mock private CaseData caseDataMutation2;
-    @Mock private CaseData caseDataMutation3;
-    @Mock private PreSubmitCallbackResponse<CaseData> response1;
-    @Mock private PreSubmitCallbackResponse<CaseData> response2;
-    @Mock private PreSubmitCallbackResponse<CaseData> response3;
+    @Mock
+    private CcdEventAuthorizor ccdEventAuthorizor;
+    @Mock
+    private PreSubmitCallbackHandler<CaseData> handler1;
+    @Mock
+    private PreSubmitCallbackHandler<CaseData> handler2;
+    @Mock
+    private PreSubmitCallbackHandler<CaseData> handler3;
+    @Mock
+    private Callback<CaseData> callback;
+    @Mock
+    private CaseDetails<CaseData> caseDetails;
+    @Mock
+    private CaseData caseData;
+    @Mock
+    private CaseData caseDataMutation1;
+    @Mock
+    private CaseData caseDataMutation2;
+    @Mock
+    private CaseData caseDataMutation3;
+    @Mock
+    private PreSubmitCallbackResponse<CaseData> response1;
+    @Mock
+    private PreSubmitCallbackResponse<CaseData> response2;
+    @Mock
+    private PreSubmitCallbackResponse<CaseData> response3;
 
     private PreSubmitCallbackDispatcher<CaseData> preSubmitCallbackDispatcher;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         preSubmitCallbackDispatcher = new PreSubmitCallbackDispatcher<>(
             ccdEventAuthorizor,
@@ -97,7 +124,7 @@ public class PreSubmitCallbackDispatcherTest {
 
             assertNotNull(callbackResponse);
             assertEquals(caseDataMutation2, callbackResponse.getData());
-            assertThat(callbackResponse.getErrors(), is(expectedErrors));
+            assertThat(callbackResponse.getErrors()).containsAll(expectedErrors);
 
             verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.BUILD_CASE);
 

@@ -1,27 +1,33 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_REMADE_RULE_32;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock PersonalisationProvider personalisationProvider;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    PersonalisationProvider personalisationProvider;
 
     private Long caseId = 12345L;
     private String appealReferenceNumber = "someReferenceNumber";
@@ -48,65 +54,88 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisationT
     private FtpaDecisionOutcomeType remade = FtpaDecisionOutcomeType.FTPA_REMADE32;
     private FtpaDecisionOutcomeType dismissed = FtpaDecisionOutcomeType.FTPA_DISMISSED;
 
-    private LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation;
+    private LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation
+        legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation = new LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation(
-            applicantGrantedTemplateId,
-            applicantPartiallyGrantedTemplateId,
-            applicantNotAdmittedTemplateId,
-            applicantRefusedTemplateId,
-            applicantReheardTemplateId,
-            allowedTemplateId,
-            dismissedTemplateId,
-            personalisationProvider
-        );
+        legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation =
+            new LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation(
+                applicantGrantedTemplateId,
+                applicantPartiallyGrantedTemplateId,
+                applicantNotAdmittedTemplateId,
+                applicantRefusedTemplateId,
+                applicantReheardTemplateId,
+                allowedTemplateId,
+                dismissedTemplateId,
+                personalisationProvider
+            );
     }
 
     @Test
     public void should_return_given_template_id_when_outcome_is_empty() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase))
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.empty());
+        assertThatThrownBy(
+            () -> legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("ftpaAppellantDecisionOutcomeType is not present");
     }
 
     @Test
     public void should_return_given_template_id() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(granted));
-        assertEquals(applicantGrantedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(granted));
+        assertEquals(applicantGrantedTemplateId,
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(partiallyGranted));
-        assertEquals(applicantPartiallyGrantedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(partiallyGranted));
+        assertEquals(applicantPartiallyGrantedTemplateId,
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(notAdmitted));
-        assertEquals(applicantNotAdmittedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(notAdmitted));
+        assertEquals(applicantNotAdmittedTemplateId,
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(reheard));
-        assertEquals(applicantReheardTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(reheard));
+        assertEquals(applicantReheardTemplateId,
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(remade));
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(allowed));
-        assertEquals(allowedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(remade));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(allowed));
+        assertEquals(allowedTemplateId,
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(remade));
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(dismissed));
-        assertEquals(dismissedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(remade));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(dismissed));
+        assertEquals(dismissedTemplateId,
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(refused));
-        assertEquals(applicantRefusedTemplateId, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(refused));
+        assertEquals(applicantRefusedTemplateId,
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT", legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_personalisation_of_all_information_given() {
-        when(personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase)).thenReturn(getPersonalisationMapWithGivenValues());
-        Map<String, String> personalisation = legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getPersonalisation(asylumCase);
+        when(personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase))
+            .thenReturn(getPersonalisationMapWithGivenValues());
+        Map<String, String> personalisation =
+            legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));

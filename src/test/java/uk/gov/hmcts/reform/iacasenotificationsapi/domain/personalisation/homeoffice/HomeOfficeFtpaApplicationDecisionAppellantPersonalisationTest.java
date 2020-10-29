@@ -1,31 +1,39 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_REMADE_RULE_32;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
 
-    @Mock AsylumCase asylumCase;
-    @Mock PersonalisationProvider personalisationProvider;
-    @Mock EmailAddressFinder emailAddressFinder;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    PersonalisationProvider personalisationProvider;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
 
     private Long caseId = 12345L;
     private String homeOfficeEmailAddressFtpaGranted = "homeoffice-granted@example.com";
@@ -54,31 +62,34 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
     private FtpaDecisionOutcomeType allowed = FtpaDecisionOutcomeType.FTPA_ALLOWED;
     private FtpaDecisionOutcomeType dismissed = FtpaDecisionOutcomeType.FTPA_DISMISSED;
 
-    private HomeOfficeFtpaApplicationDecisionAppellantPersonalisation homeOfficeFtpaApplicationDecisionAppellantPersonalisation;
+    private HomeOfficeFtpaApplicationDecisionAppellantPersonalisation
+        homeOfficeFtpaApplicationDecisionAppellantPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
-        homeOfficeFtpaApplicationDecisionAppellantPersonalisation = new HomeOfficeFtpaApplicationDecisionAppellantPersonalisation(
-            otherPartyGrantedTemplateId,
-            otherPartyPartiallyGrantedTemplateId,
-            otherPartyNotAdmittedTemplateId,
-            otherPartyRefusedTemplateId,
-            otherPartyReheardTemplateId,
-            allowedTemplateId,
-            dismissedTemplateId,
-            personalisationProvider,
-            homeOfficeEmailAddressFtpaGranted,
-            homeOfficeEmailAddressFtpaRefused,
-            emailAddressFinder
-        );
+        homeOfficeFtpaApplicationDecisionAppellantPersonalisation =
+            new HomeOfficeFtpaApplicationDecisionAppellantPersonalisation(
+                otherPartyGrantedTemplateId,
+                otherPartyPartiallyGrantedTemplateId,
+                otherPartyNotAdmittedTemplateId,
+                otherPartyRefusedTemplateId,
+                otherPartyReheardTemplateId,
+                allowedTemplateId,
+                dismissedTemplateId,
+                personalisationProvider,
+                homeOfficeEmailAddressFtpaGranted,
+                homeOfficeEmailAddressFtpaRefused,
+                emailAddressFinder
+            );
     }
 
     @Test
     public void should_return_given_template_id_when_outcome_is_empty() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.empty());
         assertThatThrownBy(() -> homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("ftpaAppellantDecisionOutcomeType is not present");
@@ -87,95 +98,130 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
     @Test
     public void should_return_given_template_id() {
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(granted));
-        assertEquals(otherPartyGrantedTemplateId, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(granted));
+        assertEquals(otherPartyGrantedTemplateId,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(partiallyGranted));
-        assertEquals(otherPartyPartiallyGrantedTemplateId, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(partiallyGranted));
+        assertEquals(otherPartyPartiallyGrantedTemplateId,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(notAdmitted));
-        assertEquals(otherPartyNotAdmittedTemplateId, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(notAdmitted));
+        assertEquals(otherPartyNotAdmittedTemplateId,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(reheard));
-        assertEquals(otherPartyReheardTemplateId, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(reheard));
+        assertEquals(otherPartyReheardTemplateId,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(remade));
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(allowed));
-        assertEquals(allowedTemplateId, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(remade));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(allowed));
+        assertEquals(allowedTemplateId,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(remade));
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(dismissed));
-        assertEquals(dismissedTemplateId, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(remade));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(dismissed));
+        assertEquals(dismissedTemplateId,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
 
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(refused));
-        assertEquals(otherPartyRefusedTemplateId, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(refused));
+        assertEquals(otherPartyRefusedTemplateId,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT", homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_for_granted_appeal_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_GRANTED));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_GRANTED));
 
-        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddressFtpaGranted));
+        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
+            .contains(homeOfficeEmailAddressFtpaGranted));
     }
 
     @Test
     public void should_return_given_email_address_for_partially_granted_appeal_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED));
 
-        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddressFtpaGranted));
+        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
+            .contains(homeOfficeEmailAddressFtpaGranted));
     }
 
     @Test
     public void should_return_given_email_address_for_refused_appeal_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REFUSED));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REFUSED));
 
-        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddressFtpaRefused));
+        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
+            .contains(homeOfficeEmailAddressFtpaRefused));
     }
 
     @Test
     public void should_return_given_email_address_for_reheard35_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REHEARD35));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REHEARD35));
 
-        assertEquals(Collections.singleton(homeOfficeEmailAddress), homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeEmailAddress),
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_email_address_for_reheard32_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REHEARD32));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REHEARD32));
 
-        assertEquals(Collections.singleton(homeOfficeEmailAddress), homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeEmailAddress),
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_given_email_address_for_remade32_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
 
-        assertEquals(Collections.singleton(homeOfficeEmailAddress), homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
+        assertEquals(Collections.singleton(homeOfficeEmailAddress),
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
     public void should_return_the_ftpa_application_decision_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
 
-        assertEquals(FtpaDecisionOutcomeType.FTPA_REMADE32, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getFtpaApplicationDecision(asylumCase));
+        assertEquals(FtpaDecisionOutcomeType.FTPA_REMADE32,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getFtpaApplicationDecision(asylumCase));
     }
 
     @Test
     public void should_return_the_ftpa_application_rj_decision_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
+        when(asylumCase.read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
 
-        assertEquals(FtpaDecisionOutcomeType.FTPA_REMADE32, homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getFtpaApplicationDecision(asylumCase));
+        assertEquals(FtpaDecisionOutcomeType.FTPA_REMADE32,
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getFtpaApplicationDecision(asylumCase));
     }
 
     @Test
     public void should_return_personalisation_of_all_information_given() {
-        when(personalisationProvider.getHomeOfficeHeaderPersonalisation(asylumCase)).thenReturn(getPersonalisationMapWithGivenValues());
-        Map<String, String> personalisation = homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getPersonalisation(asylumCase);
+        when(personalisationProvider.getHomeOfficeHeaderPersonalisation(asylumCase))
+            .thenReturn(getPersonalisationMapWithGivenValues());
+        Map<String, String> personalisation =
+            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));

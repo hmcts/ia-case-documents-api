@@ -9,24 +9,31 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 public class LegalRepresentativeRespondentFtpaSubmittedPersonalisationTest {
 
-    @Mock PersonalisationProvider personalisationProvider;
-    @Mock Callback<AsylumCase> callback;
-    @Mock AsylumCase asylumCase;
-    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock
+    PersonalisationProvider personalisationProvider;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
+    CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
     private String templateId = "ftpaSumbittedTemplateId";
@@ -36,32 +43,37 @@ public class LegalRepresentativeRespondentFtpaSubmittedPersonalisationTest {
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
 
-    private LegalRepresentativeRespondentFtpaSubmittedPersonalisation legalRepresentativeRespondentFtpaSubmittedPersonalisation;
+    private LegalRepresentativeRespondentFtpaSubmittedPersonalisation
+        legalRepresentativeRespondentFtpaSubmittedPersonalisation;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class))
+            .thenReturn(Optional.of(legalRepEmailAddress));
 
-        legalRepresentativeRespondentFtpaSubmittedPersonalisation = new LegalRepresentativeRespondentFtpaSubmittedPersonalisation(
-            templateId,
-            iaExUiFrontendUrl,
-            personalisationProvider,
-            customerServicesProvider
-        );
+        legalRepresentativeRespondentFtpaSubmittedPersonalisation =
+            new LegalRepresentativeRespondentFtpaSubmittedPersonalisation(
+                templateId,
+                iaExUiFrontendUrl,
+                personalisationProvider,
+                customerServicesProvider
+            );
     }
 
     @Test
     public void should_return_given_email_address() {
 
-        assertThat(legalRepresentativeRespondentFtpaSubmittedPersonalisation.getRecipientsList(asylumCase)).isEqualTo(Collections.singleton(legalRepEmailAddress));
+        assertThat(legalRepresentativeRespondentFtpaSubmittedPersonalisation.getRecipientsList(asylumCase))
+            .isEqualTo(Collections.singleton(legalRepEmailAddress));
     }
 
     @Test
     public void should_throw_exception_when_email_address_is_null() {
 
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> legalRepresentativeRespondentFtpaSubmittedPersonalisation.getRecipientsList(asylumCase))
+        assertThatThrownBy(
+            () -> legalRepresentativeRespondentFtpaSubmittedPersonalisation.getRecipientsList(asylumCase))
             .hasMessage("legalRepresentativeEmailAddress is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -75,14 +87,16 @@ public class LegalRepresentativeRespondentFtpaSubmittedPersonalisationTest {
     @Test
     public void should_return_given_reference_id() {
 
-        assertThat(legalRepresentativeRespondentFtpaSubmittedPersonalisation.getReferenceId(caseId)).isEqualTo(caseId + "_LEGAL_REP_RESPONDENT_FTPA_SUBMITTED");
+        assertThat(legalRepresentativeRespondentFtpaSubmittedPersonalisation.getReferenceId(caseId))
+            .isEqualTo(caseId + "_LEGAL_REP_RESPONDENT_FTPA_SUBMITTED");
     }
 
     @Test
     public void should_return_given_personalisation() {
 
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisation());
-        Map<String, String> expectedPersonalisation = legalRepresentativeRespondentFtpaSubmittedPersonalisation.getPersonalisation(callback);
+        Map<String, String> expectedPersonalisation =
+            legalRepresentativeRespondentFtpaSubmittedPersonalisation.getPersonalisation(callback);
 
         assertThat(expectedPersonalisation).isEqualToComparingOnlyGivenFields(getPersonalisation());
     }
@@ -90,7 +104,8 @@ public class LegalRepresentativeRespondentFtpaSubmittedPersonalisationTest {
     @Test
     public void should_throw_exception_when_callback_is_null() {
 
-        assertThatThrownBy(() -> legalRepresentativeRespondentFtpaSubmittedPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
+        assertThatThrownBy(() -> legalRepresentativeRespondentFtpaSubmittedPersonalisation
+            .getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }

@@ -2,30 +2,35 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.awaitility.core.ConditionTimeoutException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.service.notify.NotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
 import uk.gov.service.notify.SendSmsResponse;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class GovNotifyNotificationSenderTest {
 
     private int deduplicateSendsWithinSeconds = 1;
-    @Mock private NotificationClient notificationClient;
+    @Mock
+    private NotificationClient notificationClient;
 
     private String templateId = "a-b-c-d-e-f";
     private String emailAddress = "recipient@example.com";
@@ -35,7 +40,7 @@ public class GovNotifyNotificationSenderTest {
 
     private GovNotifyNotificationSender govNotifyNotificationSender;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         govNotifyNotificationSender =
             new GovNotifyNotificationSender(
@@ -131,7 +136,7 @@ public class GovNotifyNotificationSenderTest {
         try {
             await().atMost(2, TimeUnit.SECONDS).until(() -> false);
         } catch (ConditionTimeoutException e) {
-            assertTrue("We expect this to timeout", true);
+            assertTrue(true, "We expect this to timeout");
         }
 
         final String actualNotificationId3 =
@@ -273,7 +278,7 @@ public class GovNotifyNotificationSenderTest {
         try {
             await().atMost(2, TimeUnit.SECONDS).until(() -> false);
         } catch (ConditionTimeoutException e) {
-            assertTrue("We expect this to timeout", true);
+            assertTrue(true, "We expect this to timeout");
         }
 
         final String actualNotificationId3 =

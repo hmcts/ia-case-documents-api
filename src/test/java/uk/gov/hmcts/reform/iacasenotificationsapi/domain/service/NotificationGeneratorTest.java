@@ -4,18 +4,23 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singleton;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
@@ -25,18 +30,28 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class NotificationGeneratorTest {
 
-    @Mock EmailNotificationPersonalisation emailNotificationPersonalisation;
-    @Mock EmailNotificationPersonalisation emailNotificationPersonalisation1;
-    @Mock SmsNotificationPersonalisation smsNotificationPersonalisation1;
-    @Mock SmsNotificationPersonalisation smsNotificationPersonalisation2;
-    @Mock NotificationSender notificationSender;
-    @Spy NotificationIdAppender notificationIdAppender;
-    @Mock Callback<AsylumCase> callback;
-    @Mock CaseDetails<AsylumCase> caseDetails;
-    @Mock AsylumCase asylumCase;
+    @Mock
+    EmailNotificationPersonalisation emailNotificationPersonalisation;
+    @Mock
+    EmailNotificationPersonalisation emailNotificationPersonalisation1;
+    @Mock
+    SmsNotificationPersonalisation smsNotificationPersonalisation1;
+    @Mock
+    SmsNotificationPersonalisation smsNotificationPersonalisation2;
+    @Mock
+    NotificationSender notificationSender;
+    @Spy
+    NotificationIdAppender notificationIdAppender;
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    CaseDetails<AsylumCase> caseDetails;
+    @Mock
+    AsylumCase asylumCase;
 
     private List<EmailNotificationPersonalisation> repEmailNotificationPersonalisationList;
     private List<EmailNotificationPersonalisation> aipEmailNotificationPersonalisationList;
@@ -66,7 +81,7 @@ public class NotificationGeneratorTest {
     private String notificationId1 = "notificationId1";
     private String notificationId2 = "notificationId2";
 
-    @Before
+    @BeforeEach
     public void setup() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -83,8 +98,10 @@ public class NotificationGeneratorTest {
         when(emailNotificationPersonalisation.getPersonalisation(callback)).thenReturn(personalizationMap1);
         when(emailNotificationPersonalisation1.getPersonalisation(callback)).thenReturn(personalizationMap2);
 
-        when(notificationSender.sendEmail(templateId1, emailAddress1, personalizationMap1, refId1)).thenReturn(notificationId1);
-        when(notificationSender.sendEmail(templateId2, emailAddress2, personalizationMap2, refId2)).thenReturn(notificationId2);
+        when(notificationSender.sendEmail(templateId1, emailAddress1, personalizationMap1, refId1))
+            .thenReturn(notificationId1);
+        when(notificationSender.sendEmail(templateId2, emailAddress2, personalizationMap2, refId2))
+            .thenReturn(notificationId2);
 
         when(smsNotificationPersonalisation1.getReferenceId(caseId)).thenReturn(refId1);
         when(smsNotificationPersonalisation2.getReferenceId(caseId)).thenReturn(refId2);
@@ -95,21 +112,28 @@ public class NotificationGeneratorTest {
         when(smsNotificationPersonalisation1.getPersonalisation(callback)).thenReturn(personalizationMap1);
         when(smsNotificationPersonalisation2.getPersonalisation(callback)).thenReturn(personalizationMap2);
 
-        when(notificationSender.sendSms(templateId1, phoneNumber1, personalizationMap1, refId1)).thenReturn(notificationId1);
-        when(notificationSender.sendSms(templateId2, phoneNumber2, personalizationMap2, refId2)).thenReturn(notificationId2);
+        when(notificationSender.sendSms(templateId1, phoneNumber1, personalizationMap1, refId1))
+            .thenReturn(notificationId1);
+        when(notificationSender.sendSms(templateId2, phoneNumber2, personalizationMap2, refId2))
+            .thenReturn(notificationId2);
 
         when(notificationIdAppender.append(notificationsSent, refId1, notificationId1)).thenReturn(notificationsSent);
         when(notificationIdAppender.append(notificationsSent, refId2, notificationId2)).thenReturn(notificationsSent);
 
-        repEmailNotificationPersonalisationList = newArrayList(emailNotificationPersonalisation, emailNotificationPersonalisation1);
-        aipEmailNotificationPersonalisationList = newArrayList(emailNotificationPersonalisation, emailNotificationPersonalisation1);
-        aipSmsNotificationPersonalisationList = newArrayList(smsNotificationPersonalisation1, smsNotificationPersonalisation2);
+        repEmailNotificationPersonalisationList =
+            newArrayList(emailNotificationPersonalisation, emailNotificationPersonalisation1);
+        aipEmailNotificationPersonalisationList =
+            newArrayList(emailNotificationPersonalisation, emailNotificationPersonalisation1);
+        aipSmsNotificationPersonalisationList =
+            newArrayList(smsNotificationPersonalisation1, smsNotificationPersonalisation2);
 
     }
 
     @Test
     public void should_send_notification_for_each_email_personalisation() {
-        notificationGenerator = new EmailNotificationGenerator(repEmailNotificationPersonalisationList, notificationSender, notificationIdAppender);
+        notificationGenerator =
+            new EmailNotificationGenerator(repEmailNotificationPersonalisationList, notificationSender,
+                notificationIdAppender);
 
         when(emailNotificationPersonalisation.getRecipientsList(asylumCase)).thenReturn(singleton(emailAddress1));
         when(emailNotificationPersonalisation1.getRecipientsList(asylumCase)).thenReturn(singleton(emailAddress2));
@@ -129,7 +153,9 @@ public class NotificationGeneratorTest {
 
     @Test
     public void should_send_Aip_notification_emails_for_each_email_personalisation_using_the_subscriber_mode() {
-        notificationGenerator = new EmailNotificationGenerator(aipEmailNotificationPersonalisationList, notificationSender, notificationIdAppender);
+        notificationGenerator =
+            new EmailNotificationGenerator(aipEmailNotificationPersonalisationList, notificationSender,
+                notificationIdAppender);
 
         when(emailNotificationPersonalisation.getRecipientsList(asylumCase)).thenReturn(singleton(emailAddress1));
         when(emailNotificationPersonalisation1.getRecipientsList(asylumCase)).thenReturn(singleton(emailAddress2));
@@ -149,7 +175,8 @@ public class NotificationGeneratorTest {
 
     @Test
     public void should_send_Aip_notification_Sms_for_each_personalisation_using_the_subscriber_mode() {
-        notificationGenerator = new SmsNotificationGenerator(aipSmsNotificationPersonalisationList, notificationSender, notificationIdAppender);
+        notificationGenerator = new SmsNotificationGenerator(aipSmsNotificationPersonalisationList, notificationSender,
+            notificationIdAppender);
 
         when(smsNotificationPersonalisation1.getRecipientsList(asylumCase)).thenReturn(singleton(phoneNumber1));
         when(smsNotificationPersonalisation2.getRecipientsList(asylumCase)).thenReturn(singleton(phoneNumber2));
