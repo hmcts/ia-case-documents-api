@@ -1,18 +1,18 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DRAFT_DECISION_AND_REASONS_DOCUMENTS;
 
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class DecisionAndReasonsCreatorTest {
 
@@ -47,7 +47,7 @@ public class DecisionAndReasonsCreatorTest {
 
     private DecisionAndReasonsCreator decisionAndReasonsCreator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         decisionAndReasonsCreator =
@@ -55,17 +55,16 @@ public class DecisionAndReasonsCreatorTest {
                         decisionAndReasonsDocumentCreator,
                         documentHandler
                 );
+    }
 
+    @Test
+    public void should_create_decision_and_reasons_document_and_append_to_decision_and_reasons_documents_for_the_case() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.GENERATE_DECISION_AND_REASONS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(decisionAndReasonsDocumentCreator.create(caseDetails))
-            .thenReturn(uploadedDocument);
-    }
-
-    @Test
-    public void should_create_decision_and_reasons_document_and_append_to_decision_and_reasons_documents_for_the_case() {
+                .thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 decisionAndReasonsCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

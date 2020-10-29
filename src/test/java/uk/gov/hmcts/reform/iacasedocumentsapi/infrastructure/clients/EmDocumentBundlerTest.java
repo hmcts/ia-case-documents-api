@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -10,12 +11,12 @@ import com.google.common.collect.ImmutableList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -27,7 +28,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class EmDocumentBundlerTest {
 
@@ -45,7 +46,7 @@ public class EmDocumentBundlerTest {
 
     private EmDocumentBundler emDocumentBundler;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         String bundleFilename = "some-bundle-filename";
@@ -101,10 +102,10 @@ public class EmDocumentBundlerTest {
             bundleFilename
         );
 
-        assertThat(documentBundle.getDocumentUrl()).isEqualTo(returnedDocument.getDocumentUrl());
-        assertThat(documentBundle.getDocumentBinaryUrl()).isEqualTo(returnedDocument.getDocumentBinaryUrl());
-        assertThat(documentBundle.getDocumentFilename()).isEqualTo(returnedDocument.getDocumentFilename());
-        assertThat(documentBundle.getDocumentFilename()).isEqualTo(returnedDocument.getDocumentFilename());
+        assertEquals(documentBundle.getDocumentUrl(), returnedDocument.getDocumentUrl());
+        assertEquals(documentBundle.getDocumentBinaryUrl(), returnedDocument.getDocumentBinaryUrl());
+        assertEquals(documentBundle.getDocumentFilename(), returnedDocument.getDocumentFilename());
+        assertEquals(documentBundle.getDocumentFilename(), returnedDocument.getDocumentFilename());
 
         ArgumentCaptor<Callback<BundleCaseData>> captor = ArgumentCaptor.forClass(Callback.class);
 
@@ -113,7 +114,7 @@ public class EmDocumentBundlerTest {
             eq(BUNDLE_URL + BUNDLE_STITCH_URL)
         );
 
-        IdValue<Bundle> bundleIdValue =
+        final IdValue<Bundle> bundleIdValue =
             new IdValue<>(
                 "1",
                 new Bundle(
@@ -128,12 +129,12 @@ public class EmDocumentBundlerTest {
 
         Callback<BundleCaseData> caseDataCallback = captor.getValue();
 
-        assertThat(caseDataCallback.getEvent()).isEqualTo(Event.GENERATE_HEARING_BUNDLE);
-        assertThat(caseDataCallback.getCaseDetails().getState()).isEqualTo(State.UNKNOWN);
-        assertThat(caseDataCallback.getCaseDetails().getJurisdiction()).isEqualTo("IA");
-        assertThat(caseDataCallback.getCaseDetails().getId()).isEqualTo(1L);
-        assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().size()).isEqualTo(1);
-        assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getId()).isEqualTo("1");
+        assertEquals(caseDataCallback.getEvent(), Event.GENERATE_HEARING_BUNDLE);
+        assertEquals(caseDataCallback.getCaseDetails().getState(), State.UNKNOWN);
+        assertEquals(caseDataCallback.getCaseDetails().getJurisdiction(), "IA");
+        assertEquals(caseDataCallback.getCaseDetails().getId(), 1L);
+        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().size(), 1);
+        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getId(), "1");
         assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getValue())
             .isEqualToIgnoringGivenFields(bundleIdValue.getValue(), "documents");
 

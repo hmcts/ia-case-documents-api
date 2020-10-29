@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -8,17 +8,17 @@ import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class HearingRequirementsTemplateTest {
 
@@ -69,9 +69,13 @@ public class HearingRequirementsTemplateTest {
     private DatesToAvoid datesToAvoid1 = new DatesToAvoid();
     private DatesToAvoid datesToAvoid2 = new DatesToAvoid();
 
+    private List<IdValue<WitnessDetails>> witnessDetails;
+    private List<IdValue<InterpreterLanguage>> interpreterLanguage;
+    private List<IdValue<DatesToAvoid>> datesToAvoidList;
+
     private HearingRequirementsTemplate hearingRequirementsTemplate;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         hearingRequirementsTemplate =
@@ -82,7 +86,7 @@ public class HearingRequirementsTemplateTest {
         witness1.setWitnessName("Some Witness");
         witness2.setWitnessName("Another Witness");
 
-        final List<IdValue<WitnessDetails>> witnessDetails =
+        witnessDetails =
             Arrays.asList(
                 new IdValue<>("111", witness1),
                 new IdValue<>("222", witness2));
@@ -92,7 +96,7 @@ public class HearingRequirementsTemplateTest {
         interpreter2.setLanguage("Serbian");
         interpreter2.setLanguageDialect("Dialect B");
 
-        final List<IdValue<InterpreterLanguage>> interpreterLanguage =
+        interpreterLanguage =
             Arrays.asList(
                 new IdValue<>("111", interpreter1),
                 new IdValue<>("222", interpreter2)
@@ -103,11 +107,24 @@ public class HearingRequirementsTemplateTest {
         datesToAvoid1.setDateToAvoidReason("Christmas");
         datesToAvoid2.setDateToAvoidReason("New Year");
 
-        final List<IdValue<DatesToAvoid>> datesToAvoidList =
+        datesToAvoidList =
             Arrays.asList(
                 new IdValue<>("111", datesToAvoid1),
                 new IdValue<>("222", datesToAvoid2)
             );
+
+    }
+
+    @Test
+    public void should_return_template_name() {
+
+        assertEquals(templateName, hearingRequirementsTemplate.getName());
+    }
+
+    @Test
+    public void should_map_case_data_to_template_field_values() {
+
+
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -151,16 +168,12 @@ public class HearingRequirementsTemplateTest {
 
         when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
 
-    }
 
-    @Test
-    public void should_return_template_name() {
 
-        assertEquals(templateName, hearingRequirementsTemplate.getName());
-    }
 
-    @Test
-    public void should_map_case_data_to_template_field_values() {
+
+
+
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
@@ -210,6 +223,53 @@ public class HearingRequirementsTemplateTest {
 
     @Test
     public void should_map_case_data_to_template_field_values_no_dates_to_avoid_flag() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
+        when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
+
+        when(asylumCase.read(IS_WITNESSES_ATTENDING, YesOrNo.class)).thenReturn(Optional.of(isWitnessesAttending));
+        when(asylumCase.read(WITNESS_DETAILS)).thenReturn(Optional.of(witnessDetails));
+
+        when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
+        when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
+        when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
+
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.of(physicalOrMentalHealthIssues));
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of(physicalOrMentalHealthIssuesDescription));
+
+        when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
+        when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
+
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
+
+        when(asylumCase.read(SINGLE_SEX_COURT, YesOrNo.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE, MaleOrFemale.class)).thenReturn(Optional.of(singleSexCourtType));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE_DESCRIPTION, String.class)).thenReturn(Optional.of(singleSexCourtTypeDescription));
+
+        when(asylumCase.read(IN_CAMERA_COURT, YesOrNo.class)).thenReturn(Optional.of(inCameraCourt));
+        when(asylumCase.read(IN_CAMERA_COURT_DESCRIPTION, String.class)).thenReturn(Optional.of(inCameraCourtDescription));
+
+        when(asylumCase.read(ADDITIONAL_REQUESTS, YesOrNo.class)).thenReturn(Optional.of(additionalRequests));
+        when(asylumCase.read(ADDITIONAL_REQUESTS_DESCRIPTION, String.class)).thenReturn(Optional.of(additionalRequestsDescription));
+
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
+
+        when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
+
+
+
+
+
+
         when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
@@ -225,6 +285,7 @@ public class HearingRequirementsTemplateTest {
 
     @Test
     public void should_be_tolerant_of_missing_data() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -295,6 +356,50 @@ public class HearingRequirementsTemplateTest {
 
     @Test
     public void should_default_date_to_avoid_reason_null_values_to_empty_string() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
+        when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
+
+        when(asylumCase.read(IS_WITNESSES_ATTENDING, YesOrNo.class)).thenReturn(Optional.of(isWitnessesAttending));
+        when(asylumCase.read(WITNESS_DETAILS)).thenReturn(Optional.of(witnessDetails));
+
+        when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
+        when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
+        when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
+
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.of(physicalOrMentalHealthIssues));
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of(physicalOrMentalHealthIssuesDescription));
+
+        when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
+        when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
+
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
+
+        when(asylumCase.read(SINGLE_SEX_COURT, YesOrNo.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE, MaleOrFemale.class)).thenReturn(Optional.of(singleSexCourtType));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE_DESCRIPTION, String.class)).thenReturn(Optional.of(singleSexCourtTypeDescription));
+
+        when(asylumCase.read(IN_CAMERA_COURT, YesOrNo.class)).thenReturn(Optional.of(inCameraCourt));
+        when(asylumCase.read(IN_CAMERA_COURT_DESCRIPTION, String.class)).thenReturn(Optional.of(inCameraCourtDescription));
+
+        when(asylumCase.read(ADDITIONAL_REQUESTS, YesOrNo.class)).thenReturn(Optional.of(additionalRequests));
+        when(asylumCase.read(ADDITIONAL_REQUESTS_DESCRIPTION, String.class)).thenReturn(Optional.of(additionalRequestsDescription));
+
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
+
+        when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
+
+
+
 
         datesToAvoid1.setDateToAvoid(LocalDate.parse("2019-12-25"));
         datesToAvoid2.setDateToAvoid(LocalDate.parse("2020-01-01"));
@@ -323,6 +428,50 @@ public class HearingRequirementsTemplateTest {
 
     @Test
     public void should_default_date_to_avoid_null_values_to_past_date() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
+        when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
+
+        when(asylumCase.read(IS_WITNESSES_ATTENDING, YesOrNo.class)).thenReturn(Optional.of(isWitnessesAttending));
+        when(asylumCase.read(WITNESS_DETAILS)).thenReturn(Optional.of(witnessDetails));
+
+        when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
+        when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
+        when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
+
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.of(physicalOrMentalHealthIssues));
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of(physicalOrMentalHealthIssuesDescription));
+
+        when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
+        when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
+
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
+
+        when(asylumCase.read(SINGLE_SEX_COURT, YesOrNo.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE, MaleOrFemale.class)).thenReturn(Optional.of(singleSexCourtType));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE_DESCRIPTION, String.class)).thenReturn(Optional.of(singleSexCourtTypeDescription));
+
+        when(asylumCase.read(IN_CAMERA_COURT, YesOrNo.class)).thenReturn(Optional.of(inCameraCourt));
+        when(asylumCase.read(IN_CAMERA_COURT_DESCRIPTION, String.class)).thenReturn(Optional.of(inCameraCourtDescription));
+
+        when(asylumCase.read(ADDITIONAL_REQUESTS, YesOrNo.class)).thenReturn(Optional.of(additionalRequests));
+        when(asylumCase.read(ADDITIONAL_REQUESTS_DESCRIPTION, String.class)).thenReturn(Optional.of(additionalRequestsDescription));
+
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
+
+        when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
+
+
 
         datesToAvoid1.setDateToAvoid(LocalDate.parse("2019-12-25"));
         datesToAvoid2.setDateToAvoid(null);

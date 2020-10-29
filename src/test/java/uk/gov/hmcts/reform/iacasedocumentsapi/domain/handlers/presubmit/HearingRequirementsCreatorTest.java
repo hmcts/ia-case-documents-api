@@ -1,15 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_REQUIREMENTS;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class HearingRequirementsCreatorTest {
 
@@ -36,7 +36,7 @@ public class HearingRequirementsCreatorTest {
 
     private HearingRequirementsCreator hearingRequirementsCreator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         hearingRequirementsCreator =
@@ -44,16 +44,16 @@ public class HearingRequirementsCreatorTest {
                 hearingRequirementsDocumentCreator,
                 documentHandler
             );
+    }
+
+    @Test
+    public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.DRAFT_HEARING_REQUIREMENTS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(hearingRequirementsDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-    }
-
-    @Test
-    public void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingRequirementsCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

@@ -1,18 +1,17 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CustomerServicesProviderTest {
 
     @Mock CustomerServicesProvider customerServicesProvider;
@@ -20,7 +19,7 @@ public class CustomerServicesProviderTest {
     private String customerServicesTelephone = "555 555";
     private String customerServicesEmail = "some.email@example.com";
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         customerServicesProvider = new CustomerServicesProvider(
@@ -34,9 +33,9 @@ public class CustomerServicesProviderTest {
 
         Map<String, String> customerServicesPersonalisation = customerServicesProvider.getCustomerServicesPersonalisation();
 
-        assertThat(customerServicesPersonalisation.get("customerServicesTelephone")).isEqualTo(customerServicesTelephone);
+        assertEquals(customerServicesPersonalisation.get("customerServicesTelephone"), customerServicesTelephone);
 
-        assertThat(customerServicesPersonalisation.get("customerServicesEmail")).isEqualTo(customerServicesEmail);
+        assertEquals(customerServicesPersonalisation.get("customerServicesEmail"), customerServicesEmail);
     }
 
     @Test

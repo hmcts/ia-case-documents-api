@@ -1,61 +1,39 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder;
+import static com.github.tomakehurst.wiremock.matching.RequestPatternBuilder.newRequestPattern;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixtures.someUploadResponse;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import org.apache.commons.lang.RandomStringUtils;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.Builder;
 
-public class GivensBuilder {
+public interface GivensBuilder {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    public GivensBuilder someLoggedIn(UserDetailsForTestBuilder userDetailsForTestBuilder) {
-
-        stubFor(get(urlEqualTo("/userAuth/o/userinfo"))
-            .willReturn(aResponse()
+    default void docmosisWillReturnSomeDocument(WireMockServer server) {
+        server.addStubMapping(
+                new StubMapping(
+                        newRequestPattern(RequestMethod.POST, urlEqualTo("/docmosis/rs/render"))
+                                .build(),
+                        aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
-                .withBody(
-                    getObjectAsJsonString(
-                        userDetailsForTestBuilder))));
-
-        return this;
+                .withBody(RandomStringUtils.random(100).getBytes())
+                .build()));
     }
 
-    public GivensBuilder docmosisWillReturnSomeDocument() {
-
-        stubFor(post(urlEqualTo("/docmosis/rs/render"))
-            .willReturn(aResponse()
+    default void theDocoumentsManagementApiIsAvailable(WireMockServer server) {
+        server.addStubMapping(
+                new StubMapping(
+                        newRequestPattern(RequestMethod.POST, urlEqualTo("/ccdGateway/documents"))
+                                .build(),
+                        aResponse()
                 .withStatus(200)
-                .withBody(RandomStringUtils.random(100).getBytes())));
-
-        return this;
+                .withBody(someUploadResponse())
+                .build()));
     }
 
-    public GivensBuilder theDocoumentsManagementApiIsAvailable() {
-
-        stubFor(post(urlEqualTo("/ccdGateway/documents"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withBody(someUploadResponse())));
-
-        return this;
-    }
-
-    private String getObjectAsJsonString(Builder builder) {
-
-        try {
-            return objectMapper.writeValueAsString(builder.build());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Couldn't serialize object", e);
-        }
-    }
-
-    public GivensBuilder and() {
+    default GivensBuilder and() {
         return this;
     }
 }

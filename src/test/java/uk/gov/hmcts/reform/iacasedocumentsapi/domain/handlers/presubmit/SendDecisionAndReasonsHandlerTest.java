@@ -1,17 +1,17 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECISION_AND_REASONS_AVAILABLE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.SendDecisionAndReasonsOrchestrator;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class SendDecisionAndReasonsHandlerTest {
 
@@ -33,19 +33,17 @@ public class SendDecisionAndReasonsHandlerTest {
 
     private SendDecisionAndReasonsHandler sendDecisionAndReasonsHandler;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         sendDecisionAndReasonsHandler =
             new SendDecisionAndReasonsHandler(sendDecisionAndReasonsOrchestrator);
-
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SEND_DECISION_AND_REASONS);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
     }
 
     @Test
     public void handling_should_throw_if_event_not_applicable() {
+
+        when(callback.getEvent()).thenReturn(Event.SEND_DECISION_AND_REASONS);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
 
@@ -64,6 +62,10 @@ public class SendDecisionAndReasonsHandlerTest {
 
     @Test
     public void calls_send_decision_and_reasons_service() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SEND_DECISION_AND_REASONS);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         PreSubmitCallbackResponse<AsylumCase> response =
             sendDecisionAndReasonsHandler.handle(ABOUT_TO_SUBMIT, callback);

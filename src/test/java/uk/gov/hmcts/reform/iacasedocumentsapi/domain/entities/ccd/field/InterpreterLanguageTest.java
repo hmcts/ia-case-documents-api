@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class InterpreterLanguageTest {
 
@@ -10,7 +10,7 @@ public class InterpreterLanguageTest {
     private final String languageDialect = "Some Dialect";
     private InterpreterLanguage interpreterLanguage;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         interpreterLanguage = new InterpreterLanguage();
         interpreterLanguage.setLanguage(language);

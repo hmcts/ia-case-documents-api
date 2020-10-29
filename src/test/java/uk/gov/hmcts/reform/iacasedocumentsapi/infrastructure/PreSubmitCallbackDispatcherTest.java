@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.google.common.collect.ImmutableSet;
@@ -10,12 +9,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -33,7 +32,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.HearingN
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class PreSubmitCallbackDispatcherTest {
 
@@ -53,7 +52,7 @@ public class PreSubmitCallbackDispatcherTest {
 
     private PreSubmitCallbackDispatcher<CaseData> preSubmitCallbackDispatcher;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         preSubmitCallbackDispatcher = new PreSubmitCallbackDispatcher<>(
             ccdEventAuthorizor,
@@ -104,7 +103,7 @@ public class PreSubmitCallbackDispatcherTest {
 
             assertNotNull(callbackResponse);
             assertEquals(caseDataMutation2, callbackResponse.getData());
-            assertThat(callbackResponse.getErrors(), is(expectedErrors));
+            assertEquals(callbackResponse.getErrors(), expectedErrors);
 
             verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.BUILD_CASE);
 
@@ -131,12 +130,6 @@ public class PreSubmitCallbackDispatcherTest {
             when(callback.getEvent()).thenReturn(Event.BUILD_CASE);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(caseData);
-
-            when(response1.getData()).thenReturn(caseData);
-            when(response1.getErrors()).thenReturn(Collections.emptySet());
-
-            when(response2.getData()).thenReturn(caseData);
-            when(response2.getErrors()).thenReturn(Collections.emptySet());
 
             when(response3.getData()).thenReturn(caseData);
             when(response3.getErrors()).thenReturn(Collections.emptySet());

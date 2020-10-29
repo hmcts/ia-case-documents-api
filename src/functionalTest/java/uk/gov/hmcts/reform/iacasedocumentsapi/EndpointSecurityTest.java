@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("functional")
-public class EndpointSecurityTest {
+ class EndpointSecurityTest {
 
     @Value("${targetInstance}") private String targetInstance;
 
@@ -41,14 +41,14 @@ public class EndpointSecurityTest {
     @Autowired
     private AuthorizationHeadersProvider authorizationHeadersProvider;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+     void setUp() {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
-    public void should_allow_unauthenticated_requests_to_welcome_message_and_return_200_response_code() {
+     void should_allow_unauthenticated_requests_to_welcome_message_and_return_200_response_code() {
 
         String response =
             SerenityRest
@@ -65,7 +65,7 @@ public class EndpointSecurityTest {
     }
 
     @Test
-    public void should_allow_unauthenticated_requests_to_health_check_and_return_200_response_code() {
+     void should_allow_unauthenticated_requests_to_health_check_and_return_200_response_code() {
 
         String response =
             SerenityRest
@@ -83,7 +83,7 @@ public class EndpointSecurityTest {
     }
 
     @Test
-    public void should_not_allow_unauthenticated_requests_and_return_401_response_code() {
+     void should_not_allow_unauthenticated_requests_and_return_401_response_code() {
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
@@ -99,7 +99,7 @@ public class EndpointSecurityTest {
     }
 
     @Test
-    public void should_not_allow_requests_without_valid_service_authorisation_and_return_401_response_code() {
+     void should_not_allow_requests_without_valid_service_authorisation_and_return_401_response_code() {
 
         String invalidServiceToken = "invalid";
 
@@ -123,7 +123,7 @@ public class EndpointSecurityTest {
     }
 
     @Test
-    public void should_not_allow_requests_without_valid_user_authorisation_and_return_401_response_code() {
+     void should_not_allow_requests_without_valid_user_authorisation_and_return_401_response_code() {
 
         String serviceToken =
             authorizationHeadersProvider

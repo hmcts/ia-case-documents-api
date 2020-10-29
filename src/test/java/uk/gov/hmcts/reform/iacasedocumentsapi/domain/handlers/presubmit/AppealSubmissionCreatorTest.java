@@ -1,16 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class AppealSubmissionCreatorTest {
 
@@ -36,7 +36,7 @@ public class AppealSubmissionCreatorTest {
 
     private AppealSubmissionCreator appealSubmissionCreator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         appealSubmissionCreator =
@@ -44,16 +44,15 @@ public class AppealSubmissionCreatorTest {
                 appealSubmissionDocumentCreator,
                 documentHandler
             );
+    }
 
+    @Test
+    public void should_create_appeal_submission_pdf_and_append_to_legal_representative_documents_for_the_case() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(appealSubmissionDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-    }
-
-    @Test
-    public void should_create_appeal_submission_pdf_and_append_to_legal_representative_documents_for_the_case() {
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -66,6 +65,12 @@ public class AppealSubmissionCreatorTest {
 
     @Test
     public void should_create_appeal_submission_pdf_and_append_to_legal_representative_documents_for_the_case_when_edit_appeal_after_submit() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(appealSubmissionDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
         when(callback.getEvent()).thenReturn(Event.EDIT_APPEAL_AFTER_SUBMIT);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
@@ -79,6 +84,12 @@ public class AppealSubmissionCreatorTest {
 
     @Test
     public void should_create_appeal_submission_pdf_and_append_to_legal_representative_documents_for_the_case_when_pay_and_submit_appeal() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(appealSubmissionDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
@@ -92,6 +103,9 @@ public class AppealSubmissionCreatorTest {
 
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         assertThatThrownBy(() -> appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")

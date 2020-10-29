@@ -1,15 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
@@ -19,7 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DocumentDownloadClientTest {
 
     private final String someAccessToken = "some-access-token";
@@ -39,42 +39,42 @@ public class DocumentDownloadClientTest {
     private String someUserRolesString = "some-role,some-other-role";
     private String someUserId = "some-user-id";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         documentDownloadClient = new DocumentDownloadClient(
             documentDownloadClientApi,
             serviceAuthTokenGenerator,
             accessTokenProvider,
             userDetailsProvider);
-
-        when(documentDownloadClientApi.downloadBinary(
-            someAccessToken,
-            someServiceAuthToken,
-            someUserRolesString,
-            someUserId,
-            "a/b/c")).thenReturn(responseEntity);
-
-        when(responseEntity.getBody())
-            .thenReturn(downloadedResource);
-
-        when(accessTokenProvider.getAccessToken())
-            .thenReturn(someAccessToken);
-
-        when(serviceAuthTokenGenerator.generate())
-            .thenReturn(someServiceAuthToken);
-
-        when(userDetailsProvider.getUserDetails())
-            .thenReturn(userDetails);
-
-        when(userDetails.getRoles())
-            .thenReturn(asList(someUserRolesString));
-
-        when(userDetails.getId())
-            .thenReturn(someUserId);
     }
 
     @Test
     public void downloads_resource() {
+
+        when(documentDownloadClientApi.downloadBinary(
+                someAccessToken,
+                someServiceAuthToken,
+                someUserRolesString,
+                someUserId,
+                "a/b/c")).thenReturn(responseEntity);
+
+        when(responseEntity.getBody())
+                .thenReturn(downloadedResource);
+
+        when(accessTokenProvider.getAccessToken())
+                .thenReturn(someAccessToken);
+
+        when(serviceAuthTokenGenerator.generate())
+                .thenReturn(someServiceAuthToken);
+
+        when(userDetailsProvider.getUserDetails())
+                .thenReturn(userDetails);
+
+        when(userDetails.getRoles())
+                .thenReturn(asList(someUserRolesString));
+
+        when(userDetails.getId())
+                .thenReturn(someUserId);
 
         Resource resource = documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl);
 
@@ -87,7 +87,7 @@ public class DocumentDownloadClientTest {
                 eq("a/b/c")
             );
 
-        assertThat(resource).isEqualTo(downloadedResource);
+        assertEquals(resource, downloadedResource);
     }
 
     @Test
@@ -104,6 +104,31 @@ public class DocumentDownloadClientTest {
 
     @Test
     public void throws_if_document_api_returns_empty_body() {
+
+        when(documentDownloadClientApi.downloadBinary(
+                someAccessToken,
+                someServiceAuthToken,
+                someUserRolesString,
+                someUserId,
+                "a/b/c")).thenReturn(responseEntity);
+
+        when(responseEntity.getBody())
+                .thenReturn(downloadedResource);
+
+        when(accessTokenProvider.getAccessToken())
+                .thenReturn(someAccessToken);
+
+        when(serviceAuthTokenGenerator.generate())
+                .thenReturn(someServiceAuthToken);
+
+        when(userDetailsProvider.getUserDetails())
+                .thenReturn(userDetails);
+
+        when(userDetails.getRoles())
+                .thenReturn(asList(someUserRolesString));
+
+        when(userDetails.getId())
+                .thenReturn(someUserId);
 
         when(responseEntity.getBody())
             .thenReturn(null);

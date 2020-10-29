@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -11,19 +12,19 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.FileType;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DocmosisDocumentConversionClientTest {
 
     @Mock
@@ -38,7 +39,7 @@ public class DocmosisDocumentConversionClientTest {
     private DocmosisDocumentConversionClient docmosisDocumentConversionClient;
     private File tempSourceFile;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
 
         docmosisDocumentConversionClient = new DocmosisDocumentConversionClient(
@@ -63,6 +64,7 @@ public class DocmosisDocumentConversionClientTest {
 
         byte[] convertedBytes = docmosisDocumentConversionClient.convert(tempSourceFile, FileType.PDF);
 
+        assertEquals(convertedBytes, someRandomBytes);
         verify(restTemplate, times(1))
             .postForObject(
                 eq(someEndpoint + someUri),
@@ -71,13 +73,11 @@ public class DocmosisDocumentConversionClientTest {
 
         HttpEntity<Map<String, List>> httpEntity = httpEntityArgumentCaptor.getValue();
 
-        assertThat(httpEntity.getBody().get("accessKey").get(0)).isEqualTo(someAccessKey);
-        assertThat(httpEntity.getBody().get("outputName").get(0)).isEqualTo("temp.pdf");
-        assertThat(httpEntity.getBody().get("file").get(0))
-            .extracting("file")
-            .isEqualTo(tempSourceFile);
-
-        assertThat(convertedBytes).isEqualTo(someRandomBytes);
+        assertEquals(httpEntity.getBody().get("accessKey").get(0), someAccessKey);
+        assertEquals(httpEntity.getBody().get("outputName").get(0), "temp.pdf");
+        assertThat(httpEntity.getBody().get("file")
+                .get(0)).extracting("file")
+                .isEqualTo(tempSourceFile);
     }
 
     @Test
