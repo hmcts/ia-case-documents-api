@@ -48,7 +48,7 @@ public class PreSubmitCallbackController {
     }
 
     @ApiOperation(
-        value = "Handles 'AboutToStartEvent' callbacks from CCD",
+        value = "Handles 'AboutToStartEvent' callbacks from CCD or delegated calls from IA Case API",
         authorizations = {
             @Authorization(value = "Authorization"),
             @Authorization(value = "ServiceAuthorization")
@@ -61,13 +61,21 @@ public class PreSubmitCallbackController {
             response = PreSubmitCallbackResponse.class
         ),
         @ApiResponse(
+            code = 400,
+            message = "Bad Request"
+        ),
+        @ApiResponse(
             code = 401,
             message = "An error occurred while attempting to decode the Jwt: Invalid token"
         ),
         @ApiResponse(
-            code = 403,
-            message = "Forbidden"
+            code = 415,
+            message = "Unsupported Media Type"
         ),
+        @ApiResponse(
+            code = 500,
+            message = "Internal Server Error"
+        )
     })
     @PostMapping(path = "/ccdAboutToStart")
     public ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> ccdAboutToStart(
@@ -90,8 +98,20 @@ public class PreSubmitCallbackController {
             response = PreSubmitCallbackResponse.class
         ),
         @ApiResponse(
-            code = 403,
-            message = "Forbidden"
+            code = 400,
+            message = "Bad Request"
+        ),
+        @ApiResponse(
+            code = 401,
+            message = "An error occurred while attempting to decode the Jwt: Invalid token"
+        ),
+        @ApiResponse(
+            code = 415,
+            message = "Unsupported Media Type"
+        ),
+        @ApiResponse(
+            code = 500,
+            message = "Internal Server Error"
         )
     })
     @PostMapping(path = "/ccdAboutToSubmit")
