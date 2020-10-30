@@ -401,6 +401,21 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("requestNewHearingRequirementsNotificationGenerator")
+    public List<NotificationGenerator> requestNewHearingRequirementsNotificationGenerator(
+        LegalRepresentativeRequestNewHearingRequirementsPersonalisation legalRepresentativeRequestNewHearingRequirementsPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeRequestNewHearingRequirementsPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("addAppealNotificationGenerator")
     public List<NotificationGenerator> addAppealNotificationGenerator(
         LegalRepresentativeAddAppealPersonalisation legalRepresentativeAddAppealPersonalisation,

@@ -248,6 +248,25 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> requestNewHearingRequirementsNotificationHandler(
+        @Qualifier("requestNewHearingRequirementsNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isReheardAppealEnabled = asylumCase
+                    .read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)
+                    .equals(Optional.of(YES));
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.REQUEST_NEW_HEARING_REQUIREMENTS
+                       && isReheardAppealEnabled;
+            }, notificationGenerators
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> respondentEvidenceAipNotificationHandler(
         @Qualifier("respondentEvidenceAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 

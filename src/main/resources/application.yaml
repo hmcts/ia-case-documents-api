@@ -560,6 +560,9 @@ govnotify:
                 email: 850a3cff-a60c-4eec-9e94-a2dc42cfbaeb
               afterListing:
                 email: f5f65291-9440-4af7-897b-3c9fa957e51a
+    requestNewHearingRequirements:
+      legalRep:
+        email: fd709bf4-095c-4734-8f88-9a9feba9fd81
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -651,6 +654,7 @@ security:
       - "requestResponseAmend"
       - "reinstateAppeal"
       - "decideAnApplication"
+      - "requestNewHearingRequirements"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -700,6 +704,7 @@ security:
       - "reinstateAppeal"
       - "editAppealAfterSubmit"
       - "decideAnApplication"
+      - "requestNewHearingRequirements"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
 

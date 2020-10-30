@@ -73,6 +73,7 @@ public enum Event {
     REINSTATE_APPEAL("reinstateAppeal"),
     MAKE_AN_APPLICATION("makeAnApplication"),
     DECIDE_AN_APPLICATION("decideAnApplication"),
+    REQUEST_NEW_HEARING_REQUIREMENTS("requestNewHearingRequirements"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
