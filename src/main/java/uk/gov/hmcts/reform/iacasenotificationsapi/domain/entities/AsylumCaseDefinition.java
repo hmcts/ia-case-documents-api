@@ -254,6 +254,9 @@ public enum AsylumCaseDefinition {
 
     DECIDE_AN_APPLICATION_ID(
             "decideAnApplicationId", new TypeReference<String>(){}),
+
+    IS_REHEARD_APPEAL_ENABLED(
+        "isReheardAppealEnabled", new TypeReference<YesOrNo>() {}),
     ;
 
     private final String value;

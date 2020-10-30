@@ -3,9 +3,11 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseof
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -36,6 +39,7 @@ public class CaseOfficerFtpaDecisionPersonalisationTest {
     private String appellantFamilyName = "someAppellantFamilyName";
 
     private String applicantReheardTemplateId = "applicantReheardTemplateId";
+    private String applicantReheardEnabledTemplateId = "applicantReheardEnabledTemplateId";
 
     private CaseOfficerFtpaDecisionPersonalisation caseOfficerFtpaDecisionPersonalisation;
 
@@ -43,6 +47,7 @@ public class CaseOfficerFtpaDecisionPersonalisationTest {
     public void setup() {
         caseOfficerFtpaDecisionPersonalisation = new CaseOfficerFtpaDecisionPersonalisation(
             applicantReheardTemplateId,
+            applicantReheardEnabledTemplateId,
             personalisationProvider,
             emailAddressFinder
         );
@@ -50,7 +55,11 @@ public class CaseOfficerFtpaDecisionPersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         assertEquals(applicantReheardTemplateId, caseOfficerFtpaDecisionPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        assertEquals(applicantReheardEnabledTemplateId, caseOfficerFtpaDecisionPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test

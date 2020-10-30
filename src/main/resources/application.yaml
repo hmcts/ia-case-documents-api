@@ -445,6 +445,9 @@ govnotify:
           email: ce7523f4-9244-4b14-b4aa-aa91457e02ce
         homeOffice:
           email: 14d4a6cc-cca3-4718-b1a1-c222b4043ddf
+    applicationReheardEnabled:
+      caseOfficer:
+        email: f273c1cd-ffcd-40a4-a562-9fe12cfe4a33
     applicationReheard:
       caseOfficer:
         email: d4420fd2-52be-444b-a3f1-db9f01c988b6
