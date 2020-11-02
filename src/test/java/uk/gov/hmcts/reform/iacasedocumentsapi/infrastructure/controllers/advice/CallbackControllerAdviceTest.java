@@ -20,13 +20,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentServiceResponseException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentStitchingErrorResponseException;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class CallbackControllerAdviceTest {
+class CallbackControllerAdviceTest {
 
     @Mock
     private PreSubmitCallbackResponse preSubmitCallbackResponse;
@@ -37,6 +38,9 @@ public class CallbackControllerAdviceTest {
     @Mock
     private ErrorResponseLogger errorResponseLogger;
 
+    @Mock
+    private RequiredFieldMissingException requiredFieldMissingException;
+
     @InjectMocks
     private CallbackControllerAdvice callbackControllerAdvice;
 
@@ -45,7 +49,7 @@ public class CallbackControllerAdviceTest {
     private String testExceptionMessage;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
 
@@ -59,7 +63,28 @@ public class CallbackControllerAdviceTest {
     }
 
     @Test
-    public void should_handle_stitching_exception_and_log_message_correctly() {
+    void should_handle_exception_correctly() {
+        when(httpServletRequest.getAttribute("CCDCaseId")).thenReturn("Case12345");
+
+        DocumentStitchingErrorResponseException ex =
+                new DocumentStitchingErrorResponseException(testExceptionMessage, preSubmitCallbackResponse);
+        String logMessage = "Exception when stitching a bundle with message: ";
+
+        ResponseEntity<String> responseEntity =
+                callbackControllerAdvice.handleExceptions(httpServletRequest, requiredFieldMissingException);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+        List<ILoggingEvent> logEvents = this.listAppender.list;
+        assertEquals(1, logEvents.size());
+
+        assertThat(logEvents.get(0).getFormattedMessage())
+                .isLessThanOrEqualTo(logMessage + ex.getMessage() + ".");
+
+    }
+
+    @Test
+    void should_handle_stitching_exception_and_log_message_correctly() {
         when(httpServletRequest.getAttribute("CCDCaseId")).thenReturn("Case12345");
 
         doNothing().when(errorResponseLogger).maybeLogErrorsListResponse(any());
@@ -84,7 +109,7 @@ public class CallbackControllerAdviceTest {
     }
 
     @Test
-    public void should_handle_document_service_exception() {
+    void should_handle_document_service_exception() {
 
         DocumentServiceResponseException ex = mock(DocumentServiceResponseException.class);
 
@@ -106,7 +131,7 @@ public class CallbackControllerAdviceTest {
     }
 
     @Test
-    public void should_handle_stitching_http_exception_when_cause_is_null() {
+    void should_handle_stitching_http_exception_when_cause_is_null() {
         String logMessage = "Document service Exception with message: ";
 
         DocumentServiceResponseException ex = new DocumentServiceResponseException(testExceptionMessage);
