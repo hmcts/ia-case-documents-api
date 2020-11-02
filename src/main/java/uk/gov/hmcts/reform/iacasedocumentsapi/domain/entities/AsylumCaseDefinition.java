@@ -115,6 +115,9 @@ public enum AsylumCaseDefinition {
     FINAL_DECISION_AND_REASONS_DOCUMENTS(
         "finalDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    REHEARD_DECISION_REASONS_DOCUMENTS(
+        "reheardDecisionReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     ANONYMITY_ORDER(
         "anonymityOrder", new TypeReference<YesOrNo>(){}),
 
