@@ -31,11 +31,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -43,6 +45,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSub
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeType;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationEntityResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.CreditAccountPayment;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Currency;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentResponse;
@@ -102,38 +105,64 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         }
 
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+        long caseId = callback.getCaseDetails().getId();
 
         AppealType appealType = asylumCase.read(APPEAL_TYPE, AppealType.class)
-            .orElseThrow(() -> new IllegalStateException("AppealType is not present"));
+            .orElseThrow(
+                () -> new IllegalStateException("AppealType is not present for caseId: " + caseId)
+            );
         asylumCase.write(FEE_PAYMENT_APPEAL_TYPE, YesOrNo.NO);
 
         Fee feeSelected = getFeeTypeWriteAppealPaymentDetailsToCaseData(appealType, asylumCase);
 
-        log.info("Fee: {}", feeSelected);
+        log.info("Selected Fee for caseId: {}, {}", caseId, feeSelected);
 
         if (feeSelected != null) {
 
             writeFeeDetailsToCaseData(asylumCase, feeSelected);
 
-            DynamicList pbaAccountNumber = asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class)
-                .orElseThrow(() -> new IllegalStateException("PBA account number is not present"));
+            String pbaAccountNumber = asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class)
+                .map(DynamicList::getValue)
+                .map(Value::getCode)
+                .orElseThrow(
+                    () -> new IllegalStateException("PBA account number is not present for caseId: " + caseId)
+                );
+
+            log.info("Fetching Organisation data for caseId: {}", caseId);
+            OrganisationEntityResponse organisationResponse = refDataService
+                .getOrganisationResponse()
+                .getOrganisationEntityResponse();
 
             String paymentDescription = asylumCase.read(PAYMENT_DESCRIPTION, String.class)
-                .orElseThrow(() -> new IllegalStateException("Payment description is not present"));
+                .orElseThrow(
+                    () -> new IllegalStateException("Payment description is not present for caseId: " + caseId)
+                );
 
-            String orgName = refDataService.getOrganisationResponse().getOrganisationEntityResponse().getName();
-            String caseId = String.valueOf(callback.getCaseDetails().getId());
+            String orgName = organisationResponse.getName();
+            List<String> pbaList = organisationResponse.getPaymentAccount();
+
+            String pbaNumber = pbaList
+                .stream()
+                .filter(pba -> pba.equals(pbaAccountNumber))
+                .findAny()
+                .orElseThrow(
+                    () -> new IllegalStateException("PBA account number is not valid for caseId: " + caseId)
+                );
 
             String appealReferenceNumber = asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)
-                .orElseThrow(() -> new IllegalStateException("Appeal reference number is not present"));
+                .orElseThrow(
+                    () -> new IllegalStateException("Appeal reference number is not present for caseId: " + caseId)
+                );
             String customerReference = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
-                .orElseThrow(() -> new IllegalStateException("Legal rep reference number is not present"));
+                .orElseThrow(
+                    () -> new IllegalStateException("Legal rep reference number is not present for caseId: " + caseId)
+                );
 
             CreditAccountPayment creditAccountPayment = new CreditAccountPayment(
-                pbaAccountNumber.getValue().getCode(),
+                pbaNumber,
                 feeSelected.getCalculatedAmount(),
                 appealReferenceNumber,
-                caseId,
+                String.valueOf(caseId),
                 Currency.GBP,
                 customerReference,
                 paymentDescription,
@@ -143,20 +172,28 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
                 Arrays.asList(feeSelected)
             );
 
-            log.info("CreditAccountPayment: {}", creditAccountPayment);
+            log.info("CreditAccountPayment for caseId: {}, payment object: {}", caseId, creditAccountPayment);
 
             PaymentResponse paymentResponse = makePayment(creditAccountPayment);
+
+            log.info(
+                "PaymentResponse for caseId: {}, payment response ref: {}, status: {}, PBA: {}",
+                caseId,
+                paymentResponse.getReference(),
+                paymentResponse.getStatus(),
+                pbaNumber
+            );
 
             writePaymentResponseStatusToCaseData(paymentResponse, asylumCase);
 
             asylumCase.write(PAYMENT_REFERENCE, paymentResponse.getReference());
-            asylumCase.write(PBA_NUMBER, pbaAccountNumber.getValue().getCode());
+            asylumCase.write(PBA_NUMBER, pbaNumber);
 
             String pattern = "d MMM yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             asylumCase.write(PAYMENT_DATE, simpleDateFormat.format(paymentResponse.getDateCreated()));
         } else {
-            throw new IllegalStateException("Cannot retrieve the fee from fees-register.");
+            throw new IllegalStateException("Cannot retrieve the fee from fees-register for caseId: " + caseId);
         }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
@@ -177,6 +214,7 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         requireNonNull(creditAccountPayment, "creditAccountPayment must not be null");
 
         try {
+            log.info("Sending payment request for caseId: {}", creditAccountPayment.getCcdCaseNumber());
             return paymentService.creditAccountPayment(creditAccountPayment);
         } catch (FeignException fe) {
             log.error("Payment failed: {}", fe.getMessage());
