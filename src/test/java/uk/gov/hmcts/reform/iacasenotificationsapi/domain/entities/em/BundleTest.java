@@ -46,4 +46,22 @@ public class BundleTest {
         assertEquals(FILE_NAME, bundle.getFilename());
     }
 
+    @Test
+    public void should_hold_onto_values_for_less_fields() {
+
+        bundle =
+            new Bundle(ID, TITLE, DESCRIPTION, ELIGIBLE_FOR_STITCHING, DOCUMENTS, FILE_NAME);
+
+        assertEquals(ID, bundle.getId());
+        assertEquals(TITLE, bundle.getTitle());
+        assertEquals(DESCRIPTION, bundle.getDescription());
+        assertEquals(ELIGIBLE_FOR_STITCHING, bundle.getEligibleForStitching());
+        assertEquals(DOCUMENTS, bundle.getDocuments());
+        assertEquals(Optional.empty(), bundle.getStitchStatus());
+        assertEquals(Optional.empty(), bundle.getStitchedDocument());
+        assertEquals(YesOrNo.YES, bundle.getHasCoversheets());
+        assertEquals(YesOrNo.YES, bundle.getHasTableOfContents());
+        assertEquals(FILE_NAME, bundle.getFilename());
+    }
+
 }
