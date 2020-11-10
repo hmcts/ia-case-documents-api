@@ -6,7 +6,6 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.Servic
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationResponse;
 
 @FeignClient(name = "rd-professional-api", url = "${rd-professional.api.url}")
@@ -16,6 +15,6 @@ public interface RefDataApi {
     OrganisationResponse findOrganisation(
         @RequestHeader(AUTHORIZATION) String authorization,
         @RequestHeader(SERVICE_AUTHORIZATION) String serviceAuthorization,
-        @RequestParam(name = "email") String email
+        @RequestHeader(name = "UserEmail") String email
     );
 }
