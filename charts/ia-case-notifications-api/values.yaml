@@ -34,6 +34,10 @@ java:
         - home-office-hatton-cross-email
         - home-office-glasgow-email
         - home-office-apc-email
+        - ftpa-home-office-bradford-email
+        - ftpa-home-office-taylor-house-email
+        - ftpa-home-office-north-shields-email
+        - ftpa-home-office-hatton-cross-email
         - respondent-evidence-direction-email
         - respondent-review-direction-email
         - respondent-non-standard-direction-until-listing-email

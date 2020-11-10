@@ -30,17 +30,17 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class EmailAddressFinderTest {
 
+    @Mock AsylumCase asylumCase;
+    @Mock Map<HearingCentre, String> hearingCentreEmailAddresses;
+    @Mock Map<HearingCentre, String> homeOfficeEmailAddresses;
+    @Mock Map<HearingCentre, String> homeOfficeFtpaEmailAddresses;
+
     private final HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private final String hearingCentreEmailAddress = "hearingCentre@example.com";
     private final HearingCentre listCaseHearingCentre = HearingCentre.BRADFORD;
     private final String listCaseHearingCenterEmailAddress = "listCaseHearingCentre@example.com";
     private final String legalRepEmailAddress = "legalRep@example.com";
-    @Mock
-    AsylumCase asylumCase;
-    @Mock
-    Map<HearingCentre, String> hearingCentreEmailAddresses;
-    @Mock
-    Map<HearingCentre, String> homeOfficeEmailAddresses;
+
     private EmailAddressFinder emailAddressFinder;
 
     @BeforeEach
@@ -53,8 +53,9 @@ public class EmailAddressFinderTest {
             .thenReturn(Optional.of(legalRepEmailAddress));
         when(hearingCentreEmailAddresses.get(hearingCentre)).thenReturn(hearingCentreEmailAddress);
         when(homeOfficeEmailAddresses.get(listCaseHearingCentre)).thenReturn(listCaseHearingCenterEmailAddress);
+        when(homeOfficeFtpaEmailAddresses.get(listCaseHearingCentre)).thenReturn(listCaseHearingCenterEmailAddress);
 
-        emailAddressFinder = new EmailAddressFinder(hearingCentreEmailAddresses, homeOfficeEmailAddresses);
+        emailAddressFinder = new EmailAddressFinder(hearingCentreEmailAddresses, homeOfficeEmailAddresses, homeOfficeFtpaEmailAddresses);
     }
 
     @Test
@@ -79,12 +80,26 @@ public class EmailAddressFinderTest {
     }
 
     @Test
+    public void should_return_given_list_case_ftpa_email_address_from_lookup_map() {
+        assertEquals(listCaseHearingCenterEmailAddress, emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase));
+    }
+
+    @Test
     public void should_throw_exception_on_list_case_email_address_when_hearing_centre_is_empty() {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("listCaseHearingCentre is not present");
+    }
+
+    @Test
+    public void should_throw_exception_on_list_case_ftpa_email_address_when_hearing_centre_is_empty() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("listCaseHearingCentre is not present");
     }
 
     @Test

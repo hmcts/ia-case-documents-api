@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1373-RIA-2936 Notification of appellant ftpa application submitted",
+  "description": "RIA-1373-RIA-2936-RIA-3742 Notification of appellant ftpa application submitted",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019"
         }
       }
@@ -65,7 +66,7 @@
       },
       {
         "reference": "1373_RESPONDENT_APPELLANT_FTPA_SUBMITTED",
-        "recipient": "{$ftpaSubmitted.respondentEmailAddress}",
+        "recipient": "{$homeOfficeFtpaEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

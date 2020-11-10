@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
@@ -20,21 +21,21 @@ public class RespondentFtpaSubmittedPersonalisation implements EmailNotification
     private final String ftpaSubmittedTemplateId;
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
-    private final String respondentEmailAddress;
     private final CustomerServicesProvider customerServicesProvider;
+    private final EmailAddressFinder emailAddressFinder;
 
     public RespondentFtpaSubmittedPersonalisation(
         @Value("${govnotify.template.applyForFtpa.respondent.email}") String ftpaSubmittedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
-        @Value("${ftpaSubmitted.respondentEmailAddress}") String respondentEmailAddress,
-        CustomerServicesProvider customerServicesProvider
+        CustomerServicesProvider customerServicesProvider,
+        EmailAddressFinder emailAddressFinder
     ) {
         this.ftpaSubmittedTemplateId = ftpaSubmittedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
-        this.respondentEmailAddress = respondentEmailAddress;
         this.customerServicesProvider = customerServicesProvider;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class RespondentFtpaSubmittedPersonalisation implements EmailNotification
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(respondentEmailAddress);
+        return Collections.singleton(emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase));
     }
 
     @Override

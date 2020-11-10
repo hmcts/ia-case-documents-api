@@ -41,6 +41,10 @@ The following environment variables are required when running the api without it
 | IA_HOME_OFFICE_BIRMINGHAM_EMAIL |  some-email |
 | IA_HOME_OFFICE_HATTON_CROSS_EMAIL |  some-email |
 | IA_HOME_OFFICE_GLASGOW_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL |  some-email |
 | IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL |  some-email |
 | IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL |  some-email |
 | IA_RESPONDENT_REVIEW_DIRECTION_EMAIL |  some-email |

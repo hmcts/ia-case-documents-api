@@ -745,6 +745,17 @@ homeOfficeEmailAddresses:
   hattonCross: ${IA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-hatton-cross@example.com}
   glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
 
+homeOfficeFtpaEmailAddresses:
+  bradford: ${IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL:ho-ftpa-bradford@example.com}
+  manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ho-manchester@example.com}
+  newport: ${IA_HOME_OFFICE_NEWPORT_EMAIL:ho-newport@example.com}
+  taylorHouse: ${IA_FTPA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL:ho-ftpa-taylorhouse@example.com}
+  northShields: ${IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL:ho-north-shields@example.com}
+  newcastle: ${IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL:ho-ftpa-north-shields@example.com}
+  birmingham: ${IA_HOME_OFFICE_BIRMINGHAM_EMAIL:ho-birmingham@example.com}
+  hattonCross: ${IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-ftpa-hatton-cross@example.com}
+  glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
+
 hearingCentreTelephoneNumber:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_TELEPHONE:0300 123 1711}
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_TELEPHONE:0300 123 1711}

@@ -18,6 +18,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,14 +26,11 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 @SuppressWarnings("unchecked")
 public class RespondentFtpaSubmittedPersonalisationTest {
 
-    @Mock
-    PersonalisationProvider personalisationProvider;
-    @Mock
-    Callback<AsylumCase> callback;
-    @Mock
-    AsylumCase asylumCase;
-    @Mock
-    CustomerServicesProvider customerServicesProvider;
+    @Mock PersonalisationProvider personalisationProvider;
+    @Mock Callback<AsylumCase> callback;
+    @Mock AsylumCase asylumCase;
+    @Mock CustomerServicesProvider customerServicesProvider;
+    @Mock EmailAddressFinder emailAddressFinder;
 
     private Long caseId = 12345L;
     private String templateId = "templateId";
@@ -51,8 +49,8 @@ public class RespondentFtpaSubmittedPersonalisationTest {
             templateId,
             iaExUiFrontendUrl,
             personalisationProvider,
-            respondentEmailAddress,
-            customerServicesProvider
+            customerServicesProvider,
+            emailAddressFinder
         );
     }
 
@@ -65,15 +63,13 @@ public class RespondentFtpaSubmittedPersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-
         assertEquals(templateId, respondentFtpaSubmittedPersonalisation.getTemplateId());
     }
 
     @Test
     public void should_return_given_recipient_email_id() {
-
-        assertEquals(Collections.singleton(respondentEmailAddress),
-            respondentFtpaSubmittedPersonalisation.getRecipientsList(asylumCase));
+        when(emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase)).thenReturn(respondentEmailAddress);
+        assertEquals(Collections.singleton(respondentEmailAddress), respondentFtpaSubmittedPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
