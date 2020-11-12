@@ -2,12 +2,13 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -15,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
@@ -86,9 +88,9 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
     }
 
     private void generateDocument(CaseDetails<AsylumCase> caseDetails,
-                                 AsylumCase asylumCase,
-                                 Optional<CaseDetails<AsylumCase>> caseDetailsBefore,
-                                 DocumentCreator<AsylumCase> hearingNoticeEditedDocumentCreator) {
+                                  AsylumCase asylumCase,
+                                  Optional<CaseDetails<AsylumCase>> caseDetailsBefore,
+                                  DocumentCreator<AsylumCase> hearingNoticeEditedDocumentCreator) {
 
         Document hearingNoticeEdited =
             hearingNoticeEditedDocumentCreator.create(
@@ -96,11 +98,21 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 caseDetailsBefore
                     .orElseThrow(() -> new IllegalStateException("previous case data is not present")));
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            hearingNoticeEdited,
-            HEARING_DOCUMENTS,
-            DocumentTag.HEARING_NOTICE
-        );
+        if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
+             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNoticeEdited,
+                REHEARD_HEARING_DOCUMENTS,
+                DocumentTag.REHEARD_HEARING_NOTICE
+            );
+        } else {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNoticeEdited,
+                HEARING_DOCUMENTS,
+                DocumentTag.HEARING_NOTICE
+            );
+        }
     }
 }
