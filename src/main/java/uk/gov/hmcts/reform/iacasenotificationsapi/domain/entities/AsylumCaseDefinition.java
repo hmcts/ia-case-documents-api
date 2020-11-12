@@ -257,6 +257,9 @@ public enum AsylumCaseDefinition {
 
     IS_REHEARD_APPEAL_ENABLED(
         "isReheardAppealEnabled", new TypeReference<YesOrNo>() {}),
+
+    CASE_FLAG_SET_ASIDE_REHEARD_EXISTS(
+        "caseFlagSetAsideReheardExists", new TypeReference<YesOrNo>() {}),
     ;
 
     private final String value;

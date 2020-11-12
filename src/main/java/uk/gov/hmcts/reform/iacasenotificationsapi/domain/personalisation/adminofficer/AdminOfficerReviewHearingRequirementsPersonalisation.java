@@ -1,14 +1,18 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 
 
@@ -16,22 +20,31 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 public class AdminOfficerReviewHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
     private final String reviewHearingRequirementsAdminOfficerTemplateId;
+    private final String reviewReheardHearingRequirementsAdminOfficerTemplateId;
     private final String reviewHearingRequirementsAdminOfficerEmailAddress;
     private final AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     public AdminOfficerReviewHearingRequirementsPersonalisation(
         @NotNull(message = "reviewHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.reviewHearingRequirements.adminOfficer.email}") String reviewHearingRequirementsAdminOfficerTemplateId,
+        @NotNull(message = "reviewReheardHearingRequirementsAdminOfficerTemplateId cannot be null") @Value("${govnotify.template.reviewReheardHearingRequirements.adminOfficer.email}") String reviewReheardHearingRequirementsAdminOfficerTemplateId,
         @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
         AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider
     ) {
         this.reviewHearingRequirementsAdminOfficerTemplateId = reviewHearingRequirementsAdminOfficerTemplateId;
+        this.reviewReheardHearingRequirementsAdminOfficerTemplateId = reviewReheardHearingRequirementsAdminOfficerTemplateId;
         this.reviewHearingRequirementsAdminOfficerEmailAddress = reviewHearingRequirementsAdminOfficerEmailAddress;
         this.adminOfficerPersonalisationProvider = adminOfficerPersonalisationProvider;
     }
 
     @Override
-    public String getTemplateId() {
-        return reviewHearingRequirementsAdminOfficerTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+
+        if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
+             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
+            return reviewReheardHearingRequirementsAdminOfficerTemplateId;
+        } else {
+            return reviewHearingRequirementsAdminOfficerTemplateId;
+        }
     }
 
     @Override

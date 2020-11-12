@@ -226,6 +226,9 @@ govnotify:
     reviewHearingRequirements:
       adminOfficer:
         email: 62719354-7a95-4a5a-b42f-ae2223bd35ee
+    reviewReheardHearingRequirements:
+      adminOfficer:
+        email: 9b7c30f4-d30f-48ab-a473-83b8cae9d29f
     withoutHearingRequirements:
       adminOfficer:
         email: 40983322-c1a5-4bb3-ba65-7307905c82a6
