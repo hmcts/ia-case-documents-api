@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,10 +18,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetada
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentServiceResponseException;
 
 @ExtendWith(MockitoExtension.class)
-public class SendDecisionAndReasonsOrchestratorTest {
+class SendDecisionAndReasonsOrchestratorTest {
 
     @Mock private DocumentHandler documentHandler;
     @Mock private SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
@@ -45,7 +47,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    public void throws_and_skips_document_conversion_if_cover_letter_null() {
+    void throws_and_skips_document_conversion_if_cover_letter_null() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenReturn(null);
 
@@ -61,7 +63,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    public void throws_and_skips_document_conversion_if_cover_letter_fails_with_exception() {
+    void throws_and_skips_document_conversion_if_cover_letter_fails_with_exception() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenThrow(
             DocumentServiceResponseException.class);
@@ -77,7 +79,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    public void throws_and_fails_with_exception_when_pdf_generation_returns_null() {
+    void throws_and_fails_with_exception_when_pdf_generation_returns_null() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
@@ -96,7 +98,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    public void throws_and_fails_with_exception_when_pdf_generation_throws() {
+    void throws_and_fails_with_exception_when_pdf_generation_throws() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
@@ -114,7 +116,7 @@ public class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    public void attaches_new_documents_and_when_cover_letter_and_pdf_generated() {
+    void attaches_new_documents_and_when_cover_letter_and_pdf_generated() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
@@ -124,6 +126,47 @@ public class SendDecisionAndReasonsOrchestratorTest {
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
 
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                coverLetter,
+                FINAL_DECISION_AND_REASONS_DOCUMENTS,
+                DocumentTag.DECISION_AND_REASONS_COVER_LETTER
+            );
+
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                coverLetter,
+                FINAL_DECISION_AND_REASONS_DOCUMENTS,
+                DocumentTag.DECISION_AND_REASONS_COVER_LETTER
+            );
+
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                pdf,
+                FINAL_DECISION_AND_REASONS_DOCUMENTS,
+                DocumentTag.FINAL_DECISION_AND_REASONS_PDF
+            );
+
+        verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_DOCUMENT);
+        verify(asylumCase, times(1)).clear(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
+    }
+
+    @Test
+    void attaches_new_documents_and_when_cover_letter_and_pdf_generated_for_normal_case() {
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
+            .thenReturn(coverLetter);
+
+        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+            .thenReturn(pdf);
+
+        sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
 
         verify(documentHandler, times(1))
             .addWithMetadata(
@@ -154,4 +197,45 @@ public class SendDecisionAndReasonsOrchestratorTest {
         verify(asylumCase, times(1)).clear(DRAFT_REHEARD_DECISION_AND_REASONS);
     }
 
+    @Test
+    void attaches_new_reheard_documents_and_when_cover_letter_and_pdf_generated_for_reheard_case() {
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
+            .thenReturn(coverLetter);
+
+        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+            .thenReturn(pdf);
+
+        sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
+
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                coverLetter,
+                REHEARD_DECISION_REASONS_DOCUMENTS,
+                DocumentTag.DECISION_AND_REASONS_COVER_LETTER
+            );
+
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                coverLetter,
+                REHEARD_DECISION_REASONS_DOCUMENTS,
+                DocumentTag.DECISION_AND_REASONS_COVER_LETTER
+            );
+
+        verify(documentHandler, times(1))
+            .addWithMetadata(
+                asylumCase,
+                pdf,
+                REHEARD_DECISION_REASONS_DOCUMENTS,
+                DocumentTag.FINAL_DECISION_AND_REASONS_PDF
+            );
+
+        verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_DOCUMENT);
+        verify(asylumCase, times(1)).clear(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
+    }
 }
