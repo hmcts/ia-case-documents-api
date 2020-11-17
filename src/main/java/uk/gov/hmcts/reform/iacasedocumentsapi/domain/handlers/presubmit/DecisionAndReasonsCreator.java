@@ -1,11 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DRAFT_DECISION_AND_REASONS_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -13,6 +15,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
@@ -56,12 +59,22 @@ public class DecisionAndReasonsCreator implements PreSubmitCallbackHandler<Asylu
 
         Document decisionAndReasons = decisionAndReasonsDocumentCreator.create(caseDetails);
 
-        documentHandler.addWithMetadata(
-            asylumCase,
-            decisionAndReasons,
-            DRAFT_DECISION_AND_REASONS_DOCUMENTS,
-            DocumentTag.DECISION_AND_REASONS_DRAFT
-        );
+        if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
+             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
+            documentHandler.addWithMetadata(
+                asylumCase,
+                decisionAndReasons,
+                DRAFT_REHEARD_DECISION_AND_REASONS,
+                DocumentTag.REHEARD_DECISION_AND_REASONS_DRAFT
+            );
+        } else {
+            documentHandler.addWithMetadata(
+                asylumCase,
+                decisionAndReasons,
+                DRAFT_DECISION_AND_REASONS_DOCUMENTS,
+                DocumentTag.DECISION_AND_REASONS_DRAFT
+            );
+        }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

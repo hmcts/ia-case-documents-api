@@ -57,6 +57,7 @@ public class SendDecisionAndReasonsOrchestrator {
 
             asylumCase.clear(FINAL_DECISION_AND_REASONS_DOCUMENT);
             asylumCase.clear(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
+            asylumCase.clear(DRAFT_REHEARD_DECISION_AND_REASONS);
 
         } catch (RuntimeException e) {
 

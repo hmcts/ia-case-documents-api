@@ -310,6 +310,9 @@ public enum AsylumCaseDefinition {
     CASE_FLAG_SET_ASIDE_REHEARD_EXISTS(
         "caseFlagSetAsideReheardExists", new TypeReference<YesOrNo>() {}),
 
+    DRAFT_REHEARD_DECISION_AND_REASONS(
+        "draftReheardDecisionAndReasons", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     ;
 
 

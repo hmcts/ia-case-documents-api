@@ -17,6 +17,7 @@ public enum DocumentTag {
     HEARING_BUNDLE("hearingBundle"),
     ADDENDUM_EVIDENCE("addendumEvidence"),
     DECISION_AND_REASONS_DRAFT("decisionAndReasons"),
+    REHEARD_DECISION_AND_REASONS_DRAFT("reheardDecisionAndReasons"),
     DECISION_AND_REASONS_COVER_LETTER("decisionAndReasonsCoverLetter"),
     FINAL_DECISION_AND_REASONS_PDF("finalDecisionAndReasonsPdf"),
     APPEAL_SKELETON_BUNDLE("submitCaseBundle"),

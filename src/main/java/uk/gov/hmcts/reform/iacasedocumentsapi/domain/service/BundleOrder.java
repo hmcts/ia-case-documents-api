@@ -41,34 +41,37 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case HEARING_BUNDLE:
                 log.warn("HEARING_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 10;
+            case REHEARD_DECISION_AND_REASONS_DRAFT:
+                log.warn("REHEARD_DECISION_AND_REASONS_DRAFT DRAFT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 11;
             case DECISION_AND_REASONS_DRAFT:
                 log.warn("DECISION_AND_REASONS_DRAFT DRAFT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                return 11;
+                return 12;
             case DECISION_AND_REASONS_COVER_LETTER:
                 log.warn("DECISION_AND_REASONS_COVER_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                return 12;
+                return 13;
             case FINAL_DECISION_AND_REASONS_PDF:
                 log.warn("FINAL_DECISION_AND_REASONS_PDF tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                return 13;
+                return 14;
             case APPEAL_SKELETON_BUNDLE:
                 log.warn("APPEAL_SKELETON_BUNDLE tag should not be checked for hearing ordering, document desc: {}", document.getDescription());
-                return 14;
+                return 15;
             case END_APPEAL:
                 log.warn("END_APPEAL tag should not be checked for hearing ordering, document desc: {}", document.getDescription());
-                return 15;
+                return 16;
             case HEARING_REQUIREMENTS:
                 log.warn("HEARING_REQUIREMENTS tag should not be checked for hearing ordering, document desc: {}", document.getDescription());
-                return 16;
+                return 17;
             case CMA_REQUIREMENTS:
                 log.warn("CMA_REQUIREMENTS tag should not be checked for cma ordering, document desc: {}", document.getDescription());
-                return 17;
+                return 18;
             case CMA_NOTICE:
                 log.warn("CMA_NOTICE tag should not be checked for cma ordering, document desc: {}", document.getDescription());
-                return 18;
-            case HO_DECISION_LETTER:
                 return 19;
-            case NONE:
+            case HO_DECISION_LETTER:
                 return 20;
+            case NONE:
+                return 21;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
