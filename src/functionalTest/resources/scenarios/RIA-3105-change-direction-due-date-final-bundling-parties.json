@@ -1,22 +1,23 @@
 {
-  "description": "RIA-3488 Both parties notification of change direction due date",
+  "description": "RIA-3105 Both parties notification of change direction due date (Final Bundling)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 3488,
+      "id": 3105,
       "eventId": "changeDirectionDueDate",
-      "state": "pendingPayment",
+      "state": "finalBundling",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "ariaListingReference": "LP/12345/2019",
           "hearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "taylorHouse",
           "directionEditExplanation": "Amending the direction due date.",
           "directionEditDateDue": "{$TODAY+5}",
           "directionEditParties": "both",
-          "currentCaseStateVisibleToLegalRepresentative": "submitHearingRequirements",
-          "currentCaseStateVisibleToHomeOfficeAll": "submitHearingRequirements",
+          "currentCaseStateVisibleToLegalRepresentative": "finalBundling",
+          "currentCaseStateVisibleToHomeOfficeAll": "finalBundling",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
         }
       }
@@ -34,11 +35,11 @@
         "directionEditParties": "both",
         "notificationsSent": [
           {
-            "id": "3488_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
+            "id": "3105_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "3488_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+            "id": "3105_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
@@ -47,7 +48,7 @@
     },
     "notifications": [
       {
-        "reference": "3488_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
+        "reference": "3105_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: change to direction due date",
         "body": [
@@ -62,7 +63,7 @@
         ]
       },
       {
-        "reference": "3488_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+        "reference": "3105_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
         "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: change to direction due date",
         "body": [

@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "hearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "directionEditExplanation": "Amending the direction due date.",
           "directionEditDateDue": "{$TODAY+5}",
@@ -62,7 +63,7 @@
       },
       {
         "reference": "3228_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
-        "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: change to direction due date",
         "body": [
           "PA/12345/2019",

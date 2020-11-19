@@ -737,6 +737,7 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
 
+### POU Email addresses (Case listed)
 homeOfficeEmailAddresses:
   bradford: ${IA_HOME_OFFICE_BRADFORD_EMAIL:ho-bradford@example.com}
   manchester: ${IA_HOME_OFFICE_MANCHESTER_EMAIL:ho-manchester@example.com}
