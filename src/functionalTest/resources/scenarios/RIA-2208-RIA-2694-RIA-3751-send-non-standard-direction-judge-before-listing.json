@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2208-RIA-2694 Send Home Office non-standard direction, RIA-1191 Notify legal rep of home office direction (before listing)",
+  "description": "RIA-2208-RIA-2694-RIA-3751 Send Home Office non-standard direction, RIA-1191 Notify legal rep of home office direction (before listing)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -64,7 +64,7 @@
     "notifications": [
       {
         "reference": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
-        "recipient": "{$endAppealHomeOfficeEmailAddress}",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: direction",
         "body": [
           "PA/12345/2019",

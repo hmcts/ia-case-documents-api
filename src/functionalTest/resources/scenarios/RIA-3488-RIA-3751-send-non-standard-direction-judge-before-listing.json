@@ -1,12 +1,12 @@
 {
-  "description": "RIA-3228-RIA-2536 Send a non standard direction to both parties",
+  "description": "RIA-3488-RIA-3571 Send Home Office non-standard direction, RIA-1191 Notify legal rep of home office direction (before listing)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "CaseOfficer",
+    "credentials": "Judge",
     "input": {
-      "id": 1003,
+      "id": 348817,
       "eventId": "sendDirection",
-      "state": "appealSubmitted",
+      "state": "pendingPayment",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
@@ -16,7 +16,7 @@
               "id": "1",
               "value": {
                 "explanation": "Do the non standard thing",
-                "parties": "both",
+                "parties": "respondent",
                 "dateDue": "{$TODAY+14}",
                 "dateSent": "{$TODAY}",
                 "tag": ""
@@ -24,7 +24,7 @@
             }
           ],
           "notificationsSent": [],
-          "legalRepresentativeEmailAddress": "RIA-1003-test-case-1@example.com"
+          "legalRepresentativeEmailAddress": "RIA-348817-test-case-1@example.com"
         }
       }
     }
@@ -41,7 +41,7 @@
             "id": "1",
             "value": {
               "explanation": "Do the non standard thing",
-              "parties": "both",
+              "parties": "respondent",
               "dateDue": "{$TODAY+14}",
               "dateSent": "{$TODAY}",
               "tag": ""
@@ -50,21 +50,21 @@
         ],
         "notificationsSent": [
           {
-            "id": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
+            "id": "348817_RESPONDENT_NON_STANDARD_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1003_LEGAL_REP_NON_STANDARD_DIRECTION",
+            "id": "348817_LEGAL_REP_NON_STANDARD_DIRECTION_OF_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
-        "legalRepresentativeEmailAddress": "RIA-1003-test-case-1@example.com"
+        "legalRepresentativeEmailAddress": "RIA-348817-test-case-1@example.com"
       }
     },
     "notifications": [
       {
-        "reference": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
-        "recipient": "{$endAppealHomeOfficeEmailAddress}",
+        "reference": "348817_RESPONDENT_NON_STANDARD_DIRECTION",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: direction",
         "body": [
           "PA/12345/2019",
@@ -78,8 +78,8 @@
         ]
       },
       {
-        "reference": "1003_LEGAL_REP_NON_STANDARD_DIRECTION",
-        "recipient": "RIA-1003-test-case-1@example.com",
+        "reference": "348817_LEGAL_REP_NON_STANDARD_DIRECTION_OF_HOME_OFFICE",
+        "recipient": "RIA-348817-test-case-1@example.com",
         "subject": "Immigration and Asylum appeal: direction",
         "body": [
           "PA/12345/2019",

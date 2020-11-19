@@ -6,56 +6,109 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
 public class RespondentNonStandardDirectionPersonalisation implements EmailNotificationPersonalisation {
 
+    public static final String CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT = "currentCaseStateVisibleToHomeOfficeAll flag is not present";
     private final String respondentNonStandardDirectionBeforeListingTemplateId;
     private final String respondentNonStandardDirectionAfterListingTemplateId;
     private final String iaExUiFrontendUrl;
-    private final String respondentNonStandardDirectionEmailAddress;
+    private final String apcHomeOfficeEmailAddress;
+    private final String lartHomeOfficeEmailAddress;
     private final DirectionFinder directionFinder;
     private final CustomerServicesProvider customerServicesProvider;
-    private final RecordApplicationRespondentFinder recordApplicationRespondentFinder;
+    private final AppealService appealService;
+    private final EmailAddressFinder emailAddressFinder;
 
     public RespondentNonStandardDirectionPersonalisation(
         @Value("${govnotify.template.nonStandardDirectionBeforeListing.respondent.email}") String respondentNonStandardDirectionBeforeListingTemplateId,
         @Value("${govnotify.template.nonStandardDirectionAfterListing.respondent.email}") String respondentNonStandardDirectionAfterListingTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        @Value("${respondentEmailAddresses.nonStandardDirectionUntilListing}") String respondentNonStandardDirectionEmailAddress,
+        @Value("${apcHomeOfficeEmailAddress}") String apcHomeOfficeEmailAddress,
+        @Value("${lartHomeOfficeEmailAddress}") String lartHomeOfficeEmailAddress,
         DirectionFinder directionFinder,
         CustomerServicesProvider customerServicesProvider,
-        RecordApplicationRespondentFinder recordApplicationRespondentFinder
+        AppealService appealService,
+        EmailAddressFinder emailAddressFinder
     ) {
-        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.respondentNonStandardDirectionBeforeListingTemplateId = respondentNonStandardDirectionBeforeListingTemplateId;
         this.respondentNonStandardDirectionAfterListingTemplateId = respondentNonStandardDirectionAfterListingTemplateId;
-        this.respondentNonStandardDirectionEmailAddress = respondentNonStandardDirectionEmailAddress;
+        this.iaExUiFrontendUrl = iaExUiFrontendUrl;
+        this.apcHomeOfficeEmailAddress = apcHomeOfficeEmailAddress;
+        this.lartHomeOfficeEmailAddress = lartHomeOfficeEmailAddress;
         this.directionFinder = directionFinder;
         this.customerServicesProvider = customerServicesProvider;
-        this.recordApplicationRespondentFinder = recordApplicationRespondentFinder;
+        this.appealService = appealService;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        return isAppealListed(asylumCase)
-            ? respondentNonStandardDirectionAfterListingTemplateId : respondentNonStandardDirectionBeforeListingTemplateId;
+        return appealService.isAppealListed(asylumCase) ? respondentNonStandardDirectionAfterListingTemplateId
+                : respondentNonStandardDirectionBeforeListingTemplateId;
     }
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(recordApplicationRespondentFinder.getRespondentEmail(asylumCase));
+
+        return asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)
+            .map(currentState -> {
+                if (Arrays.asList(
+                        State.APPEAL_SUBMITTED,
+                        State.PENDING_PAYMENT,
+                        State.AWAITING_RESPONDENT_EVIDENCE
+                ).contains(currentState)) {
+                    return Collections.singleton(apcHomeOfficeEmailAddress);
+                } else if (Arrays.asList(
+                        State.CASE_BUILDING,
+                        State.CASE_UNDER_REVIEW,
+                        State.RESPONDENT_REVIEW
+                ).contains(currentState)) {
+                    return Collections.singleton(lartHomeOfficeEmailAddress);
+                } else if (Arrays.asList(
+                        State.FTPA_SUBMITTED,
+                        State.FTPA_DECIDED).contains(currentState)) {
+                    return Collections.singleton(emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase));
+                } else if (Arrays.asList(
+                        State.LISTING,
+                        State.SUBMIT_HEARING_REQUIREMENTS,
+                        State.ENDED,
+                        State.APPEAL_TAKEN_OFFLINE).contains(currentState)
+                        && !appealService.isAppealListed(asylumCase)) {
+                    return  Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+                } else if (Arrays.asList(
+                        State.PREPARE_FOR_HEARING,
+                        State.FINAL_BUNDLING,
+                        State.PRE_HEARING,
+                        State.DECISION,
+                        State.ADJOURNED,
+                        State.DECIDED,
+                        State.ENDED,
+                        State.APPEAL_TAKEN_OFFLINE
+                ).contains(currentState) && appealService.isAppealListed(asylumCase)) {
+                    final Optional<HearingCentre> maybeCaseIsListed = asylumCase
+                            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+
+                    if (maybeCaseIsListed.isPresent()) {
+                        return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+                    } else {
+                        return  Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+                    }
+                }
+                throw new IllegalStateException(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT);
+            })
+            .orElseThrow(() -> new IllegalStateException(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT));
     }
 
     @Override
@@ -68,33 +121,26 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
         requireNonNull(asylumCase, "asylumCase must not be null");
 
         final Direction direction =
-            directionFinder
-                .findFirst(asylumCase, DirectionTag.NONE)
-                .orElseThrow(() -> new IllegalStateException("non-standard direction is not present"));
+                directionFinder
+                        .findFirst(asylumCase, DirectionTag.NONE)
+                        .orElseThrow(() -> new IllegalStateException("non-standard direction is not present"));
 
         final String directionDueDate =
-            LocalDate
-                .parse(direction.getDateDue())
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+                LocalDate
+                        .parse(direction.getDateDue())
+                        .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         return ImmutableMap
-            .<String, String>builder()
-            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
-            .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-            .put("linkToOnlineService", iaExUiFrontendUrl)
-            .put("explanation", direction.getExplanation())
-            .put("dueDate", directionDueDate)
-            .build();
-    }
-
-    protected boolean isAppealListed(AsylumCase asylumCase) {
-        final Optional<HearingCentre> appealListed = asylumCase
-            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
-
-        return appealListed.isPresent();
+                .<String, String>builder()
+                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
+                .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .put("linkToOnlineService", iaExUiFrontendUrl)
+                .put("explanation", direction.getExplanation())
+                .put("dueDate", directionDueDate)
+                .build();
     }
 }
