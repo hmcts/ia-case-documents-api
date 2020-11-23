@@ -26,6 +26,8 @@ public enum Event {
     CREATE_CASE_SUMMARY("createCaseSummary"),
     REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence"),
     GENERATE_HEARING_BUNDLE("generateHearingBundle"),
+    CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle"),
+    ASYNC_STITCHING_COMPLETE("asyncStitchingComplete"),
     GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons"),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
     EDIT_CASE_LISTING("editCaseListing"),
