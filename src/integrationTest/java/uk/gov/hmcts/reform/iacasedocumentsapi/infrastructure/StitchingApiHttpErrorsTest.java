@@ -21,7 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
 public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
         WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithStitchingStub {
 
-    private static final String STITCH_API_PATH = "/api/stitch-ccd-bundles";
+    private static final String STITCH_API_PATH = "/api/new-bundle";
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})

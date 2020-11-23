@@ -25,9 +25,12 @@ public enum DocumentTag {
     CMA_REQUIREMENTS("cmaRequirements"),
     CMA_NOTICE("cmaNotice"),
     HO_DECISION_LETTER("homeOfficeDecisionLetter"),
-
+    FTPA_APPELLANT("ftpaAppellant"),
+    FTPA_RESPONDENT("ftpaRespondent"),
+    FTPA_DECISION_AND_REASONS("ftpaDecisionAndReasons"),
     @JsonEnumDefaultValue
     NONE("");
+
 
     @JsonValue
     private final String id;
@@ -41,3 +44,4 @@ public enum DocumentTag {
         return id;
     }
 }
+
