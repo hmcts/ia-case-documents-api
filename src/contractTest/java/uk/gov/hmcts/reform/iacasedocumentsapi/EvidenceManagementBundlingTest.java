@@ -42,7 +42,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 public class EvidenceManagementBundlingTest {
 
     private static final String ENDPOINT = "/api/stitch-ccd-bundles";
+    private static final String ASYNC_ENDPOINT = "/api/new-bundle";
     private static final String CLIENT_REDIRECT_URI = "/api/stitch-ccd-bundles";
+    private static final String ASYNC_CLIENT_REDIRECT_URI = "/api/async-stitch-ccd-bundles";
+
     private static final String DOC_QUERY_STRING = "document1=doc1&filename1=file1&document2=doc2&filename2=file2";
 
     private static final String ACCESS_TOKEN = "111";
@@ -78,6 +81,27 @@ public class EvidenceManagementBundlingTest {
     }
 
     @Pact(provider = "em_api", consumer = "ia_case_documents_api")
+    public RequestResponsePact executeAsyncGetEvidenceBundleIdAndGet200Response(PactDslWithProvider builder) {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+        headers.put(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.put("ServiceAuthorization", AUTHORIZATION_TOKEN);
+
+        return builder
+                .given("EM successfully returns OK Status")
+                .uponReceiving("Provider receives a POST request from an IA Documents API")
+                .path(ASYNC_ENDPOINT)
+                .method(HttpMethod.POST.toString())
+                .headers(headers)
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .body(new PactDslJsonBody()
+                        .stringType("id", "12345"))
+                .toPact();
+    }
+
+    @Pact(provider = "em_api", consumer = "ia_case_documents_api")
     public RequestResponsePact executeGetEvidenceBundleCaseDataAndGetNotNullValues(PactDslWithProvider builder) {
 
         Map<String, String> headers = Maps.newHashMap();
@@ -98,12 +122,47 @@ public class EvidenceManagementBundlingTest {
     }
 
     @Pact(provider = "em_api", consumer = "ia_case_documents_api")
+    public RequestResponsePact executeAsyncGetEvidenceBundleCaseDataAndGetNotNullValues(PactDslWithProvider builder) {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+        headers.put(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.put("ServiceAuthorization", AUTHORIZATION_TOKEN);
+
+        return builder
+                .given("EM successfully returns Bundle Case Data")
+                .uponReceiving("Provider receives a POST request for bundle case data from an IA Documents API")
+                .path(ASYNC_ENDPOINT)
+                .method(HttpMethod.POST.toString())
+                .headers(headers)
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .body(createBundleCaseDataArrayResponse())
+                .toPact();
+    }
+
+    @Pact(provider = "em_api", consumer = "ia_case_documents_api")
     public RequestResponsePact executeGetEvidenceBundleCaseDataAndGetCorrectType(PactDslWithProvider builder) {
 
         return builder
                 .given("EM successfully returns Bundle Case Data")
                 .uponReceiving("Provider receives a GET request for BundleCase data with correct type from an IA Documents API")
                 .path(ENDPOINT)
+                .method(HttpMethod.GET.toString())
+                .query(DOC_QUERY_STRING)
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .body(createBundleCaseDataArrayResponse())
+                .toPact();
+    }
+
+    @Pact(provider = "em_api", consumer = "ia_case_documents_api")
+    public RequestResponsePact executeAsyncGetEvidenceBundleCaseDataAndGetCorrectType(PactDslWithProvider builder) {
+
+        return builder
+                .given("EM successfully returns Bundle Case Data")
+                .uponReceiving("Provider receives a GET request for BundleCase data with correct type from an IA Documents API")
+                .path(ASYNC_ENDPOINT)
                 .method(HttpMethod.GET.toString())
                 .query(DOC_QUERY_STRING)
                 .willRespondWith()
@@ -133,6 +192,39 @@ public class EvidenceManagementBundlingTest {
                         .formParams(body)
                         .when()
                         .post(mockServer.getUrl() + ENDPOINT)
+                        .then()
+                        .statusCode(200)
+                        .and()
+                        .extract()
+                        .asString();
+
+        assertThat(actualResponseBody).isNotNull();
+
+        JSONObject response = new JSONObject(actualResponseBody);
+        assertThat(response.get("id").toString()).isNotBlank();
+    }
+    
+    @Test
+    @PactTestFor(pactMethod = "executeAsyncGetEvidenceBundleIdAndGet200Response")
+    public void should_post_async_to_Evidence_bundle_and_receive_code_with_200_response(MockServer mockServer) throws JSONException {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+        headers.put(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.put("ServiceAuthorization", AUTHORIZATION_TOKEN);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("response_type", "bundleCaseData");
+        body.add("redirect_uri", ASYNC_CLIENT_REDIRECT_URI);
+
+        String actualResponseBody =
+                SerenityRest
+                        .given()
+                        .headers(headers)
+                        .contentType(ContentType.URLENC)
+                        .formParams(body)
+                        .when()
+                        .post(mockServer.getUrl() + ASYNC_ENDPOINT)
                         .then()
                         .statusCode(200)
                         .and()
@@ -186,6 +278,46 @@ public class EvidenceManagementBundlingTest {
     }
 
     @Test
+    @PactTestFor(pactMethod = "executeAsyncGetEvidenceBundleCaseDataAndGetNotNullValues")
+    public void should_post_to_Async_Evidence_bundleCaseData_and_receive_not_null_values(MockServer mockServer) throws JSONException {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+        headers.put(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.put("ServiceAuthorization", AUTHORIZATION_TOKEN);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("response_type", "bundleCaseData");
+        body.add("redirect_uri", ASYNC_CLIENT_REDIRECT_URI);
+
+        String actualResponseBody =
+                SerenityRest
+                        .given()
+                        .headers(headers)
+                        .contentType(ContentType.URLENC)
+                        .formParams(body)
+                        .when()
+                        .post(mockServer.getUrl() + ASYNC_ENDPOINT)
+                        .then()
+                        .statusCode(200)
+                        .and()
+                        .extract()
+                        .asString();
+
+        assertThat(actualResponseBody).isNotNull();
+
+        JSONArray responseArray = new JSONArray(actualResponseBody);
+        JSONObject response = new JSONObject(String.valueOf(responseArray.get(0)));
+        assertThat(response.get("id").toString()).isNotBlank();
+        assertThat(response.get("title").toString()).isNotBlank();
+        assertThat(response.get("description").toString()).isNotBlank();
+        assertThat(response.get("eligibleForStitching").toString()).isNotBlank();
+        assertThat(response.get("hasCoversheets").toString()).isNotBlank();
+        assertThat(response.get("hasTableOfContents").toString()).isNotBlank();
+        assertThat(response.get("filename").toString()).isNotBlank();
+    }
+
+    @Test
     @PactTestFor(pactMethod = "executeGetEvidenceBundleCaseDataAndGetCorrectType")
     public void should_get_Evidence_bundleCaseData_and_receive_correct_type_values(MockServer mockServer) throws JSONException, IOException {
 
@@ -199,6 +331,42 @@ public class EvidenceManagementBundlingTest {
                         .log().all(true)
                         .when()
                         .get(mockServer.getUrl() + ENDPOINT + "?" + DOC_QUERY_STRING)
+                        .then()
+                        .statusCode(200)
+                        .and()
+                        .extract().body()
+                        .asString();
+
+        assertThat(actualResponseBody).isNotNull();
+
+        JSONArray responseArray = new JSONArray(actualResponseBody);
+        JSONObject response = new JSONObject(String.valueOf(responseArray.get(0)));
+
+        Bundle bundle = objectMapper.readValue(response.toString(), Bundle.class);
+
+        assertThat(bundle).isNotNull();
+        assertThat(bundle.getId()).isEqualTo("123");
+        assertThat(bundle.getHasCoversheets().equals(YesOrNo.YES));
+        assertThat(bundle.getHasTableOfContents().equals(YesOrNo.YES));
+        assertThat(bundle.getTitle()).isEqualTo("some-bundle-title1");
+        assertThat(bundle.getDescription()).isEqualTo("some-bundle-description1");
+        assertThat(bundle.getFilename()).isEqualTo("Gonzlez-decision-and-reasons-draft");
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "executeAsyncGetEvidenceBundleCaseDataAndGetCorrectType")
+    public void should_get_Async_Evidence_bundleCaseData_and_receive_correct_type_values(MockServer mockServer) throws JSONException, IOException {
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("response_type", "bundleCaseData");
+        body.add("redirect_uri", ASYNC_CLIENT_REDIRECT_URI);
+
+        String actualResponseBody =
+                SerenityRest
+                        .given()
+                        .log().all(true)
+                        .when()
+                        .get(mockServer.getUrl() + ASYNC_ENDPOINT + "?" + DOC_QUERY_STRING)
                         .then()
                         .statusCode(200)
                         .and()
