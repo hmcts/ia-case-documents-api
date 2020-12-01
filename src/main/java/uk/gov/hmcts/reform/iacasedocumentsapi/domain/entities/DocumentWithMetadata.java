@@ -24,6 +24,15 @@ public class DocumentWithMetadata {
         Document document,
         String description,
         String dateUploaded,
+        DocumentTag tag
+    ) {
+        this(document, description, dateUploaded, tag, null);
+    }
+
+    public DocumentWithMetadata(
+        Document document,
+        String description,
+        String dateUploaded,
         DocumentTag tag,
         String suppliedBy
     ) {

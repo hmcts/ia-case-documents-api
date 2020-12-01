@@ -19,7 +19,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '6.0.2'
     id 'org.sonarqube' version '3.0'
     id 'org.springframework.boot' version '2.2.4.RELEASE'
-    id 'au.com.dius.pact' version '4.1.7'
+    id 'au.com.dius.pact' version '4.1.11'
     id "io.freefair.lombok" version "5.1.1"
 }
 
@@ -40,7 +40,7 @@ def versions = [
     springBoot         : '2.2.4.RELEASE',
     springHystrix      : '2.1.1.RELEASE',
     springfoxSwagger   : '2.9.2',
-    pact_version       : '3.5.24'
+    pact_version       : '4.0.10'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
@@ -316,8 +316,8 @@ dependencies {
     testCompile 'pl.pragmatists:JUnitParams:1.1.1'
 
     //pact contract testing
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version
 
     contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.2")

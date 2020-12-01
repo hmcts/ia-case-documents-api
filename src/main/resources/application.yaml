@@ -128,8 +128,10 @@ docmosis.render.uri: /rs/render
 docmosis.status.uri: /rs/status
 docmosis.convert.uri: /rs/convert
 
+
 emBundler.url: ${EM_BUNDLER_URL:http://localhost:4623}
 emBundler.stitch.uri: ${EM_BUNDLER_STITCH_URI:/api/stitch-ccd-bundles}
+emBundler.stitch.async.uri: ${EM_BUNDLER_STITCH_ASYNC_URI:/api/new-bundle}
 
 featureFlag:
   isEmStitchingEnabled: ${IA_EM_STITCHING_ENABLED:true}
@@ -181,6 +183,8 @@ security:
       - "updateHearingRequirements"
       - "adjournHearingWithoutDate"
       - "editAppealAfterSubmit"
+      - "generateHearingBundle"
+      - "customiseHearingBundle"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"

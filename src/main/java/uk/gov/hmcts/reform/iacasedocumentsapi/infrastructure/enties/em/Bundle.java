@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import java.util.Optional;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
@@ -7,6 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Bundle implements CaseData {
 
     private String id;

@@ -27,7 +27,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.AppealSubmissionCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.HearingBundleGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.HearingNoticeCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
@@ -261,15 +260,6 @@ public class PreSubmitCallbackDispatcherTest {
             mock(DocumentCreator.class), mock(DocumentHandler.class)
         );
 
-        PreSubmitCallbackHandler<AsylumCase> h2 = new HearingBundleGenerator(
-            "mock",
-            "mock",
-            true,
-            mock(FileNameQualifier.class),
-            mock(DocumentBundler.class),
-            mock(DocumentHandler.class),
-            mock(BundleOrder.class)
-        );
 
         PreSubmitCallbackHandler<AsylumCase> h3 = new HearingNoticeCreator(
             mock(DocumentCreator.class), mock(DocumentHandler.class)
@@ -278,7 +268,6 @@ public class PreSubmitCallbackDispatcherTest {
         PreSubmitCallbackDispatcher<AsylumCase> dispatcher = new PreSubmitCallbackDispatcher<>(
             ccdEventAuthorizor,
             Arrays.asList(
-                h2,
                 h3,
                 h1
             )
@@ -287,9 +276,8 @@ public class PreSubmitCallbackDispatcherTest {
         List<PreSubmitCallbackHandler<AsylumCase>> sortedDispatcher =
             (List<PreSubmitCallbackHandler<AsylumCase>>) ReflectionTestUtils.getField(dispatcher, "sortedCallbackHandlers");
 
-        assertEquals(3, sortedDispatcher.size());
+        assertEquals(2, sortedDispatcher.size());
         assertEquals(h1, sortedDispatcher.get(0));
-        assertEquals(h2, sortedDispatcher.get(1));
-        assertEquals(h3, sortedDispatcher.get(2));
+        assertEquals(h3, sortedDispatcher.get(1));
     }
 }

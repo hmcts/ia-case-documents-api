@@ -4,9 +4,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Map;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 public enum AsylumCaseDefinition {
 
+    BUNDLE_CONFIGURATION(
+        "bundleConfiguration", new TypeReference<String>(){}),
+
+    CASE_BUNDLES(
+        "caseBundles", new TypeReference<List<IdValue<Bundle>>>(){}),
+
+    STITCHING_STATUS(
+        "stitchingStatus", new TypeReference<String>(){}),
+
+    BUNDLE_FILE_NAME_PREFIX(
+        "bundleFileNamePrefix", new TypeReference<String>(){}),
     HOME_OFFICE_REFERENCE_NUMBER(
         "homeOfficeReferenceNumber", new TypeReference<String>(){}),
 
@@ -315,6 +327,69 @@ public enum AsylumCaseDefinition {
 
     DRAFT_REHEARD_DECISION_AND_REASONS(
         "draftReheardDecisionAndReasons", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    HMCTS(
+        "hmcts", new TypeReference<String>(){}),
+
+    CUSTOM_HEARING_DOCUMENTS(
+        "customHearingDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_LEGAL_REP_DOCUMENTS(
+        "customLegalRepDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS(
+        "customAdditionalEvidenceDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_RESPONDENT_DOCUMENTS(
+        "customRespondentDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    ADDENDUM_EVIDENCE_DOCUMENTS(
+        "addendumEvidenceDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    CUSTOM_FTPA_APPELLANT_EVIDENCE_DOCS(
+        "customFtpaAppellantEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS(
+        "customAppAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS(
+        "customRespAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_FTPA_APPELLANT_DOCS(
+        "customFtpaAppellantDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_FTPA_RESPONDENT_DOCS(
+        "customFtpaRespondentDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_FINAL_DECISION_AND_REASONS_DOCS(
+        "customFinalDecisionAndReasonsDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS(
+        "customAppAddendumEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    APPELLANT_ADDENDUM_EVIDENCE_DOCS(
+        "appellantAddendumEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS(
+        "customRespAddendumEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    RESPONDENT_ADDENDUM_EVIDENCE_DOCS(
+        "respondentAddendumEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    CUSTOM_REHEARD_HEARING_DOCS(
+        "customReheardHearingDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    APP_ADDITIONAL_EVIDENCE_DOCS(
+        "appAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    RESP_ADDITIONAL_EVIDENCE_DOCS(
+        "respAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    FTPA_APPELLANT_DOCUMENTS(
+        "ftpaAppellantDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    FTPA_RESPONDENT_DOCUMENTS(
+        "ftpaRespondentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     ;
 

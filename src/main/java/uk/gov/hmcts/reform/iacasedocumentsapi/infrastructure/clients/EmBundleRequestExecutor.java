@@ -13,14 +13,14 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
 
 @Slf4j
 @Service
-public class BundleRequestExecutor {
+public class EmBundleRequestExecutor {
 
     private static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
 
@@ -28,14 +28,14 @@ public class BundleRequestExecutor {
     private final AuthTokenGenerator serviceAuthTokenGenerator;
     private final UserDetailsProvider userDetailsProvider;
 
-    public BundleRequestExecutor(RestTemplate restTemplate, AuthTokenGenerator serviceAuthTokenGenerator, UserDetailsProvider userDetailsProvider) {
+    public EmBundleRequestExecutor(RestTemplate restTemplate, AuthTokenGenerator serviceAuthTokenGenerator, UserDetailsProvider userDetailsProvider) {
         this.restTemplate = restTemplate;
         this.serviceAuthTokenGenerator = serviceAuthTokenGenerator;
         this.userDetailsProvider = userDetailsProvider;
     }
 
-    public PreSubmitCallbackResponse<BundleCaseData> post(
-        final Callback<BundleCaseData> payload,
+    public PreSubmitCallbackResponse<AsylumCase> post(
+        final Callback<AsylumCase> payload,
         final String endpoint
     ) {
 
@@ -52,9 +52,9 @@ public class BundleRequestExecutor {
         headers.set(HttpHeaders.AUTHORIZATION, accessToken);
         headers.set(SERVICE_AUTHORIZATION, serviceAuthorizationToken);
 
-        HttpEntity<Callback<BundleCaseData>> requestEntity = new HttpEntity<>(payload, headers);
+        HttpEntity<Callback<AsylumCase>> requestEntity = new HttpEntity<>(payload, headers);
 
-        PreSubmitCallbackResponse<BundleCaseData> response;
+        PreSubmitCallbackResponse<AsylumCase> response;
 
         try {
             response =
@@ -63,7 +63,7 @@ public class BundleRequestExecutor {
                         endpoint,
                         HttpMethod.POST,
                         requestEntity,
-                        new ParameterizedTypeReference<PreSubmitCallbackResponse<BundleCaseData>>() {
+                        new ParameterizedTypeReference<PreSubmitCallbackResponse<AsylumCase>>() {
                         }
                     ).getBody();
 
