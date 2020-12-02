@@ -14,7 +14,7 @@ plugins {
     id 'jacoco'
     id 'pmd'
     id 'com.github.ben-manes.versions' version '0.36.0'
-    id "info.solidsoft.pitest" version '1.5.1'
+    id "info.solidsoft.pitest" version '1.5.2'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'org.owasp.dependencycheck' version '6.0.2'
     id 'org.sonarqube' version '3.0'
