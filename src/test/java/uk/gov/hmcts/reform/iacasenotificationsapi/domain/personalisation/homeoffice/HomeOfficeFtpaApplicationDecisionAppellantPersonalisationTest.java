@@ -4,12 +4,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_REMADE_RULE_32;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,13 +30,9 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
     AsylumCase asylumCase;
     @Mock
     PersonalisationProvider personalisationProvider;
-    @Mock
-    EmailAddressFinder emailAddressFinder;
 
     private Long caseId = 12345L;
-    private String homeOfficeEmailAddressFtpaGranted = "homeoffice-granted@example.com";
-    private String homeOfficeEmailAddressFtpaRefused = "homeoffice-refused@example.com";
-    private String homeOfficeEmailAddress = "homeoffice@example.com";
+    private String upperTribunalNoticesEmailAddress = "homeoffice-granted@example.com";
     private String appealReferenceNumber = "someReferenceNumber";
     private String homeOfficeRefNumber = "someHomeOfficeRefNumber";
     private String ariaListingReference = "ariaListingReference";
@@ -68,8 +62,6 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
     @BeforeEach
     public void setup() {
 
-        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
-
         homeOfficeFtpaApplicationDecisionAppellantPersonalisation =
             new HomeOfficeFtpaApplicationDecisionAppellantPersonalisation(
                 otherPartyGrantedTemplateId,
@@ -80,9 +72,8 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
                 allowedTemplateId,
                 dismissedTemplateId,
                 personalisationProvider,
-                homeOfficeEmailAddressFtpaGranted,
-                homeOfficeEmailAddressFtpaRefused,
-                emailAddressFinder
+                upperTribunalNoticesEmailAddress
+
             );
     }
 
@@ -145,75 +136,33 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
     }
 
     @Test
-    public void should_return_given_email_address_for_granted_appeal_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_GRANTED));
-
-        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
-            .contains(homeOfficeEmailAddressFtpaGranted));
+    void should_return_given_email_address_for_correct_states() {
+        Arrays.asList(State.FTPA_SUBMITTED,State.FTPA_DECIDED).stream().forEach(state -> {
+            when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_JUDGE, State.class))
+                .thenReturn(Optional.of(state));
+            assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
+                .contains(upperTribunalNoticesEmailAddress));
+        });
     }
 
     @Test
-    public void should_return_given_email_address_for_partially_granted_appeal_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED));
+    void should_throw_exception_for_wrong_state() {
+        when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_JUDGE, State.class))
+            .thenReturn(Optional.of(State.DECIDED));
 
-        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
-            .contains(homeOfficeEmailAddressFtpaGranted));
+        assertThatThrownBy(() -> homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("homeOffice email Address cannot be found");
     }
 
     @Test
-    public void should_return_given_email_address_for_refused_appeal_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REFUSED));
+    void should_throw_exception_for_missing_state() {
+        when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_JUDGE, State.class))
+            .thenReturn(Optional.empty());
 
-        assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
-            .contains(homeOfficeEmailAddressFtpaRefused));
-    }
-
-    @Test
-    public void should_return_given_email_address_for_reheard35_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REHEARD35));
-
-        assertEquals(Collections.singleton(homeOfficeEmailAddress),
-            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
-    }
-
-    @Test
-    public void should_return_given_email_address_for_reheard32_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REHEARD32));
-
-        assertEquals(Collections.singleton(homeOfficeEmailAddress),
-            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
-    }
-
-    @Test
-    public void should_return_given_email_address_for_remade32_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
-
-        assertEquals(Collections.singleton(homeOfficeEmailAddress),
-            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase));
-    }
-
-    @Test
-    public void should_return_the_ftpa_application_decision_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
-
-        assertEquals(FtpaDecisionOutcomeType.FTPA_REMADE32,
-            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getFtpaApplicationDecision(asylumCase));
-    }
-
-    @Test
-    public void should_return_the_ftpa_application_rj_decision_outcome() {
-        when(asylumCase.read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
-            .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REMADE32));
-
-        assertEquals(FtpaDecisionOutcomeType.FTPA_REMADE32,
-            homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getFtpaApplicationDecision(asylumCase));
+        assertThatThrownBy(() -> homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("homeOffice email Address cannot be found");
     }
 
     @Test

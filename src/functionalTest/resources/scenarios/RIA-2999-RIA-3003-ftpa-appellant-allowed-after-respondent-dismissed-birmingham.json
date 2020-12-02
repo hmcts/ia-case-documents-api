@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2999-RIA-3003 Appellant FTPA Application is allowed after the respondent application already dismissed (Birmingham hearing centre)",
+  "description": "RIA-2999-RIA-3003-RIA-3754  Appellant FTPA Application is allowed after the respondent application already dismissed (Birmingham hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "listCaseHearingCentre": "birmingham",
           "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
           "ftpaRespondentRjDecisionOutcomeType": "remadeRule32",
@@ -38,7 +39,7 @@
     "notifications": [
       {
         "reference": "9007_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

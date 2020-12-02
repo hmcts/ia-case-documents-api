@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2999-RIA-3003 Respondent FTPA Application is allowed after the appellant application allowed (Manchester hearing centre)",
+  "description": "RIA-2999-RIA-3003-RIA-3754  Respondent FTPA Application is allowed after the appellant application allowed (Manchester hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "listCaseHearingCentre": "manchester",
           "ftpaRespondentRjDecisionOutcomeType": "remadeRule32",
           "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
@@ -39,7 +40,7 @@
     "notifications": [
       {
         "reference": "1019_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-        "recipient": "{$homeOfficeEmailAddresses.manchester}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

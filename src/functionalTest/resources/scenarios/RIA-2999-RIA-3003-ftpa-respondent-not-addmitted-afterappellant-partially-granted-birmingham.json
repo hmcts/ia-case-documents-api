@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2999-RIA-3003 Respondent FTPA Application is not admitted after the appellant application already partially granted (Birmingham hearing centre)",
+  "description": "RIA-2999-RIA-3003-RIA-3754  Respondent FTPA Application is not admitted after the appellant application already partially granted (Birmingham hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "listCaseHearingCentre": "birmingham",
           "ftpaRespondentRjDecisionOutcomeType": "notAdmitted",
           "ftpaAppellantRjDecisionOutcomeType": "partiallyGranted",
@@ -37,7 +38,7 @@
     "notifications": [
       {
         "reference": "9006_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

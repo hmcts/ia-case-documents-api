@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2999-RIA-3003 Respondent FTPA Application is granted after the appellant application already refused",
+  "description": "RIA-2999-RIA-3003-RIA-3754 Respondent FTPA Application is granted after the appellant application already refused",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaRespondentRjDecisionOutcomeType": "granted",
           "ftpaAppellantRjDecisionOutcomeType": "refused",
           "ftpaApplicantType": "respondent",
@@ -36,7 +37,7 @@
     "notifications": [
       {
         "reference": "9004_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
           "PA/12345/2019",

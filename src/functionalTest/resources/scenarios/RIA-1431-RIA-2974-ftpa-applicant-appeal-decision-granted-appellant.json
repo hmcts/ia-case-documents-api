@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1432-RIA-2974 FTPA Applicant Application Decision Granted Appellant",
+  "description": "RIA-1432-RIA-2974-RIA-3754 FTPA Applicant Application Decision Granted Appellant",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaAppellantDecisionOutcomeType": "granted",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
@@ -43,7 +44,7 @@
     "notifications": [
       {
         "reference": "1001_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
           "PA/12345/2019",

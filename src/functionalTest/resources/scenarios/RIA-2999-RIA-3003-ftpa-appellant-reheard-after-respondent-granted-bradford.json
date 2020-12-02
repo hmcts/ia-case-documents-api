@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2999-RIA-3003 Appellant FTPA Application is reheard after the respondent application already granted (Bradford hearing centre)",
+  "description": "RIA-2999-RIA-3003-RIA-3754  Appellant FTPA Application is reheard after the respondent application already granted (Bradford hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaAppellantRjDecisionOutcomeType": "reheardRule32",
           "ftpaRespondentRjDecisionOutcomeType": "granted",
           "ftpaApplicantType": "appellant",
@@ -38,7 +39,7 @@
     "notifications": [
       {
         "reference": "1020_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$homeOfficeEmailAddresses.bradford}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

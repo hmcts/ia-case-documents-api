@@ -11,6 +11,7 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "isReheardAppealEnabled": "Yes",
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaRespondentDecisionOutcomeType": "reheardRule32",
           "ftpaApplicantType": "respondent",
           "listCaseHearingCentre": "taylorHouse",
@@ -45,7 +46,7 @@
     "notifications": [
       {
         "reference": "36512_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

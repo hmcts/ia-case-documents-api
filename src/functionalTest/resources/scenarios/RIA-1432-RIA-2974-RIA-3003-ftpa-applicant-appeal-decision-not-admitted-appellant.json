@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "listCaseHearingCentre": "birmingham",
           "ftpaAppellantDecisionOutcomeType": "notAdmitted",
           "ftpaApplicantType": "appellant",
@@ -40,7 +41,7 @@
     "notifications": [
       {
         "reference": "1002_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

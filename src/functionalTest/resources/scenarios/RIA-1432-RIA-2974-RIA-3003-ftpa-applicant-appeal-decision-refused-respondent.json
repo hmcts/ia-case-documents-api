@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1432-RIA-2974-RIA-3003 FTPA Applicant Application Decision Refused Respondent",
+  "description": "RIA-1432-RIA-2974-RIA-3003-RIA-3754 FTPA Applicant Application Decision Refused Respondent",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaRespondentDecisionOutcomeType": "refused",
           "ftpaApplicantType": "respondent",
           "ariaListingReference": "987654321",
@@ -39,7 +40,7 @@
     "notifications": [
       {
         "reference": "1008_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-        "recipient": "{$dismissedAppealHomeOfficeEmailAddress}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal refused",
         "body": [
           "PA/12345/2019",

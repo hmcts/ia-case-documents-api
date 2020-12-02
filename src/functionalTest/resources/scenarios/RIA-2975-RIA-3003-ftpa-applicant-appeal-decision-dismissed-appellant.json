@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2975-RIA-3003 FTPA Applicant Application Decision Dismissed Appellant (Manchester hearing centre)",
+  "description": "RIA-2975-RIA-3003-RIA-3754  FTPA Applicant Application Decision Dismissed Appellant (Manchester hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "listCaseHearingCentre": "manchester",
           "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
           "ftpaAppellantDecisionRemadeRule32": "dismissed",
@@ -41,7 +42,7 @@
     "notifications": [
       {
         "reference": "1013_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$homeOfficeEmailAddresses.manchester}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

@@ -260,6 +260,9 @@ public enum AsylumCaseDefinition {
 
     CASE_FLAG_SET_ASIDE_REHEARD_EXISTS(
         "caseFlagSetAsideReheardExists", new TypeReference<YesOrNo>() {}),
+
+    CURRENT_CASE_STATE_VISIBLE_TO_JUDGE(
+        "currentCaseStateVisibleToJudge", new TypeReference<State>(){}),
     ;
 
     private final String value;

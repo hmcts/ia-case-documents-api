@@ -93,7 +93,8 @@ def secrets = [
         secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
         secret('fees-admin-officer-email', 'FEES_ADMIN_OFFICER_EMAIL'),
         secret('home-office-email-apc', 'HOME_OFFICE_EMAIL_APC'),
-        secret('home-office-email-lart', 'HOME_OFFICE_EMAIL_LART')
+        secret('home-office-email-lart', 'HOME_OFFICE_EMAIL_LART'),
+        secret('upper-tribunal-notices-email', 'IA_UPPER_TRIBUNAL_NOTICES_EMAIL')
     ]
 ]
 

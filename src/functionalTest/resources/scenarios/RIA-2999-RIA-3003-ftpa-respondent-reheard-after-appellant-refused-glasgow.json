@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2999-RIA-3003 Respondent FTPA Application is reheard after the appellant application already refused (Glasgow hearing centre)",
+  "description": "RIA-2999-RIA-3003-RIA-3754 Respondent FTPA Application is reheard after the appellant application already refused (Glasgow hearing centre)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaRespondentRjDecisionOutcomeType": "reheardRule32",
           "ftpaAppellantRjDecisionOutcomeType": "refused",
           "ftpaApplicantType": "respondent",
@@ -38,7 +39,7 @@
     "notifications": [
       {
         "reference": "1021_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
-        "recipient": "{$homeOfficeEmailAddresses.glasgow}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
         "body": [
           "PA/12345/2019",

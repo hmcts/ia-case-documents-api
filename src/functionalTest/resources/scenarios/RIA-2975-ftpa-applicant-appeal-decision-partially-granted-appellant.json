@@ -1,5 +1,5 @@
 {
-  "description": "RIA-2975 FTPA Applicant Application Decision Partially Granted Appellant",
+  "description": "RIA-2975-RIA-3754 FTPA Applicant Application Decision Partially Granted Appellant",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaDecided",
           "ftpaAppellantDecisionOutcomeType": "partiallyGranted",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
@@ -43,7 +44,7 @@
     "notifications": [
       {
         "reference": "1003_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
         "body": [
           "PA/12345/2019",

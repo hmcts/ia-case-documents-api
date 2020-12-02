@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaAppellantDecisionOutcomeType": "refused",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
@@ -39,7 +40,7 @@
     "notifications": [
       {
         "reference": "1004_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
-        "recipient": "{$dismissedAppealHomeOfficeEmailAddress}",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal refused",
         "body": [
           "PA/12345/2019",
