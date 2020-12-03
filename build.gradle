@@ -29,7 +29,7 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.6.2',
+    junit              : '5.7.0',
     junitPlatform      : '1.6.2',
     gradlePitest       : '1.5.1',
     pitest             : '1.5.2',
@@ -321,7 +321,7 @@ dependencies {
 
     contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.0")
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.0')
 
     integrationTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') { 
         force = true
