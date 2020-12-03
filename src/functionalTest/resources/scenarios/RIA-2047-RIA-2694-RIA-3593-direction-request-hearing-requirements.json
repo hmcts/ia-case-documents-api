@@ -1,10 +1,10 @@
 {
-  "description": "RIA-2048-RIA-2694 direction to legal rep to submit hearing requirements Legal Rep",
+  "description": "RIA-2047-RIA-2694-RIA-3593 direction to legal rep to submit hearing requirements",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "LegalRepresentative",
+    "credentials": "CaseOfficer",
     "input": {
-      "id": 2048,
+      "id": 2047,
       "eventId": "requestHearingRequirementsFeature",
       "state": "submitHearingRequirements",
       "caseData": {
@@ -48,7 +48,11 @@
         ],
         "notificationsSent": [
           {
-            "id": "2048_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+            "id": "2047_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2047_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
@@ -57,7 +61,7 @@
     },
     "notifications": [
       {
-        "reference": "2048_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+        "reference": "2047_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: submit hearing requirements direction",
         "body": [
@@ -73,6 +77,16 @@
           "{$TODAY+5|d MMM yyyy}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "2047_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: submit hearing requirements direction",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

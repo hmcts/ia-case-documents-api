@@ -223,6 +223,8 @@ govnotify:
     requestHearingRequirements:
       legalRep:
         email: d86a45df-5c3d-41e6-9370-3b962d8711fa
+      caseOfficer:
+        email: f68421ea-afaa-4023-a3c9-16be13b77435
     reviewHearingRequirements:
       adminOfficer:
         email: 62719354-7a95-4a5a-b42f-ae2223bd35ee

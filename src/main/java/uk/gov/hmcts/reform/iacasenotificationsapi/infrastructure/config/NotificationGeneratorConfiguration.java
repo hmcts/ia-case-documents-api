@@ -389,12 +389,13 @@ public class NotificationGeneratorConfiguration {
     @Bean("requestHearingRequirementsNotificationGenerator")
     public List<NotificationGenerator> requestHearingRequirementsNotificationGenerator(
         LegalRepresentativeRequestHearingRequirementsPersonalisation legalRepresentativeRequestHearingRequirementsPersonalisation,
+        CaseOfficerRequestHearingRequirementsPersonalisation caseOfficerRequestHearingRequirementsPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(legalRepresentativeRequestHearingRequirementsPersonalisation),
+                newArrayList(legalRepresentativeRequestHearingRequirementsPersonalisation, caseOfficerRequestHearingRequirementsPersonalisation),
                 notificationSender,
                 notificationIdAppender
             )
