@@ -1,7 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.EXCEPTIONAL_CIRCUMSTANCES_REMISSION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HELP_WITH_FEES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.NO_REMISSION;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -9,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 
 
@@ -16,18 +23,28 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 public class AdminOfficerAppealSubmittedPayOfflinePersonalisation implements EmailNotificationPersonalisation {
 
     private final String caseAdminOfficerAppealSubmittedPayOfflineTemplateId;
+    private final String caseAdminOfficerAppealSubmittedWithRemissionTemplateId;
     private final String reviewHearingRequirementsAdminOfficerEmailAddress;
+    private final String paymentExceptionsAdminOfficerEmailAddress;
     private final AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider;
 
     public AdminOfficerAppealSubmittedPayOfflinePersonalisation(
         @NotNull(message = "reListCaseAdminOfficerTemplateId cannot be null")
-        @Value("${govnotify.template.appealSubmitted.adminOfficer.pendingPaymentPa.email}") String caseAdminOfficerAppealSubmittedPayOfflineTemplateId,
+        @Value("${govnotify.template.appealSubmitted.adminOfficer.pendingPaymentPa.email}")
+            String caseAdminOfficerAppealSubmittedPayOfflineTemplateId,
+        @Value("${govnotify.template.appealSubmitted.adminOfficer.remission.email}")
+            String caseAdminOfficerAppealSubmittedWithRemissionTemplateId,
         @Value("${feesAdminOfficerEmailAddress}")
             String feesAdminOfficerEmailAddress,
+        @Value("${paymentExceptionsAdminOfficerEmailAddress}")
+            String paymentExceptionsAdminOfficerEmailAddress,
         AdminOfficerPersonalisationProvider adminOfficerPersonalisationProvider
     ) {
         this.caseAdminOfficerAppealSubmittedPayOfflineTemplateId = caseAdminOfficerAppealSubmittedPayOfflineTemplateId;
+        this.caseAdminOfficerAppealSubmittedWithRemissionTemplateId =
+            caseAdminOfficerAppealSubmittedWithRemissionTemplateId;
         this.reviewHearingRequirementsAdminOfficerEmailAddress = feesAdminOfficerEmailAddress;
+        this.paymentExceptionsAdminOfficerEmailAddress = paymentExceptionsAdminOfficerEmailAddress;
         this.adminOfficerPersonalisationProvider = adminOfficerPersonalisationProvider;
     }
 
@@ -37,12 +54,26 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisation implements Ema
     }
 
     @Override
-    public String getTemplateId() {
+    public String getTemplateId(AsylumCase asylumCase) {
+        RemissionType remissionType = asylumCase
+            .read(REMISSION_TYPE, RemissionType.class).orElse(NO_REMISSION);
+
+        if (Arrays.asList(HO_WAIVER_REMISSION, HELP_WITH_FEES, EXCEPTIONAL_CIRCUMSTANCES_REMISSION)
+            .contains(remissionType)) {
+            return caseAdminOfficerAppealSubmittedWithRemissionTemplateId;
+        }
         return caseAdminOfficerAppealSubmittedPayOfflineTemplateId;
     }
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
+        RemissionType remissionType = asylumCase
+            .read(REMISSION_TYPE, RemissionType.class).orElse(NO_REMISSION);
+
+        if (Arrays.asList(HO_WAIVER_REMISSION, HELP_WITH_FEES, EXCEPTIONAL_CIRCUMSTANCES_REMISSION)
+            .contains(remissionType)) {
+            return Collections.singleton(paymentExceptionsAdminOfficerEmailAddress);
+        }
         return Collections.singleton(reviewHearingRequirementsAdminOfficerEmailAddress);
     }
 

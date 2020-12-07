@@ -10,6 +10,8 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
 
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 
@@ -35,6 +38,7 @@ public class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
+    private String remissionTemplateId = "someRemissionTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String appealReferenceNumber = "someReferenceNumber";
@@ -62,6 +66,7 @@ public class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
         legalRepresentativeAppealSubmittedPayLaterPersonalisation =
             new LegalRepresentativeAppealSubmittedPayLaterPersonalisation(
                 templateId,
+                remissionTemplateId,
                 iaExUiFrontendUrl,
                 customerServicesProvider
             );
@@ -69,7 +74,14 @@ public class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, legalRepresentativeAppealSubmittedPayLaterPersonalisation.getTemplateId());
+        assertEquals(templateId, legalRepresentativeAppealSubmittedPayLaterPersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_given_template_id_with_remission() {
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(HO_WAIVER_REMISSION));
+        assertEquals(
+            remissionTemplateId, legalRepresentativeAppealSubmittedPayLaterPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test

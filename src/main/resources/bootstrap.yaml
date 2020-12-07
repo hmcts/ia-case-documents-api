@@ -58,6 +58,7 @@ spring:
         s2s-url: S2S_URL
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
         fees-admin-officer-email: FEES_ADMIN_OFFICER_EMAIL
+        payment-exceptions-admin-officer-email: PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL
         home-office-email-apc: HOME_OFFICE_EMAIL_APC
         home-office-email-lart: HOME_OFFICE_EMAIL_LART
         upper-tribunal-notices-email: IA_UPPER_TRIBUNAL_NOTICES_EMAIL

@@ -4,14 +4,21 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.admino
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
 
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +31,9 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
+    private String remissionTemplateId = "someRemissionTemplateId";
     private String changeToHearingRequirementsAdminOfficerEmailAddress = "fees-ao@example.com";
+    private String paymentExceptionsAdminOfficerEmailAddress = "payment-exceptions-ao@example.com";
     private AdminOfficerAppealSubmittedPayOfflinePersonalisation adminOfficerAppealSubmittedPayOfflinePersonalisation;
 
     @BeforeEach
@@ -32,14 +41,26 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
 
         adminOfficerAppealSubmittedPayOfflinePersonalisation = new AdminOfficerAppealSubmittedPayOfflinePersonalisation(
             templateId,
+            remissionTemplateId,
             changeToHearingRequirementsAdminOfficerEmailAddress,
+            paymentExceptionsAdminOfficerEmailAddress,
             adminOfficerPersonalisationProvider
         );
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, adminOfficerAppealSubmittedPayOfflinePersonalisation.getTemplateId());
+        assertEquals(templateId, adminOfficerAppealSubmittedPayOfflinePersonalisation.getTemplateId(asylumCase));
+    }
+
+    @ParameterizedTest
+    @EnumSource(
+        value = RemissionType.class,
+        names = {"HO_WAIVER_REMISSION", "HELP_WITH_FEES", "EXCEPTIONAL_CIRCUMSTANCES_REMISSION"})
+    public void should_return_given_template_id_with_remission(RemissionType remissionType) {
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
+        assertEquals(
+            remissionTemplateId, adminOfficerAppealSubmittedPayOfflinePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
@@ -47,6 +68,22 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
 
         assertEquals(caseId + "_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
             adminOfficerAppealSubmittedPayOfflinePersonalisation.getReferenceId(caseId));
+    }
+
+    @Test
+    public void should_return_given_email_address_from_asylum_case() {
+        assertTrue(adminOfficerAppealSubmittedPayOfflinePersonalisation.getRecipientsList(asylumCase)
+            .contains(changeToHearingRequirementsAdminOfficerEmailAddress));
+    }
+
+    @ParameterizedTest
+    @EnumSource(
+        value = RemissionType.class,
+        names = {"HO_WAIVER_REMISSION", "HELP_WITH_FEES", "EXCEPTIONAL_CIRCUMSTANCES_REMISSION"})
+    public void should_return_payment_email_address_with_remission(RemissionType remissionType) {
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
+        assertTrue(adminOfficerAppealSubmittedPayOfflinePersonalisation.getRecipientsList(asylumCase)
+            .contains(paymentExceptionsAdminOfficerEmailAddress));
     }
 
     @Test

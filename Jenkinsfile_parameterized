@@ -86,6 +86,8 @@ def secrets = [
 
     secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
     secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
+    secret('fees-admin-officer-email', 'FEES_ADMIN_OFFICER_EMAIL'),
+    secret('payment-exceptions-admin-officer-email', 'PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL'),
 
     secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
     secret('idam-secret', 'IA_IDAM_SECRET'),

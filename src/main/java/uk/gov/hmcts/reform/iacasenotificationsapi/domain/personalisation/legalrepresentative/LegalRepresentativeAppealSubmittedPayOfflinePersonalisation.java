@@ -1,15 +1,27 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.EXCEPTIONAL_CIRCUMSTANCES_REMISSION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HELP_WITH_FEES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.NO_REMISSION;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
@@ -17,22 +29,38 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerService
 public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisation implements EmailNotificationPersonalisation {
 
     private final String legalRepresentativeAppealSubmittedPayOfflineTemplateId;
+    private final String appealSubmittedWithRemissionLegalRepresentativeTemplateId;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeAppealSubmittedPayOfflinePersonalisation(
-        @Value("${govnotify.template.appealSubmitted.legalRep.paid.email}") String legalRepresentativeAppealSubmittedPayOfflineTemplateId,
+        @Value("${govnotify.template.appealSubmitted.legalRep.paid.email}")
+            String legalRepresentativeAppealSubmittedPayOfflineTemplateId,
+        @NotNull(message = "appealSubmittedWithRemissionLegalRepresentativeTemplateId cannot be null")
+        @Value("${govnotify.template.appealSubmitted.legalRep.remission.email}")
+            String appealSubmittedWithRemissionLegalRepresentativeTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         CustomerServicesProvider customerServicesProvider
     ) {
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
-        this.legalRepresentativeAppealSubmittedPayOfflineTemplateId = legalRepresentativeAppealSubmittedPayOfflineTemplateId;
+        this.legalRepresentativeAppealSubmittedPayOfflineTemplateId =
+            legalRepresentativeAppealSubmittedPayOfflineTemplateId;
+        this.appealSubmittedWithRemissionLegalRepresentativeTemplateId =
+            appealSubmittedWithRemissionLegalRepresentativeTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
-    public String getTemplateId() {
+    public String getTemplateId(AsylumCase asylumCase) {
+
+        RemissionType remissionType = asylumCase
+            .read(REMISSION_TYPE, RemissionType.class).orElse(NO_REMISSION);
+
+        if (Arrays.asList(HO_WAIVER_REMISSION, HELP_WITH_FEES, EXCEPTIONAL_CIRCUMSTANCES_REMISSION)
+            .contains(remissionType)) {
+            return appealSubmittedWithRemissionLegalRepresentativeTemplateId;
+        }
         return legalRepresentativeAppealSubmittedPayOfflineTemplateId;
     }
 

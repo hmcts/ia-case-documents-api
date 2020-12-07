@@ -263,6 +263,15 @@ public enum AsylumCaseDefinition {
 
     CURRENT_CASE_STATE_VISIBLE_TO_JUDGE(
         "currentCaseStateVisibleToJudge", new TypeReference<State>(){}),
+
+    IS_REMISSIONS_ENABLED(
+        "isRemissionsEnabled", new TypeReference<YesOrNo>(){}),
+
+    REMISSION_TYPE(
+        "remissionType", new TypeReference<RemissionType>(){}),
+
+    REMISSION_CLAIM(
+        "remissionClaim", new TypeReference<String>(){}),
     ;
 
     private final String value;
