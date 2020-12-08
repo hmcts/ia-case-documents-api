@@ -7,12 +7,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -26,9 +28,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.WARN)
 @SuppressWarnings("unchecked")
-public class EmBundleRequestExecutorTest {
+class EmBundleRequestExecutorTest {
 
     private static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
     private static final String ENDPOINT = "http://endpoint";
@@ -47,8 +50,8 @@ public class EmBundleRequestExecutorTest {
 
     private EmBundleRequestExecutor emBundleRequestExecutor;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         emBundleRequestExecutor = new EmBundleRequestExecutor(
             restTemplate,
             serviceAuthTokenGenerator,
@@ -61,7 +64,7 @@ public class EmBundleRequestExecutorTest {
     }
 
     @Test
-    public void should_invoke_endpoint_with_given_payload_and_return_200_with_no_errors() {
+    void should_invoke_endpoint_with_given_payload_and_return_200_with_no_errors() {
 
         when(restTemplate
             .exchange(
@@ -80,8 +83,7 @@ public class EmBundleRequestExecutorTest {
 
             );
 
-        assertThat(response).isNotNull();
-        assertThat(response).isEqualTo(callbackResponse);
+        assertThat(response).isNotNull().isEqualTo(callbackResponse);
 
         ArgumentCaptor<HttpEntity> requestEntityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
@@ -109,7 +111,7 @@ public class EmBundleRequestExecutorTest {
     }
 
     @Test
-    public void should_not_allow_null_arguments() {
+    void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> emBundleRequestExecutor.post(null, ENDPOINT))
             .hasMessage("payload must not be null")
@@ -121,7 +123,7 @@ public class EmBundleRequestExecutorTest {
     }
 
     @Test
-    public void should_handle_http_server_exception_when_calling_api() {
+    void should_handle_http_server_exception_when_calling_api() {
 
         HttpServerErrorException underlyingException = mock(HttpServerErrorException.class);
 
@@ -141,7 +143,7 @@ public class EmBundleRequestExecutorTest {
     }
 
     @Test
-    public void should_handle_http_client_exception_when_calling_api() {
+    void should_handle_http_client_exception_when_calling_api() {
         HttpClientErrorException underlyingException = mock(HttpClientErrorException.class);
 
         when(restTemplate

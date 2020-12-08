@@ -1,7 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
@@ -11,11 +14,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -30,9 +35,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class AdvancedBundlingCallbackHandlerTest {
+@MockitoSettings(strictness = Strictness.WARN)
+class AdvancedBundlingCallbackHandlerTest {
 
     @Mock private EmBundleRequestExecutor emBundleRequestExecutor;
     @Mock private Callback<AsylumCase> callback;
@@ -47,8 +53,8 @@ public class AdvancedBundlingCallbackHandlerTest {
     private List<IdValue<Bundle>> caseBundles = new ArrayList<>();
     private AdvancedBundlingCallbackHandler advancedBundlingCallbackHandler;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         advancedBundlingCallbackHandler =
             new AdvancedBundlingCallbackHandler(
                 emBundlerUrl,
@@ -73,7 +79,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void should_successfully_handle_the_callback() {
+    void should_successfully_handle_the_callback() {
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
@@ -92,7 +98,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void should_successfully_handle_the_callback_in_reheard() {
+    void should_successfully_handle_the_callback_in_reheard() {
 
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -113,7 +119,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void should_throw_when_appeal_reference_is_not_present() {
+    void should_throw_when_appeal_reference_is_not_present() {
 
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
@@ -123,7 +129,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void should_throw_when_appellant_family_name_is_not_present() {
+    void should_throw_when_appellant_family_name_is_not_present() {
 
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
@@ -133,7 +139,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void should_throw_when_case_bundle_is_not_present() {
+    void should_throw_when_case_bundle_is_not_present() {
 
         when(asylumCase.read(CASE_BUNDLES)).thenReturn(Optional.empty());
 
@@ -143,7 +149,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void should_throw_when_case_bundle_is_empty() {
+    void should_throw_when_case_bundle_is_empty() {
 
         caseBundles.clear();
 
@@ -153,7 +159,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void handling_should_throw_if_cannot_actually_handle() {
+    void handling_should_throw_if_cannot_actually_handle() {
 
         assertThatThrownBy(() -> advancedBundlingCallbackHandler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
@@ -166,7 +172,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void it_can_handle_callback() {
+    void it_can_handle_callback() {
 
         for (Event event : Event.values()) {
 
@@ -190,7 +196,7 @@ public class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
-    public void should_not_allow_null_arguments() {
+    void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> advancedBundlingCallbackHandler.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")

@@ -2,7 +2,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -10,13 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang.RandomStringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -31,9 +36,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.WARN)
 @SuppressWarnings("unchecked")
-public class CustomiseHearingBundlePreparerTest {
+class CustomiseHearingBundlePreparerTest {
 
     @Mock
     private Callback<AsylumCase> callback;
@@ -47,8 +53,8 @@ public class CustomiseHearingBundlePreparerTest {
 
     private CustomiseHearingBundlePreparer customiseHearingBundlePreparer;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         customiseHearingBundlePreparer =
                 new CustomiseHearingBundlePreparer(appender,featureToggler);
 
@@ -57,7 +63,7 @@ public class CustomiseHearingBundlePreparerTest {
     }
 
     @Test
-    public void should_create_custom_collections() {
+    void should_create_custom_collections() {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
 
         List<IdValue<DocumentWithDescription>> customCollections = asList(new IdValue("1", createDocumentWithDescription()));
@@ -95,7 +101,7 @@ public class CustomiseHearingBundlePreparerTest {
     }
 
     @Test
-    public void should_create_custom_collections_in_reheard_case() {
+    void should_create_custom_collections_in_reheard_case() {
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(callback.getCaseDetails().getCaseData().read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -154,7 +160,7 @@ public class CustomiseHearingBundlePreparerTest {
     }
 
     @Test
-    public void should_filter_legal_rep_document_with_correct_tags() {
+    void should_filter_legal_rep_document_with_correct_tags() {
 
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
 
@@ -227,7 +233,7 @@ public class CustomiseHearingBundlePreparerTest {
     }
 
     @Test
-    public void should_not_create_custom_collections_if_source_collections_are_empty() {
+    void should_not_create_custom_collections_if_source_collections_are_empty() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -248,7 +254,7 @@ public class CustomiseHearingBundlePreparerTest {
     }
 
     @Test
-    public void should_not_create_custom_collections_if_source_collections_are_empty_in_reheard_case() {
+    void should_not_create_custom_collections_if_source_collections_are_empty_in_reheard_case() {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
 
@@ -263,15 +269,15 @@ public class CustomiseHearingBundlePreparerTest {
 
 
     @Test
-    public void handling_should_throw_if_cannot_actually_handle() {
+    void handling_should_throw_if_cannot_actually_handle() {
 
         assertThatThrownBy(() -> customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @org.junit.Test
-    public void it_can_handle_callback() {
+    @Test
+    void it_can_handle_callback() {
 
         for (Event event : Event.values()) {
 
@@ -295,7 +301,7 @@ public class CustomiseHearingBundlePreparerTest {
     }
 
     @Test
-    public void should_not_allow_null_arguments() {
+    void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> customiseHearingBundlePreparer.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
