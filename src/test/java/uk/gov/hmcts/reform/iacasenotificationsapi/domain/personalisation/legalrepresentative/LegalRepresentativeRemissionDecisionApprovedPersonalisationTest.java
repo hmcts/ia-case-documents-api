@@ -10,8 +10,6 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
 
 import java.util.Map;
 import java.util.Optional;
@@ -23,14 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
-
+class LegalRepresentativeRemissionDecisionApprovedPersonalisationTest {
     @Mock
     AsylumCase asylumCase;
     @Mock
@@ -38,7 +33,6 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
-    private String remissionTemplateId = "someRemissionTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String appealReferenceNumber = "someReferenceNumber";
@@ -48,8 +42,8 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
 
-    private LegalRepresentativeAppealSubmittedPayLaterPersonalisation
-        legalRepresentativeAppealSubmittedPayLaterPersonalisation;
+    private LegalRepresentativeRemissionDecisionApprovedPersonalisation
+        legalRepresentativeRemissionDecisionApprovedPersonalisation;
 
     @BeforeEach
     void setup() {
@@ -63,10 +57,9 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
-        legalRepresentativeAppealSubmittedPayLaterPersonalisation =
-            new LegalRepresentativeAppealSubmittedPayLaterPersonalisation(
+        legalRepresentativeRemissionDecisionApprovedPersonalisation =
+            new LegalRepresentativeRemissionDecisionApprovedPersonalisation(
                 templateId,
-                remissionTemplateId,
                 iaExUiFrontendUrl,
                 customerServicesProvider
             );
@@ -74,25 +67,18 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
 
     @Test
     void should_return_given_template_id() {
-        assertEquals(templateId, legalRepresentativeAppealSubmittedPayLaterPersonalisation.getTemplateId(asylumCase));
-    }
-
-    @Test
-    void should_return_given_template_id_with_remission() {
-        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(HO_WAIVER_REMISSION));
-        assertEquals(
-            remissionTemplateId, legalRepresentativeAppealSubmittedPayLaterPersonalisation.getTemplateId(asylumCase));
+        assertEquals(templateId, legalRepresentativeRemissionDecisionApprovedPersonalisation.getTemplateId());
     }
 
     @Test
     void should_return_given_reference_id() {
-        assertEquals(caseId + "_APPEAL_SUBMITTED_PAY_LATER_LEGAL_REP",
-            legalRepresentativeAppealSubmittedPayLaterPersonalisation.getReferenceId(caseId));
+        assertEquals(caseId + "_REMISSION_DECISION_APPROVED_LEGAL_REPRESENTATIVE",
+            legalRepresentativeRemissionDecisionApprovedPersonalisation.getReferenceId(caseId));
     }
 
     @Test
     void should_return_given_email_address_from_asylum_case() {
-        assertTrue(legalRepresentativeAppealSubmittedPayLaterPersonalisation.getRecipientsList(asylumCase)
+        assertTrue(legalRepresentativeRemissionDecisionApprovedPersonalisation.getRecipientsList(asylumCase)
             .contains(legalRepEmailAddress));
     }
 
@@ -101,7 +87,7 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(
-            () -> legalRepresentativeAppealSubmittedPayLaterPersonalisation.getRecipientsList(asylumCase))
+            () -> legalRepresentativeRemissionDecisionApprovedPersonalisation.getRecipientsList(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("legalRepresentativeEmailAddress is not present");
     }
@@ -110,7 +96,7 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
     void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(
-            () -> legalRepresentativeAppealSubmittedPayLaterPersonalisation.getPersonalisation((AsylumCase) null))
+            () -> legalRepresentativeRemissionDecisionApprovedPersonalisation.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -119,7 +105,7 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
     void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
-            legalRepresentativeAppealSubmittedPayLaterPersonalisation.getPersonalisation(asylumCase);
+            legalRepresentativeRemissionDecisionApprovedPersonalisation.getPersonalisation(asylumCase);
 
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
@@ -135,10 +121,11 @@ class LegalRepresentativeAppealSubmittedPayLaterPersonalisationTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> personalisation =
-            legalRepresentativeAppealSubmittedPayLaterPersonalisation.getPersonalisation(asylumCase);
+            legalRepresentativeRemissionDecisionApprovedPersonalisation.getPersonalisation(asylumCase);
 
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
+
 }

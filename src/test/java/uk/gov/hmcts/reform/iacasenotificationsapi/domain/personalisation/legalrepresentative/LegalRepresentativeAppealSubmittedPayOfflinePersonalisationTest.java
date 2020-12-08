@@ -29,7 +29,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerService
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
+class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
 
     @Mock
     AsylumCase asylumCase;
@@ -52,7 +52,7 @@ public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
         legalRepresentativeAppealSubmittedPayOfflinePersonalisation;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -73,7 +73,7 @@ public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
     }
 
     @Test
-    public void should_return_given_template_id() {
+    void should_return_given_template_id() {
         assertEquals(templateId, legalRepresentativeAppealSubmittedPayOfflinePersonalisation.getTemplateId(asylumCase));
     }
 
@@ -81,26 +81,26 @@ public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
     @EnumSource(
         value = RemissionType.class,
         names = {"HO_WAIVER_REMISSION", "HELP_WITH_FEES", "EXCEPTIONAL_CIRCUMSTANCES_REMISSION"})
-    public void should_return_given_template_id_with_remission(RemissionType remissionType) {
+    void should_return_given_template_id_with_remission(RemissionType remissionType) {
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
         assertEquals(
             remissionTemplateId, legalRepresentativeAppealSubmittedPayOfflinePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
-    public void should_return_given_reference_id() {
+    void should_return_given_reference_id() {
         assertEquals(caseId + "_APPEAL_SUBMITTED_PAY_OFFLINE_LEGAL_REPRESENTATIVE",
             legalRepresentativeAppealSubmittedPayOfflinePersonalisation.getReferenceId(caseId));
     }
 
     @Test
-    public void should_return_given_email_address_from_asylum_case() {
+    void should_return_given_email_address_from_asylum_case() {
         assertTrue(legalRepresentativeAppealSubmittedPayOfflinePersonalisation.getRecipientsList(asylumCase)
             .contains(legalRepEmailAddress));
     }
 
     @Test
-    public void should_throw_exception_when_cannot_find_email_address_for_legal_rep() {
+    void should_throw_exception_when_cannot_find_email_address_for_legal_rep() {
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(
@@ -110,7 +110,7 @@ public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(
             () -> legalRepresentativeAppealSubmittedPayOfflinePersonalisation.getPersonalisation((AsylumCase) null))
@@ -119,7 +119,7 @@ public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given() {
+    void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
             legalRepresentativeAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);
@@ -130,7 +130,7 @@ public class LegalRepresentativeAppealSubmittedPayOfflinePersonalisationTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_mandatory_information_given() {
+    void should_return_personalisation_when_all_mandatory_information_given() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());

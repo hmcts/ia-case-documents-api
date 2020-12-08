@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
+class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
 
     @Mock
     AsylumCase asylumCase;
@@ -44,7 +44,7 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
         adminOfficerAppealSubmittedPendingPaymentPersonalisation;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         when(adminOfficerPersonalisationProvider.getChangeToHearingRequirementsPersonalisation(asylumCase))
             .thenReturn(ImmutableMap
                 .<String, String>builder()
@@ -65,7 +65,7 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
     }
 
     @Test
-    public void should_return_given_template_id() {
+    void should_return_given_template_id() {
         assertEquals(templateId, adminOfficerAppealSubmittedPendingPaymentPersonalisation.getTemplateId(asylumCase));
     }
 
@@ -73,21 +73,21 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
     @EnumSource(
         value = RemissionType.class,
         names = {"HO_WAIVER_REMISSION", "HELP_WITH_FEES", "EXCEPTIONAL_CIRCUMSTANCES_REMISSION"})
-    public void should_return_given_template_id_with_remission(RemissionType remissionType) {
+    void should_return_given_template_id_with_remission(RemissionType remissionType) {
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
         assertEquals(
             remissionTemplateId, adminOfficerAppealSubmittedPendingPaymentPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
-    public void should_return_given_reference_id() {
+    void should_return_given_reference_id() {
         Long caseId = 12345L;
         assertEquals(caseId + "_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER",
             adminOfficerAppealSubmittedPendingPaymentPersonalisation.getReferenceId(caseId));
     }
 
     @Test
-    public void should_return_given_email_address_from_asylum_case() {
+    void should_return_given_email_address_from_asylum_case() {
         assertTrue(adminOfficerAppealSubmittedPendingPaymentPersonalisation.getRecipientsList(asylumCase)
             .contains(adminOfficerEmailAddress));
     }
@@ -96,14 +96,14 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
     @EnumSource(
         value = RemissionType.class,
         names = {"HO_WAIVER_REMISSION", "HELP_WITH_FEES", "EXCEPTIONAL_CIRCUMSTANCES_REMISSION"})
-    public void should_return_payment_email_address_with_remission(RemissionType remissionType) {
+    void should_return_payment_email_address_with_remission(RemissionType remissionType) {
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
         assertTrue(adminOfficerAppealSubmittedPendingPaymentPersonalisation.getRecipientsList(asylumCase)
             .contains(paymentExceptionsAdminOfficerEmailAddress));
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(
             () -> adminOfficerAppealSubmittedPendingPaymentPersonalisation.getPersonalisation((AsylumCase) null))
@@ -112,7 +112,7 @@ public class AdminOfficerAppealSubmittedPendingPaymentPersonalisationTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given() {
+    void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
             adminOfficerAppealSubmittedPendingPaymentPersonalisation.getPersonalisation(asylumCase);

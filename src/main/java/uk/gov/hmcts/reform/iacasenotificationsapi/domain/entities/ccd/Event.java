@@ -74,6 +74,7 @@ public enum Event {
     MAKE_AN_APPLICATION("makeAnApplication"),
     DECIDE_AN_APPLICATION("decideAnApplication"),
     REQUEST_NEW_HEARING_REQUIREMENTS("requestNewHearingRequirements"),
+    RECORD_REMISSION_DECISION("recordRemissionDecision"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

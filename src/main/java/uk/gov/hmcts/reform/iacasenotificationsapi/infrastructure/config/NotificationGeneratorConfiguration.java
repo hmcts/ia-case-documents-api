@@ -1490,22 +1490,80 @@ public class NotificationGeneratorConfiguration {
 
     @Bean("decideAnApplicationNotificationGenerator")
     public List<NotificationGenerator> decideAnApplicationNotificationHandler(
-            LegalRepresentativeDecideAnApplicationPersonalisation legalRepresentativeDecideAnApplicationPersonalisation,
-            HomeOfficeDecideAnApplicationPersonalisation homeOfficeDecideAnApplicationPersonalisation,
+        LegalRepresentativeDecideAnApplicationPersonalisation legalRepresentativeDecideAnApplicationPersonalisation,
+        HomeOfficeDecideAnApplicationPersonalisation homeOfficeDecideAnApplicationPersonalisation,
 
-            NotificationSender notificationSender,
-            NotificationIdAppender notificationIdAppender
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
     ) {
 
         return Collections.singletonList(
-                new EmailNotificationGenerator(
-                        newArrayList(
-                                legalRepresentativeDecideAnApplicationPersonalisation,
-                                homeOfficeDecideAnApplicationPersonalisation
-                        ),
-                        notificationSender,
-                        notificationIdAppender
-                )
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeDecideAnApplicationPersonalisation,
+                    homeOfficeDecideAnApplicationPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("remissionDecisionApprovedNotificationGenerator")
+    public List<NotificationGenerator> remissionDecisionApprovedNotificationHandler(
+        AdminOfficerAppealRemissionApprovedPersonalisation adminOfficerAppealRemissionApprovedPersonalisation,
+        LegalRepresentativeRemissionDecisionApprovedPersonalisation legalRepresentativeRemissionDecisionApprovedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    adminOfficerAppealRemissionApprovedPersonalisation,
+                    legalRepresentativeRemissionDecisionApprovedPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("remissionDecisionPartiallyApprovedNotificationGenerator")
+    public List<NotificationGenerator> remissionDecisionPartiallyApprovedNotificationHandler(
+        AdminOfficerRemissionDecisionPartiallyApprovedPersonalisation adminOfficerRemissionDecisionPartiallyApprovedPersonalisation,
+        LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation legalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    adminOfficerRemissionDecisionPartiallyApprovedPersonalisation,
+                    legalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("remissionDecisionRejectedNotificationGenerator")
+    public List<NotificationGenerator> remissionDecisionRejectedNotificationHandler(
+        LegalRepresentativeRemissionDecisionRejectedPersonalisation legalRepresentativeRemissionDecisionRejectedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeRemissionDecisionRejectedPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
         );
     }
 }

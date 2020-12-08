@@ -78,6 +78,20 @@ govnotify:
           email: f4521175-17ac-4ea9-9196-1769bea29d10
         remission:
           email: c6fb22e2-c3fa-41f6-a4de-b9f6a55aa417
+    remissionDecision:
+      legalRep:
+        approved:
+          email: 252ce51b-69c3-4441-8a85-3c4179eebfbb
+        partiallyApproved:
+          email: 717b0290-36eb-4adf-a4c5-baacf59d379d
+        rejected:
+          email: 8a48b422-c6ed-448d-aec0-a5b43bd2b472
+      adminOfficer:
+        approved:
+          email: e819fd09-b350-41b3-a211-18d58936b65d
+        partiallyApproved:
+          email: 954c2959-e13a-4907-be1e-3eb9831fc68c
+
     appealSubmittedOutOfTime:
       appellant:
         email: b864d01f-c80c-4d91-947f-9599f0b64163
@@ -677,6 +691,7 @@ security:
       - "endAppeal"
       - "markAppealPaid"
       - "reinstateAppeal"
+      - "recordRemissionDecision"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

@@ -20,9 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
 
-
 @ExtendWith(MockitoExtension.class)
-public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
+class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
 
     @Mock
     AsylumCase asylumCase;
@@ -37,7 +36,7 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
     private AdminOfficerAppealSubmittedPayOfflinePersonalisation adminOfficerAppealSubmittedPayOfflinePersonalisation;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         adminOfficerAppealSubmittedPayOfflinePersonalisation = new AdminOfficerAppealSubmittedPayOfflinePersonalisation(
             templateId,
@@ -49,7 +48,7 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
     }
 
     @Test
-    public void should_return_given_template_id() {
+    void should_return_given_template_id() {
         assertEquals(templateId, adminOfficerAppealSubmittedPayOfflinePersonalisation.getTemplateId(asylumCase));
     }
 
@@ -57,21 +56,21 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
     @EnumSource(
         value = RemissionType.class,
         names = {"HO_WAIVER_REMISSION", "HELP_WITH_FEES", "EXCEPTIONAL_CIRCUMSTANCES_REMISSION"})
-    public void should_return_given_template_id_with_remission(RemissionType remissionType) {
+    void should_return_given_template_id_with_remission(RemissionType remissionType) {
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
         assertEquals(
             remissionTemplateId, adminOfficerAppealSubmittedPayOfflinePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
-    public void should_return_given_reference_id() {
+    void should_return_given_reference_id() {
 
         assertEquals(caseId + "_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
             adminOfficerAppealSubmittedPayOfflinePersonalisation.getReferenceId(caseId));
     }
 
     @Test
-    public void should_return_given_email_address_from_asylum_case() {
+    void should_return_given_email_address_from_asylum_case() {
         assertTrue(adminOfficerAppealSubmittedPayOfflinePersonalisation.getRecipientsList(asylumCase)
             .contains(changeToHearingRequirementsAdminOfficerEmailAddress));
     }
@@ -80,14 +79,14 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
     @EnumSource(
         value = RemissionType.class,
         names = {"HO_WAIVER_REMISSION", "HELP_WITH_FEES", "EXCEPTIONAL_CIRCUMSTANCES_REMISSION"})
-    public void should_return_payment_email_address_with_remission(RemissionType remissionType) {
+    void should_return_payment_email_address_with_remission(RemissionType remissionType) {
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
         assertTrue(adminOfficerAppealSubmittedPayOfflinePersonalisation.getRecipientsList(asylumCase)
             .contains(paymentExceptionsAdminOfficerEmailAddress));
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(
             () -> adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation((AsylumCase) null))
@@ -96,7 +95,7 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given() {
+    void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
             adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);
@@ -106,7 +105,7 @@ public class AdminOfficerAppealSubmittedPayOfflinePersonalisationTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_mandatory_information_given() {
+    void should_return_personalisation_when_all_mandatory_information_given() {
 
         Map<String, String> personalisation =
             adminOfficerAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);

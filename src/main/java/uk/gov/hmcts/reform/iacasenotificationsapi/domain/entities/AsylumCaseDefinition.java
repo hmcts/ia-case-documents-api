@@ -272,6 +272,15 @@ public enum AsylumCaseDefinition {
 
     REMISSION_CLAIM(
         "remissionClaim", new TypeReference<String>(){}),
+
+    REMISSION_DECISION(
+        "remissionDecision", new TypeReference<RemissionDecision>(){}),
+
+    AMOUNT_REMITTED(
+        "amountRemitted", new TypeReference<String>(){}),
+
+    AMOUNT_LEFT_TO_PAY(
+        "amountLeftToPay", new TypeReference<String>(){}),
     ;
 
     private final String value;
