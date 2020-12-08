@@ -10,6 +10,7 @@ public enum Event {
     PAYMENT_APPEAL("paymentAppeal"),
     SUBMIT_APPEAL("submitAppeal"),
     PAY_AND_SUBMIT_APPEAL("payAndSubmitAppeal"),
+    RECORD_REMISSION_DECISION("recordRemissionDecision"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

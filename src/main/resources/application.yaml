@@ -91,6 +91,8 @@ security:
     - "editAppeal"
     - "paymentAppeal"
     - "payAndSubmitAppeal"
+    caseworker-ia-admofficer:
+    - "recordRemissionDecision"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

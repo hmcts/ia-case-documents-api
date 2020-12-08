@@ -18,7 +18,6 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.CallbackForTest.Ca
 import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -78,8 +77,8 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                             .read(PAYMENT_REFERENCE, String.class).orElse(""));
         assertEquals("29 May 2020", response.getAsylumCase()
             .read(PAYMENT_DATE, String.class).orElse(""));
-        assertEquals("140.00", response.getAsylumCase().read(FEE_AMOUNT, BigDecimal.class)
-                            .orElse(BigDecimal.valueOf(140.00)).toString());
+        assertEquals("14000", response.getAsylumCase().read(FEE_AMOUNT, String.class)
+                            .orElse("14000"));
         assertEquals("2", response.getAsylumCase().read(FEE_VERSION, String.class).orElse(""));
 
 
@@ -102,8 +101,8 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                      responseNoHearing.getAsylumCase().read(PAYMENT_ACCOUNT_LIST, String.class).orElse(""));
         assertEquals("RC-1590-6786-1063-9996", responseNoHearing.getAsylumCase()
                         .read(PAYMENT_REFERENCE, String.class).orElse(""));
-        assertEquals("80.00", responseNoHearing.getAsylumCase()
-                        .read(FEE_AMOUNT, BigDecimal.class).orElse(BigDecimal.valueOf(80.00)).toString());
+        assertEquals("8000", responseNoHearing.getAsylumCase()
+                        .read(FEE_AMOUNT, String.class).orElse("8000"));
         assertEquals("2", responseNoHearing.getAsylumCase().read(FEE_VERSION, String.class).orElse(""));
     }
 

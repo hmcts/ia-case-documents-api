@@ -49,11 +49,9 @@ public class Fee {
     }
 
     @JsonIgnore
-    public String getFeeForDisplay() {
+    public String getAmountAsString() {
 
-        DecimalFormat df = new DecimalFormat("0.00");
-
-        return "£" + df.format(getCalculatedAmount().doubleValue()).replaceAll("\\.00$", "");
+        return new DecimalFormat("#0.##").format(getCalculatedAmount());
     }
 
     @Override

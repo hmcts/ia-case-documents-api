@@ -53,11 +53,11 @@ public class FeeTest {
     @Test
     void should_format_fee_for_display() {
 
-        Assertions.assertEquals("£100", new Fee("ABC", "desc", "1", new BigDecimal(100.00)).getFeeForDisplay());
-        Assertions.assertEquals("£100.50", new Fee("ABC", "desc", "1", new BigDecimal(100.50)).getFeeForDisplay());
-        Assertions.assertEquals("£100.05", new Fee("ABC", "desc", "1", new BigDecimal(100.05)).getFeeForDisplay());
-        Assertions.assertEquals("£100.55", new Fee("ABC", "desc", "1", new BigDecimal(100.55)).getFeeForDisplay());
-        Assertions.assertEquals("£100.50", new Fee("ABC", "desc", "1", new BigDecimal(100.5)).getFeeForDisplay());
-        Assertions.assertEquals("£100", new Fee("ABC", "desc", "1", new BigDecimal(100)).getFeeForDisplay());
+        Assertions.assertEquals("100", new Fee("ABC", "desc", "1", new BigDecimal(100.00)).getAmountAsString());
+        Assertions.assertEquals("100.5", new Fee("ABC", "desc", "1", new BigDecimal(100.50)).getAmountAsString());
+        Assertions.assertEquals("100.05", new Fee("ABC", "desc", "1", new BigDecimal(100.05)).getAmountAsString());
+        Assertions.assertEquals("100.55", new Fee("ABC", "desc", "1", new BigDecimal(100.55)).getAmountAsString());
+        Assertions.assertEquals("100.5", new Fee("ABC", "desc", "1", new BigDecimal(100.5)).getAmountAsString());
+        Assertions.assertEquals("100", new Fee("ABC", "desc", "1", new BigDecimal(100)).getAmountAsString());
     }
 }

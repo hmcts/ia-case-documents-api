@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import java.math.BigDecimal;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus;
 
 public enum AsylumCaseDefinition {
@@ -10,10 +9,10 @@ public enum AsylumCaseDefinition {
         "appealReferenceNumber", new TypeReference<String>(){}),
     LEGAL_REP_REFERENCE_NUMBER(
         "legalRepReferenceNumber", new TypeReference<String>(){}),
-    FEE_HEARING_AMOUNT_FOR_DISPLAY(
-        "feeHearingAmountForDisplay", new TypeReference<String>(){}),
-    FEE_WITHOUT_HEARING_AMOUNT_FOR_DISPLAY(
-        "feeWithoutHearingAmountForDisplay", new TypeReference<String>(){}),
+    FEE_WITH_HEARING(
+        "feeWithHearing", new TypeReference<String>(){}),
+    FEE_WITHOUT_HEARING(
+        "feeWithoutHearing", new TypeReference<String>(){}),
     APPEAL_FEE_HEARING_DESC(
         "appealFeeHearingDesc", new TypeReference<String>(){}),
     APPEAL_FEE_WITHOUT_HEARING_DESC(
@@ -25,7 +24,7 @@ public enum AsylumCaseDefinition {
     FEE_VERSION(
         "feeVersion", new TypeReference<String>(){}),
     FEE_AMOUNT(
-        "feeAmount", new TypeReference<BigDecimal>(){}),
+        "feeAmount", new TypeReference<String>(){}),
     FEE_AMOUNT_FOR_DISPLAY(
         "feeAmountForDisplay", new TypeReference<String>(){}),
     PAYMENT_STATUS(
@@ -59,7 +58,10 @@ public enum AsylumCaseDefinition {
     DECISION_WITHOUT_HEARING(
         "decisionWithoutHearing", new TypeReference<String>(){}),
     DECISION_HEARING_FEE_OPTION(
-        "decisionHearingFeeOption", new TypeReference<String>(){});
+        "decisionHearingFeeOption", new TypeReference<String>(){}),
+
+    REMISSION_TYPE(
+        "remissionType", new TypeReference<RemissionType>(){});
 
     private final String value;
     private final TypeReference typeReference;

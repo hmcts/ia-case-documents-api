@@ -15,7 +15,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_FOR_DISPLAY;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
@@ -100,8 +100,7 @@ class PaymentAppealHandlerTest {
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(null);
 
         assertThatThrownBy(() -> appealFeePaymentHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("Cannot retrieve the fee from fees-register for caseId: " + caseId);
+            .isExactlyInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -126,7 +125,7 @@ class PaymentAppealHandlerTest {
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
             .thenReturn(Optional.of(new DynamicList("PBA1234567")));
         when(asylumCase.read(PAYMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("Hearing appeal"));
-        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getFeeForDisplay()).thenReturn("£140");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getAmountAsString()).thenReturn("140");
 
         when(paymentService.creditAccountPayment(any(CreditAccountPayment.class)))
             .thenReturn(new PaymentResponse("RC-1590-6748-2373-9129", new Date(),
@@ -167,13 +166,13 @@ class PaymentAppealHandlerTest {
         verify(asylumCase, times(1))
             .write(PAYMENT_DATE, simpleDateFormat.format(new Date()));
         verify(asylumCase, times(1))
-            .write(FEE_AMOUNT, "140.0");
-        verify(asylumCase, times(1))
-            .write(FEE_AMOUNT_FOR_DISPLAY, "£140");
+            .write(FEE_AMOUNT, "14000");
         verify(asylumCase, times(1))
             .write(PAYMENT_STATUS, PAID);
         verify(asylumCase, times(1))
             .clear(PAYMENT_FAILED_FOR_DISPLAY);
+        verify(asylumCase, times(1))
+            .write(FEE_WITH_HEARING, "140");
     }
 
     @Test
@@ -209,7 +208,7 @@ class PaymentAppealHandlerTest {
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
             .thenReturn(Optional.of(new DynamicList("PBA1234567")));
         when(asylumCase.read(PAYMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("Hearing appeal"));
-        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getFeeForDisplay()).thenReturn("£140");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getAmountAsString()).thenReturn("140");
 
         when(paymentService.creditAccountPayment(any(CreditAccountPayment.class)))
             .thenReturn(new PaymentResponse("RC-1590-6748-2373-9129", new Date(),
@@ -273,7 +272,7 @@ class PaymentAppealHandlerTest {
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getDescription())
             .thenReturn("Appeal determined with a hearing");
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getVersion()).thenReturn("1");
-        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCalculatedAmount()).thenReturn(BigDecimal.valueOf(140.00));
+        when(fee.getAmountAsString()).thenReturn("140");
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> appealFeePaymentHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
@@ -296,8 +295,7 @@ class PaymentAppealHandlerTest {
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getDescription())
             .thenReturn("Appeal determined with a hearing");
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getVersion()).thenReturn("1");
-        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCalculatedAmount()).thenReturn(BigDecimal.valueOf(140.00));
-
+        when(fee.getAmountAsString()).thenReturn("140");
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
             .thenReturn(Optional.of(new DynamicList("PBA1234567")));
 
@@ -467,7 +465,7 @@ class PaymentAppealHandlerTest {
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getDescription())
             .thenReturn("Appeal determined with a hearing");
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getVersion()).thenReturn("1");
-        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCalculatedAmount()).thenReturn(BigDecimal.valueOf(140.00));
+        when(fee.getAmountAsString()).thenReturn("140");
 
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
             .thenReturn(Optional.of(new DynamicList("PBA1234567")));
@@ -513,7 +511,7 @@ class PaymentAppealHandlerTest {
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getDescription())
             .thenReturn("Appeal determined with a hearing");
         when(feeService.getFee(FeeType.FEE_WITH_HEARING).getVersion()).thenReturn("1");
-        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCalculatedAmount()).thenReturn(BigDecimal.valueOf(140.00));
+        when(fee.getAmountAsString()).thenReturn("140");
 
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
             .thenReturn(Optional.of(new DynamicList("PBA1234567")));
