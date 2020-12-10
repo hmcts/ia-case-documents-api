@@ -180,7 +180,7 @@ dependencyManagement {
     }
 
     // CVE-2020-9484 present in 9.0.34
-    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.37') {
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.40') {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-websocket'
     }
@@ -240,9 +240,10 @@ dependencies {
   implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.2.RELEASE'
   implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4'
-  implementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
 
   implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
+
   implementation group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
 
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.2.RELEASE'
@@ -257,6 +258,7 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
 
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
   testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
   testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
   testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity

@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITH_HEARING;
 
@@ -77,7 +77,7 @@ public class AppealFeeDetailsHandler implements PreSubmitCallbackHandler<AsylumC
                 }
 
                 asylumCase.write(FEE_WITH_HEARING, fee.getAmountAsString());
-                asylumCase.write(FEE_AMOUNT,
+                asylumCase.write(FEE_AMOUNT_GBP,
                     String.valueOf(new BigDecimal(fee.getAmountAsString()).multiply(new BigDecimal("100"))));
             } else if (decisionHearingFeeOption.get().equals("decisionWithoutHearing")) {
 
@@ -88,7 +88,7 @@ public class AppealFeeDetailsHandler implements PreSubmitCallbackHandler<AsylumC
                     return callbackResponse;
                 }
                 asylumCase.write(FEE_WITHOUT_HEARING, fee.getAmountAsString());
-                asylumCase.write(FEE_AMOUNT,
+                asylumCase.write(FEE_AMOUNT_GBP,
                     String.valueOf(new BigDecimal(fee.getAmountAsString()).multiply(new BigDecimal("100"))));
             }
         }

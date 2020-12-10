@@ -10,7 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITH_HEARING;
 
@@ -78,7 +78,7 @@ class AppealFeeDetailsHandlerTest {
 
         String feeAmountInPence =
             String.valueOf(new BigDecimal(fee.getAmountAsString()).multiply(new BigDecimal("100")));
-        verify(asylumCase, times(1)).write(FEE_AMOUNT, feeAmountInPence);
+        verify(asylumCase, times(1)).write(FEE_AMOUNT_GBP, feeAmountInPence);
 
     }
 

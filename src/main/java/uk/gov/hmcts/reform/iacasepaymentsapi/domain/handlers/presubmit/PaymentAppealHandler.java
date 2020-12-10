@@ -6,7 +6,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITH_HEARING;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_CODE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_DESCRIPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_PAYMENT_APPEAL_TYPE;
@@ -210,7 +210,7 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         asylumCase.write(FEE_CODE, fee.getCode());
         asylumCase.write(FEE_DESCRIPTION, fee.getDescription());
         asylumCase.write(FEE_VERSION, fee.getVersion());
-        asylumCase.write(FEE_AMOUNT, feeAmountInPence);
+        asylumCase.write(FEE_AMOUNT_GBP, feeAmountInPence);
         asylumCase.write(FEE_PAYMENT_APPEAL_TYPE, YesOrNo.YES);
     }
 

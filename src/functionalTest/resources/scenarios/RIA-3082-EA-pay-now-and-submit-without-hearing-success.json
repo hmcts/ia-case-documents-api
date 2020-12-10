@@ -34,7 +34,7 @@
         "paymentAccountList":"PBA0087535",
         "feeCode":"FEE0373",
         "feeVersion":"1",
-        "feeAmount":"8000",
+        "feeAmountGbp":"8000",
         "feeDescription":"Notice of Appeal - appellant consents without hearing A",
         "paymentStatus":"Paid"
       }

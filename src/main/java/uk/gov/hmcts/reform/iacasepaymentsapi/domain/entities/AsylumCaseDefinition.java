@@ -23,8 +23,8 @@ public enum AsylumCaseDefinition {
         "feeDescription", new TypeReference<String>(){}),
     FEE_VERSION(
         "feeVersion", new TypeReference<String>(){}),
-    FEE_AMOUNT(
-        "feeAmount", new TypeReference<String>(){}),
+    FEE_AMOUNT_GBP(
+        "feeAmountGbp", new TypeReference<String>(){}),
     FEE_AMOUNT_FOR_DISPLAY(
         "feeAmountForDisplay", new TypeReference<String>(){}),
     PAYMENT_STATUS(

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
@@ -77,7 +77,7 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                             .read(PAYMENT_REFERENCE, String.class).orElse(""));
         assertEquals("29 May 2020", response.getAsylumCase()
             .read(PAYMENT_DATE, String.class).orElse(""));
-        assertEquals("14000", response.getAsylumCase().read(FEE_AMOUNT, String.class)
+        assertEquals("14000", response.getAsylumCase().read(FEE_AMOUNT_GBP, String.class)
                             .orElse("14000"));
         assertEquals("2", response.getAsylumCase().read(FEE_VERSION, String.class).orElse(""));
 
@@ -102,7 +102,7 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
         assertEquals("RC-1590-6786-1063-9996", responseNoHearing.getAsylumCase()
                         .read(PAYMENT_REFERENCE, String.class).orElse(""));
         assertEquals("8000", responseNoHearing.getAsylumCase()
-                        .read(FEE_AMOUNT, String.class).orElse("8000"));
+                        .read(FEE_AMOUNT_GBP, String.class).orElse("8000"));
         assertEquals("2", responseNoHearing.getAsylumCase().read(FEE_VERSION, String.class).orElse(""));
     }
 
