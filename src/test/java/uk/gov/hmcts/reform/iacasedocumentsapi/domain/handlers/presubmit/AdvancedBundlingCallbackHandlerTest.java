@@ -23,16 +23,18 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
-
 
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +47,7 @@ class AdvancedBundlingCallbackHandlerTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
+    @Mock private Document document;
 
     private String emBundlerUrl = "bundleurl";
     private String emBundlerStitchUri = "stitchingUri";
@@ -91,6 +94,8 @@ class AdvancedBundlingCallbackHandlerTest {
         verify(asylumCase, times(1)).read(APPELLANT_FAMILY_NAME, String.class);
 
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
+        verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
+        verify(asylumCase).write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
@@ -100,7 +105,16 @@ class AdvancedBundlingCallbackHandlerTest {
     @Test
     void should_successfully_handle_the_callback_in_reheard() {
 
+        DocumentWithMetadata addendumEvidenceAppellantDocument = new DocumentWithMetadata(
+            document, "test","2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The appellant");
+        DocumentWithMetadata addendumEvidenceRespondentDocument = new DocumentWithMetadata(
+            document, "test","2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The respondent");
+        List<IdValue<DocumentWithMetadata>> documents = new ArrayList<>();
+        documents.add(new IdValue<DocumentWithMetadata>("0", addendumEvidenceAppellantDocument));
+        documents.add(new IdValue<DocumentWithMetadata>("1", addendumEvidenceRespondentDocument));
+
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(documents));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
@@ -115,6 +129,18 @@ class AdvancedBundlingCallbackHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+
+        documents.remove(1);
+        verify(asylumCase, times(2)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCase).write(AsylumCaseDefinition.APPELLANT_ADDENDUM_EVIDENCE_DOCS, documents);
+        documents.clear();
+        documents.add(new IdValue<DocumentWithMetadata>("1", addendumEvidenceRespondentDocument));
+        //verify(asylumCase).write(AsylumCaseDefinition.RESPONDENT_ADDENDUM_EVIDENCE_DOCS, documents);
+
+        verify(asylumCase, times(1)).read(ADDITIONAL_EVIDENCE_DOCUMENTS);
+        verify(asylumCase, times(1)).read(RESPONDENT_DOCUMENTS);
+        verify(asylumCase).write(AsylumCaseDefinition.APP_ADDITIONAL_EVIDENCE_DOCS, Collections.emptyList());
+        verify(asylumCase).write(AsylumCaseDefinition.RESP_ADDITIONAL_EVIDENCE_DOCS, Collections.emptyList());
 
     }
 
