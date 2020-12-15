@@ -4,6 +4,7 @@ import static java.io.File.createTempFile;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_PDF;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,6 +89,8 @@ public class SendDecisionAndReasonsPdfServiceTest {
             .convertResourceToPdf(finalDecisionAndReasonsResource);
         verify(documentUploader, times(1))
             .upload(any(ByteArrayResource.class), eq("application/pdf"));
+        verify(caseDetails.getCaseData(),times(1)).write(FINAL_DECISION_AND_REASONS_PDF,uploadedDecisionAndReasonsPdf);
+
     }
 
     @Test
@@ -107,5 +110,65 @@ public class SendDecisionAndReasonsPdfServiceTest {
         verifyNoInteractions(documentDownloadClient);
         verifyNoInteractions(documentUploader);
         verifyNoInteractions(wordDocumentToPdfConverter);
+    }
+
+    @Test
+    public void throws_when_draft_appeal_reference_number_missing() {
+
+
+        when(caseDetails.getCaseData())
+            .thenReturn(asylumCase);
+
+        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
+            .thenReturn(binaryDocumentUrl);
+
+        when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
+            .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
+
+        when(documentDownloadClient.download(binaryDocumentUrl))
+            .thenReturn(finalDecisionAndReasonsResource);
+
+        when(wordDocumentToPdfConverter.convertResourceToPdf(finalDecisionAndReasonsResource))
+            .thenReturn(convertedPdf);
+
+
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("Appeal reference number not present");
+    }
+
+    @Test
+    public void throws_when_draft_appellant_family_name_missing() {
+
+
+        when(caseDetails.getCaseData())
+            .thenReturn(asylumCase);
+
+        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
+            .thenReturn(binaryDocumentUrl);
+
+        when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
+            .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
+
+        when(documentDownloadClient.download(binaryDocumentUrl))
+            .thenReturn(finalDecisionAndReasonsResource);
+
+        when(wordDocumentToPdfConverter.convertResourceToPdf(finalDecisionAndReasonsResource))
+            .thenReturn(convertedPdf);
+
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of("some-appeal-reference-number"));
+
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+            .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("appellant family name not present");
+
+
     }
 }

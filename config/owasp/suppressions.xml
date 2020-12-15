@@ -87,4 +87,12 @@
     ]]></notes>
         <cve>CVE-2020-8908</cve>
    </suppress>
+    <suppress until="2099-06-01">
+        <notes><![CDATA[
+   file name: lang-tag-1.5.jar
+   Not using the readAtomData functionality
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.nimbusds/lang\-tag@.*$</packageUrl>
+        <cpe>cpe:/a:tag_project:tag</cpe>
+    </suppress>
 </suppressions>

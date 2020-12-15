@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -158,7 +158,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    private void initializeNewCollections(AsylumCase asylumCase) {
+    void initializeNewCollections(AsylumCase asylumCase) {
         if (!asylumCase.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS).isPresent()) {
             asylumCase.write(APPELLANT_ADDENDUM_EVIDENCE_DOCS, emptyList());
         }
@@ -176,7 +176,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         }
     }
 
-    private Optional<IdValue<DocumentWithMetadata>> isDocumentWithDescriptionPresent(
+    Optional<IdValue<DocumentWithMetadata>> isDocumentWithDescriptionPresent(
             List<IdValue<DocumentWithMetadata>> idValueList,
             IdValue<DocumentWithDescription> documentWithDescription
     ) {
@@ -281,7 +281,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         });
     }
 
-    private boolean contains(
+    boolean contains(
             List<IdValue<DocumentWithMetadata>> existingDocuments,
             IdValue<DocumentWithMetadata> documentWithMetadata
     ) {

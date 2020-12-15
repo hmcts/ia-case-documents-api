@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,14 +24,14 @@ public class HearingNoticeUpdatedRequirementsTemplateTest {
     @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
     @Mock private HearingNoticeUpdatedTemplateProvider hearingNoticeUpdatedTemplateProvider;
 
-    private HearingNoticeUpdatedDetailsTemplate hearingNoticeUpdatedDetailsTemplate;
+    private HearingNoticeUpdatedRequirementsTemplate hearingNoticeUpdatedRequirementsTemplate;
 
 
     @BeforeEach
     public void setUp() {
 
-        hearingNoticeUpdatedDetailsTemplate =
-            new HearingNoticeUpdatedDetailsTemplate(
+        hearingNoticeUpdatedRequirementsTemplate =
+            new HearingNoticeUpdatedRequirementsTemplate(
                 templateName,
                 stringProvider,
                 hearingNoticeUpdatedTemplateProvider
@@ -41,13 +41,15 @@ public class HearingNoticeUpdatedRequirementsTemplateTest {
     @Test
     public void should_return_template_name() {
 
-        assertEquals(templateName, hearingNoticeUpdatedDetailsTemplate.getName());
+        assertEquals(templateName, hearingNoticeUpdatedRequirementsTemplate.getName());
+        assertNotEquals("", hearingNoticeUpdatedRequirementsTemplate.getName());
     }
 
     @Test
     public void should_map_case_data_to_template_field_values() {
 
-        hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
+        assertTrue(hearingNoticeUpdatedRequirementsTemplate.mapFieldValues(caseDetails, caseDetailsBefore).isEmpty());
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
+
     }
 }

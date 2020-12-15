@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import java.io.File;
@@ -69,6 +70,7 @@ public class WordDocumentToPdfConverterTest {
 
         File pdf = wordDocumentToPdfConverter.convertResourceToPdf(byteArrayResource);
 
+        assertNotNull(pdf);
         //assertEquals(readAllBytes(pdf.toPath()), convertedBytes);
     }
 
@@ -93,6 +95,7 @@ public class WordDocumentToPdfConverterTest {
 
         File pdf = wordDocumentToPdfConverter.convertResourceToPdf(byteArrayResource);
 
+        assertNotNull(pdf);
         //assertEquals(readAllBytes(pdf.toPath()), convertedBytes);
     }
 
