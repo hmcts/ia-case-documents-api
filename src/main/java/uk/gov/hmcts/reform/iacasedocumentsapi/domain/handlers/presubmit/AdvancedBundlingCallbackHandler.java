@@ -34,8 +34,6 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
 
-
-
     public AdvancedBundlingCallbackHandler(
         @Value("${emBundler.url}") String emBundlerUrl,
         @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,

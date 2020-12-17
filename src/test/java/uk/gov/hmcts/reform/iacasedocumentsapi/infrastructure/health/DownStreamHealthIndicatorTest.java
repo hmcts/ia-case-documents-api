@@ -35,6 +35,7 @@ public class DownStreamHealthIndicatorTest {
 
         assertNotNull(downStreamHealthIndicator.getContributor("service2"));
         assertEquals(ServiceHealthIndicator.class, downStreamHealthIndicator.getContributor("service2").getClass());
+        assertTrue(downStreamHealthIndicator.iterator().hasNext());
     }
 
     @Test

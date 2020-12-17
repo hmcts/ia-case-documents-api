@@ -15,6 +15,13 @@ public class AppealDecisionTest {
     }
 
     @Test
+    public void correct_enum_returned_for_valid_values() {
+
+        assertEquals(AppealDecision.ALLOWED, AppealDecision.from("allowed"));
+        assertEquals(AppealDecision.DISMISSED, AppealDecision.from("dismissed"));
+    }
+
+    @Test
     public void throws_when_trying_to_create_from_invalid_value() {
 
         assertThatThrownBy(() -> AppealDecision.from("invalid-value"))
