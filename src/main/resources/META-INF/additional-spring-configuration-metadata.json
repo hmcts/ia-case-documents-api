@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "health.probes.enabled",
+      "type": "java.lang.String",
+      "description": "Description for health.probes.enabled."
+  }
+] }

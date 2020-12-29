@@ -87,12 +87,41 @@
     ]]></notes>
         <cve>CVE-2020-8908</cve>
    </suppress>
-    <suppress until="2099-06-01">
+    <suppress>
         <notes><![CDATA[
-   file name: lang-tag-1.5.jar
-   Not using the readAtomData functionality
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/com\.nimbusds/lang\-tag@.*$</packageUrl>
-        <cpe>cpe:/a:tag_project:tag</cpe>
+         https://nvd.nist.gov/vuln/detail/CVE-2020-28052
+         False positive -- An issue was discovered in Legion of the Bouncy Castle BC Java 1.65 and 1.66.
+         The OpenBSDBCrypt.checkPassword utility method compared incorrect data when checking the password,
+         allowing incorrect passwords to indicate they were matching with previously hashed ones that were different.
+        ]]></notes>
+        <cve>CVE-2020-28052</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+         https://nvd.nist.gov/vuln/detail/CVE-2020-29242
+         dhowden tag before 2020-11-19 allows "panic: runtime error: index out of range" via readPICFrame.
+        ]]></notes>
+        <cve>CVE-2020-29242</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+         https://nvd.nist.gov/vuln/detail/CVE-2020-29243
+         dhowden tag before 2020-11-19 allows "panic: runtime error: index out of range" via readAPICFrame.
+        ]]></notes>
+        <cve>CVE-2020-29243</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+         https://nvd.nist.gov/vuln/detail/CVE-2020-29244
+         dhowden tag before 2020-11-19 allows "panic: runtime error: index out of range" via readPICFrame.
+        ]]></notes>
+        <cve>CVE-2020-29244</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+         https://nvd.nist.gov/vuln/detail/CVE-2020-29245
+         dhowden tag before 2020-11-19 allows "panic: runtime error: index out of range" via readAPICFrame.
+        ]]></notes>
+        <cve>CVE-2020-29245</cve>
     </suppress>
 </suppressions>
