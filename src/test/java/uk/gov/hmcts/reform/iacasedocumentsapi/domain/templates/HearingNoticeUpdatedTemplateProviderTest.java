@@ -670,5 +670,45 @@ public class HearingNoticeUpdatedTemplateProviderTest {
         assertThatThrownBy(() -> hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore))
             .hasMessage("listCaseHearingCentre (before) is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
+
+
     }
+
+    @Test
+    public void handling_should_throw_if_previous_hearing_centre_name_not_present() {
+
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+
+        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
+
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.of(vulnerabilities));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.of(multimedia));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(inCamera));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(otherHearingRequest));
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+
+        assertThatThrownBy(() -> hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore))
+            .hasMessage("listCaseHearingCentre (before) is not present")
+            .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+
 }

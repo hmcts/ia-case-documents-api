@@ -74,7 +74,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         }
     }
 
-    private void populateCustomCollections(AsylumCase asylumCase, AsylumCaseDefinition sourceField, AsylumCaseDefinition targetField) {
+    void populateCustomCollections(AsylumCase asylumCase, AsylumCaseDefinition sourceField, AsylumCaseDefinition targetField) {
         if (!asylumCase.read(sourceField).isPresent()) {
             return;
         }

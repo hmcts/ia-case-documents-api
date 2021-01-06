@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +47,8 @@ public class HearingNoticeUpdatedDetailsTemplateTest {
     @Test
     public void should_map_case_data_to_template_field_values() {
 
-        hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
+        assertTrue(hearingNoticeUpdatedDetailsTemplate.mapFieldValues(caseDetails, caseDetailsBefore).isEmpty());
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
+
     }
 }

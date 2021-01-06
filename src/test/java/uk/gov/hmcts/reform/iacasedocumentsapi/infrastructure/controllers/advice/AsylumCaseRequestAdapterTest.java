@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Type;
 import org.junit.jupiter.api.BeforeEach;

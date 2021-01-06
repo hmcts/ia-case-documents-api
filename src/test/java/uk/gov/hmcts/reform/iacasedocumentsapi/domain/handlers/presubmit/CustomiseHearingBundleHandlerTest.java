@@ -218,7 +218,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
 
-        verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.CASE_BUNDLES);
+        verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
@@ -330,6 +331,8 @@ class CustomiseHearingBundleHandlerTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
+        assertEquals(featureToggler.getValue("reheard-feature", false), true);
+
         verify(asylumCaseCopy, times(4)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(4)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_APPELLANT_DOCS);
@@ -359,6 +362,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
 
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
@@ -368,6 +372,85 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
+
+    @Test
+    void should_return_values_for_document_with_description_present() {
+        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        IdValue<DocumentWithDescription> documentWithDescriptionIdValue =
+            new IdValue<>("1", createDocumentWithDescription());
+
+        final List<IdValue<DocumentWithMetadata>> documentMetadataList = asList(
+            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+
+        Optional<IdValue<DocumentWithMetadata>> result = customiseHearingBundleHandler.isDocumentWithDescriptionPresent(
+            documentMetadataList, documentWithDescriptionIdValue);
+        assertTrue(result.isPresent());
+        assertEquals(
+            "some-binary-url",
+            result.get().getValue().getDocument().getDocumentBinaryUrl());
+    }
+
+    @Test
+    void should_return_values_for_document_with_description_present_throw_exception() {
+        when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        IdValue<DocumentWithDescription> documentWithDescriptionIdValue =
+            new IdValue<>("1", new DocumentWithDescription(null, "test"));
+        ;
+        final List<IdValue<DocumentWithMetadata>> documentMetadataList = asList(
+            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+
+        assertThatThrownBy(() -> customiseHearingBundleHandler.isDocumentWithDescriptionPresent(
+            documentMetadataList, documentWithDescriptionIdValue))
+            .hasMessage("Document cannot be null")
+            .isExactlyInstanceOf(IllegalStateException.class);
+
+        assertEquals(featureToggler.getValue("reheard-feature", false), false);
+
+    }
+
+    @Test
+    void contains_should_return_true_for_document_with_metadata_present() {
+        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        IdValue<DocumentWithMetadata> documentWithMetadataIdValue =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "test"));
+
+        final List<IdValue<DocumentWithMetadata>> documentMetadataList = asList(
+            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+
+        assertTrue(customiseHearingBundleHandler.contains(
+            documentMetadataList, documentWithMetadataIdValue));
+    }
+
+    @Test
+    void should_create_custom_collections_if_source_collections_are_empty() {
+
+        when(asylumCase.read(AsylumCaseDefinition.APP_ADDITIONAL_EVIDENCE_DOCS))
+            .thenReturn(Optional.empty());
+        when(asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS))
+            .thenReturn(Optional.empty());
+
+        customiseHearingBundleHandler.initializeNewCollections(asylumCase);
+
+        verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(APP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).write(APPELLANT_ADDENDUM_EVIDENCE_DOCS, emptyList());
+        verify(asylumCase, times(1)).write(RESPONDENT_ADDENDUM_EVIDENCE_DOCS, emptyList());
+    }
+
 
     @Test
     void should_throw_when_appeal_reference_is_not_present() {
