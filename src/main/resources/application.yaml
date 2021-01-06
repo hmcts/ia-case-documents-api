@@ -35,7 +35,6 @@ spring:
         jwt:
           jwk-set-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o/jwks
 
-
 health:
   services:
     docmosis:
