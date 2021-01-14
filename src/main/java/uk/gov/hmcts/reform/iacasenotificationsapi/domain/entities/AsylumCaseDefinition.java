@@ -281,6 +281,9 @@ public enum AsylumCaseDefinition {
 
     AMOUNT_LEFT_TO_PAY(
         "amountLeftToPay", new TypeReference<String>(){}),
+
+    HOME_OFFICE_HEARING_BUNDLE_READY_INSTRUCT_STATUS(
+        "homeOfficeHearingBundleReadyInstructStatus", new TypeReference<String>() {}),
     ;
 
     private final String value;

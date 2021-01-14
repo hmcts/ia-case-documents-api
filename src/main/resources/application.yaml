@@ -238,6 +238,9 @@ govnotify:
     hearingBundleFailed:
       caseOfficer:
         email: c2af5875-f8ab-486d-a766-4a8cba223b36
+    asyncStitchingHomeOfficeNotificationFailed:
+      caseOfficer:
+        email: 0e6ade58-5cac-4ec9-8832-508b9d9d7dcd
     requestHearingRequirements:
       legalRep:
         email: d86a45df-5c3d-41e6-9370-3b962d8711fa

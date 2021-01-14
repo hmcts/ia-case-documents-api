@@ -650,6 +650,24 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("asyncStitchingCompleteHomeOfficeNotificationFailedNotificationGenerator")
+    public List<NotificationGenerator> asyncStitchingCompleteHomeOfficeNotificationFailed(
+        CaseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisation caseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    caseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("submittedHearingRequirementsNotificationGenerator")
     public List<NotificationGenerator> submittedHearingRequirementsNotificationGenerator(
         CaseOfficerSubmittedHearingRequirementsPersonalisation caseOfficerSubmittedHearingRequirementsPersonalisation,
