@@ -7,6 +7,8 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealT
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.RP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_PARTIES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_APPELLANT_INSTRUCT_STATUS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_RESPONDENT_INSTRUCT_STATUS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REMISSIONS_ENABLED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
@@ -774,7 +776,7 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
-    public PreSubmitCallbackHandler<AsylumCase> ftpaRespondentSubmittedHomeOfficeNotificationFailedNotificationHandler(
+    public PreSubmitCallbackHandler<AsylumCase> stitchingCompleteHomeOfficeNotificationFailedNotificationHandler(
         @Qualifier("asyncStitchingCompleteHomeOfficeNotificationFailedNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
 
         return new NotificationHandler(
@@ -957,6 +959,47 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && callback.getEvent() == Event.APPLY_FOR_FTPA_APPELLANT,
+            notificationGenerator
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> ftpaAppellantSubmittedHomeOfficeNotificationFailedNotificationHandler(
+        @Qualifier("ftpaSubmittedHomeOfficeNotificationFailedCaseOfficerNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                final String instructStatus = asylumCase.read(HOME_OFFICE_FTPA_APPELLANT_INSTRUCT_STATUS, String.class)
+                    .orElse("");
+
+                return
+                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.APPLY_FOR_FTPA_APPELLANT
+                    && instructStatus.equals("FAIL")
+                    ;
+            },
+            notificationGenerator
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> ftpaRespondentSubmittedHomeOfficeNotificationFailedNotificationHandler(
+        @Qualifier("ftpaSubmittedHomeOfficeNotificationFailedCaseOfficerNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                final String instructStatus = asylumCase.read(HOME_OFFICE_FTPA_RESPONDENT_INSTRUCT_STATUS, String.class)
+                    .orElse("");
+
+                return
+                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.APPLY_FOR_FTPA_RESPONDENT
+                        && instructStatus.equals("FAIL");
+            },
             notificationGenerator
         );
     }

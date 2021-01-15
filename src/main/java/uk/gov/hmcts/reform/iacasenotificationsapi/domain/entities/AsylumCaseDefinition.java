@@ -223,6 +223,12 @@ public enum AsylumCaseDefinition {
     IS_FTPA_RESPONDENT_DECIDED(
         "isFtpaRespondentDecided", new TypeReference<YesOrNo>(){}),
 
+    HOME_OFFICE_FTPA_APPELLANT_INSTRUCT_STATUS(
+        "homeOfficeFtpaAppellantInstructStatus", new TypeReference<String>() {}),
+
+    HOME_OFFICE_FTPA_RESPONDENT_INSTRUCT_STATUS(
+        "homeOfficeFtpaRespondentInstructStatus", new TypeReference<String>() {}),
+
     PAYMENT_STATUS(
         "paymentStatus", new TypeReference<PaymentStatus>(){}),
 

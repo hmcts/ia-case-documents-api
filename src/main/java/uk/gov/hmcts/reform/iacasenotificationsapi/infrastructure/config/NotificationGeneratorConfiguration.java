@@ -907,6 +907,24 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("ftpaSubmittedHomeOfficeNotificationFailedCaseOfficerNotificationGenerator")
+    public List<NotificationGenerator> ftpaSubmittedHomeOfficeNotificationFailed(
+        CaseOfficerFtpaSubmittedHomeOfficeNotificationFailedPersonalisation ftpaSubmittedHomeOfficeNotificationFailedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    ftpaSubmittedHomeOfficeNotificationFailedPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("ftpaSubmittedRespondentNotificationGenerator")
     public List<NotificationGenerator> ftpaSubmittedRespondent(
         RespondentFtpaSubmittedPersonalisation respondentFtpaSubmittedPersonalisation,

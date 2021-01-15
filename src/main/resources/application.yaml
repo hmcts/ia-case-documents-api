@@ -323,6 +323,8 @@ govnotify:
         email: 28ea778a-f2fb-4447-9144-a3815c92edbc
       adminOfficer:
         email: aa44dab0-a9cd-4129-99bd-9ba2d4c8a57b
+      caseOfficer:
+        email: 298e0507-e91f-44a8-916a-fd53e7194633
       otherLegalRep:
         email: 90630010-f2ed-4a97-a307-50291b017ed1
       otherHomeOffice:
