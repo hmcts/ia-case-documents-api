@@ -11,6 +11,10 @@ management:
       exposure:
         include: health, info, prometheus
 
+  health:
+    probes:
+      enabled: true
+
 spring:
   application:
     name: Welcome to Case Payment Service
@@ -77,6 +81,7 @@ security:
     - "/"
     - "/health"
     - "/health/liveness"
+    - "/health/readiness"
     - "/loggers/**"
     - "/swagger-ui.html"
     - "/swagger-resources/**"
