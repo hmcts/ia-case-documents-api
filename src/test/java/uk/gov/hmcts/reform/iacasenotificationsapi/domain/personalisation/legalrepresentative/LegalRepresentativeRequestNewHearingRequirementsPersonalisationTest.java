@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
-public class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest {
+class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest {
 
     @Mock AsylumCase asylumCase;
     @Mock DirectionFinder directionFinder;
@@ -50,7 +50,7 @@ public class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest
     private LegalRepresentativeRequestNewHearingRequirementsPersonalisation legalRepresentativeRequestNewHearingRequirementsPersonalisation;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         when((direction.getDateDue())).thenReturn(directionDueDate);
         when((direction.getExplanation())).thenReturn(directionExplanation);
@@ -74,22 +74,22 @@ public class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest
     }
 
     @Test
-    public void should_return_given_template_id() {
+    void should_return_given_template_id() {
         assertEquals(templateId, legalRepresentativeRequestNewHearingRequirementsPersonalisation.getTemplateId());
     }
 
     @Test
-    public void should_return_given_reference_id() {
+    void should_return_given_reference_id() {
         assertEquals(caseId + "_LEGAL_REPRESENTATIVE_REQUEST_NEW_HEARING_REQUIREMENTS_DIRECTION", legalRepresentativeRequestNewHearingRequirementsPersonalisation.getReferenceId(caseId));
     }
 
     @Test
-    public void should_return_given_email_address_from_asylum_case() {
+    void should_return_given_email_address_from_asylum_case() {
         assertEquals(Collections.singleton(legalRepEmailAddress), legalRepresentativeRequestNewHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(() -> legalRepresentativeRequestNewHearingRequirementsPersonalisation.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
@@ -97,7 +97,7 @@ public class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given() {
+    void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation = legalRepresentativeRequestNewHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
@@ -107,7 +107,7 @@ public class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_direction_is_empty() {
+    void should_throw_exception_on_personalisation_when_direction_is_empty() {
 
         when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_NEW_HEARING_REQUIREMENTS)).thenReturn(Optional.empty());
 

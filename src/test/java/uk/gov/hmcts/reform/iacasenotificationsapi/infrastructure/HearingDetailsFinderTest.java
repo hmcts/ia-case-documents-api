@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class HearingDetailsFinderTest {
+class HearingDetailsFinderTest {
 
     private static final String HEARING_CENTRE_ADDRESS = "hearingCentreAddress";
     @Mock
@@ -37,7 +37,7 @@ public class HearingDetailsFinderTest {
     private String hearingTime = "14:25";
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDateTime));
 
@@ -52,12 +52,12 @@ public class HearingDetailsFinderTest {
     }
 
     @Test
-    public void should_return_given_hearing_centre_address() {
+    void should_return_given_hearing_centre_address() {
         assertEquals(hearingCentreAddress, hearingDetailsFinder.getHearingCentreAddress(asylumCase));
     }
 
     @Test
-    public void should_throw_exception_when_hearing_centre_address_is_empty() {
+    void should_throw_exception_when_hearing_centre_address_is_empty() {
         when(stringProvider.get(HEARING_CENTRE_ADDRESS, hearingCentre.toString())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> hearingDetailsFinder.getHearingCentreAddress(asylumCase))
@@ -66,12 +66,12 @@ public class HearingDetailsFinderTest {
     }
 
     @Test
-    public void should_return_given_hearing_centre_name() {
+    void should_return_given_hearing_centre_name() {
         assertEquals(hearingCentreName, hearingDetailsFinder.getHearingCentreName(asylumCase));
     }
 
     @Test
-    public void should_throw_exception_when_hearing_centre_name_is_empty() {
+    void should_throw_exception_when_hearing_centre_name_is_empty() {
         when(stringProvider.get("hearingCentreName", hearingCentre.toString())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> hearingDetailsFinder.getHearingCentreName(asylumCase))
@@ -80,12 +80,12 @@ public class HearingDetailsFinderTest {
     }
 
     @Test
-    public void should_return_given_hearing_date_time() {
+    void should_return_given_hearing_date_time() {
         assertEquals(hearingDateTime, hearingDetailsFinder.getHearingDateTime(asylumCase));
     }
 
     @Test
-    public void should_throw_exception_when_hearing_date_time_is_empty() {
+    void should_throw_exception_when_hearing_date_time_is_empty() {
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> hearingDetailsFinder.getHearingDateTime(asylumCase))
@@ -94,7 +94,7 @@ public class HearingDetailsFinderTest {
     }
 
     @Test
-    public void should_throw_exception_when_hearing_centre_is_empty() {
+    void should_throw_exception_when_hearing_centre_is_empty() {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> hearingDetailsFinder.getHearingCentreAddress(asylumCase))

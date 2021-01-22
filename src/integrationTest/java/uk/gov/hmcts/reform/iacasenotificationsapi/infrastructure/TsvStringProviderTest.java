@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -11,13 +11,13 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.Application;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("integration")
-public class TsvStringProviderTest {
+class TsvStringProviderTest {
 
     @Autowired
     private TsvStringProvider tsvStringProvider;
 
     @Test
-    public void should_load_strings_from_resources_and_return() {
+    void should_load_strings_from_resources_and_return() {
 
         assertEquals(
             Optional.of("Birmingham"),
@@ -204,7 +204,7 @@ public class TsvStringProviderTest {
     }
 
     @Test
-    public void should_return_empty_optional_if_string_not_found() {
+    void should_return_empty_optional_if_string_not_found() {
 
         assertEquals(
             Optional.empty(),
