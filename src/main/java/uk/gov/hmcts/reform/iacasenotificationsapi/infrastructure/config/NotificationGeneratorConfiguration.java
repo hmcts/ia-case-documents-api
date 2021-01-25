@@ -143,6 +143,24 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("appealOutcomeHomeOfficeNotificationFailedNotificationGenerator")
+    public List<NotificationGenerator> appealOutcomeHomeOfficeNotificationFailedNotificationGenerator(
+        CaseOfficerAppealOutcomeHomeOfficeNotificationFailedPersonalisation caseOfficerAppealOutcomeHomeOfficeNotificationFailedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    caseOfficerAppealOutcomeHomeOfficeNotificationFailedPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("respondentChangeDirectionDueDateNotificationGenerator")
     public List<NotificationGenerator> respondentChangeDirectionDueDateNotificationGenerator(
         RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
@@ -1290,6 +1308,24 @@ public class NotificationGeneratorConfiguration {
         return Arrays.asList(
             new EmailNotificationGenerator(
                 newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, adminOfficerFtpaDecisionRespondentPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("ftpaDecisionHomeOfficeNotificationFailedNotificationGenerator")
+    public List<NotificationGenerator> ftpaDecisionHomeOfficeNotificationFailedNotificationGenerator(
+        CaseOfficerFtpaDecisionHomeOfficeNotificationFailedPersonalisation caseOfficerFtpaDecisionHomeOfficeNotificationFailedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    caseOfficerFtpaDecisionHomeOfficeNotificationFailedPersonalisation
+                ),
                 notificationSender,
                 notificationIdAppender
             )

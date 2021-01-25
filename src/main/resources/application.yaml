@@ -94,6 +94,14 @@ govnotify:
         partiallyApproved:
           email: 954c2959-e13a-4907-be1e-3eb9831fc68c
 
+    decisionHomeOfficeNotificationFailed:
+      caseOfficer:
+        email: a43092a3-3fe5-404e-8613-bc525e3da609
+
+    ftpaDecisionHomeOfficeNotificationFailed:
+      caseOfficer:
+        email: fa4235b4-fa5f-451a-8b61-958456bfe770
+
     appealSubmittedOutOfTime:
       appellant:
         email: b864d01f-c80c-4d91-947f-9599f0b64163
@@ -101,6 +109,7 @@ govnotify:
     pendingPayment:
       legalRep:
         paid:
+
           email: 91cf84fe-55f0-41a4-9d0f-fe13ae45fb8c
         paidAfterAppealSubmitted:
           beforeListing:

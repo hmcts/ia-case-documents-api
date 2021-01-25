@@ -215,7 +215,7 @@ public enum AsylumCaseDefinition {
         "ftpaRespondentSubmitted", new TypeReference<YesOrNo>(){}),
 
     FTPA_APPLICANT_TYPE(
-        "ftpaApplicantType", new TypeReference<ApplicantType>(){}),
+        "ftpaApplicantType", new TypeReference<String>(){}),
 
     IS_FTPA_APPELLANT_DECIDED(
         "isFtpaAppellantDecided", new TypeReference<YesOrNo>(){}),
@@ -228,6 +228,9 @@ public enum AsylumCaseDefinition {
 
     HOME_OFFICE_FTPA_RESPONDENT_INSTRUCT_STATUS(
         "homeOfficeFtpaRespondentInstructStatus", new TypeReference<String>() {}),
+
+    HOME_OFFICE_APPEAL_DECIDED_INSTRUCT_STATUS(
+        "homeOfficeAppealDecidedInstructStatus", new TypeReference<String>() {}),
 
     PAYMENT_STATUS(
         "paymentStatus", new TypeReference<PaymentStatus>(){}),
@@ -290,6 +293,13 @@ public enum AsylumCaseDefinition {
 
     HOME_OFFICE_HEARING_BUNDLE_READY_INSTRUCT_STATUS(
         "homeOfficeHearingBundleReadyInstructStatus", new TypeReference<String>() {}),
+
+    HOME_OFFICE_FTPA_APPELLANT_DECIDED_INSTRUCT_STATUS(
+        "homeOfficeFtpaAppellantDecidedInstructStatus", new TypeReference<String>() {}),
+
+    HOME_OFFICE_FTPA_RESPONDENT_DECIDED_INSTRUCT_STATUS(
+        "homeOfficeFtpaRespondentDecidedInstructStatus", new TypeReference<String>() {}),
+
     ;
 
     private final String value;
