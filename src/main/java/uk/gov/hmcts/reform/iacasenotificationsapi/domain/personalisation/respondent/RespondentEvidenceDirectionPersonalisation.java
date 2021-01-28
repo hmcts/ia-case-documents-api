@@ -1,10 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -31,12 +29,11 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
     private final CustomerServicesProvider customerServicesProvider;
 
     public RespondentEvidenceDirectionPersonalisation(
-        @Value("${govnotify.template.requestRespondentEvidenceDirection.respondent.email}") String respondentEvidenceDirectionTemplateId,
-        @Value("${respondentEmailAddresses.respondentEvidenceDirection}") String respondentEvidenceDirectionEmailAddress,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        DirectionFinder directionFinder,
-        CustomerServicesProvider customerServicesProvider
-    ) {
+            @Value("${govnotify.template.requestRespondentEvidenceDirection.respondent.email}") String respondentEvidenceDirectionTemplateId,
+            @Value("${respondentEmailAddresses.respondentEvidenceDirection}") String respondentEvidenceDirectionEmailAddress,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            DirectionFinder directionFinder,
+            CustomerServicesProvider customerServicesProvider) {
 
         this.respondentEvidenceDirectionTemplateId = respondentEvidenceDirectionTemplateId;
         this.respondentEvidenceDirectionEmailAddress = respondentEvidenceDirectionEmailAddress;
@@ -74,6 +71,19 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
                 .parse(direction.getDateDue())
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
+        AddressUk address = asylumCase.read(LEGAL_REP_COMPANY_ADDRESS, AddressUk.class).orElse(new AddressUk("",
+                "",
+                "",
+                "",
+                "",
+                "",""));
+        String companyAddress = "";
+
+        companyAddress += address.getAddressLine1().orElse("") + " ";
+        companyAddress += address.getAddressLine2().orElse("") + " ";
+        companyAddress += address.getCounty().orElse("") + " ";
+        companyAddress += address.getPostCode().orElse("");
+
         return ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
@@ -82,7 +92,11 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .put("linkToOnlineService", iaExUiFrontendUrl)
-            .put("explanation", direction.getExplanation())
+            .put("companyName", asylumCase.read(LEGAL_REP_COMPANY_NAME, String.class).orElse(""))
+            .put("companyAddress", companyAddress)
+            .put("legalRepName", asylumCase.read(LEGAL_REPRESENTATIVE_NAME, String.class).orElse(""))
+            .put("legalRepEmail", asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""))
+            .put("legalRepReference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
             .put("dueDate", directionDueDate)
             .build();
     }

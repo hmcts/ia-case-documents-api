@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
@@ -78,6 +79,12 @@ public enum AsylumCaseDefinition {
 
     LEGAL_REPRESENTATIVE_NAME(
             "legalRepresentativeName", new TypeReference<String>(){}),
+
+    LEGAL_REP_COMPANY_NAME(
+            "legalRepCompanyName", new TypeReference<String>(){}),
+
+    LEGAL_REP_COMPANY_ADDRESS(
+            "legalRepCompanyAddress", new TypeReference<AddressUk>(){}),
 
     NOTIFICATIONS_SENT(
             "notificationsSent",  new TypeReference<List<IdValue<String>>>(){}),

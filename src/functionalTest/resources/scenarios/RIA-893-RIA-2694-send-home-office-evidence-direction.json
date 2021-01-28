@@ -63,7 +63,6 @@
           "A1234567",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
-          "Send your evidence",
           "{$TODAY+14|d MMM yyyy}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"

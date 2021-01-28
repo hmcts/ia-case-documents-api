@@ -4,10 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +18,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
@@ -40,7 +38,13 @@ public class RespondentEvidenceDirectionPersonalisationTest {
 
     private String directionDueDate = "2019-08-27";
     private String expectedDirectionDueDate = "27 Aug 2019";
-    private String directionExplanation = "someExplanation";
+    private String companyName = "Legal Rep Company Name";
+    private String companyAddress = "45 Lunar House Spa Road London SE1 3HP";
+    private String legalRepName = "Legal Rep Name";
+    private String legalRepReference = "Legal Rep Reference";
+    private String legalRepEmail = "Legal Rep Email";
+    private String legalRepCompanyName = "Legal Rep Company Name";
+    private AddressUk legalRepCompanyAddress;
 
     private String appealReferenceNumber = "someReferenceNumber";
     private String homeOfficeRefNumber = "someHomeOfficeRefNumber";
@@ -55,14 +59,26 @@ public class RespondentEvidenceDirectionPersonalisationTest {
     @BeforeEach
     public void setup() {
 
+        legalRepCompanyAddress = new AddressUk("45 Lunar House",
+                "Spa Road",
+                "Woolworth",
+                "London",
+                "London",
+                "SE1 3HP","UK");
+
         when((direction.getDateDue())).thenReturn(directionDueDate);
-        when((direction.getExplanation())).thenReturn(directionExplanation);
         when(directionFinder.findFirst(asylumCase, DirectionTag.RESPONDENT_EVIDENCE)).thenReturn(Optional.of(direction));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
+
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_NAME, String.class)).thenReturn(Optional.of(legalRepName));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmail));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReference));
+        when(asylumCase.read(LEGAL_REP_COMPANY_NAME, String.class)).thenReturn(Optional.of(legalRepCompanyName));
+        when(asylumCase.read(LEGAL_REP_COMPANY_ADDRESS, AddressUk.class)).thenReturn(Optional.of(legalRepCompanyAddress));
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
@@ -72,8 +88,7 @@ public class RespondentEvidenceDirectionPersonalisationTest {
             respondentReviewEmailAddress,
             iaExUiFrontendUrl,
             directionFinder,
-            customerServicesProvider
-        );
+            customerServicesProvider);
     }
 
     @Test
@@ -108,7 +123,11 @@ public class RespondentEvidenceDirectionPersonalisationTest {
         assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
-        assertEquals(directionExplanation, personalisation.get("explanation"));
+        assertEquals(companyName, personalisation.get("companyName"));
+        assertEquals(companyName, personalisation.get("companyName"));
+        assertEquals(companyName, personalisation.get("companyName"));
+        assertEquals(companyName, personalisation.get("companyName"));
+        assertEquals(companyName, personalisation.get("companyName"));
         assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
@@ -129,7 +148,11 @@ public class RespondentEvidenceDirectionPersonalisationTest {
         assertEquals("", personalisation.get("homeOfficeReferenceNumber"));
         assertEquals("", personalisation.get("appellantGivenNames"));
         assertEquals("", personalisation.get("appellantFamilyName"));
-        assertEquals(directionExplanation, personalisation.get("explanation"));
+        assertEquals(companyName, personalisation.get("companyName"));
+        assertEquals(companyAddress, personalisation.get("companyAddress"));
+        assertEquals(legalRepName, personalisation.get("legalRepName"));
+        assertEquals(legalRepEmail, personalisation.get("legalRepEmail"));
+        assertEquals(legalRepReference, personalisation.get("legalRepReference"));
         assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());

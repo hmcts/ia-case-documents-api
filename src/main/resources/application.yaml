@@ -137,7 +137,7 @@ govnotify:
       legalRep:
         email: 33430912-89d5-416d-8d49-52eae9ce82c3
       respondent:
-        email: 1e718009-b7f7-4d0a-976d-a411dae559fb
+        email: c1b25fef-f94d-4a68-ad89-04aa684663b6
     respondentEvidenceSubmitted:
       caseOfficer:
         email: a1511860-2d05-42ff-8a08-778840424d83
@@ -602,6 +602,8 @@ govnotify:
     requestNewHearingRequirements:
       legalRep:
         email: fd709bf4-095c-4734-8f88-9a9feba9fd81
+
+
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 

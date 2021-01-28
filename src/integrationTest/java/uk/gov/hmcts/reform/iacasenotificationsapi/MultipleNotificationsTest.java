@@ -64,7 +64,6 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
             new HashMap.SimpleImmutableEntry<>(Event.REQUEST_HEARING_REQUIREMENTS,
                 "_LEGAL_REPRESENTATIVE_HEARING_REQUIREMENTS_DIRECTION"),
             new HashMap.SimpleImmutableEntry<>(Event.ADD_APPEAL_RESPONSE, "_LEGAL_REPRESENTATIVE_REVIEW_DIRECTION"),
-            new HashMap.SimpleImmutableEntry<>(Event.REQUEST_RESPONDENT_EVIDENCE, "_RESPONDENT_EVIDENCE_DIRECTION"),
             new HashMap.SimpleImmutableEntry<>(Event.SEND_DIRECTION, "_RESPONDENT_NON_STANDARD_DIRECTION"),
             new HashMap.SimpleImmutableEntry<>(Event.REQUEST_RESPONDENT_REVIEW, "_RESPONDENT_REVIEW_DIRECTION"));
 

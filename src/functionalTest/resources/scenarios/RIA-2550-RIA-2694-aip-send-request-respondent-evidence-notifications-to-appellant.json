@@ -99,7 +99,6 @@
           "A1234567",
           "Pablo Jimenez",
           "{$iaExUiFrontendUrl}",
-          "Send your evidence",
           "{$TODAY+14|d MMM yyyy}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
