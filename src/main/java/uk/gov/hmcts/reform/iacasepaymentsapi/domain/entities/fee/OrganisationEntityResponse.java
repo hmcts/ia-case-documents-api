@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.LegRepAddressUk;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class OrganisationEntityResponse {
     private String companyUrl;
     private SuperUser superUser;
     private List<String> paymentAccount;
-    private String contactInformation;
+    private List<LegRepAddressUk> contactInformation;
 
     public OrganisationEntityResponse(String name) {
         this.name = name;

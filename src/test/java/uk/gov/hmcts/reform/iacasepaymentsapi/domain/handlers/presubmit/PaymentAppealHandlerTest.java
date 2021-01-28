@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +45,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.LegRepAddressUk;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Callback;
@@ -78,10 +80,34 @@ class PaymentAppealHandlerTest {
 
     private ObjectMapper objectMapper;
     private long caseId = 1234;
+
+    private final String addressLine1 = "A";
+    private final String addressLine2 = "B";
+    private final String addressLine3 = "C";
+    private final String townCity = "D";
+    private final String county = "E";
+    private final String postCode = "F";
+    private final String country = "G";
+    private List<LegRepAddressUk> addresses;
+    private LegRepAddressUk legRepAddressUk;
+
     private PaymentAppealHandler appealFeePaymentHandler;
 
     @BeforeEach
     public void setUp() {
+        addresses = new ArrayList<>();
+        legRepAddressUk =  new LegRepAddressUk(
+            addressLine1,
+            addressLine2,
+            addressLine3,
+            townCity,
+            county,
+            postCode,
+            country,
+            Arrays.asList("A", "B")
+        );
+        addresses.add(legRepAddressUk);
+
         objectMapper = new ObjectMapper();
         appealFeePaymentHandler =
             new PaymentAppealHandler(feeService, paymentService, refDataService, paymentProperties, objectMapper);
@@ -145,7 +171,7 @@ class PaymentAppealHandlerTest {
                     "",
                     null,
                     newArrayList("PBA1234567"),
-                    ""
+                    addresses
                 )
             )
         );
@@ -229,7 +255,7 @@ class PaymentAppealHandlerTest {
                 "",
                 null,
                 newArrayList("PBA1234567"),
-                ""
+                addresses
                 )
             )
         );
@@ -311,7 +337,7 @@ class PaymentAppealHandlerTest {
                     "",
                     null,
                     newArrayList("PBA1234567"),
-                    ""
+                    addresses
                 )
             )
         );
@@ -482,7 +508,7 @@ class PaymentAppealHandlerTest {
                     "",
                     null,
                     newArrayList("PBA1234567"),
-                    ""
+                    addresses
                 )
             )
         );
@@ -528,7 +554,7 @@ class PaymentAppealHandlerTest {
                     "",
                     null,
                     newArrayList("PBA1234567"),
-                    ""
+                    addresses
                 )
             )
         );
