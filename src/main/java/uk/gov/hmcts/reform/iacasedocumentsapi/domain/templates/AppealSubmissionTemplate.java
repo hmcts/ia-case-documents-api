@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -37,6 +38,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
     }
 
     public String getName() {
+
         return templateName;
     }
 
@@ -69,6 +71,52 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             fieldValues.put("email", asylumCase.read(EMAIL, String.class).orElse(""));
         } else {
             fieldValues.put("mobileNumber", asylumCase.read(MOBILE_NUMBER, String.class).orElse(""));
+        }
+
+        fieldValues.put("hasSponsor", YesOrNo.NO);
+        fieldValues.put("appealOutOfCountry", asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO));
+
+        if (asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
+            fieldValues.put("decisionLetterReceivedDate", formatDateForRendering(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class).orElse("")));
+
+            Optional<OutOfCountryDecisionType> maybeOutOfCountryDecisionType = asylumCase.read(OUT_OF_COUNTRY_DECISION_TYPE, OutOfCountryDecisionType.class);
+
+            if (maybeOutOfCountryDecisionType.isPresent()) {
+
+                OutOfCountryDecisionType decisionType = maybeOutOfCountryDecisionType.get();
+                fieldValues.put("outOfCountryDecisionType", maybeOutOfCountryDecisionType.get().getDescription());
+                fieldValues.put("decisionLetterReceived", YesOrNo.YES);
+
+                if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_HUMAN_RIGHTS) {
+                    fieldValues.put("gwfReferenceNumber", asylumCase.read(GWF_REFERENCE_NUMBER, String.class).orElse(null));
+                    fieldValues.put("dateEntryClearanceDecision", formatDateForRendering(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class).orElse(null)));
+                    fieldValues.put("decisionLetterReceived", YesOrNo.NO);
+
+                } else if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_PROTECTION) {
+                    fieldValues.put("dateClientLeaveUk", formatDateForRendering(asylumCase.read(DATE_CLIENT_LEAVE_UK, String.class).orElse(null)));
+                    fieldValues.put("didClientLeaveUk", YesOrNo.YES);
+                }
+            }
+
+            if (asylumCase.read(HAS_CORRESPONDENCE_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
+                fieldValues.put("appellantOutOfCountryAddress", asylumCase.read(APPELLANT_OUT_OF_COUNTRY_ADDRESS, String.class).orElse(""));
+            }
+
+            Optional<YesOrNo> hasSponsor = asylumCase.read(HAS_SPONSOR, YesOrNo.class);
+            if (hasSponsor.isPresent() && hasSponsor.get().equals(YesOrNo.YES)) {
+                fieldValues.put("hasSponsor", YesOrNo.YES);
+                fieldValues.put("sponsorGivenNames", asylumCase.read(SPONSOR_GIVEN_NAMES, String.class).orElse(null));
+                fieldValues.put("sponsorFamilyName", asylumCase.read(SPONSOR_FAMILY_NAME, String.class).orElse(null));
+                fieldValues.put("sponsorAddress", asylumCase.read(SPONSOR_ADDRESS_FOR_DISPLAY, String.class).orElse(null));
+                Optional<ContactPreference> sponsorContactPreference = asylumCase.read(SPONSOR_CONTACT_PREFERENCE, ContactPreference.class);
+                if (sponsorContactPreference.isPresent()
+                        && sponsorContactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+                    fieldValues.put("wantsSponsorEmail", YesOrNo.YES);
+                    fieldValues.put("sponsorEmail", asylumCase.read(SPONSOR_EMAIL, String.class).orElse(null));
+                } else {
+                    fieldValues.put("sponsorMobileNumber", asylumCase.read(SPONSOR_MOBILE_NUMBER, String.class).orElse(null));
+                }
+            }
         }
 
         Optional<String> optionalAppealType = asylumCase.read(APPEAL_TYPE);
