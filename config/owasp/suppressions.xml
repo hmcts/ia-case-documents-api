@@ -10,71 +10,11 @@
   </suppress>
   <suppress>
     <notes><![CDATA[
-   file name: groovy-json-2.5.10.jar
-   ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-json@.*$</packageUrl>
-    <cve>CVE-2016-6497</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-   file name: groovy-xml-2.5.10.jar
-   ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-xml@.*$</packageUrl>
-    <cve>CVE-2016-6497</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-   file name: groovy-ant-3.0.0-indy.jar
-   ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-ant@.*$</packageUrl>
-    <cve>CVE-2016-6497</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-   file name: org.apache.sling.javax.activation-0.1.0.jar, not used, false positive
-   ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.apache\.sling/org\.apache\.sling\.javax\.activation@.*$</packageUrl>
-    <cve>CVE-2016-5394</cve>
-    <cve>CVE-2016-6798</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-   file name: testng-6.13.1.jar: jquery-1.7.1.min.js, not used
-   ]]></notes>
-    <packageUrl regex="true">^pkg:javascript/jquery@.*$</packageUrl>
-    <cve>CVE-2012-6708</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
          https://nvd.nist.gov/vuln/detail/CVE-2018-1258
          False positive -- we do not use Spring Framework 5.0.5.RELEASE (5.0.8.RELEASE at the time of writing)
          Additionally, we do not use Spring method security annotations which are the specific vulnerability
         ]]></notes>
     <cve>CVE-2018-1258</cve>
-  </suppress>
-  <suppress until="2030-01-01">
-    <notes><![CDATA[
-     Suppressing as SMTP appender is not used in this project (see: https://nvd.nist.gov/vuln/detail/CVE-2020-9488)
-   ]]></notes>
-    <gav regex="true">org.apache.logging.log4j:log4j.*</gav>
-    <cpe>cpe:/a:apache:log4j:2.12.1</cpe>
-    <cve>CVE-2020-9488</cve>
-  </suppress>
-  <suppress until="2030-01-01">
-    <notes><![CDATA[
-     Suppressing SAML vulnerability as it is not used in this project (see: https://nvd.nist.gov/vuln/detail/CVE-2020-5407)
-   ]]></notes>
-    <gav regex="true">org.springframework.security:spring-security-*.*</gav>
-    <cpe>cpe:2.3:a:security-framework_project:security-framework:5.2.1:*:*:*:*:*:*:*</cpe>
-    <cve>CVE-2020-5407</cve>
-  </suppress>
-  <suppress until="2030-01-01">
-    <notes><![CDATA[
-     Suppressing SAML vulnerability as it is not used in this project (see: https://nvd.nist.gov/vuln/detail/CVE-2020-5408)
-   ]]></notes>
-    <gav regex="true">org.springframework.security:spring-security-*.*</gav>
-    <cpe>cpe:2.3:a:security-framework_project:security-framework:5.2.1:*:*:*:*:*:*:*</cpe>
-    <cve>CVE-2020-5408</cve>
   </suppress>
   <suppress until="2030-01-01">
         <notes><![CDATA[
@@ -91,22 +31,10 @@
   </suppress>
   <suppress until="2030-01-01">
     <notes><![CDATA[
-      CVE is a json vulnerability for Node projects. False positive reported at https://github.com/jeremylong/DependencyCheck/issues/2794
-    ]]></notes>
-    <cve>CVE-2020-7712</cve>
-  </suppress>
-  <suppress until="2030-01-01">
-    <notes><![CDATA[
       We do not use vulnerable OpenId functionality https://nvd.nist.gov/vuln/detail/CVE-2007-1651 https://nvd.nist.gov/vuln/detail/CVE-2007-1652
     ]]></notes>
     <cve>CVE-2007-1651</cve>
     <cve>CVE-2007-1652</cve>
-  </suppress>
-  <suppress until="2030-01-01">
-    <notes><![CDATA[
-      We do not use HTTP v2 protocol in Reform programme https://nvd.nist.gov/vuln/detail/CVE-2020-13943
-    ]]></notes>
-    <cve>CVE-2020-13943</cve>
   </suppress>
   <suppress until="2021-06-01">
     <notes><![CDATA[
