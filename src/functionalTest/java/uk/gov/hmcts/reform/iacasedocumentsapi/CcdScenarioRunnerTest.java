@@ -36,6 +36,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 @ActiveProfiles("functional")
 public class CcdScenarioRunnerTest {
 
+
     @Value("${targetInstance}") private String targetInstance;
 
     @Autowired private Environment environment;
