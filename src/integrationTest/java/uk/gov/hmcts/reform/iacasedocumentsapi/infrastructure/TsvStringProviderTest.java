@@ -119,6 +119,11 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
+            Optional.of("Belfast Laganside Court, Oxford Street, Belfast, BT1 3LL"),
+            tsvStringProvider.get("hearingCentreAddress", "belfast")
+        );
+
+        assertEquals(
             Optional.of("IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH"),
             tsvStringProvider.get("hearingCentreAddress", "bradford")
         );
