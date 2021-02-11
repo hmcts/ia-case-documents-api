@@ -436,6 +436,9 @@ public enum AsylumCaseDefinition {
     FTPA_RESPONDENT_DOCUMENTS(
         "ftpaRespondentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE(
+            "remoteVideoCallTribunalResponse", new TypeReference<String>(){}),
+
     ;
 
 

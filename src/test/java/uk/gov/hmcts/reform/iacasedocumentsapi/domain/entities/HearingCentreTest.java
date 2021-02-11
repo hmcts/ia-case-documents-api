@@ -23,6 +23,7 @@ public class HearingCentreTest {
         assertEquals("taylorHouse", HearingCentre.TAYLOR_HOUSE.toString());
         assertEquals("belfast", HearingCentre.BELFAST.toString());
         assertEquals("newcastle", HearingCentre.NEWCASTLE.toString());
+        assertEquals("remoteHearing", HearingCentre.REMOTE_HEARING.toString());
     }
 
     @Test
@@ -40,10 +41,11 @@ public class HearingCentreTest {
         assertEquals(HearingCentre.from("taylorHouse").get(), HearingCentre.TAYLOR_HOUSE);
         assertEquals(HearingCentre.from("belfast").get(), HearingCentre.BELFAST);
         assertEquals(HearingCentre.from("newcastle").get(), HearingCentre.NEWCASTLE);
+        assertEquals(HearingCentre.from("remoteHearing").get(), HearingCentre.REMOTE_HEARING);
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(13, HearingCentre.values().length);
+        assertEquals(14, HearingCentre.values().length);
     }
 }

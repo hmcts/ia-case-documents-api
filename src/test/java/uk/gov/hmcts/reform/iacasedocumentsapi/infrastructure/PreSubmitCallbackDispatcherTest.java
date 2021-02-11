@@ -262,7 +262,7 @@ public class PreSubmitCallbackDispatcherTest {
 
 
         PreSubmitCallbackHandler<AsylumCase> h3 = new HearingNoticeCreator(
-            mock(DocumentCreator.class), mock(DocumentHandler.class)
+            mock(DocumentCreator.class), mock(DocumentCreator.class), mock(DocumentHandler.class)
         );
 
         PreSubmitCallbackDispatcher<AsylumCase> dispatcher = new PreSubmitCallbackDispatcher<>(
