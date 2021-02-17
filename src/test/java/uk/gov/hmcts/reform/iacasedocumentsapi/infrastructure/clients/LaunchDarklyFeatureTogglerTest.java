@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Lists;
-import com.launchdarkly.client.LDClientInterface;
-import com.launchdarkly.client.LDUser;
+import com.launchdarkly.sdk.LDUser;
+import com.launchdarkly.sdk.server.interfaces.LDClientInterface;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

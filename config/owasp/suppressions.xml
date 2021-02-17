@@ -8,20 +8,6 @@
         ]]></notes>
     <cve>CVE-2018-1258</cve>
   </suppress>
-  <suppress until="2030-01-01">
-    <notes><![CDATA[
-         Shadowed dependency from AppInsights-Core. Unfortunately, not propagating and applying an override for transitive dependencies.
-         Anyway, this is specific to deserialisation of AtomicDoubleArray and CompoundOrdering classes: https://github.com/google/guava/wiki/CVE-2018-10237
-        ]]></notes>
-    <gav regex="true">^com\.google\.guava:guava:.*$</gav>
-    <cve>CVE-2018-10237</cve>
-  </suppress>
-  <suppress until="2030-01-01">
-        <notes><![CDATA[
-     It is transitive dependency from Launch Darkly Client
-   ]]></notes>
-        <cve>CVE-2017-18640</cve>
-   </suppress>
   <suppress until="2099-06-01">
         <notes><![CDATA[
       Only Java >7 version is affected
