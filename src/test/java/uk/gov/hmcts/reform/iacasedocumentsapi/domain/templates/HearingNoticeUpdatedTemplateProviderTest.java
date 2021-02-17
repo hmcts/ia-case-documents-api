@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class HearingNoticeUpdatedTemplateProviderTest {
+class HearingNoticeUpdatedTemplateProviderTest {
 
     @Mock private StringProvider stringProvider;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -79,9 +79,8 @@ public class HearingNoticeUpdatedTemplateProviderTest {
             );
     }
 
-
     @Test
-    public void should_map_case_data_to_template_field_values() {
+    void should_map_case_data_to_template_field_values() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -112,11 +111,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
-
-
-
-
-
         Map<String, Object> templateFieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
         assertEquals(19, templateFieldValues.size());
@@ -142,8 +136,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_hearing_centre_address_for_taylor_house() {
-
+    void should_use_correct_hearing_centre_address_for_taylor_house() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -174,10 +167,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
-
-
-
-
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
 
         Map<String, Object> templateFieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
@@ -186,8 +175,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_hearing_centre_address_for_manchester() {
-
+    void should_use_correct_hearing_centre_address_for_manchester() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -226,8 +214,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_taylor_house() {
-
+    void should_use_correct_previous_hearing_centre_name_for_taylor_house() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -266,8 +253,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_manchester() {
-
+    void should_use_correct_previous_hearing_centre_name_for_manchester() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -305,8 +291,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_bradford() {
-
+    void should_use_correct_previous_hearing_centre_name_for_bradford() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -335,7 +320,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.BRADFORD));
         when(stringProvider.get("hearingCentreName", "bradford")).thenReturn(Optional.of(expectedFormattedBradfordHearingCentreName));
@@ -346,8 +330,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_newport() {
-
+    void should_use_correct_previous_hearing_centre_name_for_newport() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -376,8 +359,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
-
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.NEWPORT));
         when(stringProvider.get("hearingCentreName", "newport")).thenReturn(Optional.of(expectedFormattedNewportHearingCentreName));
@@ -388,8 +369,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_north_shields() {
-
+    void should_use_correct_previous_hearing_centre_name_for_north_shields() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -418,8 +398,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
-
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.NORTH_SHIELDS));
         when(stringProvider.get("hearingCentreName", "northShields")).thenReturn(Optional.of(expectedFormattedNorthShieldsHearingCentreName));
@@ -430,8 +408,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_birmingham() {
-
+    void should_use_correct_previous_hearing_centre_name_for_birmingham() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -460,8 +437,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
-
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.BIRMINGHAM));
         when(stringProvider.get("hearingCentreName", "birmingham")).thenReturn(Optional.of(expectedFormattedBirminghamHearingCentreName));
@@ -472,8 +447,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_hatton_cross() {
-
+    void should_use_correct_previous_hearing_centre_name_for_hatton_cross() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -502,8 +476,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
-
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.HATTON_CROSS));
         when(stringProvider.get("hearingCentreName", "hattonCross")).thenReturn(Optional.of(expectedFormattedHattonCrossHearingCentreName));
@@ -514,8 +486,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void should_use_correct_previous_hearing_centre_name_for_glasgow() {
-
+    void should_use_correct_previous_hearing_centre_name_for_glasgow() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -544,10 +515,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
-
-
-
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.GLASGOW));
         when(stringProvider.get("hearingCentreName", "glasgow")).thenReturn(Optional.of(expectedFormattedGlasgowHearingCentreName));
@@ -559,8 +526,7 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
 
     @Test
-    public void should_be_tolerant_of_missing_data() {
-
+    void should_be_tolerant_of_missing_data() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -590,9 +556,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
-
-
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
@@ -633,8 +596,47 @@ public class HearingNoticeUpdatedTemplateProviderTest {
     }
 
     @Test
-    public void handling_should_throw_if_previous_hearing_centre_not_present() {
+    void should_include_tribunal_response_for_remote_hearing() {
 
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+
+        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+        when(stringProvider.get("hearingCentreAddress", "remoteHearing")).thenReturn(Optional.of("Cloud Video Platform (CVP)"));
+
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("Some tribunal response"));
+
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.of(vulnerabilities));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.of(multimedia));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.of(inCamera));
+        when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.of(otherHearingRequest));
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
+
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDateBefore));
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(stringProvider.get("hearingCentreName", "taylorHouse")).thenReturn(Optional.of(expectedFormattedTaylorHouseHearingCentreName));
+
+        when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+
+        Map<String, Object> templateFieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals("Remote hearing", templateFieldValues.get("remoteHearing"));
+        assertEquals("Some tribunal response", templateFieldValues.get("remoteVideoCallTribunalResponse"));
+    }
+
+    @Test
+    void handling_should_throw_if_previous_hearing_centre_not_present() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -662,8 +664,6 @@ public class HearingNoticeUpdatedTemplateProviderTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-
-
 
         when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
@@ -671,12 +671,10 @@ public class HearingNoticeUpdatedTemplateProviderTest {
             .hasMessage("listCaseHearingCentre (before) is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
 
-
     }
 
     @Test
-    public void handling_should_throw_if_previous_hearing_centre_name_not_present() {
-
+    void handling_should_throw_if_previous_hearing_centre_name_not_present() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -709,6 +707,4 @@ public class HearingNoticeUpdatedTemplateProviderTest {
             .hasMessage("listCaseHearingCentre (before) is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
-
-
 }

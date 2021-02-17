@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -27,17 +28,20 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
 
     private final DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator;
     private final DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator;
+    private final DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentHandler documentHandler;
     private final HearingDetailsFinder hearingDetailsFinder;
 
     public HearingNoticeEditedCreator(
         @Qualifier("hearingNoticeUpdatedRequirements") DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator,
         @Qualifier("hearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator,
+        @Qualifier("remoteHearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator,
         DocumentHandler documentHandler,
         HearingDetailsFinder hearingDetailsFinder
     ) {
         this.hearingNoticeUpdatedRequirementsDocumentCreator = hearingNoticeUpdatedRequirementsDocumentCreator;
         this.hearingNoticeUpdatedDetailsDocumentCreator = hearingNoticeUpdatedDetailsDocumentCreator;
+        this.remoteHearingNoticeUpdatedDetailsDocumentCreator = remoteHearingNoticeUpdatedDetailsDocumentCreator;
         this.documentHandler = documentHandler;
         this.hearingDetailsFinder = hearingDetailsFinder;
     }
@@ -67,6 +71,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         final String listCaseHearingCentre = hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData());
         final String hearingDate = hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData());
 
+
         if (caseDetailsBefore.isPresent()) {
 
             final String hearingCentreNameBefore =
@@ -75,7 +80,9 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             final String oldHearingDate =
                 hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.get().getCaseData());
 
-            if (hearingCentreNameBefore.equals(listCaseHearingCentre) && oldHearingDate.equals(hearingDate)) {
+            if (asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING))) {
+                generateDocument(caseDetails, asylumCase, caseDetailsBefore, remoteHearingNoticeUpdatedDetailsDocumentCreator);
+            } else if (hearingCentreNameBefore.equals(listCaseHearingCentre) && oldHearingDate.equals(hearingDate)) {
                 generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedRequirementsDocumentCreator);
             } else {
                 generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedDetailsDocumentCreator);
