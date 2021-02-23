@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class HearingRequirementsTemplateTest {
+class HearingRequirementsTemplateTest {
 
     private final String templateName = "HEARING_REQUIREMENTS_TEMPLATE.docx";
 
@@ -120,15 +120,13 @@ public class HearingRequirementsTemplateTest {
     }
 
     @Test
-    public void should_return_template_name() {
+    void should_return_template_name() {
 
         assertEquals(templateName, hearingRequirementsTemplate.getName());
     }
 
     @Test
-    public void should_map_case_data_to_template_field_values() {
-
-
+    void should_map_case_data_to_template_field_values() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -200,12 +198,63 @@ public class HearingRequirementsTemplateTest {
         assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
         assertEquals(isHearingRoomNeeded, templateFieldValues.get("isHearingRoomNeeded"));
         assertEquals(isHearingLoopNeeded, templateFieldValues.get("isHearingLoopNeeded"));
+        assertEquals(isOutOfCountryEnabled, templateFieldValues.get("isOutOfCountryEnabled"));
+        assertEquals(remoteVideoCall, templateFieldValues.get("remoteVideoCall"));
+        assertEquals(remoteVideoCallDescription, templateFieldValues.get("remoteVideoCallDescription"));
+        assertEquals(physicalOrMentalHealthIssues, templateFieldValues.get("physicalOrMentalHealthIssues"));
+        assertEquals(physicalOrMentalHealthIssuesDescription, templateFieldValues.get("physicalOrMentalHealthIssuesDescription"));
+        assertEquals(pastExperiences, templateFieldValues.get("pastExperiences"));
+        assertEquals(pastExperiencesDescription, templateFieldValues.get("pastExperiencesDescription"));
+        assertEquals(multimediaEvidence, templateFieldValues.get("multimediaEvidence"));
+        assertEquals(multimediaEvidenceDescription, templateFieldValues.get("multimediaEvidenceDescription"));
+        assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
+        assertEquals(singleSexCourtType, templateFieldValues.get("singleSexCourtType"));
+        assertEquals(singleSexCourtTypeDescription, templateFieldValues.get("singleSexCourtTypeDescription"));
+        assertEquals(inCameraCourt, templateFieldValues.get("inCameraCourt"));
+        assertEquals(inCameraCourtDescription, templateFieldValues.get("inCameraCourtDescription"));
+        assertEquals(additionalRequests, templateFieldValues.get("additionalRequests"));
+        assertEquals(additionalRequestsDescription, templateFieldValues.get("additionalRequestsDescription"));
+        assertEquals(datesToAvoid, templateFieldValues.get("datesToAvoid"));
+        assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
+        assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
+
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(34, templateFieldValues.size());
+        assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
+        assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
+        assertEquals(isAppellantAttendingTheHearing, templateFieldValues.get("isAppellantAttendingTheHearing"));
+        assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
+        assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
+        assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
+        assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
+        assertEquals(2, ((List) templateFieldValues.get("language")).size());
+        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).get(0));
+        assertEquals(ImmutableMap.of("language", "Serbian"), ((List) templateFieldValues.get("language")).get(1));
+        assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
+        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
+        assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
+        assertEquals(isHearingRoomNeeded, templateFieldValues.get("isHearingRoomNeeded"));
+        assertEquals(isHearingLoopNeeded, templateFieldValues.get("isHearingLoopNeeded"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("remoteVideoCall"));
         assertEquals(physicalOrMentalHealthIssues, templateFieldValues.get("physicalOrMentalHealthIssues"));
         assertEquals(physicalOrMentalHealthIssuesDescription, templateFieldValues.get("physicalOrMentalHealthIssuesDescription"));
         assertEquals(pastExperiences, templateFieldValues.get("pastExperiences"));
         assertEquals(pastExperiencesDescription, templateFieldValues.get("pastExperiencesDescription"));
         assertEquals(isOutOfCountryEnabled, templateFieldValues.get("isOutOfCountryEnabled"));
-        assertEquals(remoteVideoCall, templateFieldValues.get("remoteVideoCall"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("remoteVideoCall"));
         assertEquals(remoteVideoCallDescription, templateFieldValues.get("remoteVideoCallDescription"));
         assertEquals(multimediaEvidence, templateFieldValues.get("multimediaEvidence"));
         assertEquals(multimediaEvidenceDescription, templateFieldValues.get("multimediaEvidenceDescription"));
@@ -226,7 +275,7 @@ public class HearingRequirementsTemplateTest {
     }
 
     @Test
-    public void should_map_case_data_to_template_field_values_no_dates_to_avoid_flag() {
+    void should_map_case_data_to_template_field_values_no_dates_to_avoid_flag() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -287,7 +336,7 @@ public class HearingRequirementsTemplateTest {
     }
 
     @Test
-    public void should_be_tolerant_of_missing_data() {
+    void should_be_tolerant_of_missing_data() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -364,7 +413,7 @@ public class HearingRequirementsTemplateTest {
     }
 
     @Test
-    public void should_default_date_to_avoid_reason_null_values_to_empty_string() {
+    void should_default_date_to_avoid_reason_null_values_to_empty_string() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -437,7 +486,7 @@ public class HearingRequirementsTemplateTest {
     }
 
     @Test
-    public void should_default_date_to_avoid_null_values_to_past_date() {
+    void should_default_date_to_avoid_null_values_to_past_date() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
