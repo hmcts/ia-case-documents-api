@@ -51,6 +51,9 @@ public class HearingDetailsFinder {
     public String getHearingCentreUrl(HearingCentre hearingCentre) {
         String hearingCentreUrl;
         switch (hearingCentre) {
+            case BELFAST:
+                hearingCentreUrl = "https://www.nidirect.gov.uk/contacts/contacts-az/belfast-laganside-courts";
+                break;
             case BIRMINGHAM:
                 hearingCentreUrl = "https://courttribunalfinder.service.gov.uk/courts/birmingham-immigration-and-asylum-chamber-first-tier-tribunal";
                 break;
