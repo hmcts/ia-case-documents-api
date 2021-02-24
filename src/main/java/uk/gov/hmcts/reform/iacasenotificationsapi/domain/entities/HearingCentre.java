@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public enum HearingCentre {
 
+    BELFAST("belfast"),
     BIRMINGHAM("birmingham"),
     BRADFORD("bradford"),
     COVENTRY("coventry"),

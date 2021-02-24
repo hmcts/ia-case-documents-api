@@ -776,6 +776,7 @@ hearingCentreEmailAddresses:
   birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham@example.com}
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+  belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
 
 ### POU Email addresses (Case listed)
 homeOfficeEmailAddresses:
@@ -788,6 +789,7 @@ homeOfficeEmailAddresses:
   birmingham: ${IA_HOME_OFFICE_BIRMINGHAM_EMAIL:ho-birmingham@example.com}
   hattonCross: ${IA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-hatton-cross@example.com}
   glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
+  belfast: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
 
 homeOfficeFtpaEmailAddresses:
   bradford: ${IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL:ho-ftpa-bradford@example.com}
@@ -810,6 +812,7 @@ hearingCentreTelephoneNumber:
   birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE:0300 123 1711}
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE:0300 123 1711}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_TELEPHONE:0300 123 1711}
+  belfast: ${IA_HEARING_CENTRE_GLASGOW_TELEPHONE:0300 123 1711}
 
 endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ho-end-appeal@example.com}
 allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:ho-allowed-appeal@example.com}
