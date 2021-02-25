@@ -3,7 +3,7 @@ java:
   applicationPort: 8092
   aadIdentityName: ia
   environment:
-    DOCMOSIS_ENDPOINT: "https://docmosis-development.platform.hmcts.net"
+    DOCMOSIS_ENDPOINT: "https://docmosis.{{ .Values.global.environment }}.platform.hmcts.net"
     IA_IDAM_REDIRECT_URI: "https://ia-case-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2/callback"
     DM_URL: "http://dm-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     CCD_URL: "http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"

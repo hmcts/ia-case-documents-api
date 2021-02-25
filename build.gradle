@@ -252,8 +252,6 @@ dependencyManagement {
             entry 'tomcat-embed-websocket'
         }
     }
-
-
 }
 
 dependencies {
