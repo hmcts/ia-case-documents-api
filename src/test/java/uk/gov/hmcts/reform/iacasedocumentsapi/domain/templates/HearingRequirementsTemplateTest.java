@@ -116,7 +116,6 @@ class HearingRequirementsTemplateTest {
                 new IdValue<>("111", datesToAvoid1),
                 new IdValue<>("222", datesToAvoid2)
             );
-
     }
 
     @Test
@@ -126,7 +125,7 @@ class HearingRequirementsTemplateTest {
     }
 
     @Test
-    void should_map_case_data_to_template_field_values() {
+    void should_map_case_data_to_template_field_values_for_in_country_appeal() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -135,6 +134,112 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
+        when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
+
+        when(asylumCase.read(IS_WITNESSES_ATTENDING, YesOrNo.class)).thenReturn(Optional.of(isWitnessesAttending));
+        when(asylumCase.read(WITNESS_DETAILS)).thenReturn(Optional.of(witnessDetails));
+
+        when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
+        when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
+        when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
+
+        when(asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class)).thenReturn(Optional.of(isOutOfCountryEnabled));
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.of(remoteVideoCall));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class)).thenReturn(Optional.of(remoteVideoCallDescription));
+
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.of(physicalOrMentalHealthIssues));
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of(physicalOrMentalHealthIssuesDescription));
+
+        when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
+        when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
+
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
+
+        when(asylumCase.read(SINGLE_SEX_COURT, YesOrNo.class)).thenReturn(Optional.of(singleSexCourt));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE, MaleOrFemale.class)).thenReturn(Optional.of(singleSexCourtType));
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE_DESCRIPTION, String.class)).thenReturn(Optional.of(singleSexCourtTypeDescription));
+
+        when(asylumCase.read(IN_CAMERA_COURT, YesOrNo.class)).thenReturn(Optional.of(inCameraCourt));
+        when(asylumCase.read(IN_CAMERA_COURT_DESCRIPTION, String.class)).thenReturn(Optional.of(inCameraCourtDescription));
+
+        when(asylumCase.read(ADDITIONAL_REQUESTS, YesOrNo.class)).thenReturn(Optional.of(additionalRequests));
+        when(asylumCase.read(ADDITIONAL_REQUESTS_DESCRIPTION, String.class)).thenReturn(Optional.of(additionalRequestsDescription));
+
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
+
+        when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
+
+        Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(37, templateFieldValues.size());
+        assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
+        assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("appealOutOfCountry"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkOoc"));
+        assertEquals(isAppellantAttendingTheHearing, templateFieldValues.get("isAppellantAttendingTheHearing"));
+        assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
+        assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
+        assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
+        assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
+        assertEquals(2, ((List) templateFieldValues.get("language")).size());
+        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).get(0));
+        assertEquals(ImmutableMap.of("language", "Serbian"), ((List) templateFieldValues.get("language")).get(1));
+        assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
+        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
+        assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
+        assertEquals(isHearingRoomNeeded, templateFieldValues.get("isHearingRoomNeeded"));
+        assertEquals(isHearingLoopNeeded, templateFieldValues.get("isHearingLoopNeeded"));
+        assertEquals(remoteVideoCall, templateFieldValues.get("remoteVideoCall"));
+        assertEquals(remoteVideoCallDescription, templateFieldValues.get("remoteVideoCallDescription"));
+        assertEquals(physicalOrMentalHealthIssues, templateFieldValues.get("physicalOrMentalHealthIssues"));
+        assertEquals(physicalOrMentalHealthIssuesDescription, templateFieldValues.get("physicalOrMentalHealthIssuesDescription"));
+        assertEquals(pastExperiences, templateFieldValues.get("pastExperiences"));
+        assertEquals(pastExperiencesDescription, templateFieldValues.get("pastExperiencesDescription"));
+        assertEquals(multimediaEvidence, templateFieldValues.get("multimediaEvidence"));
+        assertEquals(multimediaEvidenceDescription, templateFieldValues.get("multimediaEvidenceDescription"));
+        assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
+        assertEquals(singleSexCourtType, templateFieldValues.get("singleSexCourtType"));
+        assertEquals(singleSexCourtTypeDescription, templateFieldValues.get("singleSexCourtTypeDescription"));
+        assertEquals(inCameraCourt, templateFieldValues.get("inCameraCourt"));
+        assertEquals(inCameraCourtDescription, templateFieldValues.get("inCameraCourtDescription"));
+        assertEquals(additionalRequests, templateFieldValues.get("additionalRequests"));
+        assertEquals(additionalRequestsDescription, templateFieldValues.get("additionalRequestsDescription"));
+        assertEquals(datesToAvoid, templateFieldValues.get("datesToAvoid"));
+        assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
+        assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
+    }
+
+    @Test
+    public void should_map_case_data_to_template_field_values_for_out_of_country_appeal() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
         when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
 
@@ -176,19 +281,22 @@ class HearingRequirementsTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(34, templateFieldValues.size());
+        assertEquals(37, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("appealOutOfCountry"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkOoc"));
         assertEquals(isAppellantAttendingTheHearing, templateFieldValues.get("isAppellantAttendingTheHearing"));
         assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
         assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
         assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).get(0));
@@ -226,7 +334,7 @@ class HearingRequirementsTemplateTest {
 
         templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(34, templateFieldValues.size());
+        assertEquals(37, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
@@ -283,6 +391,9 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
         when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
 
@@ -344,6 +455,11 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class)).thenReturn(Optional.empty());
+
         when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_WITNESSES_ATTENDING, YesOrNo.class)).thenReturn(Optional.empty());
@@ -373,7 +489,7 @@ class HearingRequirementsTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(34, templateFieldValues.size());
+        assertEquals(37, templateFieldValues.size());
 
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
@@ -381,6 +497,11 @@ class HearingRequirementsTemplateTest {
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("appealOutOfCountry"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkOoc"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
+
         assertEquals(YesOrNo.NO, templateFieldValues.get("isAppellantAttendingTheHearing"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isWitnessesAttending"));
@@ -421,6 +542,9 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
         when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
 
@@ -495,6 +619,9 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isAppellantAttendingTheHearing));
         when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(isAppellantGivingOralEvidence));
 
