@@ -275,6 +275,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
     testImplementation libraries.junit5
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
