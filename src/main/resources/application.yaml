@@ -222,8 +222,8 @@ idam:
 
 launchDarkly:
   sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}
-  connectionTimeout: 5
-  socketTimeout: 5
+  connectionTimeout: 5000
+  socketTimeout: 5000
 
 customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
