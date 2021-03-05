@@ -289,7 +289,7 @@ dependencies {
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.2.2'
+    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.2.3'
 
     compile group: 'com.google.guava', name: 'guava', version: '29.0-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
