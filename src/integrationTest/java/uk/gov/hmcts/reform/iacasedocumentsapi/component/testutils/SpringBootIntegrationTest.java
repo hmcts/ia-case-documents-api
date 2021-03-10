@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 
 @ActiveProfiles("integration")
 @ExtendWith({
-        WiremockResolver.class
+    WiremockResolver.class
 })
 @TestPropertySource(properties = {
     "S2S_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/serviceAuth",
