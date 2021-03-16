@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Map;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
@@ -24,6 +25,42 @@ public enum AsylumCaseDefinition {
 
     HOME_OFFICE_DECISION_DATE(
         "homeOfficeDecisionDate", new TypeReference<String>(){}),
+
+    DECISION_LETTER_RECEIVED_DATE(
+            "decisionLetterReceivedDate", new TypeReference<String>(){}),
+    APPEAL_OUT_OF_COUNTRY(
+            "appealOutOfCountry", new TypeReference<YesOrNo>() {}),
+    HAS_SPONSOR(
+            "hasSponsor", new TypeReference<YesOrNo>(){}),
+
+    GWF_REFERENCE_NUMBER(
+            "gwfReferenceNumber", new TypeReference<String>(){}),
+    DATE_ENTRY_CLEARANCE_DECISION(
+            "dateEntryClearanceDecision", new TypeReference<String>(){}),
+    DATE_CLIENT_LEAVE_UK(
+            "dateClientLeaveUk", new TypeReference<String>(){}),
+    OUT_OF_COUNTRY_DECISION_TYPE(
+            "outOfCountryDecisionType", new TypeReference<OutOfCountryDecisionType>(){}),
+    HAS_CORRESPONDENCE_ADDRESS(
+            "hasCorrespondenceAddress", new TypeReference<YesOrNo>(){}),
+    APPELLANT_OUT_OF_COUNTRY_ADDRESS(
+            "appellantOutOfCountryAddress", new TypeReference<String>(){}),
+    SPONSOR_GIVEN_NAMES(
+            "sponsorGivenNames", new TypeReference<String>(){}),
+
+    SPONSOR_FAMILY_NAME(
+            "sponsorFamilyName", new TypeReference<String>(){}),
+
+    SPONSOR_CONTACT_PREFERENCE(
+            "sponsorContactPreference", new TypeReference<ContactPreference>(){}),
+
+    SPONSOR_EMAIL(
+            "sponsorEmail", new TypeReference<String>(){}),
+
+    SPONSOR_MOBILE_NUMBER(
+            "sponsorMobileNumber", new TypeReference<String>(){}),
+    SPONSOR_ADDRESS_FOR_DISPLAY(
+            "sponsorAddressForDisplay", new TypeReference<String>(){}),
 
     APPELLANT_TITLE(
         "appellantTitle", new TypeReference<String>(){}),
