@@ -54,6 +54,9 @@ public class AppointmentRequirementsFieldMapper {
         fieldValues.put("physicalOrMentalHealthIssuesDescription", asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("pastExperiences", asylumCase.read(PAST_EXPERIENCES, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put("pastExperiencesDescription", asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class).orElse(""));
+        fieldValues.put("isOutOfCountryEnabled", asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class).orElse(YesOrNo.NO));
+        fieldValues.put("remoteVideoCall", asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class).orElse(YesOrNo.NO));
+        fieldValues.put("remoteVideoCallDescription", asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("multimediaEvidence", asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put("multimediaEvidenceDescription", asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("singleSexCourt", asylumCase.read(SINGLE_SEX_COURT, YesOrNo.class).orElse(YesOrNo.NO));

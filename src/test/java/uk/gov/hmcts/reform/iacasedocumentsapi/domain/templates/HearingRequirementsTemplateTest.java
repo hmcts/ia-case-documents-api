@@ -52,6 +52,10 @@ public class HearingRequirementsTemplateTest {
     private YesOrNo pastExperiences = YesOrNo.YES;
     private String pastExperiencesDescription = "Past experiences description";
 
+    private YesOrNo isOutOfCountryEnabled = YesOrNo.YES;
+    private YesOrNo remoteVideoCall = YesOrNo.YES;
+    private String remoteVideoCallDescription = "Remote video call evidence description";
+
     private YesOrNo multimediaEvidence = YesOrNo.YES;
     private String multimediaEvidenceDescription = "Multimedia evidence description";
 
@@ -151,6 +155,10 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
         when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
 
+        when(asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class)).thenReturn(Optional.of(isOutOfCountryEnabled));
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.of(remoteVideoCall));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class)).thenReturn(Optional.of(remoteVideoCallDescription));
+
         when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
         when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
 
@@ -168,16 +176,9 @@ public class HearingRequirementsTemplateTest {
 
         when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
 
-
-
-
-
-
-
-
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(31, templateFieldValues.size());
+        assertEquals(34, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
@@ -203,6 +204,9 @@ public class HearingRequirementsTemplateTest {
         assertEquals(physicalOrMentalHealthIssuesDescription, templateFieldValues.get("physicalOrMentalHealthIssuesDescription"));
         assertEquals(pastExperiences, templateFieldValues.get("pastExperiences"));
         assertEquals(pastExperiencesDescription, templateFieldValues.get("pastExperiencesDescription"));
+        assertEquals(isOutOfCountryEnabled, templateFieldValues.get("isOutOfCountryEnabled"));
+        assertEquals(remoteVideoCall, templateFieldValues.get("remoteVideoCall"));
+        assertEquals(remoteVideoCallDescription, templateFieldValues.get("remoteVideoCallDescription"));
         assertEquals(multimediaEvidence, templateFieldValues.get("multimediaEvidence"));
         assertEquals(multimediaEvidenceDescription, templateFieldValues.get("multimediaEvidenceDescription"));
         assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
@@ -248,6 +252,10 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
         when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
 
+        when(asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class)).thenReturn(Optional.of(isOutOfCountryEnabled));
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.of(remoteVideoCall));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class)).thenReturn(Optional.of(remoteVideoCallDescription));
+
         when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
         when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
 
@@ -264,11 +272,6 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
 
         when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
-
-
-
-
-
 
         when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.empty());
 
@@ -304,6 +307,9 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(SINGLE_SEX_COURT, YesOrNo.class)).thenReturn(Optional.empty());
@@ -318,7 +324,7 @@ public class HearingRequirementsTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(31, templateFieldValues.size());
+        assertEquals(34, templateFieldValues.size());
 
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
@@ -340,6 +346,9 @@ public class HearingRequirementsTemplateTest {
         assertEquals("", templateFieldValues.get("physicalOrMentalHealthIssuesDescription"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("pastExperiences"));
         assertEquals("", templateFieldValues.get("pastExperiencesDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isOutOfCountryEnabled"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("remoteVideoCall"));
+        assertEquals("", templateFieldValues.get("remoteVideoCallDescription"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("multimediaEvidence"));
         assertEquals("", templateFieldValues.get("multimediaEvidenceDescription"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("singleSexCourt"));
@@ -381,6 +390,10 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
         when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
 
+        when(asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class)).thenReturn(Optional.of(isOutOfCountryEnabled));
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.of(remoteVideoCall));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class)).thenReturn(Optional.of(remoteVideoCallDescription));
+
         when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
         when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
 
@@ -397,9 +410,6 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
 
         when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
-
-
-
 
         datesToAvoid1.setDateToAvoid(LocalDate.parse("2019-12-25"));
         datesToAvoid2.setDateToAvoid(LocalDate.parse("2020-01-01"));
@@ -454,6 +464,10 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.of(pastExperiences));
         when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.of(pastExperiencesDescription));
 
+        when(asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class)).thenReturn(Optional.of(isOutOfCountryEnabled));
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.of(remoteVideoCall));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class)).thenReturn(Optional.of(remoteVideoCallDescription));
+
         when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.of(multimediaEvidence));
         when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.of(multimediaEvidenceDescription));
 
@@ -470,8 +484,6 @@ public class HearingRequirementsTemplateTest {
         when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.of(datesToAvoid));
 
         when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.of(datesToAvoidList));
-
-
 
         datesToAvoid1.setDateToAvoid(LocalDate.parse("2019-12-25"));
         datesToAvoid2.setDateToAvoid(null);
