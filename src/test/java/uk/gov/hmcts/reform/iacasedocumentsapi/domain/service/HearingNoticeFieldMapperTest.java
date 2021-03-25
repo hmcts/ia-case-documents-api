@@ -21,7 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class HearingNoticeFieldMapperTest {
+class HearingNoticeFieldMapperTest {
 
     private final String templateName = "HEARING_NOTICE_TEMPLATE.docx";
 
@@ -75,13 +75,13 @@ public class HearingNoticeFieldMapperTest {
     }
 
     @Test
-    public void should_return_template_name() {
+    void should_return_template_name() {
 
         assertEquals(templateName, hearingNoticeTemplate.getName());
     }
 
     @Test
-    public void should_map_case_data_to_template_field_values() {
+    void should_map_case_data_to_template_field_values() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -133,7 +133,7 @@ public class HearingNoticeFieldMapperTest {
     }
 
     @Test
-    public void should_map_case_data_from_submit_hearing_to_template_field_values() {
+    void should_map_case_data_from_submit_hearing_to_template_field_values() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -205,7 +205,7 @@ public class HearingNoticeFieldMapperTest {
     }
 
     @Test
-    public void should_use_correct_hearing_centre_address() {
+    void should_use_correct_hearing_centre_address() {
 
         setUpData();
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
@@ -217,7 +217,7 @@ public class HearingNoticeFieldMapperTest {
     }
 
     @Test
-    public void should_use_remote_hearing_centre() {
+    void should_use_remote_hearing_centre() {
 
         setUpData();
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
@@ -231,7 +231,7 @@ public class HearingNoticeFieldMapperTest {
     }
 
     @Test
-    public void should_be_tolerant_of_missing_data() {
+    void should_be_tolerant_of_missing_data() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -293,7 +293,7 @@ public class HearingNoticeFieldMapperTest {
     }
 
     @Test
-    public void handling_should_throw_if_hearing_centre_not_present() {
+    void handling_should_throw_if_hearing_centre_not_present() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 

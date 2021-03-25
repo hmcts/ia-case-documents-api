@@ -31,6 +31,7 @@ class HearingNoticeEditedCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator;
     @Mock private HearingDetailsFinder hearingDetailsFinder;
     @Mock private DocumentHandler documentHandler;
     @Mock private Callback<AsylumCase> callback;
@@ -51,6 +52,7 @@ class HearingNoticeEditedCreatorTest {
             new HearingNoticeEditedCreator(
                 hearingNoticeUpdatedRequirementsDocumentCreator,
                 hearingNoticeUpdatedDetailsDocumentCreator,
+                remoteHearingNoticeUpdatedDetailsDocumentCreator,
                 documentHandler,
                 hearingDetailsFinder
             );
@@ -81,6 +83,7 @@ class HearingNoticeEditedCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
@@ -98,6 +101,8 @@ class HearingNoticeEditedCreatorTest {
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
         final String listCaseHearingCentre = hearingCentreNameBefore;
         final String hearingDate = oldHearingDate;
 
@@ -114,9 +119,82 @@ class HearingNoticeEditedCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+    }
+
+    @Test
+    void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_for_remote_hearing() {
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+
+        final String listCaseHearingCentre = hearingCentreNameBefore;
+        final String hearingDate = oldHearingDate;
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
+        verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+    }
+
+    @Test
+    void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_for_remote_hearing_reheard_case() {
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+
+        final String listCaseHearingCentre = hearingCentreNameBefore;
+        final String hearingDate = oldHearingDate;
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
+        verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
@@ -131,6 +209,8 @@ class HearingNoticeEditedCreatorTest {
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
         final String listCaseHearingCentre = hearingCentreNameBefore;
         final String hearingDate = oldHearingDate;
 
@@ -147,6 +227,7 @@ class HearingNoticeEditedCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
@@ -176,6 +257,7 @@ class HearingNoticeEditedCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedDetailsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         //verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
@@ -205,6 +287,7 @@ class HearingNoticeEditedCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedDetailsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         //verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
@@ -224,6 +307,7 @@ class HearingNoticeEditedCreatorTest {
             .hasMessage("previous case data is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
 
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);

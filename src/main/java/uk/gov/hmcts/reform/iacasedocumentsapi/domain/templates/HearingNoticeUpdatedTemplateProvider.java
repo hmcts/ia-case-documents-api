@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
@@ -54,6 +54,16 @@ public class HearingNoticeUpdatedTemplateProvider {
 
         fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
         fieldValues.put("oldHearingDate", fieldMapper.formatDateForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
+
+        if (asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING))) {
+
+            final String remoteVideoCallTribunalResponse = asylumCase
+                .read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)
+                .orElse("");
+
+            fieldValues.put("remoteHearing", "Remote hearing");
+            fieldValues.put("remoteVideoCallTribunalResponse", remoteVideoCallTribunalResponse);
+        }
 
         return fieldValues;
     }
