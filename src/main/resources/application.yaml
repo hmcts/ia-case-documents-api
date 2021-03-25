@@ -67,6 +67,11 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
 
+remoteHearingNoticeDocument.contentType: application/pdf
+remoteHearingNoticeDocument.fileExtension: PDF
+remoteHearingNoticeDocument.fileName: "hearing-notice"
+remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00669.docx}
+
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
 hearingNoticeAdjournedWithoutDateDocument.fileName: "hearing-notice"

@@ -49,6 +49,11 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("hearingDate", formatDateForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
         fieldValues.put("hearingTime", formatTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
 
+        if (listedHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
+            fieldValues.put("remoteHearing", "Remote hearing");
+            fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
+        }
+
         fieldValues.put(
             "hearingCentreAddress",
             stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("")

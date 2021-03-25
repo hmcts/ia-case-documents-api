@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -25,13 +26,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public HearingNoticeCreator(
         @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
+        @Qualifier("remoteHearingNotice") DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
+        this.remoteHearingNoticeDocumentCreator = remoteHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -57,7 +61,15 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
+        HearingCentre listCaseHearingCentre =
+                asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).orElse(HearingCentre.TAYLOR_HOUSE);
+
+        Document hearingNotice;
+        if (listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
+            hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
+        } else {
+            hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
+        }
 
         if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
              && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {

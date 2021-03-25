@@ -27,4 +27,9 @@ public class HearingNoticeTemplateConfiguration {
         return new HearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
 
+    @Bean("remoteHearingNoticeTemplate")
+    public HearingNoticeTemplate getRemoteHearingNoticeTemplate(
+            @Value("${remoteHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
+        return new HearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+    }
 }
