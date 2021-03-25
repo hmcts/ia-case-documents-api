@@ -1,15 +1,17 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -19,22 +21,26 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class LegalRepresentativeEditListingPersonalisation implements EmailNotificationPersonalisation {
 
     private final String legalRepresentativeCaseEditedTemplateId;
+    private final String legalRepresentativeCaseEditedRemoteHearingTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeEditListingPersonalisation(
         @Value("${govnotify.template.caseEdited.legalRep.email}") String legalRepresentativeCaseEditedTemplateId,
+        @Value("${govnotify.template.caseEditedRemoteHearing.legalRep.email}") String legalRepresentativeCaseEditedRemoteHearingTemplateId,
         PersonalisationProvider personalisationProvider,
         CustomerServicesProvider customerServicesProvider
     ) {
         this.legalRepresentativeCaseEditedTemplateId = legalRepresentativeCaseEditedTemplateId;
+        this.legalRepresentativeCaseEditedRemoteHearingTemplateId = legalRepresentativeCaseEditedRemoteHearingTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
-    public String getTemplateId() {
-        return legalRepresentativeCaseEditedTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING))
+            ? legalRepresentativeCaseEditedRemoteHearingTemplateId : legalRepresentativeCaseEditedTemplateId;
     }
 
     @Override

@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1380-RIA-1616 Send case re-listed notification to case officer, Home Office (Bradford hearing centre) and legal rep",
+  "description": "RIA-1380-RIA-1616-RIA-3722 Send case re-listed notification to case officer, Home Office (Bradford hearing centre) and legal rep",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -13,7 +13,8 @@
           "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "bradford",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
-          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "remoteVideoCallTribunalResponse": "Some tribunal response"
         }
       },
       "caseDataBefore": {
@@ -66,7 +67,7 @@
           "1 May 2019",
           "3 May 2019",
           "14:25",
-          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH"
+          "Bradford"
         ]
       },
       {
@@ -83,7 +84,8 @@
           "1 May 2019",
           "3 May 2019",
           "14:25",
-          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "Bradford",
+          "Some tribunal response",
           "No special adjustments are being made to accommodate vulnerabilities",
           "No multimedia equipment is being provided",
           "The court will not be single sex",
@@ -107,7 +109,8 @@
           "1 May 2019",
           "3 May 2019",
           "14:25",
-          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "Bradford",
+          "Some tribunal response",
           "No special adjustments are being made to accommodate vulnerabilities",
           "No multimedia equipment is being provided",
           "The court will not be single sex",

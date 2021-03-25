@@ -80,7 +80,7 @@ class TsvStringProviderTest {
         );
 
         assertEquals(
-            Optional.of("Remote Hearing"),
+            Optional.of("Remote hearing"),
             tsvStringProvider.get("hearingCentre", "remoteHearing")
         );
 
@@ -145,7 +145,7 @@ class TsvStringProviderTest {
         );
 
         assertEquals(
-            Optional.of("Remote Hearing"),
+            Optional.of("Remote hearing"),
             tsvStringProvider.get("hearingCentreName", "remoteHearing")
         );
 
@@ -212,7 +212,7 @@ class TsvStringProviderTest {
             tsvStringProvider.get("hearingCentreAddress", "taylorHouse")
         );
         assertEquals(
-            Optional.of("Remote Hearing"),
+            Optional.of("Cloud Video Platform (CVP)"),
             tsvStringProvider.get("hearingCentreAddress", "remoteHearing")
         );
     }

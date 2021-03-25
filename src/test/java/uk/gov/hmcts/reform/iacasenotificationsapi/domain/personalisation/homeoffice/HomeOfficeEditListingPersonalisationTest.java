@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
@@ -23,7 +26,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class HomeOfficeEditListingPersonalisationTest {
+class HomeOfficeEditListingPersonalisationTest {
 
     @Mock
     Callback<AsylumCase> callback;
@@ -40,6 +43,8 @@ public class HomeOfficeEditListingPersonalisationTest {
     private String templateId = "someTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String homeOfficeEmailAddress = "homeoffice@example.com";
+    private String listCaseHomeOfficeEmailAddress = "listCaseHomeoOffice@example.com";
+    private String hearingCentreName = "The Hearing Centre";
 
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
@@ -60,7 +65,9 @@ public class HomeOfficeEditListingPersonalisationTest {
 
     @BeforeEach
     public void setup() {
-        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
+
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(listCaseHomeOfficeEmailAddress);
+        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
         homeOfficeEditListingPersonalisation = new HomeOfficeEditListingPersonalisation(
             templateId,
@@ -71,31 +78,36 @@ public class HomeOfficeEditListingPersonalisationTest {
     }
 
     @Test
-    public void should_return_given_template_id() {
+    void should_return_given_template_id() {
         assertEquals(templateId, homeOfficeEditListingPersonalisation.getTemplateId());
     }
 
     @Test
-    public void should_return_given_reference_id() {
+    void should_return_given_reference_id() {
         assertEquals(caseId + "_CASE_RE_LISTED_HOME_OFFICE",
             homeOfficeEditListingPersonalisation.getReferenceId(caseId));
     }
 
     @Test
-    public void should_return_given_email_address_from_lookup_map() {
+    void should_return_given_email_address_from_lookup_map() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        assertTrue(homeOfficeEditListingPersonalisation.getRecipientsList(asylumCase).contains(listCaseHomeOfficeEmailAddress));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+
         assertTrue(homeOfficeEditListingPersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddress));
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
-
+    void should_throw_exception_on_personalisation_when_case_is_null() {
         assertThatThrownBy(() -> homeOfficeEditListingPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given() {
+    void should_return_personalisation_when_all_information_given() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
 
         Map<String, String> personalisation = homeOfficeEditListingPersonalisation.getPersonalisation(callback);
@@ -112,6 +124,7 @@ public class HomeOfficeEditListingPersonalisationTest {
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
             .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("hearingCentreName", hearingCentreName)
             .put("hearingRequirementVulnerabilities", requirementsVulnerabilities)
             .put("hearingRequirementMultimedia", requirementsMultimedia)
             .put("hearingRequirementSingleSexCourt", requirementsSingleSexCourt)
@@ -131,6 +144,7 @@ public class HomeOfficeEditListingPersonalisationTest {
             .put("appellantGivenNames", "")
             .put("appellantFamilyName", "")
             .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("hearingCentreName", "")
             .put("hearingRequirementVulnerabilities", "")
             .put("hearingRequirementMultimedia", "")
             .put("hearingRequirementSingleSexCourt", "")

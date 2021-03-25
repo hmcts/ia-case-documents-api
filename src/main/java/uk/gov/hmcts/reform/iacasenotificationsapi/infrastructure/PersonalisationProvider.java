@@ -85,6 +85,9 @@ public class PersonalisationProvider {
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         Optional<CaseDetails<AsylumCase>> caseDetailsBefore = callback.getCaseDetailsBefore();
 
+        final String hearingCentreName =
+            hearingDetailsFinder.getHearingCentreName(asylumCase);
+
         final String hearingCentreAddress =
             hearingDetailsFinder.getHearingCentreAddress(asylumCase);
 
@@ -93,6 +96,7 @@ public class PersonalisationProvider {
 
         String hearingCentreNameBefore = "";
         String oldHearingDate = "";
+
 
         if (caseDetailsBefore.isPresent()) {
 
@@ -110,6 +114,7 @@ public class PersonalisationProvider {
             .put("oldHearingDate", oldHearingDate == null || oldHearingDate.isEmpty() ? "" : dateTimeExtractor.extractHearingDate(oldHearingDate))
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
+            .put("hearingCentreName", hearingCentreName)
             .put(HEARING_CENTRE_ADDRESS_CONST, hearingCentreAddress);
 
         buildHearingRequirementsFields(asylumCase, caseListingValues);
@@ -134,7 +139,9 @@ public class PersonalisationProvider {
                     "The hearing will be held in public court"))
                 .put("hearingRequirementOther", readStringCaseField(asylumCase, ADDITIONAL_TRIBUNAL_RESPONSE,
                     "No other adjustments are being made"))
-                .put("remoteVideoCallTribunalResponse",readStringCaseField(asylumCase,REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE,""));
+                .put("remoteVideoCallTribunalResponse", readStringCaseField(asylumCase, REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE,
+                    ""));
+
         } else {
 
             caseListingValues
@@ -148,7 +155,9 @@ public class PersonalisationProvider {
                     "The hearing will be held in public court"))
                 .put("hearingRequirementOther", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_OTHER,
                     "No other adjustments are being made"))
-                .put("remoteVideoCallTribunalResponse",readStringCaseField(asylumCase,REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE,""));
+                .put("remoteVideoCallTribunalResponse", readStringCaseField(asylumCase, REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE,
+                    ""));
+
         }
     }
 

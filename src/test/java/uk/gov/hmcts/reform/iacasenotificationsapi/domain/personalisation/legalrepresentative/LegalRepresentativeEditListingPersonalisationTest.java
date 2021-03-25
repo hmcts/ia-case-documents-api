@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -38,6 +38,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
     CustomerServicesProvider customerServicesProvider;
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
+    private String templateIdRemoteHearing = "remoteTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String hearingCentreAddress = "some hearing centre address";
@@ -49,6 +50,8 @@ public class LegalRepresentativeEditListingPersonalisationTest {
     private String homeOfficeRefNumber = "homeOfficeRefNumber";
 
     private String hearingCentreNameBefore = HearingCentre.MANCHESTER.toString();
+    private String hearingCentreName = HearingCentre.TAYLOR_HOUSE.toString();
+    private String remoteVideoCallTribunalResponse = "some tribunal response";
     private String requirementsVulnerabilities = "someRequirementsVulnerabilities";
     private String requirementsMultimedia = "someRequirementsMultimedia";
     private String requirementsInCamera = "someRequirementsInCamera";
@@ -68,6 +71,7 @@ public class LegalRepresentativeEditListingPersonalisationTest {
 
         legalRepresentativeEditListingPersonalisation = new LegalRepresentativeEditListingPersonalisation(
             templateId,
+            templateIdRemoteHearing,
             personalisationProvider,
             customerServicesProvider
         );
@@ -75,7 +79,14 @@ public class LegalRepresentativeEditListingPersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, legalRepresentativeEditListingPersonalisation.getTemplateId());
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        assertEquals(templateId, legalRepresentativeEditListingPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+
+        assertEquals(templateIdRemoteHearing, legalRepresentativeEditListingPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
@@ -137,6 +148,8 @@ public class LegalRepresentativeEditListingPersonalisationTest {
             .put("appellantGivenNames", appellantGivenNames)
             .put("appellantFamilyName", appellantFamilyName)
             .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("hearingCentreName", hearingCentreName)
+            .put("remoteVideoCallTribunalResponse", remoteVideoCallTribunalResponse)
             .put("hearingRequirementVulnerabilities", requirementsVulnerabilities)
             .put("hearingRequirementMultimedia", requirementsMultimedia)
             .put("hearingRequirementSingleSexCourt", requirementsSingleSexCourt)
@@ -158,6 +171,8 @@ public class LegalRepresentativeEditListingPersonalisationTest {
             .put("appellantGivenNames", "")
             .put("appellantFamilyName", "")
             .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("hearingCentreName", "")
+            .put("remoteVideoCallTribunalResponse", "")
             .put("hearingRequirementVulnerabilities", "")
             .put("hearingRequirementMultimedia", "")
             .put("hearingRequirementSingleSexCourt", "")

@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
@@ -34,6 +37,7 @@ public class HomeOfficeEditListingNoChangePersonalisationTest {
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
+    private String homeOfficeListCaseEmailAddress = "homeofficelistcase@example.com";
     private String homeOfficeEmailAddress = "homeoffice@example.com";
 
     private String appealReferenceNumber = "someReferenceNumber";
@@ -55,7 +59,9 @@ public class HomeOfficeEditListingNoChangePersonalisationTest {
 
     @BeforeEach
     public void setup() {
-        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
+
+        when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeListCaseEmailAddress);
+        when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
         homeOfficeEditListingNoChangePersonalisation = new HomeOfficeEditListingNoChangePersonalisation(
             templateId,
@@ -77,6 +83,13 @@ public class HomeOfficeEditListingNoChangePersonalisationTest {
 
     @Test
     public void should_return_given_email_address_from_lookup_map() {
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        assertTrue(homeOfficeEditListingNoChangePersonalisation.getRecipientsList(asylumCase).contains(homeOfficeListCaseEmailAddress));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+
         assertTrue(homeOfficeEditListingNoChangePersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddress));
     }
 

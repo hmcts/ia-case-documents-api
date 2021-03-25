@@ -93,7 +93,6 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
                 .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
                 .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
                 .put("hearingCentreAddress", hearingCentreAddress)
-                .put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""))
                 .build();
     }
 

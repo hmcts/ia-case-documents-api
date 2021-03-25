@@ -3,25 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ADDITIONAL_TRIBUNAL_RESPONSE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_DATE_DUE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_EXPLANATION;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IN_CAMERA_COURT_TRIBUNAL_RESPONSE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_MULTIMEDIA;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_OTHER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_REQUIREMENTS_VULNERABILITIES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.MULTIMEDIA_TRIBUNAL_RESPONSE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SINGLE_SEX_COURT_TRIBUNAL_RESPONSE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBMIT_HEARING_REQUIREMENTS_AVAILABLE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.VULNERABILITIES_TRIBUNAL_RESPONSE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +26,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class PersonalisationProviderTest {
+class PersonalisationProviderTest {
 
     @Mock
     Callback<AsylumCase> callback;
@@ -65,47 +47,51 @@ public class PersonalisationProviderTest {
     @Mock
     DirectionFinder directionFinder;
 
-    private String iaExUiFrontendUrl = "http://localhost";
+    private final String iaExUiFrontendUrl = "http://localhost";
 
-    private String hearingCentreAddress = "some hearing centre address";
+    private final String hearingCentreName = HearingCentre.TAYLOR_HOUSE.toString();
+    private final String hearingCentreAddress = "some hearing centre address";
 
-    private String hearingDateTime = "2019-08-27T14:25:15.000";
-    private String hearingDate = "2019-08-27";
-    private String hearingTime = "14:25";
+    private final String hearingDateTime = "2019-08-27T14:25:15.000";
+    private final String hearingDate = "2019-08-27";
+    private final String hearingTime = "14:25";
 
-    private String appealReferenceNumber = "someReferenceNumber";
-    private String legalRepReferenceNumber = "legalRepReferenceNumber";
-    private String ariaListingReference = "someAriaListingReference";
-    private String appellantGivenNames = "appellantGivenNames";
-    private String appellantFamilyName = "appellantFamilyName";
-    private String homeOfficeRefNumber = "homeOfficeRefNumber";
+    private final String appealReferenceNumber = "someReferenceNumber";
+    private final String legalRepReferenceNumber = "legalRepReferenceNumber";
+    private final String ariaListingReference = "someAriaListingReference";
+    private final String appellantGivenNames = "appellantGivenNames";
+    private final String appellantFamilyName = "appellantFamilyName";
+    private final String homeOfficeRefNumber = "homeOfficeRefNumber";
 
-    private String directionEditExplanation = "This is edit direction explanation";
-    private String directionEditDateDue = "2020-02-14";
+    private final String directionEditExplanation = "This is edit direction explanation";
+    private final String directionEditDateDue = "2020-02-14";
 
-    private String oldHearingCentreName = HearingCentre.MANCHESTER.toString();
-    private String oldHearingDateTime = "2019-08-20T14:25:15.000";
-    private String oldHearingDate = "2019-08-20";
+    private final String oldHearingCentreName = HearingCentre.MANCHESTER.toString();
+    private final String oldHearingDateTime = "2019-08-20T14:25:15.000";
+    private final String oldHearingDate = "2019-08-20";
 
-    private String requirementsVulnerabilities = "someRequirementsVulnerabilities";
-    private String requirementsMultimedia = "someRequirementsMultimedia";
-    private String requirementsSingleSexCourt = "someRequirementsSingleSexCourt";
-    private String requirementsInCamera = "someRequirementsInCamera";
-    private String requirementsOther = "someRequirementsOther";
+    private final String remoteVideoCallTribunalResponse = "someRemoteVideoCallTribunalResponse";
 
-    private String caseOfficerReviewedVulnerabilities = "someCaseOfficerReviewedVulnerabilities";
-    private String caseOfficerReviewedMultimedia = "someCaseOfficerReviewedMultimedia";
-    private String caseOfficerReviewedSingleSexCourt = "someCaseOfficerReviewedSingleSexCourt";
-    private String caseOfficerReviewedInCamera = "someCaseOfficerReviewedInCamera";
-    private String caseOfficerReviewedOther = "someCaseOfficerReviewedOther";
+    private final String requirementsVulnerabilities = "someRequirementsVulnerabilities";
+    private final String requirementsMultimedia = "someRequirementsMultimedia";
+    private final String requirementsSingleSexCourt = "someRequirementsSingleSexCourt";
+    private final String requirementsInCamera = "someRequirementsInCamera";
+    private final String requirementsOther = "someRequirementsOther";
 
-    private String directionExplanation = "someExplanation";
-    private String directionDueDate = "2019-10-29";
+    private final String caseOfficerReviewedVulnerabilities = "someCaseOfficerReviewedVulnerabilities";
+    private final String caseOfficerReviewedMultimedia = "someCaseOfficerReviewedMultimedia";
+    private final String caseOfficerReviewedSingleSexCourt = "someCaseOfficerReviewedSingleSexCourt";
+    private final String caseOfficerReviewedInCamera = "someCaseOfficerReviewedInCamera";
+    private final String caseOfficerReviewedOther = "someCaseOfficerReviewedOther";
+
+    private final String directionExplanation = "someExplanation";
+    private final String directionDueDate = "2019-10-29";
 
     private PersonalisationProvider personalisationProvider;
 
     @BeforeEach
     public void setUp() {
+        when(hearingDetailsFinder.getHearingCentreName(asylumCase)).thenReturn(hearingCentreName);
         when(hearingDetailsFinder.getHearingCentreAddress(asylumCase)).thenReturn(hearingCentreAddress);
         when(hearingDetailsFinder.getHearingDateTime(asylumCase)).thenReturn(hearingDateTime);
         when(hearingDetailsFinder.getHearingCentreName(asylumCaseBefore)).thenReturn(oldHearingCentreName);
@@ -127,6 +113,9 @@ public class PersonalisationProviderTest {
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
         when(dateTimeExtractor.extractHearingDate(oldHearingDateTime)).thenReturn(oldHearingDate);
         when(dateTimeExtractor.extractHearingTime(hearingDateTime)).thenReturn(hearingTime);
+
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class))
+            .thenReturn(Optional.of(remoteVideoCallTribunalResponse));
 
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class))
             .thenReturn(Optional.of(requirementsVulnerabilities));
@@ -163,38 +152,41 @@ public class PersonalisationProviderTest {
     }
 
     @Test
-    public void should_return_edit_case_listing_personalisation() {
+    void should_return_edit_case_listing_personalisation() {
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
 
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
-        assertThat(personalisation.get("hearingRequirementVulnerabilities")).isEqualTo(requirementsVulnerabilities);
-        assertThat(personalisation.get("hearingRequirementMultimedia")).isEqualTo(requirementsMultimedia);
-        assertThat(personalisation.get("hearingRequirementSingleSexCourt")).isEqualTo(requirementsSingleSexCourt);
-        assertThat(personalisation.get("hearingRequirementInCameraCourt")).isEqualTo(requirementsInCamera);
-        assertThat(personalisation.get("hearingRequirementOther")).isEqualTo(requirementsOther);
+        assertThat(personalisation.get("remoteVideoCallTribunalResponse")).contains(remoteVideoCallTribunalResponse);
+        assertThat(personalisation.get("hearingRequirementVulnerabilities")).contains(requirementsVulnerabilities);
+        assertThat(personalisation.get("hearingRequirementMultimedia")).contains(requirementsMultimedia);
+        assertThat(personalisation.get("hearingRequirementSingleSexCourt")).contains(requirementsSingleSexCourt);
+        assertThat(personalisation.get("hearingRequirementInCameraCourt")).contains(requirementsInCamera);
+        assertThat(personalisation.get("hearingRequirementOther")).contains(requirementsOther);
     }
 
     @Test
-    public void should_return_edit_case_listing_personalisation_when_submit_hearing_present() {
+    void should_return_edit_case_listing_personalisation_when_submit_hearing_present() {
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
 
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
+        assertThat(personalisation.get("remoteVideoCallTribunalResponse"))
+            .contains(remoteVideoCallTribunalResponse);
         assertThat(personalisation.get("hearingRequirementVulnerabilities"))
-            .isEqualTo(caseOfficerReviewedVulnerabilities);
-        assertThat(personalisation.get("hearingRequirementMultimedia")).isEqualTo(caseOfficerReviewedMultimedia);
+            .contains(caseOfficerReviewedVulnerabilities);
+        assertThat(personalisation.get("hearingRequirementMultimedia")).contains(caseOfficerReviewedMultimedia);
         assertThat(personalisation.get("hearingRequirementSingleSexCourt"))
-            .isEqualTo(caseOfficerReviewedSingleSexCourt);
-        assertThat(personalisation.get("hearingRequirementInCameraCourt")).isEqualTo(caseOfficerReviewedInCamera);
-        assertThat(personalisation.get("hearingRequirementOther")).isEqualTo(caseOfficerReviewedOther);
+            .contains(caseOfficerReviewedSingleSexCourt);
+        assertThat(personalisation.get("hearingRequirementInCameraCourt")).contains(caseOfficerReviewedInCamera);
+        assertThat(personalisation.get("hearingRequirementOther")).contains(caseOfficerReviewedOther);
     }
 
     @Test
-    public void should_return_uploaded_additional_evidence_personalisation() {
+    void should_return_uploaded_additional_evidence_personalisation() {
         when(callback.getEvent()).thenReturn(Event.UPLOAD_ADDITIONAL_EVIDENCE);
 
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
@@ -203,7 +195,7 @@ public class PersonalisationProviderTest {
     }
 
     @Test
-    public void should_return_non_direction_personalisation() {
+    void should_return_non_direction_personalisation() {
         when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
 
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
@@ -212,7 +204,7 @@ public class PersonalisationProviderTest {
     }
 
     @Test
-    public void should_return_reviewed_hearing_requirements_personalisation() {
+    void should_return_reviewed_hearing_requirements_personalisation() {
 
         Map<String, String> personalisation =
             personalisationProvider.getReviewedHearingRequirementsPersonalisation(asylumCase);
@@ -221,7 +213,7 @@ public class PersonalisationProviderTest {
     }
 
     @Test
-    public void should_return_change_direction_due_date_personalisation() {
+    void should_return_change_direction_due_date_personalisation() {
         when(callback.getEvent()).thenReturn(Event.CHANGE_DIRECTION_DUE_DATE);
         when(callback.getCaseDetails().getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(DIRECTION_EDIT_EXPLANATION, String.class))
@@ -234,7 +226,7 @@ public class PersonalisationProviderTest {
     }
 
     @Test
-    public void should_return_legal_rep_header_personalisation_when_all_information_given() {
+    void should_return_legal_rep_header_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation = personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase);
 
@@ -246,7 +238,7 @@ public class PersonalisationProviderTest {
     }
 
     @Test
-    public void should_return_home_office_header_personalisation_when_all_information_given() {
+    void should_return_home_office_header_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation = personalisationProvider.getHomeOfficeHeaderPersonalisation(asylumCase);
 
@@ -258,7 +250,7 @@ public class PersonalisationProviderTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given() {
+    void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation = personalisationProvider.getTribunalHeaderPersonalisation(asylumCase);
 

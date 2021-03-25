@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1976 Send case re-listed notification to case officer, Home Office and legal rep when Admin Officer edits case (IAC North Shields)",
+  "description": "RIA-1976-RIA-3722 Send case re-listed notification to case officer, Home Office and legal rep when Admin Officer edits case (IAC North Shields)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -13,7 +13,8 @@
           "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "northShields",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
-          "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net"
+          "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net",
+          "remoteVideoCallTribunalResponse": "Some tribunal response"
         }
       },
       "caseDataBefore": {
@@ -66,7 +67,7 @@
           "1 May 2019",
           "3 May 2019",
           "14:25",
-          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR"
+          "North Shields"
         ]
       },
       {
@@ -82,7 +83,8 @@
           "1 May 2019",
           "3 May 2019",
           "14:25",
-          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR",
+          "North Shields",
+          "Some tribunal response",
           "No special adjustments are being made to accommodate vulnerabilities",
           "No multimedia equipment is being provided",
           "The court will not be single sex",
@@ -106,7 +108,8 @@
           "1 May 2019",
           "3 May 2019",
           "14:25",
-          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR",
+          "North Shields",
+          "Some tribunal response",
           "No special adjustments are being made to accommodate vulnerabilities",
           "No multimedia equipment is being provided",
           "The court will not be single sex",

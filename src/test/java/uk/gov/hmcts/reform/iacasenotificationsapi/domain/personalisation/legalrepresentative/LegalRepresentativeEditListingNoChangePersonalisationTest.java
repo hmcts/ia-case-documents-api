@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
+    private String templateIdRemoteHearing = "remoteTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String hearingCentreAddress = "some hearing centre address";
@@ -69,6 +71,7 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
 
         legalRepresentativeEditListingPersonalisation = new LegalRepresentativeEditListingNoChangePersonalisation(
             templateId,
+            templateIdRemoteHearing,
             personalisationProvider,
             customerServicesProvider
         );
@@ -76,7 +79,14 @@ public class LegalRepresentativeEditListingNoChangePersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, legalRepresentativeEditListingPersonalisation.getTemplateId());
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        assertEquals(templateId, legalRepresentativeEditListingPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+
+        assertEquals(templateIdRemoteHearing, legalRepresentativeEditListingPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
