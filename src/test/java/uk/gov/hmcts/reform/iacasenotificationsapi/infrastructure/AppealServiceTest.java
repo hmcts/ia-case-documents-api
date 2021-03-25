@@ -20,7 +20,7 @@ public class AppealServiceTest {
     private AsylumCase asylumCase;
 
     @Test
-    public void isAppealListed() {
+    void isAppealListed() {
         AppealService appealService = new AppealService();
         assertFalse(appealService.isAppealListed(asylumCase));
 
@@ -28,6 +28,17 @@ public class AppealServiceTest {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
             .thenReturn(Optional.of(hearingCentre));
         assertTrue(appealService.isAppealListed(asylumCase));
+    }
+
+    @Test
+    void isRemoteHearing() {
+        AppealService appealService = new AppealService();
+        assertFalse(appealService.isAppealListed(asylumCase));
+
+        HearingCentre hearingCentre = HearingCentre.REMOTE_HEARING;
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+            .thenReturn(Optional.of(hearingCentre));
+        assertTrue(appealService.isRemoteHearing(asylumCase));
     }
 
 }

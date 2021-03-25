@@ -307,7 +307,11 @@ public enum AsylumCaseDefinition {
     HOME_OFFICE_FTPA_RESPONDENT_DECIDED_INSTRUCT_STATUS(
         "homeOfficeFtpaRespondentDecidedInstructStatus", new TypeReference<String>() {}),
 
-    ;
+    REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE(
+        "remoteVideoCallTribunalResponse", new TypeReference<String>() {}),
+
+    APPELLANT_IN_UK(
+        "appellantInUk", new TypeReference<YesOrNo>() {});
 
     private final String value;
     private final TypeReference typeReference;

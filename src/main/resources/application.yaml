@@ -188,11 +188,14 @@ govnotify:
         email: a1df610c-cd9a-494a-9100-15ed94f6fe66
     caseListed:
       caseOfficer:
-        email: 38d28eca-f30e-4af3-b782-e30ef0e9d7ad
+        email: 8bac3c7d-5fb7-4777-add3-5d7ade17ee71
       homeOffice:
-        email: 988c4d43-acea-4914-ac9a-b3ab04668dde
+        email: 621d266e-a0a0-498d-800e-0f13dd8357b8
       legalRep:
-        email: 67545160-0182-4510-96d0-ba39dbe63e5e
+        email: 84dbdaba-df43-4096-9b16-5817ba3e002c
+      remoteHearing:
+        legalRep:
+          email: e79249e2-ecbf-4d2b-8458-006285613402
     caseEdited:
       caseOfficer:
         email: e634be28-0cdb-42b4-82b2-a60f37ef0294

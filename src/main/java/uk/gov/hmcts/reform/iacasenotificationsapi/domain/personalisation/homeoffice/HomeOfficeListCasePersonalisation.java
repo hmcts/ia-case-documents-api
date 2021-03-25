@@ -15,10 +15,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.*;
 
 @Service
 public class HomeOfficeListCasePersonalisation implements EmailNotificationPersonalisation {
@@ -29,6 +26,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
     private final DateTimeExtractor dateTimeExtractor;
     private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
+    private final AppealService appealService;
 
     public HomeOfficeListCasePersonalisation(
         @Value("${govnotify.template.caseListed.homeOffice.email}") String homeOfficeCaseListedTemplateId,
@@ -36,7 +34,8 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
         StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
         EmailAddressFinder emailAddressFinder,
-        CustomerServicesProvider customerServicesProvider
+        CustomerServicesProvider customerServicesProvider,
+        AppealService appealService
     ) {
         this.homeOfficeCaseListedTemplateId = homeOfficeCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
@@ -44,6 +43,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
         this.dateTimeExtractor = dateTimeExtractor;
         this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
+        this.appealService = appealService;
     }
 
     @Override
@@ -53,7 +53,11 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        if (appealService.isRemoteHearing(asylumCase)) {
+            return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        } else {
+            return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        }
     }
 
     @Override
@@ -64,15 +68,14 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-
-        final HearingCentre listedHearingCentre =
+        HearingCentre hearingCentre =
             asylumCase
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         final String hearingCentreAddress =
             stringProvider
-                .get("hearingCentreAddress", listedHearingCentre.toString())
+                .get("hearingCentreAddress", hearingCentre.toString())
                 .orElseThrow(() -> new IllegalStateException("hearingCentreAddress is not present"));
 
         final String hearingDateTime =

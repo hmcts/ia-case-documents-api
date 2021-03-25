@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
@@ -25,19 +26,22 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
     private final StringProvider stringProvider;
     private final DateTimeExtractor dateTimeExtractor;
     private final EmailAddressFinder emailAddressFinder;
+    private final AppealService appealService;
 
     public CaseOfficerListCasePersonalisation(
         @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
-        EmailAddressFinder emailAddressFinder
+        EmailAddressFinder emailAddressFinder,
+        AppealService appealService
     ) {
         this.caseOfficerCaseListedTemplateId = caseOfficerCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.stringProvider = stringProvider;
         this.dateTimeExtractor = dateTimeExtractor;
         this.emailAddressFinder = emailAddressFinder;
+        this.appealService = appealService;
     }
 
     @Override
@@ -47,7 +51,11 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
+        if (appealService.isRemoteHearing(asylumCase)) {
+            return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        } else {
+            return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
+        }
     }
 
     @Override
@@ -59,14 +67,14 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        final HearingCentre listedHearingCentre =
+        HearingCentre hearingCentre =
             asylumCase
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         final String hearingCentreAddress =
             stringProvider
-                .get("hearingCentreAddress", listedHearingCentre.toString())
+                .get("hearingCentreAddress", hearingCentre.toString())
                 .orElseThrow(() -> new IllegalStateException("hearingCentreAddress is not present"));
 
         final String hearingDateTime =
@@ -85,6 +93,8 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
                 .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
                 .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
                 .put("hearingCentreAddress", hearingCentreAddress)
+                .put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""))
                 .build();
     }
+
 }

@@ -133,7 +133,8 @@ public class PersonalisationProvider {
                 .put("hearingRequirementInCameraCourt", readStringCaseField(asylumCase, IN_CAMERA_COURT_TRIBUNAL_RESPONSE,
                     "The hearing will be held in public court"))
                 .put("hearingRequirementOther", readStringCaseField(asylumCase, ADDITIONAL_TRIBUNAL_RESPONSE,
-                    "No other adjustments are being made"));
+                    "No other adjustments are being made"))
+                .put("remoteVideoCallTribunalResponse",readStringCaseField(asylumCase,REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE,""));
         } else {
 
             caseListingValues
@@ -146,7 +147,8 @@ public class PersonalisationProvider {
                 .put("hearingRequirementInCameraCourt", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT,
                     "The hearing will be held in public court"))
                 .put("hearingRequirementOther", readStringCaseField(asylumCase, LIST_CASE_REQUIREMENTS_OTHER,
-                    "No other adjustments are being made"));
+                    "No other adjustments are being made"))
+                .put("remoteVideoCallTribunalResponse",readStringCaseField(asylumCase,REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE,""));
         }
     }
 
