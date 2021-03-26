@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
@@ -30,7 +31,7 @@ public class EmailAddressFinder {
     public String getHearingCentreEmailAddress(AsylumCase asylumCase) {
 
         final HearingCentre hearingCentre =
-            getHearingCentre(asylumCase, AsylumCaseDefinition.HEARING_CENTRE);
+            getHearingCentre(asylumCase, HEARING_CENTRE);
 
         final String hearingCentreEmailAddress =
             hearingCentreEmailAddresses
@@ -50,33 +51,43 @@ public class EmailAddressFinder {
     }
 
     public String getListCaseHomeOfficeEmailAddress(AsylumCase asylumCase) {
-        return asylumCase
-            .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-            .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeEmailAddresses, it))
-                .orElseThrow(() -> new IllegalStateException("List case hearing centre email address not found: " + it.toString()))
-            )
-            .orElseThrow(() -> new IllegalStateException(listCaseHearingCentreIsNotPresent));
+        if (isRemoteHearing(asylumCase)) {
+            return getHearingCentreEmailAddress(asylumCase);
+        } else {
+            return asylumCase
+                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeEmailAddresses, it))
+                    .orElseThrow(() -> new IllegalStateException("List case hearing centre email address not found: " + it.toString()))
+                )
+                .orElseThrow(() -> new IllegalStateException(listCaseHearingCentreIsNotPresent));
+        }
 
     }
 
     public String getListCaseFtpaHomeOfficeEmailAddress(AsylumCase asylumCase) {
-        return asylumCase
+        if (isRemoteHearing(asylumCase)) {
+            return getHearingCentreEmailAddress(asylumCase);
+        } else {
+            return asylumCase
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeFtpaEmailAddresses, it))
-                        .orElseThrow(() -> new IllegalStateException("List case hearing centre ftpa email address not found: " + it.toString()))
+                    .orElseThrow(() -> new IllegalStateException("List case hearing centre ftpa email address not found: " + it.toString()))
                 )
                 .orElseThrow(() -> new IllegalStateException(listCaseHearingCentreIsNotPresent));
-
+        }
     }
 
     public String getListCaseHearingCentreEmailAddress(AsylumCase asylumCase) {
-        return asylumCase
-            .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-            .map(it -> Optional.ofNullable(getEmailAddress(hearingCentreEmailAddresses, it))
-                .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
-            )
-            .orElseThrow(() -> new IllegalStateException(listCaseHearingCentreIsNotPresent));
-
+        if (isRemoteHearing(asylumCase)) {
+            return getHearingCentreEmailAddress(asylumCase);
+        } else {
+            return asylumCase
+                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .map(it -> Optional.ofNullable(getEmailAddress(hearingCentreEmailAddresses, it))
+                    .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
+                )
+                .orElseThrow(() -> new IllegalStateException(listCaseHearingCentreIsNotPresent));
+        }
     }
 
     private HearingCentre getHearingCentre(AsylumCase asylumCase, AsylumCaseDefinition asylumCaseDefinition) {
@@ -99,11 +110,17 @@ public class EmailAddressFinder {
 
     public String getHomeOfficeEmailAddress(AsylumCase asylumCase) {
         return asylumCase
-                .read(AsylumCaseDefinition.HEARING_CENTRE, HearingCentre.class)
+                .read(HEARING_CENTRE, HearingCentre.class)
                 .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeEmailAddresses, it))
                         .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
                 )
                 .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
+    }
+
+    private boolean isRemoteHearing(AsylumCase asylumCase) {
+        return asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+            .map(hearingCentre -> hearingCentre == HearingCentre.REMOTE_HEARING)
+            .orElse(false);
     }
 
 }

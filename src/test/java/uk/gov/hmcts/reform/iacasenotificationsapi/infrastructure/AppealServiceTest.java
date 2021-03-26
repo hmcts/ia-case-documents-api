@@ -29,16 +29,4 @@ public class AppealServiceTest {
             .thenReturn(Optional.of(hearingCentre));
         assertTrue(appealService.isAppealListed(asylumCase));
     }
-
-    @Test
-    void isRemoteHearing() {
-        AppealService appealService = new AppealService();
-        assertFalse(appealService.isAppealListed(asylumCase));
-
-        HearingCentre hearingCentre = HearingCentre.REMOTE_HEARING;
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
-            .thenReturn(Optional.of(hearingCentre));
-        assertTrue(appealService.isRemoteHearing(asylumCase));
-    }
-
 }

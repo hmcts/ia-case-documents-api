@@ -27,6 +27,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationTy
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -40,6 +41,8 @@ public class AppellantListCmaPersonalisationEmailTest {
     DateTimeExtractor dateTimeExtractor;
     @Mock
     RecipientsFinder recipientsFinder;
+    @Mock
+    HearingDetailsFinder hearingDetailsFinder;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -69,7 +72,9 @@ public class AppellantListCmaPersonalisationEmailTest {
             .thenReturn(Optional.of(mockedAppealHomeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(mockedAppellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(mockedAppellantFamilyName));
-
+        when(hearingDetailsFinder.getHearingDateTime(asylumCase)).thenReturn(hearingDateTime);
+        when(hearingDetailsFinder.getHearingCentreName(asylumCase)).thenReturn(hearingCentre.toString());
+        when(hearingDetailsFinder.getHearingCentreAddress(asylumCase)).thenReturn(hearingCentreAddress);
         when(stringProvider.get("hearingCentreAddress", hearingCentre.toString()))
             .thenReturn(Optional.of(hearingCentreAddress));
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
@@ -79,8 +84,8 @@ public class AppellantListCmaPersonalisationEmailTest {
             templateId,
             iaAipFrontendUrl,
             recipientsFinder,
-            stringProvider,
-            dateTimeExtractor
+            dateTimeExtractor,
+            hearingDetailsFinder
         );
     }
 
@@ -110,36 +115,6 @@ public class AppellantListCmaPersonalisationEmailTest {
         assertThatThrownBy(() -> appellantListCmaPersonalisationEmail.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase cannot be null");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_hearing_centre_is_empty() {
-
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> appellantListCmaPersonalisationEmail.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("listCaseHearingCentre is not present");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_hearing_centre_address_does_not_exist() {
-
-        when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> appellantListCmaPersonalisationEmail.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingCentreAddress is not present");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_hearing_date_time_does_not_exist() {
-
-        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> appellantListCmaPersonalisationEmail.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingDateTime is not present");
     }
 
     @Test

@@ -11,10 +11,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.*;
 
 @Service
@@ -22,28 +19,25 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
 
     private final String homeOfficeCaseListedTemplateId;
     private final String iaExUiFrontendUrl;
-    private final StringProvider stringProvider;
     private final DateTimeExtractor dateTimeExtractor;
     private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
-    private final AppealService appealService;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     public HomeOfficeListCasePersonalisation(
         @Value("${govnotify.template.caseListed.homeOffice.email}") String homeOfficeCaseListedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
         EmailAddressFinder emailAddressFinder,
         CustomerServicesProvider customerServicesProvider,
-        AppealService appealService
+        HearingDetailsFinder hearingDetailsFinder
     ) {
         this.homeOfficeCaseListedTemplateId = homeOfficeCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
-        this.stringProvider = stringProvider;
         this.dateTimeExtractor = dateTimeExtractor;
         this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
-        this.appealService = appealService;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     @Override
@@ -53,11 +47,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        if (appealService.isRemoteHearing(asylumCase)) {
-            return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
-        } else {
-            return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
-        }
+        return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
     }
 
     @Override
@@ -68,20 +58,6 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-        HearingCentre hearingCentre =
-            asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-
-        final String hearingCentreAddress =
-            stringProvider
-                .get("hearingCentreAddress", hearingCentre.toString())
-                .orElseThrow(() -> new IllegalStateException("hearingCentreAddress is not present"));
-
-        final String hearingDateTime =
-            asylumCase
-                .read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class)
-                .orElseThrow(() -> new IllegalStateException("hearingDateTime is not present"));
 
         final Builder<String, String> listCaseFields = ImmutableMap
             .<String, String>builder()
@@ -92,9 +68,9 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .put("linkToOnlineService", iaExUiFrontendUrl)
-            .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
-            .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
-            .put("hearingCentreAddress", hearingCentreAddress);
+            .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDetailsFinder.getHearingDateTime(asylumCase)))
+            .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDetailsFinder.getHearingDateTime(asylumCase)))
+            .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreAddress(asylumCase));
 
         PersonalisationProvider.buildHearingRequirementsFields(asylumCase, listCaseFields);
 

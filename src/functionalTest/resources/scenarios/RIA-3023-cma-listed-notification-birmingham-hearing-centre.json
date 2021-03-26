@@ -12,6 +12,7 @@
         "replacements": {
           "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "birmingham",
+          "hearingCentre": "birmingham",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
           "subscriptions": [
             {

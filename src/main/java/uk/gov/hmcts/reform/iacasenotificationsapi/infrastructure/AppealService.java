@@ -17,10 +17,4 @@ public class AppealService {
 
         return appealListed.isPresent();
     }
-
-    public boolean isRemoteHearing(AsylumCase asylumCase) {
-        return asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-            .map(hearingCentre -> hearingCentre == HearingCentre.REMOTE_HEARING)
-            .orElse(false);
-    }
 }

@@ -212,7 +212,7 @@ class TsvStringProviderTest {
             tsvStringProvider.get("hearingCentreAddress", "taylorHouse")
         );
         assertEquals(
-            Optional.of("Cloud Video Platform (CVP)"),
+            Optional.of("Remote hearing"),
             tsvStringProvider.get("hearingCentreAddress", "remoteHearing")
         );
     }

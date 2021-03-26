@@ -30,10 +30,13 @@ public class HearingDetailsFinder {
     }
 
     public String getHearingCentreName(AsylumCase asylumCase) {
-        final HearingCentre listCaseHearingCentre =
-                getHearingCentre(asylumCase);
 
-        return stringProvider.get("hearingCentreName", listCaseHearingCentre.toString())
+        final HearingCentre hearingCentre =
+            asylumCase
+                .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+
+        return stringProvider.get("hearingCentreName", hearingCentre.toString())
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentreName is not present"));
     }
 
@@ -44,9 +47,18 @@ public class HearingDetailsFinder {
     }
 
     private HearingCentre getHearingCentre(AsylumCase asylumCase) {
-        return asylumCase
+        HearingCentre hearingCentre =
+            asylumCase
                 .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+
+        if (hearingCentre == HearingCentre.REMOTE_HEARING) {
+            return
+                asylumCase
+                    .read(AsylumCaseDefinition.HEARING_CENTRE, HearingCentre.class)
+                    .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
+        }
+        return hearingCentre;
     }
 
 

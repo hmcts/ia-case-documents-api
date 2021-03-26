@@ -11,37 +11,33 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
 
 @Service
 public class CaseOfficerListCasePersonalisation implements EmailNotificationPersonalisation {
 
     private final String caseOfficerCaseListedTemplateId;
     private final String iaExUiFrontendUrl;
-    private final StringProvider stringProvider;
     private final DateTimeExtractor dateTimeExtractor;
     private final EmailAddressFinder emailAddressFinder;
-    private final AppealService appealService;
+    private final HearingDetailsFinder hearingDetailsFinder;
+
 
     public CaseOfficerListCasePersonalisation(
         @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        StringProvider stringProvider,
         DateTimeExtractor dateTimeExtractor,
         EmailAddressFinder emailAddressFinder,
-        AppealService appealService
+        HearingDetailsFinder hearingDetailsFinder
     ) {
         this.caseOfficerCaseListedTemplateId = caseOfficerCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
-        this.stringProvider = stringProvider;
         this.dateTimeExtractor = dateTimeExtractor;
         this.emailAddressFinder = emailAddressFinder;
-        this.appealService = appealService;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     @Override
@@ -51,11 +47,7 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        if (appealService.isRemoteHearing(asylumCase)) {
-            return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
-        } else {
-            return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
-        }
+        return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
     }
 
     @Override
@@ -67,21 +59,6 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        HearingCentre hearingCentre =
-            asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-
-        final String hearingCentreAddress =
-            stringProvider
-                .get("hearingCentreAddress", hearingCentre.toString())
-                .orElseThrow(() -> new IllegalStateException("hearingCentreAddress is not present"));
-
-        final String hearingDateTime =
-            asylumCase
-                .read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class)
-                .orElseThrow(() -> new IllegalStateException("hearingDateTime is not present"));
-
         return
             ImmutableMap
                 .<String, String>builder()
@@ -90,9 +67,10 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .put("linkToOnlineService", iaExUiFrontendUrl)
-                .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
-                .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
-                .put("hearingCentreAddress", hearingCentreAddress)
+                .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDetailsFinder.getHearingDateTime(asylumCase)))
+                .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDetailsFinder.getHearingDateTime(asylumCase)))
+                .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreAddress(asylumCase))
+                .put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""))
                 .build();
     }
 

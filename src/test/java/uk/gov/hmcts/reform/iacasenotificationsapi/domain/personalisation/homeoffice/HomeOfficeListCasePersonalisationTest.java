@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -19,10 +18,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -39,7 +35,7 @@ public class HomeOfficeListCasePersonalisationTest {
     @Mock
     CustomerServicesProvider customerServicesProvider;
     @Mock
-    AppealService appealService;
+    HearingDetailsFinder hearingDetailsFinder;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -113,22 +109,24 @@ public class HomeOfficeListCasePersonalisationTest {
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
+
+        when(hearingDetailsFinder.getHearingDateTime(asylumCase)).thenReturn(hearingDateTime);
+        when(hearingDetailsFinder.getHearingCentreName(asylumCase)).thenReturn(hearingCentre.toString());
+        when(hearingDetailsFinder.getHearingCentreAddress(asylumCase)).thenReturn(hearingCentreAddress);
         when(stringProvider.get("hearingCentreAddress", hearingCentre.toString()))
             .thenReturn(Optional.of(hearingCentreAddress));
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
         when(dateTimeExtractor.extractHearingTime(hearingDateTime)).thenReturn(hearingTime);
-
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
         homeOfficeListCasePersonalisation = new HomeOfficeListCasePersonalisation(
             templateId,
             iaExUiFrontendUrl,
-            stringProvider,
             dateTimeExtractor,
             emailAddressFinder,
             customerServicesProvider,
-            appealService
+            hearingDetailsFinder
         );
     }
 
@@ -175,35 +173,13 @@ public class HomeOfficeListCasePersonalisationTest {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(remoteHearingCentre));
 
         when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
-        when(stringProvider.get("hearingCentreAddress", remoteHearingCentre.toString()))
-            .thenReturn(Optional.of(remoteHearingCentreAddress));
+
+        when(hearingDetailsFinder.getHearingCentreAddress(asylumCase))
+            .thenReturn(remoteHearingCentreAddress);
 
         Map<String, String> personalisation = homeOfficeListCasePersonalisation.getPersonalisation(asylumCase);
 
         assertEquals(remoteHearingCentreAddress, personalisation.get("hearingCentreAddress"));
-    }
-
-
-    @Test
-    void should_throw_exception_on_personalisation_when_hearing_centre_is_empty_in_remote_hearing() {
-
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
-        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingCentreAddress is not present");
-    }
-
-    @Test
-    void should_throw_exception_on_personalisation_when_hearing_centre_address_does_not_exist_in_remote_hearing() {
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
-        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingCentreAddress is not present");
     }
 
     @Test
@@ -265,35 +241,5 @@ public class HomeOfficeListCasePersonalisationTest {
         assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_hearing_centre_is_empty() {
-
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("listCaseHearingCentre is not present");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_hearing_centre_address_does_not_exist() {
-
-        when(stringProvider.get("hearingCentreAddress", hearingCentre.toString())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingCentreAddress is not present");
-    }
-
-    @Test
-    public void should_throw_exception_on_personalisation_when_hearing_date_time_does_not_exist() {
-
-        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> homeOfficeListCasePersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("hearingDateTime is not present");
     }
 }

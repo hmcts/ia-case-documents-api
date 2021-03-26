@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 
@@ -100,5 +101,15 @@ class HearingDetailsFinderTest {
         assertThatThrownBy(() -> hearingDetailsFinder.getHearingCentreAddress(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("listCaseHearingCentre is not present");
+    }
+
+    @Test
+    void should_throw_exception_when_hearing_centre_is_empty_in_remote_hearing() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> hearingDetailsFinder.getHearingCentreAddress(asylumCase))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("hearingCentre is not present");
     }
 }
