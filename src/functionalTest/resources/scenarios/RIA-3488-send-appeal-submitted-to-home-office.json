@@ -1,5 +1,6 @@
 {
     "description": "RIA-3488 Send appeal submitted notification to Home Office",
+    "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
     "request": {
       "uri": "/asylum/ccdAboutToSubmit",
       "credentials": "LegalRepresentative",

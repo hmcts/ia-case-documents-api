@@ -1,5 +1,6 @@
 {
   "description": "RIA-3103 Send direction when Request response amend event is triggered",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

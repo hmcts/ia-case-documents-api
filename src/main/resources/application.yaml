@@ -41,6 +41,8 @@ spring:
         jwt:
           jwk-set-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o/jwks
 
+featureFlag:
+  homeOfficeGovNotifyEnabled: ${IA_HOME_OFFICE_GOV_NOTIFY_ENABLED:true}
 
 govnotify:
   baseUrl: "https://api.notifications.service.gov.uk"

@@ -1,5 +1,6 @@
 {
   "description": "RIA-3082 Send appeal submitted notification to Case Officer and Home Office after successful pay and submit",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

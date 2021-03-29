@@ -1,5 +1,6 @@
 {
   "description": "RIA-2975-RIA-3754 FTPA Applicant Application Decision Partially Granted Respondent",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

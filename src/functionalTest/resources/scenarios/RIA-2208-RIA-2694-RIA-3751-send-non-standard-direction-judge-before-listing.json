@@ -1,5 +1,6 @@
 {
   "description": "RIA-2208-RIA-2694-RIA-3751 Send Home Office non-standard direction, RIA-1191 Notify legal rep of home office direction (before listing)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

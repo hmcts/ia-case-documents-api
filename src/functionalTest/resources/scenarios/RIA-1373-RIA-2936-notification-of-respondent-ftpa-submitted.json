@@ -1,5 +1,6 @@
 {
   "description": "RIA-1373-RIA-2936-RIA-3742 Notification of respondent ftpa application submitted",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficePOU",

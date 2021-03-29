@@ -1,5 +1,6 @@
 {
   "description": "RIA-722-RIA-2694 Send respondent review direction (Taylor House hearing centre)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

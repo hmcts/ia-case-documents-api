@@ -1,5 +1,6 @@
 {
   "description": "RIA-1432-RIA-2974-RIA-3003 FTPA Applicant Application Decision Refused Appellant",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

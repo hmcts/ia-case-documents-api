@@ -1,5 +1,6 @@
 {
   "description": "RIA-3220 Send appeal submitted and payment pending notification to legal representative",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

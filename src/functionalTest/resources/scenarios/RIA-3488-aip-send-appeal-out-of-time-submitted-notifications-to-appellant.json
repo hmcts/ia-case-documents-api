@@ -1,5 +1,6 @@
 {
     "description": "RIA-3488 AIP Send appeal out of time submitted notifications (Email and SMS) and Email to Case worker",
+    "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
     "request": {
       "uri": "/asylum/ccdAboutToSubmit",
       "credentials": "Citizen",

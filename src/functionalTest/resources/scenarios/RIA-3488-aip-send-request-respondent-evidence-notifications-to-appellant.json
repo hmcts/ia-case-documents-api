@@ -1,5 +1,6 @@
 {
   "description": "RIA-3488 AIP Home Office bundle request notifications (Email and SMS) to appellant and Email to HO",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

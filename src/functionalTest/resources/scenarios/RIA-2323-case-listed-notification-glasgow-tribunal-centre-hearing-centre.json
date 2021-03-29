@@ -1,5 +1,6 @@
 {
   "description": "RIA-2323 Send case listed notification to case officer, legal rep and home office (Glasgow Tribunal Centre)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

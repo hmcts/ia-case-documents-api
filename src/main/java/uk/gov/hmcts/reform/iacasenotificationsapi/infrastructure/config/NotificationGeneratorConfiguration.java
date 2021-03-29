@@ -1,13 +1,16 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.emptyList;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms.*;
@@ -24,6 +27,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.*;
 
 @Configuration
 public class NotificationGeneratorConfiguration {
+
+    @Value("${featureFlag.homeOfficeGovNotifyEnabled}")
+    private boolean isHomeOfficeGovNotifyEnabled;
 
     @Bean("forceCaseProgressionNotificationGenerator")
     public List<NotificationGenerator> forceCaseProgressionNotificationGenerator(
@@ -134,9 +140,30 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3361 - sendDecisionAndReasons
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeAppealOutcomePersonalisation, legalRepresentativeAppealOutcomePersonalisation)
+            : newArrayList(legalRepresentativeAppealOutcomePersonalisation);
+
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeAppealOutcomePersonalisation, legalRepresentativeAppealOutcomePersonalisation),
+                personalisations,
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("legalRepChangeDirectionDueDateNotificationGenerator")
+    public List<NotificationGenerator> legalRepChangeDirectionDueDateNotificationGenerator(
+        LegalRepresentativeChangeDirectionDueDatePersonalisation legalRepresentativeChangeDirectionDueDatePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeChangeDirectionDueDatePersonalisation),
                 notificationSender,
                 notificationIdAppender
             )
@@ -177,15 +204,21 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("legalRepChangeDirectionDueDateNotificationGenerator")
-    public List<NotificationGenerator> legalRepChangeDirectionDueDateNotificationGenerator(
-        LegalRepresentativeChangeDirectionDueDatePersonalisation legalRepresentativeChangeDirectionDueDatePersonalisation,
+    @Bean("respondentChangeDirectionDueDateForHomeOfficeApiEventsNotificationGenerator")
+    public List<NotificationGenerator> respondentChangeDirectionDueDateForHomeOfficeApiEventsNotificationGenerator(
+        RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
+        LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3116 - changeDirectionDueDate (requestEvidenceBundle, amendRequestBundle, requestRespondentReview, awaitingRespondentEvidence)
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(respondentChangeDirectionDueDatePersonalisation, legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation)
+            : newArrayList(legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(legalRepresentativeChangeDirectionDueDatePersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -218,9 +251,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3361 - listCase
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(caseOfficerListCasePersonalisation, legalRepresentativeListCasePersonalisation, homeOfficeListCasePersonalisation)
+            : newArrayList(caseOfficerListCasePersonalisation, legalRepresentativeListCasePersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(caseOfficerListCasePersonalisation, legalRepresentativeListCasePersonalisation, homeOfficeListCasePersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -270,9 +308,10 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3631 - submitAppeal
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeSubmitAppealPersonalisation),
+                isHomeOfficeGovNotifyEnabled ? newArrayList(homeOfficeSubmitAppealPersonalisation) : emptyList(),
                 notificationSender,
                 notificationIdAppender
             )
@@ -457,11 +496,15 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3631 - requestRespondentReview
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(respondentDirectionPersonalisation, legalRepresentativeRespondentReviewPersonalisation)
+            : newArrayList(legalRepresentativeRespondentReviewPersonalisation);
+
+
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(
-                    respondentDirectionPersonalisation,
-                    legalRepresentativeRespondentReviewPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -498,12 +541,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3631 - requestRespondentEvidence
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(respondentEvidenceDirectionPersonalisation, legalRepresentativeRequestHomeOfficeBundlePersonalisation)
+            : newArrayList(legalRepresentativeRequestHomeOfficeBundlePersonalisation);
+
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(
-                    respondentEvidenceDirectionPersonalisation,
-                    legalRepresentativeRequestHomeOfficeBundlePersonalisation
-                ),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -520,6 +565,27 @@ public class NotificationGeneratorConfiguration {
         return Arrays.asList(
             new EmailNotificationGenerator(
                 newArrayList(respondentNonStandardDirectionPersonalisation, legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("awaitingRespondentDirectionNotificationGenerator")
+    public List<NotificationGenerator> awaitingRespondentDirectionNotificationGenerator(
+        RespondentNonStandardDirectionPersonalisation respondentNonStandardDirectionPersonalisation,
+        LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        // RIA-3631 sendDirection (awaitingRespondentEvidence only)
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(respondentNonStandardDirectionPersonalisation, legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation)
+            : newArrayList(legalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation);
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -568,9 +634,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3631 - editCaseListing
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(caseOfficerEditListingPersonalisation, homeOfficeEditListingPersonalisation, legalRepresentativeEditListingPersonalisation, legalRepresentativeEditListingNoChangePersonalisation, homeOfficeEditListingNoChangePersonalisation)
+            : newArrayList(caseOfficerEditListingPersonalisation, legalRepresentativeEditListingPersonalisation, legalRepresentativeEditListingNoChangePersonalisation);
+
         return Arrays.asList(
             new EditListingEmailNotificationGenerator(
-                newArrayList(caseOfficerEditListingPersonalisation, homeOfficeEditListingPersonalisation, legalRepresentativeEditListingPersonalisation, legalRepresentativeEditListingNoChangePersonalisation, homeOfficeEditListingNoChangePersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -644,9 +715,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        //RIA-3316 - Hearing Bundle Ready (generateHearingBundle, customiseHearingBundle)
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeHearingBundleReadyPersonalisation, legalRepresentativeHearingBundleReadyPersonalisation)
+            : newArrayList(legalRepresentativeHearingBundleReadyPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeHearingBundleReadyPersonalisation, legalRepresentativeHearingBundleReadyPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -912,13 +988,15 @@ public class NotificationGeneratorConfiguration {
         NotificationIdAppender notificationIdAppender
     ) {
 
+        // RIA-3316 - applyForFTPAAppellant
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(legalRepresentativeFtpaSubmittedPersonalisation, adminOfficerFtpaSubmittedPersonalisation, respondentAppellantFtpaSubmittedPersonalisation)
+            : newArrayList(legalRepresentativeFtpaSubmittedPersonalisation, adminOfficerFtpaSubmittedPersonalisation);
+
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(
-                    legalRepresentativeFtpaSubmittedPersonalisation,
-                    adminOfficerFtpaSubmittedPersonalisation,
-                    respondentAppellantFtpaSubmittedPersonalisation
-                ),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -952,13 +1030,14 @@ public class NotificationGeneratorConfiguration {
         NotificationIdAppender notificationIdAppender
     ) {
 
+        // RIA-3316 - applyForFTPARespondent
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(respondentFtpaSubmittedPersonalisation, adminOfficerFtpaSubmittedPersonalisation, legalRepresentativeRespondentFtpaSubmittedPersonalisation)
+            : newArrayList(adminOfficerFtpaSubmittedPersonalisation, legalRepresentativeRespondentFtpaSubmittedPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(
-                    respondentFtpaSubmittedPersonalisation,
-                    adminOfficerFtpaSubmittedPersonalisation,
-                    legalRepresentativeRespondentFtpaSubmittedPersonalisation
-                ),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1118,14 +1197,14 @@ public class NotificationGeneratorConfiguration {
         NotificationIdAppender notificationIdAppender
     ) {
 
+        // RIA-3631 adjournHearingWithoutDate
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(legalRepresentativeAdjournHearingWithoutDatePersonalisation, respondentAdjournHearingWithoutDatePersonalisation, caseOfficerAdjournHearingWithoutDatePersonalisation, adminOfficerAdjournHearingWithoutDatePersonalisation)
+            : newArrayList(legalRepresentativeAdjournHearingWithoutDatePersonalisation, caseOfficerAdjournHearingWithoutDatePersonalisation, adminOfficerAdjournHearingWithoutDatePersonalisation);
+
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(
-                    legalRepresentativeAdjournHearingWithoutDatePersonalisation,
-                    respondentAdjournHearingWithoutDatePersonalisation,
-                    caseOfficerAdjournHearingWithoutDatePersonalisation,
-                    adminOfficerAdjournHearingWithoutDatePersonalisation
-                ),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1197,9 +1276,10 @@ public class NotificationGeneratorConfiguration {
             NotificationSender notificationSender,
             NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3631 requestResponseAmend
         return Arrays.asList(
                 new EmailNotificationGenerator(
-                        newArrayList(respondentRequestResponseAmendPersonalisation),
+                        isHomeOfficeGovNotifyEnabled ? newArrayList(respondentRequestResponseAmendPersonalisation) : emptyList(),
                         notificationSender,
                         notificationIdAppender
                 )
@@ -1255,9 +1335,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        //RIA-3116 leadership/resident judge decision
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeFtpaApplicationDecisionAppellantPersonalisation, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation)
+            : newArrayList(legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeFtpaApplicationDecisionAppellantPersonalisation, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1272,9 +1357,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        //RIA-3116 leadership/resident judge decision
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeFtpaApplicationDecisionAppellantPersonalisation, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation, adminOfficerFtpaDecisionAppellantPersonalisation)
+            : newArrayList(legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation, adminOfficerFtpaDecisionAppellantPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeFtpaApplicationDecisionAppellantPersonalisation, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation, adminOfficerFtpaDecisionAppellantPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1288,9 +1378,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3361 leadershipJudgeFtpaDecision
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation)
+            : newArrayList(legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1305,9 +1400,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3361 leadershipJudgeFtpaDecision
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, adminOfficerFtpaDecisionRespondentPersonalisation)
+            : newArrayList(legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, adminOfficerFtpaDecisionRespondentPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, adminOfficerFtpaDecisionRespondentPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1340,9 +1440,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3116 reheard FTPA application (resident Judge)
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeFtpaApplicationDecisionAppellantPersonalisation, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation, caseOfficerFtpaDecisionPersonalisation)
+            : newArrayList(legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation, caseOfficerFtpaDecisionPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeFtpaApplicationDecisionAppellantPersonalisation, legalRepresentativeFtpaApplicationDecisionAppellantPersonalisation, caseOfficerFtpaDecisionPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1357,9 +1462,14 @@ public class NotificationGeneratorConfiguration {
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
+        // RIA-3361 residentJudgeFtpaDecision
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, caseOfficerFtpaDecisionPersonalisation)
+            : newArrayList(legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, caseOfficerFtpaDecisionPersonalisation);
+
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(homeOfficeFtpaApplicationDecisionRespondentPersonalisation, legalRepresentativeFtpaApplicationDecisionRespondentPersonalisation, caseOfficerFtpaDecisionPersonalisation),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )
@@ -1468,14 +1578,14 @@ public class NotificationGeneratorConfiguration {
             NotificationIdAppender notificationIdAppender
     ) {
 
+        // RIA-3631 - submitAppeal This needs to be changed as per ACs
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(legalRepresentativeAppealSubmittedPendingPaymentPersonalisation, homeOfficeAppealSubmittedPendingPaymentPersonalisation, adminOfficerAppealSubmittedPendingPaymentPersonalisation)
+            : newArrayList(legalRepresentativeAppealSubmittedPendingPaymentPersonalisation, adminOfficerAppealSubmittedPendingPaymentPersonalisation);
+
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(
-                        legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
-                        homeOfficeAppealSubmittedPendingPaymentPersonalisation,
-                        adminOfficerAppealSubmittedPendingPaymentPersonalisation
-
-                ),
+                personalisations,
                 notificationSender,
                 notificationIdAppender
             )

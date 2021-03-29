@@ -1,5 +1,6 @@
 {
   "description": "RIA-2923 Hearing bundle is ready notification to home office (North Shields)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

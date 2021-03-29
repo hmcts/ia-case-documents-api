@@ -1,5 +1,6 @@
 {
   "description": "RIA-2999-RIA-3754 Appellant FTPA Application is granted  after the respondent application already granted",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

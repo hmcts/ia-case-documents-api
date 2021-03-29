@@ -1,5 +1,6 @@
 {
   "description": "RIA-1616-RIA-3722 Send case re-listed notification to case officer, Home Office (Bradford hearing centre) and legal rep when Admin Officer edits case",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

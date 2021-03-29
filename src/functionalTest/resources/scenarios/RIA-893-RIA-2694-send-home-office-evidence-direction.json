@@ -1,5 +1,6 @@
 {
   "description": "RIA-893-RIA-2694 Send Home Office evidence direction",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

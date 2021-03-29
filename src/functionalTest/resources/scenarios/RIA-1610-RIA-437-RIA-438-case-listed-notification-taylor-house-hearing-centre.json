@@ -1,5 +1,6 @@
 {
   "description": "RIA-1610-RIA-437-RIA-438 Send case listed notification to case officer, legal rep and home office (Taylor House hearing centre)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

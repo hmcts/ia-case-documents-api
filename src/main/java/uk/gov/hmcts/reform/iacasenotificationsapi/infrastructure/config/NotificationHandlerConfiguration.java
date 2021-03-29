@@ -122,6 +122,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> appealOutcomeNotificationHandler(
         @Qualifier("appealOutcomeNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3361 - sendDecisionAndReasons
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -168,8 +169,44 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
-                       && isRespondent;
+                    && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+                    && isRespondent
+                    && !isOneOfHomeOfficeApiNotifications(callback);
+            },
+            notificationGenerators
+        );
+    }
+
+    private boolean isOneOfHomeOfficeApiNotifications(Callback<AsylumCase> callback) {
+
+        return Arrays.asList(
+            State.RESPONDENT_REVIEW,
+            State.AWAITING_RESPONDENT_EVIDENCE
+        ).contains(
+            callback.getCaseDetails().getState()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> respondentChangeDirectionDueDateForHomeOfficeApiEventsNotificationHandler(
+        @Qualifier("respondentChangeDirectionDueDateForHomeOfficeApiEventsNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+        DirectionFinder directionFinder) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                boolean isRespondent = asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)
+                    .map(Parties -> Parties.equals(Parties.RESPONDENT))
+                    .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+                    && isRespondent
+                    && isOneOfHomeOfficeApiNotifications(callback);
             },
             notificationGenerators
         );
@@ -229,6 +266,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> listCaseNotificationHandler(
         @Qualifier("listCaseNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631 - listCase
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -317,6 +355,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> respondentEvidenceRepNotificationHandler(
         @Qualifier("respondentEvidenceRepNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631 - requestRespondentEvidence
         return new NotificationHandler(
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
@@ -336,6 +375,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> respondentReviewNotificationHandler(
         @Qualifier("respondentReviewNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631 - requestRespondentReview
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -440,6 +480,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> submitAppealHoNotificationHandler(
         @Qualifier("submitAppealHoNotificationGenerator") List<NotificationGenerator> notificationGenerators
     ) {
+        // RIA-3631 - submitAppeal
         return new NotificationHandler(
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
@@ -569,6 +610,8 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> requestResponseAmendDirectionhandler(
         @Qualifier("requestResponseAmendDirectionGenerator") List<NotificationGenerator> notificationGenerators
     ) {
+
+        // RIA-3631 - requestResponseAmend
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -594,6 +637,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("respondentDirectionNotificationGenerator") List<NotificationGenerator> notificationGenerators,
         DirectionFinder directionFinder) {
 
+        // RIA-3631 sendDirection (awaitingRespondentEvidence only)
         return new NotificationHandler(
             (callbackStage, callback) -> {
                 AsylumCase asylumCase =
@@ -602,8 +646,31 @@ public class NotificationHandlerConfiguration {
                         .getCaseData();
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.SEND_DIRECTION
-                       && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT);
+                    && callback.getEvent() == Event.SEND_DIRECTION
+                    && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
+                    && callback.getCaseDetails().getState() != State.AWAITING_RESPONDENT_EVIDENCE;
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> awaitingRespondentDirectionNotificationHandler(
+        @Qualifier("awaitingRespondentDirectionNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+        DirectionFinder directionFinder) {
+
+        // RIA-3631 sendDirection (awaitingRespondentEvidence only)
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.SEND_DIRECTION
+                    && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
+                    && callback.getCaseDetails().getState() == State.AWAITING_RESPONDENT_EVIDENCE;
             },
             notificationGenerators
         );
@@ -683,6 +750,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> editCaseListingNotificationHandler(
         @Qualifier("editCaseListingNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631 - editCaseListing
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -720,6 +788,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> hearingBundleReadyNotificationHandler(
         @Qualifier("hearingBundleReadyNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3316 - generateHearingBundle, customiseHearingBundle
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
@@ -945,6 +1014,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> ftpaSubmittedLegalRepNotificationHandler(
         @Qualifier("ftpaSubmittedLegalRepNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
 
+        // RIA-3316 - applyForFTPAAppellant
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -998,6 +1068,7 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> ftpaSubmittedLegNotificationHandler(
         @Qualifier("ftpaSubmittedRespondentNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
 
+        // RIA-3316 - applyForFTPARespondent
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -1164,6 +1235,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("adjournHearingWithoutDateNotificationGenerator")
             List<NotificationGenerator> notificationGenerator) {
 
+        // RIA-3631 adjournHearingWithoutDate
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -1234,6 +1306,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("ftpaApplicationDecisionRefusedOrNotAdmittedAppellantNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {
 
+        //RIA-3631 leadership/resident judge decision
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
@@ -1271,6 +1344,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("ftpaApplicationDecisionGrantedOrPartiallyGrantedAppellantNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
@@ -1335,6 +1409,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("ftpaApplicationDecisionReheardAppellantNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631 reheard FTPA application (resident Judge)
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
@@ -1427,6 +1502,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("ftpaApplicationDecisionRefusedOrNotAdmittedRespondentNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
@@ -1465,6 +1541,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("ftpaApplicationDecisionGrantedOrPartiallyGrantedRespondentNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
@@ -1529,6 +1606,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("ftpaApplicationDecisionReheardRespondentNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {
 
+        //RIA-3631 - ftpsResidentJudgeDecision
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
@@ -1633,6 +1711,7 @@ public class NotificationHandlerConfiguration {
         @Qualifier("submitAppealPendingPaymentNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {
 
+        // RIA-3631 - submitAppeal This needs to be changed as per ACs
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT

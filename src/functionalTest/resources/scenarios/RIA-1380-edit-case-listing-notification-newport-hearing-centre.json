@@ -1,5 +1,6 @@
 {
   "description": "RIA-1380-RIA-1616-RIA-3722 Send case re-listed notification to case officer (Newport hearing centre)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

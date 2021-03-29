@@ -1,5 +1,6 @@
 {
-  "description": "RIA-1976-RIA-3722 Send case re-listed notification to case officer, Home Office and legal rep when Admin Officer edits case (IAC Glasgow)",
+  "description": "RIA--RIA-3722 Send case re-listed notification to case officer, Home Office and legal rep when Admin Officer edits case (IAC Glasgow)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
