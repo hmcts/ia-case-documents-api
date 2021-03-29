@@ -346,7 +346,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(RESP_ADDITIONAL_EVIDENCE_DOCS);
-        verify(asylumCase, times(2)).write(RESP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
+        verify(asylumCase, times(1)).write(APP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
 
         verify(asylumCase, times(1)).write(ADDITIONAL_EVIDENCE_DOCUMENTS, appellantAdditionalEvidenceDocs);
         verify(asylumCase, times(1)).write(RESPONDENT_DOCUMENTS, respondentAdditionalEvidenceDocs);

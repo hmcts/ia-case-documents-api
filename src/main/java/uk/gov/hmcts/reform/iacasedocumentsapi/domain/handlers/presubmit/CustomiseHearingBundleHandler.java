@@ -168,7 +168,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         }
 
         if (!asylumCase.read(APP_ADDITIONAL_EVIDENCE_DOCS).isPresent()) {
-            asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
+            asylumCase.write(APP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
         }
 
         if (!asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS).isPresent()) {
