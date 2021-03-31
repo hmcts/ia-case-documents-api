@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.Builder;
 import lombok.ToString;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 
+@Builder
 @ToString
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CreditAccountPayment {

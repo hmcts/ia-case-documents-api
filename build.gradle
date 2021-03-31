@@ -16,6 +16,8 @@ plugins {
   id 'org.owasp.dependencycheck' version '6.0.2'
   id 'com.github.ben-manes.versions' version '0.28.0'
   id 'org.sonarqube' version '2.8'
+  id 'au.com.dius.pact' version '4.1.0'
+
 }
 
 apply plugin: 'net.serenity-bdd.aggregator'
@@ -53,6 +55,15 @@ sourceSets {
       srcDir file('src/smokeTest/java')
     }
     resources.srcDir file('src/smokeTest/resources')
+  }
+
+  contractTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/contractTest/java')
+    }
+    resources.srcDir file('src/contractTest/resources')
   }
 }
 
@@ -155,6 +166,38 @@ sonarqube {
   }
 }
 
+project.ext {
+  pacticipant = 'ia_casePaymentsApi'
+  pacticipantVersion = getCheckedOutGitCommitHash()
+}
+
+def getCheckedOutGitCommitHash() {
+  'git rev-parse --verify --short HEAD'.execute().text.trim()
+}
+
+task runAndPublishConsumerPactTests(type: Test, description: 'Publish pact test to broker.', group: 'Verification') {
+  onlyIf {
+    return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
+  }
+  useJUnitPlatform()
+  logger.lifecycle("Runs pact consumer Tests")
+  testClassesDirs = sourceSets.contractTest.output.classesDirs
+  systemProperty 'pact.rootDir', "pacts"
+  classpath = sourceSets.contractTest.runtimeClasspath
+}
+
+runAndPublishConsumerPactTests.finalizedBy pactPublish
+
+pact {
+  broker {
+    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+  }
+  publish {
+    pactDirectory = 'pacts'
+    tags = [System.getenv("PACT_BRANCH_NAME") ?:'Dev']
+    version = project.pacticipantVersion
+  }
+}
 // before committing a change, make sure task still works
 dependencyUpdates {
   def isNonStable = { String version ->
@@ -204,6 +247,7 @@ def versions = [
   reformLogging   : '5.1.1',
   springBoot      : '2.3.9.RELEASE',
   springfoxSwagger: '2.9.2',
+  pact_version    : '4.1.7',
   serenity        : '2.0.91'
 ]
 
@@ -290,6 +334,18 @@ dependencies {
 
   smokeTestImplementation sourceSets.main.runtimeClasspath
   smokeTestImplementation sourceSets.test.runtimeClasspath
+
+  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+  contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit_jupiter
+  contractTestRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit_jupiter
+  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit_jupiter
+  contractTestRuntime group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.7.0'
+  contractTestImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.4'
+  contractTestCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.4'
+  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.7.RELEASE'
+  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-netflix-ribbon', version: '2.2.7.RELEASE'
 }
 
 mainClassName = 'uk.gov.hmcts.reform.iacasepaymentsapi.Application'
