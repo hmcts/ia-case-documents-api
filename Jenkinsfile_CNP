@@ -10,6 +10,8 @@ properties([
 
 @Library("Infrastructure")
 
+import uk.gov.hmcts.contino.AppPipelineDsl
+
 def type = "java"
 def product = "ia"
 def component = "case-notifications-api"
@@ -120,6 +122,7 @@ withPipeline(type, product, component) {
     env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
     env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
     env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
 
     enableAksStagingDeployment()
     disableLegacyDeployment()
@@ -135,4 +138,11 @@ withPipeline(type, product, component) {
     }
 
     enableSlackNotifications('#ia-tech')
+
+    onMaster() {
+        enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
+    }
+    onPR() {
+        enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
+    }
 }

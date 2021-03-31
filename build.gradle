@@ -14,13 +14,14 @@ plugins {
     id 'jacoco'
     id 'pmd'
     id 'com.github.ben-manes.versions' version '0.36.0'
-    id "info.solidsoft.pitest" version '1.5.2'
+    id 'info.solidsoft.pitest' version '1.5.2'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'org.owasp.dependencycheck' version '6.0.2'
     id 'org.sonarqube' version '3.0'
     id 'org.springframework.boot' version '2.3.9.RELEASE'
     id 'uk.gov.hmcts.java' version '0.12.5'
-    id "io.freefair.lombok" version "5.3.0"
+    id 'io.freefair.lombok' version '5.3.0'
+    id 'au.com.dius.pact' version '4.1.0'
 }
 
 apply plugin: 'java'
@@ -32,6 +33,7 @@ def versions = [
         junit              : '5.6.2',
         junitPlatform      : '1.6.2',
         gradlePitest       : '1.5.1',
+        pact_version       : '4.1.7',
         pitest             : '1.5.2',
         reformLogging      : '5.1.1-BETA',
         reformHealthStarter: '0.0.5',
@@ -43,13 +45,13 @@ def versions = [
 ]
 
 ext.libraries = [
-    junit5: [
-        "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
-        "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
-        "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
-        "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
-        "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
-    ]
+        junit5: [
+                "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
+                "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
+                "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
+                "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
+                "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
+        ]
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasenotificationsapi.Application'
@@ -70,7 +72,7 @@ compileTestJava {
 }
 
 tasks.withType(Test) {
-    useJUnitPlatform ()
+    useJUnitPlatform()
 
     testLogging {
         exceptionFormat = 'full'
@@ -105,6 +107,15 @@ sourceSets {
         }
         resources.srcDir file('src/smokeTest/resources')
     }
+
+    contractTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/contractTest/java')
+        }
+        resources.srcDir file('src/contractTest/resources')
+    }
 }
 
 idea {
@@ -138,8 +149,8 @@ pmd {
     sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.functionalTest, sourceSets.smokeTest]
     reportsDir = file("$project.buildDir/reports/pmd")
     ruleSets = [
-        'category/java/errorprone.xml',
-        'category/java/bestpractices.xml'
+            'category/java/errorprone.xml',
+            'category/java/bestpractices.xml'
     ]
 }
 
@@ -193,6 +204,45 @@ pitest {
 
 project.tasks['pitest'].group = "Verification"
 
+project.ext {
+    pacticipant = 'ia_caseNotificationsApi'
+    pacticipantVersion = getCheckedOutGitCommitHash()
+}
+
+def getCheckedOutGitCommitHash() {
+    'git rev-parse --verify --short HEAD'.execute().text.trim()
+}
+
+task runContractTests(type: Test, description: 'Runs contract tests.', group: 'Verification') {
+    onlyIf {
+        return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
+    }
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    systemProperty 'pact.rootDir', "pacts"
+    testLogging.showStandardStreams = true
+
+}
+
+task runAndPublishConsumerPactTests(type: Test, description: 'Publish pact test to broker.', group: 'Verification') {
+    logger.lifecycle("Runs pact consumer Tests")
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+}
+
+runAndPublishConsumerPactTests.finalizedBy pactPublish
+
+pact {
+    broker {
+        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+    }
+    publish {
+        pactDirectory = 'pacts'
+        tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
+        version = project.pacticipantVersion
+    }
+}
 sonarqube {
     properties {
         property "sonar.projectName", "IA :: Immigration & Asylum case notifications api"
@@ -234,6 +284,10 @@ dependencyManagement {
         // CVE-2019-10086
         dependencySet(group: 'commons-beanutils', version: '1.9.4') {
             entry 'commons-beanutils'
+        }
+
+        dependencySet(group: 'com.google.guava', version: '30.0-jre') {
+            entry 'guava'
         }
     }
 }
@@ -323,6 +377,18 @@ dependencies {
 
     smokeTestCompile sourceSets.main.runtimeClasspath
     smokeTestCompile sourceSets.test.runtimeClasspath
+
+    contractTestCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+    contractTestCompile group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+    contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit_jupiter
+    contractTestRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit_jupiter
+    contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit_jupiter
+    contractTestRuntime group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.7.0'
+    contractTestImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.4'
+    contractTestCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.4'
+    contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.7.RELEASE'
+    contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-netflix-ribbon', version: '2.2.7.RELEASE'
 }
 
 dependencyCheck {
@@ -360,3 +426,4 @@ applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
+
