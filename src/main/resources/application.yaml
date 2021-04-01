@@ -658,6 +658,7 @@ security:
     caseworker-approver:
       - "nocRequest"
       - "removeRepresentation"
+      - "removeLegalRepresentative"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -725,6 +726,7 @@ security:
       - "reinstateAppeal"
       - "decideAnApplication"
       - "requestNewHearingRequirements"
+      - "removeLegalRepresentative"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -739,6 +741,7 @@ security:
       - "markAppealPaid"
       - "reinstateAppeal"
       - "recordRemissionDecision"
+      - "removeLegalRepresentative"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

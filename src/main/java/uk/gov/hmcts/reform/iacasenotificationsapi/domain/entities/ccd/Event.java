@@ -77,6 +77,7 @@ public enum Event {
     RECORD_REMISSION_DECISION("recordRemissionDecision"),
     NOC_REQUEST("nocRequest"),
     REMOVE_REPRESENTATION("removeRepresentation"),
+    REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

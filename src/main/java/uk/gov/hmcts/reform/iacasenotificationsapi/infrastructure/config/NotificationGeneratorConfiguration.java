@@ -1836,4 +1836,48 @@ public class NotificationGeneratorConfiguration {
             }
         );
     }
+
+    @Bean("removeRepresentativeAppellantEmailNotificationGenerator")
+    public List<NotificationGenerator> removeRepresentativeAppellantEmailNotificationHandler(
+        AppellantRemoveRepresentationPersonalisationEmail appellantRemoveRepresentationPersonalisationEmail,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    appellantRemoveRepresentationPersonalisationEmail
+                ),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("header","body");
+                }
+            }
+        );
+    }
+
+    @Bean("removeRepresentativeAppellantSmsNotificationGenerator")
+    public List<NotificationGenerator> removeRepresentativeAppellantSmsNotificationHandler(
+        AppellantRemoveRepresentationPersonalisationSms appellantRemoveRepresentationPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new SmsNotificationGenerator(
+                newArrayList(appellantRemoveRepresentationPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("header","body");
+                }
+            }
+        );
+    }
 }

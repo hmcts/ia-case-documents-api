@@ -2004,7 +2004,8 @@ public class NotificationHandlerConfiguration {
         return new PostSubmitNotificationHandler(
             (callbackStage, callback) -> {
                 return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
-                       && callback.getEvent() == Event.REMOVE_REPRESENTATION;
+                       && (callback.getEvent() == Event.REMOVE_REPRESENTATION
+                           || callback.getEvent() == Event.REMOVE_LEGAL_REPRESENTATIVE);
             },
             notificationGenerators
         );
@@ -2034,6 +2035,36 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
                        && callback.getEvent() == Event.REMOVE_REPRESENTATION
+                       && callback.getCaseDetails().getCaseData().read(MOBILE_NUMBER, String.class).isPresent();
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PostSubmitCallbackHandler<AsylumCase> removeRepresentativeAppellantEmailNotificationHandler(
+        @Qualifier("removeRepresentativeAppellantEmailNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new PostSubmitNotificationHandler(
+            (callbackStage, callback) -> {
+                return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
+                       && callback.getEvent() == Event.REMOVE_LEGAL_REPRESENTATIVE
+                       && callback.getCaseDetails().getCaseData().read(EMAIL, String.class).isPresent();
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PostSubmitCallbackHandler<AsylumCase> removeRepresentativeAppellantSmsNotificationHandler(
+        @Qualifier("removeRepresentativeAppellantSmsNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new PostSubmitNotificationHandler(
+            (callbackStage, callback) -> {
+                return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
+                       && callback.getEvent() == Event.REMOVE_LEGAL_REPRESENTATIVE
                        && callback.getCaseDetails().getCaseData().read(MOBILE_NUMBER, String.class).isPresent();
             },
             notificationGenerators

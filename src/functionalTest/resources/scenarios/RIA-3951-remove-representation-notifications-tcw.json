@@ -1,0 +1,26 @@
+{
+  "description": "RIA-3951 Remove legal representative notification to legal rep, case officer and home office - by TCW",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 3951,
+      "eventId": "removeLegalRepresentative",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "confirmation_header": "anything",
+      "confirmation_body": "anything"
+    }
+  }
+}

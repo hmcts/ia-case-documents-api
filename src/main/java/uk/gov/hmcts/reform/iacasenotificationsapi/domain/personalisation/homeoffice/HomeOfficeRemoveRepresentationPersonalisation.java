@@ -4,19 +4,18 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 
 @Service
@@ -24,24 +23,30 @@ public class HomeOfficeRemoveRepresentationPersonalisation implements EmailNotif
 
     private final String removeRepresentationHomeOfficeBeforeListingTemplateId;
     private final String removeRepresentationHomeOfficeAfterListingTemplateId;
-    private final String apcPrivateBetaInboxHomeOfficeEmailAddress;
+    private final String apcHomeOfficeEmailAddress;
+    private final String lartHomeOfficeEmailAddress;
     private final String iaExUiFrontendUrl;
     private final AppealService appealService;
+    private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
     public HomeOfficeRemoveRepresentationPersonalisation(
         @NotNull(message = "removeRepresentationHomeOfficeBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.homeOffice.beforeListing.email}") String removeRepresentationHomeOfficeBeforeListingTemplateId,
         @NotNull(message = "removeRepresentationHomeOfficeAfterListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.homeOffice.afterListing.email}") String removeRepresentationHomeOfficeAfterListingTemplateId,
-        @Value("${apcPrivateHomeOfficeEmailAddress}") String apcPrivateBetaInboxHomeOfficeEmailAddress,
+        @Value("${apcHomeOfficeEmailAddress}") String apcHomeOfficeEmailAddress,
+        @Value("${lartHomeOfficeEmailAddress}") String lartHomeOfficeEmailAddress,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         AppealService appealService,
+        EmailAddressFinder emailAddressFinder,
         CustomerServicesProvider customerServicesProvider
     ) {
         this.removeRepresentationHomeOfficeBeforeListingTemplateId = removeRepresentationHomeOfficeBeforeListingTemplateId;
         this.removeRepresentationHomeOfficeAfterListingTemplateId = removeRepresentationHomeOfficeAfterListingTemplateId;
-        this.apcPrivateBetaInboxHomeOfficeEmailAddress = apcPrivateBetaInboxHomeOfficeEmailAddress;
+        this.apcHomeOfficeEmailAddress = apcHomeOfficeEmailAddress;
+        this.lartHomeOfficeEmailAddress = lartHomeOfficeEmailAddress;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.appealService = appealService;
+        this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
     }
 
@@ -54,7 +59,42 @@ public class HomeOfficeRemoveRepresentationPersonalisation implements EmailNotif
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(apcPrivateBetaInboxHomeOfficeEmailAddress);
+
+        State currentState = asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class).orElse(null);
+
+        if (currentState == null) {
+            return Collections.emptySet();
+        }
+
+        if (Arrays.asList(State.APPEAL_STARTED,
+            State.APPEAL_SUBMITTED,
+            State.PENDING_PAYMENT,
+            State.AWAITING_RESPONDENT_EVIDENCE,
+            State.CASE_BUILDING,
+            State.CASE_UNDER_REVIEW,
+            State.ENDED
+        ).contains(currentState)) {
+            return Collections.singleton(apcHomeOfficeEmailAddress);
+        } else if (Arrays.asList(State.RESPONDENT_REVIEW,
+            State.LISTING,
+            State.SUBMIT_HEARING_REQUIREMENTS).contains(currentState)) {
+            return Collections.singleton(lartHomeOfficeEmailAddress);
+        } else if (Arrays.asList(State.ADJOURNED,
+            State.PREPARE_FOR_HEARING,
+            State.FINAL_BUNDLING,
+            State.PRE_HEARING,
+            State.DECISION,
+            State.DECIDED,
+            State.FTPA_SUBMITTED,
+            State.FTPA_DECIDED).contains(currentState)) {
+            if (appealService.isAppealListed(asylumCase)) {
+                return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+            } else {
+                return Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+            }
+        } else {
+            throw new IllegalStateException("homeOffice email Address cannot be found");
+        }
     }
 
     @Override

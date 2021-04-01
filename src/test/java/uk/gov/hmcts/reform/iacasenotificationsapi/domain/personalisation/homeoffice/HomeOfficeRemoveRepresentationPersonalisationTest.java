@@ -1,14 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
-
+import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,9 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -31,6 +32,8 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
     AppealService appealService;
     @Mock
     CustomerServicesProvider customerServicesProvider;
+    @Mock
+    EmailAddressFinder emailAddressFinder;
 
     private final Long caseId = 12345L;
     private final String templateIdBeforeListing = "beforeTemplateId";
@@ -41,7 +44,10 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
     private final String homeOfficeRefNumber = "someHomeOfficeRefNumber";
     private final String appellantGivenNames = "someAppellantGivenNames";
     private final String appellantFamilyName = "someAppellantFamilyName";
-    private final String homeOfficeEmail = "apchomeoffice@example.com";
+    private String apcPrivateBetaInboxHomeOfficeEmailAddress = "homeoffice-apc@example.com";
+    private String respondentReviewDirectionEmail = "homeoffice-respondent@example.com";
+    private String homeOfficeHearingCentreEmail = "hc-taylorhouse@example.com";
+    private String homeOfficeEmail = "ho-taylorhouse@example.com";
 
     private final String addressLine1 = "A";
     private final String addressLine2 = "B";
@@ -73,21 +79,81 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
+        when((emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeHearingCentreEmail);
+        when((emailAddressFinder.getHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeEmail);
+
         homeOfficeRemoveRepresentationPersonalisation =
             new HomeOfficeRemoveRepresentationPersonalisation(
                 templateIdBeforeListing,
                 templateIdAfterListing,
-                homeOfficeEmail,
+                apcPrivateBetaInboxHomeOfficeEmailAddress,
+                respondentReviewDirectionEmail,
                 iaExUiFrontendUrl,
                 appealService,
+                emailAddressFinder,
                 customerServicesProvider
             );
     }
 
     @Test
-    void should_return_given_email_address() {
-        assertTrue(homeOfficeRemoveRepresentationPersonalisation.getRecipientsList(asylumCase)
-            .contains(homeOfficeEmail));
+    void should_return_apc_email_address_for_given_states() {
+
+        List<State> apcStates = newArrayList(
+            State.APPEAL_STARTED,
+            State.APPEAL_SUBMITTED,
+            State.AWAITING_RESPONDENT_EVIDENCE,
+            State.CASE_BUILDING,
+            State.CASE_UNDER_REVIEW,
+            State.PENDING_PAYMENT,
+            State.ENDED
+        );
+
+        for (State state : apcStates) {
+            when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(state));
+            assertTrue(homeOfficeRemoveRepresentationPersonalisation.getRecipientsList(asylumCase).contains(apcPrivateBetaInboxHomeOfficeEmailAddress));
+        }
+    }
+
+    @Test
+    void should_return_lart_email_address_for_given_states() {
+
+        List<State> lartStates = newArrayList(
+            State.RESPONDENT_REVIEW,
+            State.SUBMIT_HEARING_REQUIREMENTS,
+            State.LISTING
+        );
+
+        for (State state : lartStates) {
+            when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(state));
+            assertTrue(homeOfficeRemoveRepresentationPersonalisation.getRecipientsList(asylumCase).contains(respondentReviewDirectionEmail));
+        }
+    }
+
+    @Test
+    void should_return_pou_email_address_for_given_states() {
+
+        List<State> pouStates = newArrayList(
+            State.ADJOURNED,
+            State.PREPARE_FOR_HEARING,
+            State.FINAL_BUNDLING,
+            State.PRE_HEARING,
+            State.DECISION,
+            State.DECIDED,
+            State.FTPA_SUBMITTED,
+            State.FTPA_DECIDED
+        );
+
+        for (State state : pouStates) {
+            when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(state));
+            when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+            assertTrue(homeOfficeRemoveRepresentationPersonalisation.getRecipientsList(asylumCase).contains(homeOfficeHearingCentreEmail));
+        }
+
+        for (State state : pouStates) {
+            when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)).thenReturn(Optional.of(state));
+            when(appealService.isAppealListed(asylumCase)).thenReturn(false);
+            assertTrue(homeOfficeRemoveRepresentationPersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmail));
+        }
     }
 
     @Test
@@ -141,5 +207,4 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
 
         assertEquals("", homeOfficeRemoveRepresentationPersonalisation.formatCompanyAddress(asylumCase));
     }
-
 }

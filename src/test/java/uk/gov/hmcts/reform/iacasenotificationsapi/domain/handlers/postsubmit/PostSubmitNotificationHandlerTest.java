@@ -32,6 +32,7 @@ class PostSubmitNotificationHandlerTest {
     BiPredicate<PostSubmitCallbackStage, Callback<AsylumCase>> canHandle;
     @Mock
     ErrorHandler errorHandler;
+
     private PostSubmitCallbackStage callbackStage = PostSubmitCallbackStage.CCD_SUBMITTED;
     private PostSubmitNotificationHandler notificationHandler;
     private PostSubmitCallbackResponse postSubmitCallbackResponse = new PostSubmitCallbackResponse("success","success");
