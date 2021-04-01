@@ -1979,8 +1979,62 @@ public class NotificationHandlerConfiguration {
 
         return new PostSubmitNotificationHandler(
             (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                boolean isRemoveReperesentationRequested = asylumCase.read(IS_REMOVE_REPRESENTATION_REQUESTED, YesOrNo.class)
+                    .map(decision -> decision == YES)
+                    .orElse(false);
+
                 return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
-                       && callback.getEvent() == Event.NOC_REQUEST;
+                       && callback.getEvent() == Event.NOC_REQUEST
+                       && !isRemoveReperesentationRequested;
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PostSubmitCallbackHandler<AsylumCase> removeRepresentationNotificationHandler(
+        @Qualifier("removeRepresentationNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new PostSubmitNotificationHandler(
+            (callbackStage, callback) -> {
+                return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
+                       && callback.getEvent() == Event.REMOVE_REPRESENTATION;
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PostSubmitCallbackHandler<AsylumCase> removeRepresentationAppellantEmailNotificationHandler(
+        @Qualifier("removeRepresentationAppellantEmailNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new PostSubmitNotificationHandler(
+            (callbackStage, callback) -> {
+                return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
+                       && callback.getEvent() == Event.REMOVE_REPRESENTATION
+                       && callback.getCaseDetails().getCaseData().read(EMAIL, String.class).isPresent();
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PostSubmitCallbackHandler<AsylumCase> removeRepresentationAppellantSmsNotificationHandler(
+        @Qualifier("removeRepresentationAppellantSmsNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new PostSubmitNotificationHandler(
+            (callbackStage, callback) -> {
+                return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
+                       && callback.getEvent() == Event.REMOVE_REPRESENTATION
+                       && callback.getCaseDetails().getCaseData().read(MOBILE_NUMBER, String.class).isPresent();
             },
             notificationGenerators
         );

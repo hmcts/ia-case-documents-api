@@ -1,12 +1,11 @@
 {
-  "description": "RIA-4104 Send apply notice of change notification to legal rep",
-  "disabled": true,
+  "description": "RIA-3731 Send remove representation notification to legal rep, case officer and home office",
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",
     "input": {
-      "id": 4104,
-      "eventId": "nocRequest",
+      "id": 3731,
+      "eventId": "removeRepresentation",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
@@ -20,8 +19,8 @@
     "status": 200,
     "errors": [],
     "confirmation": {
-      "confirmation_header": "success",
-      "confirmation_body": "success"
+      "confirmation_header": "anything",
+      "confirmation_body": "anything"
     }
   }
 }

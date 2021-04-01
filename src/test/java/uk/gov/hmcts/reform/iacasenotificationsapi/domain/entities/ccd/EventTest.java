@@ -80,11 +80,12 @@ public class EventTest {
         assertEquals("requestNewHearingRequirements", Event.REQUEST_NEW_HEARING_REQUIREMENTS.toString());
         assertEquals("recordRemissionDecision", RECORD_REMISSION_DECISION.toString());
         assertEquals("nocRequest", NOC_REQUEST.toString());
+        assertEquals("removeRepresentation", REMOVE_REPRESENTATION.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(73, Event.values().length);
+        assertEquals(74, Event.values().length);
     }
 }

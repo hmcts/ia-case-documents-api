@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Message;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
@@ -26,11 +26,6 @@ class PostSubmitNotificationHandlerTest {
 
     @Mock
     Callback<AsylumCase> callback;
-    @Mock
-    CaseDetails<AsylumCase> caseDetails;
-    @Mock
-    AsylumCase asylumCase;
-
     @Mock
     NotificationGenerator notificationGenerator;
     @Mock
@@ -68,6 +63,8 @@ class PostSubmitNotificationHandlerTest {
 
         assertEquals("success", response.getConfirmationHeader().get());
         assertEquals("success", response.getConfirmationBody().get());
+        assertEquals(Optional.ofNullable("success"), response.getConfirmationHeader());
+        assertEquals(Optional.ofNullable("success"), response.getConfirmationBody());
         verify(notificationGenerator).generate(callback);
     }
 

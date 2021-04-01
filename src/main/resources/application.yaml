@@ -609,8 +609,25 @@ govnotify:
     requestNewHearingRequirements:
       legalRep:
         email: fd709bf4-095c-4734-8f88-9a9feba9fd81
-
-
+    removeRepresentation:
+      legalRep:
+        beforeListing:
+          email: 54a430cb-d0f0-4170-bd5a-0bd62f06fc76
+        afterListing:
+          email: 31ecd8c7-ee85-4b3b-9805-739d378da597
+      caseOfficer:
+        beforeListing:
+          email: 09a83871-901b-41ed-b3bd-2b72cee73236
+        afterListing:
+          email: 76bad58b-a6ea-4311-ae33-f7e596cc793b
+      homeOffice:
+        beforeListing:
+          email: f924cae0-289a-42f4-bb2e-70164f9c924f
+        afterListing:
+          email: 2199e053-5ff7-46a2-9cf4-58864265d516
+      appellant:
+        email: cfb76737-b805-483f-81ec-9d1365eb3260
+        sms: ffef5cda-ec06-43e4-bd82-5d7fc266a000
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -640,6 +657,7 @@ security:
   roleEventAccess:
     caseworker-approver:
       - "nocRequest"
+      - "removeRepresentation"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -662,6 +680,7 @@ security:
       - "payAndSubmitAppeal"
       - "paymentAppeal"
       - "makeAnApplication"
+      - "removeRepresentation"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"

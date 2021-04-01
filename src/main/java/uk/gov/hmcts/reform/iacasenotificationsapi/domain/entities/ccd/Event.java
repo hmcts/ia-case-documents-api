@@ -76,6 +76,7 @@ public enum Event {
     REQUEST_NEW_HEARING_REQUIREMENTS("requestNewHearingRequirements"),
     RECORD_REMISSION_DECISION("recordRemissionDecision"),
     NOC_REQUEST("nocRequest"),
+    REMOVE_REPRESENTATION("removeRepresentation"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

@@ -33,7 +33,7 @@ public class PostSubmitCallbackDispatcher<T extends CaseData> {
     }
 
     public PostSubmitCallbackResponse handle(PostSubmitCallbackStage callbackStage,
-        Callback<T> callback
+                                             Callback<T> callback
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
@@ -44,10 +44,10 @@ public class PostSubmitCallbackDispatcher<T extends CaseData> {
 
         for (PostSubmitCallbackHandler<T> callbackHandler : sortedCallbackHandlers) {
 
-            if (callbackHandler.canHandle(callbackStage,callback)) {
+            if (callbackHandler.canHandle(callbackStage, callback)) {
 
                 PostSubmitCallbackResponse callbackResponseFromHandler =
-                    callbackHandler.handle(callbackStage,callback);
+                    callbackHandler.handle(callbackStage, callback);
 
                 callbackResponseFromHandler
                     .getConfirmationHeader()
@@ -56,7 +56,6 @@ public class PostSubmitCallbackDispatcher<T extends CaseData> {
                 callbackResponseFromHandler
                     .getConfirmationBody()
                     .ifPresent(callbackResponse::setConfirmationBody);
-
             }
         }
 

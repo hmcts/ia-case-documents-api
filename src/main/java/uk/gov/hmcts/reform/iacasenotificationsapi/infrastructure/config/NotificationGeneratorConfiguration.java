@@ -1770,4 +1770,70 @@ public class NotificationGeneratorConfiguration {
             }
         );
     }
+
+    @Bean("removeRepresentationNotificationGenerator")
+    public List<NotificationGenerator> removeRepresentationNotificationHandler(
+        LegalRepresentativeRemoveRepresentationPersonalisation legalRepresentativeRemoveRepresentationPersonalisation,
+        CaseOfficerRemoveRepresentationPersonalisation caseOfficerRemoveRepresentationPersonalisation,
+        HomeOfficeRemoveRepresentationPersonalisation homeOfficeRemoveRepresentationPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeRemoveRepresentationPersonalisation,
+                    caseOfficerRemoveRepresentationPersonalisation,
+                    homeOfficeRemoveRepresentationPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("removeRepresentationAppellantEmailNotificationGenerator")
+    public List<NotificationGenerator> removeRepresentationAppellantEmailNotificationHandler(
+        AppellantRemoveRepresentationPersonalisationEmail appellantRemoveRepresentationPersonalisationEmail,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    appellantRemoveRepresentationPersonalisationEmail
+                ),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("header","body");
+                }
+            }
+        );
+    }
+
+    @Bean("removeRepresentationAppellantSmsNotificationGenerator")
+    public List<NotificationGenerator> removeRepresentationAppellantSmsNotificationHandler(
+        AppellantRemoveRepresentationPersonalisationSms appellantRemoveRepresentationPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new SmsNotificationGenerator(
+                newArrayList(appellantRemoveRepresentationPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("header","body");
+                }
+            }
+        );
+    }
 }

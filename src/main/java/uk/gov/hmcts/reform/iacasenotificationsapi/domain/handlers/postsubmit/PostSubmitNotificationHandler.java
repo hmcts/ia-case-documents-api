@@ -19,7 +19,7 @@ public class PostSubmitNotificationHandler implements PostSubmitCallbackHandler<
     private final Optional<ErrorHandler> errorHandling;
 
     public PostSubmitNotificationHandler(BiPredicate<PostSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction,
-                               List<? extends NotificationGenerator> notificationGenerator
+                                         List<? extends NotificationGenerator> notificationGenerator
     ) {
         this.canHandleFunction = canHandleFunction;
         this.notificationGenerators = notificationGenerator;
@@ -27,8 +27,8 @@ public class PostSubmitNotificationHandler implements PostSubmitCallbackHandler<
     }
 
     public PostSubmitNotificationHandler(BiPredicate<PostSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction,
-                               List<? extends NotificationGenerator> notificationGenerator,
-                               ErrorHandler errorHandling
+                                         List<? extends NotificationGenerator> notificationGenerator,
+                                         ErrorHandler errorHandling
     ) {
         this.canHandleFunction = canHandleFunction;
         this.notificationGenerators = notificationGenerator;
@@ -40,29 +40,27 @@ public class PostSubmitNotificationHandler implements PostSubmitCallbackHandler<
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return canHandleFunction.test(callbackStage,callback);
+        return canHandleFunction.test(callbackStage, callback);
     }
 
     @Override
     public PostSubmitCallbackResponse handle(PostSubmitCallbackStage callbackStage, Callback<AsylumCase> callback) {
-        if (!canHandle(callbackStage,callback)) {
+        if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
-        PostSubmitCallbackResponse postSubmitCallbackResponse = new PostSubmitCallbackResponse("success","success");
+
+        PostSubmitCallbackResponse postSubmitCallbackResponse = new PostSubmitCallbackResponse("success", "success");
         final int lastNotificationGeneratorIndex = notificationGenerators.size() - 1;
+
         try {
             notificationGenerators.forEach(notificationGenerator -> notificationGenerator.generate(callback));
-
             Message message = notificationGenerators.get(lastNotificationGeneratorIndex).getSuccessMessage();
             if (message.getMessageHeader() != null) {
                 postSubmitCallbackResponse.setConfirmationHeader(message.getMessageHeader());
             }
-
             if (message.getMessageBody() != null) {
                 postSubmitCallbackResponse.setConfirmationBody(message.getMessageBody());
             }
-
-
         } catch (Exception e) {
             if (errorHandling.isPresent()) {
                 errorHandling.get().accept(callback, e);
@@ -72,5 +70,4 @@ public class PostSubmitNotificationHandler implements PostSubmitCallbackHandler<
         }
         return postSubmitCallbackResponse;
     }
-
 }

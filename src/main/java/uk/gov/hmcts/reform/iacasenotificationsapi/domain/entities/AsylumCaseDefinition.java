@@ -214,7 +214,6 @@ public enum AsylumCaseDefinition {
     FTPA_RESPONDENT_DECISION_REMADE_RULE_32(
         "ftpaRespondentDecisionRemadeRule32", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
-
     FTPA_APPELLANT_SUBMITTED(
         "ftpaAppellantSubmitted", new TypeReference<YesOrNo>(){}),
 
@@ -311,7 +310,21 @@ public enum AsylumCaseDefinition {
         "remoteVideoCallTribunalResponse", new TypeReference<String>() {}),
 
     APPELLANT_IN_UK(
-        "appellantInUk", new TypeReference<YesOrNo>() {});
+        "appellantInUk", new TypeReference<YesOrNo>() {}),
+
+    APPELLANT_DATE_OF_BIRTH(
+        "appellantDateOfBirth", new TypeReference<String>() {}),
+
+    EMAIL(
+        "email", new TypeReference<String>(){}),
+
+    MOBILE_NUMBER(
+        "mobileNumber", new TypeReference<String>(){}),
+
+    IS_REMOVE_REPRESENTATION_REQUESTED(
+        "isRemoveRepresentationRequested", new TypeReference<YesOrNo>(){}),
+
+    ;
 
     private final String value;
     private final TypeReference typeReference;

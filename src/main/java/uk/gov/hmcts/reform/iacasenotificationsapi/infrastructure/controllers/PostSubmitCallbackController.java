@@ -92,7 +92,7 @@ public class PostSubmitCallbackController {
         );
 
         PostSubmitCallbackResponse callbackResponse =
-            callbackDispatcher.handle(PostSubmitCallbackStage.CCD_SUBMITTED,callback);
+            callbackDispatcher.handle(PostSubmitCallbackStage.CCD_SUBMITTED, callback);
 
         LOG.info(
             "Asylum Case CCD `ccdSubmitted` event `{}` handled for Case ID `{}`",
