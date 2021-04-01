@@ -1,0 +1,27 @@
+{
+  "description": "RIA-4104 Send apply notice of change notification to legal rep",
+  "disabled": true,
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 4104,
+      "eventId": "nocRequest",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "confirmation_header": "success",
+      "confirmation_body": "success"
+    }
+   }
+}

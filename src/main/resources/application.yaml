@@ -111,7 +111,6 @@ govnotify:
     pendingPayment:
       legalRep:
         paid:
-
           email: 91cf84fe-55f0-41a4-9d0f-fe13ae45fb8c
         paidAfterAppealSubmitted:
           beforeListing:
@@ -639,6 +638,8 @@ security:
     - "caseworker-ia"
     - "citizen"
   roleEventAccess:
+    caseworker-approver:
+      - "nocRequest"
     citizen:
       - "startAppeal"
       - "editAppeal"

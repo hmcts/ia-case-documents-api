@@ -25,4 +25,13 @@ public class PostSubmitCallbackResponse {
     public void setConfirmationBody(String confirmationBody) {
         this.confirmationBody = Optional.ofNullable(confirmationBody);
     }
+
+    public PostSubmitCallbackResponse() {
+        // noop -- for deserializer
+    }
+
+    public PostSubmitCallbackResponse(String header, String body) {
+        this.confirmationHeader = Optional.of(header);
+        this.confirmationBody = Optional.of(body);
+    }
 }
