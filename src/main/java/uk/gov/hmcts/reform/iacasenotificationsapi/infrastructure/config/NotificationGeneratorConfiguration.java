@@ -1880,4 +1880,23 @@ public class NotificationGeneratorConfiguration {
             }
         );
     }
+
+    @Bean("requestFeeRemissionNotificationGenerator")
+    public List<NotificationGenerator> requestFeeRemissionNotificationHandler(
+        LegalRepresentativeRequestFeeRemissionPersonalisation legalRepresentativeRequestFeeRemissionPersonalisation,
+        AdminOfficerRequestFeeRemissionPersonalisation adminOfficerRequestFeeRemissionPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeRequestFeeRemissionPersonalisation,
+                    adminOfficerRequestFeeRemissionPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

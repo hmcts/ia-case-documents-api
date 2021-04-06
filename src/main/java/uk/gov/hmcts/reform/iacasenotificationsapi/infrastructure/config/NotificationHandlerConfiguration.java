@@ -2071,6 +2071,21 @@ public class NotificationHandlerConfiguration {
         );
     }
 
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> requestFeeRemissionNotificationHandler(
+        @Qualifier("requestFeeRemissionNotificationGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.REQUEST_FEE_REMISSION;
+            },
+            notificationGenerators
+        );
+    }
+
 }
 
 

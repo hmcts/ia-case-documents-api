@@ -78,6 +78,7 @@ public enum Event {
     NOC_REQUEST("nocRequest"),
     REMOVE_REPRESENTATION("removeRepresentation"),
     REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative"),
+    REQUEST_FEE_REMISSION("requestFeeRemission"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

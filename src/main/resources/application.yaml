@@ -628,6 +628,13 @@ govnotify:
       appellant:
         email: cfb76737-b805-483f-81ec-9d1365eb3260
         sms: ffef5cda-ec06-43e4-bd82-5d7fc266a000
+    requestFeeRemission:
+      legalRep:
+        email: acb036e5-47a3-454f-a24b-4755bf7e258c
+      adminOfficer:
+        email: 701597ee-27da-42e1-888f-ff8d461174ac
+
+
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -682,6 +689,7 @@ security:
       - "paymentAppeal"
       - "makeAnApplication"
       - "removeRepresentation"
+      - "requestFeeRemission"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
