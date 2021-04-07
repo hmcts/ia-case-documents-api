@@ -1,10 +1,35 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.*;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.DC;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.EA;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.HU;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.PA;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.RP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_PARTIES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.EMAIL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FEE_UPDATE_RECORDED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPLICANT_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_APPEAL_DECIDED_INSTRUCT_STATUS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_APPELLANT_DECIDED_INSTRUCT_STATUS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_APPELLANT_INSTRUCT_STATUS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_RESPONDENT_DECIDED_INSTRUCT_STATUS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_RESPONDENT_INSTRUCT_STATUS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REMISSIONS_ENABLED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REMOVE_REPRESENTATION_REQUESTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.MOBILE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBMIT_NOTIFICATION_STATUS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.REP;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.APPROVED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.REJECTED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.BUILD_CASE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
@@ -23,6 +48,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
@@ -2084,6 +2110,58 @@ public class NotificationHandlerConfiguration {
             },
             notificationGenerators
         );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> manageFeeUpdateCaseOfficerNotificationHandler(
+            @Qualifier("caseOfficerManageFeeUpdateGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isEaAndHuAppealType = isEaAndHuAppeal(asylumCase);
+
+                boolean isPaAppealType = isPaAppeal(asylumCase);
+
+                String eaHuAppealTypePaymentOption = asylumCase
+                    .read(AsylumCaseDefinition.EA_HU_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
+                String paAppealTypePaymentOption = asylumCase
+                    .read(AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
+
+                Optional<PaymentStatus> paymentStatus = asylumCase
+                    .read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class);
+
+                boolean maybeFeeUpdateRecorded = asylumCase
+                    .read(FEE_UPDATE_RECORDED, CheckValues.class)
+                    .map(value -> value.getValues().contains("feeUpdateRecorded")).orElse(false);
+
+                boolean isPaidByCard = ((isEaAndHuAppealType && eaHuAppealTypePaymentOption.equals("payOffline"))
+                                || (isPaAppealType && paAppealTypePaymentOption.equals("payOffline")));
+
+                boolean isPaidByAccount = ((isEaAndHuAppealType && eaHuAppealTypePaymentOption.equals("payNow"))
+                            || (isPaAppealType &&  Arrays.asList("payNow","payLater").contains(paAppealTypePaymentOption)));
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.MANAGE_FEE_UPDATE
+                       && (isPaidByCard || isPaidByAccount)
+                       && maybeFeeUpdateRecorded
+                       && !paymentStatus.equals(Optional.empty())
+                       && paymentStatus.get().equals(PaymentStatus.PAID);
+            }, notificationGenerators
+        );
+    }
+
+    protected boolean isPaAppeal(AsylumCase asylumCase) {
+        return asylumCase
+            .read(APPEAL_TYPE, AppealType.class)
+            .map(type -> type == PA).orElse(false);
+    }
+
+    protected boolean isEaAndHuAppeal(AsylumCase asylumCase) {
+        return asylumCase
+            .read(APPEAL_TYPE, AppealType.class)
+            .map(type -> type == EA || type == HU).orElse(false);
     }
 
 }

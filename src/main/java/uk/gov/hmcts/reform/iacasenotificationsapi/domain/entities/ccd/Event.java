@@ -79,6 +79,7 @@ public enum Event {
     REMOVE_REPRESENTATION("removeRepresentation"),
     REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative"),
     REQUEST_FEE_REMISSION("requestFeeRemission"),
+    MANAGE_FEE_UPDATE("manageFeeUpdate"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

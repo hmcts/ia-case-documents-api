@@ -635,6 +635,18 @@ govnotify:
         email: 701597ee-27da-42e1-888f-ff8d461174ac
 
 
+    manageFeeUpdate:
+      ctsc:
+        beforeListing:
+          email: fb0672fe-fe3c-4c18-9fdc-5b92d5db0bcf
+        afterListing:
+          email: 21f5cf40-c6cf-46f6-b1a9-c7618462bcf8
+      nbc:
+        beforeListing:
+          email: fa830c15-c2d8-40a7-8582-495a8b732d56
+        afterListing:
+          email: 901ffe0e-3b61-4c10-8047-2871c9d649c5
+
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -735,6 +747,7 @@ security:
       - "decideAnApplication"
       - "requestNewHearingRequirements"
       - "removeLegalRepresentative"
+      - "manageFeeUpdate"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -750,6 +763,7 @@ security:
       - "reinstateAppeal"
       - "recordRemissionDecision"
       - "removeLegalRepresentative"
+      - "manageFeeUpdate"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -863,6 +877,8 @@ paymentExceptionsAdminOfficerEmailAddress: ${PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EM
 apcHomeOfficeEmailAddress: ${HOME_OFFICE_EMAIL_APC}
 lartHomeOfficeEmailAddress: ${HOME_OFFICE_EMAIL_LART}
 upperTribunalNoticesEmailAddress: ${IA_UPPER_TRIBUNAL_NOTICES_EMAIL}
+nbcEmailAddress: ${IA_NBC_EMAIL}
+ctscEmailAddress: ${IA_CTSC_EMAIL}
 
 respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}
@@ -883,4 +899,3 @@ appellantDaysToWait:
   afterReasonsForAppeal: 14
   afterClarifyingQuestionsAnswers: 5
   afterCmaRequirements: 14
-

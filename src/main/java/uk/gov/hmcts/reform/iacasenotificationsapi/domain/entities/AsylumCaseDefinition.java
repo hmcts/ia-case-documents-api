@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
@@ -324,6 +325,9 @@ public enum AsylumCaseDefinition {
     IS_REMOVE_REPRESENTATION_REQUESTED(
         "isRemoveRepresentationRequested", new TypeReference<YesOrNo>(){}),
 
+
+    FEE_UPDATE_RECORDED(
+        "feeUpdateRecorded", new TypeReference<CheckValues<String>>(){}),
     ;
 
     private final String value;

@@ -1899,4 +1899,21 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("caseOfficerManageFeeUpdateGenerator")
+    public List<NotificationGenerator> manageFeeUpdateNotificationHandler(
+        CaseOfficerManageFeeUpdatePersonalisation caseOfficerManageFeeUpdatePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    caseOfficerManageFeeUpdatePersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
 }
