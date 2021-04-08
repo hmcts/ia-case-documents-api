@@ -1,0 +1,85 @@
+{
+    "description": "RIA-3995 Send appeal submitted notifications SMS to Appellant",
+    "request": {
+      "uri": "/asylum/ccdAboutToSubmit",
+      "credentials": "LegalRepresentative",
+      "input": {
+        "id": 39954,
+        "eventId": "submitAppeal",
+        "state": "appealSubmitted",
+        "caseData": {
+          "template": "minimal-appeal-submitted.json",
+          "replacements": {
+            "hearingCentre": "manchester",
+            "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+            "contactPreference": "wantsSms",
+            "appellantDateOfBirth":"{$TODAY-7300}"
+          }
+        }
+      }
+    },
+    "expectation": {
+      "status": 200,
+      "errors": [],
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+          "contactPreference": "wantsSms",
+          "appellantDateOfBirth":"{$TODAY-7300}",
+          "notificationsSent": [
+            {
+              "id": "39954_APPEAL_SUBMITTED_CASE_OFFICER",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            },
+            {
+              "id": "39954_APPEAL_SUBMITTED_HOME_OFFICE",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            },
+            {
+              "id": "39954_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            }
+          ]
+        }
+      },
+      "notifications": [
+        {
+          "reference": "39954_APPEAL_SUBMITTED_CASE_OFFICER",
+          "recipient": "{$hearingCentreEmailAddresses.manchester}",
+          "subject": "Immigration and Asylum appeal: appeal submitted",
+          "body": [
+            "PA/12345/2019",
+            "Talha Awan",
+            "{$iaExUiFrontendUrl}"
+          ]
+        },
+        {
+          "reference": "39954_APPEAL_SUBMITTED_HOME_OFFICE",
+          "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
+          "subject": "Immigration and Asylum appeal: appeal submitted",
+          "body": [
+            "PA/12345/2019",
+            "A1234567",
+            "Talha Awan",
+            "{$iaExUiFrontendUrl}",
+            "{$customerServices.telephoneNumber}",
+            "{$customerServices.emailAddress}"
+          ]
+        },
+        {
+          "reference": "39954_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
+          "recipient": "{$TEST_CITIZEN_MOBILE}",
+          "subject": "",
+          "body": [
+            "Talha Awan",
+            "{$TODAY-7300|d MMM yyyy}",
+            "39954",
+            "A1234567",
+            "CASE001"
+          ]
+        }
+      ]
+    }
+  }

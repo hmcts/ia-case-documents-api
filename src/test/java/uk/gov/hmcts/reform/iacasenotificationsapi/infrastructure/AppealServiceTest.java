@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import java.util.Optional;
@@ -12,9 +13,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
 
 @ExtendWith(MockitoExtension.class)
-public class AppealServiceTest {
+class AppealServiceTest {
 
     @Mock
     private AsylumCase asylumCase;
@@ -29,4 +31,16 @@ public class AppealServiceTest {
             .thenReturn(Optional.of(hearingCentre));
         assertTrue(appealService.isAppealListed(asylumCase));
     }
+
+    @Test
+    void isAppellantInPersonJourney() {
+        AppealService appealService = new AppealService();
+        assertFalse(appealService.isAppellantInPersonJourney(asylumCase));
+
+        JourneyType journeyType = JourneyType.AIP;
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
+            .thenReturn(Optional.of(journeyType));
+        assertTrue(appealService.isAppellantInPersonJourney(asylumCase));
+    }
+
 }

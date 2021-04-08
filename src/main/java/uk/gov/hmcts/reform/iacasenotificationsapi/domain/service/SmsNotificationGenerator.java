@@ -68,9 +68,11 @@ public class SmsNotificationGenerator implements NotificationGenerator {
         final SmsNotificationPersonalisation personalisation,
         final String referenceId,
         final Callback<AsylumCase> callback) {
-
+        String smsTemplateId = personalisation.getTemplateId() == null
+            ?
+            personalisation.getTemplateId(callback.getCaseDetails().getCaseData()) : personalisation.getTemplateId();
         return notificationSender.sendSms(
-            personalisation.getTemplateId(),
+            smsTemplateId,
             mobileNumber,
             personalisation.getPersonalisation(callback),
             referenceId

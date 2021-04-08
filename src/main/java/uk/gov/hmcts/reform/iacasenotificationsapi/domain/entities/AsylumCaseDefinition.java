@@ -215,7 +215,6 @@ public enum AsylumCaseDefinition {
     FTPA_RESPONDENT_DECISION_REMADE_RULE_32(
         "ftpaRespondentDecisionRemadeRule32", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
-
     FTPA_APPELLANT_SUBMITTED(
         "ftpaAppellantSubmitted", new TypeReference<YesOrNo>(){}),
 

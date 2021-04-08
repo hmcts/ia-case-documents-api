@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +48,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGenerator;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecordApplicationRespondentFinder;
 
-
+@Slf4j
 @Configuration
 public class NotificationHandlerConfiguration {
 
@@ -2086,7 +2087,7 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> manageFeeUpdateCaseOfficerNotificationHandler(
-            @Qualifier("caseOfficerManageFeeUpdateGenerator") List<NotificationGenerator> notificationGenerators) {
+        @Qualifier("caseOfficerManageFeeUpdateGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
             (callbackStage, callback) -> {
@@ -2109,10 +2110,10 @@ public class NotificationHandlerConfiguration {
                     .map(value -> value.getValues().contains("feeUpdateRecorded")).orElse(false);
 
                 boolean isPaidByCard = ((isEaAndHuAppealType && eaHuAppealTypePaymentOption.equals("payOffline"))
-                                || (isPaAppealType && paAppealTypePaymentOption.equals("payOffline")));
+                                        || (isPaAppealType && paAppealTypePaymentOption.equals("payOffline")));
 
                 boolean isPaidByAccount = ((isEaAndHuAppealType && eaHuAppealTypePaymentOption.equals("payNow"))
-                            || (isPaAppealType &&  Arrays.asList("payNow","payLater").contains(paAppealTypePaymentOption)));
+                                           || (isPaAppealType && Arrays.asList("payNow", "payLater").contains(paAppealTypePaymentOption)));
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.MANAGE_FEE_UPDATE
@@ -2183,6 +2184,63 @@ public class NotificationHandlerConfiguration {
             notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealAppellantSmsNotificationHandler(
+        @Qualifier("submitAppealAppellantSmsNotificationGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean smsPreferred = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)
+                    .map(contactPreference -> ContactPreference.WANTS_SMS == contactPreference)
+                    .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && (callback.getEvent() == Event.SUBMIT_APPEAL
+                           || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL)
+                       && asylumCase.read(MOBILE_NUMBER, String.class).isPresent()
+                       && smsPreferred;
+            },
+            notificationGenerators,
+            (callback, e) -> log.error(
+                "cannot send sms notification to the appellant on submitAppeal, caseId: {}",
+                callback.getCaseDetails().getId(),
+                e
+            )
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submitAppealAppellantEmailNotificationHandler(
+        @Qualifier("submitAppealAppellantEmailNotificationGenerator") List<NotificationGenerator> notificationGenerators
+    ) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean emailPreferred = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)
+                    .map(contactPreference -> ContactPreference.WANTS_EMAIL == contactPreference)
+                    .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && (callback.getEvent() == Event.SUBMIT_APPEAL
+                           || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL)
+                       && asylumCase.read(EMAIL, String.class).isPresent()
+                       && emailPreferred;
+            },
+            notificationGenerators,
+            (callback, e) -> log.error(
+                "cannot send email notification to the appellant on submitAppeal, caseId: {}",
+                callback.getCaseDetails().getId(),
+                e
+            )
+        );
+    }
+
 }
 
 

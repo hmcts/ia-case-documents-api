@@ -1957,4 +1957,34 @@ public class NotificationGeneratorConfiguration {
             }
         );
     }
+
+    @Bean("submitAppealAppellantEmailNotificationGenerator")
+    public List<NotificationGenerator> submitAppealAppellantEmailNotificationGenerator(
+        AppellantSubmitAppealPersonalisationEmail appellantSubmitAppealPersonalisationEmail,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantSubmitAppealPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("submitAppealAppellantSmsNotificationGenerator")
+    public List<NotificationGenerator> submitAppealAppellantSmsNotificationGenerator(
+        AppellantSubmitAppealPersonalisationSms appellantSubmitAppealPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new SmsNotificationGenerator(
+                newArrayList(appellantSubmitAppealPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }
