@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +20,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,8 +31,6 @@ public class LegalRepresentativeChangeDirectionDueDatePersonalisationTest {
     Callback<AsylumCase> callback;
     @Mock
     AsylumCase asylumCase;
-    @Mock
-    EmailAddressFinder emailAddressFinder;
     @Mock
     PersonalisationProvider personalisationProvider;
     @Mock
@@ -58,7 +54,6 @@ public class LegalRepresentativeChangeDirectionDueDatePersonalisationTest {
 
     @BeforeEach
     public void setUp() {
-        when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
 
         legalRepresentativeChangeDirectionDueDatePersonalisation =
             new LegalRepresentativeChangeDirectionDueDatePersonalisation(
@@ -66,15 +61,8 @@ public class LegalRepresentativeChangeDirectionDueDatePersonalisationTest {
                 beforeListingTemplateId,
                 iaExUiFrontendUrl,
                 personalisationProvider,
-                emailAddressFinder,
                 customerServicesProvider
             );
-    }
-
-    @Test
-    public void should_return_the_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(legalRepEmailAddress),
-            legalRepresentativeChangeDirectionDueDatePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test

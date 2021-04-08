@@ -1,22 +1,18 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
-public class LegalRepresentativeRespondentFtpaSubmittedPersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeRespondentFtpaSubmittedPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final String applyForFtpaTemplateId;
     private final String iaExUiFrontendUrl;
@@ -38,13 +34,6 @@ public class LegalRepresentativeRespondentFtpaSubmittedPersonalisation implement
     @Override
     public String getReferenceId(Long caseId) {
         return caseId + "_LEGAL_REP_RESPONDENT_FTPA_SUBMITTED";
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present")));
     }
 
     @Override

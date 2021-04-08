@@ -2,23 +2,19 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealDecision;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
-public class LegalRepresentativeAppealOutcomePersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeAppealOutcomePersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final String appealOutcomeAllowedLegalRepresentativeTemplateId;
     private final String appealOutcomeDismissedLegalRepresentativeTemplateId;
@@ -46,13 +42,6 @@ public class LegalRepresentativeAppealOutcomePersonalisation implements EmailNot
 
         return appealOutcomeDecision.getValue().equals(AppealDecision.ALLOWED.getValue())
             ? appealOutcomeAllowedLegalRepresentativeTemplateId : appealOutcomeDismissedLegalRepresentativeTemplateId;
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present")));
     }
 
     @Override

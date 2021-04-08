@@ -3,29 +3,24 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
-public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final String legalRepNonStandardDirectionOfHomeOfficeBeforeListingTemplateId;
     private final String legalRepNonStandardDirectionOfHomeOfficeAfterListingTemplateId;
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
-    private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation(
@@ -33,14 +28,12 @@ public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation 
         @Value("${govnotify.template.nonStandardDirectionOfHomeOfficeAfterListing.legalRep.email}") String legalRepNonStandardDirectionOfHomeOfficeAfterListingTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
-        EmailAddressFinder emailAddressFinder,
         CustomerServicesProvider customerServicesProvider
     ) {
         this.legalRepNonStandardDirectionOfHomeOfficeBeforeListingTemplateId = legalRepNonStandardDirectionOfHomeOfficeBeforeListingTemplateId;
         this.legalRepNonStandardDirectionOfHomeOfficeAfterListingTemplateId = legalRepNonStandardDirectionOfHomeOfficeAfterListingTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
-        this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
     }
 
@@ -48,11 +41,6 @@ public class LegalRepresentativeNonStandardDirectionOfHomeOfficePersonalisation 
     public String getTemplateId(AsylumCase asylumCase) {
         return isAppealListed(asylumCase)
             ? legalRepNonStandardDirectionOfHomeOfficeAfterListingTemplateId : legalRepNonStandardDirectionOfHomeOfficeBeforeListingTemplateId;
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getLegalRepEmailAddress(asylumCase));
     }
 
     @Override

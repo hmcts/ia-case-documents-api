@@ -5,21 +5,17 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
-public class LegalRepresentativeChangeDirectionDueDatePersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeChangeDirectionDueDatePersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private static final String legalRepChangeDirectionDueDateSuffix = "_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE";
 
@@ -27,7 +23,6 @@ public class LegalRepresentativeChangeDirectionDueDatePersonalisation implements
     private final String legalRepChangeDirectionDueDateBeforeListingTemplateId;
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
-    private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
 
@@ -36,14 +31,12 @@ public class LegalRepresentativeChangeDirectionDueDatePersonalisation implements
         @Value("${govnotify.template.changeDirectionDueDate.legalRep.beforeListing.email}") String legalRepChangeDirectionDueDateBeforeListingTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
-        EmailAddressFinder emailAddressFinder,
         CustomerServicesProvider customerServicesProvider
     ) {
         this.legalRepChangeDirectionDueDateAfterListingTemplateId = legalRepChangeDirectionDueDateAfterListingTemplateId;
         this.legalRepChangeDirectionDueDateBeforeListingTemplateId = legalRepChangeDirectionDueDateBeforeListingTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
-        this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
     }
 
@@ -68,11 +61,6 @@ public class LegalRepresentativeChangeDirectionDueDatePersonalisation implements
                 return legalRepChangeDirectionDueDateAfterListingTemplateId;
             })
             .orElseThrow(() -> new IllegalStateException("currentCaseStateVisibleToLegalRepresentative flag is not present"));
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getLegalRepEmailAddress(asylumCase));
     }
 
     @Override

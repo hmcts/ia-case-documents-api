@@ -1,25 +1,21 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
-public class LegalRepresentativeReinstateAppealPersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeReinstateAppealPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final String legalRepresentativeReinstateAppealBeforeListingTemplateId;
     private final String legalRepresentativeReinstateAppealAfterListingTemplateId;
@@ -54,13 +50,6 @@ public class LegalRepresentativeReinstateAppealPersonalisation implements EmailN
         } else {
             return legalRepresentativeReinstateAppealBeforeListingTemplateId;
         }
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-                .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-                .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present")));
     }
 
     @Override

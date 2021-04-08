@@ -3,16 +3,12 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -48,14 +44,6 @@ class LegalRepresentativeRequestFeeRemissionPersonalisationTest {
 
         assertEquals(caseId + "_LEGAL_REPRESENTATIVE_APPLY_FOR_LATE_REMISSION",
             legalRepresentativeRequestFeeRemissionPersonalisation.getReferenceId(caseId));
-    }
-
-    @Test
-    void should_return_given_email_address_from_asylum_case() {
-        Mockito.when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
-
-        assertTrue(legalRepresentativeRequestFeeRemissionPersonalisation.getRecipientsList(asylumCase)
-            .contains(legalRepEmailAddress));
     }
 
     @Test

@@ -22,7 +22,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,8 +32,6 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
     Callback<AsylumCase> callback;
     @Mock
     AsylumCase asylumCase;
-    @Mock
-    EmailAddressFinder emailAddressFinder;
     @Mock
     PersonalisationProvider personalisationProvider;
     @Mock
@@ -62,7 +59,6 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
     @BeforeEach
     public void setUp() {
 
-        when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
@@ -72,7 +68,6 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
                 afterListingTemplateId,
                 iaExUiFrontendUrl,
                 personalisationProvider,
-                emailAddressFinder,
                 customerServicesProvider
             );
     }
@@ -91,12 +86,6 @@ public class LegalRepresentativeNonStandardDirectionPersonalisationTest {
     public void should_return_given_reference_id() {
         assertEquals(caseId + "_LEGAL_REP_NON_STANDARD_DIRECTION",
             legalRepresentativeNonStandardDirectionPersonalisation.getReferenceId(caseId));
-    }
-
-    @Test
-    public void should_return_given_email_address_from_asylum_case() {
-        assertTrue(legalRepresentativeNonStandardDirectionPersonalisation.getRecipientsList(asylumCase)
-            .contains(legalRepEmailAddress));
     }
 
     @Test

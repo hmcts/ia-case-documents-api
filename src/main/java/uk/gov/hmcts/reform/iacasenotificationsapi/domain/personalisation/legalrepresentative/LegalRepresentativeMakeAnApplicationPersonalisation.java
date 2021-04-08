@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicationService;
 
 
 @Service
-public class LegalRepresentativeMakeAnApplicationPersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeMakeAnApplicationPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private static final String ROLE_LEGAL_REP = "caseworker-ia-legalrep-solicitor";
 
@@ -63,13 +62,6 @@ public class LegalRepresentativeMakeAnApplicationPersonalisation implements Emai
         } else {
             return isLegalRepUser ? legalRepresentativeMakeApplicationBeforeListingTemplateId : legalRepresentativeMakeApplicationOtherPartyBeforeListingTemplateId;
         }
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present")));
     }
 
     @Override

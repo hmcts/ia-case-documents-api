@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
@@ -21,7 +20,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -31,7 +29,6 @@ class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest {
     @Mock AsylumCase asylumCase;
     @Mock DirectionFinder directionFinder;
     @Mock Direction direction;
-    @Mock EmailAddressFinder emailAddressFinder;
     @Mock CustomerServicesProvider customerServicesProvider;
 
     private Long caseId = 12345L;
@@ -60,14 +57,12 @@ class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepRefNumber));
-        when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
         legalRepresentativeRequestNewHearingRequirementsPersonalisation = new LegalRepresentativeRequestNewHearingRequirementsPersonalisation(
             templateId,
             iaExUiFrontendUrl,
-            emailAddressFinder,
             directionFinder,
             customerServicesProvider
         );
@@ -81,11 +76,6 @@ class LegalRepresentativeRequestNewHearingRequirementsPersonalisationTest {
     @Test
     void should_return_given_reference_id() {
         assertEquals(caseId + "_LEGAL_REPRESENTATIVE_REQUEST_NEW_HEARING_REQUIREMENTS_DIRECTION", legalRepresentativeRequestNewHearingRequirementsPersonalisation.getReferenceId(caseId));
-    }
-
-    @Test
-    void should_return_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(legalRepEmailAddress), legalRepresentativeRequestNewHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test

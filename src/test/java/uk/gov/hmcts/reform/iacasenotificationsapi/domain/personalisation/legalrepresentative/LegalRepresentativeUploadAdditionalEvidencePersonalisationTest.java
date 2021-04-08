@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +22,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,8 +34,6 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
     @Mock
     AsylumCase asylumCase;
 
-    @Mock
-    EmailAddressFinder emailAddressFinder;
     @Mock
     PersonalisationProvider personalisationProvider;
     @Mock
@@ -62,7 +58,6 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
 
     @BeforeEach
     public void setUp() {
-        when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
 
         legalRepresentativeUploadAdditionalEvidencePersonalisation =
             new LegalRepresentativeUploadAdditionalEvidencePersonalisation(
@@ -70,15 +65,8 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
                 afterListingTemplateId,
                 iaExUiFrontendUrl,
                 personalisationProvider,
-                emailAddressFinder,
                 customerServicesProvider
             );
-    }
-
-    @Test
-    public void should_return_the_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(legalRepEmailAddress),
-            legalRepresentativeUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test
@@ -91,12 +79,6 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
         assertEquals(afterListingTemplateId,
             legalRepresentativeUploadAdditionalEvidencePersonalisation.getTemplateId(asylumCase));
 
-    }
-
-    @Test
-    public void should_return_given_reference_id() {
-        assertEquals(caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_LEGAL_REP",
-            legalRepresentativeUploadAdditionalEvidencePersonalisation.getReferenceId(caseId));
     }
 
     @Test

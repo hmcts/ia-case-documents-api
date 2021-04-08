@@ -2,19 +2,16 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
-public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final PersonalisationProvider personalisationProvider;
     private final String applicationGrantedApplicantLegalRepTemplateId;
@@ -77,13 +74,6 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation 
         } else {
             return applicationNotAdmittedApplicantLegalRepTemplateId;
         }
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present")));
     }
 
     @Override

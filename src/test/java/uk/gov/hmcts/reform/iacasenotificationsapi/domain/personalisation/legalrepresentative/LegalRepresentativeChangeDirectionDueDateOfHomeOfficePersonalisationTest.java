@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_LEGAL_REPRESENTATIVE;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,15 +65,8 @@ public class LegalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisatio
                 beforeListingTemplateId,
                 iaExUiFrontendUrl,
                 personalisationProvider,
-                emailAddressFinder,
                 customerServicesProvider
             );
-    }
-
-    @Test
-    public void should_return_the_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(legalRepEmailAddress),
-            legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test

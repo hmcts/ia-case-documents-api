@@ -6,38 +6,31 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
-public class LegalRepresentativeRequestNewHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeRequestNewHearingRequirementsPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final String legalRepRequestNewHearingRequirementsTemplateId;
     private final String iaExUiFrontendUrl;
-    private final EmailAddressFinder emailAddressFinder;
     private final DirectionFinder directionFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
     public LegalRepresentativeRequestNewHearingRequirementsPersonalisation(
         @Value("${govnotify.template.requestNewHearingRequirements.legalRep.email}") String legalRepRequestNewHearingRequirementsTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        EmailAddressFinder emailAddressFinder,
         DirectionFinder directionFinder,
         CustomerServicesProvider customerServicesProvider
     ) {
         this.legalRepRequestNewHearingRequirementsTemplateId = legalRepRequestNewHearingRequirementsTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
-        this.emailAddressFinder = emailAddressFinder;
         this.directionFinder = directionFinder;
         this.customerServicesProvider = customerServicesProvider;
     }
@@ -45,11 +38,6 @@ public class LegalRepresentativeRequestNewHearingRequirementsPersonalisation imp
     @Override
     public String getTemplateId() {
         return legalRepRequestNewHearingRequirementsTemplateId;
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getLegalRepEmailAddress(asylumCase));
     }
 
     @Override

@@ -872,6 +872,7 @@ homeOfficeFtpaEmailAddresses:
   birmingham: ${IA_HOME_OFFICE_BIRMINGHAM_EMAIL:ho-birmingham@example.com}
   hattonCross: ${IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-ftpa-hatton-cross@example.com}
   glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
+  belfast: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
 
 hearingCentreTelephoneNumber:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_TELEPHONE:0300 123 1711}

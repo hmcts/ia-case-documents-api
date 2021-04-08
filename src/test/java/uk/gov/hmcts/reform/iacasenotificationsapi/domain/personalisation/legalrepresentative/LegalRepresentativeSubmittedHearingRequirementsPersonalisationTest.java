@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,6 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,8 +28,6 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
     Callback<AsylumCase> callback;
     @Mock
     AsylumCase asylumCase;
-    @Mock
-    EmailAddressFinder emailAddressFinder;
     @Mock
     PersonalisationProvider personalisationProvider;
     @Mock
@@ -55,14 +51,11 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
     @BeforeEach
     public void setUp() {
 
-        when(emailAddressFinder.getLegalRepEmailAddress(asylumCase)).thenReturn(legalRepEmailAddress);
-
         legalRepresentativeSubmittedHearingRequirementsPersonalisation =
             new LegalRepresentativeSubmittedHearingRequirementsPersonalisation(
                 templateId,
                 iaExUiFrontendUrl,
                 personalisationProvider,
-                emailAddressFinder,
                 customerServicesProvider
             );
     }
@@ -70,12 +63,6 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisationTest 
     @Test
     public void should_return_given_template_id() {
         assertEquals(templateId, legalRepresentativeSubmittedHearingRequirementsPersonalisation.getTemplateId());
-    }
-
-    @Test
-    public void should_return_given_email_address_from_asylum_case() {
-        assertEquals(Collections.singleton(legalRepEmailAddress),
-            legalRepresentativeSubmittedHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test

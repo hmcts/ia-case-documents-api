@@ -104,12 +104,6 @@ public class LegalRepresentativeEndAppealPersonalisationTest {
     }
 
     @Test
-    public void should_return_given_email_address_from_asylum_case() {
-        assertTrue(
-            legalRepresentativeEndAppealPersonalisation.getRecipientsList(asylumCase).contains(legalRepEmailAddress));
-    }
-
-    @Test
     public void should_throw_exception_when_cannot_find_email_address_for_legal_rep() {
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
 

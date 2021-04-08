@@ -4,17 +4,14 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
-public class LegalRepresentativeRequestFeeRemissionPersonalisation implements EmailNotificationPersonalisation {
+public class LegalRepresentativeRequestFeeRemissionPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final String requestFeeRemissionTemplateId;
     private final String iaExUiFrontendUrl;
@@ -35,13 +32,6 @@ public class LegalRepresentativeRequestFeeRemissionPersonalisation implements Em
     @Override
     public String getTemplateId() {
         return requestFeeRemissionTemplateId;
-    }
-
-    @Override
-    public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present")));
     }
 
     @Override

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
 
 public enum AsylumCaseDefinition {
@@ -77,6 +74,9 @@ public enum AsylumCaseDefinition {
 
     LEGAL_REPRESENTATIVE_EMAIL_ADDRESS(
             "legalRepresentativeEmailAddress", new TypeReference<String>(){}),
+
+    LEGAL_REPRESENTATIVE_CHANGE_ORG_EMAIL_ADDRESS(
+            "legalRepresentativeChangeOrgEmailAddress", new TypeReference<String>(){}),
 
     LEGAL_REPRESENTATIVE_NAME(
             "legalRepresentativeName", new TypeReference<String>(){}),
@@ -325,9 +325,11 @@ public enum AsylumCaseDefinition {
     CONTACT_PREFERENCE(
         "contactPreference", new TypeReference<ContactPreference>(){}),
 
-
     FEE_UPDATE_RECORDED(
         "feeUpdateRecorded", new TypeReference<CheckValues<String>>(){}),
+
+    CHANGE_ORGANISATION_REQUEST_FIELD(
+        "changeOrganisationRequestField", new TypeReference<ChangeOrganisationRequest>(){}),
     ;
 
     private final String value;

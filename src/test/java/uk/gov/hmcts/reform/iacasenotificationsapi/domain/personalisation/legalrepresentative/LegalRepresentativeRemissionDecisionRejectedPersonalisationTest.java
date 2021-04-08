@@ -1,12 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 
 import java.util.Map;
@@ -52,15 +50,6 @@ class LegalRepresentativeRemissionDecisionRejectedPersonalisationTest {
         assertEquals(templateId, legalRepresentativeRemissionDecisionRejectedPersonalisation.getTemplateId(asylumCase));
     }
 
-    @Test
-    void should_return_given_email_address_from_asylum_case() {
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class))
-            .thenReturn(Optional.of(legalRepEmailAddress));
-
-        assertTrue(
-            legalRepresentativeRemissionDecisionRejectedPersonalisation.getRecipientsList(asylumCase)
-                .contains(legalRepEmailAddress));
-    }
 
     @Test
     void should_return_personalisation_when_all_information_given() {
