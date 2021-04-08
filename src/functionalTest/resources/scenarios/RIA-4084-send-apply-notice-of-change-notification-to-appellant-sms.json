@@ -1,0 +1,29 @@
+{
+  "description": "RIA-4084 Send apply notice of change notification to appellant SMS",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 4084,
+      "eventId": "nocRequest",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "contactPreference": "wantsSms",
+          "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "confirmation_header": "success",
+      "confirmation_body": "success"
+    }
+   }
+}

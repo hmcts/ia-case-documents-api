@@ -215,6 +215,7 @@ public enum AsylumCaseDefinition {
     FTPA_RESPONDENT_DECISION_REMADE_RULE_32(
         "ftpaRespondentDecisionRemadeRule32", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
+
     FTPA_APPELLANT_SUBMITTED(
         "ftpaAppellantSubmitted", new TypeReference<YesOrNo>(){}),
 
@@ -322,8 +323,8 @@ public enum AsylumCaseDefinition {
     MOBILE_NUMBER(
         "mobileNumber", new TypeReference<String>(){}),
 
-    IS_REMOVE_REPRESENTATION_REQUESTED(
-        "isRemoveRepresentationRequested", new TypeReference<YesOrNo>(){}),
+    CONTACT_PREFERENCE(
+        "contactPreference", new TypeReference<ContactPreference>(){}),
 
 
     FEE_UPDATE_RECORDED(

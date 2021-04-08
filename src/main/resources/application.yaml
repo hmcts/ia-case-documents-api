@@ -633,7 +633,20 @@ govnotify:
         email: acb036e5-47a3-454f-a24b-4755bf7e258c
       adminOfficer:
         email: 701597ee-27da-42e1-888f-ff8d461174ac
-
+    nocRequestDecision:
+      legalRep:
+        beforeListing:
+          email: 6982f650-7010-4b81-82db-e0d2122f216f
+        afterListing:
+          email: 973211bd-76f6-4a10-816e-1daae928b75e
+      homeOffice:
+        beforeListing:
+          email: eea8e690-b0ff-45dd-b85b-c67d7ff516fd
+        afterListing:
+          email: 6b3df289-05f1-44ef-a42e-c82682646d5b
+      appellant:
+        email: 94dfef5c-3e42-4a87-8792-13fdd778e72b
+        sms: c442c9ef-b299-4b01-9f17-93c0d7340f7e
 
     manageFeeUpdate:
       ctsc:
@@ -674,8 +687,9 @@ security:
     - "caseworker-ia"
     - "citizen"
   roleEventAccess:
-    caseworker-approver:
+    caseworker-caa:
       - "nocRequest"
+    caseworker-approver:
       - "removeRepresentation"
       - "removeLegalRepresentative"
     citizen:
@@ -702,6 +716,7 @@ security:
       - "makeAnApplication"
       - "removeRepresentation"
       - "requestFeeRemission"
+      - "nocRequest"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"

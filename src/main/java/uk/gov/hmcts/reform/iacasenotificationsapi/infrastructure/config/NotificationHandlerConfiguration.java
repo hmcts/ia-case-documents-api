@@ -5,26 +5,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealT
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.HU;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.PA;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.RP;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_PARTIES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.EMAIL;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FEE_UPDATE_RECORDED;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPLICANT_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_APPEAL_DECIDED_INSTRUCT_STATUS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_APPELLANT_DECIDED_INSTRUCT_STATUS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_APPELLANT_INSTRUCT_STATUS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_RESPONDENT_DECIDED_INSTRUCT_STATUS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_FTPA_RESPONDENT_INSTRUCT_STATUS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REMISSIONS_ENABLED;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_REMOVE_REPRESENTATION_REQUESTED;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.MOBILE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBMIT_NOTIFICATION_STATUS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.REP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.APPROVED;
@@ -198,9 +179,9 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
-                    && isRespondent
-                    && !isOneOfHomeOfficeApiNotifications(callback);
+                       && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+                       && isRespondent
+                       && !isOneOfHomeOfficeApiNotifications(callback);
             },
             notificationGenerators
         );
@@ -233,9 +214,9 @@ public class NotificationHandlerConfiguration {
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
-                    && isRespondent
-                    && isOneOfHomeOfficeApiNotifications(callback);
+                       && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+                       && isRespondent
+                       && isOneOfHomeOfficeApiNotifications(callback);
             },
             notificationGenerators
         );
@@ -675,9 +656,9 @@ public class NotificationHandlerConfiguration {
                         .getCaseData();
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.SEND_DIRECTION
-                    && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
-                    && callback.getCaseDetails().getState() != State.AWAITING_RESPONDENT_EVIDENCE;
+                       && callback.getEvent() == Event.SEND_DIRECTION
+                       && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
+                       && callback.getCaseDetails().getState() != State.AWAITING_RESPONDENT_EVIDENCE;
             },
             notificationGenerators
         );
@@ -697,9 +678,9 @@ public class NotificationHandlerConfiguration {
                         .getCaseData();
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.SEND_DIRECTION
-                    && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
-                    && callback.getCaseDetails().getState() == State.AWAITING_RESPONDENT_EVIDENCE;
+                       && callback.getEvent() == Event.SEND_DIRECTION
+                       && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
+                       && callback.getCaseDetails().getState() == State.AWAITING_RESPONDENT_EVIDENCE;
             },
             notificationGenerators
         );
@@ -2005,18 +1986,9 @@ public class NotificationHandlerConfiguration {
 
         return new PostSubmitNotificationHandler(
             (callbackStage, callback) -> {
-                AsylumCase asylumCase =
-                    callback
-                        .getCaseDetails()
-                        .getCaseData();
-
-                boolean isRemoveReperesentationRequested = asylumCase.read(IS_REMOVE_REPRESENTATION_REQUESTED, YesOrNo.class)
-                    .map(decision -> decision == YES)
-                    .orElse(false);
-
                 return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
-                       && callback.getEvent() == Event.NOC_REQUEST
-                       && !isRemoveReperesentationRequested;
+                       && callback.getEvent() == Event.NOC_REQUEST;
+
             },
             notificationGenerators
         );
@@ -2164,6 +2136,53 @@ public class NotificationHandlerConfiguration {
             .map(type -> type == EA || type == HU).orElse(false);
     }
 
+    @Bean
+    public PostSubmitCallbackHandler<AsylumCase> nocRequestDecisionAppellantSmsNotificationHandler(
+        @Qualifier("nocRequestDecisionAppellantSmsNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new PostSubmitNotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                boolean smsPreferred = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)
+                    .map(contactPreference -> ContactPreference.WANTS_SMS == contactPreference)
+                    .orElse(false);
+                return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
+                       && callback.getEvent() == Event.NOC_REQUEST
+                       && smsPreferred
+                       && asylumCase.read(MOBILE_NUMBER, String.class).isPresent();
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PostSubmitCallbackHandler<AsylumCase> nocRequestDecisionAppellantEmailNotificationHandler(
+        @Qualifier("nocRequestDecisionAppellantEmailNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new PostSubmitNotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                boolean emailPreferred = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)
+                    .map(contactPreference -> ContactPreference.WANTS_EMAIL == contactPreference)
+                    .orElse(false);
+                return callbackStage == PostSubmitCallbackStage.CCD_SUBMITTED
+                       && callback.getEvent() == Event.NOC_REQUEST
+                       && emailPreferred
+                       && asylumCase.read(EMAIL, String.class).isPresent();
+            },
+            notificationGenerators
+        );
+    }
 }
 
 

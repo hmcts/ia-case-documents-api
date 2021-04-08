@@ -1751,23 +1751,22 @@ public class NotificationGeneratorConfiguration {
     }
 
     @Bean("nocRequestDecisionNotificationGenerator")
-    public List<NotificationGenerator> nocRequestDecisionNotificationGenerator(
+    public List<NotificationGenerator> nocRequestDecisionNotificationHandler(
+        LegalRepresentativeNocRequestDecisionPersonalisation legalRepresentativeNocRequestDecisionPersonalisation,
+        HomeOfficeNocRequestDecisionPersonalisation homeOfficeNocRequestDecisionPersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender
     ) {
 
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(),
+                newArrayList(
+                    legalRepresentativeNocRequestDecisionPersonalisation,
+                    homeOfficeNocRequestDecisionPersonalisation
+                ),
                 notificationSender,
                 notificationIdAppender
-
-            ) {
-                @Override
-                public Message getSuccessMessage() {
-                    return new Message("header","body");
-                }
-            }
+            )
         );
     }
 
@@ -1916,4 +1915,46 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+
+    @Bean("nocRequestDecisionAppellantEmailNotificationGenerator")
+    public List<NotificationGenerator> nocRequestDecisionAppellantEmailNotificationHandler(
+        AppellantNocRequestDecisionPersonalisationEmail appellantNocRequestDecisionPersonalisationEmail,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    appellantNocRequestDecisionPersonalisationEmail
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("nocRequestDecisionAppellantSmsNotificationGenerator")
+    public List<NotificationGenerator> nocRequestDecisionAppellantSmsNotificationHandler(
+        AppellantNocRequestDecisionPersonalisationSms appellantNocRequestDecisionPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new SmsNotificationGenerator(
+                newArrayList(
+                    appellantNocRequestDecisionPersonalisationSms
+                ),
+                notificationSender,
+                notificationIdAppender
+
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("header","body");
+                }
+            }
+        );
+    }
 }
