@@ -662,7 +662,9 @@ govnotify:
           email: fa830c15-c2d8-40a7-8582-495a8b732d56
         afterListing:
           email: 901ffe0e-3b61-4c10-8047-2871c9d649c5
-
+      legalRep:
+        refundInstructed:
+          email: d8c58492-350b-4191-847a-739502c6d800
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 

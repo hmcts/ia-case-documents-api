@@ -330,6 +330,10 @@ public enum AsylumCaseDefinition {
 
     CHANGE_ORGANISATION_REQUEST_FIELD(
         "changeOrganisationRequestField", new TypeReference<ChangeOrganisationRequest>(){}),
+
+    FEE_UPDATE_COMPLETED_STAGES(
+        "feeUpdateCompletedStages", new TypeReference<List<String>>(){}),
+
     ;
 
     private final String value;

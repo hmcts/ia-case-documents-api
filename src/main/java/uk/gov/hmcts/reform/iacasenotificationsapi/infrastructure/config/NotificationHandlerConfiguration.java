@@ -1981,6 +1981,32 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> manageFeeUpdateRefundInstructedNotificationHandler(
+        @Qualifier("manageFeeUpdateRefundInstructedNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                Optional<List<String>> completedStages = asylumCase.read(FEE_UPDATE_COMPLETED_STAGES);
+                boolean isRefundInstructed = completedStages.isPresent()
+                                             && completedStages.get().get(completedStages.get().size() - 1)
+                                                 .equals("feeUpdateRefundInstructed");
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.MANAGE_FEE_UPDATE
+                       && isRefundInstructed;
+            },
+            notificationGenerators
+        );
+
+    }
+
+    @Bean
     public PostSubmitCallbackHandler<AsylumCase> nocRequestDecisionNotificationHandler(
         @Qualifier("nocRequestDecisionNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {

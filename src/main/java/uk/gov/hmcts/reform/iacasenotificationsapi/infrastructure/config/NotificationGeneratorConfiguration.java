@@ -1987,4 +1987,22 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("manageFeeUpdateRefundInstructedNotificationGenerator")
+    public List<NotificationGenerator> manageFeeUpdateRefundInstructedNotificationHandler(
+        LegalRepresentativeManageFeeUpdatePersonalisation legalRepresentativeManageFeeUpdatePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeManageFeeUpdatePersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }
