@@ -27,7 +27,6 @@ public class AppointmentRequirementsFieldMapper {
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
-
         fieldValues.put("isInterpreterServicesNeeded", asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class).orElse(YesOrNo.NO));
 
         Optional<List<IdValue<InterpreterLanguage>>> interpreterLanguage = asylumCase.read(INTERPRETER_LANGUAGE);
