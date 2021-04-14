@@ -10,7 +10,18 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "manchester"
+          "hearingCentre": "manchester",
+          "changeOrganisationRequestField": {
+            "CaseRoleId": null,
+            "ApprovalStatus": null,
+            "RequestTimestamp": null,
+            "OrganisationToAdd": {
+              "OrganisationID": null
+            },
+            "OrganisationToRemove": {
+              "OrganisationID": null
+            }
+          }
         }
       }
     }

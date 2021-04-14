@@ -18,12 +18,18 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class LegalRepresentativeNocRequestDecisionPersonalisationTest {
 
+    @Mock
+    Callback<AsylumCase> callback;
+    @Mock
+    CaseDetails<AsylumCase> caseDetails;
     @Mock
     AsylumCase asylumCase;
     @Mock
@@ -46,6 +52,8 @@ class LegalRepresentativeNocRequestDecisionPersonalisationTest {
     @BeforeEach
     void setup() {
 
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
@@ -97,16 +105,16 @@ class LegalRepresentativeNocRequestDecisionPersonalisationTest {
     void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(
-            () -> legalRepresentativeNocRequestDecisionPersonalisation.getPersonalisation((AsylumCase) null))
+            () -> legalRepresentativeNocRequestDecisionPersonalisation.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("asylumCase must not be null");
+            .hasMessage("callback must not be null");
     }
 
     @Test
     void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
-            legalRepresentativeNocRequestDecisionPersonalisation.getPersonalisation(asylumCase);
+            legalRepresentativeNocRequestDecisionPersonalisation.getPersonalisation(callback);
 
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
@@ -122,7 +130,7 @@ class LegalRepresentativeNocRequestDecisionPersonalisationTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> personalisation =
-            legalRepresentativeNocRequestDecisionPersonalisation.getPersonalisation(asylumCase);
+            legalRepresentativeNocRequestDecisionPersonalisation.getPersonalisation(callback);
 
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());

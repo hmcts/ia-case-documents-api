@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
@@ -29,9 +30,9 @@ public class LegalRepresentativeNocRequestDecisionPersonalisation implements Ema
 
     public LegalRepresentativeNocRequestDecisionPersonalisation(
         @NotNull(message = "nocRequestDecisionLegalRepresentativeBeforeListingTemplateId cannot be null")
-        @Value("${govnotify.template.nocRequestDecision.legalRep.beforeListing.email}") String nocRequestDecisionLegalRepresentativeBeforeListingTemplateId,
+        @Value("${govnotify.template.removeRepresentation.legalRep.beforeListing.email}") String nocRequestDecisionLegalRepresentativeBeforeListingTemplateId,
         @NotNull(message = "nocRequestDecisionLegalRepresentativeAfterListingTemplateId cannot be null")
-        @Value("${govnotify.template.nocRequestDecision.legalRep.afterListing.email}") String nocRequestDecisionLegalRepresentativeAfterListingTemplateId,
+        @Value("${govnotify.template.removeRepresentation.legalRep.afterListing.email}") String nocRequestDecisionLegalRepresentativeAfterListingTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         CustomerServicesProvider customerServicesProvider
     ) {
@@ -63,12 +64,15 @@ public class LegalRepresentativeNocRequestDecisionPersonalisation implements Ema
     }
 
     @Override
-    public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        requireNonNull(asylumCase, "asylumCase must not be null");
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("ccdCaseId", String.valueOf(callback.getCaseDetails().getId()))
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
             .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
