@@ -323,6 +323,8 @@ dependencies {
 //    compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: versions.reformHealthStarter
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+    compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
+
     compile group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.17.0-RELEASE'
 
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
