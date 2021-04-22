@@ -20,6 +20,7 @@ public enum AsylumCaseDefinition {
 
     BUNDLE_FILE_NAME_PREFIX(
         "bundleFileNamePrefix", new TypeReference<String>(){}),
+
     HOME_OFFICE_REFERENCE_NUMBER(
         "homeOfficeReferenceNumber", new TypeReference<String>(){}),
 
@@ -28,23 +29,31 @@ public enum AsylumCaseDefinition {
 
     DECISION_LETTER_RECEIVED_DATE(
             "decisionLetterReceivedDate", new TypeReference<String>(){}),
+
     APPEAL_OUT_OF_COUNTRY(
             "appealOutOfCountry", new TypeReference<YesOrNo>() {}),
+
     HAS_SPONSOR(
             "hasSponsor", new TypeReference<YesOrNo>(){}),
 
     GWF_REFERENCE_NUMBER(
             "gwfReferenceNumber", new TypeReference<String>(){}),
+
     DATE_ENTRY_CLEARANCE_DECISION(
             "dateEntryClearanceDecision", new TypeReference<String>(){}),
+
     DATE_CLIENT_LEAVE_UK(
             "dateClientLeaveUk", new TypeReference<String>(){}),
+
     OUT_OF_COUNTRY_DECISION_TYPE(
             "outOfCountryDecisionType", new TypeReference<OutOfCountryDecisionType>(){}),
+
     HAS_CORRESPONDENCE_ADDRESS(
             "hasCorrespondenceAddress", new TypeReference<YesOrNo>(){}),
+
     APPELLANT_OUT_OF_COUNTRY_ADDRESS(
             "appellantOutOfCountryAddress", new TypeReference<String>(){}),
+
     SPONSOR_GIVEN_NAMES(
             "sponsorGivenNames", new TypeReference<String>(){}),
 
@@ -59,6 +68,7 @@ public enum AsylumCaseDefinition {
 
     SPONSOR_MOBILE_NUMBER(
             "sponsorMobileNumber", new TypeReference<String>(){}),
+
     SPONSOR_ADDRESS_FOR_DISPLAY(
             "sponsorAddressForDisplay", new TypeReference<String>(){}),
 
@@ -438,6 +448,12 @@ public enum AsylumCaseDefinition {
 
     REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE(
             "remoteVideoCallTribunalResponse", new TypeReference<String>(){}),
+
+    IS_EVIDENCE_FROM_OUTSIDE_UK_OOC(
+        "isEvidenceFromOutsideUkOoc", new TypeReference<YesOrNo>() {}),
+
+    IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY(
+        "isEvidenceFromOutsideUkInCountry", new TypeReference<YesOrNo>() {}),
 
     ;
 

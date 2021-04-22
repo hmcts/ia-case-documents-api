@@ -60,7 +60,7 @@ appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-AP
 hearingRequirementsDocument.contentType: application/pdf
 hearingRequirementsDocument.fileExtension: PDF
 hearingRequirementsDocument.fileName: "hearing-requirements"
-hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-GNO-ENG-00673.docx}
+hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-GNO-ENG-00675.docx}
 
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
