@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.FileType;
@@ -26,9 +25,7 @@ public class WordDocumentToPdfConverter {
 
         File tempPdfFile;
 
-        try {
-
-            InputStream wordDocumentInputStream = resource.getInputStream();
+        try (InputStream wordDocumentInputStream = resource.getInputStream()) {
 
             File tempWordDocumentFile = createTempFile(
                 "tmp_",
@@ -38,8 +35,6 @@ public class WordDocumentToPdfConverter {
                 wordDocumentInputStream,
                 tempWordDocumentFile.toPath(),
                 StandardCopyOption.REPLACE_EXISTING);
-
-            IOUtils.closeQuietly(wordDocumentInputStream);
 
             byte[] convertedBinary = docmosisDocumentConversionClient.convert(
                 tempWordDocumentFile,
