@@ -94,6 +94,11 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
+                Optional.of("The decision is unlawful under section 6 of the Human Rights Act 1998"),
+                tsvStringProvider.get("appealGrounds", "humanRightsRefusal")
+        );
+
+        assertEquals(
             Optional.of("Revocation of the appellant's protection status breaches the United Kingdom's obligations under the Refugee Convention"),
             tsvStringProvider.get("appealGrounds", "revocationRefugeeConvention")
         );
