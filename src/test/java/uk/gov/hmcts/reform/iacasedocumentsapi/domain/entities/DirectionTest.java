@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -16,8 +16,16 @@ public class DirectionTest {
     private final String dateDue = "2018-12-31T12:34:56";
     private final String dateSent = "2018-12-25";
     private DirectionTag tag = DirectionTag.LEGAL_REPRESENTATIVE_REVIEW;
-    private List<IdValue<PreviousDates>> previousDates = Collections.emptyList();
     private final List<IdValue<ClarifyingQuestion>> question = asList(new IdValue<>("1", new ClarifyingQuestion("question")));
+    private final String previousDateDue = "2019-12-01";
+    private final String previousDateSent = "2018-12-01T12:34:56";
+
+    private PreviousDates previousDate = new PreviousDates(
+        previousDateDue,
+        previousDateSent
+    );
+
+    private List<IdValue<PreviousDates>> previousDates = newArrayList(new IdValue<>("1", previousDate));
 
     private Direction direction = new Direction(
         explanation,
@@ -29,13 +37,13 @@ public class DirectionTest {
     );
 
     private Direction directionWithQuestion = new Direction(
-            explanation,
-            parties,
-            dateDue,
-            dateSent,
-            tag,
-            previousDates,
-            question
+        explanation,
+        parties,
+        dateDue,
+        dateSent,
+        tag,
+        previousDates,
+        question
     );
 
     @Test

@@ -17,6 +17,15 @@ public class AsylumAppealTypeTest {
     }
 
     @Test
+    public void has_correct_string_values_for_asylum_appeal_types() {
+        assertEquals("revocationOfProtection", AsylumAppealType.RP.toString());
+        assertEquals("protection", AsylumAppealType.PA.toString());
+        assertEquals("refusalOfHumanRights", AsylumAppealType.HU.toString());
+        assertEquals("refusalOfEu", AsylumAppealType.EA.toString());
+        assertEquals("deprivation", AsylumAppealType.DC.toString());
+    }
+
+    @Test
     public void returns_optional_for_unknown_appeal_type() {
         assertEquals(AsylumAppealType.from("some_unknown_type"), Optional.empty());
     }
