@@ -23,6 +23,22 @@ public class HearingLengthTest {
     }
 
     @Test
+    public void has_correct_string_values() {
+        assertEquals("30", HearingLength.LENGTH_30_MINUTES.toString());
+        assertEquals("60", HearingLength.LENGTH_1_HOUR.toString());
+        assertEquals("90", HearingLength.LENGTH_1_HOUR_30_MINUTES.toString());
+        assertEquals("120", HearingLength.LENGTH_2_HOURS.toString());
+        assertEquals("150", HearingLength.LENGTH_2_HOURS_30_MINUTES.toString());
+        assertEquals("180", HearingLength.LENGTH_3_HOURS.toString());
+        assertEquals("210", HearingLength.LENGTH_3_HOURS_30_MINUTES.toString());
+        assertEquals("240", HearingLength.LENGTH_4_HOURS.toString());
+        assertEquals("270", HearingLength.LENGTH_4_HOURS_30_MINUTES.toString());
+        assertEquals("300", HearingLength.LENGTH_5_HOURS.toString());
+        assertEquals("330", HearingLength.LENGTH_5_HOURS_30_MINUTES.toString());
+        assertEquals("360", HearingLength.LENGTH_6_HOURS.toString());
+    }
+
+    @Test
     public void can_be_created_from() {
         assertEquals(HearingLength.from(30).get(), HearingLength.LENGTH_30_MINUTES);
         assertEquals(HearingLength.from(360).get(), HearingLength.LENGTH_6_HOURS);

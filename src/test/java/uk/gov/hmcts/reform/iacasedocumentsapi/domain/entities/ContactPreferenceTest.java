@@ -15,6 +15,12 @@ public class ContactPreferenceTest {
     }
 
     @Test
+    public void has_correct_asylum_string_values_for_contact_preference() {
+        assertEquals("wantsEmail", ContactPreference.WANTS_EMAIL.toString());
+        assertEquals("wantsSms", ContactPreference.WANTS_SMS.toString());
+    }
+
+    @Test
     public void returns_optional_for_unknown_contact_preference() {
         assertEquals(ContactPreference.from("unknown_contact_type"), Optional.empty());
     }

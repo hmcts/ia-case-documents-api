@@ -28,4 +28,11 @@ public class AppealDecisionTest {
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("invalid-value not an AppealDecision");
     }
+
+    @Test
+    public void correct_string_values_mapped_to_enum() {
+
+        assertEquals(AppealDecision.ALLOWED.toString(), "allowed");
+        assertEquals(AppealDecision.DISMISSED.toString(), "dismissed");
+    }
 }
