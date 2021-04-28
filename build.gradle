@@ -278,7 +278,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.11.2'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
-    compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '3.0.1'
 
     compile group: 'uk.gov.hmcts.reform', name: 'document-management-client', version: '6.0.0'
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.reformLogging
