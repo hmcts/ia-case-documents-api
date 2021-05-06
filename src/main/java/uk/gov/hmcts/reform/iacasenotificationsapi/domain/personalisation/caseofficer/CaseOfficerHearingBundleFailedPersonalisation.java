@@ -10,9 +10,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
 public class CaseOfficerHearingBundleFailedPersonalisation implements EmailNotificationPersonalisation {
@@ -21,18 +21,18 @@ public class CaseOfficerHearingBundleFailedPersonalisation implements EmailNotif
     private final String hearingBundleFailedCaseOfficerTemplateId;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
-    private final Map<HearingCentre, String> hearingCentreEmailAddresses;
+    private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerHearingBundleFailedPersonalisation(
-        @Value("${govnotify.template.hearingBundleFailed.caseOfficer.email}") String hearingBundleFailedCaseOfficerTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        CustomerServicesProvider customerServicesProvider,
-        Map<HearingCentre, String> hearingCentreEmailAddresses
+            @Value("${govnotify.template.hearingBundleFailed.caseOfficer.email}") String hearingBundleFailedCaseOfficerTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            CustomerServicesProvider customerServicesProvider,
+            EmailAddressFinder emailAddressFinder
     ) {
         this.hearingBundleFailedCaseOfficerTemplateId = hearingBundleFailedCaseOfficerTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;
-        this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
+        this.emailAddressFinder = emailAddressFinder;
     }
 
     @Override
@@ -42,20 +42,7 @@ public class CaseOfficerHearingBundleFailedPersonalisation implements EmailNotif
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        final HearingCentre listCaseHearingCentre =
-            asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-
-        final String hearingCentreEmailAddress =
-            hearingCentreEmailAddresses
-                .get(listCaseHearingCentre);
-
-        if (hearingCentreEmailAddress == null) {
-            throw new IllegalStateException("Hearing centre email address not found: " + listCaseHearingCentre.toString());
-        }
-
-        return Collections.singleton(hearingCentreEmailAddress);
+        return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
 
     }
 
