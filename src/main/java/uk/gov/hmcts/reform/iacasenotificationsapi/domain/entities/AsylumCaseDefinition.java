@@ -334,6 +334,8 @@ public enum AsylumCaseDefinition {
     FEE_UPDATE_COMPLETED_STAGES(
         "feeUpdateCompletedStages", new TypeReference<List<String>>(){}),
 
+    OUT_OF_TIME_DECISION_TYPE(
+        "outOfTimeDecisionType", new TypeReference<OutOfTimeDecisionType>(){}),
     ;
 
     private final String value;

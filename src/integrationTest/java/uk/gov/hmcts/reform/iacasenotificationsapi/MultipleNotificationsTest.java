@@ -11,6 +11,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS_SENT;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_TYPE;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -35,11 +36,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.SpringBoot
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.StaticPortWiremockFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.WithServiceAuthStub;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Parties;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
@@ -111,6 +108,7 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
         caseData.write(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, "someone@somewhere.com");
         caseData.write(HEARING_CENTRE, HearingCentre.MANCHESTER);
         caseData.write(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.APPEAL_SUBMITTED);
+        caseData.write(OUT_OF_TIME_DECISION_TYPE, OutOfTimeDecisionType.APPROVED);
 
         CaseDetails<AsylumCase> caseDetails = new CaseDetails<>(
             caseDetailsId,

@@ -80,6 +80,7 @@ public enum Event {
     REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative"),
     REQUEST_FEE_REMISSION("requestFeeRemission"),
     MANAGE_FEE_UPDATE("manageFeeUpdate"),
+    RECORD_OUT_OF_TIME_DECISION("recordOutOfTimeDecision"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

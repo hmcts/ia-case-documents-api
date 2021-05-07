@@ -2005,4 +2005,38 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("recordOfTimeDecisionCanProceedEmailNotificationGenerator")
+    public List<NotificationGenerator> recordOfTimeDecisionCanProceedEmailNotificationHandler(
+        LegalRepresentativeRecordOutOfTimeDecisionCanProceed legalRepresentativeRecordOutOfTimeDecisionCanProceed,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeRecordOutOfTimeDecisionCanProceed
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("recordOfTimeDecisionCannotProceedEmailNotificationGenerator")
+    public List<NotificationGenerator> recordOfTimeDecisionCannotProceedEmailNotificationHandler(
+        LegalRepresentativeRecordOutOfTimeDecisionCannotProceed legalRepresentativeRecordOutOfTimeDecisionCannotProceed,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeRecordOutOfTimeDecisionCannotProceed
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

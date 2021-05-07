@@ -650,7 +650,6 @@ govnotify:
       appellant:
         email: 94dfef5c-3e42-4a87-8792-13fdd778e72b
         sms: c442c9ef-b299-4b01-9f17-93c0d7340f7e
-
     manageFeeUpdate:
       ctsc:
         beforeListing:
@@ -665,6 +664,13 @@ govnotify:
       legalRep:
         refundInstructed:
           email: d8c58492-350b-4191-847a-739502c6d800
+    recordOutOfTimeDecision:
+      legalRep:
+        canProceed:
+          email: 163f3a93-974a-44c1-89fd-9769afdf8ba3
+        cannotProceed:
+          email: c2118e88-ab65-4e4b-8828-4078b4c1d12b
+
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -768,6 +774,7 @@ security:
       - "requestNewHearingRequirements"
       - "removeLegalRepresentative"
       - "manageFeeUpdate"
+      - "recordOutOfTimeDecision"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
