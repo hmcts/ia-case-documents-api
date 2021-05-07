@@ -102,7 +102,7 @@ public class EmailAddressFinder {
                 return emailAddressesMap.get(HearingCentre.GLASGOW);
             case NOTTINGHAM:
             case COVENTRY:
-                return emailAddressesMap.get(HearingCentre.BRADFORD);
+                return emailAddressesMap.get(HearingCentre.BIRMINGHAM);
             default:
                 return emailAddressesMap.get(hearingCentre);
         }

@@ -137,16 +137,16 @@ public class EmailAddressFinderTest {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NOTTINGHAM));
         when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NOTTINGHAM));
-        when(hearingCentreEmailAddresses.get(BRADFORD)).thenReturn("hc-bradford@example.com");
-        when(homeOfficeEmailAddresses.get(BRADFORD)).thenReturn("ho-bradford@example.com");
+        when(hearingCentreEmailAddresses.get(BIRMINGHAM)).thenReturn("hc-bradford@example.com");
+        when(homeOfficeEmailAddresses.get(BIRMINGHAM)).thenReturn("ho-bradford@example.com");
         assertEquals("hc-bradford@example.com", emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
         assertEquals("ho-bradford@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
         assertEquals("ho-bradford@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(COVENTRY));
         when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(COVENTRY));
-        when(hearingCentreEmailAddresses.get(BRADFORD)).thenReturn("hc-bradford@example.com");
-        when(homeOfficeEmailAddresses.get(BRADFORD)).thenReturn("ho-bradford@example.com");
+        when(hearingCentreEmailAddresses.get(BIRMINGHAM)).thenReturn("hc-bradford@example.com");
+        when(homeOfficeEmailAddresses.get(BIRMINGHAM)).thenReturn("ho-bradford@example.com");
         assertEquals("hc-bradford@example.com", emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
         assertEquals("ho-bradford@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
         assertEquals("ho-bradford@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));

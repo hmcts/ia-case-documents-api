@@ -47,7 +47,7 @@
     "notifications": [
       {
         "reference": "1106_CASE_LISTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "recipient": "{$hearingCentreEmailAddresses.birmingham}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
           "PA/12345/2019",
@@ -83,7 +83,7 @@
       },
       {
         "reference": "1106_CASE_LISTED_HOME_OFFICE",
-        "recipient": "{$homeOfficeEmailAddresses.bradford}",
+        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
           "PA/12345/2019",
