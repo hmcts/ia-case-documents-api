@@ -28,6 +28,8 @@ public enum DocumentTag {
     FTPA_APPELLANT("ftpaAppellant"),
     FTPA_RESPONDENT("ftpaRespondent"),
     FTPA_DECISION_AND_REASONS("ftpaDecisionAndReasons"),
+    RECORD_OUT_OF_TIME_DECISION_DOCUMENT("recordOutOfTimeDecisionDocument"),
+
     @JsonEnumDefaultValue
     NONE("");
 
