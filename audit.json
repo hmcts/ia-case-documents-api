@@ -3,8 +3,8 @@
     "task": "OWASP Zaproxy",
     "appname": "http://ia-case-payments-api-aat.service.core-compute-aat.internal",
     "description": "\u003cp\u003eA cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.\u003c/p\u003e",
-    "fingerprint": "10054_Cookie Without SameSite Attribute_http://ia-case-payments-api-aat.service.core-compute-aat.internal/v2/api-docs_GET",
-    "detail": "Cookie Without SameSite Attribute \n Evidence: Set-Cookie: dtCookie \n Solution: \u003cp\u003eEnsure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.\u003c/p\u003e \n Other info: null \n Reference: \u003cp\u003ehttps://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site\u003c/p\u003e",
+    "fingerprint": "10054_Cookie without SameSite Attribute_http://ia-case-payments-api-aat.service.core-compute-aat.internal/v2/api-docs_GET",
+    "detail": "Cookie without SameSite Attribute \n Evidence: Set-Cookie: dtCookie \n Solution: \u003cp\u003eEnsure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.\u003c/p\u003e \n Other info: null \n Reference: \u003cp\u003ehttps://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site\u003c/p\u003e",
     "source": "URI: http://ia-case-payments-api-aat.service.core-compute-aat.internal/v2/api-docs Method: GET",
     "severity": 1,
     "timestamp": "2020-09-23T12:22:06.823+00:00"
@@ -13,8 +13,8 @@
     "task": "OWASP Zaproxy",
     "appname": "http://ia-case-payments-api-aat.service.core-compute-aat.internal",
     "description": "\u003cp\u003eA cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.\u003c/p\u003e",
-    "fingerprint": "10054_Cookie Without SameSite Attribute_http://ia-case-payments-api-aat.service.core-compute-aat.internal/asylum/ccdAboutToSubmit_POST",
-    "detail": "Cookie Without SameSite Attribute \n Evidence: Set-Cookie: dtCookie \n Solution: \u003cp\u003eEnsure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.\u003c/p\u003e \n Other info: null \n Reference: \u003cp\u003ehttps://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site\u003c/p\u003e",
+    "fingerprint": "10054_Cookie without SameSite Attribute_http://ia-case-payments-api-aat.service.core-compute-aat.internal/asylum/ccdAboutToSubmit_POST",
+    "detail": "Cookie without SameSite Attribute \n Evidence: Set-Cookie: dtCookie \n Solution: \u003cp\u003eEnsure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.\u003c/p\u003e \n Other info: null \n Reference: \u003cp\u003ehttps://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site\u003c/p\u003e",
     "source": "URI: http://ia-case-payments-api-aat.service.core-compute-aat.internal/asylum/ccdAboutToSubmit Method: POST",
     "severity": 1,
     "timestamp": "2020-09-23T12:22:06.823+00:00"
@@ -23,8 +23,8 @@
     "task": "OWASP Zaproxy",
     "appname": "http://ia-case-payments-api-aat.service.core-compute-aat.internal",
     "description": "\u003cp\u003eA cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.\u003c/p\u003e",
-    "fingerprint": "10054_Cookie Without SameSite Attribute_http://ia-case-payments-api-aat.service.core-compute-aat.internal/_GET",
-    "detail": "Cookie Without SameSite Attribute \n Evidence: Set-Cookie: dtCookie \n Solution: \u003cp\u003eEnsure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.\u003c/p\u003e \n Other info: null \n Reference: \u003cp\u003ehttps://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site\u003c/p\u003e",
+    "fingerprint": "10054_Cookie without SameSite Attribute_http://ia-case-payments-api-aat.service.core-compute-aat.internal/_GET",
+    "detail": "Cookie without SameSite Attribute \n Evidence: Set-Cookie: dtCookie \n Solution: \u003cp\u003eEnsure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.\u003c/p\u003e \n Other info: null \n Reference: \u003cp\u003ehttps://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site\u003c/p\u003e",
     "source": "URI: http://ia-case-payments-api-aat.service.core-compute-aat.internal/ Method: GET",
     "severity": 1,
     "timestamp": "2020-09-23T12:22:06.823+00:00"
