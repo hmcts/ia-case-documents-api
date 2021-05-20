@@ -76,8 +76,10 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 22;
             case FTPA_DECISION_AND_REASONS:
                 return 23;
-            case NONE:
+            case RECORD_OUT_OF_TIME_DECISION_DOCUMENT:
                 return 24;
+            case NONE:
+                return 25;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
