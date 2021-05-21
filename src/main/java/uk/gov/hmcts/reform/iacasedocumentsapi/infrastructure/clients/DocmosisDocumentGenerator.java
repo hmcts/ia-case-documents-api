@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 
 @Service
+@Slf4j
 public class DocmosisDocumentGenerator implements DocumentGenerator {
 
     private final String docmosisAccessKey;
@@ -64,6 +66,8 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
 
         try {
 
+            log.info("Docmosis document generation is started for template: {}", templateName);
+            long start = System.currentTimeMillis();
             documentData =
                 restTemplate
                     .postForObject(
@@ -71,6 +75,7 @@ public class DocmosisDocumentGenerator implements DocumentGenerator {
                         requestEntity,
                         byte[].class
                     );
+            log.info("Docmosis document generation has been finished for template: {} in {}ms", templateName, System.currentTimeMillis() - start);
 
         } catch (RestClientResponseException clientEx) {
 
