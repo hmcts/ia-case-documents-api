@@ -41,6 +41,7 @@ spring:
         home-office-allowed-appeal-email: IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL
         home-office-dismissed-appeal-email: IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL
         admin-officer-review-hearing-requirements-email: IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL
+        ctsc-admin-ftpa-decision-email: IA_CTSC_ADMIN_FTPA_DECISION
         ctsc-admin-ftpa-submitted-email: IA_CTSC_ADMIN_FTPA_SUBMITTED
         respondent-ftpa-submitted-email: IA_RESPONDENT_FTPA_SUBMITTED
         customer-services-telephone: IA_CUSTOMER_SERVICES_TELEPHONE

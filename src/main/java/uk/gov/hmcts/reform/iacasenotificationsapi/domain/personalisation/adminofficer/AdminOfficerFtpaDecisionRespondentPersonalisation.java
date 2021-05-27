@@ -19,17 +19,17 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisation implements EmailN
 
     private final String applicationGrantedAdminTemplateId;
     private final String applicationPartiallyGrantedAdminTemplateId;
-    private final String reviewHearingRequirementsAdminOfficerEmailAddress;
+    private final String ctscAdminFtpaDecisionEmailAddress;
     private final PersonalisationProvider personalisationProvider;
 
     public AdminOfficerFtpaDecisionRespondentPersonalisation(
         @Value("${govnotify.template.applicationGranted.admin.email}") String applicationGrantedAdminTemplateId,
         @Value("${govnotify.template.applicationPartiallyGranted.admin.email}") String applicationPartiallyGrantedAdminTemplateId,
-        @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
+        @Value("${ctscAdminFtpaDecisionEmailAddress}") String ctscAdminFtpaDecisionEmailAddress,
         PersonalisationProvider personalisationProvider) {
         this.applicationGrantedAdminTemplateId = applicationGrantedAdminTemplateId;
         this.applicationPartiallyGrantedAdminTemplateId = applicationPartiallyGrantedAdminTemplateId;
-        this.reviewHearingRequirementsAdminOfficerEmailAddress = reviewHearingRequirementsAdminOfficerEmailAddress;
+        this.ctscAdminFtpaDecisionEmailAddress = ctscAdminFtpaDecisionEmailAddress;
         this.personalisationProvider = personalisationProvider;
     }
 
@@ -53,7 +53,7 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisation implements EmailN
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(reviewHearingRequirementsAdminOfficerEmailAddress);
+        return Collections.singleton(ctscAdminFtpaDecisionEmailAddress);
     }
 
     @Override

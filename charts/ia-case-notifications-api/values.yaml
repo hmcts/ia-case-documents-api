@@ -48,6 +48,7 @@ java:
         - admin-officer-review-hearing-requirements-email
         - ctsc-admin-ftpa-submitted-email
         - respondent-ftpa-submitted-email
+        - ctsc-admin-ftpa-decision-email
         - customer-services-telephone
         - customer-services-email
         - system-username

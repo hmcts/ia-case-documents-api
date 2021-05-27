@@ -20,18 +20,19 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisation implements EmailNo
 
     private final String applicationGrantedAdminTemplateId;
     private final String applicationPartiallyGrantedAdminTemplateId;
-    private final String reviewHearingRequirementsAdminOfficerEmailAddress;
+    private final String ctscAdminFtpaDecisionEmailAddress;
     private final PersonalisationProvider personalisationProvider;
 
     public AdminOfficerFtpaDecisionAppellantPersonalisation(
         @Value("${govnotify.template.applicationGranted.admin.email}") String applicationGrantedAdminTemplateId,
         @Value("${govnotify.template.applicationPartiallyGranted.admin.email}") String applicationPartiallyGrantedAdminTemplateId,
-        @Value("${reviewHearingRequirementsAdminOfficerEmailAddress}") String reviewHearingRequirementsAdminOfficerEmailAddress,
+        @Value("${ctscAdminFtpaDecisionEmailAddress}") String ctscAdminFtpaDecisionEmailAddress,
         PersonalisationProvider personalisationProvider) {
         this.applicationGrantedAdminTemplateId = applicationGrantedAdminTemplateId;
         this.applicationPartiallyGrantedAdminTemplateId = applicationPartiallyGrantedAdminTemplateId;
-        this.reviewHearingRequirementsAdminOfficerEmailAddress = reviewHearingRequirementsAdminOfficerEmailAddress;
+        this.ctscAdminFtpaDecisionEmailAddress = ctscAdminFtpaDecisionEmailAddress;
         this.personalisationProvider = personalisationProvider;
+        
     }
 
     @Override
@@ -55,7 +56,7 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisation implements EmailNo
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(reviewHearingRequirementsAdminOfficerEmailAddress);
+        return Collections.singleton(ctscAdminFtpaDecisionEmailAddress);
     }
 
     @Override
@@ -67,4 +68,5 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisation implements EmailNo
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         return this.personalisationProvider.getTribunalHeaderPersonalisation(asylumCase);
     }
+    
 }
