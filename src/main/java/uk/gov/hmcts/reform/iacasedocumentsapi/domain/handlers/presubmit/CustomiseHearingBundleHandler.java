@@ -115,7 +115,9 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         }
 
         prepareDocuments(getMappingFields(isReheardCase),asylumCaseCopy);
-        prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(),asylumCaseCopy);
+        if (isReheardCase) {
+            prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(),asylumCaseCopy);
+        }
 
         final PreSubmitCallbackResponse<AsylumCase> response = emBundleRequestExecutor.post(
                 new Callback<>(
