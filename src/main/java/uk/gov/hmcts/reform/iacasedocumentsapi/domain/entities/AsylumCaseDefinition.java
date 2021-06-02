@@ -18,6 +18,9 @@ public enum AsylumCaseDefinition {
     STITCHING_STATUS(
         "stitchingStatus", new TypeReference<String>(){}),
 
+    STITCHING_STATUS_UPPER_TRIBUNAL(
+        "stitchingStatusUpperTribunal", new TypeReference<String>(){}),
+
     BUNDLE_FILE_NAME_PREFIX(
         "bundleFileNamePrefix", new TypeReference<String>(){}),
 
@@ -463,6 +466,9 @@ public enum AsylumCaseDefinition {
 
     IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY(
         "isEvidenceFromOutsideUkInCountry", new TypeReference<YesOrNo>() {}),
+
+    UPPER_TRIBUNAL_DOCUMENTS(
+        "upperTribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     ;
 

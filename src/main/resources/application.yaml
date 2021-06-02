@@ -205,6 +205,7 @@ security:
       - "adjournHearingWithoutDate"
       - "listCma"
       - "endAppeal"
+      - "generateUpperTribunalBundle"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -216,6 +217,7 @@ security:
       - "sendDecisionAndReasons"
       - "updateHearingRequirements"
       - "editAppealAfterSubmit"
+      - "generateUpperTribunalBundle"
 
 
 ### dependency configuration
