@@ -93,8 +93,9 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && Arrays.asList(
-                    Event.PAY_AND_SUBMIT_APPEAL,
-                    Event.PAYMENT_APPEAL)
+            Event.PAY_AND_SUBMIT_APPEAL,
+            Event.PAYMENT_APPEAL
+        )
                    .contains(callback.getEvent());
     }
 
@@ -180,22 +181,36 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
 
             PaymentResponse paymentResponse = makePayment(creditAccountPayment);
 
-            log.info(
-                "PaymentResponse for caseId: {}, payment response ref: {}, status: {}, PBA: {}",
-                caseId,
-                paymentResponse.getReference(),
-                paymentResponse.getStatus(),
-                pbaNumber
-            );
+            if (paymentResponse != null) {
+                log.info(
+                    "PaymentResponse for caseId: {}, payment response ref: {}, status: {}, PBA: {}",
+                    caseId,
+                    paymentResponse.getReference(),
+                    paymentResponse.getStatus(),
+                    pbaNumber
+                );
 
-            writePaymentResponseStatusToCaseData(paymentResponse, asylumCase);
+                writePaymentResponseStatusToCaseData(paymentResponse, asylumCase);
 
-            asylumCase.write(PAYMENT_REFERENCE, paymentResponse.getReference());
-            asylumCase.write(PBA_NUMBER, pbaNumber);
+                asylumCase.write(PAYMENT_REFERENCE, paymentResponse.getReference());
+                asylumCase.write(PBA_NUMBER, pbaNumber);
 
-            String pattern = "d MMM yyyy";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            asylumCase.write(PAYMENT_DATE, simpleDateFormat.format(paymentResponse.getDateCreated()));
+                String pattern = "d MMM yyyy";
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                asylumCase.write(PAYMENT_DATE, simpleDateFormat.format(paymentResponse.getDateCreated()));
+            } else {
+
+                log.info(
+                    "PaymentResponse for caseId: {} and PBA: {} returned as null",
+                    caseId,
+                    pbaNumber
+                );
+
+                asylumCase.write(PAYMENT_REFERENCE, "No payment reference provided");
+                asylumCase.write(PAYMENT_STATUS, FAILED);
+
+            }
+
         } else {
             throw new IllegalStateException("Cannot retrieve the fee from fees-register for caseId: " + caseId);
         }

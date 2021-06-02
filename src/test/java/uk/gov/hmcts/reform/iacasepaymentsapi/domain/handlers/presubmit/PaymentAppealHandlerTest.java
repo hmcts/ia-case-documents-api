@@ -30,10 +30,14 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Paym
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
+import feign.Request;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -281,6 +285,88 @@ class PaymentAppealHandlerTest {
 
         verify(asylumCase, times(1))
             .write(PAYMENT_ERROR_MESSAGE, statusHistories.get(0).getErrorMessage());
+    }
+
+    @Test
+    void should_call_payment_api_on_pay_now_and_return_bad_request() {
+
+        StatusHistories statusHistory = new StatusHistories(
+            "failed",
+            "CA-E0004",
+            "Your account is deleted",
+            "2020-05-28T14:04:06.048+0000",
+            "2020-05-28T14:04:06.048+0000"
+        );
+
+        List<StatusHistories> statusHistories = new ArrayList<>();
+        statusHistories.add(statusHistory);
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getCaseDetails().getId()).thenReturn(Long.valueOf("112233445566"));
+        when(caseDetails.getId()).thenReturn(caseId);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("LegRep001"));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCode()).thenReturn("FEE0123");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getDescription())
+            .thenReturn("Appeal determined with a hearing");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getVersion()).thenReturn("1");
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getCalculatedAmount()).thenReturn(BigDecimal.valueOf(140.00));
+        when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
+            .thenReturn(Optional.of(new DynamicList("PBA1234567")));
+        when(asylumCase.read(PAYMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("Hearing appeal"));
+        when(feeService.getFee(FeeType.FEE_WITH_HEARING).getAmountAsString()).thenReturn("140");
+
+        when(paymentService.creditAccountPayment(any(CreditAccountPayment.class)))
+            .thenThrow(
+                new FeignException.BadRequest(
+                    "",
+                    Request.create(
+                        Request.HttpMethod.POST,
+                        "",
+                        Collections.emptyMap(),
+                        new byte[0],
+                        Charset.defaultCharset(),
+                        null
+                    ),
+                    new byte[0]
+                )
+            );
+
+        when(refDataService.getOrganisationResponse()).thenReturn(
+            new OrganisationResponse(
+                new OrganisationEntityResponse(
+                    "ia-legal-rep-org",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    null,
+                    newArrayList("PBA1234567"),
+                    addresses
+                )
+            )
+        );
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse = appealFeePaymentHandler
+            .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+
+        AsylumCase asylumCase = callbackResponse.getData();
+
+        verify(asylumCase, times(1))
+            .write(PAYMENT_REFERENCE, "No payment reference provided");
+
+        verify(asylumCase, times(1))
+            .write(PAYMENT_STATUS, FAILED);
     }
 
     @Test
