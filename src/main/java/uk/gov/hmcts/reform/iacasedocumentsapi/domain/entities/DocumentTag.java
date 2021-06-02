@@ -29,6 +29,7 @@ public enum DocumentTag {
     FTPA_RESPONDENT("ftpaRespondent"),
     FTPA_DECISION_AND_REASONS("ftpaDecisionAndReasons"),
     RECORD_OUT_OF_TIME_DECISION_DOCUMENT("recordOutOfTimeDecisionDocument"),
+    UPPER_TRIBUNAL_BUNDLE("upperTribunalBundle"),
 
     @JsonEnumDefaultValue
     NONE("");

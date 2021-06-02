@@ -35,7 +35,7 @@ public class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .collect(Collectors.toList());
 
-        assertEquals(27, sortedTags.size());
+        assertEquals(28, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -64,6 +64,7 @@ public class BundleOrderTest {
             DocumentTag.FTPA_RESPONDENT,
             DocumentTag.FTPA_DECISION_AND_REASONS,
             DocumentTag.RECORD_OUT_OF_TIME_DECISION_DOCUMENT,
+            DocumentTag.UPPER_TRIBUNAL_BUNDLE,
             DocumentTag.NONE
         );
 
