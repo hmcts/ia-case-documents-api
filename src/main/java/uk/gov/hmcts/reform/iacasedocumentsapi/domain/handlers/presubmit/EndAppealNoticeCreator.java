@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
@@ -22,13 +25,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> endAppealNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> endAppealAppellantNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public EndAppealNoticeCreator(
         @Qualifier("endAppealNotice") DocumentCreator<AsylumCase> endAppealNoticeDocumentCreator,
+        @Qualifier("endAppealAppellantNotice") DocumentCreator<AsylumCase> endAppealAppellantNoticeDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.endAppealNoticeDocumentCreator = endAppealNoticeDocumentCreator;
+        this.endAppealAppellantNoticeDocumentCreator = endAppealAppellantNoticeDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -54,7 +60,17 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document endAppealNotice = endAppealNoticeDocumentCreator.create(caseDetails);
+        boolean isAipJourney = asylumCase
+                .read(JOURNEY_TYPE, JourneyType.class)
+                .map(type -> type == AIP).orElse(false);
+
+        Document endAppealNotice;
+
+        if (isAipJourney) {
+            endAppealNotice = endAppealAppellantNoticeDocumentCreator.create(caseDetails);
+        } else {
+            endAppealNotice = endAppealNoticeDocumentCreator.create(caseDetails);
+        }
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,

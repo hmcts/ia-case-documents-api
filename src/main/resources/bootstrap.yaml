@@ -16,4 +16,12 @@ spring:
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
         customer-services-telephone: IA_CUSTOMER_SERVICES_TELEPHONE
         customer-services-email: IA_CUSTOMER_SERVICES_EMAIL
+        hearing-centre-bradford-email: IA_HEARING_CENTRE_BRADFORD_EMAIL
+        hearing-centre-manchester-email: IA_HEARING_CENTRE_MANCHESTER_EMAIL
+        hearing-centre-newport-email: IA_HEARING_CENTRE_NEWPORT_EMAIL
+        hearing-centre-taylor-house-email: IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL
+        hearing-centre-north-shields-email: IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL
+        hearing-centre-birmingham-email: IA_HEARING_CENTRE_BIRMINGHAM_EMAIL
+        hearing-centre-hatton-cross-email: IA_HEARING_CENTRE_HATTON_CROSS_EMAIL
+        hearing-centre-glasgow-email: IA_HEARING_CENTRE_GLASGOW_EMAIL
 
