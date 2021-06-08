@@ -12,7 +12,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 @Service
 public class EmailAddressFinder {
 
-    private String listCaseHearingCentreIsNotPresent = "listCaseHearingCentre is not present";
+    private final String listCaseHearingCentreIsNotPresent = "listCaseHearingCentre is not present";
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public EmailAddressFinder(
@@ -34,12 +34,6 @@ public class EmailAddressFinder {
         }
 
         return hearingCentreEmailAddress;
-    }
-
-    public String getLegalRepEmailAddress(AsylumCase asylumCase) {
-        return asylumCase
-            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
     }
 
     public String getListCaseHearingCentreEmailAddress(AsylumCase asylumCase) {

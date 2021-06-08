@@ -1,36 +1,31 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-
-import com.google.common.base.Strings;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.helper.EndAppealTemplateHelper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.EmailAddressFinder;
 
 
 @Component
 public class EndAppealAppellantTemplate implements DocumentTemplate<AsylumCase> {
 
-    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
-
     private final String templateName;
-    private final CustomerServicesProvider customerServicesProvider;
+    private final EndAppealTemplateHelper endAppealTemplateHelper;
     private final EmailAddressFinder emailAddressFinder;
 
     public EndAppealAppellantTemplate(
         @Value("${endAppeal.appellant.templateName}") String templateName,
-        CustomerServicesProvider customerServicesProvider,
+        EndAppealTemplateHelper endAppealTemplateHelper,
         EmailAddressFinder emailAddressFinder
     ) {
         this.templateName = templateName;
-        this.customerServicesProvider = customerServicesProvider;
+        this.endAppealTemplateHelper = endAppealTemplateHelper;
         this.emailAddressFinder = emailAddressFinder;
     }
 
@@ -41,35 +36,18 @@ public class EndAppealAppellantTemplate implements DocumentTemplate<AsylumCase> 
     public Map<String, Object> mapFieldValues(
         CaseDetails<AsylumCase> caseDetails
     ) {
-        final AsylumCase asylumCase = caseDetails.getCaseData();
-
-        final Map<String, Object> fieldValues = new HashMap<>();
-
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
-
-        fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
-        fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
-        fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
-
-        fieldValues.put("outcomeOfAppeal", asylumCase.read(END_APPEAL_OUTCOME, String.class).orElse(""));
-        fieldValues.put("reasonsOfOutcome", asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class).orElse(""));
-        fieldValues.put("endAppealDate", formatDateForRendering(asylumCase.read(END_APPEAL_DATE, String.class).orElse("")));
-        fieldValues.put("endAppealApprover", asylumCase.read(END_APPEAL_APPROVER_NAME, String.class).orElse(""));
-        fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
-        fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
-        fieldValues.put("designatedHearingCentre", emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        Map<String, Object> fieldValues = endAppealTemplateHelper.getCommonMapFieldValues(caseDetails);
+        fieldValues.put("designatedHearingCentre", isAppealListed(caseDetails.getCaseData())
+                ? emailAddressFinder.getListCaseHearingCentreEmailAddress(caseDetails.getCaseData())
+                : emailAddressFinder.getHearingCentreEmailAddress(caseDetails.getCaseData()));
 
         return fieldValues;
     }
 
-    private String formatDateForRendering(
-        String date
-    ) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDate.parse(date).format(DOCUMENT_DATE_FORMAT);
-        }
+    protected boolean isAppealListed(AsylumCase asylumCase) {
+        final Optional<HearingCentre> appealListed = asylumCase
+                .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
 
-        return "";
+        return appealListed.isPresent();
     }
 }

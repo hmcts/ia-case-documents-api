@@ -36,7 +36,7 @@ public class EmailAddressFinderTest {
     private EmailAddressFinder emailAddressFinder;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
@@ -49,7 +49,7 @@ public class EmailAddressFinderTest {
     }
 
     @Test
-    public void should_return_given_email_address_from_lookup_map() {
+    void should_return_given_email_address_from_lookup_map() {
         assertEquals(hearingCentreEmailAddress, emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
     }
 
@@ -61,20 +61,6 @@ public class EmailAddressFinderTest {
         assertThatThrownBy(() -> emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
                 .isExactlyInstanceOf(IllegalStateException.class)
                 .hasMessage("hearingCentre is not present");
-    }
-
-    @Test
-    public void should_return_given_legal_rep_email_address_from_lookup_map() {
-        assertEquals(legalRepEmailAddress, emailAddressFinder.getLegalRepEmailAddress(asylumCase));
-    }
-
-    @Test
-    public void should_throw_exception_on_legal_rep_email_address_when_is_empty() {
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> emailAddressFinder.getLegalRepEmailAddress(asylumCase))
-                .isExactlyInstanceOf(IllegalStateException.class)
-                .hasMessage("legalRepresentativeEmailAddress is not present");
     }
 
     @Test
