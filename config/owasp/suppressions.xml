@@ -16,11 +16,18 @@
         ]]></notes>
     <cve>CVE-2018-1258</cve>
   </suppress>
-    <suppress until="2030-01-01">
+  <suppress until="2030-01-01">
       <notes><![CDATA[
            https://nvd.nist.gov/vuln/detail/CVE-2021-22112
            Temporary suppression until upgrade to Spring Boot 2.4.x 
           ]]></notes>
       <cve>CVE-2021-22112</cve>
-    </suppress>
+  </suppress>
+  <suppress until="2030-01-01">
+        <notes><![CDATA[
+                 https://nvd.nist.gov/vuln/detail/CVE-2021-22118
+                 Spring Framework vulnerability, subject to review after Spring Boot upgrade to 2.4.x
+                ]]></notes>
+        <cve>CVE-2021-22118</cve>
+  </suppress>
 </suppressions>
