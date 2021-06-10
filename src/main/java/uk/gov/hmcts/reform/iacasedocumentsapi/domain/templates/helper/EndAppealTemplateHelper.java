@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.helper;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_APPROVER_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_OUTCOME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_OUTCOME_REASON;
@@ -48,7 +47,6 @@ public class EndAppealTemplateHelper {
         fieldValues.put("outcomeOfAppeal", asylumCase.read(END_APPEAL_OUTCOME, String.class).orElse(""));
         fieldValues.put("reasonsOfOutcome", asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class).orElse(""));
         fieldValues.put("endAppealDate", formatDateForRendering(asylumCase.read(END_APPEAL_DATE, String.class).orElse("")));
-        fieldValues.put("endAppealApprover", asylumCase.read(END_APPEAL_APPROVER_NAME, String.class).orElse(""));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
         fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
 

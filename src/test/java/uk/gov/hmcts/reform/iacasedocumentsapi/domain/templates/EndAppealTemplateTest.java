@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_APPROVER_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 
 import java.util.HashMap;
@@ -51,11 +52,14 @@ public class EndAppealTemplateTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(endAppealTemplateHelper.getCommonMapFieldValues(caseDetails)).thenReturn(fieldValues);
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        String endAppealApproverName = "John Doe";
+        when(asylumCase.read(END_APPEAL_APPROVER_NAME, String.class)).thenReturn(Optional.of(endAppealApproverName));
 
         Map<String, Object> templateFieldValues = endAppealNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(1, templateFieldValues.size());
+        assertEquals(2, templateFieldValues.size());
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals(endAppealApproverName, templateFieldValues.get("endAppealApprover"));
     }
 
     @Test
@@ -64,10 +68,12 @@ public class EndAppealTemplateTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(endAppealTemplateHelper.getCommonMapFieldValues(caseDetails)).thenReturn(fieldValues);
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(END_APPEAL_APPROVER_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = endAppealNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(1, templateFieldValues.size());
+        assertEquals(2, templateFieldValues.size());
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals("", templateFieldValues.get("endAppealApprover"));
     }
 }

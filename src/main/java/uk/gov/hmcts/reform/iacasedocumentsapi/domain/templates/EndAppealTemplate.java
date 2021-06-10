@@ -32,6 +32,7 @@ public class EndAppealTemplate implements DocumentTemplate<AsylumCase> {
     ) {
         Map<String, Object> fieldValues = endAppealTemplateHelper.getCommonMapFieldValues(caseDetails);
         fieldValues.put("legalRepReferenceNumber", caseDetails.getCaseData().read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("endAppealApprover", caseDetails.getCaseData().read(END_APPEAL_APPROVER_NAME, String.class).orElse(""));
         return fieldValues;
     }
 

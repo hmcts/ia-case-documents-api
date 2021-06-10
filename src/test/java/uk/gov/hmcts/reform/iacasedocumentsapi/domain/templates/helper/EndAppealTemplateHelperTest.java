@@ -60,13 +60,12 @@ class EndAppealTemplateHelperTest {
         when(asylumCase.read(END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.of(endAppealOutcome));
         when(asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class)).thenReturn(Optional.of(endAppealOutcomeReason));
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(endAppealDate));
-        when(asylumCase.read(END_APPEAL_APPROVER_NAME, String.class)).thenReturn(Optional.of(endAppealApproverName));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
         Map<String, Object> templateFieldValues = endAppealTemplateHelper.getCommonMapFieldValues(caseDetails);
 
-        assertEquals(11, templateFieldValues.size());
+        assertEquals(10, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -76,7 +75,6 @@ class EndAppealTemplateHelperTest {
         assertEquals(endAppealOutcomeReason, templateFieldValues.get("reasonsOfOutcome"));
         String expectedEndAppealDate = "25122020";
         assertEquals(expectedEndAppealDate, templateFieldValues.get("endAppealDate"));
-        assertEquals(endAppealApproverName, templateFieldValues.get("endAppealApprover"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
@@ -93,7 +91,6 @@ class EndAppealTemplateHelperTest {
         when(asylumCase.read(END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.of(endAppealOutcome));
         when(asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class)).thenReturn(Optional.of(endAppealOutcomeReason));
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(endAppealDate));
-        when(asylumCase.read(END_APPEAL_APPROVER_NAME, String.class)).thenReturn(Optional.of(endAppealApproverName));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
@@ -104,11 +101,10 @@ class EndAppealTemplateHelperTest {
         when(asylumCase.read(END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_OUTCOME_REASON, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(END_APPEAL_APPROVER_NAME, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = endAppealTemplateHelper.getCommonMapFieldValues(caseDetails);
 
-        assertEquals(11, templateFieldValues.size());
+        assertEquals(10, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
@@ -117,7 +113,6 @@ class EndAppealTemplateHelperTest {
         assertEquals("", templateFieldValues.get("outcomeOfAppeal"));
         assertEquals("", templateFieldValues.get("reasonsOfOutcome"));
         assertEquals("", templateFieldValues.get("endAppealDate"));
-        assertEquals("", templateFieldValues.get("endAppealApprover"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }

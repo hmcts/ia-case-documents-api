@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_APPROVER_TYPE;
+
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,8 +42,13 @@ public class EndAppealAppellantTemplate implements DocumentTemplate<AsylumCase> 
         fieldValues.put("designatedHearingCentre", isAppealListed(caseDetails.getCaseData())
                 ? emailAddressFinder.getListCaseHearingCentreEmailAddress(caseDetails.getCaseData())
                 : emailAddressFinder.getHearingCentreEmailAddress(caseDetails.getCaseData()));
-
+        fieldValues.put("endAppealApprover", getEndAppealApprover(caseDetails));
         return fieldValues;
+    }
+
+    private String getEndAppealApprover(CaseDetails<AsylumCase> caseDetails) {
+        String endAppealApprover = caseDetails.getCaseData().read(END_APPEAL_APPROVER_TYPE, String.class).orElse("");
+        return endAppealApprover.equalsIgnoreCase("Case Worker") ? "Tribunal Caseworker" : endAppealApprover;
     }
 
     protected boolean isAppealListed(AsylumCase asylumCase) {

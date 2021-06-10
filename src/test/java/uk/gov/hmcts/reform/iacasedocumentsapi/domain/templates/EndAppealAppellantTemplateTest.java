@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,11 +59,15 @@ public class EndAppealAppellantTemplateTest {
         when(endAppealTemplateHelper.getCommonMapFieldValues(caseDetails)).thenReturn(fieldValues);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
         when(emailAddressFinder.getHearingCentreEmailAddress(caseDetails.getCaseData())).thenReturn(designatedHearingCentre);
+        String endAppealApproverType = "Case Worker";
+        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(endAppealApproverType));
+
 
         Map<String, Object> templateFieldValues = endAppealAppellantTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(1, templateFieldValues.size());
+        assertEquals(2, templateFieldValues.size());
         assertEquals(designatedHearingCentre, templateFieldValues.get("designatedHearingCentre"));
+        assertEquals("Tribunal Caseworker", templateFieldValues.get("endAppealApprover"));
         verify(emailAddressFinder).getHearingCentreEmailAddress(asylumCase);
         verify(emailAddressFinder, times(0)).getListCaseHearingCentreEmailAddress(asylumCase);
     }
@@ -75,13 +79,16 @@ public class EndAppealAppellantTemplateTest {
         when(endAppealTemplateHelper.getCommonMapFieldValues(caseDetails)).thenReturn(fieldValues);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.BELFAST));
         when(emailAddressFinder.getListCaseHearingCentreEmailAddress(caseDetails.getCaseData())).thenReturn(designatedHearingCentre);
+        String endAppealApproverType = "Judge";
+        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(endAppealApproverType));
 
         Map<String, Object> templateFieldValues = endAppealAppellantTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(1, templateFieldValues.size());
+        assertEquals(2, templateFieldValues.size());
         assertEquals(designatedHearingCentre, templateFieldValues.get("designatedHearingCentre"));
         verify(emailAddressFinder).getListCaseHearingCentreEmailAddress(asylumCase);
         verify(emailAddressFinder, times(0)).getHearingCentreEmailAddress(asylumCase);
+        assertEquals(endAppealApproverType, templateFieldValues.get("endAppealApprover"));
     }
 
 }

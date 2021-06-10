@@ -261,6 +261,9 @@ public enum AsylumCaseDefinition {
     END_APPEAL_APPROVER_NAME(
         "endAppealApproverName", new TypeReference<String>(){}),
 
+    END_APPEAL_APPROVER_TYPE(
+        "endAppealApproverType", new TypeReference<String>(){}),
+
     TRIBUNAL_DOCUMENTS(
         "tribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
