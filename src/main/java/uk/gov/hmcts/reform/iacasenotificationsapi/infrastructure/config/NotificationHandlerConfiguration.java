@@ -19,11 +19,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.fie
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -122,11 +118,100 @@ public class NotificationHandlerConfiguration {
         @Qualifier("endAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
-            (callbackStage, callback) ->
-                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.END_APPEAL,
+            (callbackStage, callback) -> {
+
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isRepJourney = asylumCase
+                        .read(JOURNEY_TYPE, JourneyType.class)
+                        .map(type -> type != AIP).orElse(true);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.END_APPEAL
+                        && isRepJourney;
+            },
             notificationGenerators
 
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> endAppealAipSmsAppellantNotificationHandler(
+        @Qualifier("endAppealAipSmsAppellantNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isAipJourney = asylumCase
+                        .read(JOURNEY_TYPE, JourneyType.class)
+                        .map(type -> type == AIP).orElse(false);
+
+                final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
+
+                Set<IdValue<Subscriber>> smsPreferred = maybeSubscribers
+                        .orElse(Collections.emptyList()).stream()
+                        .filter(subscriber -> YES.equals(subscriber.getValue().getWantsSms()))
+                        .collect(Collectors.toSet());
+
+                return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.END_APPEAL
+                        && isAipJourney
+                        && smsPreferred.size() > 0
+                        && smsPreferred.stream().findFirst().map(subscriberIdValue ->
+                            subscriberIdValue.getValue().getMobileNumber()).isPresent());
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> endAppealAipEmailAppellantNotificationHandler(
+        @Qualifier("endAppealAipEmailAppellantNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isAipJourney = asylumCase
+                        .read(JOURNEY_TYPE, JourneyType.class)
+                        .map(type -> type == AIP).orElse(false);
+
+                final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
+
+                Set<IdValue<Subscriber>> emailPreferred = maybeSubscribers
+                        .orElse(Collections.emptyList()).stream()
+                        .filter(subscriber -> YES.equals(subscriber.getValue().getWantsEmail()))
+                        .collect(Collectors.toSet());
+
+                return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.END_APPEAL
+                        && isAipJourney
+                        && emailPreferred.size() > 0
+                        && emailPreferred.stream().findFirst().map(subscriberIdValue ->
+                            subscriberIdValue.getValue().getEmail()).isPresent());
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> endAppealAipEmailRespondentNotificationHandler(
+        @Qualifier("endAppealAipEmailRespondentNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isAipJourney = asylumCase
+                        .read(JOURNEY_TYPE, JourneyType.class)
+                        .map(type -> type == AIP).orElse(false);
+
+                return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.END_APPEAL
+                        && isAipJourney);
+            },
+            notificationGenerators
         );
     }
 

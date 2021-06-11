@@ -225,16 +225,23 @@ govnotify:
         email: c59474ab-6074-49ec-b1ec-3ca1f1a45685
       legalRep:
         email: 3f89b2fa-0bbd-419e-b490-89ed27f63512
+    endAppeal:
+      appellant:
+        sms: 9253ab19-1216-4b3c-b735-086ec81d8506
     endAppealBeforeListing:
       legalRep:
         email: 998bebf1-bb6c-44d6-a65b-ae7bb4ab186b
       homeOffice:
         email: 287f890a-47bc-41e1-a4a9-d143f8eecb9b
+      appellant:
+        email: 8569af9d-3a7d-46de-941e-e0cfecce011b
     endAppealAfterListing:
       legalRep:
         email: da6ca0ff-3955-498c-8d27-0eca1fbdf006
       homeOffice:
         email: 97b95f02-4dc3-4282-8c8c-802efb2d21ef
+      appellant:
+        email: c5931928-1c22-4c1a-b70b-7a6268039ea1
     recordRefusedApplicationBeforeListing:
       legalRep:
         email: 8bbb1537-9856-4a3e-b6cd-b862b1e192ff

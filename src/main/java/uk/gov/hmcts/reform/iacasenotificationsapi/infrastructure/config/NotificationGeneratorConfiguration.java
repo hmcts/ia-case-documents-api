@@ -134,6 +134,52 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("endAppealAipEmailRespondentNotificationGenerator")
+    public List<NotificationGenerator> endAppealAipEmailRespondentNotificationGenerator(
+        HomeOfficeEndAppealPersonalisation homeOfficeEndAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(homeOfficeEndAppealPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("endAppealAipSmsAppellantNotificationGenerator")
+    public List<NotificationGenerator> endAppealAipSmsAppellantNotificationGenerator(
+        AppellantEndAppealPersonalisationSms appellantEndAppealPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new SmsNotificationGenerator(
+                    newArrayList(appellantEndAppealPersonalisationSms),
+                    notificationSender,
+                    notificationIdAppender
+            )
+
+        );
+    }
+
+    @Bean("endAppealAipEmailAppellantNotificationGenerator")
+    public List<NotificationGenerator> endAppealAipEmailAppellantNotificationGenerator(
+        AppellantEndAppealPersonalisationEmail appellantEndAppealPersonalisationEmail,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantEndAppealPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("appealOutcomeNotificationGenerator")
     public List<NotificationGenerator> appealOutcomeNotificationGenerator(
         HomeOfficeAppealOutcomePersonalisation homeOfficeAppealOutcomePersonalisation,
