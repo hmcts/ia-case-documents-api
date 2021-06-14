@@ -94,7 +94,8 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && Arrays.asList(
             Event.PAY_AND_SUBMIT_APPEAL,
-            Event.PAYMENT_APPEAL
+            Event.PAYMENT_APPEAL,
+            Event.PAY_FOR_APPEAL
         )
                    .contains(callback.getEvent());
     }

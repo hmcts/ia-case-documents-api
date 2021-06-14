@@ -1,0 +1,45 @@
+{
+  "description": "RIA-4465 Error account deleted for event pay for appeal with a hearing - PBA0087240",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentativeOrgDeleted",
+    "input": {
+      "eventId": "payForAppeal",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "PA/50001/2020",
+          "appealType": "protection",
+          "decisionHearingFeeOption": "decisionWithHearing",
+          "homeOfficeDecisionDate": "{$TODAY-14}",
+          "paymentAccountList": "PBA0087240",
+          "homeOfficeReferenceNumber": "123456789",
+          "paymentDescription": "An IA pba test payment",
+          "customerReference": "543232",
+          "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_DELETED_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "protection",
+        "appealReferenceNumber": "PA/50001/2020",
+        "homeOfficeDecisionDate": "{$TODAY-14}",
+        "homeOfficeReferenceNumber": "123456789",
+        "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_DELETED_USERNAME}",
+        "paymentAccountList": "PBA0087240",
+        "feeCode": "FEE0238",
+        "feeVersion": "2",
+        "feeAmountGbp": "14000",
+        "feeDescription": "Appeal determined with a hearing",
+        "paymentStatus": "Failed"
+      }
+    }
+  }
+}

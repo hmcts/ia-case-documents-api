@@ -270,7 +270,9 @@ class PaymentAppealPreparerTest {
                 if (Arrays.asList(
                     Event.PAYMENT_APPEAL,
                     Event.PAY_AND_SUBMIT_APPEAL,
-                    Event.RECORD_REMISSION_DECISION)
+                    Event.PAY_FOR_APPEAL,
+                    Event.RECORD_REMISSION_DECISION
+                )
                         .contains(callback.getEvent())
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_START) {
 

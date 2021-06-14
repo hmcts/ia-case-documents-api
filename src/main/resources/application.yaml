@@ -96,6 +96,7 @@ security:
     - "editAppeal"
     - "paymentAppeal"
     - "payAndSubmitAppeal"
+    - "payForAppeal"
     caseworker-ia-admofficer:
     - "recordRemissionDecision"
 

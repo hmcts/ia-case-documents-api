@@ -100,7 +100,7 @@ class PaymentAppealHandlerTest {
     @BeforeEach
     public void setUp() {
         addresses = new ArrayList<>();
-        legRepAddressUk =  new LegRepAddressUk(
+        legRepAddressUk = new LegRepAddressUk(
             addressLine1,
             addressLine2,
             addressLine3,
@@ -250,16 +250,16 @@ class PaymentAppealHandlerTest {
         when(refDataService.getOrganisationResponse()).thenReturn(
             new OrganisationResponse(
                 new OrganisationEntityResponse(
-                "ia-legal-rep-org",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                null,
-                newArrayList("PBA1234567"),
-                addresses
+                    "ia-legal-rep-org",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    null,
+                    newArrayList("PBA1234567"),
+                    addresses
                 )
             )
         );
@@ -465,7 +465,9 @@ class PaymentAppealHandlerTest {
 
                 boolean canHandle = appealFeePaymentHandler.canHandle(callbackStage, callback);
 
-                if ((event == Event.PAYMENT_APPEAL || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL)
+                if ((event == Event.PAY_FOR_APPEAL
+                     || event == Event.PAYMENT_APPEAL
+                     || callback.getEvent() == Event.PAY_AND_SUBMIT_APPEAL)
                     && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT)) {
 
                     assertTrue(canHandle);
