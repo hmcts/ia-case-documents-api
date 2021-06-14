@@ -96,6 +96,12 @@ public enum AsylumCaseDefinition {
     APPEAL_TYPE(
         "appealType", new TypeReference<String>(){}),
 
+    JOURNEY_TYPE(
+            "journeyType", new TypeReference<JourneyType>(){}),
+
+    HEARING_CENTRE(
+            "hearingCentre", new TypeReference<HearingCentre>(){}),
+
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
@@ -254,6 +260,9 @@ public enum AsylumCaseDefinition {
 
     END_APPEAL_APPROVER_NAME(
         "endAppealApproverName", new TypeReference<String>(){}),
+
+    END_APPEAL_APPROVER_TYPE(
+        "endAppealApproverType", new TypeReference<String>(){}),
 
     TRIBUNAL_DOCUMENTS(
         "tribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),

@@ -266,6 +266,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("endAppealAppellantNotice")
+    public DocumentCreator<AsylumCase> getEndAppealAppellantDocumentCreator(
+        @Value("${endAppeal.contentType}") String contentType,
+        @Value("${endAppeal.fileExtension}") String fileExtension,
+        @Value("${endAppeal.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        EndAppealAppellantTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 
     @Bean("cmaRequirements")
     public DocumentCreator<AsylumCase> getCmaRequirementsDocumentCreator(

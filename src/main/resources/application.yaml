@@ -119,6 +119,7 @@ endAppeal.contentType:  application/pdf
 endAppeal.fileExtension: PDF
 endAppeal.fileName: "NoticeOfEndedAppeal"
 endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
+endAppeal.appellant.templateName: ${IA_END_APPEAL_APPELLANT_TEMPLATE:TB-IAC-GNO-ENG-00721.docx}
 
 cmaRequirements.contentType:  application/pdf
 cmaRequirements.fileExtension: PDF
@@ -240,3 +241,16 @@ customerServices:
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
 
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
+
+### Email addresses
+hearingCentreEmailAddresses:
+  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}
+  manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester@example.com}
+  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport@example.com}
+  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse@example.com}
+  northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
+  newcastle: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
+  birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham@example.com}
+  hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
+  glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+  belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}

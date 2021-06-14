@@ -30,3 +30,11 @@ java:
         - AppInsightsInstrumentationKey
         - customer-services-telephone
         - customer-services-email
+        - hearing-centre-bradford-email
+        - hearing-centre-manchester-email
+        - hearing-centre-newport-email
+        - hearing-centre-taylor-house-email
+        - hearing-centre-north-shields-email
+        - hearing-centre-birmingham-email
+        - hearing-centre-hatton-cross-email
+        - hearing-centre-glasgow-email
