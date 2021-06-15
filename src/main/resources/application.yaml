@@ -55,14 +55,14 @@ fees-register:
       event: issue
       jurisdiction1: tribunal
       jurisdiction2: immigration and asylum chamber
-      keyword: ABC
+      keyword: HearingOral
       service: other
     feeWithoutHearing:
       channel: default
       event: issue
       jurisdiction1: tribunal
       jurisdiction2: immigration and asylum chamber
-      keyword: DEF
+      keyword: HearingPaper
       service: other
 
 rd-professional:
