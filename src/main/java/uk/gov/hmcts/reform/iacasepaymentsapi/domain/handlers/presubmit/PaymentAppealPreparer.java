@@ -53,11 +53,12 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_START
-                && Arrays.asList(
-                    Event.PAYMENT_APPEAL,
-                    Event.PAY_AND_SUBMIT_APPEAL,
-                    Event.PAY_FOR_APPEAL,
-                    Event.RECORD_REMISSION_DECISION)
+               && Arrays.asList(
+            Event.PAYMENT_APPEAL,
+            Event.PAY_AND_SUBMIT_APPEAL,
+            Event.PAY_FOR_APPEAL,
+            Event.RECORD_REMISSION_DECISION
+        )
                    .contains(callback.getEvent());
     }
 
@@ -77,8 +78,8 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
                 .getCaseData();
 
         Optional<RemissionType> optRemissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class);
-        if (optRemissionType.isPresent()
-            && optRemissionType.get() == RemissionType.NO_REMISSION) {
+        if ((optRemissionType.isPresent() && optRemissionType.get() == RemissionType.NO_REMISSION)
+            || optRemissionType.isEmpty()) {
 
             List<String> accountsFromOrg = refDataService.getOrganisationResponse()
                 .getOrganisationEntityResponse().getPaymentAccount();
