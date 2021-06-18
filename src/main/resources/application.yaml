@@ -678,6 +678,9 @@ govnotify:
         cannotProceed:
           email: c2118e88-ab65-4e4b-8828-4078b4c1d12b
       appellant:
+        canProceed:
+          email: 45017d4b-e4f3-446d-9941-3af269ce1556
+          sms: 043f64aa-f250-46ce-b546-557a07f4b112
         cannotProceed:
           email: d19a384d-0640-4b47-abd2-ae1c038013ca
           sms: 7a12821a-d9b1-4e93-b64a-ecdc55e78034

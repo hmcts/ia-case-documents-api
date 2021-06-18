@@ -2338,7 +2338,8 @@ public class NotificationHandlerConfiguration {
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
                        && Arrays.asList(IN_TIME, OutOfTimeDecisionType.APPROVED)
-                           .contains(outOfTimeDecisionType);
+                           .contains(outOfTimeDecisionType)
+                       && isRepJourney(asylumCase);
 
             }, notificationGenerators
         );
@@ -2405,6 +2406,54 @@ public class NotificationHandlerConfiguration {
                     return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                             && callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
                             && outOfTimeDecisionType == OutOfTimeDecisionType.REJECTED
+                            && isAipJourney(asylumCase)
+                            && isSmsPreferred(asylumCase);
+
+                }, notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> recordOfTimeDecisionCanProceedAppellantEmailNotificationHandler(
+            @Qualifier("recordOfTimeDecisionCanProceedAppellantEmailNotificationGenerator")
+                    List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) -> {
+                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                    OutOfTimeDecisionType outOfTimeDecisionType =
+                            asylumCase.read(OUT_OF_TIME_DECISION_TYPE, OutOfTimeDecisionType.class)
+                                    .orElse(UNKNOWN);
+
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
+                            && Arrays.asList(IN_TIME, OutOfTimeDecisionType.APPROVED)
+                                .contains(outOfTimeDecisionType)
+                            && isAipJourney(asylumCase)
+                            && isEmailPreferred(asylumCase);
+
+                }, notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> recordOfTimeDecisionCanProceedAppellantSmsNotificationHandler(
+            @Qualifier("recordOfTimeDecisionCanProceedAppellantSmsNotificationGenerator")
+                    List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) -> {
+                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                    OutOfTimeDecisionType outOfTimeDecisionType =
+                            asylumCase.read(OUT_OF_TIME_DECISION_TYPE, OutOfTimeDecisionType.class)
+                                    .orElse(UNKNOWN);
+
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
+                            && Arrays.asList(IN_TIME, OutOfTimeDecisionType.APPROVED)
+                                .contains(outOfTimeDecisionType)
                             && isAipJourney(asylumCase)
                             && isSmsPreferred(asylumCase);
 
