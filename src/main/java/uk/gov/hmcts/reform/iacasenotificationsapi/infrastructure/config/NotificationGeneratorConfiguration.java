@@ -2085,4 +2085,38 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("recordOfTimeDecisionCannotProceedAppellantEmailNotificationGenerator")
+    public List<NotificationGenerator> recordOfTimeDecisionCannotProceedAppellantEmailNotificationGenerator(
+            AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail appellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                appellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
+    @Bean("recordOfTimeDecisionCannotProceedAppellantSmsNotificationGenerator")
+    public List<NotificationGenerator> recordOfTimeDecisionCannotProceedAppellantSmsNotificationGenerator(
+            AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationSms appellantRecordOutOfTimeDecisionCannotProceedPersonalisationSms,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+                new SmsNotificationGenerator(
+                        newArrayList(appellantRecordOutOfTimeDecisionCannotProceedPersonalisationSms),
+                        notificationSender,
+                        notificationIdAppender
+                )
+
+        );
+    }
+
 }

@@ -143,23 +143,13 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                        .read(JOURNEY_TYPE, JourneyType.class)
-                        .map(type -> type == AIP).orElse(false);
-
                 final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
 
-                Set<IdValue<Subscriber>> smsPreferred = maybeSubscribers
-                        .orElse(Collections.emptyList()).stream()
-                        .filter(subscriber -> YES.equals(subscriber.getValue().getWantsSms()))
-                        .collect(Collectors.toSet());
 
                 return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                         && callback.getEvent() == Event.END_APPEAL
-                        && isAipJourney
-                        && smsPreferred.size() > 0
-                        && smsPreferred.stream().findFirst().map(subscriberIdValue ->
-                            subscriberIdValue.getValue().getMobileNumber()).isPresent());
+                        && isAipJourney(asylumCase)
+                        && isSmsPreferred(asylumCase));
             },
             notificationGenerators
         );
@@ -173,9 +163,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                        .read(JOURNEY_TYPE, JourneyType.class)
-                        .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
 
@@ -203,9 +191,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                        .read(JOURNEY_TYPE, JourneyType.class)
-                        .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                         && callback.getEvent() == Event.END_APPEAL
@@ -437,9 +423,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE
@@ -457,9 +441,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isRepJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == REP).orElse(true);
+                boolean isRepJourney = isRepJourney(asylumCase);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE
@@ -491,9 +473,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 boolean isAppealOnTime = asylumCase
                     .read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)
@@ -617,9 +597,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 boolean isOutOfTimeAppeal = asylumCase
                     .read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)
@@ -1182,9 +1160,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.SUBMIT_TIME_EXTENSION
@@ -1203,9 +1179,7 @@ public class NotificationHandlerConfiguration {
 
                 State currentState = callback.getCaseDetails().getState();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 final Optional<List<IdValue<TimeExtension>>> maybeTimeExtensions =
                     asylumCase.read(AsylumCaseDefinition.TIME_EXTENSIONS);
@@ -1237,9 +1211,7 @@ public class NotificationHandlerConfiguration {
 
                 State currentState = callback.getCaseDetails().getState();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 final Optional<List<IdValue<TimeExtension>>> maybeTimeExtensions =
                     asylumCase.read(AsylumCaseDefinition.TIME_EXTENSIONS);
@@ -1270,9 +1242,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.SEND_DIRECTION_WITH_QUESTIONS
@@ -1290,9 +1260,7 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isAipJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == AIP).orElse(false);
+                boolean isAipJourney = isAipJourney(asylumCase);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.SUBMIT_CLARIFYING_QUESTION_ANSWERS
@@ -2391,11 +2359,98 @@ public class NotificationHandlerConfiguration {
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
-                       && outOfTimeDecisionType == OutOfTimeDecisionType.REJECTED;
+                       && outOfTimeDecisionType == OutOfTimeDecisionType.REJECTED
+                        && isRepJourney(asylumCase);
 
             }, notificationGenerators
         );
     }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> recordOfTimeDecisionCannotProceedAppellantEmailNotificationHandler(
+            @Qualifier("recordOfTimeDecisionCannotProceedAppellantEmailNotificationGenerator")
+                    List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) -> {
+                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                    OutOfTimeDecisionType outOfTimeDecisionType =
+                            asylumCase.read(OUT_OF_TIME_DECISION_TYPE, OutOfTimeDecisionType.class)
+                                    .orElse(UNKNOWN);
+
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
+                            && outOfTimeDecisionType == OutOfTimeDecisionType.REJECTED
+                            && isAipJourney(asylumCase)
+                            && isEmailPreferred(asylumCase);
+
+                }, notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> recordOfTimeDecisionCannotProceedAppellantSmsNotificationHandler(
+            @Qualifier("recordOfTimeDecisionCannotProceedAppellantSmsNotificationGenerator")
+                    List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) -> {
+                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                    OutOfTimeDecisionType outOfTimeDecisionType =
+                            asylumCase.read(OUT_OF_TIME_DECISION_TYPE, OutOfTimeDecisionType.class)
+                                    .orElse(UNKNOWN);
+
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
+                            && outOfTimeDecisionType == OutOfTimeDecisionType.REJECTED
+                            && isAipJourney(asylumCase)
+                            && isSmsPreferred(asylumCase);
+
+                }, notificationGenerators
+        );
+    }
+
+    private boolean isRepJourney(AsylumCase asylumCase) {
+
+        return asylumCase
+                .read(JOURNEY_TYPE, JourneyType.class)
+                .map(type -> type == REP).orElse(true);
+    }
+
+    private boolean isAipJourney(AsylumCase asylumCase) {
+        return asylumCase
+                .read(JOURNEY_TYPE, JourneyType.class)
+                .map(type -> type == AIP).orElse(false);
+    }
+
+    private boolean isSmsPreferred(AsylumCase asylumCase) {
+
+        final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
+
+        Set<IdValue<Subscriber>> smsPreferred = maybeSubscribers
+                .orElse(Collections.emptyList()).stream()
+                .filter(subscriber -> YES.equals(subscriber.getValue().getWantsSms()))
+                .collect(Collectors.toSet());
+
+        return smsPreferred.size() > 0 && smsPreferred.stream().findFirst().map(subscriberIdValue ->
+                subscriberIdValue.getValue().getMobileNumber()).isPresent();
+    }
+
+    private boolean isEmailPreferred(AsylumCase asylumCase) {
+
+        final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(SUBSCRIPTIONS);
+
+        Set<IdValue<Subscriber>> smsPreferred = maybeSubscribers
+                .orElse(Collections.emptyList()).stream()
+                .filter(subscriber -> YES.equals(subscriber.getValue().getWantsEmail()))
+                .collect(Collectors.toSet());
+
+        return smsPreferred.size() > 0 && smsPreferred.stream().findFirst().map(subscriberIdValue ->
+                subscriberIdValue.getValue().getEmail()).isPresent();
+    }
+
 }
 
 

@@ -677,6 +677,10 @@ govnotify:
           email: 163f3a93-974a-44c1-89fd-9769afdf8ba3
         cannotProceed:
           email: c2118e88-ab65-4e4b-8828-4078b4c1d12b
+      appellant:
+        cannotProceed:
+          email: d19a384d-0640-4b47-abd2-ae1c038013ca
+          sms: 7a12821a-d9b1-4e93-b64a-ecdc55e78034
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
