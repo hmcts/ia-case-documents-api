@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
 
 import java.util.Arrays;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
@@ -82,10 +83,15 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
         Document appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
 
+        Optional<JourneyType> journeyTypeOptional = asylumCase.read(JOURNEY_TYPE, JourneyType.class);
+        boolean isAipJourney = journeyTypeOptional.map(journeyType -> journeyType == JourneyType.AIP).orElse(false);
+
+        AsylumCaseDefinition documentField = isAipJourney ? APPELLANT_DOCUMENTS : LEGAL_REPRESENTATIVE_DOCUMENTS;
+
         documentHandler.addWithMetadata(
             asylumCase,
             appealSubmission,
-            LEGAL_REPRESENTATIVE_DOCUMENTS,
+            documentField,
             DocumentTag.APPEAL_SUBMISSION
         );
 
