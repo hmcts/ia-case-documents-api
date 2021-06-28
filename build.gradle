@@ -268,7 +268,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: versions.springBoot
     // CVE-2019-17195
-    compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.9'
+    compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.10.1'
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix
 
