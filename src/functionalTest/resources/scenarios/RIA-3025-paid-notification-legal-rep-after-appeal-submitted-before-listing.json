@@ -1,5 +1,6 @@
 {
   "description": "RIA-3025 Send payment paid notification to legal representative (PA appeal type) after appeal submitted state (before listing)",
+  "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

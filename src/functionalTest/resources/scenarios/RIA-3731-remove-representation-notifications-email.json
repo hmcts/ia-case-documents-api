@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3731 Send remove representation notification to legal rep, case officer and home office",
+  "description": "RIA-3731-RIA-4467 Send remove representation notification to legal rep, case officer and home office and appellant (email)",
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",
@@ -11,6 +11,9 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "hearingCentre": "manchester",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "contactPreference": "wantsEmail",
+          "email": "{$TEST_CITIZEN_USERNAME}",
           "changeOrganisationRequestField": {
             "CaseRoleId": null,
             "ApprovalStatus": null,
@@ -30,8 +33,8 @@
     "status": 200,
     "errors": [],
     "confirmation": {
-      "confirmation_header": "anything",
-      "confirmation_body": "anything"
+      "header": "success",
+      "body": "contains([_REMOVE_REPRESENTATION_APPELLANT_EMAIL,_REMOVE_REPRESENTATION_CASE_OFFICER,_REMOVE_REPRESENTATION_HOME_OFFICE,_REMOVE_REPRESENTATION_LEGAL_REP])"
     }
   }
 }

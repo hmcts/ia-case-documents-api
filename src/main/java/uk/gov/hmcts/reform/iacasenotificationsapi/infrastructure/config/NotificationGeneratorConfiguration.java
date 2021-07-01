@@ -1577,25 +1577,6 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-
-    @Bean("paymentPaidNotificationGenerator")
-    public List<NotificationGenerator> paymentPaidLegalRepNotificationHandler(
-        LegalRepresentativePaymentPaidPersonalisation legalRepresentativePaymentPaidPersonalisation,
-        NotificationSender notificationSender,
-        NotificationIdAppender notificationIdAppender
-    ) {
-
-        return Collections.singletonList(
-            new EmailNotificationGenerator(
-                newArrayList(
-                    legalRepresentativePaymentPaidPersonalisation
-                ),
-                notificationSender,
-                notificationIdAppender
-            )
-        );
-    }
-
     @Bean("submitAppealPayOfflineNotificationGenerator")
     public List<NotificationGenerator> submitAppealPayOfflineNotificationHandler(
             LegalRepresentativeAppealSubmittedPayOfflinePersonalisation legalRepresentativeAppealSubmittedPayOfflinePersonalisation,
@@ -1812,7 +1793,12 @@ public class NotificationGeneratorConfiguration {
                 ),
                 notificationSender,
                 notificationIdAppender
-            )
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("success","body");
+                }
+            }
         );
     }
 
@@ -1834,7 +1820,12 @@ public class NotificationGeneratorConfiguration {
                 ),
                 notificationSender,
                 notificationIdAppender
-            )
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("success","body");
+                }
+            }
         );
     }
 
@@ -1855,7 +1846,7 @@ public class NotificationGeneratorConfiguration {
             ) {
                 @Override
                 public Message getSuccessMessage() {
-                    return new Message("header","body");
+                    return new Message("success","body");
                 }
             }
         );
@@ -1876,7 +1867,7 @@ public class NotificationGeneratorConfiguration {
             ) {
                 @Override
                 public Message getSuccessMessage() {
-                    return new Message("header","body");
+                    return new Message("success","body");
                 }
             }
         );
@@ -1998,7 +1989,7 @@ public class NotificationGeneratorConfiguration {
             ) {
                 @Override
                 public Message getSuccessMessage() {
-                    return new Message("header","body");
+                    return new Message("success","body");
                 }
             }
         );
@@ -2150,4 +2141,174 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+
+    @Bean("editPaymentMethodNotificationGenerator")
+    public List<NotificationGenerator> editPaymentMethodNotificationHandler(
+        LegalRepresentativeAppealSubmittedPendingPaymentPersonalisation legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
+        HomeOfficeAppealSubmittedPendingPaymentPersonalisation homeOfficeAppealSubmittedPendingPaymentPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
+                    homeOfficeAppealSubmittedPendingPaymentPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("editPaymentMethodAoNotificationGenerator")
+    public List<NotificationGenerator> editPaymentMethodAoNotificationHandler(
+        AdminOfficerEditPaymentMethodPersonalisation adminOfficerEditPaymentMethodPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    adminOfficerEditPaymentMethodPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("payAndSubmitAppealEmailNotificationGenerator")
+    public List<NotificationGenerator> payAndSubmitAppealEmailNotificationHandler(
+        LegalRepresentativeAppealSubmittedPaidPersonalisation legalRepresentativeAppealSubmittedPaidPersonalisation,
+        CaseOfficerSubmitAppealPersonalisation caseOfficerSubmitAppealPersonalisation,
+        HomeOfficeSubmitAppealPersonalisation homeOfficeSubmitAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeAppealSubmittedPaidPersonalisation,
+                    caseOfficerSubmitAppealPersonalisation,
+                    homeOfficeSubmitAppealPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("success","body");
+                }
+            }
+        );
+    }
+
+    @Bean("payAndSubmitAppealFailedEmailNotificationGenerator")
+    public List<NotificationGenerator> payAndSubmitAppealFailedEmailNotificationHandler(
+        LegalRepresentativeAppealSubmittedPaidPersonalisation legalRepresentativeAppealSubmittedPaidPersonalisation,
+        HomeOfficeSubmitAppealPersonalisation homeOfficeSubmitAppealPersonalisation,
+        CaseOfficerSubmitAppealPersonalisation caseOfficerSubmitAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeAppealSubmittedPaidPersonalisation,
+                    homeOfficeSubmitAppealPersonalisation,
+                    caseOfficerSubmitAppealPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("success","body");
+                }
+            }
+        );
+    }
+
+    @Bean("payAndSubmitAppealAppellantEmailNotificationGenerator")
+    public List<NotificationGenerator> payAndSubmitAppealAppellantEmailNotificationHandler(
+        AppellantSubmitAppealPersonalisationEmail appellantSubmitAppealPersonalisationEmail,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantSubmitAppealPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("payAndSubmitAppealAppellantSmsNotificationGenerator")
+    public List<NotificationGenerator> payAndSubmitAppealAppellantSmsNotificationHandler(
+        AppellantSubmitAppealPersonalisationSms appellantSubmitAppealPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new SmsNotificationGenerator(
+                newArrayList(appellantSubmitAppealPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("payForAppealEmailNotificationGenerator")
+    public List<NotificationGenerator> payForAppealAppealEmailNotificationHandler(
+        LegalRepresentativeAppealSubmittedPaidPersonalisation legalRepresentativeAppealSubmittedPaidPersonalisation,
+        CaseOfficerSubmitAppealPersonalisation caseOfficerSubmitAppealPersonalisation,
+        HomeOfficeSubmitAppealPersonalisation homeOfficeSubmitAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeAppealSubmittedPaidPersonalisation,
+                    caseOfficerSubmitAppealPersonalisation,
+                    homeOfficeSubmitAppealPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("success","body");
+                }
+            }
+        );
+    }
+
+    @Bean("paymentPaidPostSubmitNotificationGenerator")
+    public List<NotificationGenerator> paymentPaidPostSubmitLegalRepNotificationHandler(
+        LegalRepresentativePaymentPaidPersonalisation legalRepresentativePaymentPaidPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativePaymentPaidPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("success","body");
+                }
+            }
+        );
+    }
 }

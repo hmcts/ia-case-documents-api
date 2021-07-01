@@ -1,0 +1,31 @@
+{
+  "description": "RIA-4467 Post-submit appeal submitted and paid notifications to LR, CO, HO and Appellant (email)",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 4467,
+      "eventId": "payAndSubmitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "taylorHouse",
+          "appealType": "refusalOfEu",
+          "paymentStatus": "Paid",
+          "contactPreference": "wantsEmail",
+          "email": "{$TEST_CITIZEN_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL,_APPEAL_SUBMITTED_CASE_OFFICER,_APPEAL_SUBMITTED_HOME_OFFICE,_APPEAL_SUBMITTED_PAID_LEGAL_REPRESENTATIVE])"
+    }
+  }
+}
+

@@ -1,5 +1,5 @@
 {
-  "description": "RIA-4084 Send apply notice of change notification to after listing",
+  "description": "RIA-4084-RIA-4467 Send apply notice of change notification after listing",
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",
@@ -24,8 +24,8 @@
     "status": 200,
     "errors": [],
     "confirmation": {
-      "confirmation_header": "success",
-      "confirmation_body": "success"
+      "header": "success",
+      "body": "contains([_NOC_REQUEST_DECISION_APPELLANT_EMAIL,_NOC_REQUEST_DECISION_HOME_OFFICE,_NOC_REQUEST_DECISION_LEGAL_REP])"
     }
    }
 }

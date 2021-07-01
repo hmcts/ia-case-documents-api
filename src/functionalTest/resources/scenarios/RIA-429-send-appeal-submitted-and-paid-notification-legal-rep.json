@@ -1,6 +1,6 @@
 {
   "description": "RIA-429 Send appeal submitted and paid notification to legal representative",
-  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

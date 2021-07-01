@@ -1,6 +1,6 @@
 {
-  "description": "RIA-4104 Send apply notice of change notification to legal rep",
-  "disabled": true,
+  "description": "RIA-4104-RIA-4467 Send apply notice of change notification to legal rep",
+  "disabled": false,
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",
@@ -20,8 +20,8 @@
     "status": 200,
     "errors": [],
     "confirmation": {
-      "confirmation_header": "success",
-      "confirmation_body": "success"
+      "header": "success",
+      "body": "contains([_NOC_REQUEST_DECISION_LEGAL_REP])"
     }
   }
 }

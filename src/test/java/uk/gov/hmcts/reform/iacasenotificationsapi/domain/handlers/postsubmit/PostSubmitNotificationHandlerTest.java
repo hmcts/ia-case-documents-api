@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Message;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
@@ -27,6 +28,10 @@ class PostSubmitNotificationHandlerTest {
     @Mock
     Callback<AsylumCase> callback;
     @Mock
+    CaseDetails<AsylumCase> caseDetails;
+    @Mock
+    AsylumCase asylumCase;
+    @Mock
     NotificationGenerator notificationGenerator;
     @Mock
     BiPredicate<PostSubmitCallbackStage, Callback<AsylumCase>> canHandle;
@@ -35,8 +40,7 @@ class PostSubmitNotificationHandlerTest {
 
     private PostSubmitCallbackStage callbackStage = PostSubmitCallbackStage.CCD_SUBMITTED;
     private PostSubmitNotificationHandler notificationHandler;
-    private PostSubmitCallbackResponse postSubmitCallbackResponse = new PostSubmitCallbackResponse("success","success");
-    private Message expectedMessage = new Message("success","success");
+    private Message expectedMessage = new Message("success", "success");
 
     @BeforeEach
     void setUp() {
@@ -47,11 +51,13 @@ class PostSubmitNotificationHandlerTest {
     void should_generate_notification_when_event_can_be_handled() {
 
         when(canHandle.test(callbackStage, callback)).thenReturn(true);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(notificationGenerator.getSuccessMessage()).thenReturn(expectedMessage);
         PostSubmitCallbackResponse response = notificationHandler.handle(callbackStage, callback);
 
         assertEquals("success", response.getConfirmationHeader().get());
-        assertEquals("success", response.getConfirmationBody().get());
+        assertEquals(asylumCase.toString(), response.getConfirmationBody().get());
         verify(notificationGenerator).generate(callback);
     }
 

@@ -8,6 +8,7 @@ public enum Event {
     EDIT_APPEAL("editAppeal"),
     SUBMIT_APPEAL("submitAppeal"),
     PAY_AND_SUBMIT_APPEAL("payAndSubmitAppeal"),
+    PAY_FOR_APPEAL("payForAppeal"),
     SEND_DIRECTION("sendDirection"),
     REQUEST_RESPONDENT_EVIDENCE("requestRespondentEvidence"),
     UPLOAD_RESPONDENT_EVIDENCE("uploadRespondentEvidence"),
@@ -81,6 +82,7 @@ public enum Event {
     REQUEST_FEE_REMISSION("requestFeeRemission"),
     MANAGE_FEE_UPDATE("manageFeeUpdate"),
     RECORD_OUT_OF_TIME_DECISION("recordOutOfTimeDecision"),
+    EDIT_PAYMENT_METHOD("editPaymentMethod"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

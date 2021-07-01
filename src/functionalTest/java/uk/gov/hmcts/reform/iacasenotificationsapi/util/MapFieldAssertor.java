@@ -2,10 +2,12 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.util;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unchecked")
 public final class MapFieldAssertor {
@@ -91,6 +93,21 @@ public final class MapFieldAssertor {
                         matchesPattern(expectedValueString)
                     );
 
+                    return;
+                }
+
+                if (expectedValueString.startsWith("contains([")) {
+
+                    Stream
+                        .of(expectedValueString.substring(10, expectedValueString.length() - 2)
+                            .split(","))
+                        .forEach(expectedValueItem -> {
+                            assertThat(
+                                "Expected field contains (" + path + ")",
+                                String.valueOf(actualValue),
+                                containsString(expectedValueItem)
+                            );
+                        });
                     return;
                 }
             }
