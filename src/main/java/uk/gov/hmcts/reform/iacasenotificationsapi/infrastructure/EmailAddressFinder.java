@@ -51,7 +51,7 @@ public class EmailAddressFinder {
     }
 
     public String getListCaseHomeOfficeEmailAddress(AsylumCase asylumCase) {
-        if (isRemoteHearing(asylumCase)) {
+        if (isRemoteHearing(asylumCase) || isDecisionWithoutHearing(asylumCase)) {
             return getHearingCentreEmailAddress(asylumCase);
         } else {
             return asylumCase
@@ -65,7 +65,7 @@ public class EmailAddressFinder {
     }
 
     public String getListCaseFtpaHomeOfficeEmailAddress(AsylumCase asylumCase) {
-        if (isRemoteHearing(asylumCase)) {
+        if (isRemoteHearing(asylumCase) || isDecisionWithoutHearing(asylumCase)) {
             return getHearingCentreEmailAddress(asylumCase);
         } else {
             return asylumCase
@@ -121,6 +121,12 @@ public class EmailAddressFinder {
         return asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
             .map(hearingCentre -> hearingCentre == HearingCentre.REMOTE_HEARING)
             .orElse(false);
+    }
+
+    private boolean isDecisionWithoutHearing(AsylumCase asylumCase) {
+        return asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .map(hearingCentre -> hearingCentre == HearingCentre.DECISION_WITHOUT_HEARING)
+                .orElse(false);
     }
 
 }
