@@ -4,7 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 34889,
+      "id": 34889657,
       "eventId": "endAppeal",
       "state": "prepareForHearing",
       "caseData": {
@@ -58,15 +58,15 @@
         "endAppealOutcomeReason": "some outcome reason",
         "notificationsSent": [
           {
-            "id": "34889_END_APPEAL_AIP_APPELLANT_SMS",
+            "id": "34889657_END_APPEAL_AIP_APPELLANT_SMS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "34889_END_APPEAL_AIP_APPELLANT_EMAIL",
+            "id": "34889657_END_APPEAL_AIP_APPELLANT_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "34889_END_APPEAL_HOME_OFFICE",
+            "id": "34889657_END_APPEAL_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -74,7 +74,7 @@
     },
     "notifications": [
       {
-        "reference": "34889_END_APPEAL_HOME_OFFICE",
+        "reference": "34889657_END_APPEAL_HOME_OFFICE",
         "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
@@ -91,7 +91,7 @@
         ]
       },
       {
-        "reference": "34889_END_APPEAL_AIP_APPELLANT_EMAIL",
+        "reference": "34889657_END_APPEAL_AIP_APPELLANT_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
         "subject": "Immigration and Asylum appeal: Your appeal has ended",
         "body": [
@@ -108,7 +108,7 @@
         ]
       },
       {
-        "reference": "34889_END_APPEAL_AIP_APPELLANT_SMS",
+        "reference": "34889657_END_APPEAL_AIP_APPELLANT_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
