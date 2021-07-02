@@ -17,6 +17,27 @@ def type = "java"
 def product = "ia"
 def component = "ia-case-payments-api"
 
+def secrets = [
+  'ia-${env}': [
+
+    secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
+    secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
+
+    secret('test-law-firm-org-success-username', 'TEST_LAW_FIRM_ORG_SUCCESS_USERNAME'),
+    secret('test-law-firm-org-success-password', 'TEST_LAW_FIRM_ORG_SUCCESS_PASSWORD'),
+
+    secret('test-law-firm-org-deleted-username', 'TEST_LAW_FIRM_ORG_DELETED_USERNAME'),
+    secret('test-law-firm-org-deleted-password', 'TEST_LAW_FIRM_ORG_DELETED_PASSWORD'),
+
+    secret('idam-redirect-uri', 'IA_IDAM_REDIRECT_URI'),
+    secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
+    secret('idam-secret', 'IA_IDAM_SECRET'),
+    secret('s2s-secret', 'IA_S2S_SECRET'),
+    secret('s2s-microservice', 'IA_S2S_MICROSERVICE')
+
+  ]
+]
+
 withNightlyPipeline(type, product, component) {
 
   env.TEST_URL = params.URL_TO_TEST
@@ -25,6 +46,7 @@ withNightlyPipeline(type, product, component) {
   env.IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
   env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
+  loadVaultSecrets(secrets)
 
   enableSecurityScan()
   enableMutationTest()
