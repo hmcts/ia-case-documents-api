@@ -5,7 +5,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 1001,
+      "id": 143223754,
       "eventId": "leadershipJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
@@ -28,15 +28,15 @@
       "replacements": {
         "notificationsSent": [
           {
-            "id": "1001_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+            "id": "143223754_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1001_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+            "id": "143223754_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1001_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
+            "id": "143223754_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -44,7 +44,7 @@
     },
     "notifications": [
       {
-        "reference": "1001_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+        "reference": "143223754_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
         "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
@@ -55,7 +55,7 @@
         ]
       },
       {
-        "reference": "1001_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+        "reference": "143223754_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
@@ -66,7 +66,7 @@
         ]
       },
       {
-        "reference": "1001_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
+        "reference": "143223754_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
         "recipient": "{$ctscAdminFtpaDecisionEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [

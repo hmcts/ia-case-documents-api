@@ -5,7 +5,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "id": 1001,
+      "id": 1939123,
       "eventId": "sendDecisionAndReasons",
       "state": "decided",
       "caseData": {
@@ -27,11 +27,11 @@
         "isDecisionAllowed": "allowed",
         "notificationsSent": [
           {
-            "id": "1001_APPEAL_OUTCOME_HOME_OFFICE",
+            "id": "1939123_APPEAL_OUTCOME_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1001_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+            "id": "1939123_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -39,7 +39,7 @@
     },
     "notifications": [
       {
-        "reference": "1001_APPEAL_OUTCOME_HOME_OFFICE",
+        "reference": "1939123_APPEAL_OUTCOME_HOME_OFFICE",
         "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
@@ -53,7 +53,7 @@
         ]
       },
       {
-        "reference": "1001_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+        "reference": "1939123_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [

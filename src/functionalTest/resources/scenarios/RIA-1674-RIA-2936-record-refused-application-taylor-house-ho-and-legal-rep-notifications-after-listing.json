@@ -4,7 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 1001,
+      "id": 16736789,
       "eventId": "recordApplication",
       "state": "prepareForHearing",
       "caseData": {
@@ -36,11 +36,11 @@
         "applicationDecision": "Refused",
         "notificationsSent": [
           {
-            "id": "1001_RECORD_APPLICATION_HOME_OFFICE",
+            "id": "16736789_RECORD_APPLICATION_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1001_RECORD_APPLICATION_LEGAL_REPRESENTATIVE",
+            "id": "16736789_RECORD_APPLICATION_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -48,7 +48,7 @@
     },
     "notifications": [
       {
-        "reference": "1001_RECORD_APPLICATION_HOME_OFFICE",
+        "reference": "16736789_RECORD_APPLICATION_HOME_OFFICE",
         "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: application for transfer refused",
         "body": [
@@ -66,7 +66,7 @@
         ]
       },
       {
-        "reference": "1001_RECORD_APPLICATION_LEGAL_REPRESENTATIVE",
+        "reference": "16736789_RECORD_APPLICATION_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: application for transfer refused",
         "body": [

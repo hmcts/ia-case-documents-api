@@ -4,7 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 1001,
+      "id": 11276222,
       "eventId": "endAppeal",
       "state": "appealSubmitted",
       "caseData": {
@@ -31,11 +31,11 @@
         "endAppealOutcomeReason": "some outcome reason",
         "notificationsSent": [
           {
-            "id": "1001_END_APPEAL_HOME_OFFICE",
+            "id": "11276222_END_APPEAL_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1001_END_APPEAL_LEGAL_REPRESENTATIVE",
+            "id": "11276222_END_APPEAL_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -43,7 +43,7 @@
     },
     "notifications": [
       {
-        "reference": "1001_END_APPEAL_HOME_OFFICE",
+        "reference": "11276222_END_APPEAL_HOME_OFFICE",
         "recipient": "{$endAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
@@ -60,7 +60,7 @@
         ]
       },
       {
-        "reference": "1001_END_APPEAL_LEGAL_REPRESENTATIVE",
+        "reference": "11276222_END_APPEAL_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
