@@ -70,6 +70,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             fieldValues.put("wantsEmail", YesOrNo.YES);
             fieldValues.put("email", asylumCase.read(EMAIL, String.class).orElse(""));
         } else {
+            fieldValues.put("wantsSms", YesOrNo.YES);
             fieldValues.put("mobileNumber", asylumCase.read(MOBILE_NUMBER, String.class).orElse(""));
         }
 
@@ -87,7 +88,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 fieldValues.put("outOfCountryDecisionType", maybeOutOfCountryDecisionType.get().getDescription());
                 fieldValues.put("decisionLetterReceived", YesOrNo.YES);
 
-                if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_HUMAN_RIGHTS) {
+                if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_HUMAN_RIGHTS || decisionType == OutOfCountryDecisionType.REFUSAL_OF_ENTRY) {
                     fieldValues.put("gwfReferenceNumber", asylumCase.read(GWF_REFERENCE_NUMBER, String.class).orElse(null));
                     fieldValues.put("dateEntryClearanceDecision", formatDateForRendering(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class).orElse(null)));
                     fieldValues.put("decisionLetterReceived", YesOrNo.NO);
