@@ -81,8 +81,14 @@ public enum AsylumCaseDefinition {
     LEGAL_REPRESENTATIVE_NAME(
             "legalRepresentativeName", new TypeReference<String>(){}),
 
+    LEGAL_REP_NAME(
+        "legalRepName", new TypeReference<String>(){}),
+
     LEGAL_REP_COMPANY_NAME(
             "legalRepCompanyName", new TypeReference<String>(){}),
+
+    LEGAL_REP_COMPANY(
+        "legalRepCompany", new TypeReference<String>(){}),
 
     LEGAL_REP_COMPANY_ADDRESS(
             "legalRepCompanyAddress", new TypeReference<AddressUk>(){}),

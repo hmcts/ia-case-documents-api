@@ -1,0 +1,85 @@
+{
+  "description": "RIA-4293 Send Home Office evidence direction - updated company and legal rep details",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1003,
+      "eventId": "requestRespondentEvidence",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "legalRepCompany": "Some Updated Company Ltd",
+          "legalRepName": "Bob Smith",
+          "legalRepresentativeEmailAddress": "email@updated.com",
+          "legalRepReferenceNumber": "updated-reference",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Send your evidence",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentEvidence"
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "legalRepCompany": "Some Updated Company Ltd",
+        "legalRepresentativeEmailAddress": "email@updated.com",
+        "legalRepReferenceNumber": "updated-reference",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Send your evidence",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentEvidence"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1003_RESPONDENT_EVIDENCE_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1003_RESPONDENT_EVIDENCE_DIRECTION",
+        "recipient": "{$respondentEmailAddresses.respondentEvidenceDirection}",
+        "subject": "Immigration and Asylum appeal: submit bundle direction",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "Some Updated Company Ltd",
+          "Bob Smith",
+          "email@updated.com",
+          "updated-reference",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}
