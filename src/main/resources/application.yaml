@@ -728,6 +728,7 @@ security:
       - "submitTimeExtension"
       - "submitClarifyingQuestionAnswers"
       - "submitCmaRequirements"
+      - "makeAnApplication"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"

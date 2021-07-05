@@ -1151,18 +1151,23 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> submitTimeExtensionAipNotificationHandler(
-        @Qualifier("submitTimeExtensionAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+            @Qualifier("submitTimeExtensionAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> {
-                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                (callbackStage, callback) -> {
+                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
                 boolean isAipJourney = isAipJourney(asylumCase);
 
-                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.SUBMIT_TIME_EXTENSION
-                       && isAipJourney;
-            }, notificationGenerators
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.MAKE_AN_APPLICATION
+                            && Arrays.asList(
+                                    State.AWAITING_REASONS_FOR_APPEAL,
+                                    State.AWAITING_CMA_REQUIREMENTS,
+                                    State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS
+                                ).contains(callback.getCaseDetails().getState())
+                            && isAipJourney;
+                }, notificationGenerators
         );
     }
 
@@ -1928,13 +1933,21 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> makeAnApplicationNotificationHandler(
-        @Qualifier("makeAnApplicationNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+            @Qualifier("makeAnApplicationNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
-            (callbackStage, callback) ->
-                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.MAKE_AN_APPLICATION,
-            notificationGenerators
+                (callbackStage, callback) -> {
+
+                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                    boolean isAipJourney = asylumCase
+                            .read(JOURNEY_TYPE, JourneyType.class)
+                            .map(type -> type == AIP).orElse(false);
+
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.MAKE_AN_APPLICATION
+                            && !isAipJourney;
+                }, notificationGenerators
         );
     }
 

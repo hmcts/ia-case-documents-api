@@ -5,7 +5,7 @@
     "credentials": "Citizen",
     "input": {
       "id": 1030,
-      "eventId": "submitTimeExtension",
+      "eventId": "makeAnApplication",
       "state": "awaitingCmaRequirements",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",

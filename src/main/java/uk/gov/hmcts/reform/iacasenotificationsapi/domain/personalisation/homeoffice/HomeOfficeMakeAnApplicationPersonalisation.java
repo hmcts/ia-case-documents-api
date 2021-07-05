@@ -1,10 +1,15 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,6 +33,7 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
     private static final String HOME_OFFICE_LART = "caseworker-ia-homeofficelart";
     private static final String HOME_OFFICE_APC = "caseworker-ia-homeofficeapc";
     private static final String HOME_OFFICE_POU = "caseworker-ia-homeofficepou";
+    private static final String CITIZEN = "citizen";
 
 
     private final String homeOfficeMakeAnApplicationBeforeListingTemplateId;
@@ -42,6 +48,7 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
     private final MakeAnApplicationService makeAnApplicationService;
     private final UserDetailsProvider userDetailsProvider;
     private final EmailAddressFinder emailAddressFinder;
+    //    private final RecipientsFinder recipientsFinder;
 
     public HomeOfficeMakeAnApplicationPersonalisation(
             @Value("${govnotify.template.makeAnApplication.beforeListing.homeOffice.email}") String homeOfficeMakeAnApplicationBeforeListingTemplateId,
