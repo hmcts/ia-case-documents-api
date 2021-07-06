@@ -543,6 +543,9 @@ govnotify:
           email: 5ba35971-b621-4968-9c5e-ef483101b22e
     makeAnApplication:
       beforeListing:
+        appellant:
+          email: 1163f6cc-b7cd-4c5d-9c3e-3121a7ce897c
+          sms: 5f1533b6-ee8c-448e-99a8-b3e0b6c2de30
         legalRep:
           email: 926e4c68-352f-4aa0-9f7b-37df4af280cf
         homeOffice:

@@ -12,28 +12,31 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicationService;
 
 @Service
-public class AppellantSubmitTimeExtensionPersonalisationSms implements SmsNotificationPersonalisation {
+public class AppellantMakeAnApplicationPersonalisationSms implements SmsNotificationPersonalisation {
 
-    private final String submitTimeExtensionAppellantSmsTemplateId;
+    private final String makeAnApplicationAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
     private final RecipientsFinder recipientsFinder;
+    private final MakeAnApplicationService makeAnApplicationService;
 
 
-    public AppellantSubmitTimeExtensionPersonalisationSms(
-        @Value("${govnotify.template.submitTimeExtension.appellant.sms}") String submitTimeExtensionAppellantSmsTemplateId,
-        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
-        RecipientsFinder recipientsFinder
-    ) {
-        this.submitTimeExtensionAppellantSmsTemplateId = submitTimeExtensionAppellantSmsTemplateId;
+    public AppellantMakeAnApplicationPersonalisationSms(
+            @Value("${govnotify.template.makeAnApplication.beforeListing.appellant.sms}") String makeAnApplicationAppellantSmsTemplateId,
+            @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+            RecipientsFinder recipientsFinder,
+            MakeAnApplicationService makeAnApplicationService) {
+        this.makeAnApplicationAppellantSmsTemplateId = makeAnApplicationAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.recipientsFinder = recipientsFinder;
+        this.makeAnApplicationService = makeAnApplicationService;
     }
 
     @Override
     public String getTemplateId() {
-        return submitTimeExtensionAppellantSmsTemplateId;
+        return makeAnApplicationAppellantSmsTemplateId;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class AppellantSubmitTimeExtensionPersonalisationSms implements SmsNotifi
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_SUBMIT_TIME_EXTENSION_APPELLANT_AIP_SMS";
+        return caseId + "_MAKE_AN_APPLICATION_APPELLANT_AIP_SMS";
     }
 
     @Override
@@ -54,6 +57,7 @@ public class AppellantSubmitTimeExtensionPersonalisationSms implements SmsNotifi
             ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("applicationType", makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase))
                 .put("Hyperlink to service", iaAipFrontendUrl)
                 .build();
     }

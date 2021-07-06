@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appell
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBSCRIPTIONS;
@@ -24,15 +25,18 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.SubscriberType
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicationService;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class AppellantSubmitTimeExtensionPersonalisationSmsTest {
+public class AppellantMakeAnApplicationPersonalisationSmsTest {
 
     @Mock
     AsylumCase asylumCase;
     @Mock
     RecipientsFinder recipientsFinder;
+    @Mock
+    MakeAnApplicationService makeAnApplicationService;
 
     private Long caseId = 12345L;
     private String emailTemplateId = "someEmailTemplateId";
@@ -40,8 +44,9 @@ public class AppellantSubmitTimeExtensionPersonalisationSmsTest {
 
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppellantMobilePhone = "07123456789";
+    private String applicationType = "someApplicationType";
 
-    private AppellantSubmitTimeExtensionPersonalisationSms appellantSubmitTimeExtensionPersonalisationSms;
+    private AppellantMakeAnApplicationPersonalisationSms appellantMakeAnApplicationPersonalisationSms;
 
     @BeforeEach
     public void setup() {
@@ -49,22 +54,23 @@ public class AppellantSubmitTimeExtensionPersonalisationSmsTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.of(mockedAppealReferenceNumber));
 
-        appellantSubmitTimeExtensionPersonalisationSms = new AppellantSubmitTimeExtensionPersonalisationSms(
+        appellantMakeAnApplicationPersonalisationSms = new AppellantMakeAnApplicationPersonalisationSms(
             emailTemplateId,
             iaAipFrontendUrl,
-            recipientsFinder
-        );
+            recipientsFinder,
+                makeAnApplicationService);
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
     }
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(emailTemplateId, appellantSubmitTimeExtensionPersonalisationSms.getTemplateId());
+        assertEquals(emailTemplateId, appellantMakeAnApplicationPersonalisationSms.getTemplateId());
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_SUBMIT_TIME_EXTENSION_APPELLANT_AIP_SMS",
-            appellantSubmitTimeExtensionPersonalisationSms.getReferenceId(caseId));
+        assertEquals(caseId + "_MAKE_AN_APPLICATION_APPELLANT_AIP_SMS",
+            appellantMakeAnApplicationPersonalisationSms.getReferenceId(caseId));
     }
 
     @Test
@@ -82,7 +88,7 @@ public class AppellantSubmitTimeExtensionPersonalisationSmsTest {
         when(asylumCase.read(SUBSCRIPTIONS))
             .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
 
-        assertTrue(appellantSubmitTimeExtensionPersonalisationSms.getRecipientsList(asylumCase)
+        assertTrue(appellantMakeAnApplicationPersonalisationSms.getRecipientsList(asylumCase)
             .contains(mockedAppellantMobilePhone));
     }
 
@@ -91,7 +97,7 @@ public class AppellantSubmitTimeExtensionPersonalisationSmsTest {
 
         when(recipientsFinder.findAll(null, NotificationType.SMS)).thenCallRealMethod();
 
-        assertThatThrownBy(() -> appellantSubmitTimeExtensionPersonalisationSms.getRecipientsList(null))
+        assertThatThrownBy(() -> appellantMakeAnApplicationPersonalisationSms.getRecipientsList(null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -100,10 +106,13 @@ public class AppellantSubmitTimeExtensionPersonalisationSmsTest {
     public void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
-            appellantSubmitTimeExtensionPersonalisationSms.getPersonalisation(asylumCase);
+            appellantMakeAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(applicationType, personalisation.get("applicationType"));
+
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
 
     }
 
@@ -111,11 +120,15 @@ public class AppellantSubmitTimeExtensionPersonalisationSmsTest {
     public void should_return_personalisation_when_only_mandatory_information_given() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
 
         Map<String, String> personalisation =
-            appellantSubmitTimeExtensionPersonalisationSms.getPersonalisation(asylumCase);
+            appellantMakeAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals("", personalisation.get("applicationType"));
+
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
     }
 }
