@@ -26,11 +26,11 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmail implements Email
     public AppellantSubmitAppealOutOfTimePersonalisationEmail(
         @Value("${govnotify.template.appealSubmittedOutOfTime.appellant.email}") String appealSubmittedOutOfTimeAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
-        @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
+        @Value("${appellantDaysToWait.afterOutOfTimeSubmission}") int daysToWaitAfterOutOfTimeSubmission,
         SystemDateProvider systemDateProvider,
         RecipientsFinder recipientsFinder
     ) {
-        this.daysToWaitAfterSubmission = daysToWaitAfterSubmission;
+        this.daysToWaitAfterSubmission = daysToWaitAfterOutOfTimeSubmission;
 
         this.recipientsFinder = recipientsFinder;
         this.appealSubmittedOutOfTimeAppellantEmailTemplateId = appealSubmittedOutOfTimeAppellantEmailTemplateId;

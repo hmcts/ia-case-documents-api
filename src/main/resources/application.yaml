@@ -112,8 +112,8 @@ govnotify:
 
     appealSubmittedOutOfTime:
       appellant:
-        email: b864d01f-c80c-4d91-947f-9599f0b64163
-        sms: c52f3074-4b5a-47e0-8dec-154ac5fc0513
+        email: 0646da08-5844-436a-b8cc-5cc24b98b2b2
+        sms: 2c2017a6-c751-45f6-abfb-6945dbcc762a
     pendingPayment:
       legalRep:
         paid:
@@ -945,6 +945,7 @@ customerServices:
 
 appellantDaysToWait:
   afterSubmission: 28
+  afterOutOfTimeSubmission: 5
   afterReasonsForAppeal: 14
   afterClarifyingQuestionsAnswers: 5
   afterCmaRequirements: 14

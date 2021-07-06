@@ -46,6 +46,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
 
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppellantMobilePhone = "07123456789";
+    private int daysToWait = 5;
 
     private AppellantSubmitAppealOutOfTimePersonalisationSms appellantSubmitAppealOutOfTimePersonalisationSms;
 
@@ -60,7 +61,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
         appellantSubmitAppealOutOfTimePersonalisationSms = new AppellantSubmitAppealOutOfTimePersonalisationSms(
             smsTemplateId,
             iaAipFrontendUrl,
-            28,
+            daysToWait,
             systemDateProvider,
             recipientsFinder);
     }
@@ -115,10 +116,10 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
-        final String dueDate = LocalDate.now().plusDays(28)
+        final String dueDate = LocalDate.now().plusDays(daysToWait)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
-        when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
+        when(systemDateProvider.dueDate(daysToWait)).thenReturn(dueDate);
 
         Map<String, String> personalisation =
             appellantSubmitAppealOutOfTimePersonalisationSms.getPersonalisation(asylumCase);
@@ -130,11 +131,11 @@ public class AppellantSubmitAppealOutOfTimePersonalisationSmsTest {
 
     @Test
     public void should_return_personalisation_when_only_mandatory_information_given() {
-        final String dueDate = LocalDate.now().plusDays(28)
+        final String dueDate = LocalDate.now().plusDays(daysToWait)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(systemDateProvider.dueDate(28)).thenReturn(dueDate);
+        when(systemDateProvider.dueDate(daysToWait)).thenReturn(dueDate);
 
         Map<String, String> personalisation =
             appellantSubmitAppealOutOfTimePersonalisationSms.getPersonalisation(asylumCase);

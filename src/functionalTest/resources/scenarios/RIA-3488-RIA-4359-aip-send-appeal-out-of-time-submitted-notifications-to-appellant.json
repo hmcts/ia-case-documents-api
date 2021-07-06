@@ -1,5 +1,5 @@
 {
-    "description": "RIA-3488 AIP Send appeal out of time submitted notifications (Email and SMS) and Email to Case worker",
+    "description": "RIA-3488-RIA-4359 AIP Send appeal out of time submitted notifications (Email and SMS) and Email to Case worker",
     "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
     "request": {
       "uri": "/asylum/ccdAboutToSubmit",
@@ -73,12 +73,12 @@
         {
           "reference": "34881_APPEAL_SUBMITTED_OUT_OF_TIME_APPELLANT_AIP_EMAIL",
           "recipient": "{$TEST_CITIZEN_USERNAME}",
-          "subject": "Your appeal details have been submitted",
+          "subject": "Immigration and Asylum appeal: Your appeal details have been sent",
           "body": [
             "PA/12345/2019",
             "A1234567",
             "Pablo Jimenez,",
-            "{$TODAY+28|d MMM yyyy}",
+            "{$TODAY+5|d MMM yyyy}",
             "{$iaAipFrontendUrl}"
           ]
         },
@@ -98,7 +98,7 @@
           "subject": "",
           "body": [
             "PA/12345/2019",
-            "{$TODAY+28|d MMM yyyy}",
+            "{$TODAY+5|d MMM yyyy}",
             "{$iaAipFrontendUrl}"
           ]
         }
