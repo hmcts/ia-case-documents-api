@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public enum OutOfCountryDecisionType {
 
-    REFUSAL_OF_HUMAN_RIGHTS("refusalOfHumanRights", "A decision to refuse a human rights claim for entry clearance"),
-    REFUSAL_OF_PROTECTION("refusalOfProtection", "A decision to refuse a human rights or protection claim, or deprive you of British citizenship, where you can only apply after your client has left the country"),
-    REMOVAL_OF_CLIENT("removalOfClient", "A decision to remove your client under the Immigration (European Economic Area) Regulations 2016");
+    REFUSAL_OF_HUMAN_RIGHTS("refusalOfHumanRights", "A decision either 1) to refuse a human rights claim made following an application for entry clearance or 2) to refuse a permit to enter the UK under the Immigration (European Economic Area) Regulation 2016"),
+    REFUSAL_OF_PROTECTION("refusalOfProtection", "A decision to refuse a protection or human rights claim where your client may only apply after leaving the UK"),
+    REMOVAL_OF_CLIENT("removalOfClient", "A decision either 1) to remove your client from the UK under the Immigration (European Economic Area) Regulations 2016, where they are currently outside the UK or 2) to deprive your client of British citizenship, where they are currently outside the UK");
 
     @JsonValue
     private String value;
