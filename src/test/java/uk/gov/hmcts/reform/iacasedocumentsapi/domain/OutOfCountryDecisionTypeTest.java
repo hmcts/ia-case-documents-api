@@ -20,9 +20,9 @@ class OutOfCountryDecisionTypeTest {
 
     @Test
     void has_correct_asylum_out_of_country_decision_types_description() {
-        assertEquals("A decision to refuse a human rights claim for entry clearance", REFUSAL_OF_HUMAN_RIGHTS.getDescription());
-        assertEquals("A decision to refuse a human rights or protection claim, or deprive you of British citizenship, where you can only apply after your client has left the country", OutOfCountryDecisionType.REFUSAL_OF_PROTECTION.getDescription());
-        assertEquals("A decision to remove your client under the Immigration (European Economic Area) Regulations 2016", OutOfCountryDecisionType.REMOVAL_OF_CLIENT.getDescription());
+        assertEquals("A decision either 1) to refuse a human rights claim made following an application for entry clearance or 2) to refuse a permit to enter the UK under the Immigration (European Economic Area) Regulation 2016", REFUSAL_OF_HUMAN_RIGHTS.getDescription());
+        assertEquals("A decision to refuse a protection or human rights claim where your client may only apply after leaving the UK", OutOfCountryDecisionType.REFUSAL_OF_PROTECTION.getDescription());
+        assertEquals("A decision either 1) to remove your client from the UK under the Immigration (European Economic Area) Regulations 2016, where they are currently outside the UK or 2) to deprive your client of British citizenship, where they are currently outside the UK", OutOfCountryDecisionType.REMOVAL_OF_CLIENT.getDescription());
     }
 
     @Test
@@ -37,7 +37,7 @@ class OutOfCountryDecisionTypeTest {
 
     @Test
     void has_correct_value_and_description() {
-        assertEquals("refusalOfHumanRights: A decision to refuse a human rights claim for entry clearance",
+        assertEquals("refusalOfHumanRights: A decision either 1) to refuse a human rights claim made following an application for entry clearance or 2) to refuse a permit to enter the UK under the Immigration (European Economic Area) Regulation 2016",
                 OutOfCountryDecisionType.from("refusalOfHumanRights").get().toString());
     }
 }
