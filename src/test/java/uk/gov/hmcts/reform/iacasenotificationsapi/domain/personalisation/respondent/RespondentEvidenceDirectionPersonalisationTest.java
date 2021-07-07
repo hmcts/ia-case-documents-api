@@ -1,11 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,10 +17,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
@@ -148,6 +149,63 @@ public class RespondentEvidenceDirectionPersonalisationTest {
         assertEquals("", personalisation.get("homeOfficeReferenceNumber"));
         assertEquals("", personalisation.get("appellantGivenNames"));
         assertEquals("", personalisation.get("appellantFamilyName"));
+        assertEquals(companyName, personalisation.get("companyName"));
+        assertEquals(companyAddress, personalisation.get("companyAddress"));
+        assertEquals(legalRepName, personalisation.get("legalRepName"));
+        assertEquals(legalRepEmail, personalisation.get("legalRepEmail"));
+        assertEquals(legalRepReference, personalisation.get("legalRepReference"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+    }
+
+    @Test
+    public void should_return_empty_company_details_for_notice_of_change_found() {
+
+        when(asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class))
+            .thenReturn(Optional.of(
+                new ChangeOrganisationRequest(
+                    null,
+                    null,
+                    null
+                )
+            ));
+        Map<String, String> personalisation = respondentEvidenceDirectionPersonalisation.getPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals("", personalisation.get("companyName"));
+        assertEquals("", personalisation.get("companyAddress"));
+        assertEquals("", personalisation.get("legalRepName"));
+        assertEquals("", personalisation.get("legalRepEmail"));
+        assertEquals("", personalisation.get("legalRepReference"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
+        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
+        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+    }
+
+    @Test
+    public void should_return_company_details_for_notice_of_change_found_with_valid_case_role() {
+
+        Value caseRole =
+            new Value("[LEGALREPRESENTATIVE]", "Legal Representative");
+
+        when(asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class))
+            .thenReturn(Optional.of(
+                new ChangeOrganisationRequest(
+                    new DynamicList(caseRole, newArrayList(caseRole)),
+                    LocalDateTime.now().toString(),
+                    "1"
+                )
+            ));
+        Map<String, String> personalisation = respondentEvidenceDirectionPersonalisation.getPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
         assertEquals(companyName, personalisation.get("companyName"));
         assertEquals(companyAddress, personalisation.get("companyAddress"));
         assertEquals(legalRepName, personalisation.get("legalRepName"));

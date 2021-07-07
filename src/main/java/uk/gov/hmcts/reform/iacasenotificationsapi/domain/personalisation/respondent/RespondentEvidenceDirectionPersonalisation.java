@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -84,6 +85,10 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
         companyAddress += address.getCounty().orElse("") + " ";
         companyAddress += address.getPostCode().orElse("");
 
+        final boolean hasNoc = asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class)
+            .map(it -> it.getCaseRoleId() == null)
+            .orElse(false);
+
         return ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
@@ -92,11 +97,11 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .put("linkToOnlineService", iaExUiFrontendUrl)
-            .put("companyName", asylumCase.read(LEGAL_REP_COMPANY, String.class).orElse(""))
-            .put("companyAddress", companyAddress)
-            .put("legalRepName", asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""))
-            .put("legalRepEmail", asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""))
-            .put("legalRepReference", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("companyName", hasNoc ? "" : asylumCase.read(LEGAL_REP_COMPANY, String.class).orElse(""))
+            .put("companyAddress", hasNoc ? "" : companyAddress)
+            .put("legalRepName", hasNoc ? "" : asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""))
+            .put("legalRepEmail", hasNoc ? "" : asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""))
+            .put("legalRepReference", hasNoc ? "" : asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
             .put("dueDate", directionDueDate)
             .build();
     }
