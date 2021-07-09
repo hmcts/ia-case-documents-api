@@ -1,27 +1,26 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
-import com.google.common.io.ByteStreams;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
-import uk.gov.hmcts.reform.document.domain.UploadResponse;
-import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
+import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 @Service
 public class SystemDocumentManagementUploader {
 
-    private final DocumentUploadClientApi documentUploadClientApi;
+    private final CaseDocumentClient caseDocumentClient;
     private final AuthorizationHeadersProvider authorizationHeadersProvider;
 
     public SystemDocumentManagementUploader(
-        DocumentUploadClientApi documentUploadClientApi,
+            CaseDocumentClient caseDocumentClient,
         AuthorizationHeadersProvider authorizationHeadersProvider
     ) {
-        this.documentUploadClientApi = documentUploadClientApi;
+        this.caseDocumentClient = caseDocumentClient;
         this.authorizationHeadersProvider = authorizationHeadersProvider;
     }
 
@@ -43,25 +42,30 @@ public class SystemDocumentManagementUploader {
 
         try {
 
-            MultipartFile file = new InMemoryMultipartFile(
-                resource.getFilename(),
-                resource.getFilename(),
-                contentType,
-                ByteStreams.toByteArray(resource.getInputStream())
-            );
+            DiskFileItem fileItem = new DiskFileItem(
+                    resource.getFilename(),
+                    "text/plain",
+                    false,
+                    resource.getFilename(),
+                    (int) resource.getFile().length(),
+                    resource.getFile().getParentFile());
+
+            fileItem.getOutputStream();
+
+            CommonsMultipartFile commonsMultipartFile = new CommonsMultipartFile(fileItem);
 
             UploadResponse uploadResponse =
-                documentUploadClientApi
-                    .upload(
-                        accessToken,
-                        serviceAuthorizationToken,
-                        userId,
-                        Collections.singletonList(file)
-                    );
+                    caseDocumentClient
+                            .uploadDocuments(
+                                    serviceAuthorizationToken,
+                                    accessToken,
+                                    "ASYLUM",
+                                    "IA",
+                                    List.of(commonsMultipartFile)
+                            );
 
-            uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
+            uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =
                 uploadResponse
-                    .getEmbedded()
                     .getDocuments()
                     .get(0);
 
