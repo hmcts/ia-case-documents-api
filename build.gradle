@@ -280,6 +280,9 @@ dependencies {
   // CVE-2019-17195
   implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.9'
 
+  // CVE-2021-27568
+  implementation group: 'net.minidev', name: 'json-smart', version: '2.3.1'
+
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'

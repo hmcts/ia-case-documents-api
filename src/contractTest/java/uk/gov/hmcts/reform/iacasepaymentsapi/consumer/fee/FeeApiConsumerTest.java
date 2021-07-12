@@ -39,14 +39,14 @@ public class FeeApiConsumerTest {
 
     @Pact(provider = "feeRegister_lookUp", consumer = "ia_casePaymentsApi")
     private RequestResponsePact generateFeeWithHearingPact(PactDslWithProvider builder) {
-        return getRequestResponsePact(builder, "ABC", "FEE0238",
+        return getRequestResponsePact(builder, "HearingOral", "FEE0238",
                                       "Appeal determined with a hearing", BigDecimal.valueOf(140.00)
         );
     }
 
     @Pact(provider = "feeRegister_lookUp", consumer = "ia_casePaymentsApi")
     private RequestResponsePact generateFeeWithoutHearingPact(PactDslWithProvider builder) {
-        return getRequestResponsePact(builder, "DEF", "FEE0456",
+        return getRequestResponsePact(builder, "HearingPaper", "FEE0372",
                                       "Appeal determined without a hearing", BigDecimal.valueOf(80.00)
         );
     }
@@ -83,7 +83,7 @@ public class FeeApiConsumerTest {
     @PactTestFor(pactMethod = "generateFeeWithHearingPact")
     public void verifyFeesWithHearingPact() {
         FeeResponse feeResponse = feesRegisterApi.findFee("default", "issue", "tribunal",
-                                                          "immigration and asylum chamber", "ABC",
+                                                          "immigration and asylum chamber", "HearingOral",
                                                           "other");
         Assertions.assertEquals("FEE0238", feeResponse.getCode());
     }
@@ -92,8 +92,8 @@ public class FeeApiConsumerTest {
     @PactTestFor(pactMethod = "generateFeeWithoutHearingPact")
     public void verifyFeesWithoutHearingPact() {
         FeeResponse feeResponse = feesRegisterApi.findFee("default", "issue", "tribunal",
-                                                          "immigration and asylum chamber", "DEF",
+                                                          "immigration and asylum chamber", "HearingPaper",
                                                           "other");
-        Assertions.assertEquals("FEE0456", feeResponse.getCode());
+        Assertions.assertEquals("FEE0372", feeResponse.getCode());
     }
 }
