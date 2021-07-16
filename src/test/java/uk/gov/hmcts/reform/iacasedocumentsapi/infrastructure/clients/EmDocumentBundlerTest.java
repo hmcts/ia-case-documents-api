@@ -136,7 +136,7 @@ public class EmDocumentBundlerTest {
         assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().size(), 1);
         assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getId(), "1");
         assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getValue())
-            .isEqualToIgnoringGivenFields(bundleIdValue.getValue(), "documents");
+            .usingRecursiveComparison().ignoringFields("documents").isEqualTo(bundleIdValue.getValue());
 
     }
 
