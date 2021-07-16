@@ -6,12 +6,14 @@ appealGrounds	revocationHumanitarianProtection	Revocation of the appellant's pro
 appealGrounds	appealGroundsEuRefusal	The decision breaches the appellant's rights under the EEA regulations
 appealGrounds	unlawfulDeprivation	The decision is unlawful because discretion should have been exercised differently
 appealGrounds	disproportionateDeprivation	Deprivation would have a disproportionate effect
+appealGrounds	humanRightsRefusal	The decision is unlawful under section 6 of the Human Rights Act 1998
 appealGroundsProtection	HumanitarianProtection	Removing the appellant from the UK would breach the UK's obligation in relation to persons eligible for a grant of humanitarian protection
 appealGroundsProtection	protectionRefugeeConvention	Removing the appellant from the UK would breach the UK's obligation under the Refugee Convention
 appealGroundsHumanRights	protectionHumanRights	Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998
 appealGroundsRevocation	revocationHumanitarianProtection	Revocation of the appellant's protection status breaches the United Kingdom's obligations in relation to persons eligible for humanitarian protection
 appealGroundsRevocation	revocationRefugeeConvention	Revocation of the appellant's protection status breaches the United Kingdom's obligations under the Refugee Convention
 appealGroundsHumanRightsRefusal	protectionHumanRights	Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998
+appealGroundsHumanRightsRefusal	humanRightsRefusal	The decision is unlawful under section 6 of the Human Rights Act 1998
 appealGroundsEuRefusal	appealGroundsEuRefusal	The decision breaches the appellant's rights under the EEA regulations
 appealGroundsDeprivation	disproportionateDeprivation	Deprivation would have a disproportionate effect
 appealGroundsDeprivation	unlawfulDeprivation	The decision is unlawful because discretion should have been exercised differently
