@@ -12,7 +12,7 @@ java:
     S2S_URL: "http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     EM_BUNDLER_URL: "http://em-ccd-orchestrator-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     EM_BUNDLER_STITCH_URI: /api/stitch-ccd-bundles
-    IA_AIP_FRONTEND_URL: https://immigration-appeal.platform.hmcts.net/
+    IA_AIP_FRONTEND_URL: https://www.appeal-immigration-asylum-decision.service.gov.uk/
     OPEN_ID_IDAM_URL: "https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net"
   keyVaults:
     ia:
