@@ -138,6 +138,9 @@ public enum AsylumCaseDefinition {
     LEGAL_REP_COMPANY(
         "legalRepCompany", new TypeReference<String>(){}),
 
+    APPELLANT_DOCUMENTS(
+            "appellantDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     LEGAL_REPRESENTATIVE_DOCUMENTS(
         "legalRepresentativeDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
