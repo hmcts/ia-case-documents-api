@@ -100,7 +100,7 @@ remoteHearingNoticeUpdatedDetailsDocument.templateName: ${IA_REMOTE_HEARING_NOTI
 decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
 decisionAndReasons.fileName: "decision-and-reasons-draft"
-decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00223.docx}
+decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00738.docx}
 
 decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
