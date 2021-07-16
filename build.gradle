@@ -283,6 +283,8 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
     compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
 
+    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '4.12.1'
+
     compile group: 'uk.gov.hmcts.reform', name: 'document-management-client', version: '6.0.0'
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.reformLogging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-httpcomponents', version: versions.reformLogging
