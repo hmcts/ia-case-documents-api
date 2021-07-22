@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.RetryableNotificationClient;
 import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapValueExtractor;
 import uk.gov.service.notify.Notification;
-import uk.gov.service.notify.NotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 
 @Component
@@ -22,7 +22,7 @@ import uk.gov.service.notify.NotificationClientException;
 public class NotificationVerifier implements Verifier {
 
     @Autowired
-    private NotificationClient notificationClient;
+    private RetryableNotificationClient notificationClient;
 
     public void verify(
         long testCaseId,

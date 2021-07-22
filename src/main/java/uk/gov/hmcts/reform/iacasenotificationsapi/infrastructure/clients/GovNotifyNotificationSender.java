@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
-import uk.gov.service.notify.NotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
 import uk.gov.service.notify.SendSmsResponse;
@@ -20,13 +19,13 @@ public class GovNotifyNotificationSender implements NotificationSender {
     private static final org.slf4j.Logger LOG = getLogger(GovNotifyNotificationSender.class);
 
     private final int deduplicateSendsWithinSeconds;
-    private final NotificationClient notificationClient;
+    private final RetryableNotificationClient notificationClient;
 
     private Cache<String, String> recentDeliveryReceiptCache;
 
     public GovNotifyNotificationSender(
         @Value("${notificationSender.deduplicateSendsWithinSeconds}") int deduplicateSendsWithinSeconds,
-        NotificationClient notificationClient
+        RetryableNotificationClient notificationClient
     ) {
         this.deduplicateSendsWithinSeconds = deduplicateSendsWithinSeconds;
         this.notificationClient = notificationClient;

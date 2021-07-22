@@ -47,6 +47,7 @@ featureFlag:
 govnotify:
   baseUrl: "https://api.notifications.service.gov.uk"
   key: ${IA_GOV_NOTIFY_KEY}
+  timeout: 5000
   template:
     forceCaseProgression:
       caseBuilding.to.caseUnderReview:
