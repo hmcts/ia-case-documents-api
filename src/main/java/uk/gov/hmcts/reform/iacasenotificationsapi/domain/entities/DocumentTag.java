@@ -20,6 +20,7 @@ public enum DocumentTag {
     APPEAL_SKELETON_BUNDLE("submitCaseBundle"),
     HO_DECISION_LETTER("homeOfficeDecisionLetter"),
     END_APPEAL("endAppeal"),
+    RECORD_OUT_OF_TIME_DECISION_DOCUMENT("recordOutOfTimeDecisionDocument"),
 
     @JsonEnumDefaultValue
     NONE("");

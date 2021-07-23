@@ -72,8 +72,27 @@ public class NotificationHandlerConfiguration {
         @Qualifier("unlinkAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                                         && Event.UNLINK_APPEAL.equals(callback.getEvent()),
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && Event.UNLINK_APPEAL.equals(callback.getEvent())
+                        && isRepJourney(asylumCase);
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> unlinkAppealAppellantNotificationHandler(
+        @Qualifier("unlinkAppealAppellantNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && Event.UNLINK_APPEAL.equals(callback.getEvent())
+                        && isAipJourney(asylumCase);
+            },
             notificationGenerators
         );
     }
@@ -83,8 +102,27 @@ public class NotificationHandlerConfiguration {
         @Qualifier("linkAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                                         && Event.LINK_APPEAL.equals(callback.getEvent()),
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && Event.LINK_APPEAL.equals(callback.getEvent())
+                        && isRepJourney(asylumCase);
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> linkAppealAppellantNotificationHandler(
+        @Qualifier("linkAppealAppellantNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && Event.LINK_APPEAL.equals(callback.getEvent())
+                        && isAipJourney(asylumCase);
+            },
             notificationGenerators
         );
     }
@@ -1064,9 +1102,26 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> appealExitedOnlineNotificationHandler(
         @Qualifier("appealExitedOnlineNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
         return new NotificationHandler(
-            (callbackStage, callback) ->
-                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REMOVE_APPEAL_FROM_ONLINE,
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.REMOVE_APPEAL_FROM_ONLINE
+                        && isRepJourney(asylumCase);
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> appealExitedOnlineAppellantNotificationHandler(
+        @Qualifier("appealExitedOnlineAppellantNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.REMOVE_APPEAL_FROM_ONLINE
+                        && isAipJourney(asylumCase);
+            },
             notificationGenerators
         );
     }
@@ -1074,11 +1129,30 @@ public class NotificationHandlerConfiguration {
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> changeHearingCentreNotificationHandler(
         @Qualifier("changeHearingCentreNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
         return new NotificationHandler(
-            (callbackStage, callback) ->
-                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.CHANGE_HEARING_CENTRE,
-            notificationGenerator
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.CHANGE_HEARING_CENTRE
+                        && isRepJourney(asylumCase);
+            },
+                        notificationGenerator
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> changeHearingCentreAppellantNotificationHandler(
+        @Qualifier("changeHearingCentreAppellantNotificationGenerator") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.CHANGE_HEARING_CENTRE
+                        && isAipJourney(asylumCase);
+            },
+                        notificationGenerator
         );
     }
 

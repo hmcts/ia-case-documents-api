@@ -73,6 +73,21 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("unlinkAppealAppellantNotificationGenerator")
+    public List<NotificationGenerator> unlinkAppealAppellantNotificationGenerator(
+        HomeOfficeUnlinkAppealPersonalisation homeOfficeUnlinkAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(homeOfficeUnlinkAppealPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("linkAppealNotificationGenerator")
     public List<NotificationGenerator> linkAppealNotificationGenerator(
         LegalRepresentativeLinkAppealPersonalisation legalRepresentativeLinkAppealPersonalisation,
@@ -83,6 +98,21 @@ public class NotificationGeneratorConfiguration {
         return Collections.singletonList(
             new EmailNotificationGenerator(
                 newArrayList(legalRepresentativeLinkAppealPersonalisation, homeOfficeLinkAppealPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("linkAppealAppellantNotificationGenerator")
+    public List<NotificationGenerator> linkAppealAppellantNotificationGenerator(
+        HomeOfficeLinkAppealPersonalisation homeOfficeLinkAppealPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(homeOfficeLinkAppealPersonalisation),
                 notificationSender,
                 notificationIdAppender
             )
@@ -992,15 +1022,29 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("changeHearingCentreNotificationGenerator")
-    public List<NotificationGenerator> changeHearingCentreNotificationGenerator(
-        LegalRepresentativeChangeHearingCentrePersonalisation legalRepresentativeChangeHearingCentrePersonalisation,
+    @Bean("appealExitedOnlineAppellantNotificationGenerator")
+    public List<NotificationGenerator> appealExitedOnlineAppellantNotificationGenerator(
+        HomeOfficeAppealExitedOnlinePersonalisation homeOfficeAppealExitedOnlinePersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(legalRepresentativeChangeHearingCentrePersonalisation),
+                newArrayList(homeOfficeAppealExitedOnlinePersonalisation),
+                notificationSender,
+                notificationIdAppender)
+        );
+    }
+
+    @Bean("changeHearingCentreAppellantNotificationGenerator")
+    public List<NotificationGenerator> changeHearingCentreAppellantNotificationGenerator(
+        CaseOfficerChangeHearingCentrePersonalisation caseOfficerChangeHearingCentrePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(caseOfficerChangeHearingCentrePersonalisation),
                 notificationSender,
                 notificationIdAppender
             )
