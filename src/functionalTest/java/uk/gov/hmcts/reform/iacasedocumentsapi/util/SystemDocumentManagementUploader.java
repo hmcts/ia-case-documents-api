@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collections;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -44,11 +44,11 @@ public class SystemDocumentManagementUploader {
 
             DiskFileItem fileItem = new DiskFileItem(
                     resource.getFilename(),
-                    "text/plain",
+                    contentType,
                     false,
                     resource.getFilename(),
                     (int) resource.getFile().length(),
-                    resource.getFile().getParentFile());
+                    resource.getFile());
 
             fileItem.getOutputStream();
 
@@ -57,11 +57,11 @@ public class SystemDocumentManagementUploader {
             UploadResponse uploadResponse =
                     caseDocumentClient
                             .uploadDocuments(
-                                    serviceAuthorizationToken,
-                                    accessToken,
-                                    "ASYLUM",
-                                    "IA",
-                                    List.of(commonsMultipartFile)
+                                accessToken,
+                                serviceAuthorizationToken,
+                                "Asylum",
+                                "IA",
+                                Collections.singletonList(commonsMultipartFile)
                             );
 
             uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =

@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collections;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
 
 @Service
 public class DocumentManagementUploader implements DocumentUploader {
@@ -21,14 +22,17 @@ public class DocumentManagementUploader implements DocumentUploader {
     private final CaseDocumentClient caseDocumentClient;
     private final AuthTokenGenerator serviceAuthorizationTokenGenerator;
     private final UserDetailsProvider userDetailsProvider;
+    private final WordDocumentToPdfConverter wordDocumentToPdfConverter;
 
     public DocumentManagementUploader(
             CaseDocumentClient caseDocumentClient,
-        AuthTokenGenerator serviceAuthorizationTokenGenerator,
-        @Qualifier("requestUser") UserDetailsProvider userDetailsProvider
+            AuthTokenGenerator serviceAuthorizationTokenGenerator,
+            @Qualifier("requestUser") UserDetailsProvider userDetailsProvider,
+            WordDocumentToPdfConverter wordDocumentToPdfConverter
     ) {
         this.caseDocumentClient = caseDocumentClient;
         this.serviceAuthorizationTokenGenerator = serviceAuthorizationTokenGenerator;
+        this.wordDocumentToPdfConverter = wordDocumentToPdfConverter;
         this.userDetailsProvider = userDetailsProvider;
     }
 
@@ -44,11 +48,11 @@ public class DocumentManagementUploader implements DocumentUploader {
 
             DiskFileItem fileItem = new DiskFileItem(
                     resource.getFilename(),
-                    "text/plain",
+                    contentType,
                     false,
                     resource.getFilename(),
                     (int) resource.getFile().length(),
-                    resource.getFile().getParentFile());
+                    resource.getFile());
 
             fileItem.getOutputStream();
 
@@ -57,11 +61,11 @@ public class DocumentManagementUploader implements DocumentUploader {
             UploadResponse uploadResponse =
                 caseDocumentClient
                     .uploadDocuments(
-                            serviceAuthorizationToken,
-                            accessToken,
-                            "ASYLUM",
-                            "IA",
-                            List.of(commonsMultipartFile)
+                        accessToken,
+                        serviceAuthorizationToken,
+                        "Asylum",
+                        "IA",
+                        Collections.singletonList(commonsMultipartFile)
                     );
 
             uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =

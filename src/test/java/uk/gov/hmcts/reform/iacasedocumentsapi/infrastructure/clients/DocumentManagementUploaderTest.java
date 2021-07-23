@@ -3,12 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +24,7 @@ import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -34,20 +33,23 @@ public class DocumentManagementUploaderTest {
     @Mock private CaseDocumentClient caseDocumentClient;
     @Mock private AuthTokenGenerator serviceAuthorizationTokenGenerator;
     @Mock private UserDetailsProvider userDetailsProvider;
+    @Mock private WordDocumentToPdfConverter wordDocumentToPdfConverter;
 
     private String serviceAuthorizationToken = "SERVICE_TOKEN";
     private String accessToken = "ACCESS_TOKEN";
     private String userId = "123";
     @Mock private UploadResponse uploadResponse;
     @Mock private File file;
+    @Mock private DiskFileItem diskFileItem;
     @Mock private List<uk.gov.hmcts.reform.ccd.document.am.model.Document> uploadedDocuments;
 
     private String contentType = "application/pdf";
     private String fileName = "some-file.pdf";
+    //private OutputStream outputStream = new ByteArrayOutputStream(3);
 
     private byte[] documentData = "pdf-data".getBytes();
     @Mock private Resource resource;
-    private InputStream resourceInputStream = new ByteArrayInputStream(documentData);
+    @Mock private DiskFileItem fileItem;
     private String expectedDocumentUrl = "document-self-href";
     private String expectedBinaryUrl = "document-self-href";
 
@@ -61,6 +63,7 @@ public class DocumentManagementUploaderTest {
     public static final String ORIGINAL_DOCUMENT_NAME = "some-file.pdf";
 
     @Mock private UserDetails userDetails;
+    @Mock private OutputStream outputStream;
 
     @Captor private ArgumentCaptor<List<MultipartFile>> multipartFilesCaptor;
 
@@ -72,9 +75,10 @@ public class DocumentManagementUploaderTest {
 
         documentManagementUploader =
             new DocumentManagementUploader(
-                    caseDocumentClient,
+                caseDocumentClient,
                 serviceAuthorizationTokenGenerator,
-                userDetailsProvider
+                userDetailsProvider,
+                wordDocumentToPdfConverter
             );
 
         Date ttl = new Date();
@@ -100,10 +104,7 @@ public class DocumentManagementUploaderTest {
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
 
         when(resource.getFilename()).thenReturn(fileName);
-        when(resource.getFile()).thenReturn(file);
-        //when(resource.getInputStream()).thenReturn(resourceInputStream);
-
-
+        when(wordDocumentToPdfConverter.convertResourceToPdf(resource)).thenReturn(file);
         when(uploadResponse.getDocuments()).thenReturn(uploadedDocuments);
         when(uploadResponse.getDocuments().get(0)).thenReturn(mockDocument);
 
@@ -113,9 +114,9 @@ public class DocumentManagementUploaderTest {
                 "someBytes".getBytes());
 
         when(caseDocumentClient.uploadDocuments(
-                eq(serviceAuthorizationToken),
                 eq(accessToken),
-                eq("ASYLUM"),
+                eq(serviceAuthorizationToken),
+                eq("Asylum"),
                 eq("IA"),
             any(List.class)
         )).thenReturn(uploadResponse);
@@ -130,9 +131,9 @@ public class DocumentManagementUploaderTest {
         assertEquals(expectedBinaryUrl, actualDocument.getDocumentBinaryUrl());
 
         verify(caseDocumentClient, times(1)).uploadDocuments(
-            eq(serviceAuthorizationToken),
                 eq(accessToken),
-                eq("ASYLUM"),
+                eq(serviceAuthorizationToken),
+                eq("Asylum"),
                 eq("IA"),
             multipartFilesCaptor.capture()
         );
