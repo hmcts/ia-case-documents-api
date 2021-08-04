@@ -4,7 +4,7 @@ java:
   aadIdentityName: ia
   environment:
     IA_EXUI_FRONTEND_URL: https://manage-case.platform.hmcts.net/
-    IA_AIP_FRONTEND_URL: https://immigration-appeal.platform.hmcts.net/
+    IA_AIP_FRONTEND_URL: https://www.appeal-immigration-asylum-decision.service.gov.uk/
     IA_IDAM_REDIRECT_URI: "https://ia-case-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2/callback"
     DM_URL: "http://dm-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     CCD_URL: "http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"

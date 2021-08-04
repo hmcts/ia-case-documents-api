@@ -9,7 +9,7 @@ properties([
               defaultValue: 'https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
               description: 'The URL you want to run these tests against'),
           string(name: 'IA_EXUI_FRONTEND_URL', defaultValue: 'https://manage-case.platform.hmcts.net/', description: 'The ExUI frontend URL that will be included in personalisation'),
-          string(name: 'IA_AIP_FRONTEND_URL', defaultValue: 'https://immigration-appeal.platform.hmcts.net/', description: 'The AIP frontend URL that will be included in personalisation')
+          string(name: 'IA_AIP_FRONTEND_URL', defaultValue: 'https://www.appeal-immigration-asylum-decision.service.gov.uk/', description: 'The AIP frontend URL that will be included in personalisation')
   ])
 ])
 
