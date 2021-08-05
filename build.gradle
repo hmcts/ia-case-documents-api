@@ -173,6 +173,12 @@ task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verificatio
     classpath = sourceSets.smokeTest.runtimeClasspath
 }
 
+task fortifyScan(type: JavaExec)  {
+    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+    classpath += sourceSets.test.runtimeClasspath
+    jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
+}
+
 jacoco {
     toolVersion = "0.8.4"
 }
@@ -357,6 +363,7 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+    testCompile 'com.github.hmcts:fortify-client:1.2.1:all'
 
     testCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
         force = true
