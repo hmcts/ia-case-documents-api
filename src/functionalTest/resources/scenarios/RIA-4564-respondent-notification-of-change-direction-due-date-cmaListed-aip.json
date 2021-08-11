@@ -1,0 +1,60 @@
+{
+  "description": "RIA-4564 Send respondent notification (to APC mailbox) of change direction due date (awaitingReasonsForAppeal) - AIP",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 45642,
+      "eventId": "changeDirectionDueDate",
+      "state": "cmaListed",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll": "cmaListed",
+          "directionEditExplanation": "Upload additional evidence",
+          "directionEditDateDue": "{$TODAY+14}",
+          "directionEditParties": "respondent",
+          "notificationsSent": [],
+          "listCaseHearingCentre": "birmingham"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "directionEditExplanation": "Upload additional evidence",
+        "directionEditDateDue": "{$TODAY+14}",
+        "directionEditParties": "respondent",
+        "notificationsSent": [
+          {
+            "id": "45642_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "listCaseHearingCentre": "birmingham",
+        "currentCaseStateVisibleToHomeOfficeAll": "cmaListed"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "45642_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
+        "subject": "Immigration and Asylum appeal: change to direction due date",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

@@ -68,7 +68,14 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
                 if (Arrays.asList(
                     State.APPEAL_SUBMITTED,
                     State.PENDING_PAYMENT,
-                    State.AWAITING_RESPONDENT_EVIDENCE
+                    State.AWAITING_RESPONDENT_EVIDENCE,
+                    State.AWAITING_REASONS_FOR_APPEAL,
+                    State.REASONS_FOR_APPEAL_SUBMITTED,
+                    State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
+                    State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED,
+                    State.AWAITING_CMA_REQUIREMENTS,
+                    State.CMA_REQUIREMENTS_SUBMITTED,
+                    State.CMA_ADJUSTMENTS_AGREED
                 ).contains(currentState)) {
                     return Collections.singleton(apcHomeOfficeEmailAddress);
                 } else if (Arrays.asList(
@@ -96,7 +103,8 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
                     State.ADJOURNED,
                     State.DECIDED,
                     State.ENDED,
-                    State.APPEAL_TAKEN_OFFLINE
+                    State.APPEAL_TAKEN_OFFLINE,
+                    State.CMA_LISTED
                 ).contains(currentState) && appealService.isAppealListed(asylumCase)) {
                     final Optional<HearingCentre> maybeCaseIsListed = asylumCase
                         .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);

@@ -32,11 +32,14 @@ public class StateTest {
         assertEquals("ftpaSubmitted", State.FTPA_SUBMITTED.toString());
         assertEquals("ftpaDecided", State.FTPA_DECIDED.toString());
         assertEquals("ended", State.ENDED.toString());
+        assertEquals("cmaRequirementsSubmitted", State.CMA_REQUIREMENTS_SUBMITTED.toString());
+        assertEquals("cmaAdjustmentsAgreed", State.CMA_ADJUSTMENTS_AGREED.toString());
+        assertEquals("cmaListed", State.CMA_LISTED.toString());
         assertEquals("appealTakenOffline", State.APPEAL_TAKEN_OFFLINE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(27, State.values().length);
+        assertEquals(30, State.values().length);
     }
 }

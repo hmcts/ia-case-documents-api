@@ -281,6 +281,22 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    // An Appellant notification to be sent similar to LR once the templates are ready in future
+    @Bean("respondentChangeDirectionDueDateAipNotificationGenerator")
+    public List<NotificationGenerator> respondentChangeDirectionDueDateAipNotificationGenerator(
+        RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(respondentChangeDirectionDueDatePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("respondentChangeDirectionDueDateForHomeOfficeApiEventsNotificationGenerator")
     public List<NotificationGenerator> respondentChangeDirectionDueDateForHomeOfficeApiEventsNotificationGenerator(
         RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
@@ -292,6 +308,27 @@ public class NotificationGeneratorConfiguration {
         List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
             ?  newArrayList(respondentChangeDirectionDueDatePersonalisation, legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation)
             : newArrayList(legalRepresentativeChangeDirectionDueDateOfHomeOfficePersonalisation);
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                personalisations,
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    // An Appellant notification to be sent similar to LR once the templates are ready in future
+    @Bean("respondentChangeDirectionDueDateForHomeOfficeApiEventsAipNotificationGenerator")
+    public List<NotificationGenerator> respondentChangeDirectionDueDateForHomeOfficeApiEventsAipNotificationGenerator(
+        RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        // RIA-3116 - changeDirectionDueDate (requestEvidenceBundle, amendRequestBundle, requestRespondentReview, awaitingRespondentEvidence)
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(respondentChangeDirectionDueDatePersonalisation)
+            : emptyList();
 
         return Arrays.asList(
             new EmailNotificationGenerator(
