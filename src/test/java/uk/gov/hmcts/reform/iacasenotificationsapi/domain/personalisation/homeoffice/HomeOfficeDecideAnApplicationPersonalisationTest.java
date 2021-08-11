@@ -77,6 +77,7 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
     private String homeOfficeEmail = "ho-taylorhouse@example.com";
 
     private String legalRepUser = "caseworker-ia-legalrep-solicitor";
+    private String citizen = "citizen";
     private String homeOfficeLart = "caseworker-ia-homeofficelart";
     private String homeOfficeApc = "caseworker-ia-homeofficeapc";
     private String homeOfficePou = "caseworker-ia-homeofficepou";
@@ -203,6 +204,73 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
     public void test_email_address_for_home_office_when_legal_rep_applied() {
 
         when(makeAnApplication.getApplicantRole()).thenReturn(legalRepUser);
+        List<String> apcEmail = newArrayList(
+            "appealSubmitted",
+            "pendingPayment",
+            "awaitingRespondentEvidence",
+            "caseBuilding",
+            "caseUnderReview",
+            "ended"
+
+
+        );
+
+        List<String> lartEmail = newArrayList(
+            "respondentReview",
+            "listing",
+            "submitHearingRequirements"
+        );
+
+        List<String> pouEmail = newArrayList(
+            "prepareForHearing",
+            "finalBundling",
+            "preHearing",
+            "decided",
+            "ftpaSubmitted",
+            "ftpaDecided",
+            "adjourned",
+            "decision"
+
+        );
+
+        Map<String, List<String>> states = new HashMap<>();
+
+        states.put(apcHomeOfficeEmailAddress, apcEmail);
+        states.put(lartHomeOfficeEmailAddress, lartEmail);
+        states.put(homeOfficeHearingCentreEmail, pouEmail);
+
+        Set<String> emailAddresses = states.keySet();
+
+        for (String emailAddress : emailAddresses) {
+            List<String> statesList = states.get(emailAddress);
+            for (String state : statesList) {
+
+                if (emailAddress != null && emailAddress.equals(homeOfficeHearingCentreEmail)) {
+                    when(makeAnApplication.getState()).thenReturn(state);
+                    when(makeAnApplicationService.isApplicationListed(State.get(state))).thenReturn(true);
+                    when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                        .thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+                    assertTrue(homeOfficeDecideAnApplicationPersonalisation.getRecipientsList(asylumCase)
+                        .contains(homeOfficeHearingCentreEmail));
+
+                    when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+                    when(asylumCase.read(HEARING_CENTRE)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+                    assertTrue(homeOfficeDecideAnApplicationPersonalisation.getRecipientsList(asylumCase)
+                        .contains(homeOfficeEmail));
+                } else {
+                    when(makeAnApplication.getState()).thenReturn(state);
+                    assertTrue(homeOfficeDecideAnApplicationPersonalisation.getRecipientsList(asylumCase)
+                        .contains(emailAddress));
+                }
+            }
+        }
+
+    }
+
+    @Test
+    public void test_email_address_for_home_office_when_aip_applied() {
+
+        when(makeAnApplication.getApplicantRole()).thenReturn(citizen);
         List<String> apcEmail = newArrayList(
             "appealSubmitted",
             "pendingPayment",

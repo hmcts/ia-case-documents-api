@@ -27,6 +27,7 @@ public class HomeOfficeDecideAnApplicationPersonalisation implements EmailNotifi
     private static final String HOME_OFFICE_LART = "caseworker-ia-homeofficelart";
     private static final String HOME_OFFICE_APC = "caseworker-ia-homeofficeapc";
     private static final String HOME_OFFICE_POU = "caseworker-ia-homeofficepou";
+    private static final String CITIZEN = "citizen";
 
 
     private final String homeOfficeDecideAnApplicationGrantedBeforeListingTemplateId;
@@ -125,24 +126,26 @@ public class HomeOfficeDecideAnApplicationPersonalisation implements EmailNotifi
             String applicantRole = makeAnApplication.getApplicantRole();
 
             if (applicantRole.equals(HOME_OFFICE_APC)
-                    || (Arrays.asList(ROLE_LEGAL_REP, HOME_OFFICE_RESPONDENT_OFFICER).contains(applicantRole)
+                    || (Arrays.asList(ROLE_LEGAL_REP, CITIZEN, HOME_OFFICE_RESPONDENT_OFFICER).contains(applicantRole)
                     && Arrays.asList(
                                 State.APPEAL_SUBMITTED,
                                 State.PENDING_PAYMENT,
                                 State.AWAITING_RESPONDENT_EVIDENCE,
                                 State.CASE_BUILDING,
                                 State.CASE_UNDER_REVIEW,
+                                State.AWAITING_REASONS_FOR_APPEAL,
+                                State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
                                 State.ENDED).contains(applicationState))) {
                 return Collections.singleton(apcHomeOfficeEmailAddress);
             } else if (HOME_OFFICE_LART.equals(applicantRole)
-                    || (Arrays.asList(ROLE_LEGAL_REP, HOME_OFFICE_RESPONDENT_OFFICER).contains(applicantRole)
+                    || (Arrays.asList(ROLE_LEGAL_REP, CITIZEN, HOME_OFFICE_RESPONDENT_OFFICER).contains(applicantRole)
                     && Arrays.asList(
                     State.RESPONDENT_REVIEW,
                     State.LISTING,
                     State.SUBMIT_HEARING_REQUIREMENTS).contains(applicationState))) {
                 return Collections.singleton(lartHomeOfficeEmailAddress);
             } else if (HOME_OFFICE_POU.equals(applicantRole)
-                    || (Arrays.asList(ROLE_LEGAL_REP, HOME_OFFICE_RESPONDENT_OFFICER).contains(applicantRole)
+                    || (Arrays.asList(ROLE_LEGAL_REP, CITIZEN, HOME_OFFICE_RESPONDENT_OFFICER).contains(applicantRole)
                     &&  isAppealListed)) {
                 final Optional<HearingCentre> maybeCaseIsListed = asylumCase
                         .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);

@@ -2039,6 +2039,19 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> decideAnApplicationAipNotificationHandler(
+        @Qualifier("decideAnApplicationAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.DECIDE_AN_APPLICATION
+                && isAipJourney(callback.getCaseDetails().getCaseData()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> remissionDecisionPartiallyApprovedNotificationHandler(
         @Qualifier("remissionDecisionPartiallyApprovedNotificationGenerator")
             List<NotificationGenerator> notificationGenerators) {

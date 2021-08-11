@@ -1763,6 +1763,32 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("decideAnApplicationAipNotificationGenerator")
+    public List<NotificationGenerator> decideAnApplicationAipNotificationHandler(
+            HomeOfficeDecideAnApplicationPersonalisation homeOfficeDecideAnApplicationPersonalisation,
+            AppellantDecideAnApplicationRefusedPersonalisationEmail appellantDecideAnApplicationRefusedPersonalisationEmail,
+            AppellantDecideAnApplicationRefusedPersonalisationSms appellantDecideAnApplicationRefusedPersonalisationSms,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    homeOfficeDecideAnApplicationPersonalisation,
+                        appellantDecideAnApplicationRefusedPersonalisationEmail
+                ),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                    newArrayList(appellantDecideAnApplicationRefusedPersonalisationSms),
+                    notificationSender,
+                    notificationIdAppender
+            )
+        );
+    }
+
     @Bean("remissionDecisionApprovedNotificationGenerator")
     public List<NotificationGenerator> remissionDecisionApprovedNotificationHandler(
         AdminOfficerAppealRemissionApprovedPersonalisation adminOfficerAppealRemissionApprovedPersonalisation,

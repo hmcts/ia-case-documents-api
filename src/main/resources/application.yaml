@@ -612,6 +612,12 @@ govnotify:
                 email: 213d2ec4-fe7a-4e73-8941-f98738ed4cb8
               afterListing:
                 email: e11411e8-4360-480c-a3f9-0716f7e2e376
+            appellant:
+              beforeListing:
+                email: af234f67-85fe-426f-8f0a-66c8606dc961
+                sms: 8cac7ac4-c945-4112-90fe-faeda8fad5e4
+              afterListing:
+                email: f03f5c1c-8507-43f9-8f9f-5f9e3cdbd66f
           otherParty:
             legalRep:
               beforeListing:
