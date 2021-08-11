@@ -18,10 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.SubscriberType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
@@ -30,7 +27,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicati
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class AppellantDecideAnApplicationRefusedPersonalisationSmsTest {
+public class AppellantDecideAnApplicationPersonalisationSmsTest {
 
     @Mock
     AsylumCase asylumCase;
@@ -38,16 +35,19 @@ public class AppellantDecideAnApplicationRefusedPersonalisationSmsTest {
     RecipientsFinder recipientsFinder;
     @Mock
     MakeAnApplicationService makeAnApplicationService;
+    @Mock
+    MakeAnApplication makeAnApplication;
 
     private Long caseId = 12345L;
-    private String emailTemplateId = "someEmailTemplateId";
+    private String refusedEmailTemplateId = "someRefusedEmailTemplateId";
+    private String grantedEmailTemplateId = "someGrantedEmailTemplateId";
     private String iaAipFrontendUrl = "http://localhost";
 
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppellantMobilePhone = "07123456789";
     private String applicationType = "someApplicationType";
 
-    private AppellantDecideAnApplicationRefusedPersonalisationSms appellantDecideAnApplicationRefusedPersonalisationSms;
+    private AppellantDecideAnApplicationPersonalisationSms appellantDecideAnApplicationPersonalisationSms;
 
     @BeforeEach
     public void setup() {
@@ -55,23 +55,39 @@ public class AppellantDecideAnApplicationRefusedPersonalisationSmsTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.of(mockedAppealReferenceNumber));
 
-        appellantDecideAnApplicationRefusedPersonalisationSms = new AppellantDecideAnApplicationRefusedPersonalisationSms(
-            emailTemplateId,
-            iaAipFrontendUrl,
-            recipientsFinder,
+        appellantDecideAnApplicationPersonalisationSms = new AppellantDecideAnApplicationPersonalisationSms(
+                refusedEmailTemplateId,
+                grantedEmailTemplateId,
+                iaAipFrontendUrl,
+                recipientsFinder,
                 makeAnApplicationService);
         when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase)).thenReturn(Optional.ofNullable(makeAnApplication));
+    }
+
+
+    @Test
+    public void should_return_refused_template_id() {
+        when(makeAnApplication.getDecision()).thenReturn("Refused");
+        when(makeAnApplication.getState()).thenReturn("appealSubmitted");
+
+        assertEquals(refusedEmailTemplateId,
+                appellantDecideAnApplicationPersonalisationSms.getTemplateId(asylumCase));
     }
 
     @Test
-    public void should_return_given_template_id() {
-        assertEquals(emailTemplateId, appellantDecideAnApplicationRefusedPersonalisationSms.getTemplateId());
+    public void should_return_granted_template_id() {
+        when(makeAnApplication.getDecision()).thenReturn("Granted");
+        when(makeAnApplication.getState()).thenReturn("appealSubmitted");
+
+        assertEquals(grantedEmailTemplateId,
+                appellantDecideAnApplicationPersonalisationSms.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_DECIDE_AN_APPLICATION_APPELLANT_REFUSED_AIP_SMS",
-            appellantDecideAnApplicationRefusedPersonalisationSms.getReferenceId(caseId));
+        assertEquals(caseId + "_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS",
+            appellantDecideAnApplicationPersonalisationSms.getReferenceId(caseId));
     }
 
     @Test
@@ -89,7 +105,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationSmsTest {
         when(asylumCase.read(SUBSCRIPTIONS))
             .thenReturn(Optional.of(Collections.singletonList(new IdValue<>("foo", subscriber))));
 
-        assertTrue(appellantDecideAnApplicationRefusedPersonalisationSms.getRecipientsList(asylumCase)
+        assertTrue(appellantDecideAnApplicationPersonalisationSms.getRecipientsList(asylumCase)
             .contains(mockedAppellantMobilePhone));
     }
 
@@ -98,7 +114,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationSmsTest {
 
         when(recipientsFinder.findAll(null, NotificationType.SMS)).thenCallRealMethod();
 
-        assertThatThrownBy(() -> appellantDecideAnApplicationRefusedPersonalisationSms.getRecipientsList(null))
+        assertThatThrownBy(() -> appellantDecideAnApplicationPersonalisationSms.getRecipientsList(null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -107,7 +123,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationSmsTest {
     public void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
-            appellantDecideAnApplicationRefusedPersonalisationSms.getPersonalisation(asylumCase);
+            appellantDecideAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
@@ -124,7 +140,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationSmsTest {
         when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
 
         Map<String, String> personalisation =
-            appellantDecideAnApplicationRefusedPersonalisationSms.getPersonalisation(asylumCase);
+            appellantDecideAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));

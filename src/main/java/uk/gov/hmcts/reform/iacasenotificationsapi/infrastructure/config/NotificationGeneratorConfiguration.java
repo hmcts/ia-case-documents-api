@@ -1766,8 +1766,8 @@ public class NotificationGeneratorConfiguration {
     @Bean("decideAnApplicationAipNotificationGenerator")
     public List<NotificationGenerator> decideAnApplicationAipNotificationHandler(
             HomeOfficeDecideAnApplicationPersonalisation homeOfficeDecideAnApplicationPersonalisation,
-            AppellantDecideAnApplicationRefusedPersonalisationEmail appellantDecideAnApplicationRefusedPersonalisationEmail,
-            AppellantDecideAnApplicationRefusedPersonalisationSms appellantDecideAnApplicationRefusedPersonalisationSms,
+            AppellantDecideAnApplicationPersonalisationEmail appellantDecideAnApplicationPersonalisationEmail,
+            AppellantDecideAnApplicationPersonalisationSms appellantDecideAnApplicationPersonalisationSms,
             NotificationSender notificationSender,
             NotificationIdAppender notificationIdAppender
     ) {
@@ -1776,13 +1776,13 @@ public class NotificationGeneratorConfiguration {
             new EmailNotificationGenerator(
                 newArrayList(
                     homeOfficeDecideAnApplicationPersonalisation,
-                        appellantDecideAnApplicationRefusedPersonalisationEmail
+                        appellantDecideAnApplicationPersonalisationEmail
                 ),
                 notificationSender,
                 notificationIdAppender
             ),
             new SmsNotificationGenerator(
-                    newArrayList(appellantDecideAnApplicationRefusedPersonalisationSms),
+                    newArrayList(appellantDecideAnApplicationPersonalisationSms),
                     notificationSender,
                     notificationIdAppender
             )

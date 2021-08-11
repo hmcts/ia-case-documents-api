@@ -4,11 +4,13 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
@@ -16,28 +18,45 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicati
 
 
 @Service
-public class AppellantDecideAnApplicationRefusedPersonalisationSms implements SmsNotificationPersonalisation {
+public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotificationPersonalisation {
 
-    private final String decideAnApplicationAppellantSmsTemplateId;
+    private final String decideAnApplicationRefusedAppellantSmsTemplateId;
+    private final String decideAnApplicationGrantedAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
     private final RecipientsFinder recipientsFinder;
     private final MakeAnApplicationService makeAnApplicationService;
 
 
-    public AppellantDecideAnApplicationRefusedPersonalisationSms(
-            @Value("${govnotify.template.decideAnApplication.refused.applicant.appellant.beforeListing.sms}") String decideAnApplicationAppellantSmsTemplateId,
+    public AppellantDecideAnApplicationPersonalisationSms(
+            @Value("${govnotify.template.decideAnApplication.refused.applicant.appellant.beforeListing.sms}") String decideAnApplicationRefusedAppellantSmsTemplateId,
+            @Value("${govnotify.template.decideAnApplication.granted.applicant.appellant.beforeListing.sms}") String decideAnApplicationGrantedAppellantSmsTemplateId,
             @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
             RecipientsFinder recipientsFinder,
             MakeAnApplicationService makeAnApplicationService) {
-        this.decideAnApplicationAppellantSmsTemplateId = decideAnApplicationAppellantSmsTemplateId;
+        this.decideAnApplicationRefusedAppellantSmsTemplateId = decideAnApplicationRefusedAppellantSmsTemplateId;
+        this.decideAnApplicationGrantedAppellantSmsTemplateId = decideAnApplicationGrantedAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.recipientsFinder = recipientsFinder;
         this.makeAnApplicationService = makeAnApplicationService;
     }
 
+
     @Override
-    public String getTemplateId() {
-        return decideAnApplicationAppellantSmsTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+
+        Optional<MakeAnApplication> maybeMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase);
+
+        if (maybeMakeAnApplication.isPresent()) {
+            MakeAnApplication makeAnApplication = maybeMakeAnApplication.get();
+            String decision = makeAnApplication.getDecision();
+
+            return
+                    "Granted".equals(decision)
+                            ? decideAnApplicationGrantedAppellantSmsTemplateId
+                            : decideAnApplicationRefusedAppellantSmsTemplateId;
+        } else {
+            return "";
+        }
     }
 
     @Override
@@ -47,7 +66,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationSms implements Sm
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_DECIDE_AN_APPLICATION_APPELLANT_REFUSED_AIP_SMS";
+        return caseId + "_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS";
     }
 
     @Override

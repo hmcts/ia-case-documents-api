@@ -18,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicationService;
@@ -26,7 +28,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicati
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
+public class AppellantDecideAnApplicationPersonalisationEmailTest {
 
     @Mock
     AsylumCase asylumCase;
@@ -36,10 +38,16 @@ public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
     MakeAnApplicationService makeAnApplicationService;
     @Mock
     AppealService appealService;
+    @Mock
+    MakeAnApplication makeAnApplication;
+
 
     private Long caseId = 12345L;
-    private String emailTemplateIdBeforeListing = "someEmailTemplateIdBeforeListing";
-    private String emailTemplateIdAfterListing = "someEmailTemplateIdAfterListing";
+    private String emailTemplateIdRefusedBeforeListing = "emailTemplateIdRefusedBeforeListing";
+    private String emailTemplateIdRefusedAfterListing = "emailTemplateIdRefusedAfterListing";
+    private String emailTemplateIdGrantedBeforeListing = "emailTemplateIdGrantedBeforeListing";
+    private String emailTemplateIdGrantedAfterListing = "emailTemplateIdGrantedAfterListing";
+
     private String iaAipFrontendUrl = "http://localhost";
     private String applicationType = "someApplicationType";
 
@@ -50,7 +58,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
     private String mockedAppellantFamilyName = "someAppellantFamilyName";
     private String mockedAppellantEmailAddress = "appelant@example.net";
 
-    private AppellantDecideAnApplicationRefusedPersonalisationEmail appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail;
+    private AppellantDecideAnApplicationPersonalisationEmail appellantDecideAnApplicationPersonalisationEmail;
 
     @BeforeEach
     public void setup() {
@@ -65,31 +73,62 @@ public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(mockedAppellantFamilyName));
         when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
         when(appealService.isAppealListed(asylumCase)).thenReturn(false);
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase)).thenReturn(Optional.ofNullable(makeAnApplication));
 
-        appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail = new AppellantDecideAnApplicationRefusedPersonalisationEmail(
-                emailTemplateIdBeforeListing,
-                emailTemplateIdAfterListing,
+        appellantDecideAnApplicationPersonalisationEmail = new AppellantDecideAnApplicationPersonalisationEmail(
+                emailTemplateIdRefusedBeforeListing,
+                emailTemplateIdRefusedAfterListing,
+                emailTemplateIdGrantedBeforeListing,
+                emailTemplateIdGrantedAfterListing,
                 iaAipFrontendUrl,
                 recipientsFinder,
-                makeAnApplicationService,
-                appealService);
+                makeAnApplicationService);
     }
 
     @Test
-    public void should_return_given_template_id() {
-        when(appealService.isAppealListed(asylumCase)).thenReturn(false);
-        assertEquals(emailTemplateIdBeforeListing,
-                appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail.getTemplateId(asylumCase));
+    public void should_return_refused_before_listing_template_id() {
+        when(makeAnApplication.getDecision()).thenReturn("Refused");
+        when(makeAnApplication.getState()).thenReturn("appealSubmitted");
 
+        assertEquals(emailTemplateIdRefusedBeforeListing,
+                appellantDecideAnApplicationPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_refused_after_listing_template_id() {
         when(appealService.isAppealListed(asylumCase)).thenReturn(true);
-        assertEquals(emailTemplateIdAfterListing,
-                appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail.getTemplateId(asylumCase));
+        when(makeAnApplication.getDecision()).thenReturn("Refused");
+        when(makeAnApplication.getState()).thenReturn("preHearing");
+        when(makeAnApplicationService.isApplicationListed(State.PRE_HEARING)).thenReturn(true);
+
+        assertEquals(emailTemplateIdRefusedAfterListing,
+                appellantDecideAnApplicationPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_granted_after_listing_template_id() {
+        when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+        when(makeAnApplication.getDecision()).thenReturn("Granted");
+        when(makeAnApplication.getState()).thenReturn("preHearing");
+        when(makeAnApplicationService.isApplicationListed(State.PRE_HEARING)).thenReturn(true);
+
+        assertEquals(emailTemplateIdGrantedAfterListing,
+                appellantDecideAnApplicationPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_granted_before_listing_template_id() {
+        when(makeAnApplication.getDecision()).thenReturn("Granted");
+        when(makeAnApplication.getState()).thenReturn("appealSubmitted");
+
+        assertEquals(emailTemplateIdGrantedBeforeListing,
+                appellantDecideAnApplicationPersonalisationEmail.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_DECIDE_AN_APPLICATION_APPELLANT_REFUSED_AIP_EMAIL",
-            appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail.getReferenceId(caseId));
+        assertEquals(caseId + "_DECIDE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
+            appellantDecideAnApplicationPersonalisationEmail.getReferenceId(caseId));
     }
 
     @Test
@@ -97,7 +136,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
         when(recipientsFinder.findAll(asylumCase, NotificationType.EMAIL))
             .thenReturn(Collections.singleton(mockedAppellantEmailAddress));
 
-        assertTrue(appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail.getRecipientsList(asylumCase)
+        assertTrue(appellantDecideAnApplicationPersonalisationEmail.getRecipientsList(asylumCase)
             .contains(mockedAppellantEmailAddress));
     }
 
@@ -107,7 +146,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
         when(recipientsFinder.findAll(null, NotificationType.EMAIL))
             .thenThrow(new NullPointerException("asylumCase must not be null"));
 
-        assertThatThrownBy(() -> appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail.getRecipientsList(null))
+        assertThatThrownBy(() -> appellantDecideAnApplicationPersonalisationEmail.getRecipientsList(null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("asylumCase must not be null");
     }
@@ -123,7 +162,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
         when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
 
         Map<String, String> personalisation =
-            appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail.getPersonalisation(asylumCase);
+            appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
 
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals("", personalisation.get("ariaListingReference"));
@@ -140,7 +179,7 @@ public class AppellantDecideAnApplicationRefusedPersonalisationEmailTest {
     public void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
-                appellantDecideAnApplicationBeforeListingRefusedPersonalisationEmail.getPersonalisation(asylumCase);
+                appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
 
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(mockedListingReferenceNumber, personalisation.get("ariaListingReference"));

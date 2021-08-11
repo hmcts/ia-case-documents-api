@@ -1,17 +1,15 @@
 {
-  "description": "RIA-4389 Send decide an application notification to AIP and HO: REFUSED - AFTER listing (Case Officer)",
+  "description": "RIA-4388 Send decide an application notification to AIP and HO: GRANTED before listing (Judge)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "CaseOfficer",
+    "credentials": "Judge",
     "input": {
-      "id": 43893,
+      "id": 43882,
       "eventId": "decideAnApplication",
-      "state": "prepareForHearing",
+      "state": "awaitingReasonsForAppeal",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
-          "ariaListingReference": "LP/12345/2019",
-          "listCaseHearingCentre": "taylorHouse",
           "subscriptions": [
             {
               "id": "1",
@@ -34,12 +32,12 @@
                 "evidence":[],
                 "applicant":"",
                 "date":"",
-                "decision":"Refused",
-                "state":"prepareForHearing",
+                "decision":"Granted",
+                "state":"awaitingReasonsForAppeal",
                 "applicantRole":"citizen",
                 "decisionReason":"No Reason given",
                 "decisionDate":"{$TODAY}",
-                "decisionMaker": "CaseOfficer"
+                "decisionMaker": "Judge"
               }
             }
           ]
@@ -53,8 +51,6 @@
     "caseData": {
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
-        "ariaListingReference": "LP/12345/2019",
-        "listCaseHearingCentre": "taylorHouse",
         "subscriptions": [
           {
             "id": "1",
@@ -76,26 +72,26 @@
               "evidence":[],
               "applicant":"",
               "date":"",
-              "decision":"Refused",
-              "state":"prepareForHearing",
+              "decision":"Granted",
+              "state":"awaitingReasonsForAppeal",
               "applicantRole":"citizen",
               "decisionReason":"No Reason given",
               "decisionDate":"{$TODAY}",
-              "decisionMaker": "CaseOfficer"
+              "decisionMaker": "Judge"
             }
           }
         ],
         "notificationsSent": [
           {
-            "id": "43893_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "id": "43882_DECIDE_AN_APPLICATION_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "43893_DECIDE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
+            "id": "43882_DECIDE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "43893_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS",
+            "id": "43882_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -103,12 +99,11 @@
     },
     "notifications": [
       {
-        "reference": "43893_DECIDE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
+        "reference": "43882_DECIDE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Immigration and Asylum appeal: Your request was refused",
+        "subject": "Immigration and Asylum appeal: Your request was granted",
         "body": [
           "PA/12345/2019",
-          "LP/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
           "{$iaAipFrontendUrl}",
@@ -117,19 +112,20 @@
         ]
       },
       {
-        "reference": "43893_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS",
+        "reference": "43882_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
           "PA/12345/2019",
-          "The Tribunal has decided to refuse the following request you made: Time extension",
+          "The Tribunal has decided to grant the following request you made:",
+          "Time extension",
           "{$iaAipFrontendUrl}"
         ]
       },
       {
-        "reference": "43893_DECIDE_AN_APPLICATION_HOME_OFFICE",
-        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: An appellant application has been refused",
+        "reference": "43882_DECIDE_AN_APPLICATION_HOME_OFFICE",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: An appellant application has been granted",
         "body": [
           "PA/12345/2019",
           "A123456",
