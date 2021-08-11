@@ -21,7 +21,7 @@ public class DocumentDownloadClient {
     private final UserDetailsProvider userDetailsProvider;
 
     public DocumentDownloadClient(
-            CaseDocumentClient caseDocumentClient,
+        CaseDocumentClient caseDocumentClient,
         AuthTokenGenerator serviceAuthTokenGenerator,
         @Qualifier("requestUser") AccessTokenProvider accessTokenProvider,
         @Qualifier("requestUser") UserDetailsProvider userDetailsProvider
@@ -45,9 +45,9 @@ public class DocumentDownloadClient {
         UserDetails userDetails = userDetailsProvider.getUserDetails();
 
         ResponseEntity<Resource> resourceResponseEntity = caseDocumentClient.getDocumentBinary(
-                serviceAuthTokenGenerator.generate(),
-                accessTokenProvider.getAccessToken(),
-                url.toString());
+            userDetails.getAccessToken(),
+            serviceAuthTokenGenerator.generate(),
+            url.toString());
 
         Resource documentResource = resourceResponseEntity.getBody();
 

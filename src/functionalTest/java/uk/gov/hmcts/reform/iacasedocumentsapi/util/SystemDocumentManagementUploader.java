@@ -1,14 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
+import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.util.Collections;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.utils.InMemoryMultipartFile;
 
 @Service
 public class SystemDocumentManagementUploader {
@@ -42,17 +43,12 @@ public class SystemDocumentManagementUploader {
 
         try {
 
-            DiskFileItem fileItem = new DiskFileItem(
-                    resource.getFilename(),
-                    contentType,
-                    false,
-                    resource.getFilename(),
-                    (int) resource.getFile().length(),
-                    resource.getFile());
-
-            fileItem.getOutputStream();
-
-            CommonsMultipartFile commonsMultipartFile = new CommonsMultipartFile(fileItem);
+            MultipartFile file = new InMemoryMultipartFile(
+                resource.getFilename(),
+                resource.getFilename(),
+                contentType,
+                ByteStreams.toByteArray(resource.getInputStream())
+            );
 
             UploadResponse uploadResponse =
                     caseDocumentClient
@@ -61,7 +57,7 @@ public class SystemDocumentManagementUploader {
                                 serviceAuthorizationToken,
                                 "Asylum",
                                 "IA",
-                                Collections.singletonList(commonsMultipartFile)
+                                Collections.singletonList(file)
                             );
 
             uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =

@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
+import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.util.Collections;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
@@ -14,7 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.utils.InMemoryMultipartFile;
 
 @Service
 public class DocumentManagementUploader implements DocumentUploader {
@@ -22,17 +22,14 @@ public class DocumentManagementUploader implements DocumentUploader {
     private final CaseDocumentClient caseDocumentClient;
     private final AuthTokenGenerator serviceAuthorizationTokenGenerator;
     private final UserDetailsProvider userDetailsProvider;
-    private final WordDocumentToPdfConverter wordDocumentToPdfConverter;
 
     public DocumentManagementUploader(
             CaseDocumentClient caseDocumentClient,
             AuthTokenGenerator serviceAuthorizationTokenGenerator,
-            @Qualifier("requestUser") UserDetailsProvider userDetailsProvider,
-            WordDocumentToPdfConverter wordDocumentToPdfConverter
+            @Qualifier("requestUser") UserDetailsProvider userDetailsProvider
     ) {
         this.caseDocumentClient = caseDocumentClient;
         this.serviceAuthorizationTokenGenerator = serviceAuthorizationTokenGenerator;
-        this.wordDocumentToPdfConverter = wordDocumentToPdfConverter;
         this.userDetailsProvider = userDetailsProvider;
     }
 
@@ -46,17 +43,12 @@ public class DocumentManagementUploader implements DocumentUploader {
 
         try {
 
-            DiskFileItem fileItem = new DiskFileItem(
-                    resource.getFilename(),
-                    contentType,
-                    false,
-                    resource.getFilename(),
-                    (int) resource.getFile().length(),
-                    resource.getFile());
-
-            fileItem.getOutputStream();
-
-            CommonsMultipartFile commonsMultipartFile = new CommonsMultipartFile(fileItem);
+            MultipartFile file = new InMemoryMultipartFile(
+                resource.getFilename(),
+                resource.getFilename(),
+                contentType,
+                ByteStreams.toByteArray(resource.getInputStream())
+            );
 
             UploadResponse uploadResponse =
                 caseDocumentClient
@@ -65,7 +57,7 @@ public class DocumentManagementUploader implements DocumentUploader {
                         serviceAuthorizationToken,
                         "Asylum",
                         "IA",
-                        Collections.singletonList(commonsMultipartFile)
+                        Collections.singletonList(file)
                     );
 
             uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =

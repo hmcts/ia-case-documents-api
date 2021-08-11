@@ -51,15 +51,12 @@ public class DocumentDownloadClientTest {
     public void downloads_resource() {
 
         when(caseDocumentClient.getDocumentBinary(
-                someServiceAuthToken,
-                someAccessToken,
-                "http://host:8080/a/b/c")).thenReturn(responseEntity);
+            null,
+            someServiceAuthToken,
+            "http://host:8080/a/b/c")).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);
-
-        when(accessTokenProvider.getAccessToken())
-                .thenReturn(someAccessToken);
 
         when(serviceAuthTokenGenerator.generate())
                 .thenReturn(someServiceAuthToken);
@@ -71,8 +68,8 @@ public class DocumentDownloadClientTest {
 
         verify(caseDocumentClient, times(1))
             .getDocumentBinary(
+                    eq(null),
                     eq(someServiceAuthToken),
-                    eq(someAccessToken),
                     eq("http://host:8080/a/b/c")
             );
 
@@ -95,14 +92,15 @@ public class DocumentDownloadClientTest {
     public void throws_if_document_api_returns_empty_body() {
 
         when(caseDocumentClient.getDocumentBinary(
-                someServiceAuthToken,
-                someAccessToken,
-                "http://host:8080/a/b/c")).thenReturn(responseEntity);
+            someAccessToken,
+            someServiceAuthToken,
+            "http://host:8080/a/b/c")).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);
-
-        when(accessTokenProvider.getAccessToken())
+        when(userDetailsProvider.getUserDetails())
+            .thenReturn(userDetails);
+        when(userDetails.getAccessToken())
                 .thenReturn(someAccessToken);
 
         when(serviceAuthTokenGenerator.generate())

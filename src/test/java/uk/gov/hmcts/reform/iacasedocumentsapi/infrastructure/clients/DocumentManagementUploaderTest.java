@@ -24,7 +24,6 @@ import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -33,7 +32,6 @@ public class DocumentManagementUploaderTest {
     @Mock private CaseDocumentClient caseDocumentClient;
     @Mock private AuthTokenGenerator serviceAuthorizationTokenGenerator;
     @Mock private UserDetailsProvider userDetailsProvider;
-    @Mock private WordDocumentToPdfConverter wordDocumentToPdfConverter;
 
     private String serviceAuthorizationToken = "SERVICE_TOKEN";
     private String accessToken = "ACCESS_TOKEN";
@@ -49,6 +47,7 @@ public class DocumentManagementUploaderTest {
 
     private byte[] documentData = "pdf-data".getBytes();
     @Mock private Resource resource;
+    private InputStream resourceInputStream = new ByteArrayInputStream(documentData);
     @Mock private DiskFileItem fileItem;
     private String expectedDocumentUrl = "document-self-href";
     private String expectedBinaryUrl = "document-self-href";
@@ -77,8 +76,7 @@ public class DocumentManagementUploaderTest {
             new DocumentManagementUploader(
                 caseDocumentClient,
                 serviceAuthorizationTokenGenerator,
-                userDetailsProvider,
-                wordDocumentToPdfConverter
+                userDetailsProvider
             );
 
         Date ttl = new Date();
@@ -104,7 +102,9 @@ public class DocumentManagementUploaderTest {
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
 
         when(resource.getFilename()).thenReturn(fileName);
-        when(wordDocumentToPdfConverter.convertResourceToPdf(resource)).thenReturn(file);
+        when(resource.getInputStream()).thenReturn(resourceInputStream);
+
+        when(resource.getFilename()).thenReturn(fileName);
         when(uploadResponse.getDocuments()).thenReturn(uploadedDocuments);
         when(uploadResponse.getDocuments().get(0)).thenReturn(mockDocument);
 
@@ -143,7 +143,7 @@ public class DocumentManagementUploaderTest {
         assertEquals(1, actualMultipartFiles.size());
         assertEquals(fileName, actualMultipartFiles.get(0).getName());
         assertEquals(fileName, actualMultipartFiles.get(0).getOriginalFilename());
-        //assertEquals(documentData.length, actualMultipartFiles.get(0).getBytes().length);
+        assertEquals(documentData.length, actualMultipartFiles.get(0).getBytes().length);
     }
 
     private uk.gov.hmcts.reform.ccd.document.am.model.Document.Links getLinks() {
