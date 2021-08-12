@@ -1,5 +1,6 @@
 java:
   image: 'https://hmctspublic.azurecr.io/ia/case-notifications-api:latest'
+  ingressHost: ia-case-notifications-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   applicationPort: 8093
   aadIdentityName: ia
   environment:
