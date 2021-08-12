@@ -184,6 +184,13 @@ task contract(type: Test, description: 'Runs the pact contract tests.', group: '
 }
 
 
+task fortifyScan(type: JavaExec)  {
+    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+    classpath += sourceSets.test.runtimeClasspath
+    jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
+}
+
+
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
 }
@@ -239,6 +246,10 @@ repositories {
     mavenLocal()
     jcenter()
     mavenCentral()
+
+    maven {
+        url 'https://www.jitpack.io'
+    }
 }
 
 dependencyManagement {
@@ -314,6 +325,7 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
+    testCompile 'com.github.hmcts:fortify-client:1.2.1:all'
 
     testCompile 'pl.pragmatists:JUnitParams:1.1.1'
 
