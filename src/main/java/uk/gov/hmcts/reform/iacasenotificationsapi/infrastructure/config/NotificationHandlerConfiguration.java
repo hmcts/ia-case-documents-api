@@ -551,7 +551,22 @@ public class NotificationHandlerConfiguration {
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW,
+                        && callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW
+                        && isRepJourney(callback.getCaseDetails().getCaseData()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> respondentReviewAipNotificationHandler(
+        @Qualifier("respondentReviewAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        // RIA-3631 - requestRespondentReview
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW
+                            && isAipJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerators
         );
     }

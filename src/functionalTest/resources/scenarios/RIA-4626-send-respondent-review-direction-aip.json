@@ -1,0 +1,140 @@
+{
+  "description": "RIA-4626 Send respondent review direction (AIP) - Home Office notification enabled",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 46261,
+      "eventId": "requestRespondentReview",
+      "state": "reasonsForAppealSubmitted",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "homeOfficeReferenceNumber": "1212-0099-0062-8083",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Review the built case",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentReview"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "hearingCentre": "taylorHouse"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "homeOfficeReferenceNumber": "1212-0099-0062-8083",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Review the built case",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentReview"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "46261_RESPONDENT_REVIEW_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "46261_REQUEST_RESPONDENT_REVIEW_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "46261_REQUEST_RESPONDENT_REVIEW_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "hearingCentre": "taylorHouse"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "46261_RESPONDENT_REVIEW_DIRECTION",
+        "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+        "subject": "Immigration and Asylum appeal: review Appeal Skeleton Argument direction",
+        "body": [
+          "PA/12345/2019",
+          "1212-0099-0062-8083",
+          "Pablo Jimenez",
+          "PA/12345/2019",
+          "{$iaExUiFrontendUrl}",
+          "Review the built case",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"        ]
+      },
+      {
+        "reference": "46261_REQUEST_RESPONDENT_REVIEW_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: The Home Office will review your appeal",
+        "body": [
+          "PA/12345/2019",
+          "1212-0099-0062-8083",
+          "Pablo Jimenez,",
+          "A Tribunal Caseworker has sent your appeal to the Home Office.",
+          "The Home Office will now review their decision to refuse your application to stay in or enter the UK.",
+          "{$iaAipFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "46261_REQUEST_RESPONDENT_REVIEW_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "The Tribunal has sent your appeal to the Home Office.",
+          "The Home Office will now review their decision to refuse your application to stay in or enter the UK and will either withdraw or maintain their decision.",
+          "If the Home Office withdraw their decision, it means they will look again at their decision to refuse your application to stay in or enter the UK.",
+          "If the Home Office maintain their decision, it means they have looked at all the information and evidence you sent to the Tribunal but still think they were correct to refuse your application to stay in or enter the UK. The appeal will continue and will be decided by a judge.",
+          "Sign in to your account to read more about what happens if the Home Office withdraw or maintain their decision.",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

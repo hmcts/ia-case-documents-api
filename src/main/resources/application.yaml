@@ -170,6 +170,9 @@ govnotify:
         email: 091be655-72cd-49cb-a66c-2030f7437595
       respondent:
         email: 4d7dbe9b-f8e4-4508-a7d0-b7f4f1e26269
+      appellant:
+        email: 2ef8069f-ae26-4770-89ff-8a2da7fa7737
+        sms: b9a45d5e-b070-4876-9c2f-ed4ff9f18116
     nonStandardDirectionBeforeListing:
       respondent:
         email: 7a3b6e21-9296-4c9c-8644-782f7e4ee475
