@@ -2072,9 +2072,24 @@ public class NotificationHandlerConfiguration {
         @Qualifier("reinstateAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                                         && callback.getEvent() == Event.REINSTATE_APPEAL,
+            (callbackStage, callback) ->
+                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                         && callback.getEvent() == Event.REINSTATE_APPEAL
+                         && isRepJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> reinstateAppealAipNotificationHandler(
+            @Qualifier("reinstateAppealAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) ->
+                        callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                && callback.getEvent() == Event.REINSTATE_APPEAL
+                                && isAipJourney(callback.getCaseDetails().getCaseData()),
+                notificationGenerators
         );
     }
 

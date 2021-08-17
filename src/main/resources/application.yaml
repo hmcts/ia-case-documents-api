@@ -341,16 +341,24 @@ govnotify:
         email: 910ba1e7-00fc-4d4f-b4ba-2cbb91eeb3f7
       legalRep:
         email: 861f0327-6339-4c7e-8ef7-060532704122
+      appellant:
+        email: 827d2814-ed51-4bd0-b1b7-bbd618cd1dce
+        sms: ff7860f8-5228-4716-ab28-9b0654b98582
     removeAppealFromOnlineAfterListing:
       homeOffice:
         email: 2e896da4-03c2-4474-b5b0-1a9fb31f33e5
       legalRep:
         email: 6de19b37-8f75-4388-8f22-56d9314569c6
+      appellant:
+        email: 2a0fdf8b-e50b-4a68-9320-74cbf6d24ab7
     changeHearingCentre:
       legalRep:
         email: 4959d7cc-54f0-4cb4-b386-49940b89925e
       caseOfficer:
         email: 122b7fce-23c9-4b34-9055-8329264fd757
+      appellant:
+        email: c1128478-d103-485f-9f0c-ac0697d8a34c
+        sms: 2015a5dd-2b6f-4ae9-aa5b-9746531afa19
     applyForFtpa:
       respondent:
         email: 317498af-4da1-44c7-935e-d70009bc687f
@@ -439,21 +447,31 @@ govnotify:
         email: 51d5c671-2edd-4bf9-86b3-ab1d38f00b38
       homeOffice:
         email: 3cd6c3c4-6512-4fa8-ad3b-a455cbfda9fa
+      appellant:
+        email: a2c177a2-4441-496b-a9d5-b7253aecb67c
+        sms: 2e3f4bc4-b311-4630-b660-fcaa711378b4
     linkAppealAfterListing:
       legalRep:
         email: 588e2447-b10d-4970-827a-7e4275d0dec2
       homeOffice:
         email: eaec4a03-15fe-4d8a-9d74-19a8e6e225ef
+      appellant:
+        email: c8c5bf5d-740b-4b44-9173-d3e4aca5fd46
     unlinkAppealBeforeListing:
       legalRep:
         email: 98eebdab-fcba-4ef7-b4ff-509651c18a6c
       homeOffice:
         email: 2dbd0ae9-9fda-4b98-a9a8-0887e05dd3c3
+      appellant:
+        email: 239fc05c-5399-4784-b96d-112f32796ebc
+        sms: f6fc30f5-386e-4d84-85b4-7369b6bc5223
     unlinkAppealAfterListing:
       legalRep:
         email: 50652202-52d0-494e-8e14-1e7093a808d6
       homeOffice:
         email: 9d289019-12d4-4815-8461-80cc3b890406
+      appellant:
+        email: 76a248c2-94cb-4c8d-84be-d68806464ce1
     appealDocumentDeletedBeforeListing:
       caseOfficer:
         email: 62513161-34ae-473e-a6cd-e5f38bef9d47
@@ -545,6 +563,12 @@ govnotify:
           email: 3c293506-bd4b-4479-9ae4-8ce602c69bd5
         afterListing:
           email: 5ba35971-b621-4968-9c5e-ef483101b22e
+      appellant:
+        beforeListing:
+          email: 3b2d48df-13a7-4c41-a730-fc0bd40de1d4
+          sms: 2f7ae47e-733a-4e1b-bb1d-e62101dd6844
+        afterListing:
+          email: 248003a9-bb0f-4955-9b55-080ed6ba5856
     makeAnApplication:
       beforeListing:
         appellant:

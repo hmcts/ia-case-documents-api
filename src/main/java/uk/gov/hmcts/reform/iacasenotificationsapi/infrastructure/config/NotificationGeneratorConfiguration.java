@@ -76,15 +76,22 @@ public class NotificationGeneratorConfiguration {
     @Bean("unlinkAppealAppellantNotificationGenerator")
     public List<NotificationGenerator> unlinkAppealAppellantNotificationGenerator(
         HomeOfficeUnlinkAppealPersonalisation homeOfficeUnlinkAppealPersonalisation,
+        AppellantUnlinkAppealPersonalisationEmail appellantUnlinkAppealPersonalisationEmail,
+        AppellantUnlinkAppealPersonalisationSms appellantUnlinkAppealPersonalisationSms,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
-        return Collections.singletonList(
-            new EmailNotificationGenerator(
-                newArrayList(homeOfficeUnlinkAppealPersonalisation),
-                notificationSender,
-                notificationIdAppender
-            )
+        return Arrays.asList(
+                new EmailNotificationGenerator(
+                        newArrayList(homeOfficeUnlinkAppealPersonalisation, appellantUnlinkAppealPersonalisationEmail),
+                        notificationSender,
+                        notificationIdAppender
+                ),
+                new SmsNotificationGenerator(
+                        newArrayList(appellantUnlinkAppealPersonalisationSms),
+                        notificationSender,
+                        notificationIdAppender
+                )
         );
     }
 
@@ -107,15 +114,22 @@ public class NotificationGeneratorConfiguration {
     @Bean("linkAppealAppellantNotificationGenerator")
     public List<NotificationGenerator> linkAppealAppellantNotificationGenerator(
         HomeOfficeLinkAppealPersonalisation homeOfficeLinkAppealPersonalisation,
+        AppellantLinkAppealPersonalisationEmail appellantLinkAppealPersonalisationEmail,
+        AppellantLinkAppealPersonalisationSms appellantLinkAppealPersonalisationSms,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
-        return Collections.singletonList(
-            new EmailNotificationGenerator(
-                newArrayList(homeOfficeLinkAppealPersonalisation),
-                notificationSender,
-                notificationIdAppender
-            )
+        return Arrays.asList(
+                new EmailNotificationGenerator(
+                        newArrayList(homeOfficeLinkAppealPersonalisation, appellantLinkAppealPersonalisationEmail),
+                        notificationSender,
+                        notificationIdAppender
+                ),
+                new SmsNotificationGenerator(
+                        newArrayList(appellantLinkAppealPersonalisationSms),
+                        notificationSender,
+                        notificationIdAppender
+                )
         );
     }
 
@@ -1088,30 +1102,44 @@ public class NotificationGeneratorConfiguration {
 
     @Bean("appealExitedOnlineAppellantNotificationGenerator")
     public List<NotificationGenerator> appealExitedOnlineAppellantNotificationGenerator(
-        HomeOfficeAppealExitedOnlinePersonalisation homeOfficeAppealExitedOnlinePersonalisation,
-        NotificationSender notificationSender,
-        NotificationIdAppender notificationIdAppender) {
+            HomeOfficeAppealExitedOnlinePersonalisation homeOfficeAppealExitedOnlinePersonalisation,
+            AppellantAppealExitedOnlinePersonalisationEmail appellantAppealExitedOnlinePersonalisationEmail,
+            AppellantAppealExitedOnlinePersonalisationSms appellantAppealExitedOnlinePersonalisationSms,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
 
         return Arrays.asList(
-            new EmailNotificationGenerator(
-                newArrayList(homeOfficeAppealExitedOnlinePersonalisation),
-                notificationSender,
-                notificationIdAppender)
+                new EmailNotificationGenerator(
+                        newArrayList(homeOfficeAppealExitedOnlinePersonalisation, appellantAppealExitedOnlinePersonalisationEmail),
+                        notificationSender,
+                        notificationIdAppender),
+                new SmsNotificationGenerator(
+                        newArrayList(appellantAppealExitedOnlinePersonalisationSms),
+                        notificationSender,
+                        notificationIdAppender
+                )
         );
     }
 
     @Bean("changeHearingCentreAppellantNotificationGenerator")
     public List<NotificationGenerator> changeHearingCentreAppellantNotificationGenerator(
         CaseOfficerChangeHearingCentrePersonalisation caseOfficerChangeHearingCentrePersonalisation,
+        AppellantChangeHearingCentrePersonalisationEmail appellantChangeHearingCentrePersonalisationEmail,
+        AppellantChangeHearingCentrePersonalisationSms appellantChangeHearingCentrePersonalisationSms,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Arrays.asList(
-            new EmailNotificationGenerator(
-                newArrayList(caseOfficerChangeHearingCentrePersonalisation),
-                notificationSender,
-                notificationIdAppender
-            )
+                new EmailNotificationGenerator(
+                        newArrayList(caseOfficerChangeHearingCentrePersonalisation, appellantChangeHearingCentrePersonalisationEmail),
+                        notificationSender,
+                        notificationIdAppender
+                ),
+                new SmsNotificationGenerator(
+                        newArrayList(appellantChangeHearingCentrePersonalisationSms),
+                        notificationSender,
+                        notificationIdAppender
+                )
         );
     }
 
@@ -1777,6 +1805,34 @@ public class NotificationGeneratorConfiguration {
                         newArrayList(
                                 legalRepresentativeReinstateAppealPersonalisation,
                                 homeOfficeReinstateAppealPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
+    @Bean("reinstateAppealAipNotificationGenerator")
+    public List<NotificationGenerator> reinstateAppealAipNotificationHandler(
+            AppellantReinstateAppealPersonalisationEmail appellantReinstateAppealPersonalisationEmail,
+            AppellantReinstateAppealPersonalisationSms appellantReinstateAppealPersonalisationSms,
+            HomeOfficeReinstateAppealPersonalisation homeOfficeReinstateAppealPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                appellantReinstateAppealPersonalisationEmail,
+                                homeOfficeReinstateAppealPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                ),
+                new SmsNotificationGenerator(
+                        newArrayList(
+                                appellantReinstateAppealPersonalisationSms
                         ),
                         notificationSender,
                         notificationIdAppender
