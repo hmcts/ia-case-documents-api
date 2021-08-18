@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3631 FTPA Applicant Application Decision Partially Granted Respondent - Home Office notification disabled",
+  "description": "RIA-3631-RIA-4352 FTPA Applicant Application Decision Partially Granted Respondent - Home Office notification disabled",
   "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -56,7 +56,8 @@
         "body": [
           "PA/12345/2019",
           "987654321",
-          "Talha Awan"
+          "Talha Awan",
+          "You must create a bundle for the Upper Tribunal. Follow these steps to do this:"
         ]
       }
     ]

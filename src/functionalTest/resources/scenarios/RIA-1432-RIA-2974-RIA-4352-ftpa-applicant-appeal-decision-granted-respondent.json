@@ -1,17 +1,17 @@
 {
-  "description": "RIA-2975-RIA-3754 FTPA Applicant Application Decision Granted Respondent",
+  "description": "RIA-1432-RIA-2974-RIA-3754-RIA-4352 FTPA Applicant Application Decision Granted Respondent",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
       "id": 1005,
-      "eventId": "residentJudgeFtpaDecision",
+      "eventId": "leadershipJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToJudge": "ftpaDecided",
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaRespondentDecisionOutcomeType": "granted",
           "ftpaApplicantType": "respondent",
           "ariaListingReference": "987654321",
@@ -72,7 +72,8 @@
         "body": [
           "PA/12345/2019",
           "987654321",
-          "Talha Awan"
+          "Talha Awan",
+          "You must create a bundle for the Upper Tribunal. Follow these steps to do this:"
         ]
       }
     ]

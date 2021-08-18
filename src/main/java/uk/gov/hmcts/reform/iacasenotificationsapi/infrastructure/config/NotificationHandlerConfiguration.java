@@ -978,6 +978,7 @@ public class NotificationHandlerConfiguration {
                 return
                     callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && callback.getEvent() == Event.ASYNC_STITCHING_COMPLETE
+                    && callback.getCaseDetails().getState() != State.FTPA_DECIDED
                     && stitchStatus.equalsIgnoreCase("DONE");
             },
             notificationGenerators
@@ -996,6 +997,7 @@ public class NotificationHandlerConfiguration {
                 return
                     callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && callback.getEvent() == Event.ASYNC_STITCHING_COMPLETE
+                    && callback.getCaseDetails().getState() != State.FTPA_DECIDED
                     && stitchStatus.equalsIgnoreCase("FAILED");
             },
             notificationGenerators
@@ -2839,6 +2841,27 @@ public class NotificationHandlerConfiguration {
                             && isSmsPreferred(asylumCase);
 
                 }, notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> upperTribinalBundleFailedNotificationHandler(
+        @Qualifier("upperTribunalBundleFailedNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                final String stitchStatus = getStitchStatus(callback);
+
+                return
+                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.ASYNC_STITCHING_COMPLETE
+                    && callback.getCaseDetails().getState() == State.FTPA_DECIDED
+                    && stitchStatus.equalsIgnoreCase("FAILED");
+            },
+            notificationGenerators
         );
     }
 

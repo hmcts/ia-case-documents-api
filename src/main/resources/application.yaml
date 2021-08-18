@@ -480,7 +480,7 @@ govnotify:
         email: aef0bfa4-03ed-431b-87d0-c77124bd5f68
     applicationGranted:
       admin:
-        email: d6a02baf-f0a1-44e3-8238-b982e886ad2f
+        email: 9b62eeb8-54ce-47ab-a9fc-f25bc0bab70a
       applicant:
         legalRep:
           email: ff724fb9-2daa-4ed1-9405-5ed389c4df7a
@@ -493,7 +493,7 @@ govnotify:
           email: bf8caa99-b3b7-4fae-bb0c-2c25f919fb65
     applicationPartiallyGranted:
       admin:
-        email: b4907a53-4c98-4870-9528-ec9e7827ef22
+        email: 5ed2b159-98e3-4878-a75f-f365370cba4d
       applicant:
         legalRep:
           email: 91a8351f-8c6f-425f-9ca6-f41e4055cd71
@@ -730,6 +730,9 @@ govnotify:
         cannotProceed:
           email: d19a384d-0640-4b47-abd2-ae1c038013ca
           sms: 7a12821a-d9b1-4e93-b64a-ecdc55e78034
+    upperTribunalBundleFailed:
+      adminOfficer:
+        email: 70ae2c06-4bb4-4ec2-8177-6c187aed39cc
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -854,6 +857,7 @@ security:
       - "recordRemissionDecision"
       - "removeLegalRepresentative"
       - "manageFeeUpdate"
+      - "asyncStitchingComplete"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -891,6 +895,7 @@ security:
       - "editAppealAfterSubmit"
       - "decideAnApplication"
       - "requestNewHearingRequirements"
+      - "asyncStitchingComplete"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
 

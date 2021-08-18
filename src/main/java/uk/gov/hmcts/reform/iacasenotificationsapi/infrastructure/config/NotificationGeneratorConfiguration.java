@@ -2501,4 +2501,19 @@ public class NotificationGeneratorConfiguration {
             }
         );
     }
+
+    @Bean("upperTribunalBundleFailedNotificationGenerator")
+    public List<NotificationGenerator> upperTribunalBundleFailedNotificationGenerator(
+        AdminOfficerUpperTribunalBundleFailedPersonalisation adminOfficerUpperTribunalBundleFailedPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(adminOfficerUpperTribunalBundleFailedPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

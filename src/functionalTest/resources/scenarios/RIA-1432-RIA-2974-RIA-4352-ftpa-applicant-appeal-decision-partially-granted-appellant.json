@@ -1,19 +1,19 @@
 {
-  "description": "RIA-2975-RIA-3754 FTPA Applicant Application Decision Partially Granted Respondent",
+  "description": "RIA-1432-RIA-2974-RIA-3754-RIA-4352 FTPA Applicant Application Decision Partially Granted Appellant",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 1007,
-      "eventId": "residentJudgeFtpaDecision",
+      "id": 1003,
+      "eventId": "leadershipJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToJudge": "ftpaDecided",
-          "ftpaRespondentDecisionOutcomeType": "partiallyGranted",
-          "ftpaApplicantType": "respondent",
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaAppellantDecisionOutcomeType": "partiallyGranted",
+          "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
           "notificationsSent": []
         }
@@ -28,15 +28,15 @@
       "replacements": {
         "notificationsSent": [
           {
-            "id": "1007_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+            "id": "1003_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1007_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+            "id": "1003_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1007_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+            "id": "1003_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -44,7 +44,7 @@
     },
     "notifications": [
       {
-        "reference": "1007_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "reference": "1003_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
         "recipient": "{$upperTribunalNoticesEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
         "body": [
@@ -55,7 +55,7 @@
         ]
       },
       {
-        "reference": "1007_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+        "reference": "1003_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
         "body": [
@@ -66,13 +66,14 @@
         ]
       },
       {
-        "reference": "1007_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+        "reference": "1003_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
         "recipient": "{$ctscAdminFtpaDecisionEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
         "body": [
           "PA/12345/2019",
           "987654321",
-          "Talha Awan"
+          "Talha Awan",
+          "You must create a bundle for the Upper Tribunal. Follow these steps to do this:"
         ]
       }
     ]

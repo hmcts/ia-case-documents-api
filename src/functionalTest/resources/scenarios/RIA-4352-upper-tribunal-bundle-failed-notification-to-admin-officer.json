@@ -1,0 +1,57 @@
+{
+  "description": "RIA-4352 Upper Tribunal bundle failed notification to admin officer",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 4352,
+      "eventId": "asyncStitchingComplete",
+      "state": "ftpaDecided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "northShields",
+          "ariaListingReference": "LP/12345/2019",
+          "legalRepReferenceNumber": "REF54321",
+          "caseBundles": [{
+            "id": "1",
+            "value": {
+              "stitchStatus": "FAILED"
+            }
+          }]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "northShields",
+        "ariaListingReference": "LP/12345/2019",
+        "legalRepReferenceNumber": "REF54321",
+        "notificationsSent": [
+          {
+            "id": "4352_UPPER_TRIBUNAL_BUNDLE_FAILED_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4352_UPPER_TRIBUNAL_BUNDLE_FAILED_ADMIN_OFFICER",
+        "recipient": "{$ctscAdminFtpaDecisionEmailAddress}",
+        "subject": "Immigration and Asylum appeal: The Upper Tribunal bundle failed to generate",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}
