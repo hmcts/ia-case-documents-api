@@ -3,52 +3,24 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
+@AllArgsConstructor
 public class Direction {
 
     private String explanation;
-    private String uniqueId;
-    private String directionType;
     private Parties parties;
     private String dateDue;
     private String dateSent;
     private DirectionTag tag;
     private List<IdValue<PreviousDates>> previousDates;
     private List<IdValue<ClarifyingQuestion>> clarifyingQuestions;
+    private String uniqueId;
+    private String directionType;
 
     private Direction() {
         // noop -- for deserializer
-    }
-
-    public Direction(
-            String explanation,
-            Parties parties,
-            String dateDue,
-            String dateSent,
-            DirectionTag tag,
-            List<IdValue<PreviousDates>> previousDates,
-            List<IdValue<ClarifyingQuestion>> clarifyingQuestions,
-            String uniqueId,
-            String directionType
-
-    ) {
-        requireNonNull(explanation);
-        requireNonNull(parties);
-        requireNonNull(dateDue);
-        requireNonNull(dateSent);
-        requireNonNull(tag);
-        requireNonNull(previousDates);
-
-        this.explanation = explanation;
-        this.parties = parties;
-        this.dateDue = dateDue;
-        this.dateSent = dateSent;
-        this.tag = tag;
-        this.previousDates = previousDates;
-        this.clarifyingQuestions = clarifyingQuestions;
-        this.uniqueId = uniqueId;
-        this.directionType = directionType;
     }
 
     public String getExplanation() {

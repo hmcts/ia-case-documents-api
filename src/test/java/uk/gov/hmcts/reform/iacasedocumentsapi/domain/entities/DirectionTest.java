@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
@@ -70,51 +69,4 @@ class DirectionTest {
         assertEquals(directionType, directionWithQuestions.getDirectionType());
     }
 
-    @Test
-    void should_not_allow_null_arguments() {
-
-        String uniqueId = UUID.randomUUID().toString();
-        List<IdValue<ClarifyingQuestion>> clarifyingQuestions = Collections.emptyList();
-        assertThatThrownBy(() -> new Direction(null, parties, dateDue, dateSent, tag, previousDates,
-                clarifyingQuestions,
-                uniqueId,
-                "someDirectionType"
-        ))
-                .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, null, dateDue, dateSent, tag, previousDates,
-                clarifyingQuestions,
-                uniqueId,
-                "someDirectionType"
-        ))
-                .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, null, dateSent, tag, previousDates,
-                clarifyingQuestions,
-                uniqueId,
-                "someDirectionType"
-        ))
-                .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, null, tag, previousDates,
-                clarifyingQuestions,
-                uniqueId,
-                "someDirectionType"
-        ))
-                .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, dateSent, null, previousDates,
-                clarifyingQuestions,
-                uniqueId,
-                "someDirectionType"
-        ))
-                .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, dateSent, tag, null,
-                clarifyingQuestions,
-                uniqueId,
-                "someDirectionType"
-        ))
-                .isExactlyInstanceOf(NullPointerException.class);
-    }
 }
