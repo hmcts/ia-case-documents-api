@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
@@ -9,6 +8,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 public class Direction {
 
     private String explanation;
+    private String uniqueId;
+    private String directionType;
     private Parties parties;
     private String dateDue;
     private String dateSent;
@@ -21,24 +22,16 @@ public class Direction {
     }
 
     public Direction(
-        String explanation,
-        Parties parties,
-        String dateDue,
-        String dateSent,
-        DirectionTag tag,
-        List<IdValue<PreviousDates>> previousDates
-    ) {
-        this(explanation, parties, dateDue, dateSent, tag, previousDates, emptyList());
-    }
+            String explanation,
+            Parties parties,
+            String dateDue,
+            String dateSent,
+            DirectionTag tag,
+            List<IdValue<PreviousDates>> previousDates,
+            List<IdValue<ClarifyingQuestion>> clarifyingQuestions,
+            String uniqueId,
+            String directionType
 
-    public Direction(
-        String explanation,
-        Parties parties,
-        String dateDue,
-        String dateSent,
-        DirectionTag tag,
-        List<IdValue<PreviousDates>> previousDates,
-        List<IdValue<ClarifyingQuestion>> clarifyingQuestions
     ) {
         requireNonNull(explanation);
         requireNonNull(parties);
@@ -46,7 +39,6 @@ public class Direction {
         requireNonNull(dateSent);
         requireNonNull(tag);
         requireNonNull(previousDates);
-        requireNonNull(clarifyingQuestions);
 
         this.explanation = explanation;
         this.parties = parties;
@@ -55,6 +47,8 @@ public class Direction {
         this.tag = tag;
         this.previousDates = previousDates;
         this.clarifyingQuestions = clarifyingQuestions;
+        this.uniqueId = uniqueId;
+        this.directionType = directionType;
     }
 
     public String getExplanation() {
@@ -88,5 +82,13 @@ public class Direction {
 
     public List<IdValue<ClarifyingQuestion>> getClarifyingQuestions() {
         return clarifyingQuestions;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public String getDirectionType() {
+        return directionType;
     }
 }
