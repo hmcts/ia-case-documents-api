@@ -74,43 +74,44 @@ class DirectionTest {
     void should_not_allow_null_arguments() {
 
         String uniqueId = UUID.randomUUID().toString();
+        List<IdValue<ClarifyingQuestion>> clarifyingQuestions = Collections.emptyList();
         assertThatThrownBy(() -> new Direction(null, parties, dateDue, dateSent, tag, previousDates,
-                Collections.emptyList(),
+                clarifyingQuestions,
                 uniqueId,
                 "someDirectionType"
         ))
                 .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new Direction(explanation, null, dateDue, dateSent, tag, previousDates,
-                Collections.emptyList(),
+                clarifyingQuestions,
                 uniqueId,
                 "someDirectionType"
         ))
                 .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new Direction(explanation, parties, null, dateSent, tag, previousDates,
-                Collections.emptyList(),
+                clarifyingQuestions,
                 uniqueId,
                 "someDirectionType"
         ))
                 .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, null, tag, previousDates,
-                Collections.emptyList(),
+                clarifyingQuestions,
                 uniqueId,
                 "someDirectionType"
         ))
                 .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, dateSent, null, previousDates,
-                Collections.emptyList(),
+                clarifyingQuestions,
                 uniqueId,
                 "someDirectionType"
         ))
                 .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, dateSent, tag, null,
-                Collections.emptyList(),
+                clarifyingQuestions,
                 uniqueId,
                 "someDirectionType"
         ))
