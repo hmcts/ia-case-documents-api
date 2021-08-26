@@ -73,7 +73,7 @@
       },
       {
         "reference": "40830_DECIDE_AN_APPLICATION_HOME_OFFICE",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: Your application has been granted",
         "body": [
           "PA/12345/2019",

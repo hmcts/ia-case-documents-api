@@ -48,7 +48,7 @@
     "notifications": [
       {
         "reference": "2923_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: hearing bundle is ready",
         "body": [
           "PA/12345/2019",

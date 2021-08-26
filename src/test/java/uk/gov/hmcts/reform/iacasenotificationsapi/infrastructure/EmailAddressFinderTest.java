@@ -72,7 +72,8 @@ public class EmailAddressFinderTest {
         assertEquals(listCaseHearingCenterEmailAddress,
             emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
-        assertEquals(hearingCentreEmailAddress,
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(BRADFORD));
+        assertEquals(listCaseHearingCenterEmailAddress,
             emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
     }
 
@@ -80,7 +81,8 @@ public class EmailAddressFinderTest {
     public void should_return_given_list_case_ftpa_email_address_from_lookup_map() {
         assertEquals(listCaseHearingCenterEmailAddress, emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
-        assertEquals(hearingCentreEmailAddress, emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(BRADFORD));
+        assertEquals(listCaseHearingCenterEmailAddress, emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase));
     }
 
     @Test
@@ -108,6 +110,15 @@ public class EmailAddressFinderTest {
         assertThatThrownBy(() -> emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("listCaseHearingCentre is not present");
+    }
+
+    @Test
+    public void should_throw_exception_on_home_office_ftpa_email_address_not_submitted() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> emailAddressFinder.getHomeOfficeFtpaEmailAddress(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("Hearing centre email address not found: taylorHouse");
     }
 
     @Test
@@ -175,7 +186,7 @@ public class EmailAddressFinderTest {
         when(homeOfficeEmailAddresses.get(NORTH_SHIELDS)).thenReturn("ho-north-shields@example.com");
         assertEquals("hc-north-shields@example.com",
             emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
-        assertEquals("hc-north-shields@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        assertEquals("ho-north-shields@example.com", emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
         assertEquals("ho-north-shields@example.com", emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
 
     }

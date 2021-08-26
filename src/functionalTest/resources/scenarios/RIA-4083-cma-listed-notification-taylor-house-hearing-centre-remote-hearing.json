@@ -113,7 +113,7 @@
       },
       {
         "reference": "4083_LIST_CMA_HOME_OFFICE_EMAIL",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: Case Management Appointment date booked",
         "body": [
           "PA/12345/2019",

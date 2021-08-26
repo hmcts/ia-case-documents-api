@@ -98,7 +98,7 @@
       },
       {
         "reference": "345310_MAKE_AN_APPLICATION_HOME_OFFICE",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: Your application has been submitted",
         "body": [
           "PA/12345/2019",

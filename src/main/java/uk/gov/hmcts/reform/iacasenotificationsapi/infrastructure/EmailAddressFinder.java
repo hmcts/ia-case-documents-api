@@ -52,7 +52,7 @@ public class EmailAddressFinder {
 
     public String getListCaseHomeOfficeEmailAddress(AsylumCase asylumCase) {
         if (isRemoteHearing(asylumCase) || isDecisionWithoutHearing(asylumCase)) {
-            return getHearingCentreEmailAddress(asylumCase);
+            return getHomeOfficeEmailAddress(asylumCase);
         } else {
             return asylumCase
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
@@ -66,7 +66,7 @@ public class EmailAddressFinder {
 
     public String getListCaseFtpaHomeOfficeEmailAddress(AsylumCase asylumCase) {
         if (isRemoteHearing(asylumCase) || isDecisionWithoutHearing(asylumCase)) {
-            return getHearingCentreEmailAddress(asylumCase);
+            return getHomeOfficeFtpaEmailAddress(asylumCase);
         } else {
             return asylumCase
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
@@ -112,6 +112,15 @@ public class EmailAddressFinder {
         return asylumCase
                 .read(HEARING_CENTRE, HearingCentre.class)
                 .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeEmailAddresses, it))
+                        .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
+                )
+                .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
+    }
+
+    public String getHomeOfficeFtpaEmailAddress(AsylumCase asylumCase) {
+        return asylumCase
+                .read(HEARING_CENTRE, HearingCentre.class)
+                .map(it -> Optional.ofNullable(getEmailAddress(homeOfficeFtpaEmailAddresses, it))
                         .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
                 )
                 .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));

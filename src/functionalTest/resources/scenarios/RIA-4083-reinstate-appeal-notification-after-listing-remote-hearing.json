@@ -63,7 +63,7 @@
       },
       {
         "reference": "31550_REINSTATE_APPEAL_HOME_OFFICE",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: appeal reinstated",
         "body": [
           "PA/12345/2019",

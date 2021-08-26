@@ -88,7 +88,7 @@
       },
       {
         "reference": "37201_CASE_LISTED_HOME_OFFICE",
-        "recipient": "{$hearingCentreEmailAddresses.birmingham}",
+        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
           "PA/12345/2019",

@@ -113,7 +113,7 @@
       },
       {
         "reference": "1007_LIST_CMA_HOME_OFFICE_EMAIL",
-        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "recipient": "{$homeOfficeEmailAddresses.manchester}",
         "subject": "Immigration and Asylum appeal: Case Management Appointment date booked",
         "body": [
           "PA/12345/2019",
