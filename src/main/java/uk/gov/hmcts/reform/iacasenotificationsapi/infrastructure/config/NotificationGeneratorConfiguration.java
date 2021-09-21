@@ -1456,13 +1456,14 @@ public class NotificationGeneratorConfiguration {
     @Bean("requestResponseAmendDirectionGenerator")
     public List<NotificationGenerator> requestResponseAmendDirectionGenerator(
             RespondentRequestResponseAmendPersonalisation respondentRequestResponseAmendPersonalisation,
+            LegalRepresentativeRequestRespondentAmendDirectionPersonalisation legalRepresentativeRequestRespondentAmendDirectionPersonalisation,
             NotificationSender notificationSender,
             NotificationIdAppender notificationIdAppender) {
 
         // RIA-3631 requestResponseAmend
         return Arrays.asList(
                 new EmailNotificationGenerator(
-                        isHomeOfficeGovNotifyEnabled ? newArrayList(respondentRequestResponseAmendPersonalisation) : emptyList(),
+                        isHomeOfficeGovNotifyEnabled ? newArrayList(respondentRequestResponseAmendPersonalisation, legalRepresentativeRequestRespondentAmendDirectionPersonalisation) : emptyList(),
                         notificationSender,
                         notificationIdAppender
                 )

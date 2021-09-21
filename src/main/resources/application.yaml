@@ -733,6 +733,9 @@ govnotify:
     upperTribunalBundleFailed:
       adminOfficer:
         email: 70ae2c06-4bb4-4ec2-8177-6c187aed39cc
+    amendRespondentEvidenceDirection:
+      legalRep:
+        email: 66a5e934-5875-4e60-a343-356916a112c7
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
