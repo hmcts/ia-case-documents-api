@@ -336,6 +336,11 @@ govnotify:
           email: e299ceb6-1d1e-49d4-82f1-429ff32a7c2f
         beforeListing:
           email: e6a69f4d-48be-40ce-9c5f-10de47cd9dd3
+      appellant:
+        email:
+          afterListing: ab1a7e10-20c0-4960-9330-d4fc0ca8aa80
+          beforeListing: 867e4336-c1fd-4853-81a8-9540a751c844
+        sms: 6af930c5-4775-4149-ba6f-f554198340c4
     changeToHearingRequirements:
       adminOfficer:
         email: 95a45479-1a6e-413b-8d96-1ad1404ab3db

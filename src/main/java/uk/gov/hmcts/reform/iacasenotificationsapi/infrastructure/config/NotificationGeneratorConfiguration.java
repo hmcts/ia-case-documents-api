@@ -299,14 +299,21 @@ public class NotificationGeneratorConfiguration {
     @Bean("respondentChangeDirectionDueDateAipNotificationGenerator")
     public List<NotificationGenerator> respondentChangeDirectionDueDateAipNotificationGenerator(
         RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
+        AppellantChangeDirectionDueDateOfHomeOfficePersonalisationEmail appellantChangeDirectionDueDateOfHomeOfficePersonalisationEmail,
+        AppellantChangeDirectionDueDateOfHomeOfficePersonalisationSms appellantChangeDirectionDueDateOfHomeOfficePersonalisationSms,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(respondentChangeDirectionDueDatePersonalisation),
+                newArrayList(respondentChangeDirectionDueDatePersonalisation, appellantChangeDirectionDueDateOfHomeOfficePersonalisationEmail),
                 notificationSender,
                 notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                    newArrayList(appellantChangeDirectionDueDateOfHomeOfficePersonalisationSms),
+                    notificationSender,
+                    notificationIdAppender
             )
         );
     }
@@ -336,19 +343,26 @@ public class NotificationGeneratorConfiguration {
     @Bean("respondentChangeDirectionDueDateForHomeOfficeApiEventsAipNotificationGenerator")
     public List<NotificationGenerator> respondentChangeDirectionDueDateForHomeOfficeApiEventsAipNotificationGenerator(
         RespondentChangeDirectionDueDatePersonalisation respondentChangeDirectionDueDatePersonalisation,
+        AppellantChangeDirectionDueDateOfHomeOfficePersonalisationEmail appellantChangeDirectionDueDateOfHomeOfficePersonalisationEmail,
+        AppellantChangeDirectionDueDateOfHomeOfficePersonalisationSms appellantChangeDirectionDueDateOfHomeOfficePersonalisationSms,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         // RIA-3116 - changeDirectionDueDate (requestEvidenceBundle, amendRequestBundle, requestRespondentReview, awaitingRespondentEvidence)
         List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
-            ?  newArrayList(respondentChangeDirectionDueDatePersonalisation)
-            : emptyList();
+            ?  newArrayList(respondentChangeDirectionDueDatePersonalisation, appellantChangeDirectionDueDateOfHomeOfficePersonalisationEmail)
+            : newArrayList(appellantChangeDirectionDueDateOfHomeOfficePersonalisationEmail);
 
         return Arrays.asList(
             new EmailNotificationGenerator(
                 personalisations,
                 notificationSender,
                 notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                    newArrayList(appellantChangeDirectionDueDateOfHomeOfficePersonalisationSms),
+                    notificationSender,
+                    notificationIdAppender
             )
         );
     }
