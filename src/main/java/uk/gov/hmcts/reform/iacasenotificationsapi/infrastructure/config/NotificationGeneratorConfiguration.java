@@ -1470,6 +1470,34 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("requestResponseAmendAipDirectionGenerator")
+    public List<NotificationGenerator> requestResponseAmendAipDirectionGenerator(
+            RespondentRequestResponseAmendPersonalisation respondentRequestResponseAmendPersonalisation,
+            AppellantRequestResponseAmendPersonalisationEmail appellantRequestResponseAmendPersonalisationEmail,
+            AppellantRequestResponseAmendPersonalisationSms appellantRequestResponseAmendPersonalisationSms,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
+
+        // RIA-3631 requestResponseAmend
+        return Arrays.asList(
+                new EmailNotificationGenerator(
+                        isHomeOfficeGovNotifyEnabled
+                                ? newArrayList(
+                                        respondentRequestResponseAmendPersonalisation,
+                                        appellantRequestResponseAmendPersonalisationEmail
+                                )
+                                : newArrayList(appellantRequestResponseAmendPersonalisationEmail),
+                        notificationSender,
+                        notificationIdAppender
+                ),
+                new SmsNotificationGenerator(
+                        newArrayList(appellantRequestResponseAmendPersonalisationSms),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
     @Bean("listCmaAipNotificationGenerator")
     public List<NotificationGenerator> listCmaAipNotificationGenerator(
         AppellantListCmaPersonalisationEmail appellantListCmaPersonalisationEmail,
