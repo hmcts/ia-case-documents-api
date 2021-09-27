@@ -862,6 +862,27 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("requestResponseReviewAipNotificationGenerator")
+    public List<NotificationGenerator> requestResponseReviewAipNotificationGenerator(
+        AppellantRequestResponseReviewPersonalisationEmail appellantRequestResponseReviewPersonalisationEmail,
+        AppellantRequestResponseReviewPersonalisationSms appellantRequestResponseReviewPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantRequestResponseReviewPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantRequestResponseReviewPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("respondentEvidenceSubmitted")
     public List<NotificationGenerator> respondentEvidenceSubmitted(
         CaseOfficerRespondentEvidenceSubmittedPersonalisation caseOfficerRespondentEvidenceSubmittedPersonalisation,

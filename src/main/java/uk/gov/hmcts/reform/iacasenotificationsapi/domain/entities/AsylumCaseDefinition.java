@@ -120,6 +120,9 @@ public enum AsylumCaseDefinition {
     LIST_CASE_HEARING_CENTRE(
             "listCaseHearingCentre",  new TypeReference<HearingCentre>(){}),
 
+    APPEAL_REVIEW_OUTCOME(
+        "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){}),
+
     END_APPEAL_OUTCOME(
         "endAppealOutcome", new TypeReference<String>(){}),
 

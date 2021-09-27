@@ -162,6 +162,10 @@ govnotify:
     responseReviewDirection:
       legalRep:
         email: 91d3e99c-ece1-4dd0-bc85-e416ff642b41
+      appellant:
+        withdrawn:
+          email: 08e127f7-07c7-42f5-8a3d-9930eb011868
+          sms: f886d73a-3528-4fbb-82ff-d39b97829c92
     buildCaseDirection:
       legalRep:
         email: b68e1cb2-ec92-488b-ad38-98a30f965419
