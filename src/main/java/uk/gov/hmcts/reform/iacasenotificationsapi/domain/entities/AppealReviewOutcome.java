@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum AppealReviewOutcome {
 
     DECISION_MAINTAINED("decisionMaintained"),
-        DECISION_WITHDRAWN("decisionWithdrawn");
+    DECISION_WITHDRAWN("decisionWithdrawn");
 
     @JsonValue
     private final String value;

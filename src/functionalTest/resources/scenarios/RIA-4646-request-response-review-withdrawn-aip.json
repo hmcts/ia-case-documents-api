@@ -1,5 +1,5 @@
 {
-  "description": "RIA-4646 Send response review direction to Appellant (AIP)",
+  "description": "RIA-4646 Send response review direction to Appellant (AIP) - Decision withdrawn",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -29,7 +29,7 @@
               "id": "1",
               "value": {
                 "explanation": "The Home Office has replied to your Appeal Skeleton Argument and evidence. You should review their response.\n\n# Next steps\n\nYou have 5 days to review the Home Office response. If you want to respond to what they have said, you should email the Tribunal.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
-                "parties": "legalRepresentative",
+                "parties": "appellant",
                 "dateDue": "{$TODAY+5}",
                 "dateSent": "{$TODAY}",
                 "tag": "requestResponseReview"
@@ -67,7 +67,7 @@
             "id": "1",
             "value": {
               "explanation": "The Home Office has replied to your Appeal Skeleton Argument and evidence. You should review their response.\n\n# Next steps\n\nYou have 5 days to review the Home Office response. If you want to respond to what they have said, you should email the Tribunal.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
-              "parties": "legalRepresentative",
+              "parties": "appellant",
               "dateDue": "{$TODAY+5}",
               "dateSent": "{$TODAY}",
               "tag": "requestResponseReview"

@@ -15,9 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealReviewOutcome;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
@@ -35,8 +34,13 @@ class AppellantRequestResponseReviewPersonalisationEmailTest {
     RecipientsFinder recipientsFinder;
     @Mock
     EmailAddressFinder emailAddressFinder;
+    @Mock
+    DirectionFinder directionFinder;
+    @Mock
+    Direction direction;
 
     private String requestResponseReviewWithdrawnTemplateId = "requestResponseReviewWithdrawnTemplateId";
+    private String maintainedResponseReviewDirectionTemplateId = "maintainedResponseReviewDirectionTemplateId";
 
     private Long caseId = 12345L;
     private String iaAipFrontendUrl = "http://localhost";
@@ -48,6 +52,8 @@ class AppellantRequestResponseReviewPersonalisationEmailTest {
     private String mockedAppellantEmailAddress = "appelant@example.net";
     private String mockedAppealHomeOfficeReferenceNumber = "someHomeOfficeReferenceNumber";
     private String designatedHearingCentre = "belfast@hearingcentre.gov";
+    private String directionDueDate = "2019-08-27";
+    private String expectedDirectionDueDate = "27 Aug 2019";
 
     private AppellantRequestResponseReviewPersonalisationEmail
             appellantRequestResponseReviewPersonalisationEmail;
@@ -57,12 +63,17 @@ class AppellantRequestResponseReviewPersonalisationEmailTest {
 
         appellantRequestResponseReviewPersonalisationEmail =
                 new AppellantRequestResponseReviewPersonalisationEmail(
-                        requestResponseReviewWithdrawnTemplateId,
-                        iaAipFrontendUrl, emailAddressFinder, recipientsFinder, customerServicesProvider);
+                        requestResponseReviewWithdrawnTemplateId, maintainedResponseReviewDirectionTemplateId,
+                        iaAipFrontendUrl, emailAddressFinder, recipientsFinder, customerServicesProvider,
+                        directionFinder);
     }
 
     @Test
     void should_return_personalisation_when_all_information_given_before_listing() {
+
+        when((direction.getDateDue())).thenReturn(directionDueDate);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_REVIEW))
+                .thenReturn(Optional.of(direction));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class))
@@ -84,6 +95,7 @@ class AppellantRequestResponseReviewPersonalisationEmailTest {
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
         verify(emailAddressFinder).getHearingCentreEmailAddress(asylumCase);
 
     }
@@ -91,6 +103,9 @@ class AppellantRequestResponseReviewPersonalisationEmailTest {
     @Test
     public void should_return_personalisation_when_only_mandatory_information_given() {
 
+        when((direction.getDateDue())).thenReturn(directionDueDate);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_RESPONSE_REVIEW))
+                .thenReturn(Optional.of(direction));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
         when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(designatedHearingCentre);
@@ -109,6 +124,7 @@ class AppellantRequestResponseReviewPersonalisationEmailTest {
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+        assertEquals(expectedDirectionDueDate, personalisation.get("dueDate"));
         verify(emailAddressFinder).getHearingCentreEmailAddress(asylumCase);
     }
 
@@ -122,12 +138,21 @@ class AppellantRequestResponseReviewPersonalisationEmailTest {
     }
 
     @Test
-    public void should_return_empty_template_id_for_decision_withdrawn() {
+    public void should_return_given_template_id_for_decision_maintained() {
 
         when(asylumCase.read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class))
                 .thenReturn(Optional.of(AppealReviewOutcome.DECISION_MAINTAINED));
 
-        assertEquals("", appellantRequestResponseReviewPersonalisationEmail.getTemplateId(asylumCase));
+        assertEquals(maintainedResponseReviewDirectionTemplateId, appellantRequestResponseReviewPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_throw_exception_on_missing_appeal_review_outcome() {
+
+        assertThatThrownBy(
+                () -> appellantRequestResponseReviewPersonalisationEmail.getTemplateId(asylumCase))
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("AppealReviewOutcome not present");
     }
 
     @Test

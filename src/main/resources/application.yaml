@@ -166,6 +166,9 @@ govnotify:
         withdrawn:
           email: 08e127f7-07c7-42f5-8a3d-9930eb011868
           sms: f886d73a-3528-4fbb-82ff-d39b97829c92
+        maintained:
+          email: 99ede208-a1b3-4e71-8a2e-03ea8bf7caff
+          sms: 62e2bca9-c245-49cb-a7cd-e1afec345d9b
     buildCaseDirection:
       legalRep:
         email: b68e1cb2-ec92-488b-ad38-98a30f965419
