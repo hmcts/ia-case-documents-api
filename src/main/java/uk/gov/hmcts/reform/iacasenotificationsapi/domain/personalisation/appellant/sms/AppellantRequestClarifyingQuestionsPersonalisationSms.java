@@ -60,7 +60,7 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSms implements Sm
                 .findFirst(asylumCase, DirectionTag.REQUEST_CLARIFYING_QUESTIONS)
                 .orElseThrow(() -> new IllegalStateException("direction '" + DirectionTag.REQUEST_CLARIFYING_QUESTIONS + "' is not present"));
 
-        final String dueDate =
+        final String directionDueDate =
             LocalDate
                 .parse(direction.getDateDue())
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
@@ -70,7 +70,7 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSms implements Sm
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Hyperlink to service", iaAipFrontendUrl)
-                .put("due date", dueDate)
+                .put("direction due date", directionDueDate)
                 .build();
     }
 }

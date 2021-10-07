@@ -406,8 +406,8 @@ govnotify:
         sms: 88117492-03e8-4c88-83b1-a172c114e354
     requestClarifyingQuestions:
       appellant:
-        email: 500c6a6f-7d4f-4833-86c4-a07b43bbe717
-        sms: bcfbd5a8-fc88-4c7f-ad16-e28d62dfbe73
+        email: 7fd1c714-36f8-4cac-ac09-dd27b2890c9f
+        sms: e0c912d0-601e-471f-ae2e-2b5852825cdf
     submitClarifyingQuestionAnswers:
       caseOfficer:
         email: 988461af-9111-4b4a-abba-6dfb3a40b422

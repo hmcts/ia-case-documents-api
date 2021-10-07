@@ -121,9 +121,11 @@
           "PA/12345/2019",
           "A1234567",
           "Pablo Jimenez",
+          "Jimenez",
           "{$iaAipFrontendUrl}",
           "{$TODAY+14|d MMM yyyy}",
-          "# How to contact the Tribunal"
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {

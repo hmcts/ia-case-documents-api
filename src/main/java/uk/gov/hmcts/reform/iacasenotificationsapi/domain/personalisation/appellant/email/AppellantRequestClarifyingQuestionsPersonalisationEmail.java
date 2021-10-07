@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
 public class AppellantRequestClarifyingQuestionsPersonalisationEmail implements EmailNotificationPersonalisation {
@@ -21,17 +22,20 @@ public class AppellantRequestClarifyingQuestionsPersonalisationEmail implements 
     private final String iaAipFrontendUrl;
     private final DirectionFinder directionFinder;
     private final RecipientsFinder recipientsFinder;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public AppellantRequestClarifyingQuestionsPersonalisationEmail(
         @Value("${govnotify.template.requestClarifyingQuestions.appellant.email}") String requestClarifyingQuestionsEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         DirectionFinder directionFinder,
-        RecipientsFinder recipientsFinder
+        RecipientsFinder recipientsFinder,
+        CustomerServicesProvider customerServicesProvider
     ) {
         this.requestClarifyingQuestionsEmailTemplateId = requestClarifyingQuestionsEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.directionFinder = directionFinder;
         this.recipientsFinder = recipientsFinder;
+        this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class AppellantRequestClarifyingQuestionsPersonalisationEmail implements 
                 .findFirst(asylumCase, DirectionTag.REQUEST_CLARIFYING_QUESTIONS)
                 .orElseThrow(() -> new IllegalStateException("direction '" + DirectionTag.REQUEST_CLARIFYING_QUESTIONS + "' is not present"));
 
-        final String dueDate =
+        final String directionDueDate =
             LocalDate
                 .parse(direction.getDateDue())
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
@@ -67,12 +71,13 @@ public class AppellantRequestClarifyingQuestionsPersonalisationEmail implements 
         return
             ImmutableMap
                 .<String, String>builder()
+                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("HO Ref Number", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Given names", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("Family name", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .put("Hyperlink to service", iaAipFrontendUrl)
-                .put("due date", dueDate)
+                .put("direction due date", directionDueDate)
                 .build();
     }
 }

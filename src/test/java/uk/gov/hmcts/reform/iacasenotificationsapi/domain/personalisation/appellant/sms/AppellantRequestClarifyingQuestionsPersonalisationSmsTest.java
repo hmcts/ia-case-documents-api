@@ -25,7 +25,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinde
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
+class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
 
     @Mock
     AsylumCase asylumCase;
@@ -36,21 +36,21 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
     @Mock
     Direction direction;
 
-    private Long caseId = 12345L;
-    private String smsTemplateId = "someSmsTemplateId";
-    private String iaAipFrontendUrl = "http://localhost";
+    private final Long caseId = 12345L;
+    private final String smsTemplateId = "someSmsTemplateId";
+    private final String iaAipFrontendUrl = "http://localhost";
 
-    private String mockedAppealReferenceNumber = "someReferenceNumber";
-    private String mockedAppellantMobilePhone = "07123456789";
+    private final String mockedAppealReferenceNumber = "someReferenceNumber";
+    private final String mockedAppellantMobilePhone = "07123456789";
 
-    private String directionDueDate = "2019-08-27";
-    private String expectedDirectionDueDate = "27 Aug 2019";
+    private final String directionDueDate = "2019-08-27";
+    private final String expectedDirectionDueDate = "27 Aug 2019";
 
     private AppellantRequestClarifyingQuestionsPersonalisationSms
         appellantRequestClarifyingQuestionsSubmissionPersonalisationSms;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
 
         when((direction.getDateDue())).thenReturn(directionDueDate);
@@ -71,18 +71,18 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
     }
 
     @Test
-    public void should_return_given_template_id() {
+    void should_return_given_template_id() {
         assertEquals(smsTemplateId, appellantRequestClarifyingQuestionsSubmissionPersonalisationSms.getTemplateId());
     }
 
     @Test
-    public void should_return_given_reference_id() {
+    void should_return_given_reference_id() {
         assertEquals(caseId + "_REQUEST_CLARIFYING_QUESTIONS_APPELLANT_AIP_SMS",
             appellantRequestClarifyingQuestionsSubmissionPersonalisationSms.getReferenceId(caseId));
     }
 
     @Test
-    public void should_throw_exception_on_recipients_when_case_is_null() {
+    void should_throw_exception_on_recipients_when_case_is_null() {
 
         when(recipientsFinder.findAll(null, NotificationType.SMS))
             .thenThrow(new NullPointerException("asylumCase must not be null"));
@@ -94,7 +94,7 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_direction_is_empty() {
+    void should_throw_exception_on_personalisation_when_direction_is_empty() {
 
         when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_CLARIFYING_QUESTIONS))
             .thenReturn(Optional.empty());
@@ -107,7 +107,7 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
 
 
     @Test
-    public void should_return_given_mobile_mobile_list_from_subscribers_in_asylum_case() {
+    void should_return_given_mobile_mobile_list_from_subscribers_in_asylum_case() {
 
         when(recipientsFinder.findAll(asylumCase, NotificationType.SMS))
             .thenReturn(Collections.singleton(mockedAppellantMobilePhone));
@@ -117,7 +117,7 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(
             () -> appellantRequestClarifyingQuestionsSubmissionPersonalisationSms.getPersonalisation((AsylumCase) null))
@@ -126,18 +126,18 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given() {
+    void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
             appellantRequestClarifyingQuestionsSubmissionPersonalisationSms.getPersonalisation(asylumCase);
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("direction due date"));
 
     }
 
     @Test
-    public void should_return_personalisation_when_only_mandatory_information_given() {
+    void should_return_personalisation_when_only_mandatory_information_given() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
@@ -146,6 +146,6 @@ public class AppellantRequestClarifyingQuestionsPersonalisationSmsTest {
 
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
-        assertEquals(expectedDirectionDueDate, personalisation.get("due date"));
+        assertEquals(expectedDirectionDueDate, personalisation.get("direction due date"));
     }
 }
