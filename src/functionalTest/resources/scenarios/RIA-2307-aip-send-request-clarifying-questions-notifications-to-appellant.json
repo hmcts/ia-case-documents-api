@@ -116,7 +116,7 @@
       {
         "reference": "1005_REQUEST_CLARIFYING_QUESTIONS_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "You need to answers some questions about your appeal",
+        "subject": "Immigration and Asylum appeal: You need to answers some questions about your appeal",
         "body": [
           "PA/12345/2019",
           "A1234567",
