@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITH_HEARING;
@@ -159,15 +160,20 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
                 .orElseThrow(
                     () -> new IllegalStateException("Appeal reference number is not present for caseId: " + caseId)
                 );
+            String appellantFamilyName = asylumCase.read(APPELLANT_FAMILY_NAME, String.class)
+                .orElseThrow(
+                    () -> new IllegalStateException("Appellant family name is not present for caseId: " + caseId)
+                );
             String customerReference = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
                 .orElseThrow(
                     () -> new IllegalStateException("Legal rep reference number is not present for caseId: " + caseId)
                 );
 
+            String caseReference = appendCaseReferenceAndAppellantName(appealReferenceNumber, appellantFamilyName);
             CreditAccountPayment creditAccountPayment = new CreditAccountPayment(
                 pbaNumber,
                 feeSelected.getCalculatedAmount(),
-                appealReferenceNumber,
+                caseReference,
                 String.valueOf(caseId),
                 Currency.GBP,
                 customerReference,
@@ -302,5 +308,10 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             }
         }
         return null;
+    }
+
+    public String appendCaseReferenceAndAppellantName(String caseReference, String appellantSurnameName) {
+
+        return caseReference + "_" + appellantSurnameName;
     }
 }

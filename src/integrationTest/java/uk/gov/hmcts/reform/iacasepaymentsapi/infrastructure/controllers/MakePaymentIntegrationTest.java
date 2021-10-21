@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
@@ -63,6 +64,7 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                 .state(State.APPEAL_STARTED)
                 .caseData(anAsylumCase()
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
+                    .with(APPELLANT_FAMILY_NAME, "some-appellant-family-name")
                     .with(LEGAL_REP_REFERENCE_NUMBER, "some-legal-reference")
                     .with(APPEAL_TYPE, "refusalOfEu")
                     .with(DECISION_HEARING_FEE_OPTION, "decisionWithHearing")
@@ -88,6 +90,7 @@ public class MakePaymentIntegrationTest extends SpringBootIntegrationTest
                 .state(State.APPEAL_STARTED)
                 .caseData(anAsylumCase()
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
+                    .with(APPELLANT_FAMILY_NAME, "some-appellant-family-name")
                     .with(LEGAL_REP_REFERENCE_NUMBER, "some-legal-reference")
                     .with(APPEAL_TYPE, "refusalOfEu")
                     .with(DECISION_HEARING_FEE_OPTION, "decisionWithoutHearing")
