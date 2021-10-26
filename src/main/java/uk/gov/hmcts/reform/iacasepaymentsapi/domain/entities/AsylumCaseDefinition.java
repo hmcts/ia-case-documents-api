@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus;
 
 public enum AsylumCaseDefinition {
@@ -61,6 +62,8 @@ public enum AsylumCaseDefinition {
         "decisionWithoutHearing", new TypeReference<String>(){}),
     DECISION_HEARING_FEE_OPTION(
         "decisionHearingFeeOption", new TypeReference<String>(){}),
+    HAS_PBA_ACCOUNTS(
+        "hasPbaAccounts", new TypeReference<YesOrNo>(){}),
 
     REMISSION_TYPE(
         "remissionType", new TypeReference<RemissionType>(){});
