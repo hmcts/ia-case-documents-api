@@ -2669,38 +2669,41 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> editPaymentMethodNotificationHandler(
-        @Qualifier("editPaymentMethodNotificationGenerator") List<NotificationGenerator> notificationGenerators
+            @Qualifier("editPaymentMethodNotificationGenerator") List<NotificationGenerator> notificationGenerators
     ) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> {
+                (callbackStage, callback) -> {
 
-                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                    final State state = callback.getCaseDetails().getState();
 
-                boolean isEaAndHuAppealType = asylumCase
-                    .read(APPEAL_TYPE, AppealType.class)
-                    .map(type -> type == EA || type == HU).orElse(false);
+                    boolean isEaAndHuAppealType = asylumCase
+                            .read(APPEAL_TYPE, AppealType.class)
+                            .map(type -> type == EA || type == HU).orElse(false);
 
-                return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                        && callback.getEvent() == Event.EDIT_PAYMENT_METHOD
-                        && isEaAndHuAppealType);
-            }, notificationGenerators
+                    return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.EDIT_PAYMENT_METHOD
+                            && state != State.APPEAL_STARTED
+                            && isEaAndHuAppealType);
+                }, notificationGenerators
         );
     }
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> editPaymentMethodAoNotificationHandler(
-        @Qualifier("editPaymentMethodAoNotificationGenerator") List<NotificationGenerator> notificationGenerators
+            @Qualifier("editPaymentMethodAoNotificationGenerator") List<NotificationGenerator> notificationGenerators
     ) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> {
+                (callbackStage, callback) -> {
 
-                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                    final State state = callback.getCaseDetails().getState();
 
-                return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                        && callback.getEvent() == Event.EDIT_PAYMENT_METHOD);
-            }, notificationGenerators
+                    return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.EDIT_PAYMENT_METHOD
+                            && state != State.APPEAL_STARTED);
+                }, notificationGenerators
         );
     }
 

@@ -2395,40 +2395,39 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-
     @Bean("editPaymentMethodNotificationGenerator")
     public List<NotificationGenerator> editPaymentMethodNotificationHandler(
-        LegalRepresentativeAppealSubmittedPendingPaymentPersonalisation legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
-        HomeOfficeAppealSubmittedPendingPaymentPersonalisation homeOfficeAppealSubmittedPendingPaymentPersonalisation,
-        NotificationSender notificationSender,
-        NotificationIdAppender notificationIdAppender) {
+            LegalRepresentativeAppealSubmittedPendingPaymentPersonalisation legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
+            HomeOfficeAppealSubmittedPendingPaymentPersonalisation homeOfficeAppealSubmittedPendingPaymentPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(
-            new EmailNotificationGenerator(
-                newArrayList(
-                    legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
-                    homeOfficeAppealSubmittedPendingPaymentPersonalisation
-                ),
-                notificationSender,
-                notificationIdAppender
-            )
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                legalRepresentativeAppealSubmittedPendingPaymentPersonalisation,
+                                homeOfficeAppealSubmittedPendingPaymentPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
         );
     }
 
     @Bean("editPaymentMethodAoNotificationGenerator")
     public List<NotificationGenerator> editPaymentMethodAoNotificationHandler(
-        AdminOfficerEditPaymentMethodPersonalisation adminOfficerEditPaymentMethodPersonalisation,
-        NotificationSender notificationSender,
-        NotificationIdAppender notificationIdAppender) {
+            AdminOfficerEditPaymentMethodPersonalisation adminOfficerEditPaymentMethodPersonalisation,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender) {
 
         return Collections.singletonList(
-            new EmailNotificationGenerator(
-                newArrayList(
-                    adminOfficerEditPaymentMethodPersonalisation
-                ),
-                notificationSender,
-                notificationIdAppender
-            )
+                new EmailNotificationGenerator(
+                        newArrayList(
+                                adminOfficerEditPaymentMethodPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
         );
     }
 
