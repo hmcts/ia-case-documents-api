@@ -2579,4 +2579,25 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
+
+    @Bean("requestHearingRequirementsAipNotificationGenerator")
+    public List<NotificationGenerator> requestHearingRequirementsAipNotificationGenerator(
+        AppellantRequestHearingRequirementsPersonalisationEmail appellantRequestHearingRequirementsPersonalisationEmail,
+        AppellantRequestHearingRequirementsPersonalisationSms appellantRequestHearingRequirementsPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantRequestHearingRequirementsPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantRequestHearingRequirementsPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }

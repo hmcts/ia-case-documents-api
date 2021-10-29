@@ -1,17 +1,12 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.DC;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.EA;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.HU;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.PA;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.RP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.REP;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.OutOfTimeDecisionType.*;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.APPROVED;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.REJECTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.OutOfTimeDecisionType.IN_TIME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.OutOfTimeDecisionType.UNKNOWN;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.BUILD_CASE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus.*;
@@ -483,7 +478,22 @@ public class NotificationHandlerConfiguration {
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.REQUEST_HEARING_REQUIREMENTS_FEATURE,
+                    && callback.getEvent() == Event.REQUEST_HEARING_REQUIREMENTS_FEATURE
+                    && isRepJourney(callback.getCaseDetails().getCaseData()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> requestHearingRequirementsAipNotificationHandler(
+        @Qualifier("requestHearingRequirementsAipNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.REQUEST_HEARING_REQUIREMENTS_FEATURE
+                    && isAipJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerators
         );
     }
