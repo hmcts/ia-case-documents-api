@@ -234,7 +234,8 @@ public class AppealSkeletonBundleGeneratorTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                RandomStringUtils.randomAlphabetic(20),
+                "some-hash");
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,6 +33,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,19 +97,19 @@ class CustomiseHearingBundlePreparerTest {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
 
         List<IdValue<DocumentWithDescription>> customCollections =
-            asList(new IdValue("1", createDocumentWithDescription()));
+            singletonList(new IdValue<>("1", createDocumentWithDescription()));
         List<IdValue<DocumentWithMetadata>> hearingDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test")));
 
         List<IdValue<DocumentWithMetadata>> legalDocumentList = asList(
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.CASE_ARGUMENT, "test")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.APPEAL_SUBMISSION, "tes")),
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.CASE_SUMMARY, "test")));
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.CASE_ARGUMENT, "test")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.APPEAL_SUBMISSION, "tes")),
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.CASE_SUMMARY, "test")));
 
         List<IdValue<DocumentWithMetadata>> additionalEvidenceList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test")));
         List<IdValue<DocumentWithMetadata>> respondentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.RESPONDENT_EVIDENCE, "test")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.RESPONDENT_EVIDENCE, "test")));
 
         when(appender.append(any(DocumentWithDescription.class), anyList()))
             .thenReturn(customCollections);
@@ -147,25 +149,25 @@ class CustomiseHearingBundlePreparerTest {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
 
         final List<IdValue<DocumentWithDescription>> customDocumentList =
-            asList(new IdValue("1", createDocumentWithDescription()));
+            singletonList(new IdValue<>("1", createDocumentWithDescription()));
 
         final List<IdValue<DocumentWithMetadata>> hearingDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.REHEARD_HEARING_NOTICE, "test")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.REHEARD_HEARING_NOTICE, "test")));
         final List<IdValue<DocumentWithMetadata>> ftpaAppellantEvidenceDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
         final List<IdValue<DocumentWithMetadata>> ftpaRespondentEvidenceDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
         final List<IdValue<DocumentWithMetadata>> ftpaAppellantDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.FTPA_APPELLANT, "test")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_APPELLANT, "test")));
         final List<IdValue<DocumentWithMetadata>> ftpaRespondentDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.FTPA_RESPONDENT, "test")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_RESPONDENT, "test")));
         final List<IdValue<DocumentWithMetadata>> finalDecisionAndReasonsDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "test")));
+            singletonList(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "test")));
 
         final List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentList = asList(
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
         when(appender.append(any(DocumentWithDescription.class), anyList()))
             .thenReturn(customDocumentList);
@@ -217,37 +219,37 @@ class CustomiseHearingBundlePreparerTest {
             .thenReturn(customCollections);
 
         DocumentWithMetadata legalDocument = new DocumentWithMetadata(
-            new Document("documentUrl", "binaryUrl", "documentFilename"),
+            new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
             "description",
             "dateUploaded",
             DocumentTag.CASE_ARGUMENT
         );
         List<IdValue<DocumentWithMetadata>> legalDocumentList = asList(
-            new IdValue<DocumentWithMetadata>(
+            new IdValue<>(
                 "1",
                 legalDocument
             ),
-            new IdValue<DocumentWithMetadata>(
+            new IdValue<>(
                 "2",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
                     "description",
                     "dateUploaded",
                     DocumentTag.APPEAL_SUBMISSION
                 )
             ),
-            new IdValue<DocumentWithMetadata>(
+            new IdValue<>(
                 "3",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
                     "description",
                     "dateUploaded",
                     DocumentTag.CASE_SUMMARY
                 )
-            ), new IdValue<DocumentWithMetadata>(
+            ), new IdValue<>(
                 "4",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
                     "description",
                     "dateUploaded",
                     DocumentTag.APPEAL_RESPONSE
@@ -288,41 +290,41 @@ class CustomiseHearingBundlePreparerTest {
             .thenReturn(customCollections);
 
         DocumentWithMetadata addendumEvidenceDocuments = new DocumentWithMetadata(
-            new Document("documentUrl", "binaryUrl", "documentFilename"),
+            new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
             "description",
             "dateUploaded",
             DocumentTag.ADDENDUM_EVIDENCE,
             "test"
         );
         List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentsList = asList(
-            new IdValue<DocumentWithMetadata>(
+            new IdValue<>(
                 "1",
                 addendumEvidenceDocuments
             ),
-            new IdValue<DocumentWithMetadata>(
+            new IdValue<>(
                 "2",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
                     "description",
                     "dateUploaded",
                     DocumentTag.ADDENDUM_EVIDENCE,
                     "The appellant"
                 )
             ),
-            new IdValue<DocumentWithMetadata>(
+            new IdValue<>(
                 "3",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
                     "description",
                     "dateUploaded",
                     DocumentTag.ADDENDUM_EVIDENCE,
                     "The respondent"
                 )
             ),
-            new IdValue<DocumentWithMetadata>(
+            new IdValue<>(
                 "4",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document("documentUrl", "binaryUrl", "documentFilename",UUID.randomUUID().toString()),
                     "description",
                     "dateUploaded",
                     DocumentTag.ADDENDUM_EVIDENCE,
@@ -440,14 +442,16 @@ class CustomiseHearingBundlePreparerTest {
         return
             new DocumentWithDescription(new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20)), "test");
+                RandomStringUtils.randomAlphabetic(20),
+                UUID.randomUUID().toString()), "test");
     }
 
     private Document createDocument() {
         return
             new Document("some-url",
                 "some-binary-url",
-                "some-filename");
+                "some-filename",
+                UUID.randomUUID().toString());
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag, String suppliedBy) {

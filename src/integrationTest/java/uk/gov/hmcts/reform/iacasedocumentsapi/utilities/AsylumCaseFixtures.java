@@ -64,7 +64,8 @@ public class AsylumCaseFixtures {
     public static Document someDocumentWithDefaults() {
         return new Document("some-doc-url",
             "some-doc-bin-url",
-            "some-filename");
+            "some-filename",
+            "some-hash");
     }
 
     private static String someDate() {
@@ -76,15 +77,14 @@ public class AsylumCaseFixtures {
     }
 
     public static String someUploadResponse() {
-        return "{\n"
-               +
-               "  \"_embedded\": {\n"
-               +
-               "    \"documents\": [\n"
+        return
+               "  {   \"documents\": [\n"
                +
                "      {\n"
                +
                "        \"originalDocumentName\": \"some-document-name\",\n"
+               +
+               "        \"hashToken\": \"some-hash\",\n"
                +
                "        \"_links\": {\n"
                +
@@ -106,9 +106,7 @@ public class AsylumCaseFixtures {
                +
                "    ]\n"
                +
-               "  }\n"
-               +
-               "}\n";
+               "  }\n";
     }
 
     public static String someUserDetails() {

@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
 @ExtendWith(MockitoExtension.class)
-public class SendDecisionAndReasonsPdfServiceTest {
+class SendDecisionAndReasonsPdfServiceTest {
 
     private final String binaryDocumentUrl = "binary-document-url";
 
@@ -54,7 +54,7 @@ public class SendDecisionAndReasonsPdfServiceTest {
     }
 
     @Test
-    public void downloads__converts__and_uploads_final_decision_and_reasons_pdf() {
+    void downloads__converts__and_uploads_final_decision_and_reasons_pdf() {
 
 
         when(caseDetails.getCaseData())
@@ -72,7 +72,7 @@ public class SendDecisionAndReasonsPdfServiceTest {
         when(wordDocumentToPdfConverter.convertResourceToPdf(finalDecisionAndReasonsResource))
                 .thenReturn(convertedPdf);
 
-        when(documentUploader.upload(any(ByteArrayResource.class), eq("application/pdf")))
+        when(documentUploader.upload(any(ByteArrayResource.class), any(),any(),any(),eq("application/pdf")))
                 .thenReturn(uploadedDocument);
 
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
@@ -88,13 +88,13 @@ public class SendDecisionAndReasonsPdfServiceTest {
         verify(wordDocumentToPdfConverter, times(1))
             .convertResourceToPdf(finalDecisionAndReasonsResource);
         verify(documentUploader, times(1))
-            .upload(any(ByteArrayResource.class), eq("application/pdf"));
+            .upload(any(ByteArrayResource.class), any(),any(),any(),eq("application/pdf"));
         verify(caseDetails.getCaseData(),times(1)).write(FINAL_DECISION_AND_REASONS_PDF,uploadedDecisionAndReasonsPdf);
 
     }
 
     @Test
-    public void throws_when_draft_document_missing() {
+    void throws_when_draft_document_missing() {
 
 
         when(caseDetails.getCaseData())
@@ -113,7 +113,7 @@ public class SendDecisionAndReasonsPdfServiceTest {
     }
 
     @Test
-    public void throws_when_draft_appeal_reference_number_missing() {
+    void throws_when_draft_appeal_reference_number_missing() {
 
 
         when(caseDetails.getCaseData())
@@ -141,7 +141,7 @@ public class SendDecisionAndReasonsPdfServiceTest {
     }
 
     @Test
-    public void throws_when_draft_appellant_family_name_missing() {
+    void throws_when_draft_appellant_family_name_missing() {
 
 
         when(caseDetails.getCaseData())

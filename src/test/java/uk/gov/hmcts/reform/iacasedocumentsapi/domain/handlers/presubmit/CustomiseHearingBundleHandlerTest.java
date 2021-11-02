@@ -53,6 +53,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.apache.commons.lang.RandomStringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -564,14 +565,16 @@ class CustomiseHearingBundleHandlerTest {
         return
             new DocumentWithDescription(new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20)), "test");
+                RandomStringUtils.randomAlphabetic(20),
+                UUID.randomUUID().toString()), "test");
     }
 
     private Document createDocument() {
         return
             new Document("some-url",
                 "some-binary-url",
-                "some-filename");
+                "some-filename",
+                "some-hash");
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag, String suppliedBy) {

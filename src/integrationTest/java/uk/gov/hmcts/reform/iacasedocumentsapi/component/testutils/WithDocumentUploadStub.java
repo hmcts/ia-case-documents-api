@@ -13,10 +13,11 @@ public interface WithDocumentUploadStub {
     default void addDocumentUploadStub(WireMockServer server) {
         server.addStubMapping(
                 new StubMapping(
-                        newRequestPattern(RequestMethod.POST, urlEqualTo("/documents"))
+                        newRequestPattern(RequestMethod.POST, urlEqualTo("/cases/documents"))
                                 .build(),
                         aResponse()
                                 .withStatus(201)
+                                .withHeader("Content-Type","application/json")
                                 .withBody(someUploadResponse())
                                 .build()));
     }

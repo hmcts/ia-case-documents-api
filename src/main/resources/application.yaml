@@ -131,6 +131,7 @@ cmaAppointmentNotice.fileExtension: PDF
 cmaAppointmentNotice.fileName: "Case-management-appointment-notice"
 cmaAppointmentNotice.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00504.docx}
 
+case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://localhost:4455}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 

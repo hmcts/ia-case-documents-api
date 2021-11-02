@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CLASSIFICATION;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,15 +40,16 @@ public class SendDecisionAndReasonsPdfService {
 
     public Document generatePdf(CaseDetails<AsylumCase> caseDetails) {
 
-        Document finalPdf = createFinalPdf(caseDetails.getCaseData());
+        Document finalPdf = createFinalPdf(caseDetails);
 
         caseDetails.getCaseData().write(FINAL_DECISION_AND_REASONS_PDF, finalPdf);
 
         return finalPdf;
     }
 
-    private Document createFinalPdf(AsylumCase asylumCase) {
+    private Document createFinalPdf(CaseDetails<AsylumCase> caseDetails) {
 
+        AsylumCase asylumCase = caseDetails.getCaseData();
         Document finalDecisionAndReasonsDoc = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class)
             .orElseThrow(
                 () -> new IllegalStateException("finalDecisionAndReasonsDocument must be present"));
@@ -61,7 +64,7 @@ public class SendDecisionAndReasonsPdfService {
             finalDecisionAndReasonsPdf,
             getDecisionAndReasonsFilename(asylumCase));
 
-        return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
+        return documentUploader.upload(byteArrayResource, CLASSIFICATION,CASE_TYPE_ID,caseDetails.getJurisdiction(),PDF_CONTENT_TYPE);
     }
 
     private ByteArrayResource getByteArrayResource(File finalDecisionAndReasonsPdf, String filename) {
