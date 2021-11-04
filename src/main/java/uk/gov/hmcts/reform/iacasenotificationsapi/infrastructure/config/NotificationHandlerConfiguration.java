@@ -2695,9 +2695,19 @@ public class NotificationHandlerConfiguration {
                     return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                             && callback.getEvent() == Event.EDIT_PAYMENT_METHOD
                             && state != State.APPEAL_STARTED
-                            && isEaAndHuAppealType);
+                            && isEaAndHuAppealType
+                            && !isRemissionRejectedAndPaymentChangedToCard(asylumCase)
+                        );
                 }, notificationGenerators
         );
+    }
+
+    private boolean isRemissionRejectedAndPaymentChangedToCard(AsylumCase asylumCase) {
+
+        Optional<RemissionDecision> optionalRemissionDecision =
+                asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
+
+        return optionalRemissionDecision.isPresent() && optionalRemissionDecision.get() == REJECTED;
     }
 
     @Bean
