@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITHOUT_HEARING;
@@ -14,7 +15,9 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_PBA_ACCOUNTS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType.HELP_WITH_FEES;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType.NO_REMISSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
@@ -37,6 +40,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDetails;
@@ -228,6 +232,7 @@ class PaymentAppealPreparerTest {
             .thenReturn(organisationResponse);
         when(organisationEntityResponse.getPaymentAccount()).thenReturn(accountsFromOrg);
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(hearingType));
         when(feeService.getFee(feeType)).thenReturn(fee);
@@ -242,6 +247,72 @@ class PaymentAppealPreparerTest {
             verify(asylumCase, times(1)).write(FEE_WITHOUT_HEARING, fee.getAmountAsString());
         }
         verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_PENDING);
+    }
+
+    @ParameterizedTest
+    @MethodSource("feeOptionParameters")
+    void should_return_valid_fee_for_decision_with_hearing_with_remission_rejected(
+        Event event, String hearingType, FeeType feeType, Fee fee
+    ) {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getEvent()).thenReturn(event);
+        when(refDataService.getOrganisationResponse())
+            .thenReturn(organisationResponse);
+
+        List<String> accountsFromOrg = new ArrayList<String>();
+        accountsFromOrg.add("PBA1234567");
+
+        when(refDataService.getOrganisationResponse())
+            .thenReturn(organisationResponse);
+        when(organisationEntityResponse.getPaymentAccount()).thenReturn(accountsFromOrg);
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(HELP_WITH_FEES));
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
+            .thenReturn(Optional.of(RemissionDecision.REJECTED));
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(hearingType));
+        when(feeService.getFee(feeType)).thenReturn(fee);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealPreparer
+            .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        assertThat(callbackResponse.getData()).isEqualTo(asylumCase);
+
+        if (feeType == FeeType.FEE_WITH_HEARING) {
+            verify(asylumCase, times(1)).write(FEE_WITH_HEARING, fee.getAmountAsString());
+        } else {
+            verify(asylumCase, times(1)).write(FEE_WITHOUT_HEARING, fee.getAmountAsString());
+        }
+        verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_PENDING);
+    }
+
+    @ParameterizedTest
+    @MethodSource("feeOptionParameters")
+    void should_not_return_valid_pba_accounts_but_return_fee_for_decision_with_hearing_with_remission_approved(
+        Event event, String hearingType, FeeType feeType, Fee fee
+    ) {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getEvent()).thenReturn(event);
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(HELP_WITH_FEES));
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
+            .thenReturn(Optional.of(RemissionDecision.APPROVED));
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(hearingType));
+        when(feeService.getFee(feeType)).thenReturn(fee);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealPreparer
+            .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        assertThat(callbackResponse.getData()).isEqualTo(asylumCase);
+
+        if (feeType == FeeType.FEE_WITH_HEARING) {
+            verify(asylumCase, times(1)).write(FEE_WITH_HEARING, fee.getAmountAsString());
+        } else {
+            verify(asylumCase, times(1)).write(FEE_WITHOUT_HEARING, fee.getAmountAsString());
+        }
+        verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_PENDING);
+        verifyNoInteractions(refDataService);
     }
 
     private static Stream<Arguments> feeOptionParameters() {
@@ -279,6 +350,7 @@ class PaymentAppealPreparerTest {
             .thenReturn(organisationResponse);
         when(organisationEntityResponse.getPaymentAccount()).thenReturn(accountsFromOrg);
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(hearingType));
         when(feeService.getFee(feeType)).thenReturn(null);

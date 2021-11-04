@@ -65,6 +65,9 @@ public enum AsylumCaseDefinition {
     HAS_PBA_ACCOUNTS(
         "hasPbaAccounts", new TypeReference<YesOrNo>(){}),
 
+    REMISSION_DECISION(
+        "remissionDecision", new TypeReference<RemissionDecision>(){}),
+
     REMISSION_TYPE(
         "remissionType", new TypeReference<RemissionType>(){});
 
