@@ -4,16 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITHOUT_HEARING;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.DECISION_WITH_HEARING;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_CODE;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_DESCRIPTION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_PAYMENT_APPEAL_TYPE;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_VERSION;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITHOUT_HEARING;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
@@ -31,7 +22,6 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Paym
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +37,6 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSub
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationEntityResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.CreditAccountPayment;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Currency;
@@ -120,13 +109,11 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             );
         asylumCase.write(FEE_PAYMENT_APPEAL_TYPE, YesOrNo.NO);
 
-        Fee feeSelected = getFeeTypeWriteAppealPaymentDetailsToCaseData(appealType, asylumCase);
+        Fee feeSelected = FeesHelper.findFeeByHearingType(feeService, asylumCase);
 
         log.info("Selected Fee for caseId: {}, {}", caseId, feeSelected);
 
         if (feeSelected != null) {
-
-            writeFeeDetailsToCaseData(asylumCase, feeSelected);
 
             String pbaAccountNumber = asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class)
                 .map(DynamicList::getValue)
@@ -225,17 +212,6 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    private void writeFeeDetailsToCaseData(AsylumCase asylumCase, Fee fee) {
-
-        String feeAmountInPence =
-            String.valueOf(new BigDecimal(fee.getAmountAsString()).multiply(new BigDecimal("100")));
-        asylumCase.write(FEE_CODE, fee.getCode());
-        asylumCase.write(FEE_DESCRIPTION, fee.getDescription());
-        asylumCase.write(FEE_VERSION, fee.getVersion());
-        asylumCase.write(FEE_AMOUNT_GBP, feeAmountInPence);
-        asylumCase.write(FEE_PAYMENT_APPEAL_TYPE, YesOrNo.YES);
-    }
-
     public PaymentResponse makePayment(CreditAccountPayment creditAccountPayment) {
 
         requireNonNull(creditAccountPayment, "creditAccountPayment must not be null");
@@ -280,34 +256,6 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
             );
             asylumCase.clear(PAYMENT_FAILED_FOR_DISPLAY);
         }
-    }
-
-    public Fee getFeeTypeWriteAppealPaymentDetailsToCaseData(AppealType appealType, AsylumCase asylumCase) {
-
-        if (appealType.equals(AppealType.EA)
-            || appealType.equals(AppealType.HU)
-            || appealType.equals(AppealType.PA)) {
-
-            String hearingFeeOption = asylumCase
-                .read(DECISION_HEARING_FEE_OPTION, String.class).orElse("");
-
-            if (hearingFeeOption.equals(DECISION_WITH_HEARING.value())) {
-
-                Fee feeWithHearing = feeService.getFee(FeeType.FEE_WITH_HEARING);
-                asylumCase.write(FEE_WITH_HEARING, feeWithHearing.getAmountAsString());
-                asylumCase.write(PAYMENT_DESCRIPTION, "Appeal determined with a hearing");
-
-                return feeWithHearing;
-
-            } else if (hearingFeeOption.equals(DECISION_WITHOUT_HEARING.value())) {
-
-                Fee feeWithoutHearing = feeService.getFee(FeeType.FEE_WITHOUT_HEARING);
-                asylumCase.write(PAYMENT_DESCRIPTION, "Appeal determined without a hearing");
-                asylumCase.write(FEE_WITHOUT_HEARING, feeWithoutHearing.getAmountAsString());
-                return feeWithoutHearing;
-            }
-        }
-        return null;
     }
 
     public String appendCaseReferenceAndAppellantName(String caseReference, String appellantSurnameName) {

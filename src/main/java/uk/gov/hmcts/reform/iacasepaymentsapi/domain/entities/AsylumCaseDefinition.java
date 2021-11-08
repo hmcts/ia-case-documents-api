@@ -64,10 +64,10 @@ public enum AsylumCaseDefinition {
         "decisionHearingFeeOption", new TypeReference<String>(){}),
     HAS_PBA_ACCOUNTS(
         "hasPbaAccounts", new TypeReference<YesOrNo>(){}),
-
     REMISSION_DECISION(
         "remissionDecision", new TypeReference<RemissionDecision>(){}),
-
+    JOURNEY_TYPE(
+        "journeyType", new TypeReference<JourneyType>(){}),
     REMISSION_TYPE(
         "remissionType", new TypeReference<RemissionType>(){});
 

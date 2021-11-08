@@ -39,6 +39,7 @@ spring:
 idam:
   baseUrl: ${IDAM_URL:http://127.0.0.1:5000}
   redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
+  scope: "openid profile authorities acr roles create-user manage-user search-user"
   s2s-auth:
     totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
     microservice: ${IA_S2S_MICROSERVICE:ia}
@@ -91,6 +92,9 @@ security:
     - "/csrf"
     - "/testing-support/**"
   roleEventAccess:
+    citizen:
+    - "startAppeal"
+    - "editAppeal"
     caseworker-ia-legalrep-solicitor:
     - "startAppeal"
     - "editAppeal"

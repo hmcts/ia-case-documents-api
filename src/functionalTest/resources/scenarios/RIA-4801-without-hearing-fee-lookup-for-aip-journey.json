@@ -1,0 +1,34 @@
+{
+  "description": "RIA-4801 Without hearing fee lookup for AIP journey",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "eventId": "editAppeal",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "journeyType": "aip",
+          "decisionHearingFeeOption": "decisionWithoutHearing",
+          "homeOfficeReferenceNumber": "123456789",
+          "customerReference": "543232"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+        "homeOfficeReferenceNumber": "123456789",
+        "feeCode": "FEE0372",
+        "feeVersion": "2",
+        "feeAmountGbp": "8000",
+        "feeDescription": "Notice of Appeal - appellant consents without hearing A"
+      }
+    }
+  }
+}

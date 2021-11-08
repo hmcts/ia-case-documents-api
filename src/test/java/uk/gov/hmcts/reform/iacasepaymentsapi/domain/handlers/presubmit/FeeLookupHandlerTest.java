@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,7 +37,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-class AppealFeeDetailsHandlerTest {
+class FeeLookupHandlerTest {
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -46,12 +45,12 @@ class AppealFeeDetailsHandlerTest {
 
     @Mock private FeeService feeService;
 
-    private AppealFeeDetailsHandler appealFeeDetailsHandler;
+    private FeeLookupHandler feeLookupHandler;
 
     @BeforeEach
     void setUp() {
 
-        appealFeeDetailsHandler = new AppealFeeDetailsHandler(feeService);
+        feeLookupHandler = new FeeLookupHandler(feeService);
     }
 
     @ParameterizedTest
@@ -65,7 +64,7 @@ class AppealFeeDetailsHandlerTest {
         when(feeService.getFee(FeeType.valueOf(feeType))).thenReturn(fee);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            appealFeeDetailsHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            feeLookupHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertThat(callbackResponse.getData()).isEqualTo(asylumCase);
@@ -89,11 +88,12 @@ class AppealFeeDetailsHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(event);
+
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class)).thenReturn(Optional.of(hearingFeeOption));
         when(feeService.getFee(FeeType.valueOf(feeType))).thenReturn(null);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            appealFeeDetailsHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            feeLookupHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertThat(callbackResponse.getErrors()).isNotEmpty();
@@ -116,12 +116,12 @@ class AppealFeeDetailsHandlerTest {
     @Test
     void handling_should_throw_if_cannot_actually_handle() {
 
-        assertThatThrownBy(() -> appealFeeDetailsHandler.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> feeLookupHandler.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
-        assertThatThrownBy(() -> appealFeeDetailsHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> feeLookupHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -135,39 +135,36 @@ class AppealFeeDetailsHandlerTest {
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-                boolean canHandle = appealFeeDetailsHandler.canHandle(callbackStage, callback);
+                boolean canHandle = feeLookupHandler.canHandle(callbackStage, callback);
 
                 if (Arrays.asList(Event.START_APPEAL, Event.EDIT_APPEAL).contains(event)
-                           && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
                 }
             }
-
-            reset(callback);
         }
     }
 
     @Test
     void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> appealFeeDetailsHandler.canHandle(null, callback))
+        assertThatThrownBy(() -> feeLookupHandler.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> appealFeeDetailsHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> feeLookupHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> appealFeeDetailsHandler.handle(null, callback))
+        assertThatThrownBy(() -> feeLookupHandler.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> appealFeeDetailsHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> feeLookupHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
-
 }

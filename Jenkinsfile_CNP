@@ -25,6 +25,9 @@ def secrets = [
         secret('test-law-firm-org-deleted-username', 'TEST_LAW_FIRM_ORG_DELETED_USERNAME'),
         secret('test-law-firm-org-deleted-password', 'TEST_LAW_FIRM_ORG_DELETED_PASSWORD'),
 
+        secret('test-citizen-username', 'TEST_CITIZEN_USERNAME'),
+        secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
+
         secret('idam-redirect-uri', 'IA_IDAM_REDIRECT_URI'),
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),
