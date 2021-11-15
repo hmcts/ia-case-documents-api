@@ -992,7 +992,7 @@ apcPrivateHomeOfficeEmailAddress: ${IA_HOME_OFFICE_APC_EMAIL}
 reviewHearingRequirementsAdminOfficerEmailAddress: ${IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL:ao-review@example.com}
 ctscAdminFtpaDecisionEmailAddress: ${IA_CTSC_ADMIN_FTPA_DECISION:ctscFtpaDecision@example.gov.uk}
 feesAdminOfficerEmailAddress: ${FEES_ADMIN_OFFICER_EMAIL}
-paymentExceptionsAdminOfficerEmailAddress: ${PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL:payment-exceptions-ao-aat@example.com}
+paymentExceptionsAdminOfficerEmailAddress: ${PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL:payment-exceptions-ao@example.com}
 apcHomeOfficeEmailAddress: ${HOME_OFFICE_EMAIL_APC}
 lartHomeOfficeEmailAddress: ${HOME_OFFICE_EMAIL_LART}
 upperTribunalNoticesEmailAddress: ${IA_UPPER_TRIBUNAL_NOTICES_EMAIL}
