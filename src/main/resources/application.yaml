@@ -214,6 +214,9 @@ govnotify:
         email: 621d266e-a0a0-498d-800e-0f13dd8357b8
       legalRep:
         email: 84dbdaba-df43-4096-9b16-5817ba3e002c
+      appellant:
+        email: f55d3aa3-fe59-48f8-9d53-adc43ad95e14
+        sms: 5b7faa5a-792e-48bf-a512-d21a27ae9b23
       remoteHearing:
         legalRep:
           email: e79249e2-ecbf-4d2b-8458-006285613402

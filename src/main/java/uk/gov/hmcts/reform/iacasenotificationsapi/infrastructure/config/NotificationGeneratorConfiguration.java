@@ -407,6 +407,34 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("listCaseAipNotificationGenerator")
+    public List<NotificationGenerator> listCaseAipNotificationGenerator(
+        CaseOfficerListCasePersonalisation caseOfficerListCasePersonalisation,
+        AppellantListCasePersonalisationEmail appellantListCasePersonalisationEmail,
+        AppellantListCasePersonalisationSms appellantListCasePersonalisationSms,
+        HomeOfficeListCasePersonalisation homeOfficeListCasePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        // RIA-3361 - listCase
+        List<EmailNotificationPersonalisation> emailPersonalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(caseOfficerListCasePersonalisation, appellantListCasePersonalisationEmail, homeOfficeListCasePersonalisation)
+            : newArrayList(caseOfficerListCasePersonalisation, appellantListCasePersonalisationEmail);
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                emailPersonalisations,
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                    newArrayList(appellantListCasePersonalisationSms),
+                    notificationSender,
+                    notificationIdAppender
+            )
+        );
+    }
+
     @Bean("submitAppealAipNotificationGenerator")
     public List<NotificationGenerator> submitAppealAipNotificationGenerator(
         CaseOfficerSubmitAppealPersonalisation caseOfficerSubmitAppealPersonalisation,
