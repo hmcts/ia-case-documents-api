@@ -65,3 +65,4 @@ spring:
         upper-tribunal-notices-email: IA_UPPER_TRIBUNAL_NOTICES_EMAIL
         nbc-email: IA_NBC_EMAIL
         ctsc-email: IA_CTSC_EMAIL
+        launch-darkly-sdk-key: LAUNCH_DARKLY_SDK_KEY

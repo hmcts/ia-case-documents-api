@@ -100,7 +100,9 @@ def secrets = [
     secret('home-office-email-lart', 'HOME_OFFICE_EMAIL_LART'),
     secret('upper-tribunal-notices-email', 'IA_UPPER_TRIBUNAL_NOTICES_EMAIL'),
     secret('nbc-email', 'IA_NBC_EMAIL'),
-    secret('ctsc-email', 'IA_CTSC_EMAIL')
+    secret('ctsc-email', 'IA_CTSC_EMAIL'),
+
+    secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY')
     ]
 ]
 
