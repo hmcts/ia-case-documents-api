@@ -1,6 +1,7 @@
 {
-    "description": "RIA-3995 Send appeal submitted notifications SMS to Appellant",
-    "request": {
+  "description": "RIA-3995 Send appeal submitted notifications SMS to Appellant",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
       "uri": "/asylum/ccdAboutToSubmit",
       "credentials": "LegalRepresentative",
       "input": {

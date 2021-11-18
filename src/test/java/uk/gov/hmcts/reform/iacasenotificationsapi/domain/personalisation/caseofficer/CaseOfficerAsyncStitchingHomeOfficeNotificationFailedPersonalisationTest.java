@@ -46,8 +46,7 @@ class CaseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisationTest {
         homeOfficeNotificationFailedPersonalisation = new CaseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisation(
             asyncStitchingHomeOfficeNotificationFailedTemplateId,
             personalisationProvider,
-            emailAddressFinder
-        );
+            emailAddressFinder);
     }
 
     @Test
@@ -65,7 +64,7 @@ class CaseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisationTest {
     void should_return_given_email_address_from_lookup_map() {
         when(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)).thenReturn(caseOfficerEmailAddress);
         assertTrue(
-            homeOfficeNotificationFailedPersonalisation.getRecipientsList(asylumCase).contains(caseOfficerEmailAddress));
+                homeOfficeNotificationFailedPersonalisation.getRecipientsList(asylumCase).contains(caseOfficerEmailAddress));
     }
 
     @Test

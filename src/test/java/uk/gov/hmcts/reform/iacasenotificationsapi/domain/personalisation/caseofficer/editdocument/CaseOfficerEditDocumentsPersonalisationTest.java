@@ -39,6 +39,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
@@ -58,6 +59,8 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
     @Mock
     private AsylumCase asylumCase;
     private CaseOfficerEditDocumentsPersonalisation personalisation;
+    @Mock
+    FeatureToggler featureToggler;
     @Captor
     private ArgumentCaptor<List<String>> argCaptor;
 
@@ -132,7 +135,7 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
             emailAddressFinder,
             editDocumentService,
             "http://localhost",
-            appealService);
+            appealService, featureToggler);
     }
 
     @Test
@@ -150,9 +153,16 @@ public class CaseOfficerEditDocumentsPersonalisationTest {
     }
 
     @Test
-    public void getRecipientsList() {
+    public void getRecipientsList_when_feature_flag_is_Off() {
+        assertTrue(
+                personalisation.getRecipientsList(asylumCase).isEmpty());
+    }
+
+    @Test
+    public void getRecipientsList_when_feature_flag_is_On() {
+        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
         given(emailAddressFinder.getHearingCentreEmailAddress(any(AsylumCase.class)))
-            .willReturn("hearingCentre@email.com");
+                .willReturn("hearingCentre@email.com");
 
         assertTrue(personalisation.getRecipientsList(new AsylumCase()).contains("hearingCentre@email.com"));
     }

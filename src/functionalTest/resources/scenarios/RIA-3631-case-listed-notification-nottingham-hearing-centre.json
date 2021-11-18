@@ -30,31 +30,17 @@
         "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
         "notificationsSent": [
           {
-            "id": "1109_CASE_LISTED_CASE_OFFICER",
+            "id": "1109_CASE_LISTED_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1109_CASE_LISTED_LEGAL_REPRESENTATIVE",
+            "id": "1109_CASE_LISTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
     },
     "notifications": [
-      {
-        "reference": "1109_CASE_LISTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.bradford}",
-        "subject": "Immigration and Asylum appeal: case listed",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}",
-          "3 May 2019",
-          "14:25",
-          "Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"
-        ]
-      },
       {
         "reference": "1109_CASE_LISTED_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
@@ -75,6 +61,20 @@
           "No other adjustments are being made",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "1109_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"
         ]
       }
     ]

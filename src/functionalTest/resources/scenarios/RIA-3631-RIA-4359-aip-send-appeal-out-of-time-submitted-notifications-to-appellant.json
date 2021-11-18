@@ -1,5 +1,6 @@
 {
   "description": "RIA-2405-RIA-2936-RIA-4359 AIP Send appeal out of time submitted notifications (Email and SMS) and Email to Case worker - Home Office notifications disabled",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

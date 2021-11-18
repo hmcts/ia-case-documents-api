@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
@@ -24,16 +25,17 @@ public class CaseOfficerListCmaPersonalisation implements EmailNotificationPerso
     private final DateTimeExtractor dateTimeExtractor;
     private final HearingDetailsFinder hearingDetailsFinder;
     private final EmailAddressFinder emailAddressFinder;
+    private final FeatureToggler featureToggler;
 
 
     public CaseOfficerListCmaPersonalisation(
-        @NotNull(message = "listCmaCaseOfficerTemplateId cannot be null") @Value("${govnotify.template.listCma.caseOfficer.email}") String listCmaCaseOfficerTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        DateTimeExtractor dateTimeExtractor,
-        EmailAddressFinder emailAddressFinder,
-        HearingDetailsFinder hearingDetailsFinder
+            @NotNull(message = "listCmaCaseOfficerTemplateId cannot be null") @Value("${govnotify.template.listCma.caseOfficer.email}") String listCmaCaseOfficerTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            DateTimeExtractor dateTimeExtractor,
+            EmailAddressFinder emailAddressFinder,
+            HearingDetailsFinder hearingDetailsFinder,
 
-    ) {
+            FeatureToggler featureToggler) {
         this.listCmaCaseOfficerTemplateId = listCmaCaseOfficerTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
 
@@ -41,6 +43,7 @@ public class CaseOfficerListCmaPersonalisation implements EmailNotificationPerso
         this.emailAddressFinder = emailAddressFinder;
         this.hearingDetailsFinder = hearingDetailsFinder;
 
+        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -50,7 +53,9 @@ public class CaseOfficerListCmaPersonalisation implements EmailNotificationPerso
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
     }
 
     @Override

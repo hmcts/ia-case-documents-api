@@ -1,5 +1,6 @@
 {
   "description": "RIA-3488 send appeal submitted and payment pending notification",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

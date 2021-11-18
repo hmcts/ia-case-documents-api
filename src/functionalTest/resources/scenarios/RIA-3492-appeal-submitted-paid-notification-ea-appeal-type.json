@@ -1,5 +1,6 @@
 {
   "description": "RIA-3492 Send appeal submitted paid notification for EA appeal Type",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -29,6 +30,7 @@
             "id": "3492_PENDING_PAYMENT_PAID_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
+
           {
             "id": "3492_PENDING_PAYMENT_PAID_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"

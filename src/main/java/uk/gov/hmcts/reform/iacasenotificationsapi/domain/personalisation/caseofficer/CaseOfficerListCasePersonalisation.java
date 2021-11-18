@@ -26,13 +26,13 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
     private final HearingDetailsFinder hearingDetailsFinder;
 
 
+
     public CaseOfficerListCasePersonalisation(
-        @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        DateTimeExtractor dateTimeExtractor,
-        EmailAddressFinder emailAddressFinder,
-        HearingDetailsFinder hearingDetailsFinder
-    ) {
+            @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            DateTimeExtractor dateTimeExtractor,
+            EmailAddressFinder emailAddressFinder,
+            HearingDetailsFinder hearingDetailsFinder) {
         this.caseOfficerCaseListedTemplateId = caseOfficerCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.dateTimeExtractor = dateTimeExtractor;

@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -20,17 +21,19 @@ public class CaseOfficerFtpaDecisionPersonalisation implements EmailNotification
     private final String applicationReheardEnabledTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerFtpaDecisionPersonalisation(
-        @Value("${govnotify.template.applicationReheard.caseOfficer.email}") String applicationReheardTemplateId,
-        @Value("${govnotify.template.applicationReheardEnabled.caseOfficer.email}") String applicationReheardEnabledTemplateId,
-        PersonalisationProvider personalisationProvider,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @Value("${govnotify.template.applicationReheard.caseOfficer.email}") String applicationReheardTemplateId,
+            @Value("${govnotify.template.applicationReheardEnabled.caseOfficer.email}") String applicationReheardEnabledTemplateId,
+            PersonalisationProvider personalisationProvider,
+            EmailAddressFinder emailAddressFinder,
+            FeatureToggler featureToggler) {
         this.applicationReheardTemplateId = applicationReheardTemplateId;
         this.applicationReheardEnabledTemplateId = applicationReheardEnabledTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
+        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -41,7 +44,9 @@ public class CaseOfficerFtpaDecisionPersonalisation implements EmailNotification
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
     }
 
     @Override

@@ -24,9 +24,9 @@ public class CaseOfficerEditListingPersonalisation implements EmailNotificationP
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerEditListingPersonalisation(
-        @Value("${govnotify.template.caseEdited.caseOfficer.email}") String caseOfficerCaseEditedTemplateId,
-        EmailAddressFinder emailAddressFinder,
-        PersonalisationProvider personalisationProvider) {
+            @Value("${govnotify.template.caseEdited.caseOfficer.email}") String caseOfficerCaseEditedTemplateId,
+            EmailAddressFinder emailAddressFinder,
+            PersonalisationProvider personalisationProvider) {
         this.caseOfficerCaseEditedTemplateId = caseOfficerCaseEditedTemplateId;
         this.emailAddressFinder = emailAddressFinder;
         this.personalisationProvider = personalisationProvider;
@@ -39,10 +39,9 @@ public class CaseOfficerEditListingPersonalisation implements EmailNotificationP
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-
         return asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING))
-            ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
-            : Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
+                    ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
+                    : Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
     }
 
     @Override

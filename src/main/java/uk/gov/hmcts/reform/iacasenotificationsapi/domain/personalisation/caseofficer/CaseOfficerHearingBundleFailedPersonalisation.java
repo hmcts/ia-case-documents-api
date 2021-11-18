@@ -27,8 +27,7 @@ public class CaseOfficerHearingBundleFailedPersonalisation implements EmailNotif
             @Value("${govnotify.template.hearingBundleFailed.caseOfficer.email}") String hearingBundleFailedCaseOfficerTemplateId,
             @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
             CustomerServicesProvider customerServicesProvider,
-            EmailAddressFinder emailAddressFinder
-    ) {
+            EmailAddressFinder emailAddressFinder) {
         this.hearingBundleFailedCaseOfficerTemplateId = hearingBundleFailedCaseOfficerTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;

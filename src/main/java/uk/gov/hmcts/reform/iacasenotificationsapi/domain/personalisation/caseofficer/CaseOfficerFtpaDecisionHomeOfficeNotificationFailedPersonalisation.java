@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -17,17 +18,19 @@ public class CaseOfficerFtpaDecisionHomeOfficeNotificationFailedPersonalisation 
     private final String ftpaDecisionCaseOfficerNotificationFailedTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerFtpaDecisionHomeOfficeNotificationFailedPersonalisation(
-        @NotNull(message = "appealOutcomeHomeOfficeNotificationFailedTemplateId cannot be null")
-        @Value("${govnotify.template.ftpaDecisionHomeOfficeNotificationFailed.caseOfficer.email}") String appealOutcomeHomeOfficeNotificationFailedTemplateId,
-        PersonalisationProvider personalisationProvider,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @NotNull(message = "appealOutcomeHomeOfficeNotificationFailedTemplateId cannot be null")
+            @Value("${govnotify.template.ftpaDecisionHomeOfficeNotificationFailed.caseOfficer.email}") String appealOutcomeHomeOfficeNotificationFailedTemplateId,
+            PersonalisationProvider personalisationProvider,
+            EmailAddressFinder emailAddressFinder,
+            FeatureToggler featureToggler) {
 
         this.ftpaDecisionCaseOfficerNotificationFailedTemplateId = appealOutcomeHomeOfficeNotificationFailedTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
+        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -37,7 +40,9 @@ public class CaseOfficerFtpaDecisionHomeOfficeNotificationFailedPersonalisation 
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
     }
 
     @Override

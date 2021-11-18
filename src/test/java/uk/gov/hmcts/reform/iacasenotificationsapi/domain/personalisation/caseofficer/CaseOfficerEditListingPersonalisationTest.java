@@ -59,8 +59,7 @@ class CaseOfficerEditListingPersonalisationTest {
         caseOfficerEditListingPersonalisation = new CaseOfficerEditListingPersonalisation(
             templateId,
             emailAddressFinder,
-            personalisationProvider
-        );
+            personalisationProvider);
     }
 
     @Test

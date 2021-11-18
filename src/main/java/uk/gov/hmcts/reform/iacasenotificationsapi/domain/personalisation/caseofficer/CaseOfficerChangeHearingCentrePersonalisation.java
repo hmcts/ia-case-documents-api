@@ -20,9 +20,8 @@ public class CaseOfficerChangeHearingCentrePersonalisation implements EmailNotif
     private EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerChangeHearingCentrePersonalisation(
-        @Value("${govnotify.template.changeHearingCentre.caseOfficer.email}") String changeHearingCentreTemplateId,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @Value("${govnotify.template.changeHearingCentre.caseOfficer.email}") String changeHearingCentreTemplateId,
+            EmailAddressFinder emailAddressFinder) {
         this.changeHearingCentreHomeOfficeTemplateId = changeHearingCentreTemplateId;
         this.emailAddressFinder = emailAddressFinder;
     }
@@ -39,7 +38,7 @@ public class CaseOfficerChangeHearingCentrePersonalisation implements EmailNotif
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_CHANGE_HEARING_CENTRE_NEW_HEARING_CENTRE";
+        return caseId + "_CHANGE_HEARING_CENTRE_CASE_OFFICER";
     }
 
     @Override

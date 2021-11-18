@@ -1,5 +1,6 @@
 {
   "description": "RIA-3689 send appeal submitted with remission and payment pending, for EA appeal notification",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

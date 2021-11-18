@@ -1,5 +1,6 @@
 {
   "description": "RIA-3313 respondent ftpa application submitted Home Office notification failure",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficePOU",
@@ -45,6 +46,17 @@
     },
     "notifications": [
       {
+        "reference": "3313_FTPA_SUBMITTED_HO_NOTIFICATION_FAILED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: A notification to the respondent has failed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
         "reference": "3313_FTPA_SUBMITTED_RESPONDENT",
         "recipient": "{$homeOfficeFtpaEmailAddresses.bradford}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
@@ -81,17 +93,6 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
-        ]
-      },
-      {
-        "reference": "3313_FTPA_SUBMITTED_HO_NOTIFICATION_FAILED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.bradford}",
-        "subject": "Immigration and Asylum appeal: A notification to the respondent has failed",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

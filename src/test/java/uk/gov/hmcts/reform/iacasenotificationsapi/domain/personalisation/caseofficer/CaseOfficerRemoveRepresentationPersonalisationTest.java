@@ -64,8 +64,7 @@ class CaseOfficerRemoveRepresentationPersonalisationTest {
             templateIdAfterListing,
             iaExUiFrontendUrl,
             appealService,
-            emailAddressFinder
-        );
+            emailAddressFinder);
     }
 
     @Test
@@ -87,7 +86,7 @@ class CaseOfficerRemoveRepresentationPersonalisationTest {
     @Test
     void should_return_given_email_address_from_lookup_map() {
         assertTrue(
-            caseOfficerRemoveRepresentationPersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
+                caseOfficerRemoveRepresentationPersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
     }
 
     @Test

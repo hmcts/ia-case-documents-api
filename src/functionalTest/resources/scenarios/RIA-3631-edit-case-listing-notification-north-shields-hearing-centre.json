@@ -39,33 +39,17 @@
         "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net",
         "notificationsSent": [
           {
-            "id": "2005_CASE_RE_LISTED_CASE_OFFICER",
+            "id": "2005_CASE_RE_LISTED_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "2005_CASE_RE_LISTED_LEGAL_REPRESENTATIVE",
+            "id": "2005_CASE_RE_LISTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
     },
     "notifications": [
-      {
-        "reference": "2005_CASE_RE_LISTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.northShields}",
-        "subject": "Immigration and Asylum appeal: case re-listed",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}",
-          "Taylor House",
-          "1 May 2019",
-          "3 May 2019",
-          "14:25",
-          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR"
-        ]
-      },
       {
         "reference": "2005_CASE_RE_LISTED_LEGAL_REPRESENTATIVE",
         "recipient": "ia-law-firm-a@fake.hmcts.net",
@@ -88,6 +72,22 @@
           "No other adjustments are being made",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "2005_CASE_RE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.northShields}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "Taylor House",
+          "1 May 2019",
+          "3 May 2019",
+          "14:25",
+          "IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR"
         ]
       }
     ]

@@ -1,5 +1,6 @@
 {
   "description": "RIA-3631 Send appeal submitted PA appeal type and payLater notification (HO Notification disabled)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -35,27 +36,17 @@
         "appealType":"protection",
         "notificationsSent": [
           {
-            "id": "3472_APPEAL_SUBMITTED_CASE_OFFICER",
+            "id": "3472_APPEAL_SUBMITTED_PAY_LATER_LEGAL_REP",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "3472_APPEAL_SUBMITTED_PAY_LATER_LEGAL_REP",
+            "id": "3472_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
     },
     "notifications": [
-      {
-        "reference": "3472_APPEAL_SUBMITTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: appeal submitted",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
       {
         "reference": "3472_APPEAL_SUBMITTED_PAY_LATER_LEGAL_REP",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
@@ -67,6 +58,16 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "3472_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

@@ -1,5 +1,6 @@
 {
   "description": "RIA-1976 Send case submitted notification to case officer (IAC Hatton Cross) (save and continue disabled)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

@@ -35,15 +35,15 @@
         "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
         "notificationsSent": [
           {
-            "id": "1333_CASE_LISTED_CASE_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
             "id": "1333_CASE_LISTED_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
             "id": "1333_CASE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1333_CASE_LISTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
@@ -56,18 +56,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "1333_CASE_LISTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.bradford}",
-        "subject": "Immigration and Asylum appeal: case listed",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "3 May 2019",
-          "14:25",
-          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH"
-        ]
-      },
       {
         "reference": "1333_CASE_LISTED_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
@@ -104,6 +92,18 @@
           "CO reviewed single sex court response",
           "CO reviewed in camera court response",
           "No other adjustments are being made"
+        ]
+      },
+      {
+        "reference": "1333_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH"
         ]
       }
     ]

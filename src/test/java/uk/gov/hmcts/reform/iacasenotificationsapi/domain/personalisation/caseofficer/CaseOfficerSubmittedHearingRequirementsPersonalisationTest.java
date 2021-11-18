@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseof
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -34,6 +36,8 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
     EmailAddressFinder emailAddressFinder;
     @Mock
     PersonalisationProvider personalisationProvider;
+    @Mock
+    private FeatureToggler featureToggler;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -56,8 +60,8 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
                 templateId,
                 iaExUiFrontendUrl,
                 personalisationProvider,
-                emailAddressFinder
-            );
+                emailAddressFinder,
+                    featureToggler);
     }
 
     @Test
@@ -66,9 +70,15 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
     }
 
     @Test
-    public void should_return_given_email_address_from_asylum_case() {
+    public void should_return_given_email_address_from_asylum_case_when_feature_flag_is_Off() {
+        assertTrue(caseOfficerSubmittedHearingRequirementsPersonalisation.getRecipientsList(asylumCase).isEmpty());
+    }
+
+    @Test
+    public void should_return_given_email_address_from_asylum_case_when_feature_flag_is_On() {
+        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
         assertEquals(Collections.singleton(hearingCentreEmailAddress),
-            caseOfficerSubmittedHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
+                caseOfficerSubmittedHearingRequirementsPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test

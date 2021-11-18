@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -25,24 +26,28 @@ public class CaseOfficerUploadAdditionalEvidencePersonalisation implements Email
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerUploadAdditionalEvidencePersonalisation(
-        @Value("${govnotify.template.uploadedAdditionalEvidenceBeforeListing.caseOfficer.email}") String caseOfficerUploadedAdditionalEvidenceBeforeListingTemplateId,
-        @Value("${govnotify.template.uploadedAdditionalEvidenceAfterListing.caseOfficer.email}") String caseOfficerUploadedAdditionalEvidenceAfterListingTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        PersonalisationProvider personalisationProvider,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @Value("${govnotify.template.uploadedAdditionalEvidenceBeforeListing.caseOfficer.email}") String caseOfficerUploadedAdditionalEvidenceBeforeListingTemplateId,
+            @Value("${govnotify.template.uploadedAdditionalEvidenceAfterListing.caseOfficer.email}") String caseOfficerUploadedAdditionalEvidenceAfterListingTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            PersonalisationProvider personalisationProvider,
+            EmailAddressFinder emailAddressFinder,
+            FeatureToggler featureToggler) {
         this.caseOfficerUploadedAdditionalEvidenceBeforeListingTemplateId = caseOfficerUploadedAdditionalEvidenceBeforeListingTemplateId;
         this.caseOfficerUploadedAdditionalEvidenceAfterListingTemplateId = caseOfficerUploadedAdditionalEvidenceAfterListingTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;
+        this.featureToggler = featureToggler;
     }
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
     }
 
     @Override

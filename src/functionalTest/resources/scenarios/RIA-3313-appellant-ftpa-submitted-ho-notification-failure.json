@@ -1,11 +1,13 @@
 {
   "description": "RIA-3313 appellant ftpa application submitted Home Office notification failure",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
       "id": 3313,
       "eventId": "applyForFTPAAppellant",
+
       "state": "ftpaSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",

@@ -1,6 +1,7 @@
 {
   "description": "RIA-3631 Send appeal submitted notification to Case Officer and exclude Home Office after successful pay and submit",
-  "enabled": false,
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

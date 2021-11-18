@@ -1,5 +1,6 @@
 {
   "description": "RIA-3020 Send Cma requirements submitted to appellant and caseworker",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Citizen",
@@ -48,11 +49,11 @@
         ],
         "notificationsSent": [
           {
-            "id": "1011_CMA_REQUIREMENTS_SUBMITTED_CASE_OFFICER",
+            "id": "1011_SUBMIT_CMA_REQUIREMENTS_APPELLANT_AIP_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1011_SUBMIT_CMA_REQUIREMENTS_APPELLANT_AIP_EMAIL",
+            "id": "1011_CMA_REQUIREMENTS_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
@@ -64,16 +65,6 @@
     },
     "notifications": [
       {
-        "reference": "1011_CMA_REQUIREMENTS_SUBMITTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.manchester}",
-        "subject": "Immigration and Asylum appeal: Case Management Appointment requirements submitted",
-        "body": [
-          "PA/12345/2019",
-          "Pablo Jimenez",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
-      {
         "reference": "1011_SUBMIT_CMA_REQUIREMENTS_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
         "subject": "You sent your appointment needs",
@@ -83,6 +74,16 @@
           "Pablo Jimenez",
           "{$TODAY+14|d MMM yyyy}",
           "{$iaAipFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1011_CMA_REQUIREMENTS_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: Case Management Appointment requirements submitted",
+        "body": [
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}"
         ]
       },
       {

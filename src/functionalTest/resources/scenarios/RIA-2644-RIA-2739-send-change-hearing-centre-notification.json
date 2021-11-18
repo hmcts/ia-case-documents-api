@@ -24,7 +24,7 @@
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1234_CHANGE_HEARING_CENTRE_NEW_HEARING_CENTRE",
+            "id": "1234_CHANGE_HEARING_CENTRE_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -42,7 +42,7 @@
         ]
       },
       {
-        "reference": "1234_CHANGE_HEARING_CENTRE_NEW_HEARING_CENTRE",
+        "reference": "1234_CHANGE_HEARING_CENTRE_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
         "subject": "Immigration and Asylum appeal: change of designated hearing centre",
         "body": [

@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -29,6 +30,8 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
     AsylumCase asylumCase;
     @Mock
     Map<HearingCentre, String> hearingCentreEmailAddressMap;
+    @Mock
+    private FeatureToggler featureToggler;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -53,8 +56,8 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
         caseOfficerHomeOfficeResponseUploadedPersonalisation = new CaseOfficerHomeOfficeResponseUploadedPersonalisation(
             templateId,
             iaExUiFrontendUrl,
-            hearingCentreEmailAddressMap
-        );
+            hearingCentreEmailAddressMap,
+                featureToggler);
     }
 
     @Test
@@ -69,15 +72,22 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
     }
 
     @Test
-    public void should_return_given_email_address_from_lookup_map() {
+    public void should_return_given_email_address_from_lookup_map_when_feature_flag_is_Off() {
         assertTrue(caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase)
-            .contains(hearingCentreEmailAddress));
+                .isEmpty());
+    }
+
+    @Test
+    public void should_return_given_email_address_from_lookup_map_when_feature_flag_is_On() {
+        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
+        assertTrue(caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase)
+                .contains(hearingCentreEmailAddress));
     }
 
     @Test
     public void should_throw_exception_on_email_address_when_hearing_centre_is_empty() {
+        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
         when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
         assertThatThrownBy(() -> caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("hearingCentre is not present");
@@ -85,8 +95,8 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
 
     @Test
     public void should_throw_exception_when_cannot_find_email_address_for_hearing_centre() {
+        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
         when(hearingCentreEmailAddressMap.get(hearingCentre)).thenReturn(null);
-
         assertThatThrownBy(() -> caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Hearing centre email address not found: " + hearingCentre.toString());

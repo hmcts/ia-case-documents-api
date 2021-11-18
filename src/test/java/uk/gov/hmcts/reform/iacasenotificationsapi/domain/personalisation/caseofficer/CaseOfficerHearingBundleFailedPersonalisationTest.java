@@ -64,8 +64,7 @@ public class CaseOfficerHearingBundleFailedPersonalisationTest {
             templateId,
             iaExUiFrontendUrl,
             customerServicesProvider,
-            emailAddressFinder
-        );
+            emailAddressFinder);
     }
 
     @Test

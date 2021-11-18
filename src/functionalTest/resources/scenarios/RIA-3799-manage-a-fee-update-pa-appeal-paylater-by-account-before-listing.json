@@ -1,5 +1,6 @@
 {
   "description": "RIA-3799 Manage a fee update PA appeal paylater by account before listing (CTSC)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

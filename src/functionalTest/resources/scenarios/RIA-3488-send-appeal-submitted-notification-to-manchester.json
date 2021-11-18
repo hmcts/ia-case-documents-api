@@ -1,6 +1,7 @@
 {
-    "description": "RIA-3488 Send appeal submitted notification to Manchester hearing centre",
-    "request": {
+  "description": "RIA-3488 Send appeal submitted notification to Manchester hearing centre",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
       "uri": "/asylum/ccdAboutToSubmit",
       "credentials": "LegalRepresentative",
       "input": {

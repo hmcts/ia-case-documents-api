@@ -21,7 +21,7 @@
     "errors": [],
     "confirmation": {
       "header": "success",
-      "body": "contains([_REMOVE_REPRESENTATION_CASE_OFFICER,_REMOVE_REPRESENTATION_HOME_OFFICE,_REMOVE_REPRESENTATION_LEGAL_REP])"
+      "body": "contains([_REMOVE_REPRESENTATION_HOME_OFFICE,_REMOVE_REPRESENTATION_LEGAL_REP,_REMOVE_REPRESENTATION_CASE_OFFICER])"
     }
   }
 }

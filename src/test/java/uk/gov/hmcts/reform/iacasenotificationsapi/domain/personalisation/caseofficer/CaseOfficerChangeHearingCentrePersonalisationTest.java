@@ -34,6 +34,7 @@ public class CaseOfficerChangeHearingCentrePersonalisationTest {
     AsylumCase asylumCase;
     @Mock
     EmailAddressFinder emailAddressFinder;
+
     private CaseOfficerChangeHearingCentrePersonalisation caseOfficerChangeHearingCentrePersonalisation;
 
     @BeforeEach
@@ -56,14 +57,14 @@ public class CaseOfficerChangeHearingCentrePersonalisationTest {
     @Test
     public void should_return_given_reference_id() {
         Long caseId = 12345L;
-        assertEquals(caseId + "_CHANGE_HEARING_CENTRE_NEW_HEARING_CENTRE",
+        assertEquals(caseId + "_CHANGE_HEARING_CENTRE_CASE_OFFICER",
             caseOfficerChangeHearingCentrePersonalisation.getReferenceId(caseId));
     }
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
         assertTrue(caseOfficerChangeHearingCentrePersonalisation.getRecipientsList(asylumCase)
-            .contains(hearingCentreEmailAddress));
+                .contains(hearingCentreEmailAddress));
     }
 
     @Test

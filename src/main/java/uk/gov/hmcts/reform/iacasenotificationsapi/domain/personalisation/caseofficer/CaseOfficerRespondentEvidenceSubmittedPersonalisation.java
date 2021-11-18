@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
@@ -22,12 +23,14 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisation implements Em
     private final String respondentEvidenceSubmittedTemplateId;
     private final String iaExUiFrontendUrl;
     private final EmailAddressFinder emailAddressFinder;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerRespondentEvidenceSubmittedPersonalisation(
-        @NotNull(message = "respondentEvidenceSubmittedTemplateId cannot be null") @Value("${govnotify.template.respondentEvidenceSubmitted.caseOfficer.email}") String respondentEvidenceSubmittedTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @NotNull(message = "respondentEvidenceSubmittedTemplateId cannot be null") @Value("${govnotify.template.respondentEvidenceSubmitted.caseOfficer.email}") String respondentEvidenceSubmittedTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            EmailAddressFinder emailAddressFinder,
+            FeatureToggler featureToggler) {
+        this.featureToggler = featureToggler;
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
 
         this.respondentEvidenceSubmittedTemplateId = respondentEvidenceSubmittedTemplateId;
@@ -42,7 +45,9 @@ public class CaseOfficerRespondentEvidenceSubmittedPersonalisation implements Em
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
 
     }
 

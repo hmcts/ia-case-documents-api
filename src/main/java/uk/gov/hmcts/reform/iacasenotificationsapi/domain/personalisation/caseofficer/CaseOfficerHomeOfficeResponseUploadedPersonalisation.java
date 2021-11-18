@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 
 @Service
 public class CaseOfficerHomeOfficeResponseUploadedPersonalisation implements EmailNotificationPersonalisation {
@@ -21,15 +22,17 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisation implements Ema
     private final String homeOfficeResponseUploadedTemplateId;
     private final String iaExUiFrontendUrl;
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerHomeOfficeResponseUploadedPersonalisation(
-        @Value("${govnotify.template.homeOfficeResponseUploaded.caseOfficer.email}") String homeOfficeResponseUploadedTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        Map<HearingCentre, String> hearingCentreEmailAddresses
-    ) {
+            @Value("${govnotify.template.homeOfficeResponseUploaded.caseOfficer.email}") String homeOfficeResponseUploadedTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            Map<HearingCentre, String> hearingCentreEmailAddresses,
+            FeatureToggler featureToggler) {
         this.homeOfficeResponseUploadedTemplateId = homeOfficeResponseUploadedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
+        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -39,12 +42,14 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisation implements Ema
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(asylumCase
-            .read(HEARING_CENTRE, HearingCentre.class)
-            .map(centre -> Optional.ofNullable(hearingCentreEmailAddresses.get(centre))
-                .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + centre.toString()))
-            )
-            .orElseThrow(() -> new IllegalStateException("hearingCentre is not present")));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(asylumCase
+                    .read(HEARING_CENTRE, HearingCentre.class)
+                    .map(centre -> Optional.ofNullable(hearingCentreEmailAddresses.get(centre))
+                        .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + centre.toString()))
+                    )
+                    .orElseThrow(() -> new IllegalStateException("hearingCentre is not present")))
+                : Collections.emptySet();
     }
 
     @Override

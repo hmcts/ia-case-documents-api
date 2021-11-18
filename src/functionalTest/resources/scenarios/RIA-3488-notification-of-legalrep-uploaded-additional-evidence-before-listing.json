@@ -1,5 +1,6 @@
 {
   "description": "RIA-3488 Notification of legal rep uploaded additional evidence (before listing)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
@@ -20,27 +21,17 @@
       "replacements": {
         "notificationsSent": [
           {
-            "id": "348812_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
+            "id": "348812_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "348812_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
+            "id": "348812_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
     },
     "notifications": [
-      {
-        "reference": "348812_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: additional evidence uploaded",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
       {
         "reference": "348812_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
         "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
@@ -52,6 +43,16 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "348812_UPLOADED_ADDITIONAL_EVIDENCE_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: additional evidence uploaded",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

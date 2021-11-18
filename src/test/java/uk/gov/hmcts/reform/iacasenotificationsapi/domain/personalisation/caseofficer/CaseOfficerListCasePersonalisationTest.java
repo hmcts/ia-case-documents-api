@@ -86,8 +86,7 @@ public class CaseOfficerListCasePersonalisationTest {
             iaExUiFrontendUrl,
             dateTimeExtractor,
             emailAddressFinder,
-            hearingDetailsFinder
-        );
+            hearingDetailsFinder);
     }
 
     @Test
@@ -103,7 +102,7 @@ public class CaseOfficerListCasePersonalisationTest {
     @Test
     public void should_return_given_email_address_from_lookup_map() {
         assertTrue(
-            caseOfficerListCasePersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
+                caseOfficerListCasePersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
     }
 
     @Test

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
@@ -21,12 +22,14 @@ public class CaseOfficerSubmitAppealPersonalisation implements EmailNotification
     private final String appealSubmittedCaseOfficerTemplateId;
     private final String iaExUiFrontendUrl;
     private final EmailAddressFinder emailAddressFinder;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerSubmitAppealPersonalisation(
-        @Value("${govnotify.template.appealSubmitted.caseOfficer.email}") String appealSubmittedCaseOfficerTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @Value("${govnotify.template.appealSubmitted.caseOfficer.email}") String appealSubmittedCaseOfficerTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            EmailAddressFinder emailAddressFinder,
+            FeatureToggler featureToggler) {
+        this.featureToggler = featureToggler;
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
 
         this.appealSubmittedCaseOfficerTemplateId = appealSubmittedCaseOfficerTemplateId;
@@ -41,8 +44,9 @@ public class CaseOfficerSubmitAppealPersonalisation implements EmailNotification
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ?  Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
     }
 
     @Override

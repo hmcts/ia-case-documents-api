@@ -25,12 +25,11 @@ public class CaseOfficerRemoveRepresentationPersonalisation implements EmailNoti
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerRemoveRepresentationPersonalisation(
-        @NotNull(message = "removeRepresentationCaseOfficerBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.beforeListing.email}") String removeRepresentationCaseOfficerBeforeListingTemplateId,
-        @NotNull(message = "removeRepresentationCaseOfficerAfterListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.afterListing.email}") String removeRepresentationCaseOfficerAfterListingTemplateId,
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        AppealService appealService,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @NotNull(message = "removeRepresentationCaseOfficerBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.beforeListing.email}") String removeRepresentationCaseOfficerBeforeListingTemplateId,
+            @NotNull(message = "removeRepresentationCaseOfficerAfterListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.afterListing.email}") String removeRepresentationCaseOfficerAfterListingTemplateId,
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            AppealService appealService,
+            EmailAddressFinder emailAddressFinder) {
         this.removeRepresentationCaseOfficerBeforeListingTemplateId = removeRepresentationCaseOfficerBeforeListingTemplateId;
         this.removeRepresentationCaseOfficerAfterListingTemplateId = removeRepresentationCaseOfficerAfterListingTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;

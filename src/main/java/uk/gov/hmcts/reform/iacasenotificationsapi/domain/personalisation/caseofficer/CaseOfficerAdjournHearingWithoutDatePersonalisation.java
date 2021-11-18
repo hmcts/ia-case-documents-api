@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 @Service
@@ -19,13 +20,15 @@ public class CaseOfficerAdjournHearingWithoutDatePersonalisation implements Emai
 
     private final String caseOfficerAdjournHearingWithoutDateTemplateId;
     private EmailAddressFinder emailAddressFinder;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerAdjournHearingWithoutDatePersonalisation(
-        @Value("${govnotify.template.adjournHearingWithoutDate.caseOfficer.email}") String caseOfficerAdjournHearingWithoutDateTemplateId,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @Value("${govnotify.template.adjournHearingWithoutDate.caseOfficer.email}") String caseOfficerAdjournHearingWithoutDateTemplateId,
+            EmailAddressFinder emailAddressFinder,
+            FeatureToggler featureToggler) {
         this.caseOfficerAdjournHearingWithoutDateTemplateId = caseOfficerAdjournHearingWithoutDateTemplateId;
         this.emailAddressFinder = emailAddressFinder;
+        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -35,7 +38,9 @@ public class CaseOfficerAdjournHearingWithoutDatePersonalisation implements Emai
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
     }
 
     @Override

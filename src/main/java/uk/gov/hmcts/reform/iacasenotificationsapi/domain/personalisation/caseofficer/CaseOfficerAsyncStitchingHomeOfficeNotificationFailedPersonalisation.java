@@ -19,11 +19,10 @@ public class CaseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisatio
     private final PersonalisationProvider personalisationProvider;
 
     public CaseOfficerAsyncStitchingHomeOfficeNotificationFailedPersonalisation(
-        @NotNull(message = "asyncStitchingHomeOfficeNotificationFailedTemplateId cannot be null")
-        @Value("${govnotify.template.asyncStitchingHomeOfficeNotificationFailed.caseOfficer.email}") String asyncStitchingHomeOfficeNotificationFailedTemplateId,
-        PersonalisationProvider personalisationProvider,
-        EmailAddressFinder emailAddressFinder
-    ) {
+            @NotNull(message = "asyncStitchingHomeOfficeNotificationFailedTemplateId cannot be null")
+            @Value("${govnotify.template.asyncStitchingHomeOfficeNotificationFailed.caseOfficer.email}") String asyncStitchingHomeOfficeNotificationFailedTemplateId,
+            PersonalisationProvider personalisationProvider,
+            EmailAddressFinder emailAddressFinder) {
         this.asyncStitchingHomeOfficeNotificationFailedTemplateId = asyncStitchingHomeOfficeNotificationFailedTemplateId;
         this.personalisationProvider = personalisationProvider;
         this.emailAddressFinder = emailAddressFinder;

@@ -1,5 +1,6 @@
 {
   "description": "RIA-1283 Notification to case officer and legal rep of submitted hearing requirements",
+  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
@@ -24,27 +25,17 @@
         "hearingCentre": "taylorHouse",
         "notificationsSent": [
           {
-            "id": "1283_CASE_OFFICER_OF_SUBMITTED_HEARING_REQUIREMENTS",
+            "id": "1283_LEGAL_REP_OF_SUBMITTED_HEARING_REQUIREMENTS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1283_LEGAL_REP_OF_SUBMITTED_HEARING_REQUIREMENTS",
+            "id": "1283_CASE_OFFICER_OF_SUBMITTED_HEARING_REQUIREMENTS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
     },
     "notifications": [
-      {
-        "reference": "1283_CASE_OFFICER_OF_SUBMITTED_HEARING_REQUIREMENTS",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: hearing requirements submitted",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
       {
         "reference": "1283_LEGAL_REP_OF_SUBMITTED_HEARING_REQUIREMENTS",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
@@ -56,6 +47,16 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "1283_CASE_OFFICER_OF_SUBMITTED_HEARING_REQUIREMENTS",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: hearing requirements submitted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

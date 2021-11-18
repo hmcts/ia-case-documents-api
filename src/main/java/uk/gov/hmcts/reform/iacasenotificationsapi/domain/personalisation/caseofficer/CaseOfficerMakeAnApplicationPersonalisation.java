@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicationService;
@@ -29,18 +30,20 @@ public class CaseOfficerMakeAnApplicationPersonalisation implements EmailNotific
     private final EmailAddressFinder emailAddressFinder;
     private final AppealService appealService;
     private final MakeAnApplicationService makeAnApplicationService;
+    private final FeatureToggler featureToggler;
 
     public CaseOfficerMakeAnApplicationPersonalisation(
-        @Value("${govnotify.template.makeAnApplication.beforeListing.caseOfficer.other.email}") String makeAnApplicationCaseOfficerBeforeListingTemplateId,
-        @Value("${govnotify.template.makeAnApplication.afterListing.caseOfficer.other.email}") String makeAnApplicationCaseOfficerAfterListingTemplateId,
-        @Value("${govnotify.template.makeAnApplication.beforeListing.caseOfficer.judgeReview.email}") String makeAnApplicationCaseOfficerJudgeReviewBeforeListingTemplateId,
-        @Value("${govnotify.template.makeAnApplication.afterListing.caseOfficer.judgeReview.email}") String makeAnApplicationCaseOfficerJudgeReviewAfterListingTemplateId,
+            @Value("${govnotify.template.makeAnApplication.beforeListing.caseOfficer.other.email}") String makeAnApplicationCaseOfficerBeforeListingTemplateId,
+            @Value("${govnotify.template.makeAnApplication.afterListing.caseOfficer.other.email}") String makeAnApplicationCaseOfficerAfterListingTemplateId,
+            @Value("${govnotify.template.makeAnApplication.beforeListing.caseOfficer.judgeReview.email}") String makeAnApplicationCaseOfficerJudgeReviewBeforeListingTemplateId,
+            @Value("${govnotify.template.makeAnApplication.afterListing.caseOfficer.judgeReview.email}") String makeAnApplicationCaseOfficerJudgeReviewAfterListingTemplateId,
 
-        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        EmailAddressFinder emailAddressFinder,
-        AppealService appealService,
-        MakeAnApplicationService makeAnApplicationService
-    ) {
+            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+            EmailAddressFinder emailAddressFinder,
+            AppealService appealService,
+            MakeAnApplicationService makeAnApplicationService,
+            FeatureToggler featureToggler) {
+        this.featureToggler = featureToggler;
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
 
         this.makeAnApplicationCaseOfficerBeforeListingTemplateId = makeAnApplicationCaseOfficerBeforeListingTemplateId;
@@ -67,7 +70,9 @@ public class CaseOfficerMakeAnApplicationPersonalisation implements EmailNotific
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return featureToggler.getValue("tcw-notifications-feature", false)
+                ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
+                : Collections.emptySet();
     }
 
     @Override
