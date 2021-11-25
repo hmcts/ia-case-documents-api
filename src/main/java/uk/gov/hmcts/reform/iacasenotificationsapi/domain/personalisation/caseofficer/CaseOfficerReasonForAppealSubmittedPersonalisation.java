@@ -44,7 +44,7 @@ public class CaseOfficerReasonForAppealSubmittedPersonalisation implements Email
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return featureToggler.getValue("tcw-notifications-feature", false)
+        return featureToggler.getValue("tcw-notifications-feature", true)
                 ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
                 : Collections.emptySet();
     }

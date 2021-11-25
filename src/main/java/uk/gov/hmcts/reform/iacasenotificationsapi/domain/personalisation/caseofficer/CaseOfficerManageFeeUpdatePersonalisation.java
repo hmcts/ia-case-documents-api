@@ -48,7 +48,7 @@ public class CaseOfficerManageFeeUpdatePersonalisation implements EmailNotificat
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        if (featureToggler.getValue("tcw-notifications-feature", false)) {
+        if (featureToggler.getValue("tcw-notifications-feature", true)) {
             if (isPaymentByPBa(asylumCase)) {
                 return Collections.singleton(ctscEmailAddress);
             } else if (isPaymentByCard(asylumCase)) {

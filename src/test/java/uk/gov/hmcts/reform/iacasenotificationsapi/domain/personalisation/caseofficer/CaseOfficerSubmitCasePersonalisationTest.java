@@ -72,7 +72,7 @@ public class CaseOfficerSubmitCasePersonalisationTest {
 
     @Test
     public void should_return_given_email_address_from_lookup_map_when_feature_flag_is_On() {
-        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
+        when(featureToggler.getValue("tcw-notifications-feature", true)).thenReturn(true);
         assertTrue(
             caseOfficerSubmitCasePersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
     }

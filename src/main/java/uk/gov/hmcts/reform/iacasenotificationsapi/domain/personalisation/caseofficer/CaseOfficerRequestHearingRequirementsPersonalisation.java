@@ -45,7 +45,7 @@ public class CaseOfficerRequestHearingRequirementsPersonalisation implements Ema
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return featureToggler.getValue("tcw-notifications-feature", false)
+        return featureToggler.getValue("tcw-notifications-feature", true)
                 ? Collections.singleton(asylumCase
                     .read(HEARING_CENTRE, HearingCentre.class)
                     .map(centre -> Optional.ofNullable(hearingCentreEmailAddresses.get(centre))

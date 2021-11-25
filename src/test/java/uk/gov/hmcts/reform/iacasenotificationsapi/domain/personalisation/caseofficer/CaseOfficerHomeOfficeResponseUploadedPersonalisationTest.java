@@ -79,14 +79,14 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
 
     @Test
     public void should_return_given_email_address_from_lookup_map_when_feature_flag_is_On() {
-        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
+        when(featureToggler.getValue("tcw-notifications-feature", true)).thenReturn(true);
         assertTrue(caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase)
                 .contains(hearingCentreEmailAddress));
     }
 
     @Test
     public void should_throw_exception_on_email_address_when_hearing_centre_is_empty() {
-        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
+        when(featureToggler.getValue("tcw-notifications-feature", true)).thenReturn(true);
         when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
@@ -95,7 +95,7 @@ public class CaseOfficerHomeOfficeResponseUploadedPersonalisationTest {
 
     @Test
     public void should_throw_exception_when_cannot_find_email_address_for_hearing_centre() {
-        when(featureToggler.getValue("tcw-notifications-feature", false)).thenReturn(true);
+        when(featureToggler.getValue("tcw-notifications-feature", true)).thenReturn(true);
         when(hearingCentreEmailAddressMap.get(hearingCentre)).thenReturn(null);
         assertThatThrownBy(() -> caseOfficerHomeOfficeResponseUploadedPersonalisation.getRecipientsList(asylumCase))
             .isExactlyInstanceOf(IllegalStateException.class)
