@@ -1138,7 +1138,8 @@ public class NotificationHandlerConfiguration {
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.UPLOAD_ADDITIONAL_EVIDENCE,
+                && callback.getEvent() == Event.UPLOAD_ADDITIONAL_EVIDENCE
+                && isRepJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerator
         );
     }
@@ -1567,7 +1568,8 @@ public class NotificationHandlerConfiguration {
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.EDIT_APPEAL_AFTER_SUBMIT,
+                && callback.getEvent() == Event.EDIT_APPEAL_AFTER_SUBMIT
+                && isRepJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerator
         );
     }
