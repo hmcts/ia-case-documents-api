@@ -209,6 +209,7 @@ security:
     citizen:
       - "startAppeal"
       - "editAppeal"
+      - "uploadAdditionalEvidence"
       - "submitAppeal"
       - "submitCmaRequirements"
     caseworker-ia-iacjudge:
