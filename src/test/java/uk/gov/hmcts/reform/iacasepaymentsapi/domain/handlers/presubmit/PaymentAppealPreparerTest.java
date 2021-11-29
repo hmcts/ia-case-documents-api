@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -13,6 +14,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.FEE_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_PBA_ACCOUNTS;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
@@ -40,6 +42,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.JourneyType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.Value;
@@ -74,6 +77,10 @@ class PaymentAppealPreparerTest {
     public void setUp() {
         paymentAppealPreparer = new PaymentAppealPreparer(refDataService, feeService);
         organisationResponse = new OrganisationResponse(organisationEntityResponse);
+
+        lenient().when(callback.getCaseDetails()).thenReturn(caseDetails);
+        lenient().when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        lenient().when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.REP));
     }
 
     @Test
@@ -87,8 +94,6 @@ class PaymentAppealPreparerTest {
         valueList.add(new Value("PBA1234567", "PBA1234567"));
         valueList.add(new Value("PBA1234588", "PBA1234588"));
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
         when(refDataService.getOrganisationResponse())
             .thenReturn(organisationResponse);
@@ -115,8 +120,6 @@ class PaymentAppealPreparerTest {
     @Test
     void handler_should_throw_when_there_issue_with_ref_data_service() {
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
         when(refDataService.getOrganisationResponse()).thenThrow(FeignException.class);
 
@@ -140,8 +143,6 @@ class PaymentAppealPreparerTest {
         valueList.add(new Value("PBA1234567", "PBA1234567"));
         valueList.add(new Value("PBA1234588", "PBA1234588"));
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
         when(refDataService.getOrganisationResponse())
             .thenReturn(organisationResponse);
@@ -171,8 +172,6 @@ class PaymentAppealPreparerTest {
         valueList.add(new Value("PBA1234567", "PBA1234567"));
         valueList.add(new Value("PBA1234588", "PBA1234588"));
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
 
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(HO_WAIVER_REMISSION));
@@ -191,8 +190,6 @@ class PaymentAppealPreparerTest {
     @Test
     void should_handle_no_payment_accounts() {
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.PAY_AND_SUBMIT_APPEAL);
         when(refDataService.getOrganisationResponse())
             .thenReturn(organisationResponse);
@@ -219,8 +216,6 @@ class PaymentAppealPreparerTest {
         Event event, String hearingType, FeeType feeType, Fee fee
     ) {
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(event);
         when(refDataService.getOrganisationResponse())
             .thenReturn(organisationResponse);
@@ -255,8 +250,6 @@ class PaymentAppealPreparerTest {
         Event event, String hearingType, FeeType feeType, Fee fee
     ) {
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(event);
         when(refDataService.getOrganisationResponse())
             .thenReturn(organisationResponse);
@@ -292,8 +285,6 @@ class PaymentAppealPreparerTest {
         Event event, String hearingType, FeeType feeType, Fee fee
     ) {
 
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(event);
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(HELP_WITH_FEES));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
@@ -337,8 +328,7 @@ class PaymentAppealPreparerTest {
     @ParameterizedTest
     @MethodSource("feeServiceIsDownParameters")
     void should_return_error_on_fee_service_is_down(Event event, String hearingType, FeeType feeType) {
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
         when(callback.getEvent()).thenReturn(event);
         when(refDataService.getOrganisationResponse())
             .thenReturn(organisationResponse);

@@ -109,7 +109,9 @@ class FeeLookupHandlerTest {
             Arguments.of(Event.START_APPEAL, "FEE_WITH_HEARING", feeWithHearing, "decisionWithHearing"),
             Arguments.of(Event.START_APPEAL, "FEE_WITHOUT_HEARING", feeWithoutHearing, "decisionWithoutHearing"),
             Arguments.of(Event.EDIT_APPEAL, "FEE_WITH_HEARING", feeWithHearing, "decisionWithHearing"),
-            Arguments.of(Event.EDIT_APPEAL, "FEE_WITHOUT_HEARING", feeWithoutHearing, "decisionWithoutHearing")
+            Arguments.of(Event.EDIT_APPEAL, "FEE_WITHOUT_HEARING", feeWithoutHearing, "decisionWithoutHearing"),
+            Arguments.of(Event.PAYMENT_APPEAL, "FEE_WITH_HEARING", feeWithHearing, "decisionWithHearing"),
+            Arguments.of(Event.PAYMENT_APPEAL, "FEE_WITHOUT_HEARING", feeWithoutHearing, "decisionWithoutHearing")
         );
     }
 
@@ -137,7 +139,7 @@ class FeeLookupHandlerTest {
 
                 boolean canHandle = feeLookupHandler.canHandle(callbackStage, callback);
 
-                if (Arrays.asList(Event.START_APPEAL, Event.EDIT_APPEAL).contains(event)
+                if (Arrays.asList(Event.START_APPEAL, Event.EDIT_APPEAL, Event.PAYMENT_APPEAL).contains(event)
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);

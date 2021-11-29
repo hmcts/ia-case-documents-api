@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_PBA_ACCOUNTS;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
@@ -20,6 +21,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.JourneyType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.Value;
@@ -57,13 +59,19 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
+        final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+        final boolean isLegalRepJourney = asylumCase.read(JOURNEY_TYPE, JourneyType.class)
+            .map(journey -> journey == JourneyType.REP)
+            .orElse(true);
+
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_START
                && Arrays.asList(
-            Event.PAYMENT_APPEAL,
-            Event.PAY_AND_SUBMIT_APPEAL,
-            Event.PAY_FOR_APPEAL,
-            Event.RECORD_REMISSION_DECISION
-        ).contains(callback.getEvent());
+                   Event.PAYMENT_APPEAL,
+                   Event.PAY_AND_SUBMIT_APPEAL,
+                   Event.PAY_FOR_APPEAL,
+                   Event.RECORD_REMISSION_DECISION
+                ).contains(callback.getEvent())
+               && isLegalRepJourney;
     }
 
     @Override

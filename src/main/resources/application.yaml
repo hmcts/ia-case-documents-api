@@ -103,6 +103,7 @@ security:
     citizen:
     - "startAppeal"
     - "editAppeal"
+    - "paymentAppeal"
     caseworker-ia-legalrep-solicitor:
     - "startAppeal"
     - "editAppeal"
