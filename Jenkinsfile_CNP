@@ -28,6 +28,9 @@ def secrets = [
         secret('test-citizen-username', 'TEST_CITIZEN_USERNAME'),
         secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
 
+        secret('system-username', 'IA_SYSTEM_USERNAME'),
+        secret('system-password', 'IA_SYSTEM_PASSWORD'),
+
         secret('idam-redirect-uri', 'IA_IDAM_REDIRECT_URI'),
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),
@@ -51,6 +54,7 @@ withPipeline(type, product, component) {
     env.IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
     env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
+    env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
 
     enableAksStagingDeployment()
     disableLegacyDeployment()

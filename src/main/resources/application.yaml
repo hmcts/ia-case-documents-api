@@ -39,6 +39,9 @@ spring:
 idam:
   baseUrl: ${IDAM_URL:http://127.0.0.1:5000}
   redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
+  system:
+    username: ${IA_SYSTEM_USERNAME:ia-system-user@fake.hmcts.net}
+    password: ${IA_SYSTEM_PASSWORD:London05}
   scope: "openid profile authorities acr roles create-user manage-user search-user"
   s2s-auth:
     totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
@@ -77,6 +80,10 @@ payment:
     organisationUrn: immigration and asylum chamber
     siteId: BFA1
 
+core-case-data:
+  api:
+    url: ${CCD_URL:http://127.0.0.1:4452}
+
 security:
   anonymousPaths:
     - "/"
@@ -91,6 +98,7 @@ security:
     - "/favicon.ico"
     - "/csrf"
     - "/testing-support/**"
+    - "/payment-updates"
   roleEventAccess:
     citizen:
     - "startAppeal"
@@ -103,6 +111,8 @@ security:
     - "payForAppeal"
     caseworker-ia-admofficer:
     - "recordRemissionDecision"
+    caseworker-ia-system:
+    - "updatePaymentStatus"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

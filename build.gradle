@@ -291,7 +291,7 @@ dependencies {
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.2.RELEASE'
   implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4'
 
-  implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
+  compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
 
   implementation group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
@@ -301,6 +301,7 @@ dependencies {
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
   implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+
 
   annotationProcessor 'org.projectlombok:lombok:1.18.12'
   implementation 'org.projectlombok:lombok:1.18.12'
@@ -330,6 +331,8 @@ dependencies {
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
   testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
+
+  testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.7.2'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath

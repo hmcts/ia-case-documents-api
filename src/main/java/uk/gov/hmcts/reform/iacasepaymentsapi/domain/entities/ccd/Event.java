@@ -11,8 +11,8 @@ public enum Event {
     SUBMIT_APPEAL("submitAppeal"),
     PAY_AND_SUBMIT_APPEAL("payAndSubmitAppeal"),
     PAY_FOR_APPEAL("payForAppeal"),
-
     RECORD_REMISSION_DECISION("recordRemissionDecision"),
+    UPDATE_PAYMENT_STATUS("updatePaymentStatus"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

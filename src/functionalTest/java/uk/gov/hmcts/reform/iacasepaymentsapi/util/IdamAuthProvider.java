@@ -8,6 +8,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.Token;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.oauth2.IdentityManagerResponseException;
 
 @Service
@@ -46,5 +47,35 @@ public class IdamAuthProvider {
             throw new IdentityManagerResponseException("Could not get system user token from IDAM", ex);
         }
 
+    }
+
+    public String getSystemUserToken() {
+
+        return getUserToken(
+            System.getenv("IA_SYSTEM_USERNAME"),
+            System.getenv("IA_SYSTEM_PASSWORD")
+        );
+    }
+
+    public String getLegalRepToken() {
+
+        return getUserToken(
+            System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_PASSWORD")
+        );
+    }
+
+    public String getUserId(String token) {
+
+        try {
+
+            UserInfo userInfo = idamApi.userInfo(token);
+
+            return userInfo.getUid();
+
+        } catch (FeignException ex) {
+
+            throw new IdentityManagerResponseException("Could not get system user token from IDAM", ex);
+        }
     }
 }
