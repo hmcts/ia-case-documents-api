@@ -40,7 +40,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.PaymentApi;
     properties = {"payment.api.url=localhost:8991"}
 )
 @PactFolder("pacts")
-public class PaymentConsumerTest {
+public class PbaPaymentConsumerTest {
     @Autowired
     PaymentApi paymentApi;
 
