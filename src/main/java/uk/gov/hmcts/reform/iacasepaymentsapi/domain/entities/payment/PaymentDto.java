@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeDto;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"payment_group_reference"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(NON_NULL)
 @Builder
 @AllArgsConstructor
@@ -38,7 +38,7 @@ public class PaymentDto {
     private String reference;
 
     @JsonProperty("service_name")
-    private Service service;
+    private String service;
 
     @JsonProperty("date_created")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", timezone = "GMT")

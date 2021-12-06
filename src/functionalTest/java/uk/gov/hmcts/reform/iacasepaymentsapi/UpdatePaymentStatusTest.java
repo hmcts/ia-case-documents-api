@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentDto;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Service;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.ServiceTokenGeneratorConfiguration;
 import uk.gov.hmcts.reform.iacasepaymentsapi.util.CcdCaseCreationTest;
 import uk.gov.hmcts.reform.iacasepaymentsapi.util.FunctionalSpringContext;
@@ -82,7 +81,7 @@ public class UpdatePaymentStatusTest extends CcdCaseCreationTest {
             .ccdCaseNumber(String.valueOf(getCaseId()))
             .reference(paymentReference)
             .status("Success")
-            .service(Service.IAC)
+            .service("IAC")
             .method("Card")
             .build();
     }

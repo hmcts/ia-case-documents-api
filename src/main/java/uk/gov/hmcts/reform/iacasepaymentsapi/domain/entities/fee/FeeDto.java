@@ -10,10 +10,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(NON_NULL)
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @Data

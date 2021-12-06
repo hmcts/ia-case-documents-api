@@ -27,7 +27,6 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.consumer.entities.CardPaymentReques
 import uk.gov.hmcts.reform.iacasepaymentsapi.consumer.util.CardPaymentApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeDto;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentDto;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Service;
 
 @ExtendWith(PactConsumerTestExt.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -116,7 +115,7 @@ public class CardPaymentConsumerTest {
         cardPaymentRequest.setCurrency("GBP");
         cardPaymentRequest.setDescription("A card payment for appeal with hearing");
         cardPaymentRequest.setSiteId("BFA1");
-        cardPaymentRequest.setService(Service.IAC);
+        cardPaymentRequest.setService("IAC");
         cardPaymentRequest.setFees(Arrays.asList(getFeeWithHearing()));
 
         return cardPaymentRequest;

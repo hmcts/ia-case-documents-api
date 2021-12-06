@@ -43,7 +43,7 @@ class PaymentDtoTest {
             .amount(amount)
             .description(description)
             .reference(reference)
-            .service(Service.IAC)
+            .service("Immigration and Asylum Appeals")
             .dateCreated(new Date())
             .dateUpdated(new Date())
             .currency(currency)
@@ -60,7 +60,7 @@ class PaymentDtoTest {
         assertEquals(id, paymentDto.getId());
         assertEquals(amount, paymentDto.getAmount());
         assertEquals(reference, paymentDto.getReference());
-        assertEquals(Service.IAC, paymentDto.getService());
+        assertEquals("Immigration and Asylum Appeals", paymentDto.getService());
         assertNotNull(paymentDto.getDateCreated());
         assertNotNull(paymentDto.getDateUpdated());
         assertEquals("GBP", paymentDto.getCurrency());

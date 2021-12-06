@@ -25,7 +25,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.iacasepaymentsapi.consumer.util.CardPaymentApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentDto;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.Service;
 
 @ExtendWith(PactConsumerTestExt.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -97,7 +96,7 @@ public class GetPaymentConsumerTest {
             .currency("GBP")
             .ccdCaseNumber("1633693806322587")
             .channel("online")
-            .service(Service.IAC)
+            .service("IAC")
             .status("Initiated")
             .externalReference("9s7g2j2q3fvia0u4kneq0l7dvf")
             .build();
