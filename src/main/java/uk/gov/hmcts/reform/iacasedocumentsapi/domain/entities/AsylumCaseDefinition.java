@@ -99,6 +99,12 @@ public enum AsylumCaseDefinition {
     APPEAL_TYPE(
         "appealType", new TypeReference<String>(){}),
 
+    REASONS_FOR_APPEAL_DECISION(
+        "reasonsForAppealDecision", new TypeReference<String>(){}),
+
+    REASONS_FOR_APPEAL_DOCUMENTS(
+        "reasonsForAppealDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     JOURNEY_TYPE(
             "journeyType", new TypeReference<JourneyType>(){}),
 

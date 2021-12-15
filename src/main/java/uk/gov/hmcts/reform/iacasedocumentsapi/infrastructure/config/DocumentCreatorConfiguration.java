@@ -330,4 +330,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("appealReasons")
+    public DocumentCreator<AsylumCase> getAppealReasonsDocumentCreator(
+        @Value("${appealReasons.contentType}") String contentType,
+        @Value("${appealReasons.fileExtension}") String fileExtension,
+        @Value("${appealReasons.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        AppealReasonsTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 }
