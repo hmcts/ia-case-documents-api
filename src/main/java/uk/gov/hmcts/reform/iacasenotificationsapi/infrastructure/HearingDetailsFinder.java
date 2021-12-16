@@ -61,5 +61,17 @@ public class HearingDetailsFinder {
         return hearingCentre;
     }
 
+    public String getHearingCentreLocation(AsylumCase asylumCase) {
+        HearingCentre hearingCentre =
+                asylumCase
+                        .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+
+        if (hearingCentre == HearingCentre.REMOTE_HEARING) {
+            return "Remote hearing";
+        } else {
+            return getHearingCentreAddress(asylumCase);
+        }
+    }
 
 }

@@ -123,6 +123,7 @@ public class LegalRepresentativeListCasePersonalisationTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+        when(hearingDetailsFinder.getHearingCentreLocation(asylumCase)).thenReturn(hearingCentreAddress);
 
         legalRepresentativeListCasePersonalisation = new LegalRepresentativeListCasePersonalisation(
             templateId,
@@ -202,7 +203,7 @@ public class LegalRepresentativeListCasePersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeListCasePersonalisation.getPersonalisation(asylumCase);
 
-        assertEquals(remoteHearingCentreAddress, personalisation.get("hearingCentreAddress"));
+        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
     }
 
     @Test

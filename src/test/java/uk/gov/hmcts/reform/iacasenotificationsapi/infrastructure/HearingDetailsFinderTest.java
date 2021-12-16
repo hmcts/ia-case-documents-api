@@ -112,4 +112,29 @@ class HearingDetailsFinderTest {
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("hearingCentre is not present");
     }
+
+    @Test
+    void should_throw_exception_when_list_hearing_centre_is_empty() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> hearingDetailsFinder.getHearingCentreLocation(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("listCaseHearingCentre is not present");
+    }
+
+    @Test
+    void should_return_remote_hearing_when_list_hearing_centre_is_remote() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+
+        assertEquals("Remote hearing", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
+    }
+
+    @Test
+    void should_return_hearing_location_address_when_list_hearing_centre_is_not_remote() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(hearingCentre));
+
+        assertEquals(hearingCentreAddress, hearingDetailsFinder.getHearingCentreLocation(asylumCase));
+    }
 }

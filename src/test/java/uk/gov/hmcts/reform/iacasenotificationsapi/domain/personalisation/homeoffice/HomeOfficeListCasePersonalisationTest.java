@@ -119,6 +119,7 @@ public class HomeOfficeListCasePersonalisationTest {
         when(dateTimeExtractor.extractHearingTime(hearingDateTime)).thenReturn(hearingTime);
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
+        when(hearingDetailsFinder.getHearingCentreLocation(asylumCase)).thenReturn(hearingCentreAddress);
 
         homeOfficeListCasePersonalisation = new HomeOfficeListCasePersonalisation(
             templateId,
@@ -174,7 +175,7 @@ public class HomeOfficeListCasePersonalisationTest {
 
         when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
-        when(hearingDetailsFinder.getHearingCentreAddress(asylumCase))
+        when(hearingDetailsFinder.getHearingCentreLocation(asylumCase))
             .thenReturn(remoteHearingCentreAddress);
 
         Map<String, String> personalisation = homeOfficeListCasePersonalisation.getPersonalisation(asylumCase);

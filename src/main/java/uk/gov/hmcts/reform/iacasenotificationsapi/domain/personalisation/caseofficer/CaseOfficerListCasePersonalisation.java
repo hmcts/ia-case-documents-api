@@ -69,7 +69,7 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
                 .put("linkToOnlineService", iaExUiFrontendUrl)
                 .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDetailsFinder.getHearingDateTime(asylumCase)))
                 .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDetailsFinder.getHearingDateTime(asylumCase)))
-                .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreAddress(asylumCase))
+                .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreLocation(asylumCase))
                 .put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""))
                 .build();
     }

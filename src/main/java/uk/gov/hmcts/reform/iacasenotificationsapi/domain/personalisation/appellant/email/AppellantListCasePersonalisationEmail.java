@@ -76,7 +76,7 @@ public class AppellantListCasePersonalisationEmail implements EmailNotificationP
             .put("Hyperlink to service", iaAipFrontendUrl)
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDetailsFinder.getHearingDateTime(asylumCase)))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDetailsFinder.getHearingDateTime(asylumCase)))
-            .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreAddress(asylumCase));
+            .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
 
         return listCaseFields.build();
 

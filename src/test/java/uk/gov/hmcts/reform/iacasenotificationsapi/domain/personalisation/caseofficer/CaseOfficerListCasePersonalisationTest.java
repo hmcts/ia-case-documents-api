@@ -76,6 +76,7 @@ public class CaseOfficerListCasePersonalisationTest {
         when(hearingDetailsFinder.getHearingCentreAddress(asylumCase)).thenReturn(hearingCentreAddress);
         when(stringProvider.get("hearingCentreAddress", hearingCentre.toString()))
             .thenReturn(Optional.of(hearingCentreAddress));
+        when(hearingDetailsFinder.getHearingCentreLocation(asylumCase)).thenReturn(remoteHearingCentreAddress);
 
         when(dateTimeExtractor.extractHearingDate(hearingDateTime)).thenReturn(hearingDate);
 
@@ -125,7 +126,7 @@ public class CaseOfficerListCasePersonalisationTest {
         assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
         assertEquals(hearingDate, personalisation.get("hearingDate"));
         assertEquals(hearingTime, personalisation.get("hearingTime"));
-        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
+        assertEquals(remoteHearingCentreAddress, personalisation.get("hearingCentreAddress"));
     }
 
     @Test
@@ -145,7 +146,7 @@ public class CaseOfficerListCasePersonalisationTest {
         assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
         assertEquals(hearingDate, personalisation.get("hearingDate"));
         assertEquals(hearingTime, personalisation.get("hearingTime"));
-        assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
+        assertEquals(remoteHearingCentreAddress, personalisation.get("hearingCentreAddress"));
     }
 
     @Test

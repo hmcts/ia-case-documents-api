@@ -70,7 +70,7 @@ public class LegalRepresentativeListCasePersonalisation implements LegalRepresen
             .put("linkToOnlineService", iaExUiFrontendUrl)
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDetailsFinder.getHearingDateTime(asylumCase)))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDetailsFinder.getHearingDateTime(asylumCase)))
-            .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreAddress(asylumCase));
+            .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
 
         PersonalisationProvider.buildHearingRequirementsFields(asylumCase, listCaseFields);
 
