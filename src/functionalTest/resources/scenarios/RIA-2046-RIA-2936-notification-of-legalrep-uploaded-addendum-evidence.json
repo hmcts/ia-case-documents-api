@@ -1,6 +1,6 @@
 {
   "description": "RIA-2046-RIA-2936 Notification of legal rep uploaded addendum evidence",
-  "launchDarklyKey": "tcw-notifications-feature:true",
+  "launchDarklyKey": "tcw-application-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

@@ -43,7 +43,7 @@ public class CaseOfficerSubmitTimeExtensionPersonalisation implements EmailNotif
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return featureToggler.getValue("tcw-notifications-feature", false)
+        return featureToggler.getValue("tcw-application-notifications-feature", true)
                 ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
                 : Collections.emptySet();
     }
