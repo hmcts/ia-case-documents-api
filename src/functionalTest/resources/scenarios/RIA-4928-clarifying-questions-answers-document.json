@@ -1,0 +1,112 @@
+{
+  "description": "RIA-4928: Submit clarifying questions and Answers - document",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 1122,
+      "eventId": "submitClarifyingQuestionAnswers",
+      "state": "awaitingClarifyingQuestionsAnswers",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "PA/11111/2019",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "requestClarifyingQuestions",
+                "parties": "appellant",
+                "dateDue": "{$TODAY}",
+                "dateSent": "{$TODAY}",
+                "explanation": "You must now tell us why you think the Home Office decision to refuse your claim is wrong.",
+                "previousDates": [],
+                "clarifyingQuestions": [
+                  {
+                    "id": "608e6eba-a8d6-4c3a-b95f-53e1cd7e7407",
+                    "value": {
+                      "question": "A question"
+                    }
+                  }]
+              }
+            }
+          ],
+          "clarifyingQuestionsAnswers": [
+            {
+              "id": "608e6eba-a8d6-4c3a-b95f-53e1cd7e7407",
+              "value": {
+                "answer": "answer1",
+                "dueDate": "2020-06-25",
+                "dateSent": "2020-05-28",
+                "question": "A question",
+                "dateResponded": "2020-05-28",
+                "supportingEvidence": [
+                  {
+                    "id": "8d6c15e0-37e1-4af9-ac4f-cbe9349c7c39",
+                    "value": {
+                      "document_url": "http://dm-store:4506/documents/0f8f7f89-311c-43f9-b7f2-c8c861a448ae",
+                      "document_filename": "Screenshot 2020-05-20 at 14.42.55.png",
+                      "document_binary_url": "http://dm-store:4506/documents/0f8f7f89-311c-43f9-b7f2-c8c861a448ae/binary"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "clarifyingQuestionsAnswers": [
+          {
+            "id": "608e6eba-a8d6-4c3a-b95f-53e1cd7e7407",
+            "value": {
+              "answer": "answer1",
+              "dueDate": "2020-06-25",
+              "dateSent": "2020-05-28",
+              "question": "A question",
+              "dateResponded": "2020-05-28",
+              "supportingEvidence": [
+                {
+                  "id": "8d6c15e0-37e1-4af9-ac4f-cbe9349c7c39",
+                  "value": {
+                    "document_url": "http://dm-store:4506/documents/0f8f7f89-311c-43f9-b7f2-c8c861a448ae",
+                    "document_filename": "Screenshot 2020-05-20 at 14.42.55.png",
+                    "document_binary_url": "http://dm-store:4506/documents/0f8f7f89-311c-43f9-b7f2-c8c861a448ae/binary"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "legalRepresentativeDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 11111 2019-Gonzlez-Tribunal-questions-and-answers.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "additionalEvidence",
+              "suppliedBy": ""
+            }
+          }
+        ],
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
+      }
+    }
+  }
+}
+

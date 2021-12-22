@@ -351,4 +351,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("clarifyingQuestionsAnswers")
+    public DocumentCreator<AsylumCase> getAppealReasonsDocumentCreator(
+        @Value("${clarifyingQuestionsAnswers.contentType}") String contentType,
+        @Value("${clarifyingQuestionsAnswers.fileExtension}") String fileExtension,
+        @Value("${clarifyingQuestionsAnswers.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        ClarifyingQuestionsAnswersTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 }
