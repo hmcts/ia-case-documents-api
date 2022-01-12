@@ -997,6 +997,28 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+
+    @Bean("submittedHearingRequirementsAipNotificationGenerator")
+    public List<NotificationGenerator> submittedHearingRequirementsAipNotificationGenerator(
+        AppellantSubmittedHearingRequirementsPersonalisation appellantSubmittedHearingRequirementsPersonalisation,
+        AppellantSubmittedHearingRequirementsPersonalisationSms appellantSubmittedHearingRequirementsPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantSubmittedHearingRequirementsPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantSubmittedHearingRequirementsPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("adjustedHearingRequirementsNotificationGenerator")
     public List<NotificationGenerator> adjustedHearingRequirementsNotificationGenerator(
         AdminOfficerReviewHearingRequirementsPersonalisation adminOfficerReviewHearingRequirementsPersonalisation,

@@ -311,6 +311,9 @@ govnotify:
         email: 0c6dab6e-5c5d-4070-bccf-c8d490be7c19
       caseOfficer:
         email: 03aa193b-ba2c-4334-bbee-0b8244a91521
+      appellant:
+        email: fe78b847-225f-4fc5-963b-cd5a0b3e671e
+        sms: b43b2fe3-f662-4b25-ad15-af3ddc07ec81
     uploadedAdditionalEvidenceBeforeListing:
       legalRep:
         email: c758ab41-4baa-4909-a6ba-31980395683a
@@ -800,6 +803,7 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "submitCmaRequirements"
       - "makeAnApplication"
+      - "draftHearingRequirements"
       - "requestHearingRequirementsFeature"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
@@ -1023,6 +1027,7 @@ appellantDaysToWait:
   afterReasonsForAppeal: 14
   afterClarifyingQuestionsAnswers: 5
   afterCmaRequirements: 14
+  afterHearingRequirementsSubmitted: 14
 
 launchDarkly:
   sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}

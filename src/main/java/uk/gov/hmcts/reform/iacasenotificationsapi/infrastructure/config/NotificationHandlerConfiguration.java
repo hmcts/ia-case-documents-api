@@ -1100,7 +1100,22 @@ public class NotificationHandlerConfiguration {
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.DRAFT_HEARING_REQUIREMENTS,
+                    && callback.getEvent() == Event.DRAFT_HEARING_REQUIREMENTS
+                    && isRepJourney(callback.getCaseDetails().getCaseData()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> submittedHearingRequirementsAipNotificationHandler(
+        @Qualifier("submittedHearingRequirementsAipNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.DRAFT_HEARING_REQUIREMENTS
+                    && isAipJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerators
         );
     }
@@ -1111,6 +1126,7 @@ public class NotificationHandlerConfiguration {
             List<NotificationGenerator> notificationGenerator) {
 
         return new NotificationHandler(
+
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.REVIEW_HEARING_REQUIREMENTS,
