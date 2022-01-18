@@ -2,12 +2,16 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import java.util.List;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @EqualsAndHashCode
 @ToString
+@Getter
+@Setter
 public class ClarifyingQuestionAnswer {
     private String dateSent;
     private String dueDate;
@@ -26,30 +30,6 @@ public class ClarifyingQuestionAnswer {
         this.question = question;
         this.answer = answer;
         this.supportingEvidence = supportingEvidence;
-    }
-
-    public String getDateSent() {
-        return dateSent;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public String getDateResponded() {
-        return dateResponded;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public List<IdValue<Document>> getSupportingEvidence() {
-        return supportingEvidence;
     }
 }
 

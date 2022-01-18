@@ -139,7 +139,7 @@ appealReasons.templateName: ${IA_APPEAL_REASONS_TEMPLATE:TB-IAC-GNO-ENG-00802.do
 clarifyingQuestionsAnswers.contentType:  application/pdf
 clarifyingQuestionsAnswers.fileExtension: PDF
 clarifyingQuestionsAnswers.fileName: "Tribunal-questions-and-answers"
-clarifyingQuestionsAnswers.templateName: ${IA_APPEAL_REASONS_TEMPLATE:TB-IAC-CLQ-ENG-00010.docx}
+clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-IAC-GNO-ENG-00803.docx }
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
