@@ -136,6 +136,11 @@ appealReasons.fileExtension: PDF
 appealReasons.fileName: "Appeal-reasons"
 appealReasons.templateName: ${IA_APPEAL_REASONS_TEMPLATE:TB-IAC-GNO-ENG-00802.docx}
 
+clarifyingQuestionsAnswers.contentType:  application/pdf
+clarifyingQuestionsAnswers.fileExtension: PDF
+clarifyingQuestionsAnswers.fileName: "Tribunal-questions-and-answers"
+clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-IAC-CLQ-ENG-00010.docx}
+
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -218,6 +223,7 @@ security:
       - "submitAppeal"
       - "submitCmaRequirements"
       - "submitReasonsForAppeal"
+      - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
     caseworker-ia-iacjudge:
       - "generateDecisionAndReasons"
