@@ -61,7 +61,7 @@ public class AppealReasonsCreator implements PreSubmitCallbackHandler<AsylumCase
             appealReasonsDocument,
             // ia-aip-frontend and case-api is still using this to show the appellant documents
             LEGAL_REPRESENTATIVE_DOCUMENTS,
-            DocumentTag.ADDITIONAL_EVIDENCE
+            DocumentTag.APPEAL_REASONS
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
