@@ -131,6 +131,11 @@ cmaAppointmentNotice.fileExtension: PDF
 cmaAppointmentNotice.fileName: "Case-management-appointment-notice"
 cmaAppointmentNotice.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00504.docx}
 
+appealReasons.contentType:  application/pdf
+appealReasons.fileExtension: PDF
+appealReasons.fileName: "Appeal-reasons"
+appealReasons.templateName: ${IA_APPEAL_REASONS_TEMPLATE:TB-IAC-GNO-ENG-00802.docx}
+
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -212,6 +217,7 @@ security:
       - "uploadAdditionalEvidence"
       - "submitAppeal"
       - "submitCmaRequirements"
+      - "submitReasonsForAppeal"
       - "draftHearingRequirements"
     caseworker-ia-iacjudge:
       - "generateDecisionAndReasons"
