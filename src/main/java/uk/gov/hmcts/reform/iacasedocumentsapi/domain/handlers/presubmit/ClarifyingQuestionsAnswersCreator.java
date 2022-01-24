@@ -61,7 +61,7 @@ public class ClarifyingQuestionsAnswersCreator implements PreSubmitCallbackHandl
             clarifyingQuestionsAnswersDocument,
             // ia-aip-frontend and case-api is still using this to show the appellant documents
             LEGAL_REPRESENTATIVE_DOCUMENTS,
-            DocumentTag.ADDITIONAL_EVIDENCE
+            DocumentTag.CLARIFYING_QUESTIONS
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

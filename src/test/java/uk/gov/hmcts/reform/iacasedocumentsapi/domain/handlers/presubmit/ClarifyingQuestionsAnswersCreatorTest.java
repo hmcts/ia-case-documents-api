@@ -71,7 +71,7 @@ class ClarifyingQuestionsAnswersCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(clarifyingQuestionsAnswersDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LEGAL_REPRESENTATIVE_DOCUMENTS, DocumentTag.ADDITIONAL_EVIDENCE);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LEGAL_REPRESENTATIVE_DOCUMENTS, DocumentTag.CLARIFYING_QUESTIONS);
     }
 
 
