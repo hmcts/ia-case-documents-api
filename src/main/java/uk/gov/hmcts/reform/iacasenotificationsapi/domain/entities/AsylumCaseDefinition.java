@@ -326,6 +326,9 @@ public enum AsylumCaseDefinition {
     APPELLANT_IN_UK(
         "appellantInUk", new TypeReference<YesOrNo>() {}),
 
+    APPEAL_OUT_OF_COUNTRY(
+        "appealOutOfCountry", new TypeReference<YesOrNo>() {}),
+
     APPELLANT_DATE_OF_BIRTH(
         "appellantDateOfBirth", new TypeReference<String>() {}),
 

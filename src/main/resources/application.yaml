@@ -240,11 +240,17 @@ govnotify:
         email: 0e8c3a70-4ba3-442b-8b12-235ee69a8d20
       legalRep:
         email: a5fc7b20-d69c-42ab-bd26-79c7cf9a7fda
+      appellant:
+        email: 202cab17-fce1-4236-82b1-f23ed80034f1
+        sms: 37f77d54-9de5-45a4-940a-b4a4cfb37716
     appealOutcomeDismissed:
       homeOffice:
         email: c59474ab-6074-49ec-b1ec-3ca1f1a45685
       legalRep:
         email: 3f89b2fa-0bbd-419e-b490-89ed27f63512
+      appellant:
+        email: 1d3266fe-ec61-4bd2-a7de-50092ec557ff
+        sms: d27c4839-01f6-4027-aaf6-7f6004f2b27b
     endAppeal:
       appellant:
         sms: 9253ab19-1216-4b3c-b735-086ec81d8506

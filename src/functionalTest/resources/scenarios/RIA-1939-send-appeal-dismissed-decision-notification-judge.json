@@ -11,6 +11,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "journeyType": "rep",
           "ariaListingReference": "LP/12345/2019",
           "isDecisionAllowed": "dismissed",
           "notificationsSent": []

@@ -1,17 +1,30 @@
 {
-  "description": "RIA-1939 Send appeal (dismissed) decision notification to Home Office and Legal Representative - Admin Officer",
+  "description": "RIA-4932 - AIP - appeal outcome - dismissed",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "AdminOfficer",
+    "credentials": "CaseOfficer",
     "input": {
-      "id": 1003,
+      "id": 2222,
       "eventId": "sendDecisionAndReasons",
       "state": "decided",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "journeyType": "rep",
+          "journeyType": "aip",
+          "appealOutOfCountry": "No",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
           "ariaListingReference": "LP/12345/2019",
           "isDecisionAllowed": "dismissed",
           "notificationsSent": []
@@ -28,11 +41,15 @@
         "isDecisionAllowed": "dismissed",
         "notificationsSent": [
           {
-            "id": "1003_APPEAL_OUTCOME_HOME_OFFICE",
+            "id": "2222_APPEAL_OUTCOME_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1003_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+            "id": "2222_APPEAL_OUTCOME_AIP_APPELLANT_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2222_APPEAL_OUTCOME_AIP_APPELLANT_SMS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -40,7 +57,7 @@
     },
     "notifications": [
       {
-        "reference": "1003_APPEAL_OUTCOME_HOME_OFFICE",
+        "reference": "2222_APPEAL_OUTCOME_HOME_OFFICE",
         "recipient": "{$dismissedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
@@ -54,17 +71,27 @@
         ]
       },
       {
-        "reference": "1003_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
-        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "reference": "2222_APPEAL_OUTCOME_AIP_APPELLANT_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Your appeal has been decided",
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
-          "CASE001",
+          "A1234567",
           "Talha Awan",
-          "{$iaExUiFrontendUrl}",
+          "{$iaAipFrontendUrl}",
+          "14 days",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "2222_APPEAL_OUTCOME_AIP_APPELLANT_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "14 days",
+          "{$iaAipFrontendUrl}"
         ]
       }
     ]

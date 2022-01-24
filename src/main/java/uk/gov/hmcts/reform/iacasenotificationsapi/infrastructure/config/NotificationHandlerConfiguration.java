@@ -236,12 +236,48 @@ public class NotificationHandlerConfiguration {
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> appealOutcomeNotificationHandler(
         @Qualifier("appealOutcomeNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
-
-        // RIA-3361 - sendDecisionAndReasons
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.SEND_DECISION_AND_REASONS,
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> appealOutcomeRepNotificationHandler(
+        @Qualifier("appealOutcomeRepNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isRepJourney = asylumCase
+                    .read(JOURNEY_TYPE, JourneyType.class)
+                    .map(type -> type == REP).orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.SEND_DECISION_AND_REASONS
+                       && isRepJourney;
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> appealOutcomeAipNotificationHandler(
+        @Qualifier("appealOutcomeAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isAipJourney = isAipJourney(asylumCase);
+
+                return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.SEND_DECISION_AND_REASONS
+                        && isAipJourney);
+            },
             notificationGenerators
         );
     }

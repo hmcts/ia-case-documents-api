@@ -227,19 +227,52 @@ public class NotificationGeneratorConfiguration {
     @Bean("appealOutcomeNotificationGenerator")
     public List<NotificationGenerator> appealOutcomeNotificationGenerator(
         HomeOfficeAppealOutcomePersonalisation homeOfficeAppealOutcomePersonalisation,
-        LegalRepresentativeAppealOutcomePersonalisation legalRepresentativeAppealOutcomePersonalisation,
         NotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
-        // RIA-3361 - sendDecisionAndReasons
         List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
-            ?  newArrayList(homeOfficeAppealOutcomePersonalisation, legalRepresentativeAppealOutcomePersonalisation)
-            : newArrayList(legalRepresentativeAppealOutcomePersonalisation);
-
+            ?  newArrayList(homeOfficeAppealOutcomePersonalisation)
+            : newArrayList();
 
         return Arrays.asList(
             new EmailNotificationGenerator(
                 personalisations,
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("appealOutcomeRepNotificationGenerator")
+    public List<NotificationGenerator> appealOutcomeRepNotificationGenerator(
+        LegalRepresentativeAppealOutcomePersonalisation legalRepresentativeAppealOutcomePersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeAppealOutcomePersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("appealOutcomeAipNotificationGenerator")
+    public List<NotificationGenerator> appealOutcomeAipNotificationGenerator(
+        AppellantAppealOutcomePersonalisationEmail appellantAppealOutcomePersonalisationEmail,
+        AppellantAppealOutcomePersonalisationSms appellantAppealOutcomePersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantAppealOutcomePersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantAppealOutcomePersonalisationSms),
                 notificationSender,
                 notificationIdAppender
             )
