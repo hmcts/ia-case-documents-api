@@ -71,7 +71,7 @@ class AppealReasonsCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(appealReasonsDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LEGAL_REPRESENTATIVE_DOCUMENTS, DocumentTag.ADDITIONAL_EVIDENCE);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LEGAL_REPRESENTATIVE_DOCUMENTS, DocumentTag.APPEAL_REASONS);
     }
 
 

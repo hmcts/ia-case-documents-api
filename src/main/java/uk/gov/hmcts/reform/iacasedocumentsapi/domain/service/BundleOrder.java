@@ -81,8 +81,10 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case UPPER_TRIBUNAL_BUNDLE:
                 log.warn("UPPER_TRIBUNAL_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 25;
-            case NONE:
+            case APPEAL_REASONS:
                 return 26;
+            case NONE:
+                return 27;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
