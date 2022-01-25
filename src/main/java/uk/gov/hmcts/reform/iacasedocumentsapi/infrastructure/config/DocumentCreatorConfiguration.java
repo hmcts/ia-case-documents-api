@@ -224,6 +224,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("aipDecisionAndReasonsCoverLetter")
+    public DocumentCreator<AsylumCase> getAipDecisionAndReasonsCoverLetterDocumentCreator(
+        @Value("${aipDecisionAndReasonsCoverLetter.contentType}") String contentType,
+        @Value("${aipDecisionAndReasonsCoverLetter.fileExtension}") String fileExtension,
+        @Value("${aipDecisionAndReasonsCoverLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        AppellantDecisionAndReasonsCoverLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("decisionAndReasonsCoverLetter")
     public DocumentCreator<AsylumCase> getAndDecisionAndReasonsCoverLetterDocumentCreator(
         @Value("${decisionAndReasonsCoverLetter.contentType}") String contentType,
