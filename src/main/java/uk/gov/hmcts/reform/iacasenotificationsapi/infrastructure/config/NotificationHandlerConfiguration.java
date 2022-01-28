@@ -1005,14 +1005,28 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
-    public PreSubmitCallbackHandler<AsylumCase> editCaseListingNotificationHandler(
-        @Qualifier("editCaseListingNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+    public PreSubmitCallbackHandler<AsylumCase> editCaseListingRepNotificationHandler(
+        @Qualifier("editCaseListingRepNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
         // RIA-3631 - editCaseListing
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.EDIT_CASE_LISTING,
+                && callback.getEvent() == Event.EDIT_CASE_LISTING
+                && isRepJourney(callback.getCaseDetails().getCaseData()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> editCaseListingAipNotificationHandler(
+        @Qualifier("editCaseListingAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                && callback.getEvent() == Event.EDIT_CASE_LISTING
+                && isAipJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerators
         );
     }

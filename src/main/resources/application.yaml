@@ -221,12 +221,15 @@ govnotify:
         legalRep:
           email: e79249e2-ecbf-4d2b-8458-006285613402
     caseEdited:
+      homeOffice:
+        email: b4cfdb17-6130-4f52-aec4-f3571e030790
       caseOfficer:
         email: fec967bf-79f6-4683-b908-d1eea3cc591e
       legalRep:
         email: 60adb2b5-7a46-43bb-a03b-218b342e3d77
-      homeOffice:
-        email: b4cfdb17-6130-4f52-aec4-f3571e030790
+      appellant:
+        email: 11254ed3-abfb-4fd2-a2bf-8453f470321a
+        sms: 7d23fda4-9ff7-4642-aa97-1a8a3ccafaba
     caseEditedNoChange:
       legalRep:
         email: 9bdfb1cb-c5a8-45b8-8f6c-b81d3d331db6

@@ -854,8 +854,8 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("editCaseListingNotificationGenerator")
-    public List<NotificationGenerator> editCaseListingNotificationGenerator(
+    @Bean("editCaseListingRepNotificationGenerator")
+    public List<NotificationGenerator> editCaseListingRepNotificationGenerator(
         HomeOfficeEditListingPersonalisation homeOfficeEditListingPersonalisation,
         LegalRepresentativeEditListingPersonalisation legalRepresentativeEditListingPersonalisation,
         LegalRepresentativeEditListingNoChangePersonalisation legalRepresentativeEditListingNoChangePersonalisation,
@@ -872,6 +872,34 @@ public class NotificationGeneratorConfiguration {
         return Arrays.asList(
             new EditListingEmailNotificationGenerator(
                 personalisations,
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("editCaseListingAipNotificationGenerator")
+    public List<NotificationGenerator> editCaseListingAipNotificationGenerator(
+        HomeOfficeEditListingPersonalisation homeOfficeEditListingPersonalisation,
+        AppellantEditListingPersonalisationEmail appellantEditListingPersonalisationEmail,
+        AppellantEditListingPersonalisationSms appellantEditListingPersonalisationSms,
+        HomeOfficeEditListingNoChangePersonalisation homeOfficeEditListingNoChangePersonalisation,
+        CaseOfficerEditListingPersonalisation caseOfficerEditListingPersonalisation,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ?  newArrayList(homeOfficeEditListingPersonalisation, appellantEditListingPersonalisationEmail, homeOfficeEditListingNoChangePersonalisation, caseOfficerEditListingPersonalisation)
+            : newArrayList(appellantEditListingPersonalisationEmail, caseOfficerEditListingPersonalisation);
+
+        return Arrays.asList(
+            new EditListingEmailNotificationGenerator(
+                personalisations,
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantEditListingPersonalisationSms),
                 notificationSender,
                 notificationIdAppender
             )
