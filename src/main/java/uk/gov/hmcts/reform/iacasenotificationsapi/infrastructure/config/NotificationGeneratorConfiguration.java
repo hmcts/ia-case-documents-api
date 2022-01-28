@@ -987,8 +987,8 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("hearingBundleReadyNotificationGenerator")
-    public List<NotificationGenerator> hearingBundleReadyNotificationGenerator(
+    @Bean("hearingBundleReadyRepNotificationGenerator")
+    public List<NotificationGenerator> hearingBundleReadyRepNotificationGenerator(
         HomeOfficeHearingBundleReadyPersonalisation homeOfficeHearingBundleReadyPersonalisation,
         LegalRepresentativeHearingBundleReadyPersonalisation legalRepresentativeHearingBundleReadyPersonalisation,
         NotificationSender notificationSender,
@@ -1002,6 +1002,33 @@ public class NotificationGeneratorConfiguration {
         return Arrays.asList(
             new EmailNotificationGenerator(
                 personalisations,
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("hearingBundleReadyAipNotificationGenerator")
+    public List<NotificationGenerator> hearingBundleReadyAipNotificationGenerator(
+        HomeOfficeHearingBundleReadyPersonalisation homeOfficeHearingBundleReadyPersonalisation,
+        AppellantHearingBundleReadyPersonalisationEmail appellantHearingBundleReadyPersonalisationEmail,
+        AppellantHearingBundleReadyPersonalisationSms appellantHearingBundleReadyPersonalisationSms,
+        NotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        List<EmailNotificationPersonalisation> personalisations = isHomeOfficeGovNotifyEnabled
+            ? newArrayList(homeOfficeHearingBundleReadyPersonalisation, appellantHearingBundleReadyPersonalisationEmail)
+            : newArrayList(appellantHearingBundleReadyPersonalisationEmail);
+
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                personalisations,
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantHearingBundleReadyPersonalisationSms),
                 notificationSender,
                 notificationIdAppender
             )

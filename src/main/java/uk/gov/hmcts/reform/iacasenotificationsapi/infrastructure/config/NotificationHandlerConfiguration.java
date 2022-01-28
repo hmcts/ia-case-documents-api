@@ -1071,21 +1071,31 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
-    public PreSubmitCallbackHandler<AsylumCase> hearingBundleReadyNotificationHandler(
-        @Qualifier("hearingBundleReadyNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+    public PreSubmitCallbackHandler<AsylumCase> hearingBundleReadyRepNotificationHandler(
+        @Qualifier("hearingBundleReadyRepNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 
-        // RIA-3316 - generateHearingBundle, customiseHearingBundle
         return new NotificationHandler(
-            (callbackStage, callback) -> {
-
-                final String stitchStatus = getStitchStatus(callback);
-
-                return
-                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+            (callbackStage, callback) ->
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                     && callback.getEvent() == Event.ASYNC_STITCHING_COMPLETE
                     && callback.getCaseDetails().getState() != State.FTPA_DECIDED
-                    && stitchStatus.equalsIgnoreCase("DONE");
-            },
+                    && "DONE".equalsIgnoreCase(getStitchStatus(callback))
+                    && isRepJourney(callback.getCaseDetails().getCaseData()),
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> hearingBundleReadyAipNotificationHandler(
+        @Qualifier("hearingBundleReadyAipNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) ->
+                    callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.ASYNC_STITCHING_COMPLETE
+                        && callback.getCaseDetails().getState() != State.FTPA_DECIDED
+                        && "DONE".equalsIgnoreCase(getStitchStatus(callback))
+                        && isAipJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerators
         );
     }

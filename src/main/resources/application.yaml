@@ -292,6 +292,9 @@ govnotify:
         email: 4b8a8e0d-2901-411a-897c-dd2493bc8e03
       homeOffice:
         email: 3bb1f83d-4e4f-449d-a282-0ba2812cf88d
+      appellant:
+        email: fd89835b-4cf7-40e0-ade2-97c51c589431
+        sms: 24e64431-0888-427e-b2e9-9a4cbb0d79d4
     hearingBundleFailed:
       caseOfficer:
         email: c2af5875-f8ab-486d-a766-4a8cba223b36
@@ -814,6 +817,7 @@ security:
       - "makeAnApplication"
       - "draftHearingRequirements"
       - "requestHearingRequirementsFeature"
+      - "asyncStitchingComplete"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
