@@ -279,6 +279,22 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("appealDecidedOrEndedPendingPaymentGenerator")
+    public List<NotificationGenerator> appealDecidedOrEndedPendingPaymentGenerator(
+            AdminOfficerDecidedOrEndedAppealPendingPayment adminOfficerDecidedOrEndedAppealPendingPayment,
+            NotificationSender notificationSender,
+            NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+                new EmailNotificationGenerator(
+                        newArrayList(adminOfficerDecidedOrEndedAppealPendingPayment),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
     @Bean("legalRepChangeDirectionDueDateNotificationGenerator")
     public List<NotificationGenerator> legalRepChangeDirectionDueDateNotificationGenerator(
         LegalRepresentativeChangeDirectionDueDatePersonalisation legalRepresentativeChangeDirectionDueDatePersonalisation,

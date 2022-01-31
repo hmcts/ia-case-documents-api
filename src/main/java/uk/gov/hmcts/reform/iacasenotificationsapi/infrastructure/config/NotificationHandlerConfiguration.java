@@ -3011,6 +3011,43 @@ public class NotificationHandlerConfiguration {
         );
     }
 
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> appealDecidedOrEndedPendingPaymentNotificationHandler(
+            @Qualifier("appealDecidedOrEndedPendingPaymentGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        // RIA-4827 - Ctsc notification of Pending payment on appeal decided or ended.
+        return new NotificationHandler(
+                (callbackStage, callback) -> {
+
+                    final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                    boolean isAipCorrectAppealType = asylumCase
+                        .read(APPEAL_TYPE, AppealType.class)
+                        .map(type -> type == PA).orElse(false);
+
+                    boolean isAipPaymentUnpaid =
+                        asylumCase.read(PAYMENT_STATUS, PaymentStatus.class)
+                            .map(status -> status != PAID).orElse(false)
+                        || asylumCase.read(PAYMENT_STATUS, PaymentStatus.class).isEmpty();
+
+                    boolean isAipAppealUnpaid =
+                        (isAipJourney(asylumCase) && isAipCorrectAppealType && isAipPaymentUnpaid);
+
+                    boolean isPaymentPending =
+                            asylumCase.read(PAYMENT_STATUS, PaymentStatus.class)
+                                    .map(status -> status == PAYMENT_PENDING).orElse(false);
+
+                    return
+                            callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                    && Arrays.asList(
+                                            Event.SEND_DECISION_AND_REASONS,
+                                            Event.END_APPEAL).contains(callback.getEvent())
+                                    && (isPaymentPending || isAipAppealUnpaid);
+                },
+                notificationGenerators
+        );
+    }
+
     private boolean isRepJourney(AsylumCase asylumCase) {
 
         return asylumCase

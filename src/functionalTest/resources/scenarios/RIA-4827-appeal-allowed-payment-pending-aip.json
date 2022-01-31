@@ -1,17 +1,16 @@
 {
-  "description": "RIA-1939 Send appeal (allowed) decision notification to Home Office and Legal Representative - Admin Officer",
+  "description": "RIA-4827 Payment outstanding notification to HO & CTSC (AIP journey) after decision allowed (payment pending) - Judge",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "AdminOfficer",
+    "credentials": "Judge",
     "input": {
-      "id": 1939123,
+      "id": 4827,
       "eventId": "sendDecisionAndReasons",
       "state": "decided",
       "caseData": {
-        "template": "minimal-appeal-submitted.json",
+        "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
-          "journeyType": "rep",
           "ariaListingReference": "LP/12345/2019",
           "isDecisionAllowed": "allowed",
           "paymentStatus": "Payment pending",
@@ -24,20 +23,16 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-submitted.json",
+      "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
         "isDecisionAllowed": "allowed",
         "notificationsSent": [
           {
-            "id": "1939123_APPEAL_OUTCOME_HOME_OFFICE",
+            "id": "4827_APPEAL_OUTCOME_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1939123_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "1939123_APPEAL_PENDING_PAYMENT_ADMIN_OFFICER",
+            "id": "4827_APPEAL_PENDING_PAYMENT_ADMIN_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -45,40 +40,26 @@
     },
     "notifications": [
       {
-        "reference": "1939123_APPEAL_OUTCOME_HOME_OFFICE",
+        "reference": "4827_APPEAL_OUTCOME_HOME_OFFICE",
         "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
           "A1234567",
-          "Talha Awan",
+          "Pablo Jimenez",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
         ]
       },
       {
-        "reference": "1939123_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
-        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: decision and reasons",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "CASE001",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}",
-          "{$customerServices.telephoneNumber}",
-          "{$customerServices.emailAddress}"
-        ]
-      },
-      {
-        "reference": "1939123_APPEAL_PENDING_PAYMENT_ADMIN_OFFICER",
+        "reference": "4827_APPEAL_PENDING_PAYMENT_ADMIN_OFFICER",
         "recipient": "{$ctscAdminPendingPaymentEmailAddress}",
         "subject": "Immigration and Asylum appeal: An unpaid appeal has been decided or ended",
         "body": [
           "PA/12345/2019",
-          "Talha Awan",
+          "Pablo Jimenez",
           "{$iaExUiFrontendUrl}"
         ]
       }

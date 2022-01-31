@@ -50,6 +50,7 @@ java:
         - ctsc-admin-ftpa-submitted-email
         - respondent-ftpa-submitted-email
         - ctsc-admin-ftpa-decision-email
+        - ctsc-admin-pending-payment-email
         - customer-services-telephone
         - customer-services-email
         - system-username

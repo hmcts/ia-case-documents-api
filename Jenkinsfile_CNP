@@ -87,6 +87,7 @@ def secrets = [
         secret('admin-officer-review-hearing-requirements-email', 'IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL'),
 
         secret('ctsc-admin-ftpa-decision-email', 'IA_CTSC_ADMIN_FTPA_DECISION'),
+        secret('ctsc-admin-pending-payment-email', 'IA_CTSC_ADMIN_PENDING_PAYMENT_EMAIL'),
 
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
