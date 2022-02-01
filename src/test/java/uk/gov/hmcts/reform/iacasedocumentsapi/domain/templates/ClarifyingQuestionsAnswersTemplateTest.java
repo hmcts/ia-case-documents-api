@@ -151,7 +151,9 @@ class ClarifyingQuestionsAnswersTemplateTest {
             "2021-12-22",
             DirectionTag.REQUEST_CLARIFYING_QUESTIONS,
             Collections.emptyList(),
-            Collections.singletonList(new IdValue<>("id", new ClarifyingQuestion("Question"))));
+            Collections.singletonList(new IdValue<>("id", new ClarifyingQuestion("Question"))),
+            "some-id",
+            "some-direction-type");
     }
 
     private List<IdValue<ClarifyingQuestionAnswer>> getClarifyingQuestionsAnswers() {
