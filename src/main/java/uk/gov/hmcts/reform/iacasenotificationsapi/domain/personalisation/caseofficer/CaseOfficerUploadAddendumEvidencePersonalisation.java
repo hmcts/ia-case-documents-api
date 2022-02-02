@@ -39,7 +39,7 @@ public class CaseOfficerUploadAddendumEvidencePersonalisation implements EmailNo
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return featureToggler.getValue("tcw-notifications-feature", true)
+        return featureToggler.getValue("tcw-application-notifications-feature", true)
                 ? Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
                 : Collections.emptySet();
     }

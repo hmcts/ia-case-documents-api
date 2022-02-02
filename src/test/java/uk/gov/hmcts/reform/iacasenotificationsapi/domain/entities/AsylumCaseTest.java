@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
@@ -124,7 +125,11 @@ public class AsylumCaseTest {
                 "some-date",
                 "some-other-date",
                 DirectionTag.CASE_EDIT,
-                Collections.emptyList()));
+                Collections.emptyList(),
+                Collections.emptyList(),
+                UUID.randomUUID().toString(),
+                "someDirectionType"
+            ));
 
 
         asylumCase.write(DIRECTIONS, asList(idValue));

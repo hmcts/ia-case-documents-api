@@ -1,14 +1,14 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
-public class DirectionTest {
+class DirectionTest {
 
     private final String explanation = "Do the thing";
     private final Parties parties = Parties.RESPONDENT;
@@ -17,27 +17,35 @@ public class DirectionTest {
     private DirectionTag tag = DirectionTag.LEGAL_REPRESENTATIVE_REVIEW;
     private List<IdValue<PreviousDates>> previousDates = Collections.emptyList();
     private List<IdValue<ClarifyingQuestion>> clarifyingQuestions = Collections.emptyList();
+    private final String uniqueId = UUID.randomUUID().toString();
+    private final String directionType = "someEventDirectionType";
+
     private Direction direction = new Direction(
-        explanation,
-        parties,
-        dateDue,
-        dateSent,
-        tag,
-        previousDates
+            explanation,
+            parties,
+            dateDue,
+            dateSent,
+            tag,
+            previousDates,
+            Collections.emptyList(),
+            UUID.randomUUID().toString(),
+            "someDirectionType"
     );
 
     private Direction directionWithQuestions = new Direction(
-        explanation,
-        parties,
-        dateDue,
-        dateSent,
-        tag,
-        previousDates,
-        clarifyingQuestions
+            explanation,
+            parties,
+            dateDue,
+            dateSent,
+            tag,
+            previousDates,
+            clarifyingQuestions,
+            uniqueId,
+            directionType
     );
 
     @Test
-    public void should_hold_onto_values() {
+    void should_hold_onto_values() {
 
         assertEquals(explanation, direction.getExplanation());
         assertEquals(parties, direction.getParties());
@@ -48,27 +56,7 @@ public class DirectionTest {
     }
 
     @Test
-    public void direction_should_not_allow_null_arguments() {
-
-        assertThatThrownBy(() -> new Direction(null, parties, dateDue, dateSent, tag, previousDates))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, null, dateDue, dateSent, tag, previousDates))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, null, dateSent, tag, previousDates))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, null, tag, previousDates))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, dateSent, null, previousDates))
-            .isExactlyInstanceOf(NullPointerException.class);
-    }
-
-
-    @Test
-    public void direction_with_questions_should_hold_onto_values() {
+    void should_hold_onto_values_for_clarifying_questions() {
 
         assertEquals(explanation, directionWithQuestions.getExplanation());
         assertEquals(parties, directionWithQuestions.getParties());
@@ -77,32 +65,7 @@ public class DirectionTest {
         assertEquals(tag, directionWithQuestions.getTag());
         assertEquals(previousDates, directionWithQuestions.getPreviousDates());
         assertEquals(clarifyingQuestions, directionWithQuestions.getClarifyingQuestions());
-    }
-
-    @Test
-    public void direction_with_questions_should_not_allow_null_arguments() {
-
-        assertThatThrownBy(
-            () -> new Direction(null, parties, dateDue, dateSent, tag, previousDates, clarifyingQuestions))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(
-            () -> new Direction(explanation, null, dateDue, dateSent, tag, previousDates, clarifyingQuestions))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(
-            () -> new Direction(explanation, parties, null, dateSent, tag, previousDates, clarifyingQuestions))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(
-            () -> new Direction(explanation, parties, dateDue, null, tag, previousDates, clarifyingQuestions))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(
-            () -> new Direction(explanation, parties, dateDue, dateSent, null, previousDates, clarifyingQuestions))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new Direction(explanation, parties, dateDue, dateSent, tag, null, clarifyingQuestions))
-            .isExactlyInstanceOf(NullPointerException.class);
+        assertEquals(uniqueId, directionWithQuestions.getUniqueId());
+        assertEquals(directionType, directionWithQuestions.getDirectionType());
     }
 }

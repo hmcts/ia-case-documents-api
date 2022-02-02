@@ -81,7 +81,11 @@ public class SendsDirectionTest extends SpringBootIntegrationTest implements Wit
                             "1980-04-12",
                             "1980-04-12",
                             DirectionTag.NONE,
-                            Collections.emptyList()))))));
+                            Collections.emptyList(),
+                            Collections.emptyList(),
+                            UUID.randomUUID().toString(),
+                            "someDirectionType")
+                        )))));
 
         Optional<List<IdValue<String>>> notificationsSent =
             response

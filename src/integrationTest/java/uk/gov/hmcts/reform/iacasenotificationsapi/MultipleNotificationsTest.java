@@ -19,11 +19,7 @@ import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -203,7 +199,11 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
             LocalDate.now().plusDays(7L).format(DateTimeFormatter.ofPattern(dateFormat)),
             LocalDate.now().format(DateTimeFormatter.ofPattern(dateFormat)),
             directionTag,
-            Collections.emptyList());
+            Collections.emptyList(),
+            Collections.emptyList(),
+            UUID.randomUUID().toString(),
+            "someDirectionType"
+        );
     }
 
 }
