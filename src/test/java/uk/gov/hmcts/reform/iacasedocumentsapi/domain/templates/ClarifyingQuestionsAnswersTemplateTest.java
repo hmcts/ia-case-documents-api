@@ -163,8 +163,8 @@ class ClarifyingQuestionsAnswersTemplateTest {
         );
         return Collections.singletonList(
             new IdValue<>("id", new ClarifyingQuestionAnswer("2021-12-22", "2021-12-22",
-                "2021-12-22", "Question",
-                "Answer", supportingEvidence))
+                "2021-12-22", "Question", "Answer",
+                "directionId", supportingEvidence))
         );
     }
 }
