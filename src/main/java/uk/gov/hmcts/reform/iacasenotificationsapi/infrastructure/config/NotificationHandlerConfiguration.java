@@ -928,33 +928,9 @@ public class NotificationHandlerConfiguration {
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.SEND_DIRECTION
                        && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
-                       && callback.getCaseDetails().getState() == State.AWAITING_RESPONDENT_EVIDENCE
-                       && isRepJourney(asylumCase);
+                       && callback.getCaseDetails().getState() == State.AWAITING_RESPONDENT_EVIDENCE;
             },
             notificationGenerators
-        );
-    }
-
-    @Bean
-    public PreSubmitCallbackHandler<AsylumCase> awaitingRespondentDirectionAipNotificationHandler(
-            @Qualifier("awaitingRespondentDirectionAipNotificationGenerator") List<NotificationGenerator> notificationGenerators,
-            DirectionFinder directionFinder) {
-
-        return new NotificationHandler(
-                (callbackStage, callback) -> {
-                    AsylumCase asylumCase =
-                            callback
-                                    .getCaseDetails()
-                                    .getCaseData();
-
-                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                            && callback.getEvent() == Event.SEND_DIRECTION
-                            && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.RESPONDENT)
-                            && callback.getCaseDetails().getState() == State.AWAITING_RESPONDENT_EVIDENCE
-                            && isAipJourney(asylumCase)
-                            && !notificationGenerators.isEmpty();
-                },
-                notificationGenerators
         );
     }
 
