@@ -9,13 +9,13 @@ plugins {
   id 'checkstyle'
   id 'pmd'
   id 'jacoco'
-  id "info.solidsoft.pitest" version '1.5.1'
-  id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+  id "info.solidsoft.pitest" version '1.5.2'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'org.springframework.boot' version '2.3.9.RELEASE'
   id 'uk.gov.hmcts.java' version '0.12.5'
-  id 'org.owasp.dependencycheck' version '6.0.2'
+  id 'org.owasp.dependencycheck' version '6.1.6'
   id 'com.github.ben-manes.versions' version '0.28.0'
-  id 'org.sonarqube' version '2.8'
+  id 'org.sonarqube' version '3.0'
   id 'au.com.dius.pact' version '4.1.0'
 
 }
@@ -226,9 +226,27 @@ dependencyManagement {
       entry 'guava'
     }
 
-    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.54') {
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.58') {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-websocket'
+    }
+
+    // CVE-2021-22060
+    dependency(group: 'org.springframework', name: 'spring-core', version: '5.3.15')
+
+    //CVE-2021-22119
+    dependency group: 'org.springframework.security', name: 'spring-security-core',  version: '5.6.1'
+
+    //CVE-2021-42550
+    dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
+      entry 'logback-classic'
+      entry 'logback-core'
+    }
+
+    //CVE-2021-44228, CVE-2021-44832, CVE-2021-45046
+    dependencySet(group: 'org.apache.logging.log4j', version: '2.17.1') {
+      entry 'log4j-api'
+      entry 'log4j-to-slf4j'
     }
   }
 }
@@ -243,11 +261,11 @@ def versions = [
   pitest          : '1.5.2',
   junit           : '5.6.2',
   junitPlatform   : '1.6.2',
-  reformLogging   : '5.1.1',
-  springBoot      : '2.3.9.RELEASE',
+  reformLogging   : '5.1.7',
+  springBoot      : '2.6.3',
   springfoxSwagger: '2.9.2',
   pact_version    : '4.1.7',
-  serenity        : '2.0.91'
+  serenity        : '2.2.12'
 ]
 
 ext.libraries = [
@@ -268,12 +286,12 @@ configurations {
 }
 
 dependencies {
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: versions.springBoot
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: versions.springBoot
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
   // CVE-2019-17195
@@ -307,7 +325,7 @@ dependencies {
   implementation 'org.projectlombok:lombok:1.18.12'
 
   testImplementation libraries.junit5
-  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
+  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot, {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
