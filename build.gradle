@@ -35,11 +35,11 @@ def versions = [
         gradlePitest       : '1.5.1',
         pact_version       : '4.1.7',
         pitest             : '1.5.2',
-        reformLogging      : '5.1.1-BETA',
+        reformLogging      : '5.1.7',
         reformHealthStarter: '0.0.5',
         serenity           : '2.2.12',
         sonarPitest        : '0.5',
-        springBoot         : '2.3.9.RELEASE',
+        springBoot         : '2.6.3',
         springHystrix      : '2.1.1.RELEASE',
         springfoxSwagger   : '2.9.2'
 ]
@@ -281,7 +281,7 @@ repositories {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.54') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.58') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-el'
             entry 'tomcat-embed-websocket'
@@ -294,6 +294,24 @@ dependencyManagement {
 
         dependencySet(group: 'com.google.guava', version: '30.0-jre') {
             entry 'guava'
+        }
+
+        //CVE-2021-42550
+        dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
+            entry 'logback-classic'
+            entry 'logback-core'
+        }
+
+        //CVE-2021-22060
+        dependency group: 'org.springframework', name: 'spring-core', version: '5.3.15'
+
+        //CVE-2021-22119
+        dependency group: 'org.springframework.security', name: 'spring-security-core',  version: '5.6.1'
+
+        //CVE-2021-44228, CVE-2021-44832, CVE-2021-45046
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.17.1') {
+            entry 'log4j-api'
+            entry 'log4j-to-slf4j'
         }
     }
 }
@@ -324,8 +342,7 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
     compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
 
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.reformLogging
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-httpcomponents', version: versions.reformLogging
+    compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
     compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'
     compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
