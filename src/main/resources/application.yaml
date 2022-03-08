@@ -101,11 +101,15 @@ decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.w
 decisionAndReasons.fileExtension: docx
 decisionAndReasons.fileName: "decision-and-reasons-draft"
 decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00738.docx}
-
 decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
+
+aipDecisionAndReasonsCoverLetter.contentType:  application/pdf
+aipDecisionAndReasonsCoverLetter.fileExtension: PDF
+aipDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
+aipDecisionAndReasonsCoverLetter.templateName: ${IA_AIP_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00807.docx}
 
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
