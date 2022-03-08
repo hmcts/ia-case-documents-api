@@ -107,6 +107,7 @@ decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00239.docx}
 
+
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
 hearingBundle.fileExtension: PDF
