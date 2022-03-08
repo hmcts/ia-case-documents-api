@@ -39,11 +39,13 @@ public class EventTest {
         assertEquals("listCma", Event.LIST_CMA.toString());
         assertEquals("editAppealAfterSubmit", Event.EDIT_APPEAL_AFTER_SUBMIT.toString());
         assertEquals("generateUpperTribunalBundle", Event.GENERATE_UPPER_TRIBUNAL_BUNDLE.toString());
+        assertEquals("submitReasonsForAppeal", Event.SUBMIT_REASONS_FOR_APPEAL.toString());
+        assertEquals("submitClarifyingQuestionAnswers",Event.SUBMIT_CLARIFYING_QUESTION_ANSWERS.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(32, Event.values().length);
+        assertEquals(34, Event.values().length);
     }
 }

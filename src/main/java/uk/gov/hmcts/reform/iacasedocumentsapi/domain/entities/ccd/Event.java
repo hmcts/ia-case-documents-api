@@ -36,7 +36,8 @@ public enum Event {
     LIST_CMA("listCma"),
     EDIT_APPEAL_AFTER_SUBMIT("editAppealAfterSubmit"),
     GENERATE_UPPER_TRIBUNAL_BUNDLE("generateUpperTribunalBundle"),
-
+    SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal"),
+    SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers"),
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
 
