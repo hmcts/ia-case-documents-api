@@ -101,6 +101,7 @@ decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.w
 decisionAndReasons.fileExtension: docx
 decisionAndReasons.fileName: "decision-and-reasons-draft"
 decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00738.docx}
+
 decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
@@ -135,6 +136,15 @@ cmaAppointmentNotice.fileExtension: PDF
 cmaAppointmentNotice.fileName: "Case-management-appointment-notice"
 cmaAppointmentNotice.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00504.docx}
 
+appealReasons.contentType:  application/pdf
+appealReasons.fileExtension: PDF
+appealReasons.fileName: "Appeal-reasons"
+appealReasons.templateName: ${IA_APPEAL_REASONS_TEMPLATE:TB-IAC-GNO-ENG-00802.docx}
+
+clarifyingQuestionsAnswers.contentType:  application/pdf
+clarifyingQuestionsAnswers.fileExtension: PDF
+clarifyingQuestionsAnswers.fileName: "Tribunal-questions-and-answers"
+clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-IAC-GNO-ENG-00803.docx }
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -216,6 +226,9 @@ security:
       - "uploadAdditionalEvidence"
       - "submitAppeal"
       - "submitCmaRequirements"
+      - "submitReasonsForAppeal"
+      - "submitClarifyingQuestionAnswers"
+      - "draftHearingRequirements"
     caseworker-ia-iacjudge:
       - "generateDecisionAndReasons"
       - "endAppeal"
