@@ -16,15 +16,12 @@ public class FormattedDocumentListTest {
         FormattedDocumentList formattedDocumentList = new FormattedDocumentList(formattedDocuments);
 
         String actual = formattedDocumentList.toString();
+        String expected = new StringBuilder().append("Document: \nsome name\nDescription: \nsome desc")
+            .append(System.getProperty("line.separator"))
+            .append(System.getProperty("line.separator"))
+            .append("Document: \nsome other name\nDescription: \nsome other desc")
+            .toString();
 
-        assertThat(actual).isEqualTo("Document: \n"
-            + "some name\n"
-            + "Description: \n"
-            + "some desc\n"
-            + "\n"
-            + "Document: \n"
-            + "some other name\n"
-            + "Description: \n"
-            + "some other desc");
+        assertThat(actual).isEqualTo(expected);
     }
 }

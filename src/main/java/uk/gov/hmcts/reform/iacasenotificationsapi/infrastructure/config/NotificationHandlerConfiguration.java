@@ -154,13 +154,9 @@ public class NotificationHandlerConfiguration {
 
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isRepJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type != AIP).orElse(true);
-
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.END_APPEAL
-                       && isRepJourney;
+                       && isRepJourney(asylumCase);
             },
             notificationGenerators
 
@@ -252,13 +248,9 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isRepJourney = asylumCase
-                    .read(JOURNEY_TYPE, JourneyType.class)
-                    .map(type -> type == REP).orElse(false);
-
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.SEND_DECISION_AND_REASONS
-                       && isRepJourney;
+                       && isRepJourney(asylumCase);
             },
             notificationGenerators
         );
@@ -595,11 +587,9 @@ public class NotificationHandlerConfiguration {
             (callbackStage, callback) -> {
                 AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-                boolean isRepJourney = isRepJourney(asylumCase);
-
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE
-                       && isRepJourney;
+                       && isRepJourney(asylumCase);
             }, notificationGenerators
         );
     }
