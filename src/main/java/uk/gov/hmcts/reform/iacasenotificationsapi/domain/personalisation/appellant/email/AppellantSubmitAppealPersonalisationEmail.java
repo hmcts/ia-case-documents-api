@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appell
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.EMAIL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 
 import com.google.common.collect.ImmutableMap;
@@ -26,6 +27,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvi
 public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificationPersonalisation {
 
     private final String appealSubmittedAppellantEmailTemplateId;
+    private final String appealSubmittedAppellantNoHomeOfficeReferenceEmailTemplateId;
     private final String appealSubmittedAppellantLegalRepEmailTemplateId;
     private final String iaAipFrontendUrl;
     private final int daysToWaitAfterSubmission;
@@ -36,6 +38,7 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
 
     public AppellantSubmitAppealPersonalisationEmail(
         @Value("${govnotify.template.appealSubmitted.appellant.email}") String appealSubmittedAppellantEmailTemplateId,
+        @Value("${govnotify.template.appealSubmitted.appellant.noHomeOfficeReference.email}") String appealSubmittedAppellantNoHomeOfficeReferenceEmailTemplateId,
         @Value("${govnotify.template.appealSubmitted.appellant.legalRep.email}") String appealSubmittedAppellantLegalRepEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterSubmission}") int daysToWaitAfterSubmission,
@@ -45,6 +48,7 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
         CustomerServicesProvider customerServicesProvider
     ) {
         this.appealSubmittedAppellantEmailTemplateId = appealSubmittedAppellantEmailTemplateId;
+        this.appealSubmittedAppellantNoHomeOfficeReferenceEmailTemplateId = appealSubmittedAppellantNoHomeOfficeReferenceEmailTemplateId;
         this.appealSubmittedAppellantLegalRepEmailTemplateId = appealSubmittedAppellantLegalRepEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.daysToWaitAfterSubmission = daysToWaitAfterSubmission;
@@ -58,7 +62,11 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
     public String getTemplateId(AsylumCase asylumCase) {
 
         if (appealService.isAppellantInPersonJourney(asylumCase)) {
-            return appealSubmittedAppellantEmailTemplateId;
+            if (asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).isEmpty()) {
+                return appealSubmittedAppellantNoHomeOfficeReferenceEmailTemplateId;
+            } else {
+                return appealSubmittedAppellantEmailTemplateId;
+            }
         } else {
             return appealSubmittedAppellantLegalRepEmailTemplateId;
         }
@@ -93,11 +101,10 @@ public class AppellantSubmitAppealPersonalisationEmail implements EmailNotificat
                 .getCaseData();
 
         final String dateOfBirth = asylumCase
-                .read(AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH,String.class)
-                .orElseThrow(() -> new IllegalStateException("Appellant's birth of date is not present"));
+            .read(AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH, String.class)
+            .orElseThrow(() -> new IllegalStateException("Appellant's birth of date is not present"));
 
-        final  String formattedDateOfBirth = LocalDate.parse(dateOfBirth).format(DateTimeFormatter.ofPattern("d MMM yyyy"));
-
+        final String formattedDateOfBirth = LocalDate.parse(dateOfBirth).format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         String dueDate = systemDateProvider.dueDate(daysToWaitAfterSubmission);
 

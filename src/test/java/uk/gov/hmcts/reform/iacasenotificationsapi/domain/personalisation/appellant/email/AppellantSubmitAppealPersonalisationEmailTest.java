@@ -50,6 +50,7 @@ class AppellantSubmitAppealPersonalisationEmailTest {
 
     private Long caseId = 12345L;
     private String emailTemplateId = "someEmailTemplateId";
+    private String emailWithoutHoReferenceTemplateId = "anotherEmailTemplateId";
     private String nonAipEmailTemplateId = "someEmailTemplateId1";
     private String iaAipFrontendUrl = "http://localhost";
 
@@ -92,6 +93,7 @@ class AppellantSubmitAppealPersonalisationEmailTest {
 
         appellantSubmitAppealPersonalisationEmail = new AppellantSubmitAppealPersonalisationEmail(
             emailTemplateId,
+            emailWithoutHoReferenceTemplateId,
             nonAipEmailTemplateId,
             iaAipFrontendUrl,
             28,
@@ -106,6 +108,10 @@ class AppellantSubmitAppealPersonalisationEmailTest {
 
         when(appealService.isAppellantInPersonJourney(asylumCase)).thenReturn(true);
         assertEquals(emailTemplateId, appellantSubmitAppealPersonalisationEmail.getTemplateId(asylumCase));
+
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(appealService.isAppellantInPersonJourney(asylumCase)).thenReturn(true);
+        assertEquals(emailWithoutHoReferenceTemplateId, appellantSubmitAppealPersonalisationEmail.getTemplateId(asylumCase));
 
         when(appealService.isAppellantInPersonJourney(asylumCase)).thenReturn(false);
         assertEquals(nonAipEmailTemplateId, appellantSubmitAppealPersonalisationEmail.getTemplateId(asylumCase));
