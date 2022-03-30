@@ -41,7 +41,8 @@ def versions = [
     springBoot         : '2.6.3',
     springHystrix      : '2.2.10.RELEASE',
     springfoxSwagger   : '2.9.2',
-    pact_version       : '3.5.24'
+    pact_version       : '3.5.24',
+    jackson            : '2.13.1'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
@@ -290,10 +291,11 @@ dependencies {
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix
 
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.11.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: versions.jackson
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
     compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
