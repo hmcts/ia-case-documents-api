@@ -38,7 +38,7 @@ def versions = [
     reformHealthStarter: '0.0.5',
     serenity           : '2.2.12',
     sonarPitest        : '0.5',
-    springBoot         : '2.6.3',
+    springBoot         : '2.6.6',
     springHystrix      : '2.2.10.RELEASE',
     springfoxSwagger   : '2.9.2',
     pact_version       : '3.5.24'
