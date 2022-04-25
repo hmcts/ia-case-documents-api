@@ -32,6 +32,7 @@ public enum DocumentTag {
     UPPER_TRIBUNAL_BUNDLE("upperTribunalBundle"),
     APPEAL_REASONS("appealReasons"),
     CLARIFYING_QUESTIONS("clarifyingQuestions"),
+    BAIL_SUBMISSION("bailSubmission"),
 
     @JsonEnumDefaultValue
     NONE("");

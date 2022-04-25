@@ -43,6 +43,12 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
+        if (Arrays.asList(
+                Event.SUBMIT_APPLICATION)
+            .contains(callback.getEvent())) {
+            return false;
+        }
+
         final AsylumCase asylumCase =
             callback
                 .getCaseDetails()

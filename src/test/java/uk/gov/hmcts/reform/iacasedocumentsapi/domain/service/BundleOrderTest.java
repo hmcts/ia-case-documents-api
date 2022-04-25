@@ -23,13 +23,14 @@ public class BundleOrderTest {
     @Mock Document document;
 
     @Test
-    public void should_sort_in_correct_order() {
+    public void should_sort_in_correct_order_excluding_bail_tags() {
         List<DocumentTag> tags = newArrayList(DocumentTag.values());
         tags.add(DocumentTag.CASE_ARGUMENT);
         tags.add(DocumentTag.APPEAL_SUBMISSION);
         Collections.shuffle(tags);
 
         List<DocumentTag> sortedTags = tags.stream()
+            .filter(tag -> !tag.equals(DocumentTag.BAIL_SUBMISSION))
             .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag,"test"))
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)

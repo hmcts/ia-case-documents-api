@@ -38,6 +38,7 @@ public enum Event {
     GENERATE_UPPER_TRIBUNAL_BUNDLE("generateUpperTribunalBundle"),
     SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal"),
     SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers"),
+    SUBMIT_APPLICATION("submitApplication"),
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
 
