@@ -90,7 +90,7 @@ public class BailPreSubmitCallbackController extends PreSubmitCallbackController
     @ApiResponses({
         @ApiResponse(
             code = 200,
-            message = "Transformed Asylum case data, with any identified error or warning messages",
+            message = "Transformed Bail case data, with any identified error or warning messages",
             response = PreSubmitCallbackResponse.class
             ),
         @ApiResponse(
