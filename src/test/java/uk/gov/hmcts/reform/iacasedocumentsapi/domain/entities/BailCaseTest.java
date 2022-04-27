@@ -25,18 +25,18 @@ public class BailCaseTest {
     private BailCase bailCase;
 
     @BeforeEach
-    public void setUp() throws JsonProcessingException {
+    void setUp() throws JsonProcessingException {
         bailCase = objectMapper.readValue(caseData, BailCase.class);
     }
 
     @Test
-    public void should_read_simple_type_with_parameter_type() {
+    void should_read_simple_type_with_parameter_type() {
         assertEquals("family", bailCase.read(APPLICANT_FAMILY_NAME, String.class).get());
         assertEquals("immigrationRemovalCentre", bailCase.read(APPLICANT_DETAINED_LOC, String.class).get());
     }
 
     @Test
-    public void should_read_complex_type_with_target_parameter_type() {
+    void should_read_complex_type_with_target_parameter_type() {
         Optional<List<IdValue<NationalityFieldValue>>> mayBeNationalities = bailCase.read(APPLICANT_NATIONALITIES);
         List<IdValue<NationalityFieldValue>> nationalityList = mayBeNationalities.get();
         NationalityFieldValue nationality = nationalityList.get(0).getValue();
@@ -45,7 +45,7 @@ public class BailCaseTest {
     }
 
     @Test
-    public void should_write_simple_types() {
+    void should_write_simple_types() {
         bailCase.write(APPLICANT_GIVEN_NAMES, "John");
         bailCase.write(APPLICANT_FAMILY_NAME, "Doe");
         assertEquals("John", bailCase.read(APPLICANT_GIVEN_NAMES).get());
@@ -53,7 +53,7 @@ public class BailCaseTest {
     }
 
     @Test
-    public void should_write_complex_type() {
+    void should_write_complex_type() {
         IdValue<DocumentWithDescription> idValue = new IdValue<>(
             "some-id",
             new DocumentWithDescription(
@@ -66,16 +66,16 @@ public class BailCaseTest {
         Optional<List<IdValue<DocumentWithDescription>>> maybeEvidence = bailCase.read(UPLOAD_THE_BAIL_EVIDENCE_DOCS);
         IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeEvidence.get().get(0);
 
-        Assertions.assertEquals(maybeEvidence.get().size(), 1);
-        Assertions.assertEquals(documentWithDescriptionIdValue.getId(), "some-id");
-        Assertions.assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentUrl(), "some-doc-url");
-        Assertions.assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentBinaryUrl(), "some-doc-binary-url");
-        Assertions.assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentFilename(), "some-doc-filename");
-        Assertions.assertEquals(documentWithDescriptionIdValue.getValue().getDescription().get(), "some-description");
+        Assertions.assertEquals(1, maybeEvidence.get().size());
+        Assertions.assertEquals("some-id", documentWithDescriptionIdValue.getId());
+        Assertions.assertEquals("some-doc-url", documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentUrl());
+        Assertions.assertEquals("some-doc-binary-url", documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentBinaryUrl());
+        Assertions.assertEquals("some-doc-filename", documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentFilename());
+        Assertions.assertEquals("some-description", documentWithDescriptionIdValue.getValue().getDescription().get());
     }
 
     @Test
-    public void should_clear_field() {
+    void should_clear_field() {
         bailCase.clear(APPLICANT_FAMILY_NAME);
         assertEquals(Optional.empty(), bailCase.read(APPLICANT_FAMILY_NAME));
     }

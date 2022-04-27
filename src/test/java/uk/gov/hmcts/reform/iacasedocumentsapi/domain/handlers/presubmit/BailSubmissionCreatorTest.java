@@ -38,12 +38,12 @@ public class BailSubmissionCreatorTest {
     private BailSubmissionCreator bailSubmissionCreator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         bailSubmissionCreator = new BailSubmissionCreator(bailSubmissionDocumentCreator, bailDocumentHandler);
     }
 
     @Test
-    public void should_handle_valid_events_stage() {
+    void should_handle_valid_events_stage() {
         for (Event event : Event.values()) {
             when(callback.getEvent()).thenReturn(event);
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
@@ -58,7 +58,7 @@ public class BailSubmissionCreatorTest {
     }
 
     @Test
-    public void should_not_allow_null_args() {
+    void should_not_allow_null_args() {
         assertThatThrownBy(() -> bailSubmissionCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
@@ -77,7 +77,7 @@ public class BailSubmissionCreatorTest {
     }
 
     @Test
-    public void should_throw_if_cannot_handle() {
+    void should_throw_if_cannot_handle() {
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
         assertThatThrownBy((() -> bailSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
             .isExactlyInstanceOf(IllegalStateException.class)
@@ -85,7 +85,7 @@ public class BailSubmissionCreatorTest {
     }
 
     @Test
-    public void should_create_document_and_add_to_bailcase() {
+    void should_create_document_and_add_to_bailcase() {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPLICATION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);

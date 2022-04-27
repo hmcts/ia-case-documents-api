@@ -29,6 +29,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private static final String SENT_BY_LR = "Legal Representative";
     private static final String SENT_BY_HO = "Home Office";
+    private static final String NATIONALITY = "nationality";
 
     private final String templateName;
 
@@ -43,6 +44,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         return templateName;
     }
 
+    @Override
     public Map<String, Object> mapFieldValues(
         CaseDetails<BailCase> caseDetails
     ) {
@@ -77,7 +79,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(idValue -> idValue.getValue().getCode())
-                .map(nationality -> ImmutableMap.of("nationality", nationality))
+                .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
                 .collect(Collectors.toList())
         );
 
@@ -192,7 +194,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .orElse(Collections.emptyList())
                     .stream()
                     .map(idValue -> idValue.getValue().getCode())
-                    .map(nationality -> ImmutableMap.of("nationality", nationality))
+                    .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporterHasPassport", bailCase.read(SUPPORTER_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
@@ -238,7 +240,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .orElse(Collections.emptyList())
                     .stream()
                     .map(idValue -> idValue.getValue().getCode())
-                    .map(nationality -> ImmutableMap.of("nationality", nationality))
+                    .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporter2HasPassport", bailCase.read(SUPPORTER_2_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
@@ -283,7 +285,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .orElse(Collections.emptyList())
                     .stream()
                     .map(idValue -> idValue.getValue().getCode())
-                    .map(nationality -> ImmutableMap.of("nationality", nationality))
+                    .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporter3HasPassport", bailCase.read(SUPPORTER_3_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
@@ -328,7 +330,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .orElse(Collections.emptyList())
                     .stream()
                     .map(idValue -> idValue.getValue().getCode())
-                    .map(nationality -> ImmutableMap.of("nationality", nationality))
+                    .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporter4HasPassport", bailCase.read(SUPPORTER_4_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
