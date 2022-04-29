@@ -7,8 +7,7 @@ public enum UserRole {
     CASE_OFFICER("caseworker-ia-caseofficer"),
     LEGAL_REPRESENTATIVE("caseworker-ia-legalrep-solicitor"),
     JUDICIARY("caseworker-ia-judiciary"),
-    SYSTEM("caseworker-ia-system"),
-    HOME_OFFICE_GENERIC("caseworker-ia-respondentofficer");
+    SYSTEM("caseworker-ia-system");
 
     @JsonValue
     private final String id;

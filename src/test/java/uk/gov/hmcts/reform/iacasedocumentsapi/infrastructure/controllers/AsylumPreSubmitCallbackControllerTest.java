@@ -15,12 +15,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDispatcher;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCallbackDispatcher;
 
 @ExtendWith(MockitoExtension.class)
 public class AsylumPreSubmitCallbackControllerTest {
 
-    @Mock private PreSubmitCallbackDispatcher<AsylumCase> callbackDispatcher;
+    @Mock private AsylumPreSubmitCallbackDispatcher callbackDispatcher;
     @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;

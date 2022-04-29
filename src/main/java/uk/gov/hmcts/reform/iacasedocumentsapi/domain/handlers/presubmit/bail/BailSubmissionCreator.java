@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICATION_SUBMISSION_DOCUMENT;

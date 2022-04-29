@@ -18,12 +18,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDispatcher;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.BailPreSubmitCallbackDispatcher;
 
 @ExtendWith({MockitoExtension.class})
 public class BailPreSubmitCallbackControllerTest {
 
-    @Mock private PreSubmitCallbackDispatcher<BailCase> callbackDispatcher;
+    @Mock private BailPreSubmitCallbackDispatcher callbackDispatcher;
     @Mock private PreSubmitCallbackResponse<BailCase> callbackResponse;
     @Mock private Callback<BailCase> callback;
     @Mock private CaseDetails<BailCase> caseDetails;

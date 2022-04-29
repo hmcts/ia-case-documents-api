@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDispatcher;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.BailPreSubmitCallbackDispatcher;
 
 @Api(
     value = "/bail",
@@ -33,9 +31,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDi
 @RestController
 public class BailPreSubmitCallbackController extends PreSubmitCallbackController<BailCase> {
 
-    private static final org.slf4j.Logger LOG = getLogger(BailPreSubmitCallbackController.class);
-
-    public BailPreSubmitCallbackController(PreSubmitCallbackDispatcher<BailCase> callbackDispatcher) {
+    public BailPreSubmitCallbackController(BailPreSubmitCallbackDispatcher callbackDispatcher) {
         super(callbackDispatcher);
     }
 

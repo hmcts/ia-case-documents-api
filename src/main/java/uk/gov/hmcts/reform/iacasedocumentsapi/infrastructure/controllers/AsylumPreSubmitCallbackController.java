@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDispatcher;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCallbackDispatcher;
 
 @Api(
     value = "/asylum",
@@ -31,8 +31,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDi
 @RestController
 public class AsylumPreSubmitCallbackController extends PreSubmitCallbackController<AsylumCase> {
 
-
-    public AsylumPreSubmitCallbackController(PreSubmitCallbackDispatcher<AsylumCase> callbackDispatcher) {
+    public AsylumPreSubmitCallbackController(AsylumPreSubmitCallbackDispatcher callbackDispatcher) {
         super(callbackDispatcher);
     }
 

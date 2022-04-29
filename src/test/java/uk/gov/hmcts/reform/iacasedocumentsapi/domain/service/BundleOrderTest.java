@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +31,7 @@ public class BundleOrderTest {
         Collections.shuffle(tags);
 
         List<DocumentTag> sortedTags = tags.stream()
-            .filter(tag -> !tag.equals(DocumentTag.BAIL_SUBMISSION))
+            .filter(tag -> !tag.getCaseType().equals(CaseType.BAIL))
             .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag,"test"))
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)
