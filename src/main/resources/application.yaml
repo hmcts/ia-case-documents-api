@@ -146,6 +146,11 @@ clarifyingQuestionsAnswers.fileExtension: PDF
 clarifyingQuestionsAnswers.fileName: "Tribunal-questions-and-answers"
 clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-IAC-GNO-ENG-00803.docx }
 
+bailSubmissionDocument.contentType: application/pdf
+bailSubmissionDocument.fileExtension: PDF
+bailSubmissionDocument.fileName: "bail-application-summary"
+bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-BAIL-ENG-00001.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -192,6 +197,7 @@ security:
       - "uploadAdditionalEvidence"
       - "draftHearingRequirements"
       - "payAndSubmitAppeal"
+      - "submitApplication"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -220,6 +226,7 @@ security:
       - "listCma"
       - "endAppeal"
       - "generateUpperTribunalBundle"
+      - "submitApplication"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -236,6 +243,8 @@ security:
       - "updateHearingRequirements"
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
+    caseworker-ia-respondentofficer:
+      - "submitApplication"
 
 
 ### dependency configuration
