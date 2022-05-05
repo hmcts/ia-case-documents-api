@@ -106,17 +106,20 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         }
 
         fieldValues.put("applicantArrivalInUKDate", formatDateForRendering(bailCase.read(APPLICANT_ARRIVAL_IN_UK, String.class).orElse("")));
+
         fieldValues.put("hasAppealHearingPending", bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class).orElse(""));
-        if (bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class).orElse("").equals("Yes")) {
-            fieldValues.put("appealReferenceNumber", bailCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
-        }
-
-        if (bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class).orElse("").equals("YesWithoutAppealNumber")) {
-            fieldValues.put("hasAppealHearingPending", "Yes Without Appeal Number");
-        }
-
-        if (bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class).orElse("").equals("DontKnow")) {
-            fieldValues.put("hasAppealHearingPending", "Don't Know");
+        switch (bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class).orElse("")) {
+            case "YesWithoutAppealNumber":
+                fieldValues.put("hasAppealHearingPending", "Yes Without Appeal Number");
+                break;
+            case "DontKnow":
+                fieldValues.put("hasAppealHearingPending", "Don't Know");
+                break;
+            case "Yes" :
+                fieldValues.put("appealReferenceNumber", bailCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
+                break;
+            default:
+                break;
         }
 
         fieldValues.put("applicantHasAddress", bailCase.read(APPLICANT_HAS_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO));
@@ -143,12 +146,18 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         }
 
         fieldValues.put("hasPreviousBailApplication", bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class).orElse(""));
-        if (bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class).orElse("").equals("Yes")) {
-            fieldValues.put("previousBailApplicationNumber", bailCase.read(PREVIOUS_BAIL_APPLICATION_NUMBER, String.class).orElse(""));
-        } else if (bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class).orElse("").equals("YesWithoutApplicationNumber")) {
-            fieldValues.put("hasPreviousBailApplication", "Yes Without Application Number");
-        } else if (bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class).orElse("").equals("DontKnow")) {
-            fieldValues.put("hasPreviousBailApplication", "Don't Know");
+        switch (bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class).orElse("")) {
+            case "Yes":
+                fieldValues.put("previousBailApplicationNumber", bailCase.read(PREVIOUS_BAIL_APPLICATION_NUMBER, String.class).orElse(""));
+                break;
+            case "YesWithoutApplicationNumber":
+                fieldValues.put("hasPreviousBailApplication", "Yes Without Application Number");
+                break;
+            case "DontKnow":
+                fieldValues.put("hasPreviousBailApplication", "Don't Know");
+                break;
+            default:
+                break;
         }
 
         fieldValues.put("applicantBeenRefusedBail", bailCase.read(APPLICANT_BEEN_REFUSED_BAIL, YesOrNo.class).orElse(YesOrNo.NO));
