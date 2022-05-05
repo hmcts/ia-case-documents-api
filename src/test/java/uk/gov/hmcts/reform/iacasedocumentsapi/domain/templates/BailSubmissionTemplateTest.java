@@ -308,6 +308,45 @@ public class BailSubmissionTemplateTest {
         assertFalse(fieldValuesMap.containsKey("legalRepReference"));
     }
 
+    @Test
+    public void should_set_gender_details_if_gender_others() {
+        dataSetUp();
+        when(bailCase.read(APPLICANT_GENDER, String.class)).thenReturn(Optional.of("Other"));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertTrue(fieldValuesMap.containsKey("applicantOtherGenderDetails"));
+    }
+
+    @Test
+    public void should_not_set_gender_details_if_gender_male() {
+        dataSetUp();
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertFalse(fieldValuesMap.containsKey("applicantOtherGenderDetails"));
+    }
+
+    @Test
+    public void should_set_hasPreviousBailApplication_for_dontknow() {
+        dataSetUp();
+        when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("DontKnow"));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertEquals("Don't Know", fieldValuesMap.get("hasPreviousBailApplication"));
+    }
+
+    @Test
+    public void should_set_hasPreviousBailApplication_for_YesWithoutApplicationNumber() {
+        dataSetUp();
+        when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("YesWithoutApplicationNumber"));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertEquals("Yes Without Application Number", fieldValuesMap.get("hasPreviousBailApplication"));
+    }
+
     //Helper method for common assertions
     private void checkCommonFields() {
         assertTrue(fieldValuesMap.containsKey("applicantGivenNames"));
