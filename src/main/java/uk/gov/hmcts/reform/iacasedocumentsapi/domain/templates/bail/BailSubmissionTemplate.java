@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +70,11 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         }
 
         fieldValues.put("applicantDateOfBirth", formatDateForRendering(bailCase.read(APPLICANT_DATE_OF_BIRTH, String.class).orElse("")));
-        fieldValues.put("applicantGender", bailCase.read(APPLICANT_GENDER, String.class).orElse(""));
+        String gender = bailCase.read(APPLICANT_GENDER, String.class).orElse("");
+        fieldValues.put("applicantGender", gender);
+        if (gender.equals("Other")) {
+            fieldValues.put("applicantOtherGenderDetails", bailCase.read(APPLICANT_GENDER_ENTER_DETAILS, String.class).orElse(""));
+        }
 
         Optional<List<IdValue<NationalityFieldValue>>> applicantNationalities = bailCase
             .read(APPLICANT_NATIONALITIES);
@@ -353,15 +358,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 interpreterLanguages
                     .orElse(Collections.emptyList())
                     .stream()
-                    .map(language -> ImmutableMap.of("language", language.getValue().getLanguage()))
-                    .collect(Collectors.toList())
-            );
-            fieldValues.put(
-                "languageDialect",
-                interpreterLanguages
-                    .orElse(Collections.emptyList())
-                    .stream()
-                    .map(languageIdValue -> ImmutableMap.of("languageDialect", languageIdValue.getValue().getLanguageDialect()))
+                    .map(language -> new InterpreterLanguage(language.getValue().getLanguage(), language.getValue().getLanguageDialect()))
                     .collect(Collectors.toList())
             );
         }
