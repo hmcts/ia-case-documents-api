@@ -38,7 +38,7 @@ def versions = [
     reformHealthStarter: '0.0.5',
     serenity           : '2.2.12',
     sonarPitest        : '0.5',
-    springBoot         : '2.6.3',
+    springBoot         : '2.6.7',
     springHystrix      : '2.2.10.RELEASE',
     springfoxSwagger   : '2.9.2',
     pact_version       : '3.5.24'
@@ -251,7 +251,16 @@ dependencyManagement {
         }
 
         // CVE-2021-22060
-        dependency(group: 'org.springframework', name: 'spring-core', version: '5.3.15')
+        dependencySet(group: 'org.springframework', version: '5.3.19') {
+            entry 'spring-core'
+            entry 'spring-aop'
+            entry 'spring-beans'
+            entry 'spring-context'
+            entry 'spring-expression'
+            entry 'spring-jcl'
+            entry 'spring-web'
+            entry 'spring-webmvc'
+        }
 
         //CVE-2021-22119
         dependency group: 'org.springframework.security', name: 'spring-security-core',  version: '5.6.1'
