@@ -259,7 +259,6 @@ dependencyManagement {
             entry 'spring-expression'
             entry 'spring-jcl'
             entry 'spring-web'
-            entry 'spring-webmvc'
         }
 
         //CVE-2021-22119
