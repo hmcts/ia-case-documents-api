@@ -52,6 +52,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
 
         final Map<String, Object> fieldValues = new HashMap<>();
         boolean isLegalRep = false;
+        final boolean hasLegalRep = bailCase.read(HAS_LEGAL_REP, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
 
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("CREATED_DATE", caseDetails.getCreatedDate().format(DOCUMENT_DATE_FORMAT));
@@ -211,7 +212,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporterHasPassport", bailCase.read(SUPPORTER_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            fieldValues.put("supporterPassport", bailCase.read(SUPPORTER_PASSPORT, String.class).orElse(""));
+            if (!bailCase.read(SUPPORTER_PASSPORT, String.class).orElse("").isEmpty()) {
+                fieldValues.put("supporterPassport", bailCase.read(SUPPORTER_PASSPORT, String.class).get());
+            }
             fieldValues.put("financialAmountSupporterUndertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES, String.class).orElse(""));
         }
 
@@ -257,7 +260,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporter2HasPassport", bailCase.read(SUPPORTER_2_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            fieldValues.put("supporter2Passport", bailCase.read(SUPPORTER_2_PASSPORT, String.class).orElse(""));
+            if (!bailCase.read(SUPPORTER_2_PASSPORT, String.class).orElse("").isEmpty()) {
+                fieldValues.put("supporter2Passport", bailCase.read(SUPPORTER_2_PASSPORT, String.class).get());
+            }
             fieldValues.put("financialAmountSupporter2Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES, String.class).orElse(""));
         }
 
@@ -302,7 +307,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporter3HasPassport", bailCase.read(SUPPORTER_3_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            fieldValues.put("supporter3Passport", bailCase.read(SUPPORTER_3_PASSPORT, String.class).orElse(""));
+            if (!bailCase.read(SUPPORTER_3_PASSPORT, String.class).orElse("").isEmpty()) {
+                fieldValues.put("supporter3Passport", bailCase.read(SUPPORTER_3_PASSPORT, String.class).orElse(""));
+            }
             fieldValues.put("financialAmountSupporter3Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES, String.class).orElse(""));
         }
 
@@ -347,7 +354,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .collect(Collectors.toList())
             );
             fieldValues.put("supporter4HasPassport", bailCase.read(SUPPORTER_4_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            fieldValues.put("supporter4Passport", bailCase.read(SUPPORTER_4_PASSPORT, String.class).orElse(""));
+            if (!bailCase.read(SUPPORTER_4_PASSPORT, String.class).orElse("").isEmpty()) {
+                fieldValues.put("supporter4Passport", bailCase.read(SUPPORTER_4_PASSPORT, String.class).orElse(""));
+            }
             fieldValues.put("financialAmountSupporter4Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES, String.class).orElse(""));
         }
 
@@ -380,8 +389,8 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             fieldValues.put("videoHearingDetails", bailCase.read(VIDEO_HEARING_DETAILS, String.class).orElse(""));
         }
 
-        fieldValues.put("isLegallyRepresentedForFlag", isLegalRep ? YesOrNo.YES : YesOrNo.NO);
-        if (isLegalRep) {
+        fieldValues.put("isLegallyRepresentedForFlag", isLegalRep || hasLegalRep ? YesOrNo.YES : YesOrNo.NO);
+        if (isLegalRep || hasLegalRep) {
             fieldValues.put("legalRepCompany", bailCase.read(LEGAL_REP_COMPANY, String.class).orElse(""));
             fieldValues.put("legalRepName", bailCase.read(LEGAL_REP_NAME, String.class).orElse(""));
             fieldValues.put("legalRepEmail", bailCase.read(LEGAL_REP_EMAIL, String.class).orElse(""));

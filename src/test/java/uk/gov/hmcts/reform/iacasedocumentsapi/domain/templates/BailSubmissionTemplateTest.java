@@ -347,6 +347,31 @@ public class BailSubmissionTemplateTest {
         assertEquals("Yes Without Application Number", fieldValuesMap.get("hasPreviousBailApplication"));
     }
 
+    @Test
+    public void should_not_set_passportNumber_if_field_is_empty() {
+        dataSetUp();
+        when(bailCase.read(SUPPORTER_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SUPPORTER_PASSPORT, String.class)).thenReturn(Optional.empty());
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertFalse(fieldValuesMap.containsKey("supporterPassport"));
+    }
+
+    @Test
+    public void should_set_LR_Details_For_Application_SubmittedBy_Applicant() {
+        dataSetUp();
+        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("Applicant"));
+        when(bailCase.read(HAS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertEquals(YesOrNo.YES, fieldValuesMap.get("isLegallyRepresentedForFlag"));
+        assertTrue(fieldValuesMap.containsKey("legalRepCompany"));
+        assertTrue(fieldValuesMap.containsKey("legalRepName"));
+        assertTrue(fieldValuesMap.containsKey("legalRepEmail"));
+    }
+
     //Helper method for common assertions
     private void checkCommonFields() {
         assertTrue(fieldValuesMap.containsKey("applicantGivenNames"));
