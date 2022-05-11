@@ -125,7 +125,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_sentBy_properly_for_admin() {
+    void should_set_sentBy_properly_for_admin() {
         dataSetUp();
         when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         List<String> validSubmissionsBy = Arrays.asList("Applicant", "Legal Representative", "Home Office");
@@ -137,7 +137,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_not_set_previous_application_reference_if_not_present() {
+    void should_not_set_previous_application_reference_if_not_present() {
         dataSetUp();
         when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("No"));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
@@ -145,7 +145,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_not_set_previous_appeal_reference_if_not_present() {
+    void should_not_set_previous_appeal_reference_if_not_present() {
         dataSetUp();
         when(bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class)).thenReturn(Optional.of("No"));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
@@ -153,7 +153,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_disability_details_if_present() {
+    void should_set_disability_details_if_present() {
         dataSetUp();
         when(bailCase.read(APPLICANT_DISABILITY1, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
@@ -163,7 +163,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_prison_details_if_detained_in_prison() {
+    void should_set_prison_details_if_detained_in_prison() {
         dataSetUp();
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -174,7 +174,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_prison_details_if_detained_in_irc() {
+    void should_set_prison_details_if_detained_in_irc() {
         dataSetUp();
         when(bailCase.read(APPLICANT_DETAINED_LOC, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
         when(bailCase.read(IRC_NAME, String.class)).thenReturn(Optional.of("Derwentside"));
@@ -187,7 +187,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_not_set_supporter_2_data_if_not_present() {
+    void should_not_set_supporter_2_data_if_not_present() {
         dataSetUp();
         when(bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_2, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
@@ -209,7 +209,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_supporter_1_2_3_data_if_present() {
+    void should_set_supporter_1_2_3_data_if_present() {
         dataSetUp();
         supporter2DataSetUp();
         supporter3DataSetUp();
@@ -234,7 +234,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_supporter_2_3_4_data_if_present() {
+    void should_set_supporter_2_3_4_data_if_present() {
         dataSetUp();
         supporter2DataSetUp();
         supporter3DataSetUp();
@@ -247,7 +247,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_be_tolerant_to_empty_data() {
+    void should_be_tolerant_to_empty_data() {
         dataSetUp();
         when(bailCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
         when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
@@ -274,7 +274,7 @@ public class BailSubmissionTemplateTest {
     with interpreter languages
     */
     @Test
-    public void should_set_the_fields_for_application_submittedBy_LR() {
+    void should_set_the_fields_for_application_submittedBy_LR() {
         dataSetUp();
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -292,7 +292,7 @@ public class BailSubmissionTemplateTest {
     with interpreter languages
     */
     @Test
-    public void should_set_the_fields_for_application_submittedBy_HO() {
+    void should_set_the_fields_for_application_submittedBy_HO() {
         dataSetUp();
         when(bailCase.read(IS_HOME_OFFICE, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -309,7 +309,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_gender_details_if_gender_others() {
+    void should_set_gender_details_if_gender_others() {
         dataSetUp();
         when(bailCase.read(APPLICANT_GENDER, String.class)).thenReturn(Optional.of("Other"));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
@@ -319,7 +319,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_not_set_gender_details_if_gender_male() {
+    void should_not_set_gender_details_if_gender_male() {
         dataSetUp();
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -328,7 +328,7 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_hasPreviousBailApplication_for_dontknow() {
+    void should_set_hasPreviousBailApplication_for_dontknow() {
         dataSetUp();
         when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("DontKnow"));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
@@ -338,13 +338,38 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    public void should_set_hasPreviousBailApplication_for_YesWithoutApplicationNumber() {
+    void should_set_hasPreviousBailApplication_for_YesWithoutApplicationNumber() {
         dataSetUp();
         when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("YesWithoutApplicationNumber"));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
 
         checkCommonFields();
         assertEquals("Yes Without Application Number", fieldValuesMap.get("hasPreviousBailApplication"));
+    }
+
+    @Test
+    void should_not_set_passportNumber_if_field_is_empty() {
+        dataSetUp();
+        when(bailCase.read(SUPPORTER_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SUPPORTER_PASSPORT, String.class)).thenReturn(Optional.empty());
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertFalse(fieldValuesMap.containsKey("supporterPassport"));
+    }
+
+    @Test
+    void should_set_LR_Details_For_Application_SubmittedBy_Applicant() {
+        dataSetUp();
+        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("Applicant"));
+        when(bailCase.read(HAS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertEquals(YesOrNo.YES, fieldValuesMap.get("isLegallyRepresentedForFlag"));
+        assertTrue(fieldValuesMap.containsKey("legalRepCompany"));
+        assertTrue(fieldValuesMap.containsKey("legalRepName"));
+        assertTrue(fieldValuesMap.containsKey("legalRepEmail"));
     }
 
     //Helper method for common assertions
