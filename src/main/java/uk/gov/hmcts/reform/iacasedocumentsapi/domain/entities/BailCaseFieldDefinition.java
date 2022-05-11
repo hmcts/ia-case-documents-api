@@ -2,11 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.InterpreterLanguage;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 public enum BailCaseFieldDefinition {
     SENT_BY_CHECKLIST(
@@ -239,6 +235,50 @@ public enum BailCaseFieldDefinition {
         "isLegallyRepresentedForFlag", new TypeReference<YesOrNo>() {}),
     HAS_LEGAL_REP(
         "hasLegalRep", new TypeReference<YesOrNo>(){}),
+    DECISION_UNSIGNED_DOCUMENT(
+        "decisionUnsignedDocument", new TypeReference<Document>(){}),
+    DECISION_UNSIGNED_DOC_METADATA(
+        "decisionUnsignedDocMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+    REASONS_JUDGE_IS_MINDED_DETAILS(
+        "reasonsJudgeIsMindedDetails", new TypeReference<String>(){}),
+    JUDGE_DETAILS_NAME(
+        "judgeDetailsName", new TypeReference<String>(){}),
+    CONDITIONS_FOR_BAIL_OTHER(
+        "conditionsForBailOther", new TypeReference<String>(){}),
+    CONDITIONS_FOR_BAIL_APPEARANCE(
+        "conditionsForBailAppearance", new TypeReference<String>(){}),
+    CONDITIONS_FOR_BAIL_ACTIVITIES(
+        "conditionsForBailActivities", new TypeReference<String>(){}),
+    CONDITIONS_FOR_BAIL_RESIDENCE(
+        "conditionsForBailResidence", new TypeReference<String>(){}),
+    CONDITIONS_FOR_BAIL_ELECTRONIC_MONITORING(
+        "conditionsForBailElectronicMonitoring",  new TypeReference<String>(){}),
+    SECRETARY_OF_STATE_REFUSAL_REASONS(
+        "secretaryOfStateRefusalReasons", new TypeReference<String>(){}),
+    BAIL_TRANSFER_YES_OR_NO(
+        "bailTransferYesOrNo", new TypeReference<YesOrNo>(){}),
+    JUDGE_HAS_AGREED_TO_SUPPORTER1(
+        "judgeHasAgreedToSupporter1", new TypeReference<YesOrNo>(){}),
+    JUDGE_HAS_AGREED_TO_SUPPORTER2(
+        "judgeHasAgreedToSupporter2", new TypeReference<YesOrNo>(){}),
+    JUDGE_HAS_AGREED_TO_SUPPORTER3(
+        "judgeHasAgreedToSupporter3", new TypeReference<YesOrNo>(){}),
+    JUDGE_HAS_AGREED_TO_SUPPORTER4(
+        "judgeHasAgreedToSupporter4", new TypeReference<YesOrNo>(){}),
+    RECORD_FINANCIAL_CONDITION_YES_OR_NO(
+        "recordFinancialConditionYesOrNo", new TypeReference<YesOrNo>(){}),
+    RECORD_DECISION_TYPE(
+        "recordDecisionType", new TypeReference<String>(){}),
+    RECORD_THE_DECISION_LIST(
+        "recordTheDecisionList", new TypeReference<String>(){}),
+    BAIL_TRANSFER_DIRECTIONS(
+        "bailTransferDirections", new TypeReference<String>(){}),
+    REASON_FOR_REFUSAL_DETAILS(
+        "reasonForRefusalDetails", new TypeReference<String>(){}),
+    TRIBUNAL_REFUSAL_REASON(
+        "tribunalRefusalReason", new TypeReference<String>(){}),
+    CONDITIONS_FOR_BAIL(
+            "conditionsForBail", new TypeReference<List<String>>(){}),
     ;
 
     private final String value;
