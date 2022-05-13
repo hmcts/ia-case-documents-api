@@ -32,7 +32,7 @@ public class BailDocumentHandlerTest {
 
     private final DocumentTag tag = DocumentTag.ADDITIONAL_EVIDENCE;
 
-    private final BailCaseFieldDefinition documentField = BailCaseFieldDefinition.UPLOAD_THE_BAIL_EVIDENCE_METADATA;
+    private final BailCaseFieldDefinition documentField = BailCaseFieldDefinition.APPLICANT_DOCUMENTS_WITH_METADATA;
 
     private BailDocumentHandler bailDocumentHandler;
 
