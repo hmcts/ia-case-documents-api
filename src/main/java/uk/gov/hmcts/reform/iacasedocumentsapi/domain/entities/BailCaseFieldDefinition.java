@@ -237,8 +237,8 @@ public enum BailCaseFieldDefinition {
         "hasLegalRep", new TypeReference<YesOrNo>(){}),
     DECISION_UNSIGNED_DOCUMENT(
         "decisionUnsignedDocument", new TypeReference<Document>(){}),
-    DECISION_UNSIGNED_DOC_METADATA(
-        "decisionUnsignedDocMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+    TRIBUNAL_DOCUMENTS_WITH_METADATA(
+        "tribunalDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     REASONS_JUDGE_IS_MINDED_DETAILS(
         "reasonsJudgeIsMindedDetails", new TypeReference<String>(){}),
     JUDGE_DETAILS_NAME(
