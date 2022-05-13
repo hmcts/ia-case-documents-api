@@ -223,8 +223,8 @@ public enum BailCaseFieldDefinition {
         "groundsForBailProvideEvidenceOption", new TypeReference<YesOrNo>(){}),
     UPLOAD_THE_BAIL_EVIDENCE_DOCS(
         "uploadTheBailEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
-    UPLOAD_THE_BAIL_EVIDENCE_METADATA(
-        "uploadTheBailEvidenceMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+    APPLICANT_DOCUMENTS_WITH_METADATA(
+        "applicantDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     TRANSFER_BAIL_MANAGEMENT_YES_OR_NO(
         "transferBailManagementYesOrNo", new TypeReference<YesOrNo>(){}),
     NO_TRANSFER_BAIL_MANAGEMENT_REASONS(
@@ -239,8 +239,6 @@ public enum BailCaseFieldDefinition {
         "isLegallyRepresentedForFlag", new TypeReference<YesOrNo>() {}),
     HAS_LEGAL_REP(
         "hasLegalRep", new TypeReference<YesOrNo>(){}),
-    APPLICATION_SUBMISSION_DOCUMENT(
-        "applicationSubmissionDocument", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     ;
 
     private final String value;

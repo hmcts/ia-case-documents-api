@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICATION_SUBMISSION_DOCUMENT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_DOCUMENTS_WITH_METADATA;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -58,7 +58,7 @@ public class BailSubmissionCreator implements PreSubmitCallbackHandler<BailCase>
         bailDocumentHandler.addWithMetadata(
             bailCase,
             bailSubmission,
-            APPLICATION_SUBMISSION_DOCUMENT,
+            APPLICANT_DOCUMENTS_WITH_METADATA,
             DocumentTag.BAIL_SUBMISSION
         );
 

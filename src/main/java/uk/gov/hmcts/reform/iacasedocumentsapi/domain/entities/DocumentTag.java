@@ -34,6 +34,7 @@ public enum DocumentTag {
     APPEAL_REASONS("appealReasons", CaseType.ASYLUM),
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
+    BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
 
     @JsonEnumDefaultValue
     NONE("", CaseType.UNKNOWN);

@@ -97,6 +97,6 @@ public class BailSubmissionCreatorTest {
         assertNotNull(response);
         assertEquals(bailCase, response.getData());
         verify(bailDocumentHandler, times(1))
-            .addWithMetadata(bailCase, bailSubmission, BailCaseFieldDefinition.APPLICATION_SUBMISSION_DOCUMENT, DocumentTag.BAIL_SUBMISSION);
+            .addWithMetadata(bailCase, bailSubmission, BailCaseFieldDefinition.APPLICANT_DOCUMENTS_WITH_METADATA, DocumentTag.BAIL_SUBMISSION);
     }
 }
