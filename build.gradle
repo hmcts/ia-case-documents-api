@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath("org.yaml:snakeyaml:1.26")
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.11")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
     }
 }
 
@@ -36,7 +36,7 @@ def versions = [
     pitest             : '1.5.2',
     reformLogging      : '5.1.7',
     reformHealthStarter: '0.0.5',
-    serenity           : '2.2.12',
+    serenity           : '2.6.0',
     sonarPitest        : '0.5',
     springBoot         : '2.6.7',
     springHystrix      : '2.2.10.RELEASE',
@@ -261,8 +261,11 @@ dependencyManagement {
             entry 'spring-web'
         }
 
+        //CVE-2021-22060
+        dependency group: 'org.springframework', name: 'spring-core', version: '5.3.20'
+
         //CVE-2021-22119
-        dependency group: 'org.springframework.security', name: 'spring-security-core',  version: '5.6.1'
+        dependency group: 'org.springframework.security', name: 'spring-security-core',  version: '5.6.3'
 
         //CVE-2021-42550
         dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
@@ -275,6 +278,10 @@ dependencyManagement {
             entry 'log4j-api'
             entry 'log4j-to-slf4j'
         }
+
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2020.0.4'
+        }
     }
 }
 
@@ -285,13 +292,13 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.2.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.1'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: versions.springBoot
     // CVE-2019-17195
-    compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.9'
+    compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 
     // CVE-2021-27568
     compile group: 'net.minidev', name: 'json-smart', version: '2.3.1'
@@ -317,7 +324,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.2.2'
+    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.8.1'
 
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
