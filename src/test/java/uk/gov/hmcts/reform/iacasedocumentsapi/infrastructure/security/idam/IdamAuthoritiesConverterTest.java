@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
@@ -45,6 +44,9 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
+        assertTrue(jwt.hasClaim(TOKEN_NAME));
+        assertEquals(jwt.getClaim(TOKEN_NAME).toString(), "access_token");
+
         when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "caseworker-ia-caseofficer"));
         when(idamApi.userInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
@@ -82,6 +84,9 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
+        assertTrue(jwt.hasClaim(TOKEN_NAME));
+        assertEquals(jwt.getClaim(TOKEN_NAME).toString(), "access_token");
+
         assertEquals(Collections.emptyList(), idamAuthoritiesConverter.convert(jwt));
     }
 
@@ -93,6 +98,9 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
+
+        assertTrue(jwt.hasClaim(TOKEN_NAME));
+        assertEquals(jwt.getClaim(TOKEN_NAME).toString(), "access_token");
 
         idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi);
 
