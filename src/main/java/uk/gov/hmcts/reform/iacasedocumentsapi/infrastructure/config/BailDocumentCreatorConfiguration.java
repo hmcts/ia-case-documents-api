@@ -8,6 +8,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseFileNameQua
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedGrantedTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedMindedRefusalTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedRefusalTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
 
 @Configuration
@@ -31,6 +34,69 @@ public class BailDocumentCreatorConfiguration {
             documentTemplate,
             documentGenerator,
             documentUploader
+        );
+    }
+
+    @Bean("decisionUnsignedGranted")
+    public DocumentCreator<BailCase> getBailDecisionUnsignedGrantedDocumentCreator(
+            @Value("${decisionUnsignedDocument.contentType}") String contentType,
+            @Value("${decisionUnsignedDocument.fileExtension}") String fileExtension,
+            @Value("${decisionUnsignedDocument.fileName}") String fileName,
+            BailCaseFileNameQualifier fileNameQualifier,
+            BailDecisionUnsignedGrantedTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("decisionUnsignedMindedRefusal")
+    public DocumentCreator<BailCase> getBailDecisionUnsignedMindedRefusalDocumentCreator(
+            @Value("${decisionUnsignedDocument.contentType}") String contentType,
+            @Value("${decisionUnsignedDocument.fileExtension}") String fileExtension,
+            @Value("${decisionUnsignedDocument.fileName}") String fileName,
+            BailCaseFileNameQualifier fileNameQualifier,
+            BailDecisionUnsignedMindedRefusalTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("decisionUnsignedRefusal")
+    public DocumentCreator<BailCase> getBailDecisionUnsignedRefusalDocumentCreator(
+            @Value("${decisionUnsignedDocument.contentType}") String contentType,
+            @Value("${decisionUnsignedDocument.fileExtension}") String fileExtension,
+            @Value("${decisionUnsignedDocument.fileName}") String fileName,
+            BailCaseFileNameQualifier fileNameQualifier,
+            BailDecisionUnsignedRefusalTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
         );
     }
 }

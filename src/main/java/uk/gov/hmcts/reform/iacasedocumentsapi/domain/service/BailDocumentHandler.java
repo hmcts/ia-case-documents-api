@@ -82,5 +82,9 @@ public class BailDocumentHandler {
             .orElse(Collections.emptyList());
     }
 
+    public void addDocumentWithoutMetadata(BailCase bailCase, Document document, BailCaseFieldDefinition documentField) {
+        bailCase.write(documentField, document);
+    }
+
 
 }

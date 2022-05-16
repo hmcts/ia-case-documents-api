@@ -151,6 +151,13 @@ bailSubmissionDocument.fileExtension: PDF
 bailSubmissionDocument.fileName: "bail-application-summary"
 bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-BAIL-ENG-00001.docx}
 
+decisionUnsignedDocument.contentType: application/pdf
+decisionUnsignedDocument.fileExtension: PDF
+decisionUnsignedDocument.fileName: "decision-notice-UNSIGNED"
+decisionUnsignedDocument.grant.templateName: ${IA_BAIL_DECISION_GRANT_TEMPLATE:TB-IAC-BAIL-ENG-00002.docx}
+decisionUnsignedDocument.judgeMinded.templateName: ${IA_BAIL_DECISION_JUDGE_MINDED_TEMPLATE:TB-IAC-BAIL-ENG-00003.docx}
+decisionUnsignedDocument.refusal.templateName: ${IA_BAIL_DECISION_REFUSAL_TEMPLATE:TB-IAC-BAIL-ENG-00004.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -227,6 +234,7 @@ security:
       - "endAppeal"
       - "generateUpperTribunalBundle"
       - "submitApplication"
+      - "recordTheDecision"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -268,6 +276,8 @@ launchDarkly:
 customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
+
+govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
