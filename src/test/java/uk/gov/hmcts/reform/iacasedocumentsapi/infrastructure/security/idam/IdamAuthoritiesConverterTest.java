@@ -44,14 +44,11 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
-        assertTrue(jwt.hasClaim(TOKEN_NAME));
-        assertEquals(jwt.getClaim(TOKEN_NAME).toString(), "access_token");
-
         when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "caseworker-ia-caseofficer"));
         when(idamApi.userInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
         idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi);
-
+        //Indu commented it
         List<GrantedAuthority> expectedGrantedAuthorities = Lists.newArrayList(
             new SimpleGrantedAuthority("caseworker-ia"),
             new SimpleGrantedAuthority("caseworker-ia-caseofficer")
@@ -84,9 +81,6 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
-        assertTrue(jwt.hasClaim(TOKEN_NAME));
-        assertEquals(jwt.getClaim(TOKEN_NAME).toString(), "access_token");
-
         assertEquals(Collections.emptyList(), idamAuthoritiesConverter.convert(jwt));
     }
 
@@ -98,9 +92,6 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
-
-        assertTrue(jwt.hasClaim(TOKEN_NAME));
-        assertEquals(jwt.getClaim(TOKEN_NAME).toString(), "access_token");
 
         idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi);
 
