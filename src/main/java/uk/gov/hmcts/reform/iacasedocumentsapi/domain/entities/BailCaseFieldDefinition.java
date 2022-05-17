@@ -279,6 +279,12 @@ public enum BailCaseFieldDefinition {
         "tribunalRefusalReason", new TypeReference<String>(){}),
     CONDITIONS_FOR_BAIL(
             "conditionsForBail", new TypeReference<List<String>>(){}),
+    END_APPLICATION_DATE(
+        "endApplicationDate", new TypeReference<String>(){}),
+    END_APPLICATION_OUTCOME(
+        "endApplicationOutcome", new TypeReference<String>(){}),
+    END_APPLICATION_REASONS(
+        "endApplicationReasons", new TypeReference<String>(){}),
     ;
 
     private final String value;

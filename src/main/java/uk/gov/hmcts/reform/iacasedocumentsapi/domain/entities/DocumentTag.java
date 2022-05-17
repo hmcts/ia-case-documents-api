@@ -36,6 +36,7 @@ public enum DocumentTag {
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
+    BAIL_END_APPLICATION("bailEndApplication", CaseType.BAIL),
 
     @JsonEnumDefaultValue
     NONE("", CaseType.UNKNOWN);
