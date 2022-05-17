@@ -27,7 +27,7 @@ public class BailDecisionUnsignedTemplateHelper {
             CaseDetails<BailCase> caseDetails
     ) {
         final BailCase bailCase = caseDetails.getCaseData();
-
+        final String applicantDetainedLoc = "applicantDetainedLoc";
         final Map<String, Object> fieldValues = new HashMap<>();
         boolean isLegalRep = false;
         final boolean hasLegalRep = bailCase.read(HAS_LEGAL_REP, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
@@ -47,14 +47,16 @@ public class BailDecisionUnsignedTemplateHelper {
         fieldValues.put("bailReferenceNumber", bailCase.read(BAIL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", bailCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
 
-        fieldValues.put("applicantDetainedLoc", bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse(""));
+        fieldValues.put(applicantDetainedLoc, bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse(""));
         if (bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse("").equals("prison")) {
-            fieldValues.put("applicantDetainedLoc", bailCase.read(PRISON_NAME, String.class).orElse(""));
+            fieldValues.put(applicantDetainedLoc, "Prison");
+            fieldValues.put("prisonName", bailCase.read(PRISON_NAME, String.class).orElse(""));
             fieldValues.put("applicantPrisonDetails", bailCase.read(APPLICANT_PRISON_DETAILS, String.class).orElse(""));
         }
 
         if (bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse("").equals("immigrationRemovalCentre")) {
-            fieldValues.put("applicantDetainedLoc", bailCase.read(IRC_NAME, String.class).orElse(""));
+            fieldValues.put(applicantDetainedLoc, "Immigration Removal Centre");
+            fieldValues.put("ircName", bailCase.read(IRC_NAME, String.class).orElse(""));
         }
 
         fieldValues.put("isLegallyRepresentedForFlag", isLegallyRepresentedCase ? YesOrNo.YES : YesOrNo.NO);

@@ -54,6 +54,8 @@ public class BailDecisionUnsignedTemplateHelperTest {
 
         checkCommonFields();
         assertTrue(fieldValuesMap.containsKey("applicantPrisonDetails"));
+        assertTrue(fieldValuesMap.containsKey("prisonName"));
+        assertFalse(fieldValuesMap.containsKey("ircName"));
     }
 
     @Test
@@ -64,7 +66,9 @@ public class BailDecisionUnsignedTemplateHelperTest {
         fieldValuesMap = bailDecisionUnsignedTemplateHelper.getCommonMapFieldValues(caseDetails);
 
         checkCommonFields();
+        assertTrue(fieldValuesMap.containsKey("ircName"));
         assertFalse(fieldValuesMap.containsKey("applicantPrisonDetails"));
+        assertFalse(fieldValuesMap.containsKey("prisonName"));
     }
 
 
