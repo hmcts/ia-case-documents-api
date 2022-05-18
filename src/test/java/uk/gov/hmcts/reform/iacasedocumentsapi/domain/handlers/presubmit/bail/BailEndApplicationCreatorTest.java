@@ -49,8 +49,6 @@ class BailEndApplicationCreatorTest {
         for (Event event : Event.values()) {
             when(callback.getEvent()).thenReturn(event);
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
-                when(callback.getCaseDetails()).thenReturn(caseDetails);
-                when(caseDetails.getCaseData()).thenReturn(bailCase);
                 boolean canHandle = bailEndApplicationCreator.canHandle(preSubmitCallbackStage, callback);
                 if (event == Event.END_APPLICATION && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
@@ -99,8 +97,6 @@ class BailEndApplicationCreatorTest {
     @Test
     void should_throw_if_cannot_handle() {
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(bailCase);
         assertThatThrownBy((() -> bailEndApplicationCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Cannot handle callback");

@@ -38,9 +38,6 @@ public class BailEndApplicationCreator implements PreSubmitCallbackHandler<BailC
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        final CaseDetails<BailCase> caseDetails = callback.getCaseDetails();
-        final BailCase bailCase = caseDetails.getCaseData();
-
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == Event.END_APPLICATION;
     }
