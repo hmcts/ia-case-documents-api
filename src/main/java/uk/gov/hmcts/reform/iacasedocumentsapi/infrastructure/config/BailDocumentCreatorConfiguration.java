@@ -8,10 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseFileNameQua
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedGrantedTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedMindedRefusalTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedRefusalTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.*;
 
 @Configuration
 public class BailDocumentCreatorConfiguration {
@@ -97,6 +94,27 @@ public class BailDocumentCreatorConfiguration {
                 documentTemplate,
                 documentGenerator,
                 documentUploader
+        );
+    }
+
+    @Bean("bailEndApplication")
+    public DocumentCreator<BailCase> getBailEndApplicationDocumentCreator(
+        @Value("${bailEndApplication.contentType}") String contentType,
+        @Value("${bailEndApplication.fileExtension}") String fileExtension,
+        @Value("${bailEndApplication.fileName}") String fileName,
+        BailCaseFileNameQualifier fileNameQualifier,
+        BailEndApplicationTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 }

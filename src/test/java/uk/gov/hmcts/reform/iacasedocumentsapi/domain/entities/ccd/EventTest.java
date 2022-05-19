@@ -43,11 +43,12 @@ public class EventTest {
         assertEquals("submitClarifyingQuestionAnswers",Event.SUBMIT_CLARIFYING_QUESTION_ANSWERS.toString());
         assertEquals("submitApplication",Event.SUBMIT_APPLICATION.toString());
         assertEquals("recordTheDecision",Event.RECORD_THE_DECISION.toString());
+        assertEquals("endApplication",Event.END_APPLICATION.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(36, Event.values().length);
+        assertEquals(37, Event.values().length);
     }
 }
