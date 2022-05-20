@@ -146,16 +146,6 @@ checkstyle {
     configDir = new File(rootDir, 'config/checkstyle')
 }
 
-//tasks.withType(Checkstyle).each { checkstyleTask ->
-//    checkstyleTask.doLast {
-//        reports.all { report ->
-//            def outputFile = report.destination
-//            if (outputFile.exists() && outputFile.text.contains("<error ")) {
-//                throw new GradleException("There were checkstyle warnings! For more info check $outputFile")
-//            }
-//        }
-//    }
-//}
 
 pmd {
     toolVersion = '6.41.0'
@@ -312,7 +302,7 @@ dependencies {
 
 
     // CVE-2019-17195
-    compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.9'
+    compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 
     // CVE-2021-27568
     compile group: 'net.minidev', name: 'json-smart', version: '2.3.1'
