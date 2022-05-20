@@ -2,25 +2,12 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <suppress until="2030-01-01">
         <notes><![CDATA[
-                 5.3 MEDIUM
-                 https://nvd.nist.gov/vuln/detail/CVE-2021-28170
-                 Spring Framework vulnerability, subject to review after Spring Boot upgrade to 2.4.x affected lib org.glassfish:jakarta.el:3.0.3
-                ]]></notes>
-        <cve>CVE-2021-28170</cve>
-    </suppress>
-    <suppress until="2030-01-01">
-        <notes><![CDATA[
-                 5.3 MEDIUM
-                 https://nvd.nist.gov/vuln/detail/CVE-2020-23171
-                 Spring Framework vulnerability, https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-23171 nim-lang all versions affected https://github.com/nim-lang/zip/issues/54
-                ]]></notes>
-        <cve>CVE-2020-23171</cve>
-    </suppress>
-    <suppress until="2030-01-01">
-        <notes><![CDATA[
-                 6.5 MEDIUM - ignore
-                 https://nvd.nist.gov/vuln/detail/CVE-2022-22950
-                ]]></notes>
-        <cve>CVE-2022-22950</cve>
+             https://nvd.nist.gov/vuln/detail/CVE-2016-1000027
+             Root Cause: spring-web-5.2.3.RELEASE.jar <= org/springframework/remoting/httpinvoker/HttpInvokerServiceExporter.class : [2.5.1,)
+             Pivotal Spring Framework 4.1.4 suffers from a potential remote code execution (RCE) issue if used for Java deserialization of untrusted data. Depending on how the library is implemented within a product, this issue may or not occur, and authentication may be required
+             Note: No java deserialization of external end point being done in this component therefore it is suppressed.
+            ]]>
+        </notes>
+        <cve>CVE-2016-1000027</cve>
     </suppress>
 </suppressions>
