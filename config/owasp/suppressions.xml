@@ -10,11 +10,4 @@
         </notes>
         <cve>CVE-2016-1000027</cve>
     </suppress>
-    <suppress>
-        <notes><![CDATA[file name: tomcat-embed-core-9.0.58.jar
-            It affects only users running clustering over an untrusted network
-            ]]>
-        </notes>
-        <cve>CVE-2022-29885</cve>
-    </suppress>
 </suppressions>
