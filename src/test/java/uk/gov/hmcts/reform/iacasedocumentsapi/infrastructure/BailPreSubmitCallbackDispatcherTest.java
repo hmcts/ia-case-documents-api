@@ -1,8 +1,20 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
@@ -17,8 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.util.ReflectionTestUtils;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -26,34 +37,34 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Dispa
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.AppealSubmissionCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.HearingNoticeCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail.BailSubmissionCreator;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailDocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class PreSubmitCallbackDispatcherTest {
+public class BailPreSubmitCallbackDispatcherTest {
 
     @Mock private CcdEventAuthorizor ccdEventAuthorizor;
-    @Mock private PreSubmitCallbackHandler<CaseData> handler1;
-    @Mock private PreSubmitCallbackHandler<CaseData> handler2;
-    @Mock private PreSubmitCallbackHandler<CaseData> handler3;
-    @Mock private Callback<CaseData> callback;
-    @Mock private CaseDetails<CaseData> caseDetails;
-    @Mock private CaseData caseData;
-    @Mock private CaseData caseDataMutation1;
-    @Mock private CaseData caseDataMutation2;
-    @Mock private CaseData caseDataMutation3;
-    @Mock private PreSubmitCallbackResponse<CaseData> response1;
-    @Mock private PreSubmitCallbackResponse<CaseData> response2;
-    @Mock private PreSubmitCallbackResponse<CaseData> response3;
+    @Mock private PreSubmitCallbackHandler<BailCase> handler1;
+    @Mock private PreSubmitCallbackHandler<BailCase> handler2;
+    @Mock private PreSubmitCallbackHandler<BailCase> handler3;
+    @Mock private Callback<BailCase> callback;
+    @Mock private CaseDetails<BailCase> caseDetails;
+    @Mock private BailCase caseData;
+    @Mock private BailCase caseDataMutation1;
+    @Mock private BailCase caseDataMutation2;
+    @Mock private BailCase caseDataMutation3;
+    @Mock private PreSubmitCallbackResponse<BailCase> response1;
+    @Mock private PreSubmitCallbackResponse<BailCase> response2;
+    @Mock private PreSubmitCallbackResponse<BailCase> response3;
 
-    private PreSubmitCallbackDispatcher<CaseData> preSubmitCallbackDispatcher;
+    private BailPreSubmitCallbackDispatcher preSubmitCallbackDispatcher;
 
     @BeforeEach
     public void setUp() {
-        preSubmitCallbackDispatcher = new PreSubmitCallbackDispatcher<>(
+        preSubmitCallbackDispatcher = new BailPreSubmitCallbackDispatcher(
             ccdEventAuthorizor,
             Arrays.asList(
                 handler1,
@@ -73,7 +84,7 @@ public class PreSubmitCallbackDispatcherTest {
 
             when(caseDetails.getCaseData()).thenReturn(caseData);
 
-            when(callback.getEvent()).thenReturn(Event.BUILD_CASE);
+            when(callback.getEvent()).thenReturn(Event.SUBMIT_APPLICATION);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
 
             when(response1.getData()).thenReturn(caseDataMutation1);
@@ -97,14 +108,14 @@ public class PreSubmitCallbackDispatcherTest {
             when(handler3.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(true);
             when(handler3.handle(eq(callbackStage), any(Callback.class))).thenReturn(response3);
 
-            PreSubmitCallbackResponse<CaseData> callbackResponse =
+            PreSubmitCallbackResponse<BailCase> callbackResponse =
                 preSubmitCallbackDispatcher.handle(callbackStage, callback);
 
             assertNotNull(callbackResponse);
             assertEquals(caseDataMutation2, callbackResponse.getData());
             assertEquals(callbackResponse.getErrors(), expectedErrors);
 
-            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.BUILD_CASE);
+            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPLICATION);
 
             InOrder inOrder = inOrder(handler1, handler3, handler2);
 
@@ -126,7 +137,7 @@ public class PreSubmitCallbackDispatcherTest {
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-            when(callback.getEvent()).thenReturn(Event.BUILD_CASE);
+            when(callback.getEvent()).thenReturn(Event.SUBMIT_APPLICATION);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(caseData);
 
@@ -145,14 +156,14 @@ public class PreSubmitCallbackDispatcherTest {
             when(handler3.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(true);
             when(handler3.handle(eq(callbackStage), any(Callback.class))).thenReturn(response3);
 
-            PreSubmitCallbackResponse<CaseData> callbackResponse =
+            PreSubmitCallbackResponse<BailCase> callbackResponse =
                 preSubmitCallbackDispatcher.handle(callbackStage, callback);
 
             assertNotNull(callbackResponse);
             assertEquals(caseData, callbackResponse.getData());
             assertTrue(callbackResponse.getErrors().isEmpty());
 
-            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.BUILD_CASE);
+            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPLICATION);
 
             verify(handler1, times(1)).canHandle(eq(callbackStage), any(Callback.class));
             verify(handler1, times(0)).handle(eq(callbackStage), any(Callback.class));
@@ -172,16 +183,16 @@ public class PreSubmitCallbackDispatcherTest {
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-            when(callback.getEvent()).thenReturn(Event.BUILD_CASE);
+            when(callback.getEvent()).thenReturn(Event.SUBMIT_APPLICATION);
 
             doThrow(AccessDeniedException.class)
                 .when(ccdEventAuthorizor)
-                .throwIfNotAuthorized(Event.BUILD_CASE);
+                .throwIfNotAuthorized(Event.SUBMIT_APPLICATION);
 
             assertThatThrownBy(() -> preSubmitCallbackDispatcher.handle(callbackStage, callback))
                 .isExactlyInstanceOf(AccessDeniedException.class);
 
-            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.BUILD_CASE);
+            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPLICATION);
 
             verify(handler1, never()).canHandle(any(), any());
             verify(handler1, never()).handle(any(), any());
@@ -197,18 +208,18 @@ public class PreSubmitCallbackDispatcherTest {
     @Test
     public void should_not_error_if_no_handlers_are_provided() {
 
-        PreSubmitCallbackDispatcher<CaseData> preSubmitCallbackDispatcher =
-            new PreSubmitCallbackDispatcher<>(ccdEventAuthorizor, Collections.emptyList());
+        PreSubmitCallbackDispatcher<BailCase> preSubmitCallbackDispatcher =
+            new BailPreSubmitCallbackDispatcher(ccdEventAuthorizor, Collections.emptyList());
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
             try {
 
-                when(callback.getEvent()).thenReturn(Event.BUILD_CASE);
+                when(callback.getEvent()).thenReturn(Event.SUBMIT_APPLICATION);
                 when(callback.getCaseDetails()).thenReturn(caseDetails);
                 when(caseDetails.getCaseData()).thenReturn(caseData);
 
-                PreSubmitCallbackResponse<CaseData> callbackResponse =
+                PreSubmitCallbackResponse<BailCase> callbackResponse =
                     preSubmitCallbackDispatcher
                         .handle(callbackStage, callback);
 
@@ -216,7 +227,7 @@ public class PreSubmitCallbackDispatcherTest {
                 assertEquals(caseData, callbackResponse.getData());
                 assertTrue(callbackResponse.getErrors().isEmpty());
 
-                verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.BUILD_CASE);
+                verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPLICATION);
 
                 reset(ccdEventAuthorizor);
 
@@ -229,7 +240,7 @@ public class PreSubmitCallbackDispatcherTest {
     @Test
     public void should_not_allow_null_ccd_event_authorizor() {
 
-        assertThatThrownBy(() -> new PreSubmitCallbackDispatcher<>(null, Collections.emptyList()))
+        assertThatThrownBy(() -> new BailPreSubmitCallbackDispatcher(null, Collections.emptyList()))
             .hasMessage("ccdEventAuthorizor must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
@@ -237,7 +248,7 @@ public class PreSubmitCallbackDispatcherTest {
     @Test
     public void should_not_allow_null_handlers() {
 
-        assertThatThrownBy(() -> new PreSubmitCallbackDispatcher<>(ccdEventAuthorizor, null))
+        assertThatThrownBy(() -> new BailPreSubmitCallbackDispatcher(ccdEventAuthorizor, null))
             .hasMessage("callbackHandlers must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
@@ -254,30 +265,25 @@ public class PreSubmitCallbackDispatcherTest {
             .isExactlyInstanceOf(NullPointerException.class);
     }
 
+    //Will need to add handlers here to improve the test when we hae more Bail Handlers.
+    // to test the sorting.
     @Test
-    public void should_sort_handlers_by_name() {
-        PreSubmitCallbackHandler<AsylumCase> h1 = new AppealSubmissionCreator(
-            mock(DocumentCreator.class), mock(DocumentHandler.class)
+    public void should_add_handlers_by_name() {
+        PreSubmitCallbackHandler<BailCase> h1 = new BailSubmissionCreator(
+            mock(DocumentCreator.class), mock(BailDocumentHandler.class)
         );
 
-
-        PreSubmitCallbackHandler<AsylumCase> h3 = new HearingNoticeCreator(
-            mock(DocumentCreator.class), mock(DocumentCreator.class), mock(DocumentHandler.class)
-        );
-
-        PreSubmitCallbackDispatcher<AsylumCase> dispatcher = new PreSubmitCallbackDispatcher<>(
+        BailPreSubmitCallbackDispatcher dispatcher = new BailPreSubmitCallbackDispatcher(
             ccdEventAuthorizor,
             Arrays.asList(
-                h3,
                 h1
             )
         );
 
-        List<PreSubmitCallbackHandler<AsylumCase>> sortedDispatcher =
-            (List<PreSubmitCallbackHandler<AsylumCase>>) ReflectionTestUtils.getField(dispatcher, "sortedCallbackHandlers");
+        List<PreSubmitCallbackHandler<BailCase>> sortedDispatcher =
+            (List<PreSubmitCallbackHandler<BailCase>>) ReflectionTestUtils.getField(dispatcher, "sortedCallbackHandlers");
 
-        assertEquals(2, sortedDispatcher.size());
+        assertEquals(1, sortedDispatcher.size());
         assertEquals(h1, sortedDispatcher.get(0));
-        assertEquals(h3, sortedDispatcher.get(1));
     }
 }

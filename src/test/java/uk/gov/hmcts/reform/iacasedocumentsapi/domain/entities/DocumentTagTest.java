@@ -30,11 +30,15 @@ public class DocumentTagTest {
         assertEquals("upperTribunalBundle", DocumentTag.UPPER_TRIBUNAL_BUNDLE.toString());
         assertEquals("appealReasons", DocumentTag.APPEAL_REASONS.toString());
         assertEquals("clarifyingQuestions", DocumentTag.CLARIFYING_QUESTIONS.toString());
+        assertEquals("bailSubmission", DocumentTag.BAIL_SUBMISSION.toString());
+        assertEquals("uploadTheBailEvidenceDocs", DocumentTag.BAIL_EVIDENCE.toString());
+        assertEquals("bailDecisionUnsigned", DocumentTag.BAIL_DECISION_UNSIGNED.toString());
+        assertEquals("bailEndApplication", DocumentTag.BAIL_END_APPLICATION.toString());
         assertEquals("", DocumentTag.NONE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(28, DocumentTag.values().length);
+        assertEquals(32, DocumentTag.values().length);
     }
 }
