@@ -261,7 +261,7 @@ dependencyManagement {
             entry 'spring-web'
         }
 
-        dependency group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.1'
+        dependency group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.3'
 
         //CVE-2021-42550
         dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
@@ -284,15 +284,14 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.2'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.2'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.1'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.1'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
 
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: versions.springBoot
 
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
 
     // CVE-2019-17195
@@ -340,7 +339,7 @@ dependencies {
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
     testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
-    testCompile group: 'io.rest-assured', name: 'rest-assured-all', version: '4.3.1'
+    testCompile group: 'io.rest-assured', name: 'rest-assured-all', version: '5.0.1'
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
