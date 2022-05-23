@@ -14,4 +14,10 @@
         <notes><![CDATA[file name: tomcat-embed-core-9.0.58.jar]]></notes>
         <cve>CVE-2022-29885</cve>
     </suppress>
+    <suppress>
+        <cve>CVE-2020-15522</cve>
+        <cve>CVE-2018-1258</cve>
+        <cve>CVE-2021-22112</cve>
+        <cve>CVE-2021-22044</cve>
+    </suppress>
 </suppressions>
