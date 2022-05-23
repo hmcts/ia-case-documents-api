@@ -285,6 +285,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.2'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.2'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
 
@@ -292,6 +293,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: versions.springBoot
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
+
+
     // CVE-2019-17195
     compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 
