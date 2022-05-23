@@ -11,23 +11,10 @@
         <cve>CVE-2016-1000027</cve>
     </suppress>
     <suppress>
-        <notes><![CDATA[file name: tomcat-embed-core-9.0.58.jar]]></notes>
+        <notes><![CDATA[file name: tomcat-embed-core-9.0.58.jar
+            It affects only users running clustering over an untrusted network
+            ]]>
+        </notes>
         <cve>CVE-2022-29885</cve>
-    </suppress>
-    <suppress>
-        <cve>CVE-2020-15522</cve>
-        <cve>CVE-2018-1258</cve>
-        <cve>CVE-2021-22112</cve>
-        <cve>CVE-2021-22044</cve>
-        <cve>CVE-2021-22119</cve>
-        <cve>CVE-2021-28170</cve>
-        <cve>CVE-2022-22968</cve>
-        <cve>CVE-2022-22965</cve>
-        <cve>CVE-2021-22060</cve>
-        <cve>CVE-2021-22096</cve>
-        <cve>CVE-2022-22950</cve>
-        <cve>CVE-2021-22118</cve>
-        <cve>CVE-2022-22969</cve>
-
     </suppress>
 </suppressions>
