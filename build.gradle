@@ -42,6 +42,9 @@ def versions = [
     springHystrix      : '2.2.10.RELEASE',
     pact_version       : '4.1.7',
     springDoc          : '1.6.8',
+    springSecurity     : '5.7.1',
+    springCloud        : '3.1.1',
+    jackson            : '2.13.3'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
@@ -261,7 +264,7 @@ dependencyManagement {
             entry 'spring-web'
         }
 
-        dependency group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.3'
+        dependency group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
         //CVE-2021-42550
         dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
@@ -284,14 +287,14 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.1'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.1'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
 
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.7.1'
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '5.7.1'
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '5.7.1'
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
 
 
 
@@ -302,11 +305,11 @@ dependencies {
     compile group: 'net.minidev', name: 'json-smart', version: '2.3.1'
 
 
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.3'
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.3'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.13.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: versions.jackson
 
 
     compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
@@ -334,7 +337,7 @@ dependencies {
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
     testCompile group: 'ru.lanwen.wiremock', name: 'wiremock-junit5', version: '1.3.1'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.6.3'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
     testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
