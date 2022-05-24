@@ -34,11 +34,14 @@ public class DocumentTagTest {
         assertEquals("uploadTheBailEvidenceDocs", DocumentTag.BAIL_EVIDENCE.toString());
         assertEquals("bailDecisionUnsigned", DocumentTag.BAIL_DECISION_UNSIGNED.toString());
         assertEquals("bailEndApplication", DocumentTag.BAIL_END_APPLICATION.toString());
+        assertEquals("signedDecisionNotice", DocumentTag.SIGNED_DECISION_NOTICE.toString());
+        assertEquals("uploadDocument", DocumentTag.UPLOAD_DOCUMENT.toString());
+        assertEquals("uploadBailSummary", DocumentTag.BAIL_SUMMARY.toString());
         assertEquals("", DocumentTag.NONE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(32, DocumentTag.values().length);
+        assertEquals(35, DocumentTag.values().length);
     }
 }
