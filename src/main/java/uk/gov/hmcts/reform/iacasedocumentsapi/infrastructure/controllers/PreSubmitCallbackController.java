@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +29,7 @@ public class PreSubmitCallbackController<T extends CaseData> {
     }
 
     public ResponseEntity<PreSubmitCallbackResponse<T>> ccdAboutToStart(
-        @ApiParam(value = "Asylum case data", required = true) @NotNull @RequestBody Callback<T> callback
+        @Parameter(name = "Asylum case data", required = true) @NotNull @RequestBody Callback<T> callback
     ) {
         return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_START, callback);
     }
