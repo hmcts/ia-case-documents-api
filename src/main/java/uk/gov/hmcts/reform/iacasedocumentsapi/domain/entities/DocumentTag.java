@@ -40,6 +40,7 @@ public enum DocumentTag {
     SIGNED_DECISION_NOTICE("signedDecisionNotice", CaseType.BAIL),
     UPLOAD_DOCUMENT("uploadDocument", CaseType.BAIL),
     BAIL_SUMMARY("uploadBailSummary", CaseType.BAIL),
+    B1_DOCUMENT("b1Document", CaseType.BAIL),
 
     @JsonEnumDefaultValue
     NONE("", CaseType.UNKNOWN);
