@@ -49,7 +49,8 @@ public class BailSubmissionCreatorTest {
             when(callback.getEvent()).thenReturn(event);
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
                 boolean canHandle = bailSubmissionCreator.canHandle(preSubmitCallbackStage, callback);
-                if (event == Event.SUBMIT_APPLICATION && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                if ((event == Event.SUBMIT_APPLICATION || event == Event.MAKE_NEW_APPLICATION)
+                        && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
