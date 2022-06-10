@@ -210,6 +210,7 @@ security:
       - "draftHearingRequirements"
       - "payAndSubmitAppeal"
       - "submitApplication"
+      - "makeNewApplication"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -241,6 +242,7 @@ security:
       - "submitApplication"
       - "recordTheDecision"
       - "endApplication"
+      - "makeNewApplication"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -260,6 +262,7 @@ security:
       - "endApplication"
     caseworker-ia-respondentofficer:
       - "submitApplication"
+      - "makeNewApplication"
 
 
 ### dependency configuration
