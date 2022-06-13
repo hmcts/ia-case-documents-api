@@ -253,16 +253,16 @@ dependencyManagement {
             entry 'tomcat-embed-websocket'
         }
 
-        // CVE-2021-22060
-        dependencySet(group: 'org.springframework', version: '5.3.20') {
-            entry 'spring-core'
-            entry 'spring-aop'
-            entry 'spring-beans'
-            entry 'spring-context'
-            entry 'spring-expression'
-            entry 'spring-jcl'
-            entry 'spring-web'
-        }
+//        // CVE-2021-22060
+//        dependencySet(group: 'org.springframework', version: '5.3.20') {
+//            entry 'spring-core'
+//            entry 'spring-aop'
+//            entry 'spring-beans'
+//            entry 'spring-context'
+//            entry 'spring-expression'
+//            entry 'spring-jcl'
+//            entry 'spring-web'
+//        }
 
         dependency group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
