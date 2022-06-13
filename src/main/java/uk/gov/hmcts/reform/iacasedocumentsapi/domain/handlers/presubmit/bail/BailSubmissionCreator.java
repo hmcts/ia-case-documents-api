@@ -39,7 +39,8 @@ public class BailSubmissionCreator implements PreSubmitCallbackHandler<BailCase>
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && callback.getEvent() == Event.SUBMIT_APPLICATION;
+                && (callback.getEvent() == Event.SUBMIT_APPLICATION
+                    || callback.getEvent() == Event.MAKE_NEW_APPLICATION);
     }
 
     public PreSubmitCallbackResponse<BailCase> handle(
