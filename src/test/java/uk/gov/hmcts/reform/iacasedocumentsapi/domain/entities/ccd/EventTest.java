@@ -45,6 +45,7 @@ public class EventTest {
         assertEquals("recordTheDecision",Event.RECORD_THE_DECISION.toString());
         assertEquals("endApplication",Event.END_APPLICATION.toString());
         assertEquals("makeNewApplication",Event.MAKE_NEW_APPLICATION.toString());
+        assertEquals("editBailApplicationAfterSubmit",Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
