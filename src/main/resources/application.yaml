@@ -243,6 +243,7 @@ security:
       - "recordTheDecision"
       - "endApplication"
       - "makeNewApplication"
+      - "editBailApplicationAfterSubmit"
     citizen:
       - "startAppeal"
       - "editAppeal"
