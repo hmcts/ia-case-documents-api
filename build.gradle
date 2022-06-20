@@ -302,7 +302,7 @@ dependencies {
     compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 
     // CVE-2021-27568
-    compile group: 'net.minidev', name: 'json-smart', version: '2.3.1'
+    compile group: 'net.minidev', name: 'json-smart', version: '2.4.8'
 
 
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
