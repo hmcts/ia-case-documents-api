@@ -285,6 +285,8 @@ public enum BailCaseFieldDefinition {
         "endApplicationOutcome", new TypeReference<String>(){}),
     END_APPLICATION_REASONS(
         "endApplicationReasons", new TypeReference<String>(){}),
+    PRIOR_APPLICATIONS(
+            "priorApplications1", new TypeReference<List<IdValue<PriorApplication>>>(){}),
     ;
 
     private final String value;

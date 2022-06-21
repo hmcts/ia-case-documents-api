@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.PriorApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -32,6 +33,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissi
 public class BailSubmissionTemplateTest {
     @Mock private CaseDetails<BailCase> caseDetails;
     @Mock private BailCase bailCase;
+    @Mock private PriorApplication priorApplication;
 
     private final String templateName = "BAIL_SUBMISSION_TEMPLATE.docx";
     private String applicantGivenNames = "John";
@@ -372,6 +374,14 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("legalRepEmail"));
     }
 
+    @Test
+    void should_not_show_previous_application_details_if_prior_applications_dont_exist() {
+        dataSetUp();
+        when(bailCase.read(PRIOR_APPLICATIONS, PriorApplication.class)).thenReturn(Optional.of(priorApplication));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        assertFalse(fieldValuesMap.containsKey("showPreviousApplicationSection"));
+    }
+
     //Helper method for common assertions
     private void checkCommonFields() {
         assertTrue(fieldValuesMap.containsKey("applicantGivenNames"));
@@ -413,6 +423,7 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("applicantDisability1"));
         assertTrue(fieldValuesMap.containsKey("videoHearing1"));
         assertTrue(fieldValuesMap.containsKey("isLegallyRepresentedForFlag"));
+        assertTrue(fieldValuesMap.containsKey("showPreviousApplicationSection"));
     }
 
     private void assertSupporter2Fields() {
