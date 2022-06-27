@@ -260,6 +260,7 @@ security:
       - "updateHearingRequirements"
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
+      - "recordTheDecision"
       - "endApplication"
     caseworker-ia-respondentofficer:
       - "submitApplication"
