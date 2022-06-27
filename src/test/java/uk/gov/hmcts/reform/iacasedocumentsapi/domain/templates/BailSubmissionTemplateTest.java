@@ -41,7 +41,7 @@ public class BailSubmissionTemplateTest {
     private String applicationSubmittedBy = "Legal Representative";
     private String applicantDateOfBirth = "1999-12-31";
     private String applicantGender = "Male";
-    private String applicantMobileNumber = "07777777777";
+    private String applicantMobileNumber1 = "07777777777";
     private String homeOfficeReferenceNumber = "123654";
     private String applicantDetainedLoc = "prison";
     private String applicantPrisonDetails = "4568";
@@ -52,15 +52,15 @@ public class BailSubmissionTemplateTest {
     private String hasPreviousBailApplication = "Yes";
     private String supporterGivenNames = "Supporter1";
     private String supporterFamilyNames = "Family";
-    private String supporterTelephoneNumber = "5698565666";
-    private String supporterMobileNumber = "464464444";
-    private String supporterEmailAddress = "dhsk@gsg.com";
+    private String supporterTelephoneNumber1 = "5698565666";
+    private String supporterMobileNumber1 = "464464444";
+    private String supporterEmailAddress1 = "dhsk@gsg.com";
     private String supporterDob = "1998-02-15";
     private String supporterRelation = "Brother";
     private String supporterOccupation = "Doctor";
     private String supporterImmigration = "Resident";
     private String supporterHasPassport = "Yes";
-    private String financialAmountSupporterUndertakes = "2000";
+    private String financialAmountSupporterUndertakes1 = "2000";
     private String groundsForBailReasons = "Grounds for bails";
     private String legalRepCompany = "COMPANY NAME";
     private String legalRepName = "REP NAME";
@@ -197,9 +197,9 @@ public class BailSubmissionTemplateTest {
         assertFalse(fieldValuesMap.containsKey("supporter2GivenNames"));
         assertFalse(fieldValuesMap.containsKey("supporter2FamilyNames"));
         assertFalse(fieldValuesMap.containsKey("supporter2AddressDetails"));
-        assertFalse(fieldValuesMap.containsKey("supporter2TelephoneNumber"));
-        assertFalse(fieldValuesMap.containsKey("supporter2MobileNumber"));
-        assertFalse(fieldValuesMap.containsKey("supporter2EmailAddress"));
+        assertFalse(fieldValuesMap.containsKey("supporter2TelephoneNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter2MobileNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter2EmailAddress1"));
         assertFalse(fieldValuesMap.containsKey("supporter2DOB"));
         assertFalse(fieldValuesMap.containsKey("supporter2Relation"));
         assertFalse(fieldValuesMap.containsKey("supporter2Occupation"));
@@ -207,7 +207,7 @@ public class BailSubmissionTemplateTest {
         assertFalse(fieldValuesMap.containsKey("supporter2Nationalities"));
         assertFalse(fieldValuesMap.containsKey("supporter2HasPassport"));
         assertFalse(fieldValuesMap.containsKey("supporter2Passport"));
-        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes"));
+        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes1"));
     }
 
     @Test
@@ -222,9 +222,9 @@ public class BailSubmissionTemplateTest {
         assertFalse(fieldValuesMap.containsKey("supporter4GivenNames"));
         assertFalse(fieldValuesMap.containsKey("supporter4FamilyNames"));
         assertFalse(fieldValuesMap.containsKey("supporter4AddressDetails"));
-        assertFalse(fieldValuesMap.containsKey("supporter4TelephoneNumber"));
-        assertFalse(fieldValuesMap.containsKey("supporter4MobileNumber"));
-        assertFalse(fieldValuesMap.containsKey("supporter4EmailAddress"));
+        assertFalse(fieldValuesMap.containsKey("supporter4TelephoneNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter4MobileNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter4EmailAddress1"));
         assertFalse(fieldValuesMap.containsKey("supporter4DOB"));
         assertFalse(fieldValuesMap.containsKey("supporter4Relation"));
         assertFalse(fieldValuesMap.containsKey("supporter4Occupation"));
@@ -232,7 +232,7 @@ public class BailSubmissionTemplateTest {
         assertFalse(fieldValuesMap.containsKey("supporter4Nationalities"));
         assertFalse(fieldValuesMap.containsKey("supporter4HasPassport"));
         assertFalse(fieldValuesMap.containsKey("supporter4Passport"));
-        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter4Undertakes"));
+        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter4Undertakes1"));
     }
 
     @Test
@@ -404,9 +404,9 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporterGivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporterFamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporterAddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("supporterTelephoneNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporterMobileNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporterEmailAddress"));
+        assertTrue(fieldValuesMap.containsKey("supporterTelephoneNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporterMobileNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporterEmailAddress1"));
         assertTrue(fieldValuesMap.containsKey("supporterDOB"));
         assertTrue(fieldValuesMap.containsKey("supporterRelation"));
         assertTrue(fieldValuesMap.containsKey("supporterOccupation"));
@@ -414,7 +414,7 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporterNationalities"));
         assertTrue(fieldValuesMap.containsKey("supporterHasPassport"));
         assertTrue(fieldValuesMap.containsKey("supporterPassport"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporterUndertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporterUndertakes1"));
         assertTrue(fieldValuesMap.containsKey("groundsForBailReasons"));
         assertTrue(fieldValuesMap.containsKey("transferBailManagementYesOrNo"));
         assertTrue(fieldValuesMap.containsKey("groundsForBailProvideEvidenceOption"));
@@ -431,9 +431,9 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter2GivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporter2FamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporter2AddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("supporter2TelephoneNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporter2MobileNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporter2EmailAddress"));
+        assertTrue(fieldValuesMap.containsKey("supporter2TelephoneNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporter2MobileNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporter2EmailAddress1"));
         assertTrue(fieldValuesMap.containsKey("supporter2DOB"));
         assertTrue(fieldValuesMap.containsKey("supporter2Relation"));
         assertTrue(fieldValuesMap.containsKey("supporter2Occupation"));
@@ -441,7 +441,7 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter2Nationalities"));
         assertTrue(fieldValuesMap.containsKey("supporter2HasPassport"));
         assertTrue(fieldValuesMap.containsKey("supporter2Passport"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes1"));
     }
 
     private void assertSupporter3Fields() {
@@ -449,9 +449,9 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter3GivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporter3FamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporter3AddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("supporter3TelephoneNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporter3MobileNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporter3EmailAddress"));
+        assertTrue(fieldValuesMap.containsKey("supporter3TelephoneNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporter3MobileNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporter3EmailAddress1"));
         assertTrue(fieldValuesMap.containsKey("supporter3DOB"));
         assertTrue(fieldValuesMap.containsKey("supporter3Relation"));
         assertTrue(fieldValuesMap.containsKey("supporter3Occupation"));
@@ -459,7 +459,7 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter3Nationalities"));
         assertTrue(fieldValuesMap.containsKey("supporter3HasPassport"));
         assertTrue(fieldValuesMap.containsKey("supporter3Passport"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter3Undertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter3Undertakes1"));
     }
 
     private void assertSupporter4Fields() {
@@ -467,9 +467,9 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter4GivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporter4FamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporter4AddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("supporter4TelephoneNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporter4MobileNumber"));
-        assertTrue(fieldValuesMap.containsKey("supporter4EmailAddress"));
+        assertTrue(fieldValuesMap.containsKey("supporter4TelephoneNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporter4MobileNumber1"));
+        assertTrue(fieldValuesMap.containsKey("supporter4EmailAddress1"));
         assertTrue(fieldValuesMap.containsKey("supporter4DOB"));
         assertTrue(fieldValuesMap.containsKey("supporter4Relation"));
         assertTrue(fieldValuesMap.containsKey("supporter4Occupation"));
@@ -477,7 +477,7 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter4Nationalities"));
         assertTrue(fieldValuesMap.containsKey("supporter4HasPassport"));
         assertTrue(fieldValuesMap.containsKey("supporter4Passport"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter4Undertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter4Undertakes1"));
     }
 
     // Helper method to set the common data
@@ -493,7 +493,7 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(APPLICANT_GENDER, String.class)).thenReturn(Optional.of(applicantGender));
         when(bailCase.read(APPLICANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(addressUk));
         when(bailCase.read(APPLICANT_NATIONALITIES)).thenReturn(Optional.of(applicantNationalities));
-        when(bailCase.read(APPLICANT_MOBILE_NUMBER, String.class)).thenReturn(Optional.of(applicantMobileNumber));
+        when(bailCase.read(APPLICANT_MOBILE_NUMBER_1, String.class)).thenReturn(Optional.of(applicantMobileNumber1));
         when(bailCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(bailCase.read(APPLICANT_DETAINED_LOC, String.class)).thenReturn(Optional.of(applicantDetainedLoc));
         when(bailCase.read(APPLICANT_PRISON_DETAILS, String.class)).thenReturn(Optional.of(applicantPrisonDetails));
@@ -511,9 +511,9 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(SUPPORTER_TELEPHONE_NUMBER, String.class)).thenReturn(Optional.of(supporterTelephoneNumber));
-        when(bailCase.read(SUPPORTER_MOBILE_NUMBER)).thenReturn(Optional.of(supporterMobileNumber));
-        when(bailCase.read(SUPPORTER_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(supporterEmailAddress));
+        when(bailCase.read(SUPPORTER_TELEPHONE_NUMBER_1, String.class)).thenReturn(Optional.of(supporterTelephoneNumber1));
+        when(bailCase.read(SUPPORTER_MOBILE_NUMBER_1)).thenReturn(Optional.of(supporterMobileNumber1));
+        when(bailCase.read(SUPPORTER_EMAIL_ADDRESS_1, String.class)).thenReturn(Optional.of(supporterEmailAddress1));
         when(bailCase.read(SUPPORTER_DOB, String.class)).thenReturn(Optional.of(supporterDob));
         when(bailCase.read(SUPPORTER_RELATION, String.class)).thenReturn(Optional.of(supporterRelation));
         when(bailCase.read(SUPPORTER_OCCUPATION, String.class)).thenReturn(Optional.of(supporterOccupation));
@@ -521,7 +521,7 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_NATIONALITY)).thenReturn(Optional.of(supporterNationalities));
         when(bailCase.read(SUPPORTER_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(SUPPORTER_PASSPORT, String.class)).thenReturn(Optional.of(supporterHasPassport));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
         when(bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_2, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_3, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_4, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -546,9 +546,9 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_2_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_2_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_2_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(SUPPORTER_2_TELEPHONE_NUMBER, String.class)).thenReturn(Optional.of(supporterTelephoneNumber));
-        when(bailCase.read(SUPPORTER_2_MOBILE_NUMBER)).thenReturn(Optional.of(supporterMobileNumber));
-        when(bailCase.read(SUPPORTER_2_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(supporterEmailAddress));
+        when(bailCase.read(SUPPORTER_2_TELEPHONE_NUMBER_1, String.class)).thenReturn(Optional.of(supporterTelephoneNumber1));
+        when(bailCase.read(SUPPORTER_2_MOBILE_NUMBER_1)).thenReturn(Optional.of(supporterMobileNumber1));
+        when(bailCase.read(SUPPORTER_2_EMAIL_ADDRESS_1, String.class)).thenReturn(Optional.of(supporterEmailAddress1));
         when(bailCase.read(SUPPORTER_2_DOB, String.class)).thenReturn(Optional.of(supporterDob));
         when(bailCase.read(SUPPORTER_2_RELATION, String.class)).thenReturn(Optional.of(supporterRelation));
         when(bailCase.read(SUPPORTER_2_OCCUPATION, String.class)).thenReturn(Optional.of(supporterOccupation));
@@ -556,7 +556,7 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_2_NATIONALITY)).thenReturn(Optional.of(supporterNationalities));
         when(bailCase.read(SUPPORTER_2_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(SUPPORTER_2_PASSPORT, String.class)).thenReturn(Optional.of(supporterHasPassport));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 
     private void supporter3DataSetUp() {
@@ -564,9 +564,9 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_3_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_3_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_3_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(SUPPORTER_3_TELEPHONE_NUMBER, String.class)).thenReturn(Optional.of(supporterTelephoneNumber));
-        when(bailCase.read(SUPPORTER_3_MOBILE_NUMBER)).thenReturn(Optional.of(supporterMobileNumber));
-        when(bailCase.read(SUPPORTER_3_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(supporterEmailAddress));
+        when(bailCase.read(SUPPORTER_3_TELEPHONE_NUMBER_1, String.class)).thenReturn(Optional.of(supporterTelephoneNumber1));
+        when(bailCase.read(SUPPORTER_3_MOBILE_NUMBER_1)).thenReturn(Optional.of(supporterMobileNumber1));
+        when(bailCase.read(SUPPORTER_3_EMAIL_ADDRESS_1, String.class)).thenReturn(Optional.of(supporterEmailAddress1));
         when(bailCase.read(SUPPORTER_3_DOB, String.class)).thenReturn(Optional.of(supporterDob));
         when(bailCase.read(SUPPORTER_3_RELATION, String.class)).thenReturn(Optional.of(supporterRelation));
         when(bailCase.read(SUPPORTER_3_OCCUPATION, String.class)).thenReturn(Optional.of(supporterOccupation));
@@ -574,7 +574,7 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_3_NATIONALITY)).thenReturn(Optional.of(supporterNationalities));
         when(bailCase.read(SUPPORTER_3_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(SUPPORTER_3_PASSPORT, String.class)).thenReturn(Optional.of(supporterHasPassport));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 
     private void supporter4DataSetUp() {
@@ -582,9 +582,9 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_4_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_4_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_4_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(SUPPORTER_4_TELEPHONE_NUMBER, String.class)).thenReturn(Optional.of(supporterTelephoneNumber));
-        when(bailCase.read(SUPPORTER_4_MOBILE_NUMBER)).thenReturn(Optional.of(supporterMobileNumber));
-        when(bailCase.read(SUPPORTER_4_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(supporterEmailAddress));
+        when(bailCase.read(SUPPORTER_4_TELEPHONE_NUMBER_1, String.class)).thenReturn(Optional.of(supporterTelephoneNumber1));
+        when(bailCase.read(SUPPORTER_4_MOBILE_NUMBER_1)).thenReturn(Optional.of(supporterMobileNumber1));
+        when(bailCase.read(SUPPORTER_4_EMAIL_ADDRESS_1, String.class)).thenReturn(Optional.of(supporterEmailAddress1));
         when(bailCase.read(SUPPORTER_4_DOB, String.class)).thenReturn(Optional.of(supporterDob));
         when(bailCase.read(SUPPORTER_4_RELATION, String.class)).thenReturn(Optional.of(supporterRelation));
         when(bailCase.read(SUPPORTER_4_OCCUPATION, String.class)).thenReturn(Optional.of(supporterOccupation));
@@ -592,7 +592,7 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(SUPPORTER_4_NATIONALITY)).thenReturn(Optional.of(supporterNationalities));
         when(bailCase.read(SUPPORTER_4_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(SUPPORTER_4_PASSPORT, String.class)).thenReturn(Optional.of(supporterHasPassport));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 }
 
