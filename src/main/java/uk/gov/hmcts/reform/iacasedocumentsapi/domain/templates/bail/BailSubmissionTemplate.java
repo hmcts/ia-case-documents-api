@@ -92,7 +92,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
 
         fieldValues.put("applicantHasMobile", bailCase.read(APPLICANT_HAS_MOBILE, YesOrNo.class).orElse(YesOrNo.NO));
         if (bailCase.read(APPLICANT_HAS_MOBILE, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("applicantMobileNumber", bailCase.read(APPLICANT_MOBILE_NUMBER, String.class).orElse(""));
+            fieldValues.put("applicantMobileNumber1", bailCase.read(APPLICANT_MOBILE_NUMBER_1, String.class).orElse(""));
         }
 
         fieldValues.put("homeOfficeReferenceNumber", bailCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
@@ -170,7 +170,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         }
         fieldValues.put("agreesToBoundByFinancialCond", bailCase.read(AGREES_TO_BOUND_BY_FINANCIAL_COND, YesOrNo.class).orElse(YesOrNo.NO));
         if (bailCase.read(AGREES_TO_BOUND_BY_FINANCIAL_COND, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("financialCondAmount", bailCase.read(FINANCIAL_COND_AMOUNT, String.class).orElse(""));
+            fieldValues.put("financialCondAmount1", bailCase.read(FINANCIAL_COND_AMOUNT_1, String.class).orElse(""));
         }
 
         setSupporterDetails(bailCase, fieldValues);
@@ -226,9 +226,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                         .build()
                 );
             }
-            fieldValues.put("supporterTelephoneNumber", bailCase.read(SUPPORTER_TELEPHONE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporterMobileNumber", bailCase.read(SUPPORTER_MOBILE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporterEmailAddress", bailCase.read(SUPPORTER_EMAIL_ADDRESS, String.class).orElse(""));
+            fieldValues.put("supporterTelephoneNumber1", bailCase.read(SUPPORTER_TELEPHONE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporterMobileNumber1", bailCase.read(SUPPORTER_MOBILE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporterEmailAddress1", bailCase.read(SUPPORTER_EMAIL_ADDRESS_1, String.class).orElse(""));
             fieldValues.put("supporterDOB", formatDateForRendering(bailCase.read(SUPPORTER_DOB, String.class).orElse("")));
             fieldValues.put("supporterRelation", bailCase.read(SUPPORTER_RELATION, String.class).orElse(""));
             fieldValues.put("supporterOccupation", bailCase.read(SUPPORTER_OCCUPATION, String.class).orElse(""));
@@ -248,7 +248,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             if (!bailCase.read(SUPPORTER_PASSPORT, String.class).orElse("").isEmpty()) {
                 fieldValues.put("supporterPassport", bailCase.read(SUPPORTER_PASSPORT, String.class).orElse(""));
             }
-            fieldValues.put("financialAmountSupporterUndertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporterUndertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 
@@ -276,9 +276,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 );
             }
 
-            fieldValues.put("supporter2TelephoneNumber", bailCase.read(SUPPORTER_2_TELEPHONE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporter2MobileNumber", bailCase.read(SUPPORTER_2_MOBILE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporter2EmailAddress", bailCase.read(SUPPORTER_2_EMAIL_ADDRESS, String.class).orElse(""));
+            fieldValues.put("supporter2TelephoneNumber1", bailCase.read(SUPPORTER_2_TELEPHONE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporter2MobileNumber1", bailCase.read(SUPPORTER_2_MOBILE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporter2EmailAddress1", bailCase.read(SUPPORTER_2_EMAIL_ADDRESS_1, String.class).orElse(""));
             fieldValues.put("supporter2DOB", formatDateForRendering(bailCase.read(SUPPORTER_2_DOB, String.class).orElse("")));
             fieldValues.put("supporter2Relation", bailCase.read(SUPPORTER_2_RELATION, String.class).orElse(""));
             fieldValues.put("supporter2Occupation", bailCase.read(SUPPORTER_2_OCCUPATION, String.class).orElse(""));
@@ -298,7 +298,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             if (!bailCase.read(SUPPORTER_2_PASSPORT, String.class).orElse("").isEmpty()) {
                 fieldValues.put("supporter2Passport", bailCase.read(SUPPORTER_2_PASSPORT, String.class).orElse(""));
             }
-            fieldValues.put("financialAmountSupporter2Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporter2Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 
@@ -325,9 +325,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                         .build()
                 );
             }
-            fieldValues.put("supporter3TelephoneNumber", bailCase.read(SUPPORTER_3_TELEPHONE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporter3MobileNumber", bailCase.read(SUPPORTER_3_MOBILE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporter3EmailAddress", bailCase.read(SUPPORTER_3_EMAIL_ADDRESS, String.class).orElse(""));
+            fieldValues.put("supporter3TelephoneNumber1", bailCase.read(SUPPORTER_3_TELEPHONE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporter3MobileNumber1", bailCase.read(SUPPORTER_3_MOBILE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporter3EmailAddress1", bailCase.read(SUPPORTER_3_EMAIL_ADDRESS_1, String.class).orElse(""));
             fieldValues.put("supporter3DOB", formatDateForRendering(bailCase.read(SUPPORTER_3_DOB, String.class).orElse("")));
             fieldValues.put("supporter3Relation", bailCase.read(SUPPORTER_3_RELATION, String.class).orElse(""));
             fieldValues.put("supporter3Occupation", bailCase.read(SUPPORTER_3_OCCUPATION, String.class).orElse(""));
@@ -347,7 +347,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             if (!bailCase.read(SUPPORTER_3_PASSPORT, String.class).orElse("").isEmpty()) {
                 fieldValues.put("supporter3Passport", bailCase.read(SUPPORTER_3_PASSPORT, String.class).orElse(""));
             }
-            fieldValues.put("financialAmountSupporter3Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporter3Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 
@@ -373,9 +373,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                         .build()
                 );
             }
-            fieldValues.put("supporter4TelephoneNumber", bailCase.read(SUPPORTER_4_TELEPHONE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporter4MobileNumber", bailCase.read(SUPPORTER_4_MOBILE_NUMBER, String.class).orElse(""));
-            fieldValues.put("supporter4EmailAddress", bailCase.read(SUPPORTER_4_EMAIL_ADDRESS, String.class).orElse(""));
+            fieldValues.put("supporter4TelephoneNumber1", bailCase.read(SUPPORTER_4_TELEPHONE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporter4MobileNumber1", bailCase.read(SUPPORTER_4_MOBILE_NUMBER_1, String.class).orElse(""));
+            fieldValues.put("supporter4EmailAddress1", bailCase.read(SUPPORTER_4_EMAIL_ADDRESS_1, String.class).orElse(""));
             fieldValues.put("supporter4DOB", formatDateForRendering(bailCase.read(SUPPORTER_4_DOB, String.class).orElse("")));
             fieldValues.put("supporter4Relation", bailCase.read(SUPPORTER_4_RELATION, String.class).orElse(""));
             fieldValues.put("supporter4Occupation", bailCase.read(SUPPORTER_4_OCCUPATION, String.class).orElse(""));
@@ -395,7 +395,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             if (!bailCase.read(SUPPORTER_4_PASSPORT, String.class).orElse("").isEmpty()) {
                 fieldValues.put("supporter4Passport", bailCase.read(SUPPORTER_4_PASSPORT, String.class).orElse(""));
             }
-            fieldValues.put("financialAmountSupporter4Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporter4Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 

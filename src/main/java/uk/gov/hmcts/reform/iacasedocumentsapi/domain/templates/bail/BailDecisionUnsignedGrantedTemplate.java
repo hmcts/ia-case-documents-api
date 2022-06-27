@@ -111,7 +111,7 @@ public class BailDecisionUnsignedGrantedTemplate implements DocumentTemplate<Bai
                 );
             }
 
-            fieldValues.put("financialAmountSupporterUndertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporterUndertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 
@@ -139,7 +139,7 @@ public class BailDecisionUnsignedGrantedTemplate implements DocumentTemplate<Bai
                 );
             }
 
-            fieldValues.put("financialAmountSupporter2Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporter2Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 
@@ -167,7 +167,7 @@ public class BailDecisionUnsignedGrantedTemplate implements DocumentTemplate<Bai
                 );
             }
 
-            fieldValues.put("financialAmountSupporter3Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporter3Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 
@@ -194,7 +194,7 @@ public class BailDecisionUnsignedGrantedTemplate implements DocumentTemplate<Bai
                 );
             }
 
-            fieldValues.put("financialAmountSupporter4Undertakes", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES, String.class).orElse(""));
+            fieldValues.put("financialAmountSupporter4Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1, String.class).orElse(""));
         }
     }
 }
