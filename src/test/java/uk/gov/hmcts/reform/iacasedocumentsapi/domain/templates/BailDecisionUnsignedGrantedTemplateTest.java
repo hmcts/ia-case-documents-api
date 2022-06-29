@@ -28,7 +28,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
 
     private final String templateName = "BAIL_DECISION_UNSIGNED_REFUSAL_TEMPLATE.docx";
 
-    private String financialAmountSupporterUndertakes = "1500";
+    private String financialAmountSupporterUndertakes1 = "1500";
     private String supporterGivenNames = "Supporter1";
     private String supporterFamilyNames = "Family";
     private String supporterAddressLine1 = "123 Test Street";
@@ -98,7 +98,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         assertFalse(fieldValuesMap.containsKey("supporter2GivenNames"));
         assertFalse(fieldValuesMap.containsKey("supporter2FamilyNames"));
         assertFalse(fieldValuesMap.containsKey("supporter2AddressDetails"));
-        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes"));
+        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes1"));
     }
 
     @Test
@@ -133,7 +133,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporterGivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporterFamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporterAddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporterUndertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporterUndertakes1"));
         assertTrue(fieldValuesMap.containsKey("bailTransferYesOrNo"));
         assertTrue(fieldValuesMap.containsKey("bailTransferDirections"));
     }
@@ -143,7 +143,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter2GivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporter2FamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporter2AddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes1"));
     }
 
     private void assertSupporter3Fields() {
@@ -151,7 +151,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter3GivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporter3FamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporter3AddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter3Undertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter3Undertakes1"));
     }
 
     private void assertSupporter4Fields() {
@@ -159,7 +159,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         assertTrue(fieldValuesMap.containsKey("supporter4GivenNames"));
         assertTrue(fieldValuesMap.containsKey("supporter4FamilyNames"));
         assertTrue(fieldValuesMap.containsKey("supporter4AddressDetails"));
-        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter4Undertakes"));
+        assertTrue(fieldValuesMap.containsKey("financialAmountSupporter4Undertakes1"));
     }
 
     // Helper method to set the common data
@@ -177,7 +177,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         when(bailCase.read(SUPPORTER_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
 
         when(bailCase.read(BAIL_TRANSFER_YES_OR_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(BAIL_TRANSFER_DIRECTIONS, String.class)).thenReturn(Optional.of(bailTransferDirections));
@@ -188,7 +188,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         when(bailCase.read(SUPPORTER_2_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_2_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_2_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 
     private void supporter3DataSetUp() {
@@ -196,7 +196,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         when(bailCase.read(SUPPORTER_3_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_3_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_3_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 
     private void supporter4DataSetUp() {
@@ -204,7 +204,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         when(bailCase.read(SUPPORTER_4_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
         when(bailCase.read(SUPPORTER_4_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
         when(bailCase.read(SUPPORTER_4_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
-        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 }
 
