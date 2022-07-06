@@ -273,7 +273,7 @@ dependencyManagement {
         }
 
         //CVE-2021-44228, CVE-2021-44832, CVE-2021-45046
-        dependencySet(group: 'org.apache.logging.log4j', version: '2.18.1') {
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.18.0') {
             entry 'log4j-api'
             entry 'log4j-to-slf4j'
         }
