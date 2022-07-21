@@ -85,20 +85,13 @@ public class DocumentManagementUploaderTest {
 
         when(uploadedDocuments.get(0)).thenReturn(uploadedDocument);
 
-//        when(documentUploadClientApi.uploadDocuments(
-//            eq(accessToken),
-//            eq(serviceAuthorizationToken),
-//            eq("Asylum"),
-//            eq("IA"),
-//            any(List.class)
-//        )).thenReturn(uploadResponse);
-        doReturn(uploadResponse).when(documentUploadClientApi.uploadDocuments(
-                eq(accessToken),
-                eq(serviceAuthorizationToken),
-                eq("Asylum"),
-                eq("IA"),
-                any(List.class)
-        ));
+        when(documentUploadClientApi.uploadDocuments(
+            eq(accessToken),
+            eq(serviceAuthorizationToken),
+            eq("Asylum"),
+            eq("IA"),
+            any(List.class)
+        )).thenReturn(uploadResponse);
 
         final Document actualDocument = documentManagementUploader.upload(
             resource,
