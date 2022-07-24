@@ -33,9 +33,7 @@ public class DocumentManagementUploaderTest {
 
     private String serviceAuthorizationToken = "SERVICE_TOKEN";
     private String accessToken = "ACCESS_TOKEN";
-    private String userId = "123";
-    @Mock private UploadResponse uploadResponse;
-    @Mock private List<uk.gov.hmcts.reform.ccd.document.am.model.Document> uploadedDocuments;
+
     private uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =
             uk.gov.hmcts.reform.ccd.document.am.model.Document.builder().build();
 
@@ -53,6 +51,8 @@ public class DocumentManagementUploaderTest {
     @Captor private ArgumentCaptor<List<MultipartFile>> multipartFilesCaptor;
 
     private DocumentManagementUploader documentManagementUploader;
+    private UploadResponse uploadResponse;
+
 
     @BeforeEach
     public void setUp() {
@@ -70,6 +70,9 @@ public class DocumentManagementUploaderTest {
         uploadedDocument.links.self.href = expectedDocumentUrl;
         uploadedDocument.links.binary = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Link();
         uploadedDocument.links.binary.href = expectedBinaryUrl;
+
+        uploadResponse = new UploadResponse(List.of(uploadedDocument));
+
     }
 
     @Test
@@ -77,13 +80,10 @@ public class DocumentManagementUploaderTest {
 
         when(serviceAuthorizationTokenGenerator.generate()).thenReturn(serviceAuthorizationToken);
         when(userDetails.getAccessToken()).thenReturn(accessToken);
-        when(userDetails.getId()).thenReturn(userId);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
 
         when(resource.getFilename()).thenReturn(fileName);
         when(resource.getInputStream()).thenReturn(resourceInputStream);
-
-        when(uploadedDocuments.get(0)).thenReturn(uploadedDocument);
 
         when(documentUploadClientApi.uploadDocuments(
             eq(accessToken),
