@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableCircuitBreaker
@@ -11,8 +12,11 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
     {
     "uk.gov.hmcts.reform.authorisation",
     "uk.gov.hmcts.reform.iacasedocumentsapi",
-    "uk.gov.hmcts.reform.ccd.document.am"
     })
+@ComponentScan(
+        basePackages = {"uk.gov.hmcts.reform.ccd.document.am"},
+        lazyInit = true
+)
 
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
 public class Application {
