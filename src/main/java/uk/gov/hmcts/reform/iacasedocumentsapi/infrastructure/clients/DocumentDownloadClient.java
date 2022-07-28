@@ -2,23 +2,25 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
 @Service
 public class DocumentDownloadClient {
 
-    private final CaseDocumentClient caseDocumentClient;
+    private final CcdCaseDocumentAmClient caseDocumentClient;
     private final AuthTokenGenerator serviceAuthTokenGenerator;
     private final AccessTokenProvider accessTokenProvider;
 
+    @Autowired
     public DocumentDownloadClient(
-        CaseDocumentClient caseDocumentClient,
+        CcdCaseDocumentAmClient caseDocumentClient,
         AuthTokenGenerator serviceAuthTokenGenerator,
         @Qualifier("requestUser") AccessTokenProvider accessTokenProvider
     ) {
@@ -40,7 +42,7 @@ public class DocumentDownloadClient {
         ResponseEntity<Resource> resourceResponseEntity = caseDocumentClient.getDocumentBinary(
             accessTokenProvider.getAccessToken(),
             serviceAuthTokenGenerator.generate(),
-            url.getPath().substring(1));
+            UUID.fromString(url.getPath().substring(1)));
 
         Resource documentResource = resourceResponseEntity.getBody();
 

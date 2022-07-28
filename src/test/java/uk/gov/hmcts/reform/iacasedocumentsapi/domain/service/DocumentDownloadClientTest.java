@@ -12,9 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.CcdCaseDocumentAmClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class DocumentDownloadClientTest {
@@ -23,7 +24,7 @@ public class DocumentDownloadClientTest {
     private final String someServiceAuthToken = "some-service-auth-token";
 
     @Mock
-    private CaseDocumentClient caseDocumentClient;
+    private CcdCaseDocumentAmClient caseDocumentClient;
     @Mock private AccessTokenProvider accessTokenProvider;
     @Mock private AuthTokenGenerator serviceAuthTokenGenerator;
     @Mock private ResponseEntity<Resource> responseEntity;
@@ -46,7 +47,7 @@ public class DocumentDownloadClientTest {
         when(caseDocumentClient.getDocumentBinary(
                 someAccessToken,
                 someServiceAuthToken,
-                "a/b/c")).thenReturn(responseEntity);
+                UUID.fromString("a/b/c"))).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);
@@ -63,7 +64,7 @@ public class DocumentDownloadClientTest {
             .getDocumentBinary(
                 eq(someAccessToken),
                 eq(someServiceAuthToken),
-                eq("a/b/c")
+                eq(UUID.fromString("a/b/c"))
             );
 
         assertEquals(resource, downloadedResource);
@@ -87,7 +88,7 @@ public class DocumentDownloadClientTest {
         when(caseDocumentClient.getDocumentBinary(
                 someAccessToken,
                 someServiceAuthToken,
-                "a/b/c")).thenReturn(responseEntity);
+                UUID.fromString("a/b/c"))).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);

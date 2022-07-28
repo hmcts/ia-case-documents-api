@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
+import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
@@ -27,7 +27,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 @SuppressWarnings("unchecked")
 public class DocumentManagementUploaderTest {
 
-    @Mock private CaseDocumentClient documentUploadClientApi;
+    @Mock private CcdCaseDocumentAmClient documentUploadClientApi;
     @Mock private AuthTokenGenerator serviceAuthorizationTokenGenerator;
     @Mock private UserDetailsProvider userDetailsProvider;
 
@@ -53,6 +53,7 @@ public class DocumentManagementUploaderTest {
     private DocumentManagementUploader documentManagementUploader;
     private UploadResponse uploadResponse;
 
+    DocumentUploadRequest uploadRequest;
 
     @BeforeEach
     public void setUp() {
@@ -78,6 +79,13 @@ public class DocumentManagementUploaderTest {
     @Test
     public void should_upload_document_to_document_management_and_return_links() throws IOException {
 
+
+        uploadRequest = new DocumentUploadRequest(
+                "PUBLIC",
+                "Asylum",
+                "IA",
+                multipartFilesCaptor.capture());
+
         when(serviceAuthorizationTokenGenerator.generate()).thenReturn(serviceAuthorizationToken);
         when(userDetails.getAccessToken()).thenReturn(accessToken);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
@@ -88,9 +96,7 @@ public class DocumentManagementUploaderTest {
         when(documentUploadClientApi.uploadDocuments(
             eq(accessToken),
             eq(serviceAuthorizationToken),
-            eq("Asylum"),
-            eq("IA"),
-            any(List.class)
+            eq(uploadRequest)
         )).thenReturn(uploadResponse);
 
         final Document actualDocument = documentManagementUploader.upload(
@@ -105,9 +111,7 @@ public class DocumentManagementUploaderTest {
         verify(documentUploadClientApi, times(1)).uploadDocuments(
             eq(accessToken),
             eq(serviceAuthorizationToken),
-            eq("Asylum"),
-            eq("IA"),
-            multipartFilesCaptor.capture()
+            eq(uploadRequest)
         );
 
         List<MultipartFile> actualMultipartFiles = multipartFilesCaptor.getAllValues().get(0);
