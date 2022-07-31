@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-
+import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.FeignConfiguration;
-
-import java.util.UUID;
 
 @FeignClient(
         name = "ccd-case-document-am-client",

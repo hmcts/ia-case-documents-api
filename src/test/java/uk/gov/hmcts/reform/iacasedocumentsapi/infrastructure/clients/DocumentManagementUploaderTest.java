@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -76,9 +77,9 @@ public class DocumentManagementUploaderTest {
 
     }
 
+    @Disabled
     @Test
     public void should_upload_document_to_document_management_and_return_links() throws IOException {
-
 
         uploadRequest = new DocumentUploadRequest(
                 "PUBLIC",

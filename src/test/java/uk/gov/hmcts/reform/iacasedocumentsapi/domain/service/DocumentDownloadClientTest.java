@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.CcdCaseDocumentAmClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
-import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class DocumentDownloadClientTest {
@@ -31,7 +31,7 @@ public class DocumentDownloadClientTest {
     @Mock private Resource downloadedResource;
 
     private DocumentDownloadClient documentDownloadClient;
-    private String someWellFormattedDocumentBinaryDownloadUrl = "http://host:8080/a/b/c";
+    private String someWellFormattedDocumentBinaryDownloadUrl = "http://host:8080/a24a6ea4-ce75-4665-a070-57453082c256";
 
     @BeforeEach
     public void setUp() {
@@ -47,7 +47,7 @@ public class DocumentDownloadClientTest {
         when(caseDocumentClient.getDocumentBinary(
                 someAccessToken,
                 someServiceAuthToken,
-                UUID.fromString("a/b/c"))).thenReturn(responseEntity);
+                UUID.fromString("a24a6ea4-ce75-4665-a070-57453082c256"))).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);
@@ -64,7 +64,7 @@ public class DocumentDownloadClientTest {
             .getDocumentBinary(
                 eq(someAccessToken),
                 eq(someServiceAuthToken),
-                eq(UUID.fromString("a/b/c"))
+                eq(UUID.fromString("a24a6ea4-ce75-4665-a070-57453082c256"))
             );
 
         assertEquals(resource, downloadedResource);
@@ -88,7 +88,7 @@ public class DocumentDownloadClientTest {
         when(caseDocumentClient.getDocumentBinary(
                 someAccessToken,
                 someServiceAuthToken,
-                UUID.fromString("a/b/c"))).thenReturn(responseEntity);
+                UUID.fromString("a24a6ea4-ce75-4665-a070-57453082c256"))).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);
