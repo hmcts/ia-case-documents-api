@@ -22,6 +22,7 @@ public enum DocumentTag {
     FINAL_DECISION_AND_REASONS_PDF("finalDecisionAndReasonsPdf"),
     APPEAL_SKELETON_BUNDLE("submitCaseBundle"),
     END_APPEAL("endAppeal"),
+    END_APPEAL_AUTOMATICALLY("endAppealAutomatically"),
     CMA_REQUIREMENTS("cmaRequirements"),
     CMA_NOTICE("cmaNotice"),
     HO_DECISION_LETTER("homeOfficeDecisionLetter"),
@@ -35,7 +36,6 @@ public enum DocumentTag {
 
     @JsonEnumDefaultValue
     NONE("");
-
 
     @JsonValue
     private final String id;

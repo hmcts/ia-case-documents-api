@@ -31,6 +31,7 @@ public enum Event {
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
     EDIT_CASE_LISTING("editCaseListing"),
     END_APPEAL("endAppeal"),
+    END_APPEAL_AUTOMATICALLY("endAppealAutomatically"),
     ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate"),
     SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements"),
     LIST_CMA("listCma"),
@@ -38,6 +39,7 @@ public enum Event {
     GENERATE_UPPER_TRIBUNAL_BUNDLE("generateUpperTribunalBundle"),
     SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal"),
     SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers"),
+
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
 
