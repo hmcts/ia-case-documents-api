@@ -83,6 +83,16 @@ public enum Event {
     MANAGE_FEE_UPDATE("manageFeeUpdate"),
     RECORD_OUT_OF_TIME_DECISION("recordOutOfTimeDecision"),
     EDIT_PAYMENT_METHOD("editPaymentMethod"),
+    SUBMIT_APPLICATION("submitApplication"),
+    UPLOAD_BAIL_SUMMARY("uploadBailSummary"),
+    UPLOAD_SIGNED_DECISION_NOTICE("uploadSignedDecisionNotice"),
+    END_APPLICATION("endApplication"),
+    UPLOAD_DOCUMENTS("uploadDocuments"),
+    SEND_BAIL_DIRECTION("sendBailDirection"),
+    EDIT_BAIL_DOCUMENTS("editBailDocuments"),
+    CHANGE_BAIL_DIRECTION_DUE_DATE("changeBailDirectionDueDate"),
+    MAKE_NEW_APPLICATION("makeNewApplication"),
+    EDIT_BAIL_APPLICATION_AFTER_SUBMIT("editBailApplicationAfterSubmit"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

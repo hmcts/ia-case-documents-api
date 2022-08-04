@@ -9,6 +9,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailHearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 
 @Service
@@ -18,14 +21,17 @@ public class EmailAddressFinder {
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
     private final Map<HearingCentre, String> homeOfficeEmailAddresses;
     private final Map<HearingCentre, String> homeOfficeFtpaEmailAddresses;
+    private final Map<BailHearingCentre, String> bailHearingCentreEmailAddresses;
 
     public EmailAddressFinder(
         Map<HearingCentre, String> hearingCentreEmailAddresses,
         Map<HearingCentre, String> homeOfficeEmailAddresses,
-        Map<HearingCentre, String> homeOfficeFtpaEmailAddresses) {
+        Map<HearingCentre, String> homeOfficeFtpaEmailAddresses,
+        Map<BailHearingCentre, String> bailHearingCentreEmailAddresses) {
         this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
         this.homeOfficeEmailAddresses = homeOfficeEmailAddresses;
         this.homeOfficeFtpaEmailAddresses = homeOfficeFtpaEmailAddresses;
+        this.bailHearingCentreEmailAddresses = bailHearingCentreEmailAddresses;
     }
 
     public String getHearingCentreEmailAddress(AsylumCase asylumCase) {
@@ -96,6 +102,12 @@ public class EmailAddressFinder {
             .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
     }
 
+    private BailHearingCentre getBailHearingCentre(BailCase bailCase, BailCaseFieldDefinition bailCaseDefinition) {
+        return bailCase
+            .read(bailCaseDefinition, BailHearingCentre.class)
+            .orElseThrow(() -> new IllegalStateException("Bail hearingCentre is not present"));
+    }
+
     private String getEmailAddress(Map<HearingCentre, String> emailAddressesMap, HearingCentre hearingCentre) {
         switch (hearingCentre) {
             case GLASGOW_TRIBUNAL_CENTRE:
@@ -124,6 +136,22 @@ public class EmailAddressFinder {
                         .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
                 )
                 .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
+    }
+
+    public String getBailHearingCentreEmailAddress(BailCase bailCase) {
+
+        final BailHearingCentre hearingCentre =
+            getBailHearingCentre(bailCase, BailCaseFieldDefinition.HEARING_CENTRE);
+
+        final String bailHearingCentreEmailAddress =
+            bailHearingCentreEmailAddresses
+                .get(hearingCentre);
+
+        if (bailHearingCentreEmailAddress == null) {
+            throw new IllegalStateException("Hearing centre email address not found: " + hearingCentre.toString());
+        }
+
+        return bailHearingCentreEmailAddress;
     }
 
     private boolean isRemoteHearing(AsylumCase asylumCase) {

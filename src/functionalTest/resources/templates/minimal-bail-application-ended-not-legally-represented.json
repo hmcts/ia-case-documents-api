@@ -1,0 +1,103 @@
+{
+  "isAdmin": "Yes",
+  "hasLegalRep": "No",
+  "hearingCentre": "bradford",
+  "videoHearing1": "Yes",
+  "applicantGender": "Female",
+  "sentByChecklist": "Applicant",
+  "applicantAddress": {
+  },
+  "interpreterYesNo": "No",
+  "judgeDetailsName": "JudgeName",
+  "applicantFullName": "TheName TheLastName",
+  "detentionFacility": "Derwentside",
+  "notificationsSent": [
+    {
+      "id": "1652266063605220_BAIL_APPLICATION_SUBMITTED_HEARING_CENTRE",
+      "value": "d099816a-875f-405b-ab4d-8376a8ec1756"
+    },
+    {
+      "id": "1652266063605220_BAIL_APPLICATION_SUBMITTED_HOME_OFFICE",
+      "value": "b9ed236b-cd7a-421a-bcb0-d91d427336ef"
+    },
+    {
+      "id": "1652266063605220_BAIL_APPLICATION_SUBMITTED_APPLICANT_SMS",
+      "value": "e27de110-0bf1-4015-9dab-5e0cf8560366"
+    },
+    {
+      "id": "1652266063605220_BAIL_SUMMARY_UPLOADED_ADMIN_OFFICER",
+      "value": "30434c4b-0cfd-4f1e-b919-02547264addc"
+    },
+    {
+      "id": "1652266063605220_BAIL_UPLOADED_SIGNED_DECISION_NOTICE_ADMIN_OFFICER",
+      "value": "30434c4b-0cfd-4f1e-b919-02547264addc"
+    }
+  ],
+  "applicantHasMobile": "Yes",
+  "applicantFamilyName": "TheLastName",
+  "applicantGivenNames": "TheName",
+  "applicantHasAddress": "No",
+  "bailReferenceNumber": "1652-2660-6360-5220",
+  "applicantDateOfBirth": "6666-06-06",
+  "applicantDetainedLoc": "immigrationRemovalCentre",
+  "applicantDisability1": "No",
+  "applicantNationality": "STATELESS",
+  "interpreterLanguages": [
+  ],
+  "applicantMobileNumber1": "07555555555",
+  "groundsForBailReasons": "tywtywstw",
+  "recordDecisionType": "granted",
+  "uploadBailSummaryDocs": [
+    {
+      "id": "e94a1298-baae-4774-acb0-e01e44734238",
+      "value": {
+        "document": {
+          "document_url": "http://dm-store:8080/documents/656b0cca-bb80-449e-8c7b-c8506a54cded",
+          "document_filename": "B1_Bail_Form_0222_save.pdf",
+          "document_binary_url": "http://dm-store:8080/documents/656b0cca-bb80-449e-8c7b-c8506a54cded/binary"
+        },
+        "description": "asfvas"
+      }
+    }
+  ],
+  "applicantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "code": "Stateless"
+      }
+    }
+  ],
+  "applicationSubmittedBy": "Home Office",
+  "hasAppealHearingPending": "No",
+  "applicantArrivalInUKDate": "5555-05-05",
+  "applicantBeenRefusedBail": "No",
+  "hasFinancialCondSupporter": "No",
+  "homeOfficeReferenceNumber": "tttttttt",
+  "uploadBailSummaryMetadata": [
+    {
+      "id": "1",
+      "value": {
+        "tag": "uploadBailSummary",
+        "document": {
+          "document_url": "http://dm-store:8080/documents/656b0cca-bb80-449e-8c7b-c8506a54cded",
+          "document_filename": "B1_Bail_Form_0222_save.pdf",
+          "document_binary_url": "http://dm-store:8080/documents/656b0cca-bb80-449e-8c7b-c8506a54cded/binary"
+        },
+        "description": "asfvas",
+        "dateUploaded": "2022-05-11"
+      }
+    }
+  ],
+  "hasPreviousBailApplication": "No",
+  "isLegallyRepresentedForFlag": "No",
+  "reasonsJudgeIsMindedDetails": "The judge is minded",
+  "agreesToBoundByFinancialCond": "No",
+  "transferBailManagementYesOrNo": "Yes",
+  "currentCaseStateVisibleToJudge": "endApplication",
+  "secretaryOfStateConsentYesOrNo": "Yes",
+  "currentCaseStateVisibleToHomeOffice": "endApplication",
+  "groundsForBailProvideEvidenceOption": "No",
+  "currentCaseStateVisibleToAdminOfficer": "endApplication",
+  "currentCaseStateVisibleToLegalRepresentative": "endApplication"
+}

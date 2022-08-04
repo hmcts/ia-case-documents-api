@@ -14,29 +14,31 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PostSubmitCallbackDispatcher;
 
 @ExtendWith(MockitoExtension.class)
-class PostSubmitCallbackControllerTest {
+class BailPostSubmitCallbackControllerTest {
 
     @Mock
-    private PostSubmitCallbackDispatcher<AsylumCase> callbackDispatcher;
+    private PostSubmitCallbackDispatcher<BailCase> callbackDispatcher;
     @Mock
     private PostSubmitCallbackResponse callbackResponse;
     @Mock
-    private Callback<AsylumCase> callback;
+    private Callback<BailCase> callback;
     @Mock
-    private CaseDetails<AsylumCase> caseDetails;
+    private CaseDetails<BailCase> caseDetails;
 
-    private PostSubmitCallbackController postSubmitCallbackController;
+    private PostSubmitCallbackController<BailCase> postSubmitCallbackController;
 
     @BeforeEach
     public void setUp() {
         postSubmitCallbackController =
-            new PostSubmitCallbackController(
+            new PostSubmitCallbackController<>(
                 callbackDispatcher
             );
     }
@@ -84,7 +86,7 @@ class PostSubmitCallbackControllerTest {
     @Test
     void should_not_allow_null_constructor_arguments() {
 
-        assertThatThrownBy(() -> new PostSubmitCallbackController(null))
+        assertThatThrownBy(() -> new PostSubmitCallbackController<>(null))
             .hasMessage("callbackDispatcher must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

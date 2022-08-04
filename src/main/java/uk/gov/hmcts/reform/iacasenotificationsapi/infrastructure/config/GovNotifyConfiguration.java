@@ -25,4 +25,15 @@ public class GovNotifyConfiguration {
 
         return new RetryableNotificationClient(new CustomNotificationClient(key, goveNotifyBaseUrl, timeout));
     }
+
+    @Bean("BailClient")
+    public RetryableNotificationClient notificationBailClient(
+            @Value("${govnotify.bail.key}") String key,
+            @Value("${govnotify.baseUrl}") String goveNotifyBaseUrl,
+            @Value("${govnotify.bail.timeout}") int timeout
+    ) {
+        requireNonNull(key);
+
+        return new RetryableNotificationClient(new CustomNotificationClient(key, goveNotifyBaseUrl, timeout));
+    }
 }

@@ -1,0 +1,53 @@
+{
+  "isLegalRep": "Yes",
+  "prisonName": "Channings Wood",
+  "legalRepName": "Legal Rep",
+  "hearingCentre": "newport",
+  "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+  "legalRepPhone": "07896541236",
+  "videoHearing1": "Yes",
+  "applicantGender": "MALE",
+  "legalRepCompany": "Fake Org Ltd",
+  "interpreterYesNo": "No",
+  "applicantFullName": "John Smith",
+  "detentionFacility": "Channings Wood",
+  "legalRepReference": "123654LR",
+  "applicantHasMobile": "No",
+  "applicantFamilyName": "Smith",
+  "applicantGivenNames": "John",
+  "applicantHasAddress": "No",
+  "bailReferenceNumber": "1650-6221-2061-5101",
+  "declarationOnSubmit": [
+    "declarationOnSubmit"
+  ],
+  "applicantDateOfBirth": "2000-02-02",
+  "applicantDetainedLoc": "prison",
+  "applicantDisability1": "No",
+  "applicantNationality": "STATELESS",
+  "interpreterLanguages": [],
+  "groundsForBailReasons": "test grounds",
+  "applicantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "code": "Stateless"
+      }
+    }
+  ],
+  "applicantPrisonDetails": "1234",
+  "applicationSubmittedBy": "Legal Representative",
+  "hasAppealHearingPending": "No",
+  "applicantArrivalInUKDate": "2022-03-12",
+  "applicantBeenRefusedBail": "No",
+  "hasFinancialCondSupporter": "No",
+  "homeOfficeReferenceNumber": "A12345",
+  "hasPreviousBailApplication": "No",
+  "isLegallyRepresentedForFlag": "Yes",
+  "agreesToBoundByFinancialCond": "No",
+  "transferBailManagementYesOrNo": "Yes",
+  "currentCaseStateVisibleToJudge": "applicationSubmitted",
+  "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+  "groundsForBailProvideEvidenceOption": "No",
+  "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+  "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+}

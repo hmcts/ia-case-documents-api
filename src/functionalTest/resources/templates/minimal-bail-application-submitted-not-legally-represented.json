@@ -1,0 +1,60 @@
+{
+  "isAdmin": "Yes",
+  "prisonName": "Eastwood Park",
+  "hasLegalRep": "No",
+  "hearingCentre": "birmingham",
+  "videoHearing1": "Yes",
+  "applicantGender": "MALE",
+  "sentByChecklist": "Applicant",
+  "interpreterYesNo": "No",
+  "uploadB1FormDocs": [
+    {
+      "id": "e7f00625-65fe-4bb0-80e6-ec891e5bf1e1",
+      "value": {
+        "document": {
+          "document_url": "http://dm-store:8080/documents/8ef5c8f5-cf55-478d-bc9e-1e835329d944",
+          "document_filename": "upload_test_pdf.pdf",
+          "document_binary_url": "http://dm-store:8080/documents/8ef5c8f5-cf55-478d-bc9e-1e835329d944/binary"
+        },
+        "description": "desc"
+      }
+    }
+  ],
+  "applicantFullName": "John Doe",
+  "detentionFacility": "Eastwood Park",
+  "applicantHasMobile": "No",
+  "applicantFamilyName": "Doe",
+  "applicantGivenNames": "John",
+  "applicantHasAddress": "No",
+  "bailReferenceNumber": "1650-9687-2604-3754",
+  "applicantDateOfBirth": "1990-01-01",
+  "applicantDetainedLoc": "prison",
+  "applicantDisability1": "No",
+  "applicantNationality": "HAS_NATIONALITY",
+  "interpreterLanguages": [],
+  "groundsForBailReasons": "Reasons 1 2 3",
+  "applicantNationalities": [
+    {
+      "id": "6690acce-8cce-445f-8cc2-6fd5940c76c1",
+      "value": {
+        "code": "Argentine"
+      }
+    }
+  ],
+  "applicantPrisonDetails": "111",
+  "applicationSubmittedBy": "Applicant",
+  "hasAppealHearingPending": "DontKnow",
+  "applicantArrivalInUKDate": "2020-12-12",
+  "applicantBeenRefusedBail": "No",
+  "hasFinancialCondSupporter": "No",
+  "homeOfficeReferenceNumber": "REF123",
+  "hasPreviousBailApplication": "DontKnow",
+  "isLegallyRepresentedForFlag": "No",
+  "agreesToBoundByFinancialCond": "No",
+  "transferBailManagementYesOrNo": "Yes",
+  "currentCaseStateVisibleToJudge": "applicationSubmitted",
+  "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+  "groundsForBailProvideEvidenceOption": "No",
+  "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+  "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+}

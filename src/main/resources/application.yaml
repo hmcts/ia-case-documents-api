@@ -27,6 +27,8 @@ spring:
   jackson.date-format: yyyy-MM-dd
   main:
     allow-bean-definition-overriding: true
+  config:
+    import: "optional:configtree:/mnt/secrets/ia/"
   security:
     oauth2:
       client:
@@ -776,6 +778,53 @@ govnotify:
     amendRespondentEvidenceDirection:
       legalRep:
         email: 66a5e934-5875-4e60-a343-356916a112c7
+  bail:
+    key: ${IA_BAIL_GOV_NOTIFY_KEY}
+    timeout: 5000
+    template:
+      submitApplication:
+        email: 5f30774f-00fb-4c03-b010-e5a8afaa5f05
+        sms: 64ac7c79-682f-4bd7-9847-bfd21240e8c6
+      submitApplicationWithoutLR:
+        email: 4888954b-446a-4e84-95cf-58340a66550b
+      uploadBailSummary:
+        email: 1e852128-33e5-41d8-a788-ee6a3281c337
+      uploadBailSummaryWithoutLR:
+        email: 68153bee-1adc-4a78-83bc-c49d42394617
+      uploadSignedDecisionNotice:
+        sms: 72389303-1c07-47df-905f-8366b69f3482
+        email: 3e4d7195-2e48-4ca0-b88f-ac6969cf8a4b
+      uploadSignedDecisionNoticeWithoutLR:
+        email: ffaee311-d762-4937-a7c9-17e9f3706873
+      uploadSignedDecisionNoticeHO:
+        email: 6d7a8f5f-3c29-4f19-bf23-5eced46eb976
+      endApplication:
+        sms: fbb7895c-891a-4e7a-89c3-bd822e3c0071
+        email: e70e45e1-5609-430a-9c29-e0bb539e5efa
+      endApplicationLR:
+        email: 52894473-9ded-40f8-9696-e19661fc4f44
+      endApplicationWithoutLR:
+        email: 93beafd6-7e2e-4e45-a4ea-c424ffa54521
+      uploadDocument:
+        email: 2b975611-7b5b-4c92-a231-406e6e64e4ba
+      uploadDocumentWithoutLR:
+        email: abf2bc5b-dbf0-43f0-b324-e3a08f2dea13
+      sendDirectionDirectRecipient:
+        email: 4e41c2bd-02f2-4843-bfff-dffa5cbcb1f5
+      sendDirectionOtherParties:
+        email: 0d251cb4-b7e3-4dcb-92e3-629b03eec859
+      editBailDocuments:
+        email: dbe0934c-2770-4a26-8eab-b8d9ec522f04
+      editBailDocumentsWithoutLr:
+        email: 267cbf89-9d32-45b0-8ded-0f275d042110
+      changeBailDirectionDueDate:
+        email: 7cef2a13-701f-4425-9685-501236bf1c74
+      changeBailDirectionDueDateWithoutLR:
+        email: 3ea0376f-c7b7-4d8d-941d-abfacc1ddd96
+      editApplicationAfterSubmit:
+        email: 84d48a3f-afd6-4759-9219-22cb37bebabb
+      editApplicationAfterSubmitWithoutLr:
+        email: 160386c8-7fc5-4359-8d3d-f99765af00d5
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -841,6 +890,9 @@ security:
       - "requestFeeRemission"
       - "nocRequest"
       - "editPaymentMethod"
+      - "submitApplication"
+      - "uploadDocuments"
+      - "makeNewApplication"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -905,6 +957,15 @@ security:
       - "removeLegalRepresentative"
       - "manageFeeUpdate"
       - "asyncStitchingComplete"
+      - "submitApplication"
+      - "uploadSignedDecisionNotice"
+      - "endApplication"
+      - "uploadDocuments"
+      - "sendBailDirection"
+      - "editBailDocuments"
+      - "editBailApplicationAfterSubmit"
+      - "changeBailDirectionDueDate"
+      - "makeNewApplication"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -928,6 +989,10 @@ security:
       - "uploadAddendumEvidenceHomeOffice"
       - "applyForFTPARespondent"
       - "makeAnApplication"
+      - "submitApplication"
+      - "uploadBailSummary"
+      - "uploadDocuments"
+      - "makeNewApplication"
     caseworker-ia-iacjudge:
       - "endAppeal"
       - "sendDecisionAndReasons"
@@ -943,6 +1008,12 @@ security:
       - "decideAnApplication"
       - "requestNewHearingRequirements"
       - "asyncStitchingComplete"
+      - "uploadSignedDecisionNotice"
+      - "endApplication"
+      - "uploadDocuments"
+      - "sendBailDirection"
+      - "editBailDocuments"
+      - "changeBailDirectionDueDate"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
 
@@ -972,6 +1043,17 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+
+### Bail Hearing Email addresses
+bailHearingCentreEmailAddresses:
+  yarlswood: ${IA_BAIL_HEARING_CENTRE_YARLSWOOD_EMAIL:hc-bradford@example.com}
+  glasgow: ${IA_BAIL_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+  manchester: ${IA_BAIL_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester@example.com}
+  hattonCross: ${IA_BAIL_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
+  taylorHouse: ${IA_BAIL_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse@example.com}
+  newport: ${IA_BAIL_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport@example.com}
+  birmingham: ${IA_BAIL_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham@example.com}
+  bradford: ${IA_BAIL_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}
 
 ### POU Email addresses (Case listed)
 homeOfficeEmailAddresses:
@@ -1024,6 +1106,7 @@ upperTribunalNoticesEmailAddress: ${IA_UPPER_TRIBUNAL_NOTICES_EMAIL}
 nbcEmailAddress: ${IA_NBC_EMAIL}
 ctscEmailAddress: ${IA_CTSC_EMAIL}
 ctscAdminPendingPaymentEmailAddress: ${IA_CTSC_ADMIN_PENDING_PAYMENT_EMAIL:pendingPayment@example.com}
+bailHomeOfficeEmailAddress: ${IA_BAIL_HOME_OFFICE_EMAIL:ho-bail-alar@example.com}
 
 respondentEmailAddresses:
   nonStandardDirectionUntilListing: ${IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:respondent@example.com}

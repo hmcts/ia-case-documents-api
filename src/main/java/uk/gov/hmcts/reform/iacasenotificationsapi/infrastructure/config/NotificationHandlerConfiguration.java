@@ -31,6 +31,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.ErrorHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PostSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.postsubmit.PostSubmitNotificationHandler;
@@ -686,12 +687,7 @@ public class NotificationHandlerConfiguration {
                            && isRemissionApproved
                            && isEaAndHuAppealType);
             }, notificationGenerators,
-            (callback, e) -> {
-                callback
-                    .getCaseDetails()
-                    .getCaseData()
-                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
-            }
+            getErrorHandler()
         );
     }
 
@@ -736,12 +732,7 @@ public class NotificationHandlerConfiguration {
                        && (!paymentFailed || paymentFailedChangedToPayLater)
                        && !isPaymentPendingForEaOrHuAppeal(callback);
             }, notificationGenerators,
-            (callback, e) -> {
-                callback
-                    .getCaseDetails()
-                    .getCaseData()
-                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
-            }
+            getErrorHandler()
         );
     }
 
@@ -1758,12 +1749,7 @@ public class NotificationHandlerConfiguration {
                        && isCorrectAppealType
                        && paymentStatus == PaymentStatus.PAID;
             }, notificationGenerators,
-            (callback, e) -> {
-                callback
-                    .getCaseDetails()
-                    .getCaseData()
-                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
-            }
+            getErrorHandler()
         );
     }
 
@@ -1824,12 +1810,7 @@ public class NotificationHandlerConfiguration {
                            && paAppealTypePaymentOption.equals("payLater"));
             },
             notificationGenerators,
-            (callback, e) -> {
-                callback
-                    .getCaseDetails()
-                    .getCaseData()
-                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
-            }
+            getErrorHandler()
         );
     }
 
@@ -1850,12 +1831,7 @@ public class NotificationHandlerConfiguration {
                        && isRpAndDcAppealType;
             },
             notificationGenerators,
-            (callback, e) -> {
-                callback
-                    .getCaseDetails()
-                    .getCaseData()
-                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
-            }
+            getErrorHandler()
         );
     }
 
@@ -2050,12 +2026,7 @@ public class NotificationHandlerConfiguration {
                 && (isPaymentPendingForEaOrHuAppeal(callback)
                     || isPaymentPendingForEaOrHuAppealWithRemission(callback)),
             notificationGenerators,
-            (callback, e) -> {
-                callback
-                    .getCaseDetails()
-                    .getCaseData()
-                    .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
-            }
+            getErrorHandler()
         );
     }
 
@@ -2587,11 +2558,7 @@ public class NotificationHandlerConfiguration {
                        && smsPreferred;
             },
             notificationGenerators,
-            (callback, e) -> log.error(
-                "cannot send sms notification to the appellant on submitAppeal, caseId: {}",
-                callback.getCaseDetails().getId(),
-                e
-            )
+            getSmsErrorHandling()
         );
     }
 
@@ -3099,6 +3066,26 @@ public class NotificationHandlerConfiguration {
 
         return smsPreferred.size() > 0 && smsPreferred.stream().findFirst().map(subscriberIdValue ->
                 subscriberIdValue.getValue().getEmail()).isPresent();
+    }
+
+    private ErrorHandler<AsylumCase> getErrorHandler() {
+        ErrorHandler<AsylumCase> errorHandler = (callback, e) -> {
+            callback
+                .getCaseDetails()
+                .getCaseData()
+                .write(SUBMIT_NOTIFICATION_STATUS, "Failed");
+        };
+        return errorHandler;
+    }
+
+    private ErrorHandler<AsylumCase> getSmsErrorHandling() {
+        ErrorHandler<AsylumCase> errorHandler =
+            (callback, e) -> log.error(
+                "cannot send sms notification to the appellant on submitAppeal, caseId: {}",
+                callback.getCaseDetails().getId(),
+                e
+            );
+        return errorHandler;
     }
 
 }

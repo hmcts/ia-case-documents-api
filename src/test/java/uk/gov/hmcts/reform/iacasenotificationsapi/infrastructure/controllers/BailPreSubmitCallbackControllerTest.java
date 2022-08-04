@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -21,23 +21,23 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.P
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PreSubmitCallbackDispatcher;
 
 @ExtendWith(MockitoExtension.class)
-public class PreSubmitCallbackControllerTest {
+public class BailPreSubmitCallbackControllerTest {
 
     @Mock
-    private PreSubmitCallbackDispatcher<AsylumCase> callbackDispatcher;
+    private PreSubmitCallbackDispatcher<BailCase> callbackDispatcher;
     @Mock
-    private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
+    private PreSubmitCallbackResponse<BailCase> callbackResponse;
     @Mock
-    private Callback<AsylumCase> callback;
+    private Callback<BailCase> callback;
     @Mock
-    private CaseDetails<AsylumCase> caseDetails;
+    private CaseDetails<BailCase> caseDetails;
 
-    private PreSubmitCallbackController preSubmitCallbackController;
+    private PreSubmitCallbackController<BailCase> preSubmitCallbackController;
 
     @BeforeEach
     public void setUp() {
         preSubmitCallbackController =
-            new PreSubmitCallbackController(
+            new PreSubmitCallbackController<>(
                 callbackDispatcher
             );
     }
@@ -51,7 +51,7 @@ public class PreSubmitCallbackControllerTest {
             .when(callbackDispatcher)
             .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
-        ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> actualResponse =
+        ResponseEntity<PreSubmitCallbackResponse<BailCase>> actualResponse =
             preSubmitCallbackController.ccdAboutToStart(callback);
 
         assertNotNull(actualResponse);
@@ -71,7 +71,7 @@ public class PreSubmitCallbackControllerTest {
             .when(callbackDispatcher)
             .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
-        ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> actualResponse =
+        ResponseEntity<PreSubmitCallbackResponse<BailCase>> actualResponse =
             preSubmitCallbackController.ccdAboutToSubmit(callback);
 
         assertNotNull(actualResponse);
@@ -85,7 +85,7 @@ public class PreSubmitCallbackControllerTest {
     @Test
     public void should_not_allow_null_constructor_arguments() {
 
-        assertThatThrownBy(() -> new PreSubmitCallbackController(null))
+        assertThatThrownBy(() -> new PreSubmitCallbackController<>(null))
             .hasMessage("callbackDispatcher must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

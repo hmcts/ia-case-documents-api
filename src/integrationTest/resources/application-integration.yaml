@@ -1,4 +1,5 @@
 govnotify.key: not-used-in-integration
+govnotify.bail.key: not-used-in-integration
 
 respondentEmailAddresses:
   nonStandardDirectionUntilListing: not-used-in-integration

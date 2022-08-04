@@ -19,6 +19,7 @@ def component = "case-notifications-api"
 def secrets = [
     'ia-${env}': [
         secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
+        secret('ia-bail-gov-notify-key', 'IA_BAIL_GOV_NOTIFY_KEY'),
 
         secret('hearing-centre-bradford-email', 'IA_HEARING_CENTRE_BRADFORD_EMAIL'),
         secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
@@ -105,7 +106,20 @@ def secrets = [
         secret('nbc-email', 'IA_NBC_EMAIL'),
         secret('ctsc-email', 'IA_CTSC_EMAIL'),
 
-        secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY')
+        secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY'),
+
+        secret('bail-hearing-centre-bradford-email', 'IA_BAIL_HEARING_CENTRE_BRADFORD_EMAIL'),
+        secret('bail-hearing-centre-birmingham-email', 'IA_BAIL_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
+        secret('bail-hearing-centre-newport-email', 'IA_BAIL_HEARING_CENTRE_NEWPORT_EMAIL'),
+        secret('bail-hearing-centre-taylor-house-email', 'IA_BAIL_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+        secret('bail-hearing-centre-hatton-cross-email', 'IA_BAIL_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
+        secret('bail-hearing-centre-manchester-email', 'IA_BAIL_HEARING_CENTRE_MANCHESTER_EMAIL'),
+        secret('bail-hearing-centre-glasgow-email', 'IA_BAIL_HEARING_CENTRE_GLASGOW_EMAIL'),
+        secret('bail-hearing-centre-yarlswood-email', 'IA_BAIL_HEARING_CENTRE_YARLSWOOD_EMAIL'),
+
+        secret('bail-home-office-email', 'IA_BAIL_HOME_OFFICE_EMAIL'),
+
+        secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE')
     ]
 ]
 

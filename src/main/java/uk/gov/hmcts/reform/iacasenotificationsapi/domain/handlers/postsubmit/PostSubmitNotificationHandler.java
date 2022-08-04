@@ -7,7 +7,9 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Message;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.ErrorHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers.PostSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.NotificationGenerator;
@@ -17,7 +19,7 @@ public class PostSubmitNotificationHandler implements PostSubmitCallbackHandler<
 
     private final BiPredicate<PostSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction;
     private final List<? extends NotificationGenerator> notificationGenerators;
-    private final Optional<ErrorHandler> errorHandling;
+    private final Optional<ErrorHandler<AsylumCase>> errorHandling;
 
     public PostSubmitNotificationHandler(BiPredicate<PostSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction,
                                          List<? extends NotificationGenerator> notificationGenerator
@@ -29,7 +31,7 @@ public class PostSubmitNotificationHandler implements PostSubmitCallbackHandler<
 
     public PostSubmitNotificationHandler(BiPredicate<PostSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction,
                                          List<? extends NotificationGenerator> notificationGenerator,
-                                         ErrorHandler errorHandling
+                                         ErrorHandler<AsylumCase> errorHandling
     ) {
         this.canHandleFunction = canHandleFunction;
         this.notificationGenerators = notificationGenerator;

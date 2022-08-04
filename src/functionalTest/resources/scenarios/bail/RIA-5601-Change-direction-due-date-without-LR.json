@@ -1,0 +1,57 @@
+{
+  "description": "RIA-5601 send bail documents uploaded notification to HomeOffice",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 5601,
+      "eventId": "changeBailDirectionDueDate",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted-direction-sent.json",
+        "replacements": {
+          "isLegallyRepresentedForFlag": "No",
+          "currentCaseStateVisibleToJudge": "applicationSubmitted",
+          "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+          "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+          "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted-not-legally-represented.json",
+      "replacements": {
+        "isLegallyRepresentedForFlag": "No",
+        "currentCaseStateVisibleToJudge": "applicationSubmitted",
+        "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+        "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+        "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted",
+        "notificationsSent": [
+          {
+            "id": "5601_CHANGE_BAIL_DIRECTION_DUE_DATE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "5601_CHANGE_BAIL_DIRECTION_DUE_DATE_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: You have a direction",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "A direction due date has been changed in the online service.",
+          "Sign in to your account to view the updated direction(s) in the directions tab."
+        ]
+      }
+    ]
+  }
+}

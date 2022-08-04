@@ -3,21 +3,21 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.BaseNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNotifyNotificationSender;
 
 public class EmailNotificationGenerator implements NotificationGenerator {
 
     protected final List<EmailNotificationPersonalisation> personalisationList;
     protected final NotificationIdAppender notificationIdAppender;
-    protected final NotificationSender notificationSender;
+    protected final GovNotifyNotificationSender notificationSender;
 
     public EmailNotificationGenerator(
         List<EmailNotificationPersonalisation> repPersonalisationList,
-        NotificationSender notificationSender,
+        GovNotifyNotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         this.personalisationList = repPersonalisationList;

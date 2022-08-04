@@ -20,6 +20,7 @@ The following environment variables are required when running the api without it
 | Environment Variable | *Example values*  |
 |----------------------|----------|
 | IA_GOV_NOTIFY_KEY | some-gov-notify-key |
+| IA_BAIL_GOV_NOTIFY_KEY | some-gov-notify-key |
 | IA_IDAM_CLIENT_ID  |  some-idam-client-id |
 | IA_IDAM_SECRET  |  some-idam-secret |
 | IA_IDAM_REDIRECT_URI  |  http://localhost:3451/oauth2redirect |

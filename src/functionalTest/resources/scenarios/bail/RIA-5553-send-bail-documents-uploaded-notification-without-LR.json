@@ -1,0 +1,57 @@
+{
+  "description": "RIA-5553 send bail documents uploaded notification to HomeOffice",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 5553,
+      "eventId": "uploadDocuments",
+      "state": "bailSummaryUploaded",
+      "caseData": {
+        "template": "minimal-bail-application-submitted-not-legally-represented.json",
+        "replacements": {
+          "isLegallyRepresentedForFlag": "No",
+          "currentCaseStateVisibleToJudge": "bailSummaryUploaded",
+          "currentCaseStateVisibleToHomeOffice": "bailSummaryUploaded",
+          "currentCaseStateVisibleToAdminOfficer": "bailSummaryUploaded",
+          "currentCaseStateVisibleToLegalRepresentative": "bailSummaryUploaded"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted-not-legally-represented.json",
+      "replacements": {
+        "isLegallyRepresentedForFlag": "No",
+        "currentCaseStateVisibleToJudge": "bailSummaryUploaded",
+        "currentCaseStateVisibleToHomeOffice": "bailSummaryUploaded",
+        "currentCaseStateVisibleToAdminOfficer": "bailSummaryUploaded",
+        "currentCaseStateVisibleToLegalRepresentative": "bailSummaryUploaded",
+        "notificationsSent": [
+          {
+            "id": "5553_BAIL_UPLOADED_DOCUMENTS_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "5553_BAIL_UPLOADED_DOCUMENTS_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: New document uploaded",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "New documentation has been uploaded to the online service.",
+          "Sign in to your account to view the uploaded document(s) in the documents tab."
+        ]
+      }
+    ]
+  }
+}

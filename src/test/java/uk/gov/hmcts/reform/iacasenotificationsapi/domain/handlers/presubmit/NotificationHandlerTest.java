@@ -37,7 +37,7 @@ public class NotificationHandlerTest {
     @Mock
     BiPredicate<PreSubmitCallbackStage, Callback<AsylumCase>> canHandle;
     @Mock
-    ErrorHandler errorHandler;
+    ErrorHandler<AsylumCase> errorHandler;
 
     private PreSubmitCallbackStage callbackStage = PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
     private NotificationHandler notificationHandler;
