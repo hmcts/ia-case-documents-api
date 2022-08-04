@@ -2,26 +2,58 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <suppress until="2030-01-01">
         <notes><![CDATA[
-                 5.3 MEDIUM
-                 https://nvd.nist.gov/vuln/detail/CVE-2021-28170
-                 Spring Framework vulnerability, subject to review after Spring Boot upgrade to 2.4.x affected lib org.glassfish:jakarta.el:3.0.3
-                ]]></notes>
-        <cve>CVE-2021-28170</cve>
+             https://nvd.nist.gov/vuln/detail/CVE-2016-1000027
+             Root Cause: spring-web-5.2.3.RELEASE.jar <= org/springframework/remoting/httpinvoker/HttpInvokerServiceExporter.class : [2.5.1,)
+             Pivotal Spring Framework 4.1.4 suffers from a potential remote code execution (RCE) issue if used for Java deserialization of untrusted data. Depending on how the library is implemented within a product, this issue may or not occur, and authentication may be required
+             Note: No java deserialization of untrusted data is happening in this component therefore it is suppressed.
+            ]]>
+        </notes>
+        <cve>CVE-2016-1000027</cve>
     </suppress>
     <suppress until="2030-01-01">
         <notes><![CDATA[
-                 5.3 MEDIUM
-                 https://nvd.nist.gov/vuln/detail/CVE-2020-23171
-                 Spring Framework vulnerability, https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-23171 nim-lang all versions affected https://github.com/nim-lang/zip/issues/54
-                ]]></notes>
-        <cve>CVE-2020-23171</cve>
+                incorrectly tagging spring-security-crypto, Affects versions prior to 5.3.2
+                ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-crypto@.+?$</packageUrl>
+        <cve>CVE-2020-5408</cve>
     </suppress>
     <suppress until="2030-01-01">
         <notes><![CDATA[
-                 6.5 MEDIUM - ignore
-                 https://nvd.nist.gov/vuln/detail/CVE-2022-22950
-                ]]></notes>
-        <cve>CVE-2022-22950</cve>
+                incorrectly tagging spring-security-rsa as spring-security
+                ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-rsa@.+$</packageUrl>
+        <cve>CVE-2022-22976</cve>
+        <cve>CVE-2022-22978</cve>
+    </suppress>
+    <suppress until="2030-01-01">
+        <notes><![CDATA[
+            incorrectly tagging spring-boot-starter-security as spring-security
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring\-boot\-starter\-security@.+$</packageUrl>
+        <cve>CVE-2022-22976</cve>
+        <cve>CVE-2022-22978</cve>
+    </suppress>
+    <suppress until="2030-01-01">
+        <notes><![CDATA[
+                https://nvd.nist.gov/vuln/detail/CVE-2022-34305
+                In Apache Tomcat 10.1.0-M1 to 10.1.0-M16, 10.0.0-M1 to 10.0.22, 9.0.30
+                to 9.0.64 and 8.5.50 to 8.5.81 the Form authentication example in the
+                examples web application displayed user provided data without filtering,
+                exposing a XSS vulnerability
+            ]]>
+        </notes>
+        <cve>CVE-2022-34305</cve>
+    </suppress>
+    <suppress until="2030-01-01">
+        <notes><![CDATA[
+                https://nvd.nist.gov/vuln/detail/CVE-2022-33915
+                There is no latest version available.
+            ]]>
+        </notes>
+        <cve>CVE-2022-33915</cve>
     </suppress>
     <suppress>
         <notes>Temporarily suppressing Spring framework related vulnerabilities</notes>
