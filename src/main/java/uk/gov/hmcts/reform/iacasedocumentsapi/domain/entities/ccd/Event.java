@@ -5,47 +5,55 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Event {
 
-    START_APPEAL("startAppeal"),
-    EDIT_APPEAL("editAppeal"),
-    SUBMIT_APPEAL("submitAppeal"),
-    PAY_AND_SUBMIT_APPEAL("payAndSubmitAppeal"),
-    SEND_DIRECTION("sendDirection"),
-    REQUEST_RESPONDENT_EVIDENCE("requestRespondentEvidence"),
-    UPLOAD_RESPONDENT_EVIDENCE("uploadRespondentEvidence"),
-    BUILD_CASE("buildCase"),
-    SUBMIT_CASE("submitCase"),
-    REQUEST_CASE_EDIT("requestCaseEdit"),
-    REQUEST_RESPONDENT_REVIEW("requestRespondentReview"),
-    ADD_APPEAL_RESPONSE("addAppealResponse"),
-    REQUEST_HEARING_REQUIREMENTS("requestHearingRequirements"),
-    DRAFT_HEARING_REQUIREMENTS("draftHearingRequirements"),
-    UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements"),
-    CHANGE_DIRECTION_DUE_DATE("changeDirectionDueDate"),
-    UPLOAD_ADDITIONAL_EVIDENCE("uploadAdditionalEvidence"),
-    LIST_CASE("listCase"),
-    CREATE_CASE_SUMMARY("createCaseSummary"),
-    REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence"),
-    GENERATE_HEARING_BUNDLE("generateHearingBundle"),
-    CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle"),
-    GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons"),
-    SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
-    EDIT_CASE_LISTING("editCaseListing"),
-    END_APPEAL("endAppeal"),
-    ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate"),
-    SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements"),
-    LIST_CMA("listCma"),
-    EDIT_APPEAL_AFTER_SUBMIT("editAppealAfterSubmit"),
-    GENERATE_UPPER_TRIBUNAL_BUNDLE("generateUpperTribunalBundle"),
-    SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal"),
-    SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers"),
+    START_APPEAL("startAppeal", CaseType.ASYLUM),
+    EDIT_APPEAL("editAppeal", CaseType.ASYLUM),
+    SUBMIT_APPEAL("submitAppeal", CaseType.ASYLUM),
+    PAY_AND_SUBMIT_APPEAL("payAndSubmitAppeal", CaseType.ASYLUM),
+    SEND_DIRECTION("sendDirection", CaseType.ASYLUM),
+    REQUEST_RESPONDENT_EVIDENCE("requestRespondentEvidence", CaseType.ASYLUM),
+    UPLOAD_RESPONDENT_EVIDENCE("uploadRespondentEvidence", CaseType.ASYLUM),
+    BUILD_CASE("buildCase", CaseType.ASYLUM),
+    SUBMIT_CASE("submitCase", CaseType.ASYLUM),
+    REQUEST_CASE_EDIT("requestCaseEdit", CaseType.ASYLUM),
+    REQUEST_RESPONDENT_REVIEW("requestRespondentReview", CaseType.ASYLUM),
+    ADD_APPEAL_RESPONSE("addAppealResponse", CaseType.ASYLUM),
+    REQUEST_HEARING_REQUIREMENTS("requestHearingRequirements", CaseType.ASYLUM),
+    DRAFT_HEARING_REQUIREMENTS("draftHearingRequirements", CaseType.ASYLUM),
+    UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
+    CHANGE_DIRECTION_DUE_DATE("changeDirectionDueDate", CaseType.ASYLUM),
+    UPLOAD_ADDITIONAL_EVIDENCE("uploadAdditionalEvidence", CaseType.ASYLUM),
+    LIST_CASE("listCase", CaseType.ASYLUM),
+    CREATE_CASE_SUMMARY("createCaseSummary", CaseType.ASYLUM),
+    REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence", CaseType.ASYLUM),
+    GENERATE_HEARING_BUNDLE("generateHearingBundle", CaseType.ASYLUM),
+    CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle", CaseType.ASYLUM),
+    GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons", CaseType.ASYLUM),
+    SEND_DECISION_AND_REASONS("sendDecisionAndReasons", CaseType.ASYLUM),
+    EDIT_CASE_LISTING("editCaseListing", CaseType.ASYLUM),
+    END_APPEAL("endAppeal", CaseType.ASYLUM),
+    ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate", CaseType.ASYLUM),
+    SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements", CaseType.ASYLUM),
+    LIST_CMA("listCma", CaseType.ASYLUM),
+    EDIT_APPEAL_AFTER_SUBMIT("editAppealAfterSubmit", CaseType.ASYLUM),
+    GENERATE_UPPER_TRIBUNAL_BUNDLE("generateUpperTribunalBundle", CaseType.ASYLUM),
+    SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal", CaseType.ASYLUM),
+    SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers", CaseType.ASYLUM),
+    SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
+    RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),
+    END_APPLICATION("endApplication", CaseType.BAIL),
+    MAKE_NEW_APPLICATION("makeNewApplication", CaseType.BAIL),
+    EDIT_BAIL_APPLICATION_AFTER_SUBMIT("editBailApplicationAfterSubmit", CaseType.BAIL),
     @JsonEnumDefaultValue
-    UNKNOWN("unknown");
+    UNKNOWN("unknown", CaseType.UNKNOWN);
 
     @JsonValue
     private final String id;
 
-    Event(String id) {
+    private final CaseType caseType;
+
+    Event(String id, CaseType caseType) {
         this.id = id;
+        this.caseType = caseType;
     }
 
     @Override
