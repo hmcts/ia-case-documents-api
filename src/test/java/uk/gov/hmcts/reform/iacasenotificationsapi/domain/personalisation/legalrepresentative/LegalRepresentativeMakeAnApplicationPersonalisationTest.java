@@ -24,7 +24,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -47,8 +46,6 @@ public class LegalRepresentativeMakeAnApplicationPersonalisationTest {
     UserDetailsProvider userDetailsProvider;
     @Mock
     UserDetails userDetails;
-    @Mock
-    MakeAnApplication makeAnApplication;
 
 
     private Long caseId = 12345L;
@@ -84,8 +81,7 @@ public class LegalRepresentativeMakeAnApplicationPersonalisationTest {
             .thenReturn(Optional.of(legalRepEmailAddress));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
-        when(makeAnApplication.getType()).thenReturn(applicationType);
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
 
         legalRepresentativeMakeAnApplicationPersonalisation = new LegalRepresentativeMakeAnApplicationPersonalisation(
@@ -176,7 +172,7 @@ public class LegalRepresentativeMakeAnApplicationPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(makeAnApplication.getType()).thenReturn("");
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
 
         Map<String, String> personalisation =
             legalRepresentativeMakeAnApplicationPersonalisation.getPersonalisation(asylumCase);

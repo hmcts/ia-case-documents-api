@@ -24,7 +24,7 @@
               }
             }
           ],
-          "decideAnApplicationId": "3",
+          "decideAnApplicationId": "1",
           "makeAnApplications": [
               {
               "id": "1",
@@ -36,38 +36,6 @@
                 "date":"",
                 "decision":"Refused",
                 "state":"prepareForHearing",
-                "applicantRole":"citizen",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
-                "decisionMaker": "CaseOfficer"
-              }
-            },
-            {
-              "id": "2",
-              "value": {
-                "type":"Update hearing requirements",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Refused",
-                "state":"appealSubmitted",
-                "applicantRole":"citizen",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
-                "decisionMaker": "CaseOfficer"
-              }
-            },
-            {
-              "id": "3",
-              "value": {
-                "type":"Transfer",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Refused",
-                "state":"preHearing",
                 "applicantRole":"citizen",
                 "decisionReason":"No Reason given",
                 "decisionDate":"{$TODAY}",
@@ -115,38 +83,6 @@
               "decisionDate":"{$TODAY}",
               "decisionMaker": "CaseOfficer"
             }
-          },
-          {
-            "id": "2",
-            "value": {
-              "type":"Update hearing requirements",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Refused",
-              "state":"appealSubmitted",
-              "applicantRole":"citizen",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
-              "decisionMaker": "CaseOfficer"
-            }
-          },
-          {
-            "id": "3",
-            "value": {
-              "type":"Transfer",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Refused",
-              "state":"preHearing",
-              "applicantRole":"citizen",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
-              "decisionMaker": "CaseOfficer"
-            }
           }
         ],
         "notificationsSent": [
@@ -175,8 +111,6 @@
           "LP/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
-          "A CaseOfficer has decided to refuse the following request you made:",
-          "Transfer",
           "{$iaAipFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
@@ -188,7 +122,7 @@
         "subject": "",
         "body": [
           "PA/12345/2019",
-          "A CaseOfficer has decided to refuse the following request you made: Transfer",
+          "The Tribunal has decided to refuse the following request you made: Time extension",
           "{$iaAipFrontendUrl}"
         ]
       },

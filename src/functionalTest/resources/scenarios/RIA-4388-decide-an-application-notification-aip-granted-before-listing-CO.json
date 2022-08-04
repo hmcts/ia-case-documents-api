@@ -25,41 +25,9 @@
           "decideAnApplicationId": "1",
           "makeAnApplications": [
               {
-              "id": "2",
-              "value": {
-                "type":"Time extension",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Granted",
-                "state":"awaitingReasonsForAppeal",
-                "applicantRole":"citizen",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
-                "decisionMaker": "Case Officer"
-              }
-            },
-            {
               "id": "1",
               "value": {
-                "type":"Withdraw",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Granted",
-                "state":"appealSubmitted",
-                "applicantRole":"citizen",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
-                "decisionMaker": "Case Officer"
-              }
-            },
-            {
-              "id": "3",
-              "value": {
-                "type":"Update appeal details",
+                "type":"Time extension",
                 "details":"",
                 "evidence":[],
                 "applicant":"",
@@ -97,41 +65,9 @@
         ],
         "makeAnApplications": [
           {
-            "id": "2",
-            "value": {
-              "type":"Time extension",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Granted",
-              "state":"awaitingReasonsForAppeal",
-              "applicantRole":"citizen",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
-              "decisionMaker": "Case Officer"
-            }
-          },
-          {
             "id": "1",
             "value": {
-              "type":"Withdraw",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Granted",
-              "state":"appealSubmitted",
-              "applicantRole":"citizen",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
-              "decisionMaker": "Case Officer"
-            }
-          },
-          {
-            "id": "3",
-            "value": {
-              "type":"Update appeal details",
+              "type":"Time extension",
               "details":"",
               "evidence":[],
               "applicant":"",
@@ -170,8 +106,6 @@
           "PA/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
-          "The Tribunal has decided to grant the following request you made:",
-          "Withdraw",
           "{$iaAipFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
@@ -184,7 +118,7 @@
         "body": [
           "PA/12345/2019",
           "The Tribunal has decided to grant the following request you made:",
-          "Withdraw",
+          "Time extension",
           "{$iaAipFrontendUrl}"
         ]
       },

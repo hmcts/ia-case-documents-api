@@ -50,7 +50,6 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
 
     private String iaAipFrontendUrl = "http://localhost";
     private String applicationType = "someApplicationType";
-    private String decisionMaker = "someDecisionMaker";
 
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppealHomeOfficeReferenceNumber = "someHomeOfficeReferenceNumber";
@@ -72,10 +71,9 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
             .thenReturn(Optional.of(mockedAppealHomeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(mockedAppellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(mockedAppellantFamilyName));
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
         when(appealService.isAppealListed(asylumCase)).thenReturn(false);
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.ofNullable(makeAnApplication));
-        when(makeAnApplication.getType()).thenReturn(applicationType);
-        when(makeAnApplication.getDecisionMaker()).thenReturn(decisionMaker);
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase)).thenReturn(Optional.ofNullable(makeAnApplication));
 
         appellantDecideAnApplicationPersonalisationEmail = new AppellantDecideAnApplicationPersonalisationEmail(
                 emailTemplateIdRefusedBeforeListing,
@@ -161,9 +159,7 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
-        when(makeAnApplication.getType()).thenReturn("");
-        when(makeAnApplication.getDecisionMaker()).thenReturn("");
-        when(makeAnApplication.getDecision()).thenReturn("Refused");
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
 
         Map<String, String> personalisation =
             appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
@@ -174,15 +170,13 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
         assertEquals("", personalisation.get("Given names"));
         assertEquals("", personalisation.get("Family name"));
         assertEquals("", personalisation.get("applicationType"));
-        assertEquals("", personalisation.get("decision maker role"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
 
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given_and_decision_granted() {
-        when(makeAnApplication.getDecision()).thenReturn("Granted");
+    public void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
                 appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
@@ -195,25 +189,6 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
         assertEquals(applicationType, personalisation.get("applicationType"));
 
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
-    }
-
-    @Test
-    public void should_return_personalisation_when_all_information_given_and_decision_refused() {
-        when(makeAnApplication.getDecision()).thenReturn("Refused");
-
-        Map<String, String> personalisation =
-                appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
-
-        assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(mockedListingReferenceNumber, personalisation.get("ariaListingReference"));
-        assertEquals(mockedAppealHomeOfficeReferenceNumber, personalisation.get("HO Ref Number"));
-        assertEquals(mockedAppellantGivenNames, personalisation.get("Given names"));
-        assertEquals(mockedAppellantFamilyName, personalisation.get("Family name"));
-        assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
-        assertEquals(applicationType, personalisation.get("applicationType"));
-        assertEquals(decisionMaker, personalisation.get("decision maker role"));
-
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
     }
 }

@@ -4,36 +4,40 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+
 
 @Service
 public class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail implements EmailNotificationPersonalisation {
 
     private final String appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
     private final String iaAipFrontendUrl;
-    private final String iaAipFrontendPathToJudgeReview;
     private final RecipientsFinder recipientsFinder;
+    private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
     public AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail(
             @Value("${govnotify.template.recordOutOfTimeDecision.appellant.cannotProceed.email}") String appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId,
             @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
-            @Value("${iaAipFrontendPathToJudgeReview}") String iaAipFrontendPathToJudgeReview,
             RecipientsFinder recipientsFinder,
+            EmailAddressFinder emailAddressFinder,
             CustomerServicesProvider customerServicesProvider
     ) {
         this.appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId = appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
-        this.iaAipFrontendPathToJudgeReview = iaAipFrontendPathToJudgeReview;
         this.recipientsFinder = recipientsFinder;
+        this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
     }
 
@@ -65,7 +69,17 @@ public class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail i
                         .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                         .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
                         .put("Hyperlink to service", iaAipFrontendUrl)
-                        .put("direct link to judges’ review page", iaAipFrontendUrl + iaAipFrontendPathToJudgeReview)
+                        .put("designated hearing centre", isAppealListed(asylumCase)
+                                ? emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)
+                                : emailAddressFinder.getHearingCentreEmailAddress(asylumCase))
                         .build();
     }
+
+    protected boolean isAppealListed(AsylumCase asylumCase) {
+        final Optional<HearingCentre> appealListed = asylumCase
+                .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+
+        return appealListed.isPresent();
+    }
+
 }

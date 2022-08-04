@@ -18,7 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.SubscriberType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
@@ -34,8 +37,6 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
     RecipientsFinder recipientsFinder;
     @Mock
     MakeAnApplicationService makeAnApplicationService;
-    @Mock
-    MakeAnApplication makeAnApplication;
 
     private Long caseId = 12345L;
     private String emailTemplateId = "someEmailTemplateId";
@@ -58,8 +59,7 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
             iaAipFrontendUrl,
             recipientsFinder,
                 makeAnApplicationService);
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
-        when(makeAnApplication.getType()).thenReturn(applicationType);
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
         assertEquals(applicationType, personalisation.get("applicationType"));
 
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, false);
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
 
     }
 
@@ -120,7 +120,7 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
     public void should_return_personalisation_when_only_mandatory_information_given() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(makeAnApplication.getType()).thenReturn("");
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
 
         Map<String, String> personalisation =
             appellantMakeAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
@@ -129,6 +129,6 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
         assertEquals("", personalisation.get("applicationType"));
 
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, false);
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
     }
 }

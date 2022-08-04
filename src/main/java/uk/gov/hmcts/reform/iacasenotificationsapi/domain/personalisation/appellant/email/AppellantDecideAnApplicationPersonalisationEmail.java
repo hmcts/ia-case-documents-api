@@ -21,8 +21,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicati
 public class AppellantDecideAnApplicationPersonalisationEmail implements EmailNotificationPersonalisation {
 
     private static final String ROLE_CITIZEN = "citizen";
-    private static final String DECISION_GRANTED = "Granted";
-    private static final String DECISION_REFUSED = "Refused";
     private final String decideAnApplicationRefusedBeforeListingAppellantEmailTemplateId;
     private final String decideAnApplicationRefusedAfterListingAppellantEmailTemplateId;
     private final String decideAnApplicationAppellantGrantedBeforeListingEmailTemplateId;
@@ -51,18 +49,18 @@ public class AppellantDecideAnApplicationPersonalisationEmail implements EmailNo
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
 
-        Optional<MakeAnApplication> makeAnApplicationOptional = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
+        Optional<MakeAnApplication> maybeMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase);
 
-        if (makeAnApplicationOptional.isPresent()) {
-            MakeAnApplication makeAnApplication = makeAnApplicationOptional.get();
+        if (maybeMakeAnApplication.isPresent()) {
+            MakeAnApplication makeAnApplication = maybeMakeAnApplication.get();
             String decision = makeAnApplication.getDecision();
 
             boolean isApplicationListed = makeAnApplicationService.isApplicationListed(State.get(makeAnApplication.getState()));
 
             if (isApplicationListed) {
-                return DECISION_GRANTED.equals(decision) ? decideAnApplicationAppellantGrantedAfterListingEmailTemplateId : decideAnApplicationRefusedAfterListingAppellantEmailTemplateId;
+                return "Granted".equals(decision) ? decideAnApplicationAppellantGrantedAfterListingEmailTemplateId : decideAnApplicationRefusedAfterListingAppellantEmailTemplateId;
             } else {
-                return DECISION_GRANTED.equals(decision) ? decideAnApplicationAppellantGrantedBeforeListingEmailTemplateId : decideAnApplicationRefusedBeforeListingAppellantEmailTemplateId;
+                return "Granted".equals(decision) ? decideAnApplicationAppellantGrantedBeforeListingEmailTemplateId : decideAnApplicationRefusedBeforeListingAppellantEmailTemplateId;
             }
         } else {
             return "";
@@ -84,21 +82,16 @@ public class AppellantDecideAnApplicationPersonalisationEmail implements EmailNo
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        Optional<MakeAnApplication> makeAnApplicationOptional = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
-        String decision = makeAnApplicationOptional.map(MakeAnApplication::getDecision).orElse("");
-
-        ImmutableMap.Builder<String, String> builder = ImmutableMap
+        return
+            ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("ariaListingReference", asylumCase.read(AsylumCaseDefinition.ARIA_LISTING_REFERENCE, String.class).orElse(""))
                 .put("HO Ref Number", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Given names", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("Family name", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("applicationType", makeAnApplicationOptional.map(MakeAnApplication::getType).orElse(""))
-                .put("Hyperlink to service", iaAipFrontendUrl);
-        if (DECISION_REFUSED.equals(decision)) {
-            builder.put("decision maker role", makeAnApplicationOptional.map(MakeAnApplication::getDecisionMaker).orElse(""));
-        }
-        return builder.build();
+                .put("applicationType", makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase))
+                .put("Hyperlink to service", iaAipFrontendUrl)
+                .build();
     }
 }

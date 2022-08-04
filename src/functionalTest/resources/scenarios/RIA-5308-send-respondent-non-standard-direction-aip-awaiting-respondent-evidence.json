@@ -5,7 +5,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 102222,
+      "id": 1022,
       "eventId": "sendDirection",
       "state": "awaitingRespondentEvidence",
       "caseData": {
@@ -51,7 +51,7 @@
         ],
         "notificationsSent": [
           {
-            "id": "102222_RESPONDENT_NON_STANDARD_DIRECTION",
+            "id": "1022_RESPONDENT_NON_STANDARD_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -59,7 +59,7 @@
     },
     "notifications": [
       {
-        "reference": "102222_RESPONDENT_NON_STANDARD_DIRECTION",
+        "reference": "1022_RESPONDENT_NON_STANDARD_DIRECTION",
         "recipient": "{$apcHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: direction",
         "body": [

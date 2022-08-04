@@ -46,7 +46,6 @@ public class AppellantDecideAnApplicationPersonalisationSmsTest {
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppellantMobilePhone = "07123456789";
     private String applicationType = "someApplicationType";
-    private String decisionMaker = "someDecisionMaker";
 
     private AppellantDecideAnApplicationPersonalisationSms appellantDecideAnApplicationPersonalisationSms;
 
@@ -62,9 +61,8 @@ public class AppellantDecideAnApplicationPersonalisationSmsTest {
                 iaAipFrontendUrl,
                 recipientsFinder,
                 makeAnApplicationService);
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.ofNullable(makeAnApplication));
-        when(makeAnApplication.getType()).thenReturn(applicationType);
-        when(makeAnApplication.getDecisionMaker()).thenReturn(decisionMaker);
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase)).thenReturn(Optional.ofNullable(makeAnApplication));
     }
 
 
@@ -122,8 +120,7 @@ public class AppellantDecideAnApplicationPersonalisationSmsTest {
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given_and_decision_refused() {
-        when(makeAnApplication.getDecision()).thenReturn("Refused");
+    public void should_return_personalisation_when_all_information_given() {
 
         Map<String, String> personalisation =
             appellantDecideAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
@@ -131,24 +128,8 @@ public class AppellantDecideAnApplicationPersonalisationSmsTest {
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
         assertEquals(applicationType, personalisation.get("applicationType"));
-        assertEquals(decisionMaker, personalisation.get("decision maker role"));
 
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
-
-    }
-
-    @Test
-    public void should_return_personalisation_when_all_information_given_and_decision_granted() {
-        when(makeAnApplication.getDecision()).thenReturn("Granted");
-
-        Map<String, String> personalisation =
-                appellantDecideAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
-
-        assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
-        assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
-        assertEquals(applicationType, personalisation.get("applicationType"));
-
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
 
     }
 
@@ -156,9 +137,7 @@ public class AppellantDecideAnApplicationPersonalisationSmsTest {
     public void should_return_personalisation_when_only_mandatory_information_given() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(makeAnApplication.getType()).thenReturn("");
-        when(makeAnApplication.getDecisionMaker()).thenReturn("");
-        when(makeAnApplication.getDecision()).thenReturn("Refused");
+        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
 
         Map<String, String> personalisation =
             appellantDecideAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
@@ -166,8 +145,7 @@ public class AppellantDecideAnApplicationPersonalisationSmsTest {
         assertEquals("", personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
         assertEquals("", personalisation.get("applicationType"));
-        assertEquals("", personalisation.get("decision maker role"));
 
-        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
+        verify(makeAnApplicationService).getMakeAnApplicationTypeName(asylumCase);
     }
 }

@@ -260,21 +260,21 @@ govnotify:
         sms: d27c4839-01f6-4027-aaf6-7f6004f2b27b
     endAppeal:
       appellant:
-        sms: b7aba09e-4df5-486f-9107-f7721db52a02
+        sms: 9253ab19-1216-4b3c-b735-086ec81d8506
     endAppealBeforeListing:
       legalRep:
         email: 998bebf1-bb6c-44d6-a65b-ae7bb4ab186b
       homeOffice:
         email: 287f890a-47bc-41e1-a4a9-d143f8eecb9b
       appellant:
-        email: dc83c0d8-16fe-4a1e-9d93-f5016a9db503
+        email: 8569af9d-3a7d-46de-941e-e0cfecce011b
     endAppealAfterListing:
       legalRep:
         email: da6ca0ff-3955-498c-8d27-0eca1fbdf006
       homeOffice:
         email: 97b95f02-4dc3-4282-8c8c-802efb2d21ef
       appellant:
-        email: 30ecce8a-eeac-4905-9ce1-ec919c3437d1
+        email: c5931928-1c22-4c1a-b70b-7a6268039ea1
     recordRefusedApplicationBeforeListing:
       legalRep:
         email: 8bbb1537-9856-4a3e-b6cd-b862b1e192ff
@@ -351,13 +351,6 @@ govnotify:
         email: 61999628-3fb7-44de-a38c-304d6d765143
       homeOffice:
         email: 6e473679-dfc7-4fa7-96e3-583d0e8ff09f
-      appellant:
-        email: 0b7b84c5-fdde-493f-a431-0979e5085b1d
-        sms: ce6ecd7b-6239-4093-8e39-b8fbf17334da
-    hoOrTcwUploadedAddendumEvidence:
-      appellant:
-        email: 41045d9c-0769-48d7-9da7-0919b80eb29d
-        sms: f38ac04a-af21-447c-afe5-8eca0ab39d38
     changeDirectionDueDate:
       legalRep:
         afterListing:
@@ -694,10 +687,10 @@ govnotify:
                 email: e11411e8-4360-480c-a3f9-0716f7e2e376
             appellant:
               beforeListing:
-                email: 70d786c0-e487-4708-a74e-a96060e9e12a
-                sms: c52c4994-57f6-4a8f-8442-bdaf3ec952d2
+                email: af234f67-85fe-426f-8f0a-66c8606dc961
+                sms: 8cac7ac4-c945-4112-90fe-faeda8fad5e4
               afterListing:
-                email: b56b929e-872c-49eb-81d1-8da3ec1b480b
+                email: f03f5c1c-8507-43f9-8f9f-5f9e3cdbd66f
           otherParty:
             legalRep:
               beforeListing:
@@ -775,8 +768,8 @@ govnotify:
           email: 45017d4b-e4f3-446d-9941-3af269ce1556
           sms: 043f64aa-f250-46ce-b546-557a07f4b112
         cannotProceed:
-          email: beed994b-3499-46cb-9999-20066e9d80a3
-          sms: c54e3e51-43ba-48f4-ae88-8a269153259c
+          email: d19a384d-0640-4b47-abd2-ae1c038013ca
+          sms: 7a12821a-d9b1-4e93-b64a-ecdc55e78034
     upperTribunalBundleFailed:
       adminOfficer:
         email: 70ae2c06-4bb4-4ec2-8177-6c187aed39cc
@@ -789,7 +782,6 @@ notificationSender.deduplicateSendsWithinSeconds: 60
 
 iaExUiFrontendUrl: ${IA_EXUI_FRONTEND_URL:https://manage-case.platform.hmcts.net/}
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
-iaAipFrontendPathToJudgeReview: ask-judge-review
 
 tsvStringsFileLocation: strings.tsv
 
@@ -830,7 +822,6 @@ security:
       - "draftHearingRequirements"
       - "requestHearingRequirementsFeature"
       - "asyncStitchingComplete"
-      - "uploadAddendumEvidenceLegalRep"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
