@@ -30,6 +30,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
@@ -55,6 +56,8 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     UserDetails userDetails;
     @Mock
     EmailAddressFinder emailAddressFinder;
+    @Mock
+    MakeAnApplication makeAnApplication;
 
     private Long caseId = 12345L;
 
@@ -99,7 +102,8 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
+        when(makeAnApplication.getType()).thenReturn(applicationType);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);

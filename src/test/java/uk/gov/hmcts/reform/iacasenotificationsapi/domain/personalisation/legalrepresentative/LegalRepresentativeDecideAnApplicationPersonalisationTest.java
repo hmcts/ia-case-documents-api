@@ -83,7 +83,7 @@ public class LegalRepresentativeDecideAnApplicationPersonalisationTest {
             .thenReturn(Optional.of(legalRepEmailAddress));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-        when((makeAnApplicationService.getMakeAnApplication(asylumCase))).thenReturn(Optional.of(makeAnApplication));
+        when((makeAnApplicationService.getMakeAnApplication(asylumCase, true))).thenReturn(Optional.of(makeAnApplication));
 
         legalRepresentativeDecideAnApplicationPersonalisation =
             new LegalRepresentativeDecideAnApplicationPersonalisation(
@@ -205,7 +205,7 @@ public class LegalRepresentativeDecideAnApplicationPersonalisationTest {
         when(makeAnApplication.getDecisionMaker()).thenReturn("Judge");
         when(makeAnApplication.getType()).thenReturn("Other");
 
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase)).thenReturn(Optional.of(makeAnApplication));
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(makeAnApplication));
 
         Map<String, String> personalisation =
             legalRepresentativeDecideAnApplicationPersonalisation.getPersonalisation(asylumCase);

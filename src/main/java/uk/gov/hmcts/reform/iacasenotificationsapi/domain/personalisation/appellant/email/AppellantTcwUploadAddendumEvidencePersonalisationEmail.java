@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,45 +13,50 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Service
-public class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail implements EmailNotificationPersonalisation {
+public class AppellantTcwUploadAddendumEvidencePersonalisationEmail implements EmailNotificationPersonalisation {
 
-    private final String appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
-    private final String iaAipFrontendUrl;
-    private final String iaAipFrontendPathToJudgeReview;
+    private final String templateId;
+    private final String directLinkToNewEvidencePage;
+    private FeatureToggler featureToggler;
     private final RecipientsFinder recipientsFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
-    public AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail(
-            @Value("${govnotify.template.recordOutOfTimeDecision.appellant.cannotProceed.email}") String appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId,
+    public AppellantTcwUploadAddendumEvidencePersonalisationEmail(
+            @Value("${govnotify.template.hoOrTcwUploadedAddendumEvidence.appellant.email}") String templateId,
             @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
-            @Value("${iaAipFrontendPathToJudgeReview}") String iaAipFrontendPathToJudgeReview,
             RecipientsFinder recipientsFinder,
-            CustomerServicesProvider customerServicesProvider
+            CustomerServicesProvider customerServicesProvider,
+            FeatureToggler featureToggler
     ) {
-        this.appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId = appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
-        this.iaAipFrontendUrl = iaAipFrontendUrl;
-        this.iaAipFrontendPathToJudgeReview = iaAipFrontendPathToJudgeReview;
+        this.templateId = templateId;
+        this.directLinkToNewEvidencePage = iaAipFrontendUrl + "new-evidence";
         this.recipientsFinder = recipientsFinder;
         this.customerServicesProvider = customerServicesProvider;
+        this.featureToggler = featureToggler;
     }
 
     @Override
-    public String getTemplateId(AsylumCase asylumCase) {
-        return appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
+    public String getTemplateId() {
+        return templateId;
     }
 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
-        return recipientsFinder.findAll(asylumCase, NotificationType.EMAIL);
+        requireNonNull(asylumCase, "asylumCase must not be null");
+
+        return featureToggler.getValue("aip-upload-addendum-evidence-feature", false)
+                ? recipientsFinder.findAll(asylumCase, NotificationType.EMAIL)
+                : Collections.emptySet();
     }
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_RECORD_OUT_OF_TIME_DECISION_CANNOT_PROCEED_AIP_EMAIL";
+        return caseId + "_TCW_UPLOADED_ADDENDUM_EVIDENCE_AIP_APPELLANT_EMAIL";
     }
 
     @Override
@@ -62,10 +69,11 @@ public class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail i
                         .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
                         .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                         .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+                        .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
                         .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                         .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                        .put("Hyperlink to service", iaAipFrontendUrl)
-                        .put("direct link to judges’ review page", iaAipFrontendUrl + iaAipFrontendPathToJudgeReview)
+                        .put("Direct link to new evidence page", directLinkToNewEvidencePage)
                         .build();
     }
+
 }

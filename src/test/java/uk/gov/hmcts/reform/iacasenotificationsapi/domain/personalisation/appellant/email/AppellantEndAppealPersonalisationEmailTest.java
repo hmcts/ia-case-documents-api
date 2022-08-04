@@ -23,8 +23,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -34,14 +32,13 @@ public class AppellantEndAppealPersonalisationEmailTest {
     AsylumCase asylumCase;
     @Mock
     RecipientsFinder recipientsFinder;
-    @Mock
-    EmailAddressFinder emailAddressFinder;
 
     private Long caseId = 12345L;
     private String beforeListingEmailTemplateId = "beforeListingEmailTemplateId";
     private String afterListingEmailTemplateId = "afterListingEmailTemplateId";
-    private String iaAipFrontendUrl = "http://localhost";
-
+    private String iaAipFrontendUrl = "http://localhost/";
+    private String iaAipFrontendPathToJudgeReview = "ask-judge-review";
+    private String directLinkToJudgesReviewPage = "http://localhost/ask-judge-review";
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppealHomeOfficeReferenceNumber = "someHomeOfficeReferenceNumber";
     private String mockedAppellantGivenNames = "someAppellantGivenNames";
@@ -65,8 +62,8 @@ public class AppellantEndAppealPersonalisationEmailTest {
                         beforeListingEmailTemplateId,
                         afterListingEmailTemplateId,
                         iaAipFrontendUrl,
-                        recipientsFinder,
-                        emailAddressFinder
+                        iaAipFrontendPathToJudgeReview,
+                        recipientsFinder
                 );
     }
 
@@ -118,9 +115,6 @@ public class AppellantEndAppealPersonalisationEmailTest {
         String outcomeOfAppeal = "Withdrawn";
         String reasonsOfOutcome = "error in application";
         String endAppealDate = LocalDate.now().toString();
-        String designatedHearingCentre = "belfast@hearingcentre.gov";
-        when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(designatedHearingCentre);
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
         when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(endAppealApprover));
         when(asylumCase.read(AsylumCaseDefinition.END_APPEAL_DATE, String.class)).thenReturn(Optional.of(endAppealDate));
         when(asylumCase.read(AsylumCaseDefinition.END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.of(outcomeOfAppeal));
@@ -134,15 +128,11 @@ public class AppellantEndAppealPersonalisationEmailTest {
         assertEquals(mockedAppellantGivenNames, personalisation.get("appellantGivenNames"));
         assertEquals(mockedAppellantFamilyName, personalisation.get("appellantFamilyName"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(directLinkToJudgesReviewPage, personalisation.get("direct link to judges’ review page"));
         assertEquals(endAppealApprover, personalisation.get("endAppealApprover"));
         assertEquals(LocalDate.parse(endAppealDate).format(DateTimeFormatter.ofPattern("d MMM yyyy")), personalisation.get("endAppealDate"));
         assertEquals(outcomeOfAppeal, personalisation.get("outcomeOfAppeal"));
         assertEquals(reasonsOfOutcome, personalisation.get("reasonsOfOutcome"));
-        assertEquals(designatedHearingCentre, personalisation.get("designated hearing centre"));
-
-        verify(emailAddressFinder).getHearingCentreEmailAddress(asylumCase);
-        verify(emailAddressFinder, times(0)).getListCaseHearingCentreEmailAddress(asylumCase);
-
     }
 
     @Test
@@ -152,9 +142,6 @@ public class AppellantEndAppealPersonalisationEmailTest {
         String outcomeOfAppeal = "Withdrawn";
         String reasonsOfOutcome = "error in application";
         String endAppealDate = LocalDate.now().toString();
-        String designatedHearingCentre = "belfast@hearingcentre.gov";
-        when(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)).thenReturn(designatedHearingCentre);
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.BELFAST));
         when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(endAppealApprover));
         when(asylumCase.read(AsylumCaseDefinition.END_APPEAL_DATE, String.class)).thenReturn(Optional.of(endAppealDate));
         when(asylumCase.read(AsylumCaseDefinition.END_APPEAL_OUTCOME, String.class)).thenReturn(Optional.of(outcomeOfAppeal));
@@ -168,22 +155,17 @@ public class AppellantEndAppealPersonalisationEmailTest {
         assertEquals(mockedAppellantGivenNames, personalisation.get("appellantGivenNames"));
         assertEquals(mockedAppellantFamilyName, personalisation.get("appellantFamilyName"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(directLinkToJudgesReviewPage, personalisation.get("direct link to judges’ review page"));
         assertEquals(endAppealApprover, personalisation.get("endAppealApprover"));
         assertEquals(LocalDate.parse(endAppealDate).format(DateTimeFormatter.ofPattern("d MMM yyyy")), personalisation.get("endAppealDate"));
         assertEquals(outcomeOfAppeal, personalisation.get("outcomeOfAppeal"));
         assertEquals(reasonsOfOutcome, personalisation.get("reasonsOfOutcome"));
-        assertEquals(designatedHearingCentre, personalisation.get("designated hearing centre"));
-
-        verify(emailAddressFinder).getListCaseHearingCentreEmailAddress(asylumCase);
-        verify(emailAddressFinder, times(0)).getHearingCentreEmailAddress(asylumCase);
 
     }
 
     @Test
     public void should_return_personalisation_when_only_mandatory_information_given() {
 
-        String designatedHearingCentre = "belfast@hearingcentre.gov";
-        when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(designatedHearingCentre);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
@@ -196,6 +178,6 @@ public class AppellantEndAppealPersonalisationEmailTest {
         assertEquals("", personalisation.get("appellantGivenNames"));
         assertEquals("", personalisation.get("appellantFamilyName"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
-        assertEquals(designatedHearingCentre, personalisation.get("designated hearing centre"));
+        assertEquals(directLinkToJudgesReviewPage, personalisation.get("direct link to judges’ review page"));
     }
 }

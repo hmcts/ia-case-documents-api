@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -14,32 +15,30 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
-@Service
-public class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail implements EmailNotificationPersonalisation {
 
-    private final String appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
+@Service
+public class AppellantUploadAddendumEvidencePersonalisationEmail implements EmailNotificationPersonalisation {
+
+    private final String uploadAddendumEvidenceEmailNotificationTemplateId;
     private final String iaAipFrontendUrl;
-    private final String iaAipFrontendPathToJudgeReview;
     private final RecipientsFinder recipientsFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
-    public AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail(
-            @Value("${govnotify.template.recordOutOfTimeDecision.appellant.cannotProceed.email}") String appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId,
+    public AppellantUploadAddendumEvidencePersonalisationEmail(
+            @Value("${govnotify.template.uploadedAddendumEvidence.appellant.email}") String uploadAddendumEvidenceEmailNotificationTemplateId,
             @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
-            @Value("${iaAipFrontendPathToJudgeReview}") String iaAipFrontendPathToJudgeReview,
             RecipientsFinder recipientsFinder,
             CustomerServicesProvider customerServicesProvider
     ) {
-        this.appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId = appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
+        this.uploadAddendumEvidenceEmailNotificationTemplateId = uploadAddendumEvidenceEmailNotificationTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
-        this.iaAipFrontendPathToJudgeReview = iaAipFrontendPathToJudgeReview;
         this.recipientsFinder = recipientsFinder;
         this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
-    public String getTemplateId(AsylumCase asylumCase) {
-        return appellantRecordOutOfTimeDecisionCannotProceedEmailTemplateId;
+    public String getTemplateId() {
+        return uploadAddendumEvidenceEmailNotificationTemplateId;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail i
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_RECORD_OUT_OF_TIME_DECISION_CANNOT_PROCEED_AIP_EMAIL";
+        return caseId + "_UPLOADED_ADDENDUM_EVIDENCE_AIP_APPELLANT_EMAIL";
     }
 
     @Override
@@ -62,10 +61,11 @@ public class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail i
                         .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
                         .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                         .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+                        .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
                         .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                         .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                        .put("Hyperlink to service", iaAipFrontendUrl)
-                        .put("direct link to judges’ review page", iaAipFrontendUrl + iaAipFrontendPathToJudgeReview)
+                        .put("hyperlink to service", iaAipFrontendUrl)
                         .build();
     }
+
 }

@@ -106,6 +106,8 @@
           "PA/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
+          "A Judge has decided to refuse the following request you made:",
+          "Time extension",
           "{$iaAipFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
@@ -117,7 +119,7 @@
         "subject": "",
         "body": [
           "PA/12345/2019",
-          "The Tribunal has decided to refuse the following request you made: Time extension",
+          "A Judge has decided to refuse the following request you made: Time extension",
           "{$iaAipFrontendUrl}"
         ]
       },

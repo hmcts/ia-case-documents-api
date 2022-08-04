@@ -1,17 +1,19 @@
 {
-  "description": "RIA-4321 End appeal notification to Home Office and AIP (SMS and Email) - (before listing) - CO",
+  "description": "RIA-5808 AIP Home Office Upload Addendum Evidence notification",
+  "launchDarklyKey": "aip-upload-addendum-evidence-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "CaseOfficer",
+    "credentials": "HomeOfficeLart",
     "input": {
-      "id": 34999,
-      "eventId": "endAppeal",
-      "state": "appealSubmitted",
+      "id": 34882,
+      "eventId": "uploadAddendumEvidenceHomeOffice",
+      "state": "preHearing",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
-          "journeyType": "aip",
+          "listCaseHearingCentre": "taylorHouse",
           "hearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
           "subscriptions": [
             {
               "id": "1",
@@ -23,12 +25,7 @@
                 "wantsSms": "Yes"
               }
             }
-          ],
-          "endAppealOutcome": "Withdrawn",
-          "endAppealApproverType": "Judge",
-          "endAppealDate": "2019-08-13",
-          "endAppealOutcomeReason": "some outcome reason",
-          "notificationsSent": []
+          ]
         }
       }
     }
@@ -39,6 +36,7 @@
     "caseData": {
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "hearingCentre": "taylorHouse",
         "subscriptions": [
           {
@@ -52,21 +50,17 @@
             }
           }
         ],
-        "endAppealOutcome": "Withdrawn",
-        "endAppealApproverType": "Judge",
-        "endAppealDate": "2019-08-13",
-        "endAppealOutcomeReason": "some outcome reason",
         "notificationsSent": [
           {
-            "id": "34999_END_APPEAL_AIP_APPELLANT_SMS",
+            "id": "34882_HOME_OFFICE_UPLOADED_ADDENDUM_EVIDENCE_AIP_APPELLANT_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "34999_END_APPEAL_AIP_APPELLANT_EMAIL",
+            "id": "34882_UPLOADED_ADDENDUM_EVIDENCE_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "34999_END_APPEAL_HOME_OFFICE",
+            "id": "34882_HOME_OFFICE_UPLOADED_ADDENDUM_EVIDENCE_AIP_APPELLANT_SMS",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -74,47 +68,33 @@
     },
     "notifications": [
       {
-        "reference": "34999_END_APPEAL_HOME_OFFICE",
-        "recipient": "{$endAppealHomeOfficeEmailAddress}",
-        "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
-        "body": [
-          "PA/12345/2019",
-          "A1234567",
-          "Pablo Jimenez",
-          "{$iaExUiFrontendUrl}",
-          "Withdrawn",
-          "some outcome reason",
-          "Judge",
-          "13 Aug 2019",
-          "{$customerServices.telephoneNumber}",
-          "{$customerServices.emailAddress}"
-        ]
-      },
-      {
-        "reference": "34999_END_APPEAL_AIP_APPELLANT_EMAIL",
+        "reference": "34882_HOME_OFFICE_UPLOADED_ADDENDUM_EVIDENCE_AIP_APPELLANT_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Immigration and Asylum appeal: Your appeal has ended",
+        "subject": "Immigration and Asylum appeal: New evidence has been uploaded for this appeal",
         "body": [
           "PA/12345/2019",
+          "LP/12345/2019",
           "A1234567",
-          "Pablo Jimenez",
-          "{$iaAipFrontendUrl}",
-          "Withdrawn",
-          "some outcome reason",
-          "Judge",
-          "13 Aug 2019",
-          "{$customerServices.telephoneNumber}",
-          "{$customerServices.emailAddress}"
+          "Pablo Jimenez"
         ]
       },
       {
-        "reference": "34999_END_APPEAL_AIP_APPELLANT_SMS",
+        "reference": "34882_UPLOADED_ADDENDUM_EVIDENCE_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: addendum uploaded",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "34882_HOME_OFFICE_UPLOADED_ADDENDUM_EVIDENCE_AIP_APPELLANT_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
-          "PA/12345/2019",
-          "13 Aug 2019",
-          "{$iaAipFrontendUrl}"
+          "PA/12345/2019"
         ]
       }
     ]

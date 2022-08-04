@@ -1,9 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 
-import static java.util.Collections.emptyList;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.MAKE_AN_APPLICATIONS;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,42 +14,22 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 
 @Service
 public class MakeAnApplicationService {
-    public String getMakeAnApplicationTypeName(AsylumCase asylumCase) {
-
-        Optional<List<IdValue<MakeAnApplication>>> maybeMakeAnApplications = asylumCase.read(AsylumCaseDefinition.MAKE_AN_APPLICATIONS);
-
-        if (maybeMakeAnApplications.isPresent()) {
-            List<IdValue<MakeAnApplication>> makeAnApplications = maybeMakeAnApplications.orElse(Collections.emptyList());
-            if (makeAnApplications.size() > 0) {
-                return makeAnApplications.get(0).getValue().getType();
-            }
-        }
-
-        return "";
-    }
-
-    public Optional<MakeAnApplication> getMakeAnApplication(AsylumCase asylumCase) {
-
-        Optional<String>  maybeDecideAnApplicationId = asylumCase.read(DECIDE_AN_APPLICATION_ID);
-
-        if (maybeDecideAnApplicationId.isPresent()) {
-
-            Optional<List<IdValue<MakeAnApplication>>>  maybeMakeAnApplications = asylumCase.read(MAKE_AN_APPLICATIONS);
-
-            if (maybeMakeAnApplications.isPresent()) {
-                List<IdValue<MakeAnApplication>> makeAnApplications = maybeMakeAnApplications.orElse(emptyList());
-
-                if (makeAnApplications.size() > 0) {
-                    for (IdValue<MakeAnApplication> applicationIdValue : makeAnApplications) {
-                        if (applicationIdValue.getId().equals(maybeDecideAnApplicationId.get())) {
-                            return Optional.of(applicationIdValue.getValue());
-                        }
-                    }
+    public Optional<MakeAnApplication> getMakeAnApplication(AsylumCase asylumCase, boolean decided) {
+        Optional<MakeAnApplication> makeApplicationOptional = Optional.empty();
+        Optional<List<IdValue<MakeAnApplication>>> makeAnApplicationsOptional = asylumCase.read(AsylumCaseDefinition.MAKE_AN_APPLICATIONS);
+        if (makeAnApplicationsOptional.isPresent()) {
+            List<IdValue<MakeAnApplication>> idValues = makeAnApplicationsOptional.orElse(Collections.emptyList());
+            if (idValues.size() > 0) {
+                if (decided) {
+                    Optional<String>  decideAnApplicationIdOptional = asylumCase.read(DECIDE_AN_APPLICATION_ID);
+                    String decideAnApplicationId = decideAnApplicationIdOptional.orElse("");
+                    makeApplicationOptional = idValues.stream().filter(idValue -> idValue.getId().equals(decideAnApplicationId)).map(idValue -> idValue.getValue()).findAny();
+                } else {
+                    makeApplicationOptional = Optional.of(idValues.get(0).getValue());
                 }
             }
         }
-
-        return Optional.empty();
+        return makeApplicationOptional;
     }
 
     public boolean isApplicationListed(State state) {

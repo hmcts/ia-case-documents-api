@@ -20,6 +20,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicati
 @Service
 public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotificationPersonalisation {
 
+    private static final String DECISION_GRANTED = "Granted";
+    private static final String DECISION_REFUSED = "Refused";
+
     private final String decideAnApplicationRefusedAppellantSmsTemplateId;
     private final String decideAnApplicationGrantedAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
@@ -44,14 +47,14 @@ public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotifi
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
 
-        Optional<MakeAnApplication> maybeMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase);
+        Optional<MakeAnApplication> maybeMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
 
         if (maybeMakeAnApplication.isPresent()) {
             MakeAnApplication makeAnApplication = maybeMakeAnApplication.get();
             String decision = makeAnApplication.getDecision();
 
             return
-                    "Granted".equals(decision)
+                    DECISION_GRANTED.equals(decision)
                             ? decideAnApplicationGrantedAppellantSmsTemplateId
                             : decideAnApplicationRefusedAppellantSmsTemplateId;
         } else {
@@ -73,12 +76,18 @@ public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotifi
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        return
-            ImmutableMap
+        Optional<MakeAnApplication> makeAnApplicationOptional = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
+        String decision = makeAnApplicationOptional.map(MakeAnApplication::getDecision).orElse("");
+
+        ImmutableMap.Builder<String, String> builder = ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("applicationType", makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase))
-                .put("Hyperlink to service", iaAipFrontendUrl)
-                .build();
+                .put("applicationType", makeAnApplicationOptional.map(MakeAnApplication::getType).orElse(""))
+                .put("Hyperlink to service", iaAipFrontendUrl);
+
+        if (DECISION_REFUSED.equals(decision)) {
+            builder.put("decision maker role", makeAnApplicationOptional.map(MakeAnApplication::getDecisionMaker).orElse(""));
+        }
+        return builder.build();
     }
 }

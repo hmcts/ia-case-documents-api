@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
@@ -37,6 +38,8 @@ public class CaseOfficerMakeAnApplicationPersonalisationTest {
     AppealService appealService;
     @Mock
     MakeAnApplicationService makeAnApplicationService;
+    @Mock
+    MakeAnApplication makeAnApplication;
     @Mock
     private FeatureToggler featureToggler;
 
@@ -62,6 +65,7 @@ public class CaseOfficerMakeAnApplicationPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
 
         caseOfficerMakeAnApplicationPersonalisation = new CaseOfficerMakeAnApplicationPersonalisation(
             makeAnApplicationCaseOfficerBeforeListingTemplateId,
@@ -78,7 +82,7 @@ public class CaseOfficerMakeAnApplicationPersonalisationTest {
     @Test
     public void should_return_given_template_id() {
         when(appealService.isAppealListed(asylumCase)).thenReturn(false);
-        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn("");
+        when(makeAnApplication.getType()).thenReturn("");
         assertEquals(makeAnApplicationCaseOfficerBeforeListingTemplateId,
             caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
 
@@ -86,7 +90,7 @@ public class CaseOfficerMakeAnApplicationPersonalisationTest {
         assertEquals(makeAnApplicationCaseOfficerAfterListingTemplateId,
             caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
 
-        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase))
+        when(makeAnApplication.getType())
             .thenReturn("Judge's review of application decision");
         when(appealService.isAppealListed(asylumCase)).thenReturn(false);
         assertEquals(makeAnApplicationCaseOfficerJudgeReviewBeforeListingTemplateId,

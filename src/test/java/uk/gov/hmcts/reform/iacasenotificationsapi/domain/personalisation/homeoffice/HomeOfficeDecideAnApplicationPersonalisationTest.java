@@ -101,7 +101,7 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
         when((emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)))
             .thenReturn(homeOfficeHearingCentreEmail);
         when((emailAddressFinder.getHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeEmail);
-        when((makeAnApplicationService.getMakeAnApplication(asylumCase))).thenReturn(Optional.of(makeAnApplication));
+        when((makeAnApplicationService.getMakeAnApplication(asylumCase, true))).thenReturn(Optional.of(makeAnApplication));
 
         homeOfficeDecideAnApplicationPersonalisation = new HomeOfficeDecideAnApplicationPersonalisation(
             homeOfficeDecideAnApplicationGrantedBeforeListingTemplateId,
@@ -210,7 +210,8 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
             "awaitingRespondentEvidence",
             "caseBuilding",
             "caseUnderReview",
-            "ended"
+            "ended",
+            "reasonsForAppealSubmitted"
 
 
         );
@@ -277,7 +278,8 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
             "awaitingRespondentEvidence",
             "caseBuilding",
             "caseUnderReview",
-            "ended"
+            "ended",
+            "reasonsForAppealSubmitted"
 
 
         );

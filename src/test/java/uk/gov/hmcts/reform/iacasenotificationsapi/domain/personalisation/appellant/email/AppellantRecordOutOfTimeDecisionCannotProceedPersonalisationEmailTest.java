@@ -3,14 +3,11 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appell
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 
 import java.util.Collections;
 import java.util.Map;
@@ -21,11 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 
 
@@ -39,13 +34,13 @@ class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmailTest {
     CustomerServicesProvider customerServicesProvider;
     @Mock
     RecipientsFinder recipientsFinder;
-    @Mock
-    EmailAddressFinder emailAddressFinder;
 
     private String recordOutOfDecisionCannotProceedTemplateId = "recordOutOfDecisionCannotProceedTemplateId";
 
     private Long caseId = 12345L;
-    private String iaAipFrontendUrl = "http://localhost";
+    private String iaAipFrontendUrl = "http://localhost/";
+    private String iaAipFrontendPathToJudgeReview = "ask-judge-review";
+    private String directLinkToJudgesReviewPage = "http://localhost/ask-judge-review";
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
     private String appellantGivenNames = "someAppellantGivenNames";
@@ -64,14 +59,13 @@ class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmailTest {
         appellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail =
                 new AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail(
                         recordOutOfDecisionCannotProceedTemplateId,
-                        iaAipFrontendUrl, recipientsFinder, emailAddressFinder, customerServicesProvider);
+                        iaAipFrontendUrl, iaAipFrontendPathToJudgeReview, recipientsFinder, customerServicesProvider);
 
     }
 
     @Test
     void should_return_personalisation_when_all_information_given_before_listing() {
 
-        String designatedHearingCentre = "belfast@hearingcentre.gov";
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class))
                 .thenReturn(Optional.of(mockedAppealHomeOfficeReferenceNumber));
@@ -80,9 +74,6 @@ class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmailTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
-                .thenReturn(Optional.empty());
-        when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(designatedHearingCentre);
 
         Map<String, String> personalisation =
                 appellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail.getPersonalisation(asylumCase);
@@ -92,17 +83,15 @@ class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmailTest {
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(directLinkToJudgesReviewPage, personalisation.get("direct link to judges’ review page"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
-        verify(emailAddressFinder).getHearingCentreEmailAddress(asylumCase);
-        verify(emailAddressFinder, times(0)).getListCaseHearingCentreEmailAddress(asylumCase);
 
     }
 
     @Test
     void should_return_personalisation_when_all_information_given_after_listing() {
 
-        String designatedHearingCentre = "belfast@hearingcentre.gov";
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class))
                 .thenReturn(Optional.of(mockedAppealHomeOfficeReferenceNumber));
@@ -111,9 +100,6 @@ class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmailTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
-                .thenReturn(Optional.of(HearingCentre.BELFAST));
-        when(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)).thenReturn(designatedHearingCentre);
 
         Map<String, String> personalisation =
                 appellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmail.getPersonalisation(asylumCase);
@@ -123,10 +109,9 @@ class AppellantRecordOutOfTimeDecisionCannotProceedPersonalisationEmailTest {
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(directLinkToJudgesReviewPage, personalisation.get("direct link to judges’ review page"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
-        verify(emailAddressFinder, times(0)).getHearingCentreEmailAddress(asylumCase);
-        verify(emailAddressFinder).getListCaseHearingCentreEmailAddress(asylumCase);
     }
 
 

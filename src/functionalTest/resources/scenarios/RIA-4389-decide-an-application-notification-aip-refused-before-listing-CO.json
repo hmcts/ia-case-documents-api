@@ -22,9 +22,57 @@
               }
             }
           ],
-          "decideAnApplicationId": "1",
+          "decideAnApplicationId": "2",
           "makeAnApplications": [
               {
+              "id": "1",
+              "value": {
+                "type":"Time extension",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"",
+                "decision":"Refused",
+                "state":"awaitingReasonsForAppeal",
+                "applicantRole":"citizen",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "CaseOfficer"
+              }
+            },
+            {
+              "id": "2",
+              "value": {
+                "type":"Update appeal details",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"",
+                "decision":"Refused",
+                "state":"awaitingReasonsForAppeal",
+                "applicantRole":"citizen",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "CaseOfficer"
+              }
+            },
+            {
+              "id": "3",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"",
+                "decision":"Refused",
+                "state":"awaitingReasonsForAppeal",
+                "applicantRole":"citizen",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "CaseOfficer"
+              }
+            },
+            {
               "id": "1",
               "value": {
                 "type":"Time extension",
@@ -79,6 +127,54 @@
               "decisionDate":"{$TODAY}",
               "decisionMaker": "CaseOfficer"
             }
+          },
+          {
+            "id": "2",
+            "value": {
+              "type":"Update appeal details",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"",
+              "decision":"Refused",
+              "state":"awaitingReasonsForAppeal",
+              "applicantRole":"citizen",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "CaseOfficer"
+            }
+          },
+          {
+            "id": "3",
+            "value": {
+              "type":"Other",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"",
+              "decision":"Refused",
+              "state":"awaitingReasonsForAppeal",
+              "applicantRole":"citizen",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "CaseOfficer"
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "type":"Time extension",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"",
+              "decision":"Refused",
+              "state":"awaitingReasonsForAppeal",
+              "applicantRole":"citizen",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "CaseOfficer"
+            }
           }
         ],
         "notificationsSent": [
@@ -106,6 +202,8 @@
           "PA/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
+          "A CaseOfficer has decided to refuse the following request you made:",
+          "Update appeal details",
           "{$iaAipFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
@@ -117,7 +215,7 @@
         "subject": "",
         "body": [
           "PA/12345/2019",
-          "The Tribunal has decided to refuse the following request you made: Time extension",
+          "A CaseOfficer has decided to refuse the following request you made: Update appeal details",
           "{$iaAipFrontendUrl}"
         ]
       },

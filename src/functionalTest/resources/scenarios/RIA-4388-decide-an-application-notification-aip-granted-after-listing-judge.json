@@ -27,7 +27,7 @@
           "decideAnApplicationId": "1",
           "makeAnApplications": [
               {
-              "id": "1",
+              "id": "2",
               "value": {
                 "type":"Time extension",
                 "details":"",
@@ -36,6 +36,22 @@
                 "date":"",
                 "decision":"Granted",
                 "state":"prepareForHearing",
+                "applicantRole":"citizen",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "type":"Expedite",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"",
+                "decision":"Granted",
+                "state":"preHearing",
                 "applicantRole":"citizen",
                 "decisionReason":"No Reason given",
                 "decisionDate":"{$TODAY}",
@@ -69,7 +85,7 @@
         ],
         "makeAnApplications": [
           {
-            "id": "1",
+            "id": "2",
             "value": {
               "type":"Time extension",
               "details":"",
@@ -78,6 +94,22 @@
               "date":"",
               "decision":"Granted",
               "state":"prepareForHearing",
+              "applicantRole":"citizen",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "Judge"
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "type":"Expedite",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"",
+              "decision":"Granted",
+              "state":"preHearing",
               "applicantRole":"citizen",
               "decisionReason":"No Reason given",
               "decisionDate":"{$TODAY}",
@@ -111,6 +143,8 @@
           "LP/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
+          "The Tribunal has decided to grant the following request you made:",
+          "Expedite",
           "{$iaAipFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
@@ -123,7 +157,7 @@
         "body": [
           "PA/12345/2019",
           "The Tribunal has decided to grant the following request you made:",
-          "Time extension",
+          "Expedite",
           "{$iaAipFrontendUrl}"
         ]
       },
