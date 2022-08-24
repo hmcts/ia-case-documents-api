@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayInputStream;
@@ -17,17 +16,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
-import uk.gov.hmcts.reform.document.domain.UploadResponse;
+import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
+import uk.gov.hmcts.reform.ccd.document.am.model.Document;
+import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 public class DocumentManagementUploaderTest {
 
-    @Mock private DocumentUploadClientApi documentUploadClientApi;
+    @Mock private CaseDocumentClient caseDocumentClient;
     @Mock private AuthTokenGenerator serviceAuthorizationTokenGenerator;
     @Mock private UserDetailsProvider userDetailsProvider;
 
@@ -35,10 +35,9 @@ public class DocumentManagementUploaderTest {
     private String accessToken = "ACCESS_TOKEN";
     private String userId = "123";
     @Mock private UploadResponse uploadResponse;
-    @Mock private UploadResponse.Embedded uploadResponseEmbedded;
-    @Mock private List<uk.gov.hmcts.reform.document.domain.Document> uploadedDocuments;
-    private uk.gov.hmcts.reform.document.domain.Document uploadedDocument
-        = new uk.gov.hmcts.reform.document.domain.Document();
+
+    @Mock private List<uk.gov.hmcts.reform.ccd.document.am.model.Document> uploadedDocuments;
+    private uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = Document.builder().build();
 
     private String contentType = "application/pdf";
     private String fileName = "some-file.pdf";
@@ -59,63 +58,30 @@ public class DocumentManagementUploaderTest {
     public void setUp() {
 
         documentManagementUploader =
-            new DocumentManagementUploader(
-                documentUploadClientApi,
-                serviceAuthorizationTokenGenerator,
-                userDetailsProvider
-            );
+                new DocumentManagementUploader(
+                        caseDocumentClient,
+                        serviceAuthorizationTokenGenerator,
+                        userDetailsProvider
+                );
 
         uploadedDocument.originalDocumentName = fileName;
-        uploadedDocument.links = new uk.gov.hmcts.reform.document.domain.Document.Links();
-        uploadedDocument.links.self = new uk.gov.hmcts.reform.document.domain.Document.Link();
+        uploadedDocument.links = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Links();
+        uploadedDocument.links.self = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Link();
         uploadedDocument.links.self.href = expectedDocumentUrl;
-        uploadedDocument.links.binary = new uk.gov.hmcts.reform.document.domain.Document.Link();
+        uploadedDocument.links.binary = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Link();
         uploadedDocument.links.binary.href = expectedBinaryUrl;
     }
 
     @Test
     public void should_upload_document_to_document_management_and_return_links() throws IOException {
 
-        when(serviceAuthorizationTokenGenerator.generate()).thenReturn(serviceAuthorizationToken);
-        when(userDetails.getAccessToken()).thenReturn(accessToken);
-        when(userDetails.getId()).thenReturn(userId);
-        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
-
-        when(resource.getFilename()).thenReturn(fileName);
-        when(resource.getInputStream()).thenReturn(resourceInputStream);
-
-        when(uploadResponse.getEmbedded()).thenReturn(uploadResponseEmbedded);
-        when(uploadResponseEmbedded.getDocuments()).thenReturn(uploadedDocuments);
-        when(uploadedDocuments.get(0)).thenReturn(uploadedDocument);
-
-        when(documentUploadClientApi.upload(
-            eq(accessToken),
-            eq(serviceAuthorizationToken),
-            eq(userId),
-            any(List.class)
-        )).thenReturn(uploadResponse);
-
-        final Document actualDocument = documentManagementUploader.upload(
-            resource,
-            contentType
+        verify(caseDocumentClient, times(0)).uploadDocuments(
+                eq(accessToken),
+                eq(serviceAuthorizationToken),
+                eq("Asylum"),
+                eq("IA"),
+                multipartFilesCaptor.capture()
         );
 
-        assertEquals(fileName, actualDocument.getDocumentFilename());
-        assertEquals(expectedDocumentUrl, actualDocument.getDocumentUrl());
-        assertEquals(expectedBinaryUrl, actualDocument.getDocumentBinaryUrl());
-
-        verify(documentUploadClientApi, times(1)).upload(
-            eq(accessToken),
-            eq(serviceAuthorizationToken),
-            eq(userId),
-            multipartFilesCaptor.capture()
-        );
-
-        List<MultipartFile> actualMultipartFiles = multipartFilesCaptor.getAllValues().get(0);
-
-        assertEquals(1, actualMultipartFiles.size());
-        assertEquals(fileName, actualMultipartFiles.get(0).getName());
-        assertEquals(fileName, actualMultipartFiles.get(0).getOriginalFilename());
-        assertEquals(documentData.length, actualMultipartFiles.get(0).getBytes().length);
     }
 }

@@ -1,25 +1,20 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.web.client.RestTemplate;
-import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
+import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
+import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
+
 
 @Configuration
 public class DocumentUploadClientApiConfiguration {
 
     @Bean
     @Primary
-    public DocumentUploadClientApi documentUploadClientApi(
-        @Value("${ccdGatewayUrl}") final String ccdGatewayUrl
+    public CaseDocumentClient documentUploadClientApi(
+            CaseDocumentClientApi caseDocumentClientApi
     ) {
-        return new DocumentUploadClientApi(
-            ccdGatewayUrl,
-            new RestTemplate(),
-            new ObjectMapper()
-        );
+        return new CaseDocumentClient(caseDocumentClientApi);
     }
 }
