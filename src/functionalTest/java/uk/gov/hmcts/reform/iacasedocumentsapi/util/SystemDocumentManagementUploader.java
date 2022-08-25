@@ -6,22 +6,23 @@ import java.util.Collections;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
-import uk.gov.hmcts.reform.document.domain.UploadResponse;
-import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
+import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
+import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
+import uk.gov.hmcts.reform.ccd.document.am.util.InMemoryMultipartFile;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.CcdCaseDocumentAmClient;
 
 @Service
 public class SystemDocumentManagementUploader {
 
-    private final DocumentUploadClientApi documentUploadClientApi;
+    private final CcdCaseDocumentAmClient documentUploadClient;
     private final AuthorizationHeadersProvider authorizationHeadersProvider;
 
     public SystemDocumentManagementUploader(
-        DocumentUploadClientApi documentUploadClientApi,
+        CcdCaseDocumentAmClient documentUploadClient,
         AuthorizationHeadersProvider authorizationHeadersProvider
     ) {
-        this.documentUploadClientApi = documentUploadClientApi;
+        this.documentUploadClient = documentUploadClient;
         this.authorizationHeadersProvider = authorizationHeadersProvider;
     }
 
@@ -50,18 +51,23 @@ public class SystemDocumentManagementUploader {
                 ByteStreams.toByteArray(resource.getInputStream())
             );
 
+            DocumentUploadRequest uploadRequest = new DocumentUploadRequest(
+                    "PUBLIC",
+                    "Asylum",
+                    "IA",
+                    Collections.singletonList(file)
+            );
+
             UploadResponse uploadResponse =
-                documentUploadClientApi
-                    .upload(
+                    documentUploadClient
+                    .uploadDocuments(
                         accessToken,
                         serviceAuthorizationToken,
-                        userId,
-                        Collections.singletonList(file)
+                        uploadRequest
                     );
 
-            uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
+            uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =
                 uploadResponse
-                    .getEmbedded()
                     .getDocuments()
                     .get(0);
 

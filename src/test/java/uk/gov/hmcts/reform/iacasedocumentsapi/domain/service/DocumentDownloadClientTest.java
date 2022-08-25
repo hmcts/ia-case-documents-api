@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.document.DocumentDownloadClientApi;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.CcdCaseDocumentAmClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
@@ -26,37 +24,30 @@ public class DocumentDownloadClientTest {
     private final String someServiceAuthToken = "some-service-auth-token";
 
     @Mock
-    private DocumentDownloadClientApi documentDownloadClientApi;
+    private CcdCaseDocumentAmClient caseDocumentClient;
     @Mock private AccessTokenProvider accessTokenProvider;
     @Mock private AuthTokenGenerator serviceAuthTokenGenerator;
-    @Mock private UserDetailsProvider userDetailsProvider;
-    @Mock private UserDetails userDetails;
     @Mock private ResponseEntity<Resource> responseEntity;
     @Mock private Resource downloadedResource;
 
     private DocumentDownloadClient documentDownloadClient;
-    private String someWellFormattedDocumentBinaryDownloadUrl = "http://host:8080/a/b/c";
-    private String someUserRolesString = "some-role,some-other-role";
-    private String someUserId = "some-user-id";
+    private String someWellFormattedDocumentBinaryDownloadUrl = "http://host:8080/a24a6ea4-ce75-4665-a070-57453082c256";
 
     @BeforeEach
     public void setUp() {
         documentDownloadClient = new DocumentDownloadClient(
-            documentDownloadClientApi,
+            caseDocumentClient,
             serviceAuthTokenGenerator,
-            accessTokenProvider,
-            userDetailsProvider);
+            accessTokenProvider);
     }
 
     @Test
     public void downloads_resource() {
 
-        when(documentDownloadClientApi.downloadBinary(
+        when(caseDocumentClient.getDocumentBinary(
                 someAccessToken,
                 someServiceAuthToken,
-                someUserRolesString,
-                someUserId,
-                "a/b/c")).thenReturn(responseEntity);
+                UUID.fromString("a24a6ea4-ce75-4665-a070-57453082c256"))).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);
@@ -67,24 +58,13 @@ public class DocumentDownloadClientTest {
         when(serviceAuthTokenGenerator.generate())
                 .thenReturn(someServiceAuthToken);
 
-        when(userDetailsProvider.getUserDetails())
-                .thenReturn(userDetails);
-
-        when(userDetails.getRoles())
-                .thenReturn(asList(someUserRolesString));
-
-        when(userDetails.getId())
-                .thenReturn(someUserId);
-
         Resource resource = documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl);
 
-        verify(documentDownloadClientApi, times(1))
-            .downloadBinary(
+        verify(caseDocumentClient, times(1))
+            .getDocumentBinary(
                 eq(someAccessToken),
                 eq(someServiceAuthToken),
-                eq(someUserRolesString),
-                eq(someUserId),
-                eq("a/b/c")
+                eq(UUID.fromString("a24a6ea4-ce75-4665-a070-57453082c256"))
             );
 
         assertEquals(resource, downloadedResource);
@@ -95,9 +75,9 @@ public class DocumentDownloadClientTest {
 
         assertThatThrownBy(() -> documentDownloadClient.download("bad-url"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Invalid url for DocumentDownloadClientApi");
+            .hasMessage("Invalid url for CaseDocumentClient");
 
-        verifyNoInteractions(documentDownloadClientApi);
+        verifyNoInteractions(caseDocumentClient);
         verifyNoInteractions(serviceAuthTokenGenerator);
         verifyNoInteractions(accessTokenProvider);
     }
@@ -105,12 +85,10 @@ public class DocumentDownloadClientTest {
     @Test
     public void throws_if_document_api_returns_empty_body() {
 
-        when(documentDownloadClientApi.downloadBinary(
+        when(caseDocumentClient.getDocumentBinary(
                 someAccessToken,
                 someServiceAuthToken,
-                someUserRolesString,
-                someUserId,
-                "a/b/c")).thenReturn(responseEntity);
+                UUID.fromString("a24a6ea4-ce75-4665-a070-57453082c256"))).thenReturn(responseEntity);
 
         when(responseEntity.getBody())
                 .thenReturn(downloadedResource);
@@ -120,15 +98,6 @@ public class DocumentDownloadClientTest {
 
         when(serviceAuthTokenGenerator.generate())
                 .thenReturn(someServiceAuthToken);
-
-        when(userDetailsProvider.getUserDetails())
-                .thenReturn(userDetails);
-
-        when(userDetails.getRoles())
-                .thenReturn(asList(someUserRolesString));
-
-        when(userDetails.getId())
-                .thenReturn(someUserId);
 
         when(responseEntity.getBody())
             .thenReturn(null);
