@@ -197,7 +197,7 @@ jacocoTestReport {
 
 pitest {
     //adds dependency to org.pitest:pitest-junit5-plugin and sets "testPlugin" to "junit5"
-    junit5PluginVersion = '0.12'
+    junit5PluginVersion = '0.15'
     targetClasses = ['uk.gov.hmcts.reform.iacasenotificationsapi.*']
     excludedClasses = [
             'uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.*',
