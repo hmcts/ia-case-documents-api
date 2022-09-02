@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 @Service
 public class SystemDocumentManagementUploader {
 
-    private CaseDocumentClient caseDocumentClient;
+    private final CaseDocumentClient caseDocumentClient;
 
     private final AuthorizationHeadersProvider authorizationHeadersProvider;
 
