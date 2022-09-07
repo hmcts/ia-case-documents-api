@@ -14,6 +14,7 @@ public class AsylumAppealTypeTest {
         assertEquals(AsylumAppealType.from("refusalOfHumanRights").get(), AsylumAppealType.HU);
         assertEquals(AsylumAppealType.from("refusalOfEu").get(), AsylumAppealType.EA);
         assertEquals(AsylumAppealType.from("deprivation").get(), AsylumAppealType.DC);
+        assertEquals(AsylumAppealType.from("euSettlementScheme").get(), AsylumAppealType.EU);
     }
 
     @Test
