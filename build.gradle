@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("org.yaml:snakeyaml:1.26")
+        classpath("org.yaml:snakeyaml:1.30")
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.11")
     }
 }
@@ -333,7 +333,7 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     compileOnly 'org.projectlombok:lombok:1.18.12'
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.30'
 
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
@@ -344,7 +344,7 @@ dependencies {
     testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
-    testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
+    testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.30'
     testCompile group: 'io.rest-assured', name: 'rest-assured-all', version: '4.3.1'
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.3.1'
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
