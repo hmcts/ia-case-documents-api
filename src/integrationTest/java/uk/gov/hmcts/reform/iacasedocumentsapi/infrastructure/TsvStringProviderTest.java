@@ -11,9 +11,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("integration")
 public class TsvStringProviderTest {
-
- private TsvStringProvider tsvStringProvider;
-
+    private TsvStringProvider tsvStringProvider;
 
     public void setTsvStringProvider(TsvStringProvider tsvStringProvider) {
         this.tsvStringProvider = tsvStringProvider;
@@ -212,7 +210,10 @@ public class TsvStringProviderTest {
     @Test
     public void should_return_empty_optional_if_string_not_found() {
 
-      assertEquals(Optional.empty(), tsvStringProvider.get("not", "exists"));
+        assertEquals(
+              Optional.of(null),
+              tsvStringProvider.get("not", "exists")
+        );
     }
 
 }
