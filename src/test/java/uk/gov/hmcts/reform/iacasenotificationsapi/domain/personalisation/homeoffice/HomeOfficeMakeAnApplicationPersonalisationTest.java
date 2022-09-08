@@ -30,6 +30,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
@@ -55,6 +56,8 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     UserDetails userDetails;
     @Mock
     EmailAddressFinder emailAddressFinder;
+    @Mock
+    MakeAnApplication makeAnApplication;
 
     private Long caseId = 12345L;
 
@@ -80,6 +83,7 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     private String homeOfficeEmail = "ho-taylorhouse@example.com";
 
     private String legalRepUser = "caseworker-ia-legalrep-solicitor";
+    private String citizenUser = "citizen";
     private String homeOfficeLart = "caseworker-ia-homeofficelart";
     private String homeOfficeApc = "caseworker-ia-homeofficeapc";
     private String homeOfficePou = "caseworker-ia-homeofficepou";
@@ -99,7 +103,8 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
 
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
-        when(makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase)).thenReturn(applicationType);
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
+        when(makeAnApplication.getType()).thenReturn(applicationType);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
@@ -132,6 +137,9 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
         assertEquals(homeOfficeMakeAnApplicationBeforeListingTemplateId,
             homeOfficeMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
 
+        when(userDetails.getRoles()).thenReturn(
+                Arrays.asList(citizenUser)
+        );
         when(appealService.isAppealListed(asylumCase)).thenReturn(true);
         assertEquals(homeOfficeMakeAnApplicationAfterListingTemplateId,
             homeOfficeMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
@@ -205,6 +213,9 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
             State.APPEAL_SUBMITTED,
             State.AWAITING_RESPONDENT_EVIDENCE,
             State.CASE_BUILDING,
+            State.REASONS_FOR_APPEAL_SUBMITTED,
+            State.AWAITING_REASONS_FOR_APPEAL,
+            State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
             State.CASE_UNDER_REVIEW,
             State.PENDING_PAYMENT,
             State.ENDED
@@ -267,6 +278,9 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
             State.APPEAL_SUBMITTED,
             State.AWAITING_RESPONDENT_EVIDENCE,
             State.CASE_BUILDING,
+            State.REASONS_FOR_APPEAL_SUBMITTED,
+            State.AWAITING_REASONS_FOR_APPEAL,
+            State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
             State.CASE_UNDER_REVIEW,
             State.PENDING_PAYMENT,
             State.ENDED

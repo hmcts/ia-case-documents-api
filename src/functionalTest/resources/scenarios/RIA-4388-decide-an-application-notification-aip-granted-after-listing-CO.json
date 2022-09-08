@@ -41,6 +41,22 @@
                 "decisionDate":"{$TODAY}",
                 "decisionMaker": "CaseOfficer"
               }
+            },
+            {
+              "id": "2",
+              "value": {
+                "type":"Adjourn",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"",
+                "decision":"Granted",
+                "state":"preHearing",
+                "applicantRole":"citizen",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "CaseOfficer"
+              }
             }
           ]
         }
@@ -83,6 +99,22 @@
               "decisionDate":"{$TODAY}",
               "decisionMaker": "CaseOfficer"
             }
+          },
+          {
+            "id": "2",
+            "value": {
+              "type":"Adjourn",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"",
+              "decision":"Granted",
+              "state":"preHearing",
+              "applicantRole":"citizen",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "CaseOfficer"
+            }
           }
         ],
         "notificationsSent": [
@@ -111,6 +143,8 @@
           "LP/12345/2019",
           "A1234567",
           "Pablo Jimenez,",
+          "The Tribunal has decided to grant the following request you made:",
+          "Time extension",
           "{$iaAipFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"

@@ -82,7 +82,7 @@ public class LegalRepresentativeMakeAnApplicationPersonalisation implements Lega
                 .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("applicationType", makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase))
+                .put("applicationType", makeAnApplicationService.getMakeAnApplication(asylumCase, false).map(MakeAnApplication::getType).orElse(""))
                 .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build();
     }

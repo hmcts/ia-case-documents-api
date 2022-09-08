@@ -76,7 +76,7 @@
       {
         "reference": "34889657_END_APPEAL_HOME_OFFICE",
         "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
+        "subject": "Immigration and Asylum appeal: Your appeal has ended – Withdrawn",
         "body": [
           "PA/12345/2019",
           "A1234567",
@@ -113,7 +113,6 @@
         "subject": "",
         "body": [
           "PA/12345/2019",
-          "some outcome reason",
           "13 Aug 2019",
           "{$iaAipFrontendUrl}"
         ]

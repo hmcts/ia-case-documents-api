@@ -120,6 +120,6 @@ public class LegalRepresentativeDecideAnApplicationPersonalisation implements Le
     }
 
     private Optional<MakeAnApplication> getMakeAnApplication(AsylumCase asylumCase) {
-        return makeAnApplicationService.getMakeAnApplication(asylumCase);
+        return makeAnApplicationService.getMakeAnApplication(asylumCase, true);
     }
 }

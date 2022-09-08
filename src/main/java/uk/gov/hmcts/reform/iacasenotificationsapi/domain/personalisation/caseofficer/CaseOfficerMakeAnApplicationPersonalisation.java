@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
@@ -59,7 +60,8 @@ public class CaseOfficerMakeAnApplicationPersonalisation implements EmailNotific
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
         boolean isAppealListed = appealService.isAppealListed(asylumCase);
-        boolean isJudgeReviewApplicationType = makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase).equals("Judge's review of application decision");
+        String applicationType = makeAnApplicationService.getMakeAnApplication(asylumCase, false).map(MakeAnApplication::getType).orElse("");
+        boolean isJudgeReviewApplicationType = applicationType.equals("Judge's review of application decision");
         if (isAppealListed) {
             return isJudgeReviewApplicationType ? makeAnApplicationCaseOfficerJudgeReviewAfterListingTemplateId : makeAnApplicationCaseOfficerAfterListingTemplateId;
         } else {

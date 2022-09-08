@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
@@ -48,7 +49,6 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
     private final MakeAnApplicationService makeAnApplicationService;
     private final UserDetailsProvider userDetailsProvider;
     private final EmailAddressFinder emailAddressFinder;
-    //    private final RecipientsFinder recipientsFinder;
 
     public HomeOfficeMakeAnApplicationPersonalisation(
             @Value("${govnotify.template.makeAnApplication.beforeListing.homeOffice.email}") String homeOfficeMakeAnApplicationBeforeListingTemplateId,
@@ -103,32 +103,16 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
             return Collections.emptySet();
         }
 
+        boolean hasValidRoles = hasRoles(Arrays.asList(ROLE_LEGAL_REP, CITIZEN, HOME_OFFICE_RESPONDENT_OFFICER));
+
         if (hasRoles(Arrays.asList(HOME_OFFICE_APC))
-                || (hasRoles(Arrays.asList(ROLE_LEGAL_REP, HOME_OFFICE_RESPONDENT_OFFICER))
-                && Arrays.asList(State.APPEAL_SUBMITTED,
-                            State.PENDING_PAYMENT,
-                            State.AWAITING_RESPONDENT_EVIDENCE,
-                            State.CASE_BUILDING,
-                            State.CASE_UNDER_REVIEW,
-                            State.ENDED
-                ).contains(currentState))) {
+                || (hasValidRoles && isValidStateForHomeOfficeApc(currentState))) {
             return Collections.singleton(apcHomeOfficeEmailAddress);
         } else if (hasRoles(Arrays.asList(HOME_OFFICE_LART))
-                || (hasRoles(Arrays.asList(ROLE_LEGAL_REP, HOME_OFFICE_RESPONDENT_OFFICER))
-                && Arrays.asList(State.RESPONDENT_REVIEW,
-                        State.LISTING,
-                        State.SUBMIT_HEARING_REQUIREMENTS).contains(currentState))) {
+                || (hasValidRoles && isValidStateForHomeOfficeLart(currentState))) {
             return Collections.singleton(lartHomeOfficeEmailAddress);
         } else if (hasRoles(Arrays.asList(HOME_OFFICE_POU))
-                || (hasRoles(Arrays.asList(ROLE_LEGAL_REP, HOME_OFFICE_RESPONDENT_OFFICER))
-                && (Arrays.asList(State.ADJOURNED,
-                    State.PREPARE_FOR_HEARING,
-                    State.FINAL_BUNDLING,
-                    State.PRE_HEARING,
-                    State.DECISION,
-                    State.DECIDED,
-                    State.FTPA_SUBMITTED,
-                    State.FTPA_DECIDED).contains(currentState)))) {
+                || (hasValidRoles && (isValidStateForHomeOfficePou(currentState)))) {
             if (appealService.isAppealListed(asylumCase)) {
                 return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
             } else {
@@ -156,7 +140,7 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
                 .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("applicationType", makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase))
+                .put("applicationType", makeAnApplicationService.getMakeAnApplication(asylumCase, false).map(MakeAnApplication::getType).orElse(""))
                 .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build();
     }
@@ -167,5 +151,36 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
                 .getRoles()
                 .stream()
                 .anyMatch(r -> roles.contains(r));
+    }
+
+    private boolean isValidStateForHomeOfficeApc(State currentState) {
+        return Arrays.asList(State.APPEAL_SUBMITTED,
+                State.PENDING_PAYMENT,
+                State.AWAITING_RESPONDENT_EVIDENCE,
+                State.CASE_BUILDING,
+                State.REASONS_FOR_APPEAL_SUBMITTED,
+                State.AWAITING_REASONS_FOR_APPEAL,
+                State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
+                State.CASE_UNDER_REVIEW,
+                State.ENDED
+        ).contains(currentState);
+    }
+
+    private boolean isValidStateForHomeOfficeLart(State currentState) {
+        return Arrays.asList(State.RESPONDENT_REVIEW,
+                State.LISTING,
+                State.SUBMIT_HEARING_REQUIREMENTS).contains(currentState);
+    }
+
+    private boolean isValidStateForHomeOfficePou(State currentState) {
+        return Arrays.asList(State.ADJOURNED,
+                State.PREPARE_FOR_HEARING,
+                State.FINAL_BUNDLING,
+                State.PRE_HEARING,
+                State.DECISION,
+                State.DECIDED,
+                State.FTPA_SUBMITTED,
+                State.FTPA_DECIDED
+        ).contains(currentState);
     }
 }

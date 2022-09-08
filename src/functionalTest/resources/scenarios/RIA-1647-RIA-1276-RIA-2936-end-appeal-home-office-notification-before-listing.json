@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1647-RIA-1276-RIA-2936 End appeal notification to Home Office and legal representative (after listing)",
+  "description": "RIA-1647-RIA-1276-RIA-2936 End appeal notification to Home Office and legal representative (before listing)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

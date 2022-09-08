@@ -20,8 +20,13 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicati
 @Service
 public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotificationPersonalisation {
 
+    private static final String ROLE_CITIZEN = "citizen";
+    private static final String DECISION_GRANTED = "Granted";
+    private static final String DECISION_REFUSED = "Refused";
+
     private final String decideAnApplicationRefusedAppellantSmsTemplateId;
     private final String decideAnApplicationGrantedAppellantSmsTemplateId;
+    private final String decideAnApplicationOtherPartySmsTempateId;
     private final String iaAipFrontendUrl;
     private final RecipientsFinder recipientsFinder;
     private final MakeAnApplicationService makeAnApplicationService;
@@ -30,11 +35,13 @@ public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotifi
     public AppellantDecideAnApplicationPersonalisationSms(
             @Value("${govnotify.template.decideAnApplication.refused.applicant.appellant.beforeListing.sms}") String decideAnApplicationRefusedAppellantSmsTemplateId,
             @Value("${govnotify.template.decideAnApplication.granted.applicant.appellant.beforeListing.sms}") String decideAnApplicationGrantedAppellantSmsTemplateId,
+            @Value("${govnotify.template.decideAnApplication.otherParty.appellant.sms}") String decideAnApplicationOtherPartySmsTempateId,
             @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
             RecipientsFinder recipientsFinder,
             MakeAnApplicationService makeAnApplicationService) {
         this.decideAnApplicationRefusedAppellantSmsTemplateId = decideAnApplicationRefusedAppellantSmsTemplateId;
         this.decideAnApplicationGrantedAppellantSmsTemplateId = decideAnApplicationGrantedAppellantSmsTemplateId;
+        this.decideAnApplicationOtherPartySmsTempateId = decideAnApplicationOtherPartySmsTempateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.recipientsFinder = recipientsFinder;
         this.makeAnApplicationService = makeAnApplicationService;
@@ -43,17 +50,21 @@ public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotifi
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-
-        Optional<MakeAnApplication> maybeMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase);
+        Optional<MakeAnApplication> maybeMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
 
         if (maybeMakeAnApplication.isPresent()) {
             MakeAnApplication makeAnApplication = maybeMakeAnApplication.get();
             String decision = makeAnApplication.getDecision();
+            String applicantRole = makeAnApplication.getApplicantRole();
+            boolean isCitizenRole  = applicantRole.equals(ROLE_CITIZEN);
 
-            return
-                    "Granted".equals(decision)
-                            ? decideAnApplicationGrantedAppellantSmsTemplateId
-                            : decideAnApplicationRefusedAppellantSmsTemplateId;
+            if (isCitizenRole) {
+                return DECISION_GRANTED.equals(decision)
+                        ? decideAnApplicationGrantedAppellantSmsTemplateId
+                        : decideAnApplicationRefusedAppellantSmsTemplateId;
+            } else {
+                return decideAnApplicationOtherPartySmsTempateId;
+            }
         } else {
             return "";
         }
@@ -73,12 +84,19 @@ public class AppellantDecideAnApplicationPersonalisationSms implements SmsNotifi
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        return
-            ImmutableMap
+        Optional<MakeAnApplication> makeAnApplicationOptional = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
+        String decision = makeAnApplicationOptional.map(MakeAnApplication::getDecision).orElse("");
+
+        ImmutableMap.Builder<String, String> builder = ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("applicationType", makeAnApplicationService.getMakeAnApplicationTypeName(asylumCase))
-                .put("Hyperlink to service", iaAipFrontendUrl)
-                .build();
+                .put("applicationType", makeAnApplicationOptional.map(MakeAnApplication::getType).orElse(""))
+                .put("decision", decision)
+                .put("Hyperlink to service", iaAipFrontendUrl);
+
+        if (DECISION_REFUSED.equals(decision)) {
+            builder.put("decision maker role", makeAnApplicationOptional.map(MakeAnApplication::getDecisionMaker).orElse(""));
+        }
+        return builder.build();
     }
 }

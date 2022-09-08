@@ -1,6 +1,7 @@
 {
   "description": "RIA-3153 AIP - [Cma Requirements] Request Time extension notifications (Email and SMS) to appellant and Email to Case Officer",
   "launchDarklyKey": "tcw-application-notifications-feature:true",
+  "disabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Citizen",
