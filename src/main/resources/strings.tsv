@@ -23,6 +23,7 @@ appealType	revocationOfProtection	The revocation of a protection status
 appealType	refusalOfHumanRights	Refusal of a human rights claim
 appealType	refusalOfEu	Refusal of application under the EEA regulations
 appealType	deprivation	Deprivation of citizenship
+appealType	euSettlementScheme	EU Settlement Scheme
 hearingCentreName	belfast	Belfast
 hearingCentreName	birmingham	Birmingham
 hearingCentreName	bradford	Bradford
