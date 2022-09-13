@@ -1011,10 +1011,6 @@ security:
       - "uploadAddendumEvidenceHomeOffice"
       - "applyForFTPARespondent"
       - "makeAnApplication"
-      - "submitApplication"
-      - "uploadBailSummary"
-      - "uploadDocuments"
-      - "makeNewApplication"
     caseworker-ia-iacjudge:
       - "endAppeal"
       - "sendDecisionAndReasons"
@@ -1038,6 +1034,11 @@ security:
       - "changeBailDirectionDueDate"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
+    caseworker-ia-homeofficebail:
+      - "submitApplication"
+      - "uploadBailSummary"
+      - "uploadDocuments"
+      - "makeNewApplication"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}

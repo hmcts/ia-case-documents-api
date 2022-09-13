@@ -49,7 +49,7 @@
       {
         "reference": "22392936_END_APPEAL_HOME_OFFICE",
         "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: Your appeal has ended – Withdrawn",
+        "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
