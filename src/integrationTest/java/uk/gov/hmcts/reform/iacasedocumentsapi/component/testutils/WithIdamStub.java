@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import org.springframework.http.HttpHeaders;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.Builder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest;
 
@@ -24,6 +25,7 @@ public interface WithIdamStub {
                         aResponse()
                                 .withStatus(201)
                                 .withHeader("Content-Type", "application/json")
+                                .withHeader(HttpHeaders.CONNECTION, "close")
                                 .withBody(
                                         getObjectAsJsonString(
                                                 userDetailsForTestBuilder))

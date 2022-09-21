@@ -6,6 +6,7 @@ import static com.github.tomakehurst.wiremock.matching.RequestPatternBuilder.new
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import org.springframework.http.HttpHeaders;
 
 public interface WithStitchingStub {
 
@@ -17,6 +18,7 @@ public interface WithStitchingStub {
                         aResponse()
                                 .withStatus(500)
                                 .withHeader("Content-Type", "application/json")
+                                .withHeader(HttpHeaders.CONNECTION, "close")
                                 .withBody("Error from stitching-api")
                                 .build()
                 )
@@ -31,6 +33,7 @@ public interface WithStitchingStub {
                         aResponse()
                                 .withStatus(400)
                                 .withHeader("Content-Type", "application/json")
+                                .withHeader(HttpHeaders.CONNECTION, "close")
                                 .withBody("Error from stitching-api")
                                 .build()
                 )
