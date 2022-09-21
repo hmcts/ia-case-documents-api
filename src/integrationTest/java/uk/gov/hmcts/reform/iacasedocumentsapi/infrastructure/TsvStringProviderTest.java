@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
@@ -11,11 +12,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("integration")
 public class TsvStringProviderTest {
-    private TsvStringProvider tsvStringProvider;
 
-    public void setTsvStringProvider(TsvStringProvider tsvStringProvider) {
-        this.tsvStringProvider = tsvStringProvider;
-    }
+    @Autowired private TsvStringProvider tsvStringProvider;
 
     @Test
     public void should_load_strings_from_resources_and_return() {
@@ -96,8 +94,8 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
-                Optional.of("The decision is unlawful under section 6 of the Human Rights Act 1998"),
-                tsvStringProvider.get("appealGrounds", "humanRightsRefusal")
+            Optional.of("The decision is unlawful under section 6 of the Human Rights Act 1998"),
+            tsvStringProvider.get("appealGrounds", "humanRightsRefusal")
         );
 
         assertEquals(
@@ -202,8 +200,8 @@ public class TsvStringProviderTest {
 
 
         assertEquals(
-                Optional.of("Stateless"),
-                tsvStringProvider.get("isoCountries", "ZZ")
+            Optional.of("Stateless"),
+            tsvStringProvider.get("isoCountries", "ZZ")
         );
     }
 
@@ -211,9 +209,8 @@ public class TsvStringProviderTest {
     public void should_return_empty_optional_if_string_not_found() {
 
         assertEquals(
-              Optional.of(null),
-              tsvStringProvider.get("not", "exists")
+            Optional.empty(),
+            tsvStringProvider.get("not", "exists")
         );
     }
-
 }
