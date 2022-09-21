@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixture
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import org.springframework.http.HttpHeaders;
 
 public interface WithDocumentUploadStub {
 
@@ -17,6 +18,7 @@ public interface WithDocumentUploadStub {
                                 .build(),
                         aResponse()
                                 .withStatus(201)
+                                .withHeader(HttpHeaders.CONNECTION, "close")
                                 .withBody(someUploadResponse())
                                 .build()));
     }

@@ -7,6 +7,7 @@ import static com.github.tomakehurst.wiremock.matching.RequestPatternBuilder.new
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import org.springframework.http.HttpHeaders;
 
 public interface WithServiceAuthStub {
     String SERVICE_TOKEN =
@@ -21,6 +22,7 @@ public interface WithServiceAuthStub {
                         aResponse()
                                 .withStatus(200)
                                 .withBody(SERVICE_TOKEN)
+                                .withHeader(HttpHeaders.CONNECTION, "close")
                                 .build()));
     }
 }
