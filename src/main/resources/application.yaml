@@ -269,6 +269,7 @@ security:
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
+case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
 
 idam:
   baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}

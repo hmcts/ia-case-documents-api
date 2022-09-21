@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
 @Service
+@ComponentScan("uk.gov.hmcts.reform.ccd.document.am.feign")
 public class DocumentDownloadClient {
 
 

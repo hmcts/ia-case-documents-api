@@ -342,7 +342,7 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
     testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-    
+
     testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'

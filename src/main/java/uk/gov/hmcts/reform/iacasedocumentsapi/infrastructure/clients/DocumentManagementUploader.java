@@ -4,6 +4,7 @@ import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 
 @Service
+@ComponentScan("uk.gov.hmcts.reform.ccd.document.am.feign")
 public class DocumentManagementUploader implements DocumentUploader {
 
     private final CaseDocumentClient caseDocumentClient;
