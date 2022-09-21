@@ -14,7 +14,7 @@ public class BailCaseFieldDefinitionTest {
 
     List<BailCaseFieldDefinition> fieldsNamesWithDifferentNaming =
         Arrays.asList(SUPPORTER_DOB, SUPPORTER_2_DOB, SUPPORTER_3_DOB, SUPPORTER_4_DOB, APPLICANT_ARRIVAL_IN_UK,
-                PRIOR_APPLICATIONS);
+                PRIOR_APPLICATIONS, UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA);
 
     @Test
     public void mapped_to_equivalent_field_name() {
@@ -31,6 +31,6 @@ public class BailCaseFieldDefinitionTest {
 
     @Test
     public void should_fail_if_new_fields_added_in_class() {
-        assertEquals(141, values().length);
+        assertEquals(142, values().length);
     }
 }
