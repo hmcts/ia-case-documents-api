@@ -7,18 +7,17 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixture
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
-import org.springframework.http.HttpHeaders;
 
 public interface WithDocumentUploadStub {
 
     default void addDocumentUploadStub(WireMockServer server) {
         server.addStubMapping(
                 new StubMapping(
-                        newRequestPattern(RequestMethod.POST, urlEqualTo("/documents"))
+                        newRequestPattern(RequestMethod.POST, urlEqualTo("/cases/documents"))
                                 .build(),
                         aResponse()
                                 .withStatus(201)
-                                .withHeader(HttpHeaders.CONNECTION, "close")
+                                .withHeader("Content-Type", "application/json")
                                 .withBody(someUploadResponse())
                                 .build()));
     }
