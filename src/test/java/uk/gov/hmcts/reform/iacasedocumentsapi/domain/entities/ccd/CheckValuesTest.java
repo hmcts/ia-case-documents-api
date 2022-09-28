@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,6 @@ public class CheckValuesTest {
 
     @Test
     public void should_hold_onto_values() {
-        assertEquals(values,underTest.getValues());
+        assertEquals(values, underTest.getValues());
     }
 }
