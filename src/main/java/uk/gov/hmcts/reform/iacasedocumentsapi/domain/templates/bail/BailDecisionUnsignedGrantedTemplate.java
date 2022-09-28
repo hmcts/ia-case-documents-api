@@ -82,7 +82,7 @@ public class BailDecisionUnsignedGrantedTemplate implements DocumentTemplate<Bai
             }
 
             if (conditionsList.contains("bailReporting")) {
-                fieldValues.put("conditionsForBailReporting", bailCase.read(CONDITION_FOR_BAIL_REPORTING, String.class).orElse(""));
+                fieldValues.put("conditionsForBailReporting", bailCase.read(CONDITIONS_FOR_BAIL_REPORTING, String.class).orElse(""));
             }
 
             if (conditionsList.contains("bailOther")) {
