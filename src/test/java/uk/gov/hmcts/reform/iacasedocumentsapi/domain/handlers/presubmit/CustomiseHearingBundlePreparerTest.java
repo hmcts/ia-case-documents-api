@@ -346,6 +346,11 @@ class CustomiseHearingBundlePreparerTest {
         verify(asylumCase, times(1)).clear(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).write(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, customCollections);
 
+        verify(appender, times(2)).append(
+            documentsCaptor.capture(), eq(customCollections));
+
+        List<DocumentWithDescription> appDocuments = documentsCaptor.getAllValues();
+        assertEquals(2, appDocuments.size());
     }
 
     @Test
