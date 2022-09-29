@@ -289,6 +289,10 @@ public enum BailCaseFieldDefinition {
             "priorApplications1", new TypeReference<List<IdValue<PriorApplication>>>(){}),
     UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA(
         "unsgnDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+    UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT(
+        "uploadSignedDecisionNoticeDocument", new TypeReference<Document>(){}),
+    SIGNED_DECISION_DOCUMENT_WITH_METADATA(
+        "signDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     ;
 
     private final String value;
