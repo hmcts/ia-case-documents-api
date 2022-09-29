@@ -3,7 +3,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("org.yaml:snakeyaml:1.26")
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.11")
     }
 }
@@ -253,18 +252,10 @@ dependencyManagement {
             entry 'tomcat-embed-websocket'
         }
 
-//        // CVE-2021-22060
-//        dependencySet(group: 'org.springframework', version: '5.3.20') {
-//            entry 'spring-core'
-//            entry 'spring-aop'
-//            entry 'spring-beans'
-//            entry 'spring-context'
-//            entry 'spring-expression'
-//            entry 'spring-jcl'
-//            entry 'spring-web'
-//        }
-
         dependency group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
+
+        // CVE-2022-25857, CVE-2022-38749, CVE-2022-38750, CVE-2022-38751
+        dependency group: 'org.yaml', name: 'snakeyaml', version: '1.32'
 
         //CVE-2021-42550
         dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
@@ -331,7 +322,6 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     compileOnly 'org.projectlombok:lombok:1.18.12'
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
 
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
@@ -342,7 +332,6 @@ dependencies {
     testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
-    testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
     testCompile group: 'io.rest-assured', name: 'rest-assured-all', version: '4.3.1'
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.3.1'
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
@@ -360,19 +349,6 @@ dependencies {
     contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.0")
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.0")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
-
-    integrationTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
-        force = true
-    }
-
-    functionalTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
-        force = true
-    }
-
-    contractTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.26') {
-        force = true
-    }
-
 
     integrationTestCompile sourceSets.main.runtimeClasspath
     integrationTestCompile sourceSets.test.runtimeClasspath
