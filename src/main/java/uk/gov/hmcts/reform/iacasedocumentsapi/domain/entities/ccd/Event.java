@@ -31,7 +31,7 @@ public enum Event {
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons", CaseType.ASYLUM),
     EDIT_CASE_LISTING("editCaseListing", CaseType.ASYLUM),
     END_APPEAL("endAppeal", CaseType.ASYLUM),
-    END_APPEAL_AUTOMATICALLY("endAppealAutomatically"),
+    END_APPEAL_AUTOMATICALLY("endAppealAutomatically", CaseType.ASYLUM),
     ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate", CaseType.ASYLUM),
     SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements", CaseType.ASYLUM),
     LIST_CMA("listCma", CaseType.ASYLUM),
