@@ -131,7 +131,7 @@ public class BailDecisionUnsignedGrantedCreatorTest {
         assertEquals(bailCase, response.getData());
         verify(bailDocumentHandler, times(1))
             .addWithMetadata(bailCase, bailDecisionUnsigned,
-                    BailCaseFieldDefinition.TRIBUNAL_DOCUMENTS_WITH_METADATA, DocumentTag.BAIL_DECISION_UNSIGNED);
+                    BailCaseFieldDefinition.UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA, DocumentTag.BAIL_DECISION_UNSIGNED);
 
         verify(bailDocumentHandler, times(1))
             .addDocumentWithoutMetadata(bailCase, bailDecisionUnsigned, BailCaseFieldDefinition.DECISION_UNSIGNED_DOCUMENT);
