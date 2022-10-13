@@ -39,14 +39,15 @@ public class BailDecisionUnsignedGrantedTemplateTest {
     private String supporterAddressPostCode = "AB1 2CD";
     private String supporterAddressCountry = "UK";
     private String conditionsForBailResidence = "conditions residence";
-    private String conditionsForBailAppearance = "conditions apperance";
-    private String conditionsForBailActivities = "conditions activites";
-    private String conditionsForBailElectronicMonitoring = "conditions electornic monitoring";
+    private String conditionsForBailAppearance = "conditions appearance";
+    private String conditionsForBailActivities = "conditions activities";
+    private String conditionsForBailReporting = "conditions reporting";
+    private String conditionsForBailElectronicMonitoring = "conditions electronic monitoring";
     private String conditionsForBailOther = "conditions other";
     private String bailTransferDirections = "bail transfer directions";
 
     private List<String> conditionsList =
-            Arrays.asList("bailAppearance", "bailActivities", "bailResidence", "bailElectronicMonitoring", "bailOther");
+            Arrays.asList("bailAppearance", "bailActivities", "bailResidence", "bailElectronicMonitoring", "bailOther", "bailReporting");
 
     private AddressUk supporterAddressUk = new AddressUk(
             supporterAddressLine1,
@@ -86,7 +87,22 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         fieldValuesMap = bailDecisionUnsignedGrantedTemplate.mapFieldValues(caseDetails);
         assertFalse(fieldValuesMap.containsKey("conditionsForBailAppearance"));
         assertFalse(fieldValuesMap.containsKey("conditionsForBailActivities"));
+        assertFalse(fieldValuesMap.containsKey("conditionsForBailReporting"));
         assertFalse(fieldValuesMap.containsKey("conditionsForBailOther"));
+    }
+
+    @Test
+    void should_not_set_conditions_if_not_present() {
+        dataSetUp();
+        List<String> testConditionsList =
+            Arrays.asList("conditionsForBailAppearance", "conditionsForBailActivities", "conditionsForBailReporting");
+
+        when(bailCase.read(CONDITIONS_FOR_BAIL)).thenReturn(Optional.of(testConditionsList));
+
+        fieldValuesMap = bailDecisionUnsignedGrantedTemplate.mapFieldValues(caseDetails);
+        assertFalse(fieldValuesMap.containsKey("conditionsForBailOther"));
+        assertFalse(fieldValuesMap.containsKey("bailResidence"));
+        assertFalse(fieldValuesMap.containsKey("bailElectronicMonitoring"));
     }
 
     @Test
@@ -128,6 +144,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         assertTrue(fieldValuesMap.containsKey("conditionsForBailResidence"));
         assertTrue(fieldValuesMap.containsKey("conditionsForBailAppearance"));
         assertTrue(fieldValuesMap.containsKey("conditionsForBailActivities"));
+        assertTrue(fieldValuesMap.containsKey("conditionsForBailReporting"));
         assertTrue(fieldValuesMap.containsKey("conditionsForBailElectronicMonitoring"));
         assertTrue(fieldValuesMap.containsKey("conditionsForBailOther"));
         assertTrue(fieldValuesMap.containsKey("supporterGivenNames"));
@@ -169,6 +186,7 @@ public class BailDecisionUnsignedGrantedTemplateTest {
         when(bailCase.read(CONDITIONS_FOR_BAIL_RESIDENCE, String.class)).thenReturn(Optional.of(conditionsForBailResidence));
         when(bailCase.read(CONDITIONS_FOR_BAIL_APPEARANCE, String.class)).thenReturn(Optional.of(conditionsForBailAppearance));
         when(bailCase.read(CONDITIONS_FOR_BAIL_ACTIVITIES, String.class)).thenReturn(Optional.of(conditionsForBailActivities));
+        when(bailCase.read(CONDITIONS_FOR_BAIL_REPORTING, String.class)).thenReturn(Optional.of(conditionsForBailReporting));
         when(bailCase.read(CONDITIONS_FOR_BAIL_ELECTRONIC_MONITORING, String.class)).thenReturn(Optional.of(conditionsForBailElectronicMonitoring));
         when(bailCase.read(CONDITIONS_FOR_BAIL_OTHER, String.class)).thenReturn(Optional.of(conditionsForBailOther));
         when(bailCase.read(RECORD_FINANCIAL_CONDITION_YES_OR_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
