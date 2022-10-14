@@ -253,6 +253,8 @@ public enum BailCaseFieldDefinition {
         "conditionsForBailResidence", new TypeReference<String>(){}),
     CONDITIONS_FOR_BAIL_ELECTRONIC_MONITORING(
         "conditionsForBailElectronicMonitoring",  new TypeReference<String>(){}),
+    CONDITIONS_FOR_BAIL_REPORTING(
+        "conditionsForBailReporting", new TypeReference<String>(){}),
     SECRETARY_OF_STATE_REFUSAL_REASONS(
         "secretaryOfStateRefusalReasons", new TypeReference<String>(){}),
     BAIL_TRANSFER_YES_OR_NO(
@@ -287,6 +289,12 @@ public enum BailCaseFieldDefinition {
         "endApplicationReasons", new TypeReference<String>(){}),
     PRIOR_APPLICATIONS(
             "priorApplications1", new TypeReference<List<IdValue<PriorApplication>>>(){}),
+    UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA(
+        "unsgnDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+    UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT(
+        "uploadSignedDecisionNoticeDocument", new TypeReference<Document>(){}),
+    SIGNED_DECISION_DOCUMENT_WITH_METADATA(
+        "signDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     ;
 
     private final String value;

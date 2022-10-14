@@ -134,7 +134,7 @@ public class BailDecisionUnsignedRefusalCreatorTest {
         assertEquals(bailCase, response.getData());
         verify(bailDocumentHandler, times(1))
             .addWithMetadata(bailCase, bailDecisionUnsigned,
-                    BailCaseFieldDefinition.TRIBUNAL_DOCUMENTS_WITH_METADATA,
+                    BailCaseFieldDefinition.UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA,
                     DocumentTag.BAIL_DECISION_UNSIGNED);
 
         verify(bailDocumentHandler, times(1))
