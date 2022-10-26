@@ -9,7 +9,6 @@ import io.restassured.specification.RequestSpecification;
 import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentDto;
@@ -40,7 +39,8 @@ public class UpdatePaymentStatusTest extends CcdCaseCreationTest {
             .build();
     }
 
-    @Test
+
+
     public void should_update_payment_status_successfully_with_status_code_200() {
 
         shouldPayAndSubmitAppeal();
@@ -56,7 +56,8 @@ public class UpdatePaymentStatusTest extends CcdCaseCreationTest {
         assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test
+
+
     public void should_fail_on_invalid_payment_reference_with_status_code_400() {
 
         shouldPayAndSubmitAppeal();
