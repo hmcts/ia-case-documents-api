@@ -137,8 +137,14 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
         List<IdValue<String>> allNotifications =
             maybeNotificationsSent.orElseThrow(IllegalStateException::new);
 
-        assertThat(allNotifications.size()).isGreaterThan(1);
-        assertThat(allNotifications.get(0).getId()).isNotEqualTo(allNotifications.get(1).getId());
+        if (eventWithSuffixPair.getKey() == Event.SUBMIT_APPEAL) {
+            assertThat(allNotifications.size()).isEqualTo(1);
+        } else {
+            assertThat(allNotifications.size()).isGreaterThan(1);
+            assertThat(allNotifications.get(0).getId()).isNotEqualTo(allNotifications.get(1).getId());
+        }
+
+
 
     }
 

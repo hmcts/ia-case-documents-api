@@ -12,7 +12,8 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "manchester"
+          "hearingCentre": "manchester",
+          "paAppealTypePaymentOption": "payLater"
         }
       }
     }
@@ -24,6 +25,7 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "hearingCentre": "manchester",
+        "paAppealTypePaymentOption": "payLater",
         "notificationsSent": [
           {
             "id": "2118123_APPEAL_SUBMITTED_CASE_OFFICER",

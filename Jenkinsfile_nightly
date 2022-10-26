@@ -122,8 +122,10 @@ def secrets = [
         secret('bail-hearing-centre-yarlswood-email', 'IA_BAIL_HEARING_CENTRE_YARLSWOOD_EMAIL'),
 
         secret('bail-home-office-email', 'IA_BAIL_HOME_OFFICE_EMAIL'),
+        secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE'),
 
-        secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE')
+        secret('system-username', 'IA_SYSTEM_USERNAME'),
+        secret('system-password', 'IA_SYSTEM_PASSWORD')
     ]
 ]
 

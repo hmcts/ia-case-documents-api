@@ -93,6 +93,8 @@ public enum Event {
     CHANGE_BAIL_DIRECTION_DUE_DATE("changeBailDirectionDueDate"),
     MAKE_NEW_APPLICATION("makeNewApplication"),
     EDIT_BAIL_APPLICATION_AFTER_SUBMIT("editBailApplicationAfterSubmit"),
+    END_APPEAL_AUTOMATICALLY("endAppealAutomatically"),
+    UPDATE_PAYMENT_STATUS("updatePaymentStatus"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

@@ -1,6 +1,6 @@
 {
   "description": "RIA-3689 send appeal submitted with remission and payOffline, for PA appeal notification",
-  "launchDarklyKey": "tcw-notifications-feature:true",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
@@ -12,8 +12,9 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "isRemissionsEnabled": "Yes",
-          "remissionType":"hoWaiverRemission",
-          "appealType":"protection"
+          "remissionType": "hoWaiverRemission",
+          "appealType": "protection",
+          "paAppealTypePaymentOption": "payOffline"
         }
       }
     }
@@ -28,11 +29,8 @@
         "isRemissionsEnabled": "Yes",
         "remissionType":"hoWaiverRemission",
         "appealType":"protection",
+        "paAppealTypePaymentOption": "payOffline",
         "notificationsSent": [
-          {
-            "id": "3689_APPEAL_SUBMITTED_CASE_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
           {
             "id": "3689_APPEAL_SUBMITTED_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
@@ -49,16 +47,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "3689_APPEAL_SUBMITTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: appeal submitted",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
       {
         "reference": "3689_APPEAL_SUBMITTED_HOME_OFFICE",
         "recipient": "{$apcPrivateHomeOfficeEmailAddress}",

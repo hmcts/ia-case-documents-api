@@ -1,18 +1,19 @@
 {
-  "description": "RIA-365-RIA-2936 Send appeal submitted notification to Taylor House hearing centre",
+  "description": "RIA-6273 New way of paying LR, HO notification appeal submitted PA pay now",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "id": 1002,
+      "id": 12344321,
       "eventId": "submitAppeal",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "taylorHouse",
-          "paymentStatus": "Paid"
+          "appealType": "protection",
+          "paAppealTypePaymentOption":"payNow",
+          "hasServiceRequestAlready": "No"
         }
       }
     }
@@ -23,27 +24,17 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "hearingCentre": "taylorHouse",
-        "paymentStatus": "Paid",
         "notificationsSent": [
           {
-            "id": "1002_APPEAL_SUBMITTED_HOME_OFFICE",
+            "id": "12344321_APPEAL_SUBMITTED_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "12344321_APPEAL_SUBMITTED_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
-    },
-    "notifications": [
-      {
-        "reference": "1002_APPEAL_SUBMITTED_HOME_OFFICE",
-        "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
-        "subject": "Immigration and Asylum appeal: appeal submitted",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      }
-    ]
+    }
   }
 }

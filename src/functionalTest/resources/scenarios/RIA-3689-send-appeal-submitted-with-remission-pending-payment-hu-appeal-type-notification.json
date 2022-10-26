@@ -1,6 +1,6 @@
 {
   "description": "RIA-3689 send appeal submitted with remission and payment pending, for HU appeal notification",
-  "launchDarklyKey": "tcw-notifications-feature:true",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
@@ -13,7 +13,8 @@
         "replacements": {
           "isRemissionsEnabled": "Yes",
           "remissionType":"hoWaiverRemission",
-          "appealType":"refusalOfHumanRights"
+          "appealType":"refusalOfHumanRights",
+          "eaHuAppealTypePaymentOption": "payLater"
         }
       }
     }
@@ -28,6 +29,7 @@
         "isRemissionsEnabled": "Yes",
         "remissionType":"hoWaiverRemission",
         "appealType":"refusalOfHumanRights",
+        "eaHuAppealTypePaymentOption": "payLater",
         "notificationsSent": [
           {
             "id": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_LEGAL_REP",
