@@ -126,6 +126,11 @@ endAppeal.fileName: "NoticeOfEndedAppeal"
 endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
 endAppeal.appellant.templateName: ${IA_END_APPEAL_APPELLANT_TEMPLATE:TB-IAC-GNO-ENG-00721.docx}
 
+endAppealAutomatically.contentType: application/pdf
+endAppealAutomatically.fileExtension: PDF
+endAppealAutomatically.fileName: "NoticeOfEndedAppeal"
+endAppealAutomatically.templateName: ${IA_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-GNO-ENG-00239.docx}
+
 cmaRequirements.contentType:  application/pdf
 cmaRequirements.fileExtension: PDF
 cmaRequirements.fileName: "Case-management-appointment-requirements"
@@ -268,7 +273,8 @@ security:
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
-
+    caseworker-ia-system:
+      - "endAppealAutomatically"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
