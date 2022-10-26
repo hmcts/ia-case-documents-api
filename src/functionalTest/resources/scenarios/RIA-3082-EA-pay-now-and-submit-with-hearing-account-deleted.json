@@ -1,6 +1,6 @@
 {
   "description": "RIA-3082 Account deleted for pay and submit now with a hearing (EA appeal type) - PBA0087240",
-  "enabled": true,
+  "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentativeOrgDeleted",
