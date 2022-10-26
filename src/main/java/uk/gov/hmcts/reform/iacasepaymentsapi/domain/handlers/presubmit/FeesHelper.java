@@ -24,7 +24,7 @@ public class FeesHelper {
     private FeesHelper() {
     }
 
-    static final Fee findFeeByHearingType(FeeService feeService, AsylumCase asylumCase) {
+    public static final Fee findFeeByHearingType(FeeService feeService, AsylumCase asylumCase) {
         Fee fee;
         Optional<String> decisionHearingFeeOption = asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class);
         if (decisionHearingFeeOption.isPresent()) {

@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.controllers;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -45,7 +46,8 @@ class UpdatePaymentStatusControllerTest {
     void should_update_the_payment_status_successfully() {
 
         when(paymentDto.getCcdCaseNumber()).thenReturn("1234");
-        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class))).thenReturn(getSubmitEventResponse());
+        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class), eq(false)))
+            .thenReturn(getSubmitEventResponse());
 
         ResponseEntity responseEntity = updatePaymentStatusController.updatePaymentStatus(paymentDto);
 
@@ -64,7 +66,8 @@ class UpdatePaymentStatusControllerTest {
     void should_error_when_service_is_unavailable() {
 
         when(paymentDto.getCcdCaseNumber()).thenReturn("1234");
-        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class))).thenThrow(ResponseStatusException.class);
+        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class), eq(false)))
+            .thenThrow(ResponseStatusException.class);
 
         assertThatThrownBy(() -> updatePaymentStatusController.updatePaymentStatus(paymentDto))
             .isExactlyInstanceOf(ResponseStatusException.class);
@@ -74,7 +77,8 @@ class UpdatePaymentStatusControllerTest {
     void should_error_on_invalid_ccd_case_number() {
 
         when(paymentDto.getCcdCaseNumber()).thenReturn("1001");
-        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class))).thenThrow(BadRequestException.class);
+        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class), eq(false)))
+            .thenThrow(BadRequestException.class);
 
         assertThatThrownBy(() -> updatePaymentStatusController.updatePaymentStatus(paymentDto))
             .isExactlyInstanceOf(BadRequestException.class);

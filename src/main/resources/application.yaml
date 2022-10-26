@@ -17,7 +17,7 @@ management:
 
 spring:
   application:
-    name: Welcome to Case Payment Service
+    name: ia-case-payments-api
   main:
     allow-bean-definition-overriding: true
   jackson.date-format: yyyy-MM-dd
@@ -75,7 +75,8 @@ rd-professional:
 
 payment:
   api:
-    url: ${PAYMENT_API_URL:http://localhost:8991}
+    url: ${PAYMENT_API_URL:http://localhost:8083}
+    callback-url: ${PAY_CALLBACK_URL:http://host.docker.internal:8096/service-request-update}
   params:
     organisationUrn: immigration and asylum chamber
     siteId: BFA1
@@ -92,28 +93,30 @@ security:
     - "/health/readiness"
     - "/loggers/**"
     - "/swagger-ui.html"
-    - "/swagger-resources/**"
-    - "/v2/api-docs"
-    - "/webjars/springfox-swagger-ui/**"
+    - "/swagger-ui/**"
+    - "/v3/api-docs/**"
     - "/favicon.ico"
     - "/csrf"
     - "/testing-support/**"
     - "/payment-updates"
+    - "/service-request-update"
   roleEventAccess:
     citizen:
-    - "startAppeal"
-    - "editAppeal"
-    - "paymentAppeal"
+      - "startAppeal"
+      - "editAppeal"
+      - "paymentAppeal"
     caseworker-ia-legalrep-solicitor:
-    - "startAppeal"
-    - "editAppeal"
-    - "paymentAppeal"
-    - "payAndSubmitAppeal"
-    - "payForAppeal"
+      - "startAppeal"
+      - "submitAppeal"
+      - "editAppeal"
+      - "paymentAppeal"
+      - "payAndSubmitAppeal"
+      - "payForAppeal"
+      - "generateServiceRequest"
     caseworker-ia-admofficer:
-    - "recordRemissionDecision"
+      - "recordRemissionDecision"
     caseworker-ia-system:
-    - "updatePaymentStatus"
+      - "updatePaymentStatus"
 
 ### dependency configuration
 auth.idam.client.baseUrl: ${IDAM_URL:http://127.0.0.1:4501}

@@ -1,7 +1,7 @@
 buildscript {
-    dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.11")
-    }
+  dependencies {
+    classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.11")
+  }
 }
 
 plugins {
@@ -11,12 +11,12 @@ plugins {
   id 'jacoco'
   id "info.solidsoft.pitest" version '1.5.2'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-  id 'org.springframework.boot' version '2.3.9.RELEASE'
+  id 'org.springframework.boot' version '2.7.0'
   id 'uk.gov.hmcts.java' version '0.12.5'
-  id 'org.owasp.dependencycheck' version '6.1.6'
-  id 'com.github.ben-manes.versions' version '0.28.0'
+  id 'org.owasp.dependencycheck' version '7.1.1'
+  id 'com.github.ben-manes.versions' version '0.42.0'
   id 'org.sonarqube' version '3.0'
-  id 'au.com.dius.pact' version '4.1.0'
+  id 'au.com.dius.pact' version '4.1.7'
 
 }
 
@@ -109,6 +109,14 @@ task smoke(type: Test) {
   classpath = sourceSets.smokeTest.runtimeClasspath
 }
 
+task contract(type: Test, description: 'Runs the pact contract tests.', group: 'Verification') {
+  description = "Runs the consumer Pact tests"
+  useJUnitPlatform()
+  testClassesDirs = sourceSets.contractTest.output.classesDirs
+  classpath = sourceSets.contractTest.runtimeClasspath
+
+}
+
 checkstyle {
   maxWarnings = 0
   toolVersion = '8.29'
@@ -139,7 +147,7 @@ jacocoTestReport {
 project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 pitest {
-  junit5PluginVersion = '0.12'
+  junit5PluginVersion = '0.15'
   targetClasses = ['uk.gov.hmcts.reform.iacasepaymentsapi.*']
   excludedClasses = [
     'uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.*',
@@ -175,15 +183,16 @@ def getCheckedOutGitCommitHash() {
   'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
+
 task runAndPublishConsumerPactTests(type: Test, description: 'Publish pact test to broker.', group: 'Verification') {
   onlyIf {
     return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
   }
   useJUnitPlatform()
-  logger.lifecycle("Runs pact consumer Tests")
   testClassesDirs = sourceSets.contractTest.output.classesDirs
-  systemProperty 'pact.rootDir', "pacts"
   classpath = sourceSets.contractTest.runtimeClasspath
+  systemProperty 'pact.rootDir', "pacts"
+  testLogging.showStandardStreams = true
 }
 
 runAndPublishConsumerPactTests.finalizedBy pactPublish
@@ -219,6 +228,20 @@ dependencyCheck {
   }
 }
 
+
+def versions = [
+  pitest          : '1.5.2',
+  junit           : '5.7.0',
+  junitPlatform   : '1.7.2',
+  reformLogging   : '5.1.7',
+  springBoot      : '2.7.3',
+  springDoc       : '1.6.8',
+  pact_version    : '4.1.7',
+  serenity        : '3.1.20',
+  springSecurity  : '5.7.1',
+]
+
+
 dependencyManagement {
   dependencies {
     // CVE-2018-10237 - Unbounded memory allocation
@@ -226,16 +249,17 @@ dependencyManagement {
       entry 'guava'
     }
 
-    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.58') {
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.65') {
       entry 'tomcat-embed-core'
+      entry 'tomcat-embed-el'
       entry 'tomcat-embed-websocket'
     }
 
-    // CVE-2021-22060
-    dependency(group: 'org.springframework', name: 'spring-core', version: '5.3.15')
+    // CVE-2021-22060, CVE-2022-22965, CVE-2022-22950, CVE-2022-22971, CVE-2022-22968, CVE-2022-22970
+    dependency(group: 'org.springframework', name: 'spring-core', version: '5.3.22')
 
     //CVE-2021-22119
-    dependency group: 'org.springframework.security', name: 'spring-security-core',  version: '5.6.1'
+    dependency group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
     //CVE-2021-42550
     dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
@@ -248,6 +272,8 @@ dependencyManagement {
       entry 'log4j-api'
       entry 'log4j-to-slf4j'
     }
+
+    dependency group: 'org.yaml', name: 'snakeyaml', version: '1.32'
   }
 }
 
@@ -256,17 +282,6 @@ repositories {
   jcenter()
   mavenCentral()
 }
-
-def versions = [
-  pitest          : '1.5.2',
-  junit           : '5.6.2',
-  junitPlatform   : '1.6.2',
-  reformLogging   : '5.1.7',
-  springBoot      : '2.6.3',
-  springfoxSwagger: '2.9.2',
-  pact_version    : '4.1.7',
-  serenity        : '2.2.12'
-]
 
 ext.libraries = [
   junit5: [
@@ -283,6 +298,8 @@ configurations {
   integrationTestRuntime.extendsFrom testRuntime
   functionalTestCompile.extendsFrom testCompile
   functionalTestRuntime.extendsFrom testRuntime
+  contractTestCompile.extendsFrom testCompile
+  contractTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -294,28 +311,42 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: versions.springBoot
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.1'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.1'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: '2021.0.3'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
+
+  implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
+  implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
+  implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
+
   // CVE-2019-17195
-  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.9'
+  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 
   // CVE-2021-27568
-  implementation group: 'net.minidev', name: 'json-smart', version: '2.3.1'
+  implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'
 
-  implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
-  implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
+
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.3'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
+  implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.3'
 
   implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
   implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.2.RELEASE'
-  implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
-  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
+  implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'
+
+  implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
+
+  implementation group:  'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
 
   implementation group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
 
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.2.RELEASE'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: 'Hoxton.SR4'
+
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
   implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
@@ -325,26 +356,28 @@ dependencies {
   implementation 'org.projectlombok:lombok:1.18.12'
 
   testImplementation libraries.junit5
-  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot, {
-    exclude group: 'junit', module: 'junit'
-    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-  }
 
-  testCompile "com.github.tomakehurst:wiremock:2.19.0"
-  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.5.0'
-  testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
-  testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
+  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+  testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.7.1'
+
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.6.28'
+  testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
+
+  testImplementation(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
     exclude group: "com.vaadin.external.google", module: "android-json"
   }
-  testCompile "ru.lanwen.wiremock:wiremock-junit5:1.3.1"
 
-  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
-  testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
-  testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
-  testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
-  testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
+  testImplementation group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
+  testImplementation group: 'ru.lanwen.wiremock', name: 'wiremock-junit5', version: '1.3.1'
 
-  testImplementation group: 'org.springframework.security', name: 'spring-security-test'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '4.3.1'
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+
+
 
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
@@ -361,17 +394,26 @@ dependencies {
   smokeTestImplementation sourceSets.main.runtimeClasspath
   smokeTestImplementation sourceSets.test.runtimeClasspath
 
-  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
-  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
-  contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit_jupiter
-  contractTestRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit_jupiter
-  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit_jupiter
-  contractTestRuntime group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.7.0'
-  contractTestImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.4'
-  contractTestCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.4'
-  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.7.RELEASE'
-  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-netflix-ribbon', version: '2.2.7.RELEASE'
+  contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+
+  contractTestImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
+  contractTestImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
+  contractTestImplementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.3'
+
+
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+
+
+  contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.0")
+  contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+  contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.0')
+
+
+  contractTestRuntime group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.8.1'
+
+  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.1'
+  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-netflix-ribbon', version: '2.2.10.RELEASE'
 }
 
 mainClassName = 'uk.gov.hmcts.reform.iacasepaymentsapi.Application'
@@ -387,5 +429,5 @@ bootJar {
 }
 
 wrapper {
-    distributionType = Wrapper.DistributionType.ALL
+  distributionType = Wrapper.DistributionType.ALL
 }

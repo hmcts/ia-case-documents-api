@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -104,7 +105,7 @@ class CcdDataServiceTest {
 
         SubmitEventDetails submitEventDetails =
             ccdDataService.updatePaymentStatus(
-                getCaseMetaData("Success", "RC-1627-5070-9329-7815"));
+                getCaseMetaData("Success", "RC-1627-5070-9329-7815"), false);
 
         assertNotNull(submitEventDetails);
         assertEquals(caseId, submitEventDetails.getId());
@@ -138,7 +139,7 @@ class CcdDataServiceTest {
         ResponseStatusException rse = assertThrows(
             ResponseStatusException.class, () ->
                 ccdDataService.updatePaymentStatus(
-                    getCaseMetaData("Success", "RC-1627-5070-9329-7815")));
+                    getCaseMetaData("Success", "RC-1627-5070-9329-7815"), false));
 
         assertThat(rse.getMessage()).contains("400 BAD_REQUEST \"Payment reference not found for the caseId: 1234\"");
 
@@ -160,7 +161,43 @@ class CcdDataServiceTest {
                 jurisdiction,  caseType, String.valueOf(caseId), eventId)).thenThrow(FeignException.class);
 
         FeignException fe = assertThrows(FeignException.class, () -> ccdDataService.updatePaymentStatus(
-            getCaseMetaData("Success", "RC-1627-5070-9329-7815")));
+            getCaseMetaData("Success", "RC-1627-5070-9329-7815"), false));
+    }
+
+    @Test
+    void service_should_not_seek_payment_reference_if_is_waysToPay() {
+        when(systemTokenGenerator.generate()).thenReturn(token);
+        when(serviceAuthorization.generate()).thenReturn(serviceToken);
+        when(systemUserProvider.getSystemUserId("Bearer " + token)).thenReturn(userId);
+
+        StartEventDetails startEventResponse = getStartEventResponse("RC-1627-5070-9329-7815");
+        when(ccdDataApi.startEvent(
+            "Bearer " + token, serviceToken, userId, jurisdiction,  caseType,
+            String.valueOf(caseId), eventId)).thenReturn(startEventResponse);
+
+        when(asylumCase.read(PAYMENT_REFERENCE, String.class)).thenReturn(Optional.empty());
+
+        CaseDataContent caseDataContent = getCaseDataContent("Paid");
+        when(ccdDataApi.submitEvent("Bearer " + token, serviceToken, String.valueOf(caseId),
+                                    caseDataContent)).thenReturn(getSubmitEventResponse());
+
+        SubmitEventDetails submitEventDetails =
+            assertDoesNotThrow(() -> ccdDataService.updatePaymentStatus(
+                getCaseMetaData("Paid", "RC-1627-5070-9329-7815"), true));
+
+        assertNotNull(submitEventDetails);
+        assertEquals(caseId, submitEventDetails.getId());
+        assertEquals(jurisdiction, submitEventDetails.getJurisdiction());
+        assertEquals("Success", submitEventDetails.getData().get("paymentStatus"));
+        assertEquals("RC-1627-5070-9329-7815", submitEventDetails.getData().get("paymentReference"));
+        assertEquals(200, submitEventDetails.getCallbackResponseStatusCode());
+        assertEquals("CALLBACK_COMPLETED", submitEventDetails.getCallbackResponseStatus());
+
+        verify(ccdDataApi, times(1))
+            .startEvent("Bearer " + token, serviceToken, userId,
+                        jurisdiction,  caseType, String.valueOf(caseId), eventId);
+        verify(ccdDataApi, times(1))
+            .submitEvent("Bearer " + token, serviceToken, String.valueOf(caseId), caseDataContent);
     }
 
     private StartEventDetails getStartEventResponse(String paymentReference) {

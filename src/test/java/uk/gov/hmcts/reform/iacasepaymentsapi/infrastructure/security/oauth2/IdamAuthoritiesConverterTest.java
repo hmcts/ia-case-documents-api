@@ -66,7 +66,7 @@ public class IdamAuthoritiesConverterTest {
     @Test
     public void should_return_correct_granted_authority_collection() {
 
-        when(jwt.containsClaim(TOKEN_NAME)).thenReturn(true);
+        when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
@@ -103,7 +103,7 @@ public class IdamAuthoritiesConverterTest {
 
         idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi);
 
-        when(jwt.containsClaim(TOKEN_NAME)).thenReturn(true);
+        when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
@@ -115,7 +115,7 @@ public class IdamAuthoritiesConverterTest {
 
         when(idamApi.userInfo("Bearer " + tokenValue)).thenThrow(FeignException.class);
 
-        when(jwt.containsClaim(TOKEN_NAME)).thenReturn(true);
+        when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 

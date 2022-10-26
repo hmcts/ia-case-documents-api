@@ -43,7 +43,7 @@ public class CcdDataService {
     }
 
 
-    public SubmitEventDetails updatePaymentStatus(CaseMetaData caseMetaData) {
+    public SubmitEventDetails updatePaymentStatus(CaseMetaData caseMetaData, boolean isWaysToPay) {
 
         String event = caseMetaData.getEvent().toString();
         String caseId = String.valueOf(caseMetaData.getCaseId());
@@ -74,7 +74,7 @@ public class CcdDataService {
         log.info("Case details found for the caseId: {}", caseId);
 
         if (!isPaymentReferenceExists(startEventDetails.getCaseDetails().getCaseData(),
-                                      caseMetaData.getPaymentReference())) {
+                                      caseMetaData.getPaymentReference()) && !isWaysToPay) {
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                                               "Payment reference not found for the caseId: " + caseId);

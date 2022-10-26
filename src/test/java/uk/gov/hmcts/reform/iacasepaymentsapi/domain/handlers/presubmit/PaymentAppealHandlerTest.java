@@ -371,7 +371,7 @@ class PaymentAppealHandlerTest {
                         Charset.defaultCharset(),
                         null
                     ),
-                    new byte[0]
+                    new byte[0], null
                 )
             );
 

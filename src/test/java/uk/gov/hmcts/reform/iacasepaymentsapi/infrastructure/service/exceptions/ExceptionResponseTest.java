@@ -22,6 +22,7 @@ class ExceptionResponseTest {
 
         assertEquals(exceptionResponse.getErrorMessage(), errorMessage);
         assertEquals(exceptionResponse.getErrorCode(), errorCode);
-        assertTrue(exceptionResponse.getTimestamp().isBefore(LocalDateTime.now()));
+        assertTrue(exceptionResponse.getTimestamp().isBefore(LocalDateTime.now())
+                   || exceptionResponse.getTimestamp().isEqual(LocalDateTime.now()));
     }
 }

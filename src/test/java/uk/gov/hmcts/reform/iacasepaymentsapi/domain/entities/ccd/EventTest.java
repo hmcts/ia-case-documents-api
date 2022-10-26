@@ -17,12 +17,13 @@ public class EventTest {
         assertEquals("submitAppeal", Event.SUBMIT_APPEAL.toString());
         assertEquals("recordRemissionDecision", Event.RECORD_REMISSION_DECISION.toString());
         assertEquals("updatePaymentStatus", Event.UPDATE_PAYMENT_STATUS.toString());
+        assertEquals("generateServiceRequest", Event.GENERATE_SERVICE_REQUEST.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
 
-        assertEquals(9, Event.values().length);
+        assertEquals(10, Event.values().length);
     }
 }

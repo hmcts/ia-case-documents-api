@@ -11,12 +11,13 @@ public class StateTest {
 
         assertEquals("appealStarted", State.APPEAL_STARTED.toString());
         assertEquals("appealSubmitted", State.APPEAL_SUBMITTED.toString());
+        assertEquals("pendingPayment", State.PENDING_PAYMENT.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
 
-        assertEquals(3, State.values().length);
+        assertEquals(4, State.values().length);
     }
 }

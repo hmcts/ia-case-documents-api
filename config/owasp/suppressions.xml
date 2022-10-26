@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
   <suppress until="2030-01-01">
+  <notes><![CDATA[
+             https://nvd.nist.gov/vuln/detail/CVE-2016-1000027
+             Root Cause: spring-web-5.2.3.RELEASE.jar <= org/springframework/remoting/httpinvoker/HttpInvokerServiceExporter.class : [2.5.1,)
+             Pivotal Spring Framework 4.1.4 suffers from a potential remote code execution (RCE) issue if used for Java deserialization of untrusted data. Depending on how the library is implemented within a product, this issue may or not occur, and authentication may be required
+             Note: No java deserialization of untrusted data is happening in this component therefore it is suppressed.
+            ]]>
+  </notes>
+  <cve>CVE-2016-1000027</cve>
+  </suppress>
+  <suppress until="2030-01-01">
     <notes><![CDATA[
-                 https://nvd.nist.gov/vuln/detail/CVE-2018-1258
-                 False positive &#45;&#45; we do not use Spring Framework 5.0.5.RELEASE (5.0.8.RELEASE at the time of writing)
-                 Additionally, we do not use Spring method security annotations which are the specific vulnerability
-                ]]></notes>
+             False positive.
+             These vulnerabilities actually affect Spring Security, but dependencyCheck is mixing them up with spring-boot-starter-oauth2-resource-server.
+             Resolution of these false positives hasn't been resolved yet in the latest dependencyCheck upgrade.
+             https://github.com/jeremylong/DependencyCheck/issues/3622
+            ]]>
+    </notes>
     <cve>CVE-2018-1258</cve>
+    <cve>CVE-2020-5408</cve>
+    <cve>CVE-2021-22112</cve>
+    <cve>CVE-2022-22978</cve>
+    <cve>CVE-2022-22976</cve>
   </suppress>
   <suppress until="2030-01-01">
     <notes><![CDATA[
-                 https://nvd.nist.gov/vuln/detail/CVE-2021-28170
-                 Spring Framework vulnerability, subject to review after Spring Boot upgrade to 2.4.x affected lib org.glassfish:jakarta.el:3.0.3
-                ]]></notes>
-    <cve>CVE-2021-28170</cve>
-  </suppress>
-  <suppress until="2030-01-01">
-    <notes><![CDATA[
-                 https://nvd.nist.gov/vuln/detail/CVE-2020-23171
-                 Spring Framework vulnerability, https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-23171 nim-lang all versions affected https://github.com/nim-lang/zip/issues/54
-                ]]></notes>
-    <cve>CVE-2020-23171</cve>
+             False positive.
+             This is addressed in snake yaml 1.32 revision, however CVEs DB is still not updated to reflect it.
+             https://bitbucket.org/snakeyaml/snakeyaml/issues/531/stackoverflow-oss-fuzz-47081
+            ]]>
+    </notes>
+    <cve>CVE-2022-38752</cve>
   </suppress>
   <suppress>
-    <notes>
-      <![CDATA[https://nvd.nist.gov/vuln/detail/CVE-2020-36518]]>
-      <![CDATA[https://github.com/FasterXML/jackson-databind/issues/2816]]>
-    </notes>
-    <cve>CVE-2020-36518</cve>
+    <cve>CVE-2022-42003</cve>
+    <cve>CVE-2022-42004</cve>
   </suppress>
 </suppressions>

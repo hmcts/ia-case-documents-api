@@ -31,10 +31,13 @@ public class PaymentDto {
 
     private String id;
 
+    @JsonProperty("payment_amount")
     private BigDecimal amount;
 
+    @JsonProperty("case_reference")
     private String description;
 
+    @JsonProperty("payment_reference")
     private String reference;
 
     @JsonProperty("service_name")
@@ -53,8 +56,10 @@ public class PaymentDto {
     @JsonProperty("ccd_case_number")
     private String ccdCaseNumber;
 
+    @JsonProperty("account_number")
     private String channel;
 
+    @JsonProperty("payment_method")
     private String method;
 
     @JsonProperty("external_provider")

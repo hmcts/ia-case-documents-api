@@ -1,11 +1,12 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.controllers;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,8 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.SubmitEventDeta
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentDto;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.CcdDataService;
 
-@Api(tags = {"Update payment status controller"})
-@SwaggerDefinition(tags = {@Tag(name = "UpdatePaymentStatusController", description = "Update payment status")})
+@Tag(name = "Update payment status controller")
+@OpenAPIDefinition(tags = {@Tag(name = "UpdatePaymentStatusController", description = "Update payment status")})
 @RestController
 @Slf4j
 public class UpdatePaymentStatusController {
@@ -33,12 +34,26 @@ public class UpdatePaymentStatusController {
         this.ccdDataService = ccdDataService;
     }
 
-    @ApiOperation(value = "Update payment status", notes = "Update payment status")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Updated payment status successfully"),
-        @ApiResponse(code = 400, message = "Bad request"),
-        @ApiResponse(code = 500, message = "Internal server error")
-    })
+    @Operation(
+        summary = "Update payment status",
+        responses =
+            {
+                @ApiResponse(
+                    responseCode = "200",
+                    description = "Updated payment status successfully",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+                @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+                @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+
+            }
+    )
+
     @PutMapping(path = "/payment-updates",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +65,7 @@ public class UpdatePaymentStatusController {
             new CaseMetaData(Event.UPDATE_PAYMENT_STATUS, JURISDICTION,
                              CASE_TYPE, Long.valueOf(caseId), paymentDto.getStatus(), paymentDto.getReference());
 
-        SubmitEventDetails response = ccdDataService.updatePaymentStatus(caseMetaData);
+        SubmitEventDetails response = ccdDataService.updatePaymentStatus(caseMetaData, false);
         return ResponseEntity.status(response.getCallbackResponseStatusCode()).body(response);
     }
 }

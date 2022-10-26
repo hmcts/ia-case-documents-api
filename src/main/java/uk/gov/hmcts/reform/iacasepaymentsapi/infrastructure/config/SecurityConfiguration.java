@@ -15,12 +15,12 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
@@ -32,7 +32,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.SpringAutho
 @ConfigurationProperties(prefix = "security")
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration  {
 
     private final List<String> anonymousPaths = new ArrayList<>();
     private final Map<String, List<Event>> roleEventAccess = new HashMap<>();
@@ -51,20 +51,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.serviceAuthFilter = serviceAuthFilter;
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-
-        web.ignoring().mvcMatchers(
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().mvcMatchers(
             anonymousPaths
-                .stream().toArray(String[]::new)
+                .stream()
+                .toArray(String[]::new)
         );
     }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(idamAuthoritiesConverter);
+
 
         http
             .addFilterBefore(serviceAuthFilter, AbstractPreAuthenticatedProcessingFilter.class)
@@ -83,7 +84,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .and()
             .oauth2Client();
+
+        return http.build();
     }
+
 
     @Bean
     public AuthorizedRolesProvider authorizedRolesProvider() {

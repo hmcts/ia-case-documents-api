@@ -20,7 +20,7 @@ class SwaggerPublisher extends SpringBootIntegrationTest {
     @Test
     @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void generateDocs() throws Exception {
-        byte[] specs = mockMvc.perform(get("/v2/api-docs?group=ia-case-payments-api"))
+        byte[] specs = mockMvc.perform(get("/v3/api-docs?group=ia-case-payments-api"))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()

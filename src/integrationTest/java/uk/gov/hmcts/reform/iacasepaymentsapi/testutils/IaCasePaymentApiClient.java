@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.ServiceTokenGeneratorConfiguration.SERVICE_AUTHORIZATION;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import groovy.util.logging.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,6 +29,8 @@ public class IaCasePaymentApiClient {
         this.aboutToSubmitUrl = "/asylum/ccdAboutToSubmit";
         this.aboutToStartUrl = "/asylum/ccdAboutToStart";
         this.ccdSubmittedUrl = "/asylum/ccdSubmitted";
+
+        objectMapper.registerModule(new JavaTimeModule());
 
         httpHeaders.add(AUTHORIZATION, "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiMWVyMFdSd2dJT1RBRm9q"
                                        + "RTRyQy9mYmVLdTNJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJpYS5sZWdhbHJlcC5hLmNjZE"
@@ -95,6 +98,7 @@ public class IaCasePaymentApiClient {
     }
 
     private String toJson(Object o) {
+        objectMapper.registerModule(new JavaTimeModule());
         return translateException(() -> objectMapper.writeValueAsString(o));
     }
 

@@ -10,6 +10,10 @@ public enum AsylumCaseDefinition {
         "appealReferenceNumber", new TypeReference<String>(){}),
     APPELLANT_FAMILY_NAME(
         "appellantFamilyName", new TypeReference<String>(){}),
+    APPELLANT_GIVEN_NAMES(
+        "appellantGivenNames", new TypeReference<String>(){}),
+    APPELLANT_NAME_FOR_DISPLAY(
+        "appellantNameForDisplay", new TypeReference<String>(){}),
     LEGAL_REP_REFERENCE_NUMBER(
         "legalRepReferenceNumber", new TypeReference<String>(){}),
     FEE_WITH_HEARING(
@@ -69,7 +73,14 @@ public enum AsylumCaseDefinition {
     JOURNEY_TYPE(
         "journeyType", new TypeReference<JourneyType>(){}),
     REMISSION_TYPE(
-        "remissionType", new TypeReference<RemissionType>(){});
+        "remissionType", new TypeReference<RemissionType>(){}),
+    HAS_SERVICE_REQUEST_ALREADY(
+        "hasServiceRequestAlready", new TypeReference<YesOrNo>(){}),
+    IS_SERVICE_REQUEST_TAB_VISIBLE_CONSIDERING_REMISSIONS(
+        "isServiceRequestTabVisibleConsideringRemissions", new TypeReference<YesOrNo>(){}),
+    REQUEST_FEE_REMISSION_FLAG_FOR_SERVICE_REQUEST(
+        "requestFeeRemissionFlagForServiceRequest", new TypeReference<YesOrNo>(){}),
+    ;
 
     private final String value;
     private final TypeReference typeReference;

@@ -13,6 +13,7 @@ public enum Event {
     PAY_FOR_APPEAL("payForAppeal"),
     RECORD_REMISSION_DECISION("recordRemissionDecision"),
     UPDATE_PAYMENT_STATUS("updatePaymentStatus"),
+    GENERATE_SERVICE_REQUEST("generateServiceRequest"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

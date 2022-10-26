@@ -2,7 +2,10 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_PBA_ACCOUNTS;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_SERVICE_REQUEST_ALREADY;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.IS_SERVICE_REQUEST_TAB_VISIBLE_CONSIDERING_REMISSIONS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.JourneyType;
@@ -34,6 +38,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.RefDataService;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.ServiceRequestService;
 
 @Slf4j
 @Component
@@ -41,13 +46,16 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
 
     private final RefDataService refDataService;
     private final FeeService feeService;
+    private final ServiceRequestService serviceRequestService;
 
     public PaymentAppealPreparer(
         RefDataService refDataService,
-        FeeService feeService
+        FeeService feeService,
+        ServiceRequestService serviceRequestService
     ) {
         this.feeService = feeService;
         this.refDataService = refDataService;
+        this.serviceRequestService = serviceRequestService;
     }
 
     @Override
@@ -60,18 +68,30 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
         requireNonNull(callback, "callback must not be null");
 
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
-        final boolean isLegalRepJourney = asylumCase.read(JOURNEY_TYPE, JourneyType.class)
-            .map(journey -> journey == JourneyType.REP)
-            .orElse(true);
 
-        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_START
+        return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_START
                && Arrays.asList(
                    Event.PAYMENT_APPEAL,
                    Event.PAY_AND_SUBMIT_APPEAL,
                    Event.PAY_FOR_APPEAL,
                    Event.RECORD_REMISSION_DECISION
                 ).contains(callback.getEvent())
-               && isLegalRepJourney;
+               && isLegalRepJourney(asylumCase))
+               || isWaysToPay(callbackStage, callback, isLegalRepJourney(asylumCase));
+    }
+
+    private boolean isWaysToPay(PreSubmitCallbackStage callbackStage,
+                                Callback<AsylumCase> callback,
+                                boolean isLegalRepJourney) {
+
+        List<Event> waysToPayEvents = List.of(Event.SUBMIT_APPEAL,
+                                              Event.GENERATE_SERVICE_REQUEST,
+                                              Event.RECORD_REMISSION_DECISION);
+
+        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+               && waysToPayEvents.contains(callback.getEvent())
+               && isLegalRepJourney
+               && isHuOrEaOrPa(callback.getCaseDetails().getCaseData());
     }
 
     @Override
@@ -92,13 +112,7 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
         PreSubmitCallbackResponse<AsylumCase> response =
             new PreSubmitCallbackResponse<>(callback.getCaseDetails().getCaseData());
 
-        Optional<RemissionType> optRemissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class);
-        Optional<RemissionDecision> optionalRemissionDecision =
-            asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
-        if ((optRemissionType.isPresent() && optRemissionType.get() == RemissionType.NO_REMISSION)
-            || optRemissionType.isEmpty()
-            || (optionalRemissionDecision.isPresent() && optionalRemissionDecision.get() == RemissionDecision.REJECTED)
-        ) {
+        if (hasNoRemission(asylumCase)) {
 
             try {
 
@@ -133,9 +147,51 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
             response.addErrors(Collections.singleton("Cannot retrieve the fee from fees-register."));
             return response;
         }
+
         asylumCase.write(PAYMENT_STATUS, PAYMENT_PENDING);
+
+        YesOrNo hasServiceRequestAlready = asylumCase.read(HAS_SERVICE_REQUEST_ALREADY, YesOrNo.class)
+            .orElse(YesOrNo.NO);
+
+        if (isWaysToPay(callbackStage, callback, isLegalRepJourney(asylumCase))
+            && hasServiceRequestAlready != YesOrNo.YES
+            && hasNoRemission(asylumCase)) {
+
+            asylumCase.write(HAS_SERVICE_REQUEST_ALREADY, YesOrNo.YES);
+
+            if (hasNoRemission(asylumCase)) {
+                asylumCase.write(IS_SERVICE_REQUEST_TAB_VISIBLE_CONSIDERING_REMISSIONS, YesOrNo.YES);
+            }
+        }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
+    private boolean isLegalRepJourney(AsylumCase asylumCase) {
+        return asylumCase.read(JOURNEY_TYPE, JourneyType.class)
+            .map(journey -> journey == JourneyType.REP)
+            .orElse(true);
+    }
+
+    private boolean isHuOrEaOrPa(AsylumCase asylumCase) {
+        Optional<AppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AppealType.class);
+        if (optionalAppealType.isPresent()) {
+            AppealType appealType = optionalAppealType.get();
+            return appealType.equals(AppealType.EA)
+                || appealType.equals(AppealType.HU)
+                || appealType.equals(AppealType.PA);
+        }
+        return false;
+    }
+
+    private boolean hasNoRemission(AsylumCase asylumCase) {
+        Optional<RemissionType> optRemissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class);
+        Optional<RemissionDecision> optionalRemissionDecision =
+            asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
+
+        return (optRemissionType.isPresent() && optRemissionType.get() == RemissionType.NO_REMISSION)
+               || optRemissionType.isEmpty()
+               || (optionalRemissionDecision.isPresent()
+                   && optionalRemissionDecision.get() == RemissionDecision.REJECTED);
+    }
 }
