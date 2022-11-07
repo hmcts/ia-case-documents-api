@@ -43,6 +43,7 @@ public class AppointmentRequirementsFieldMapper {
             interpreterLanguage
                 .orElse(Collections.emptyList())
                 .stream()
+                .filter(languageIdValue -> languageIdValue.getValue().getLanguageDialect() != null)
                 .map(languageIdValue -> ImmutableMap.of("languageDialect", languageIdValue.getValue().getLanguageDialect()))
                 .collect(Collectors.toList())
         );
