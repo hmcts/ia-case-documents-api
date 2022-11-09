@@ -1,0 +1,32 @@
+{
+  "description": "RIA-5965 send NoC notification to appellant SMS",
+  "request": {
+    "uri": "/bail/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 5965,
+      "eventId": "nocRequestBail",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+          "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
+          "applicantHasMobile": "Yes",
+          "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_BAIL_NOC_CHANGED_LR_APPLICANT_SMS])",
+      "body": "contains([_BAIL_NOC_CHANGED_LR_ADMIN])",
+      "body": "contains([_BAIL_NOC_CHANGED_LR_LEGAL_REPRESENTATIVE])",
+      "body": "contains([_BAIL_NOC_CHANGED_LR_HOME_OFFICE])"
+    }
+  }
+}

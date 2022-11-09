@@ -851,6 +851,19 @@ govnotify:
         email: 84d48a3f-afd6-4759-9219-22cb37bebabb
       editApplicationAfterSubmitWithoutLr:
         email: 160386c8-7fc5-4359-8d3d-f99765af00d5
+      stopLegalRepresenting:
+        sms: 14f55cf1-5442-466c-a1fc-bb4a268bc6d8
+        legalRep: 402192e3-d493-435a-b00c-c016deaee2ea
+        homeOffice: cff0fb03-2808-4625-90d6-a9285d2e875e
+        adminOfficer: 4d3db07e-4000-41f8-9a3d-79b4a785cc12
+      nocChangedLRForLR:
+        email: 803cc8e0-1b98-4154-9d91-b1f56cbe85d7
+      nocChangedLRForHO:
+        email: a7d6c3bc-2108-4fba-995c-bb8a407ae58f
+      nocChangedLRForAdmin:
+        email: 8a745ed0-63f0-4a35-8cf0-f2ed4f962daf
+      nocChangedLRForApplicant:
+        sms: 8141263c-c1f1-4f86-a164-ab48df561dbe
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -881,6 +894,7 @@ security:
   roleEventAccess:
     caseworker-caa:
       - "nocRequest"
+      - "nocRequestBail"
     caseworker-approver:
       - "removeRepresentation"
       - "removeLegalRepresentative"
@@ -920,6 +934,8 @@ security:
       - "submitApplication"
       - "uploadDocuments"
       - "makeNewApplication"
+      - "stopLegalRepresenting"
+      - "nocRequestBail"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"

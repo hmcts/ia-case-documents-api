@@ -6,10 +6,14 @@ import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.adminofficer.email.AdminOfficerBailNocChangedLrPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.adminofficer.email.AdminOfficerBailStopLegalRepresentingPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.adminofficer.email.AdminOfficerBailSummaryUploadedPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms.ApplicantBailApplicationEndedPersonalisationSms;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms.ApplicantBailApplicationSubmittedPersonalisationSms;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms.ApplicantBailNocChangedLrPersonalisationSms;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms.ApplicantBailSignedDecisionNoticeUploadedPersonalisationSms;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms.ApplicantBailStopLegalRepresentingPersonalisationSms;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.hearingcentre.email.HearingCentreSubmitApplicationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.homeoffice.email.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email.*;
@@ -330,6 +334,56 @@ public class BailNotificationGeneratorConfiguration {
         return List.of(
             new BailEmailNotificationGenerator(
                 newArrayList(homeOfficeBailApplicationEditAfterSubmitPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("stopLegalRepresentingNotificationGenerator")
+    public List<BailNotificationGenerator> stopLegalRepresentingNotificationGenerator(
+            AdminOfficerBailStopLegalRepresentingPersonalisation adminOfficerBailStopLegalRepresentingPersonalisation,
+            LegalRepresentativeBailStopLegalRepresentingPersonalisation legalRepresentativeBailStopLegalRepresentingPersonalisation,
+            HomeOfficeBailStopLegalRepresentingPersonalisation homeOfficeBailStopLegalRepresentingPersonalisation,
+            ApplicantBailStopLegalRepresentingPersonalisationSms applicantBailStopLegalRepresentingPersonalisationSms,
+            BailGovNotifyNotificationSender notificationSender,
+            BailNotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+                new BailEmailNotificationGenerator(
+                        newArrayList(adminOfficerBailStopLegalRepresentingPersonalisation,
+                                legalRepresentativeBailStopLegalRepresentingPersonalisation,
+                                homeOfficeBailStopLegalRepresentingPersonalisation),
+                        notificationSender,
+                        notificationIdAppender
+                ),
+                new BailSmsNotificationGenerator(
+                        newArrayList(applicantBailStopLegalRepresentingPersonalisationSms),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
+    @Bean("nocChangedLegalRepNotificationGenerator")
+    public List<BailNotificationGenerator> nocChangedLegalRepNotificationGenerator(
+        LegalRepresentativeBailNocChangedLrPersonalisation legalRepresentativeBailNocChangedLrPersonalisation,
+        AdminOfficerBailNocChangedLrPersonalisation adminOfficerBailNocChangedLrPersonalisation,
+        HomeOfficeBailNocChangedLrPersonalisation homeOfficeBailNocChangedLrPersonalisation,
+        ApplicantBailNocChangedLrPersonalisationSms applicantBailNocChangedLrPersonalisationSms,
+        BailGovNotifyNotificationSender notificationSender,
+        BailNotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new BailEmailNotificationGenerator(
+                newArrayList(legalRepresentativeBailNocChangedLrPersonalisation,
+                    adminOfficerBailNocChangedLrPersonalisation,
+                    homeOfficeBailNocChangedLrPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new BailSmsNotificationGenerator(
+                newArrayList(applicantBailNocChangedLrPersonalisationSms),
                 notificationSender,
                 notificationIdAppender
             )

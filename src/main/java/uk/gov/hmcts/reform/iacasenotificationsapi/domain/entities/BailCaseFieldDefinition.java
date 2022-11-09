@@ -217,6 +217,8 @@ public enum BailCaseFieldDefinition {
         "legalRepPhone", new TypeReference<String>(){}),
     LEGAL_REP_REFERENCE(
         "legalRepReference", new TypeReference<String>(){}),
+    LEGAL_REP_COMPANY_ADDRESS(
+        "legalRepCompanyAddress", new TypeReference<AddressUk>(){}),
     GROUNDS_FOR_BAIL_REASONS(
         "groundsForBailReasons", new TypeReference<String>(){}),
     GROUNDS_FOR_BAIL_PROVIDE_EVIDENCE_OPTION(
