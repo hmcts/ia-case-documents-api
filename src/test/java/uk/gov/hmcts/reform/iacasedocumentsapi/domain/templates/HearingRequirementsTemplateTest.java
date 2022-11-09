@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -531,6 +532,142 @@ class HearingRequirementsTemplateTest {
         assertEquals(YesOrNo.NO, templateFieldValues.get("datesToAvoid"));
         assertEquals(0, ((List) templateFieldValues.get("dateToAvoid")).size());
         assertEquals(0, ((List) templateFieldValues.get("dateToAvoidReason")).size());
+    }
+
+    @Test
+    void should_filter_out_invalid_interpreter_language_and_map_correctly() {
+
+        interpreterLanguage =
+            Arrays.asList(
+                new IdValue<>("111", new InterpreterLanguage(null, null)),
+                new IdValue<>("111", interpreter2)
+            );
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(IS_APPELLANT_ATTENDING_THE_HEARING, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_APPELLANT_GIVING_ORAL_EVIDENCE, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_WITNESSES_ATTENDING, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(WITNESS_DETAILS)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
+        when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+        when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(PAST_EXPERIENCES, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(PAST_EXPERIENCES_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_OUT_OF_COUNTRY_ENABLED, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMOTE_VIDEO_CALL_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(MULTIMEDIA_EVIDENCE_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SINGLE_SEX_COURT, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE, MaleOrFemale.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SINGLE_SEX_COURT_TYPE_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IN_CAMERA_COURT, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IN_CAMERA_COURT_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(ADDITIONAL_REQUESTS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(ADDITIONAL_REQUESTS_DESCRIPTION, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DATES_TO_AVOID_YES_NO, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DATES_TO_AVOID)).thenReturn(Optional.empty());
+
+        Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(37, templateFieldValues.size());
+
+        assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals("", templateFieldValues.get("appealReferenceNumber"));
+        assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
+        assertEquals("", templateFieldValues.get("appellantGivenNames"));
+        assertEquals("", templateFieldValues.get("appellantFamilyName"));
+        assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("appealOutOfCountry"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkOoc"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isAppellantAttendingTheHearing"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isAppellantGivingOralEvidence"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isWitnessesAttending"));
+        assertEquals(0, ((List) templateFieldValues.get("witnessDetails")).size());
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isWitnessesAttending"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("isInterpreterServicesNeeded"));
+        assertEquals(1, ((List) templateFieldValues.get("language")).size());
+        assertEquals(1, ((List) templateFieldValues.get("languageDialect")).size());
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isHearingRoomNeeded"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isHearingLoopNeeded"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("physicalOrMentalHealthIssues"));
+        assertEquals("", templateFieldValues.get("physicalOrMentalHealthIssuesDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("pastExperiences"));
+        assertEquals("", templateFieldValues.get("pastExperiencesDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isOutOfCountryEnabled"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("remoteVideoCall"));
+        assertEquals("", templateFieldValues.get("remoteVideoCallDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("multimediaEvidence"));
+        assertEquals("", templateFieldValues.get("multimediaEvidenceDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("singleSexCourt"));
+        assertEquals(MaleOrFemale.NONE, templateFieldValues.get("singleSexCourtType"));
+        assertEquals("", templateFieldValues.get("singleSexCourtTypeDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("inCameraCourt"));
+        assertEquals("", templateFieldValues.get("inCameraCourtDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("additionalRequests"));
+        assertEquals("", templateFieldValues.get("additionalRequestsDescription"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("datesToAvoid"));
+        assertEquals(0, ((List) templateFieldValues.get("dateToAvoid")).size());
+        assertEquals(0, ((List) templateFieldValues.get("dateToAvoidReason")).size());
+    }
+
+    @Test
+    void should_throw_when_interpreter_services_needed_yes_and_interpreter_language_missing() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
+        when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> hearingRequirementsTemplate.mapFieldValues(caseDetails))
+            .hasMessage("Interpreter language is required for requested interpreter services")
+            .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void should_throw_when_interpreter_services_needed_yes_and_interpreter_language_list_empty() {
+
+        interpreterLanguage =
+            Arrays.asList(
+                new IdValue<>("111", new InterpreterLanguage(null, null))
+            );
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+
+        when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
+        when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        assertThatThrownBy(() -> hearingRequirementsTemplate.mapFieldValues(caseDetails))
+            .hasMessage("Interpreter language is required for requested interpreter services")
+            .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test

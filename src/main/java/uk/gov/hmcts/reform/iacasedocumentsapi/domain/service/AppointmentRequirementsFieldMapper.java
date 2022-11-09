@@ -27,26 +27,36 @@ public class AppointmentRequirementsFieldMapper {
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("isInterpreterServicesNeeded", asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class).orElse(YesOrNo.NO));
 
-        Optional<List<IdValue<InterpreterLanguage>>> interpreterLanguage = asylumCase.read(INTERPRETER_LANGUAGE);
-        fieldValues.put(
-            "language",
-            interpreterLanguage
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(language -> ImmutableMap.of("language", language.getValue().getLanguage()))
-                .collect(Collectors.toList())
-        );
-        fieldValues.put(
-            "languageDialect",
-            interpreterLanguage
-                .orElse(Collections.emptyList())
-                .stream()
-                .filter(languageIdValue -> languageIdValue.getValue().getLanguageDialect() != null)
-                .map(languageIdValue -> ImmutableMap.of("languageDialect", languageIdValue.getValue().getLanguageDialect()))
-                .collect(Collectors.toList())
-        );
+        YesOrNo interpreterServicesNeeded = asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class).orElse(YesOrNo.NO);
+        fieldValues.put("isInterpreterServicesNeeded", interpreterServicesNeeded);
+
+        Optional<List<IdValue<InterpreterLanguage>>> interpreterLanguagesOptional = asylumCase.read(INTERPRETER_LANGUAGE);
+        List<Map<String, String>> interpreterLanguages = interpreterLanguagesOptional
+            .orElse(Collections.emptyList())
+            .stream()
+            .filter(languageIdValue -> languageIdValue.getValue().getLanguage() != null)
+            .map(languageIdValue -> ImmutableMap.of("language", languageIdValue.getValue().getLanguage()))
+            .collect(Collectors.toList());
+
+        if (interpreterServicesNeeded.equals(YesOrNo.YES) && interpreterLanguages.isEmpty()) {
+            throw new IllegalStateException("Interpreter language is required for requested interpreter services");
+        }
+        if (interpreterServicesNeeded.equals(YesOrNo.NO)) {
+            fieldValues.put("language", Collections.emptyList());
+            fieldValues.put("languageDialect", Collections.emptyList());
+        } else {
+            fieldValues.put("language", interpreterLanguages);
+            fieldValues.put(
+                "languageDialect",
+                interpreterLanguagesOptional
+                    .orElse(Collections.emptyList())
+                    .stream()
+                    .filter(languageIdValue -> languageIdValue.getValue().getLanguageDialect() != null)
+                    .map(languageIdValue -> ImmutableMap.of("languageDialect", languageIdValue.getValue().getLanguageDialect()))
+                    .collect(Collectors.toList())
+            );
+        }
 
         fieldValues.put("isHearingRoomNeeded", asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put("isHearingLoopNeeded", asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class).orElse(YesOrNo.NO));
