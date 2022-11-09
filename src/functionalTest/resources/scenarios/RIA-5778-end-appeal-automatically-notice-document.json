@@ -2,7 +2,7 @@
   "description": "RIA-5778 end appeal automatically notice document PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "System",
+    "credentials": "SystemUser",
     "input": {
       "eventId": "endAppealAutomatically",
       "state": "*",
