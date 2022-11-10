@@ -68,8 +68,7 @@ public class BailDecisionUnsignedRefusalCreator implements PreSubmitCallbackHand
 
         bailDocumentHandler.addWithMetadata(
             bailCase,
-            bailDocument,
-            TRIBUNAL_DOCUMENTS_WITH_METADATA,
+            bailDocument,            
             UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA,
             DocumentTag.BAIL_DECISION_UNSIGNED
         );
