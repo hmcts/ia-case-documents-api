@@ -269,8 +269,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
       - "recordTheDecision"
-      - "endApplication"
-    caseworker-ia-respondentofficer:
+      - "endApplication"    
       - "uploadSignedDecisionNotice"
     caseworker-ia-homeofficebail:
       - "submitApplication"
