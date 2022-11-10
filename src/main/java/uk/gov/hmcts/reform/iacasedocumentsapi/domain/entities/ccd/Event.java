@@ -44,6 +44,7 @@ public enum Event {
     END_APPLICATION("endApplication", CaseType.BAIL),
     MAKE_NEW_APPLICATION("makeNewApplication", CaseType.BAIL),
     EDIT_BAIL_APPLICATION_AFTER_SUBMIT("editBailApplicationAfterSubmit", CaseType.BAIL),
+    UPLOAD_SIGNED_DECISION_NOTICE("uploadSignedDecisionNotice", CaseType.BAIL),
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);
 

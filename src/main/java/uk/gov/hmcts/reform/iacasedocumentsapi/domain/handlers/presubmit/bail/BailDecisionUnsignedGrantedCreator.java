@@ -68,6 +68,7 @@ public class BailDecisionUnsignedGrantedCreator implements PreSubmitCallbackHand
             bailCase,
             bailDocument,
             TRIBUNAL_DOCUMENTS_WITH_METADATA,
+            UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA,
             DocumentTag.BAIL_DECISION_UNSIGNED
         );
 
