@@ -23,6 +23,7 @@ public enum DocumentTag {
     FINAL_DECISION_AND_REASONS_PDF("finalDecisionAndReasonsPdf", CaseType.ASYLUM),
     APPEAL_SKELETON_BUNDLE("submitCaseBundle", CaseType.ASYLUM),
     END_APPEAL("endAppeal", CaseType.ASYLUM),
+    END_APPEAL_AUTOMATICALLY("endAppealAutomatically", CaseType.ASYLUM),
     CMA_REQUIREMENTS("cmaRequirements", CaseType.ASYLUM),
     CMA_NOTICE("cmaNotice", CaseType.ASYLUM),
     HO_DECISION_LETTER("homeOfficeDecisionLetter", CaseType.ASYLUM),

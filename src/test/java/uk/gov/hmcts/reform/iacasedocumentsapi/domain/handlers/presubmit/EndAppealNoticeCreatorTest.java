@@ -61,6 +61,9 @@ public class EndAppealNoticeCreatorTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.END_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        JourneyType journeyType = JourneyType.REP;
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
+            .thenReturn(Optional.of(journeyType));
 
         when(endAppealNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 

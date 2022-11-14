@@ -64,11 +64,14 @@
             ]]>
         </notes>
         <cve>CVE-2022-25857</cve>
-    </suppress>
+    </suppress>    
     <suppress>
         <notes><![CDATA[file name: snakeyaml-1.26.jar]]></notes>        
         <cve>CVE-2022-38749</cve>
         <cve>CVE-2022-38750</cve>
         <cve>CVE-2022-38751</cve>
+        <cve>CVE-2022-38752</cve>
+        <cve>CVE-2022-42003</cve>
+        <cve>CVE-2022-42004</cve>
     </suppress>
 </suppressions>
