@@ -192,7 +192,7 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(makeAnApplication.getType()).thenReturn("");
         when(makeAnApplication.getDecisionMaker()).thenReturn("");
-        when(makeAnApplication.getDecision()).thenReturn("");
+        when(makeAnApplication.getDecision()).thenReturn("Refused");
 
         Map<String, String> personalisation =
             appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
@@ -203,14 +203,14 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
         assertEquals("", personalisation.get("Given names"));
         assertEquals("", personalisation.get("Family name"));
         assertEquals("", personalisation.get("applicationType"));
-        assertEquals("", personalisation.get("decision"));
+        assertEquals("", personalisation.get("decision maker role"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
 
         verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
     }
 
     @Test
-    public void should_return_personalisation_when_all_information_given_and_decision_granted() {
+   public void should_return_personalisation_when_all_information_given_and_decision_granted() {
         String decision = "Granted";
         when(makeAnApplication.getDecision()).thenReturn(decision);
 

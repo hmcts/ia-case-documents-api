@@ -11,6 +11,9 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.PinInPostDetails;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
@@ -18,20 +21,26 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 @Service
 public class CaseOfficerRemoveRepresentationPersonalisation implements EmailNotificationPersonalisation {
 
-    private final String removeRepresentationCaseOfficerBeforeListingTemplateId;
-    private final String removeRepresentationCaseOfficerAfterListingTemplateId;
+    private final String iaAipFrontendUrl;
+    private final String iaAipPathToSelfRepresentation;
+    private final String beforeListingTemplateId;
+    private final String afterListingTemplateId;
     private final String iaExUiFrontendUrl;
     private final AppealService appealService;
     private final EmailAddressFinder emailAddressFinder;
 
     public CaseOfficerRemoveRepresentationPersonalisation(
-            @NotNull(message = "removeRepresentationCaseOfficerBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.beforeListing.email}") String removeRepresentationCaseOfficerBeforeListingTemplateId,
-            @NotNull(message = "removeRepresentationCaseOfficerAfterListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.afterListing.email}") String removeRepresentationCaseOfficerAfterListingTemplateId,
-            @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-            AppealService appealService,
-            EmailAddressFinder emailAddressFinder) {
-        this.removeRepresentationCaseOfficerBeforeListingTemplateId = removeRepresentationCaseOfficerBeforeListingTemplateId;
-        this.removeRepresentationCaseOfficerAfterListingTemplateId = removeRepresentationCaseOfficerAfterListingTemplateId;
+        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${iaAipPathToSelfRepresentation}") String iaAipPathToSelfRepresentation,
+        @NotNull(message = "removeRepresentationCaseOfficerBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.beforeListing.email}") String beforeListingTemplateId,
+        @NotNull(message = "removeRepresentationCaseOfficerBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.caseOfficer.afterListing.email}") String afterListingTemplateId,
+        @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+        AppealService appealService,
+        EmailAddressFinder emailAddressFinder) {
+        this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.iaAipPathToSelfRepresentation = iaAipPathToSelfRepresentation;
+        this.beforeListingTemplateId = beforeListingTemplateId;
+        this.afterListingTemplateId = afterListingTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.appealService = appealService;
         this.emailAddressFinder = emailAddressFinder;
@@ -40,8 +49,8 @@ public class CaseOfficerRemoveRepresentationPersonalisation implements EmailNoti
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
         return appealService.isAppealListed(asylumCase)
-            ? removeRepresentationCaseOfficerAfterListingTemplateId
-            : removeRepresentationCaseOfficerBeforeListingTemplateId;
+            ? afterListingTemplateId
+            : beforeListingTemplateId;
     }
 
     @Override
@@ -55,17 +64,36 @@ public class CaseOfficerRemoveRepresentationPersonalisation implements EmailNoti
     }
 
     @Override
-    public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
+    public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
+        requireNonNull(callback, "callback must not be null");
+
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        return
-            ImmutableMap
-                .<String, String>builder()
-                .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
-                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("linkToOnlineService", iaExUiFrontendUrl)
-                .build();
+        String linkToPiPStartPage = iaAipFrontendUrl + iaAipPathToSelfRepresentation;
+
+        ImmutableMap.Builder<String, String> personalizationBuilder = ImmutableMap
+            .<String, String>builder()
+            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("ccdCaseId", String.valueOf(callback.getCaseDetails().getId()))
+            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("linkToPiPStartPage", linkToPiPStartPage);
+
+        if (appealService.isAppealListed(asylumCase)) {
+            personalizationBuilder.put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
+        }
+
+        PinInPostDetails pip = asylumCase.read(AsylumCaseDefinition.APPELLANT_PIN_IN_POST, PinInPostDetails.class).orElse(null);
+        if (pip != null) {
+            personalizationBuilder.put("securityCode", pip.getAccessCode());
+            personalizationBuilder.put("validDate", defaultDateFormat((pip.getExpiryDate())));
+        } else {
+            personalizationBuilder.put("securityCode", "");
+            personalizationBuilder.put("validDate", "");
+        }
+
+        return personalizationBuilder.build();
     }
 }

@@ -11,7 +11,21 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "hearingCentre": "manchester",
-          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted"
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "X1X 0XX",
+            "PostTown": "LONDON",
+            "AddressLine1": "60 XXY STREET",
+            "AddressLine2": ""
+          },
+          "appellantPinInPost": {
+            "accessCode": "AI123BX",
+            "expiryDate": "01/01/2022",
+            "pinUsed": "No"
+          }
         }
       }
     }

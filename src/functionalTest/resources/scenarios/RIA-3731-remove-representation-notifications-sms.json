@@ -24,6 +24,11 @@
             "OrganisationToRemove": {
               "OrganisationID": null
             }
+          },
+          "appellantPinInPost": {
+            "accessCode": "AI123BX",
+            "expiryDate": "01/01/2022",
+            "pinUsed": "No"
           }
         }
       }

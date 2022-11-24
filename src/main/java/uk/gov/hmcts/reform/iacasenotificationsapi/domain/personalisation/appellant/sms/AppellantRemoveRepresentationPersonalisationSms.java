@@ -11,22 +11,28 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.PinInPostDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
-
 @Service
 public class AppellantRemoveRepresentationPersonalisationSms implements SmsNotificationPersonalisation {
 
+    private final String iaAipFrontendUrl;
+    private final String iaAipPathToSelfRepresentation;
     private final String removeRepresentationAppellantSmsTemplateId;
     private final CustomerServicesProvider customerServicesProvider;
 
 
     public AppellantRemoveRepresentationPersonalisationSms(
+        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${iaAipPathToSelfRepresentation}") String iaAipPathToSelfRepresentation,
         @Value("${govnotify.template.removeRepresentation.appellant.sms}") String removeRepresentationAppellantSmsTemplateId,
         CustomerServicesProvider customerServicesProvider
     ) {
+        this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.iaAipPathToSelfRepresentation = iaAipPathToSelfRepresentation;
         this.removeRepresentationAppellantSmsTemplateId = removeRepresentationAppellantSmsTemplateId;
         this.customerServicesProvider = customerServicesProvider;
     }
@@ -55,15 +61,27 @@ public class AppellantRemoveRepresentationPersonalisationSms implements SmsNotif
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        return
-            ImmutableMap
-                .<String, String>builder()
-                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-                .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("appellantDateOfBirth", asylumCase.read(AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH, String.class).orElse(""))
-                .put("ccdCaseId", String.valueOf(callback.getCaseDetails().getId()))
-                .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-                .build();
+        String linkToPiPStartPage = iaAipFrontendUrl + iaAipPathToSelfRepresentation;
+
+        ImmutableMap.Builder<String, String> personalizationBuilder = ImmutableMap
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("appellantDateOfBirth", defaultDateFormat(asylumCase.read(AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH, String.class).orElse("")))
+            .put("ccdCaseId", String.valueOf(callback.getCaseDetails().getId()))
+            .put("legalRepReferenceNumber", asylumCase.read(AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("linkToPiPStartPage", linkToPiPStartPage);
+
+        PinInPostDetails pip = asylumCase.read(APPELLANT_PIN_IN_POST, PinInPostDetails.class).orElse(null);
+        if (pip != null) {
+            personalizationBuilder.put("securityCode", pip.getAccessCode());
+            personalizationBuilder.put("validDate", defaultDateFormat(pip.getExpiryDate()));
+        } else {
+            personalizationBuilder.put("securityCode", "");
+            personalizationBuilder.put("validDate", "");
+        }
+
+        return personalizationBuilder.build();
     }
 }

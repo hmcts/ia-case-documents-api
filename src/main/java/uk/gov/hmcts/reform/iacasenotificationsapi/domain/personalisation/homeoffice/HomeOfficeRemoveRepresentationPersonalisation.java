@@ -32,7 +32,7 @@ public class HomeOfficeRemoveRepresentationPersonalisation implements EmailNotif
 
     public HomeOfficeRemoveRepresentationPersonalisation(
         @NotNull(message = "removeRepresentationHomeOfficeBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.homeOffice.beforeListing.email}") String removeRepresentationHomeOfficeBeforeListingTemplateId,
-        @NotNull(message = "removeRepresentationHomeOfficeAfterListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.homeOffice.afterListing.email}") String removeRepresentationHomeOfficeAfterListingTemplateId,
+        @NotNull(message = "removeRepresentationHomeOfficeBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.homeOffice.afterListing.email}") String removeRepresentationHomeOfficeAfterListingTemplateId,
         @Value("${apcHomeOfficeEmailAddress}") String apcHomeOfficeEmailAddress,
         @Value("${lartHomeOfficeEmailAddress}") String lartHomeOfficeEmailAddress,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
@@ -106,19 +106,23 @@ public class HomeOfficeRemoveRepresentationPersonalisation implements EmailNotif
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        return ImmutableMap
+        ImmutableMap.Builder<String, String> personalizationBuilder = ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
             .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-            .put("ariaListingReference", asylumCase.read(AsylumCaseDefinition.ARIA_LISTING_REFERENCE, String.class).orElse(""))
             .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
             .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
             .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
             .put("linkToOnlineService", iaExUiFrontendUrl)
             .put("legalRepresentativeName", asylumCase.read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_NAME, String.class).orElse(""))
             .put("legalRepCompanyAddress", formatCompanyAddress(asylumCase))
-            .put("legalRepresentativeEmailAddress", asylumCase.read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""))
-            .build();
+            .put("legalRepresentativeEmailAddress", asylumCase.read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""));
+
+        if (appealService.isAppealListed(asylumCase)) {
+            personalizationBuilder.put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
+        }
+
+        return personalizationBuilder.build();
     }
 
     public String formatCompanyAddress(AsylumCase asylumCase) {

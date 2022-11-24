@@ -736,17 +736,17 @@ govnotify:
           email: 31ecd8c7-ee85-4b3b-9805-739d378da597
       caseOfficer:
         beforeListing:
-          email: 09a83871-901b-41ed-b3bd-2b72cee73236
+          email: abb94a28-62e3-4aea-9dba-9bdea1f6c9ec
         afterListing:
-          email: 76bad58b-a6ea-4311-ae33-f7e596cc793b
+          email: 00efcbda-7ea2-4853-9382-81458557cc0d
       homeOffice:
         beforeListing:
-          email: f924cae0-289a-42f4-bb2e-70164f9c924f
+          email: 30082d96-3b49-4955-8b93-871fc00756f2
         afterListing:
-          email: 2199e053-5ff7-46a2-9cf4-58864265d516
+          email: d8198bce-f8ba-4ffe-85f3-04986db249e0
       appellant:
-        email: cfb76737-b805-483f-81ec-9d1365eb3260
-        sms: ffef5cda-ec06-43e4-bd82-5d7fc266a000
+        email: bee313b9-dea4-43ce-967a-d012de51a54a
+        sms: 318452c5-230f-4471-aafa-847accf5f20b
     requestFeeRemission:
       legalRep:
         email: acb036e5-47a3-454f-a24b-4755bf7e258c
@@ -870,6 +870,7 @@ notificationSender.deduplicateSendsWithinSeconds: 60
 
 iaExUiFrontendUrl: ${IA_EXUI_FRONTEND_URL:https://manage-case.platform.hmcts.net/}
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
+iaAipPathToSelfRepresentation: "start-representing-yourself"
 iaAipFrontendPathToJudgeReview: ask-judge-review
 
 tsvStringsFileLocation: strings.tsv

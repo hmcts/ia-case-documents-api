@@ -2299,9 +2299,8 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("nocRequestDecisionNotificationGenerator")
-    public List<NotificationGenerator> nocRequestDecisionNotificationHandler(
-        LegalRepresentativeNocRequestDecisionPersonalisation legalRepresentativeNocRequestDecisionPersonalisation,
+    @Bean("nocRequestDecisionHomeOfficeNotificationGenerator")
+    public List<NotificationGenerator> nocRequestDecisionHomeOfficeNotificationGenerator(
         HomeOfficeNocRequestDecisionPersonalisation homeOfficeNocRequestDecisionPersonalisation,
         GovNotifyNotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender
@@ -2310,8 +2309,29 @@ public class NotificationGeneratorConfiguration {
         return Collections.singletonList(
             new EmailNotificationGenerator(
                 newArrayList(
-                    legalRepresentativeNocRequestDecisionPersonalisation,
                     homeOfficeNocRequestDecisionPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            ) {
+                @Override
+                public Message getSuccessMessage() {
+                    return new Message("success","body");
+                }
+            }
+        );
+    }
+
+    @Bean("nocRequestDecisionLrNotificationGenerator")
+    public List<NotificationGenerator> nocRequestDecisionLrNotificationGenerator(
+        LegalRepresentativeNocRequestDecisionPersonalisation legalRepresentativeNocRequestDecisionPersonalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeNocRequestDecisionPersonalisation
                 ),
                 notificationSender,
                 notificationIdAppender
@@ -2514,6 +2534,30 @@ public class NotificationGeneratorConfiguration {
                     return new Message("success","body");
                 }
             }
+        );
+    }
+
+    @Bean("aipNocRequestDecisionAppellantNotificationGenerator")
+    public List<NotificationGenerator> aipNocRequestDecisionAppellantNotificationHandler(
+        AipAppellantNocRequestDecisionPersonalisationEmail aipAppellantNocRequestDecisionPersonalisationEmail,
+        AipAppellantNocRequestDecisionPersonalisationSms aipAppellantNocRequestDecisionPersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    aipAppellantNocRequestDecisionPersonalisationEmail
+                ),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipAppellantNocRequestDecisionPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
         );
     }
 

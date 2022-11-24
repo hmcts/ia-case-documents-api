@@ -1,10 +1,10 @@
 {
-  "description": "RIA-3731-RIA-4467 Send remove representation notification to legal rep, case officer and home office and appellant (email)",
+  "description": "RIA-6043 Send remove representation notification to legal rep, case officer and home office and appellant (email and letter)",
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",
     "input": {
-      "id": 3731,
+      "id": 6043,
       "eventId": "removeRepresentation",
       "state": "appealSubmitted",
       "caseData": {
@@ -14,6 +14,20 @@
           "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "contactPreference": "wantsEmail",
           "email": "{$TEST_CITIZEN_USERNAME}",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "X1X 0XX",
+            "PostTown": "LONDON",
+            "AddressLine1": "60",
+            "AddressLine2": "XXY STREET"
+          },
+          "appellantPinInPost": {
+            "accessCode": "AI123BX",
+            "expiryDate": "01/01/2022",
+            "pinUsed": "No"
+          },
           "changeOrganisationRequestField": {
             "CaseRoleId": null,
             "ApprovalStatus": null,
@@ -24,11 +38,6 @@
             "OrganisationToRemove": {
               "OrganisationID": null
             }
-          },
-          "appellantPinInPost": {
-            "accessCode": "AI123BX",
-            "expiryDate": "01/01/2022",
-            "pinUsed": "No"
           }
         }
       }

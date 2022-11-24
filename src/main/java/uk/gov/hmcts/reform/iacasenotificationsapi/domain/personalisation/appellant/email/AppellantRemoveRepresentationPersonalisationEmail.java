@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.PinInPostDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -18,13 +18,19 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerService
 @Service
 public class AppellantRemoveRepresentationPersonalisationEmail implements EmailNotificationPersonalisation {
 
+    private final String iaAipFrontendUrl;
+    private final String iaAipPathToSelfRepresentation;
     private final String removeRepresentationAppellantEmailTemplateId;
     private final CustomerServicesProvider customerServicesProvider;
 
     public AppellantRemoveRepresentationPersonalisationEmail(
+        @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
+        @Value("${iaAipPathToSelfRepresentation}") String iaAipPathToSelfRepresentation,
         @Value("${govnotify.template.removeRepresentation.appellant.email}") String removeRepresentationAppellantEmailTemplateId,
         CustomerServicesProvider customerServicesProvider
     ) {
+        this.iaAipFrontendUrl = iaAipFrontendUrl;
+        this.iaAipPathToSelfRepresentation = iaAipPathToSelfRepresentation;
         this.removeRepresentationAppellantEmailTemplateId = removeRepresentationAppellantEmailTemplateId;
         this.customerServicesProvider = customerServicesProvider;
     }
@@ -37,7 +43,7 @@ public class AppellantRemoveRepresentationPersonalisationEmail implements EmailN
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
         return Collections.singleton(asylumCase
-            .read(EMAIL, String.class)
+            .read(AsylumCaseDefinition.EMAIL, String.class)
             .orElseThrow(() -> new IllegalStateException("appellantEmailAddress is not present")));
     }
 
@@ -53,15 +59,27 @@ public class AppellantRemoveRepresentationPersonalisationEmail implements EmailN
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         requireNonNull(asylumCase, "asylumCase must not be null");
 
-        return
-            ImmutableMap
-                .<String, String>builder()
-                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-                .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("appellantDateOfBirth", asylumCase.read(AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH, String.class).orElse(""))
-                .put("ccdCaseId", String.valueOf(callback.getCaseDetails().getId()))
-                .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
-                .build();
+        String linkToPiPStartPage = iaAipFrontendUrl + iaAipPathToSelfRepresentation;
+
+        ImmutableMap.Builder<String, String> personalizationBuilder = ImmutableMap
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("appellantDateOfBirth", defaultDateFormat(asylumCase.read(AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH, String.class).orElse("")))
+            .put("ccdCaseId", String.valueOf(callback.getCaseDetails().getId()))
+            .put("legalRepReferenceNumber", asylumCase.read(AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("linkToPiPStartPage", linkToPiPStartPage);
+
+        PinInPostDetails pip = asylumCase.read(AsylumCaseDefinition.APPELLANT_PIN_IN_POST, PinInPostDetails.class).orElse(null);
+        if (pip != null) {
+            personalizationBuilder.put("securityCode", pip.getAccessCode());
+            personalizationBuilder.put("validDate", defaultDateFormat(pip.getExpiryDate()));
+        } else {
+            personalizationBuilder.put("securityCode", "");
+            personalizationBuilder.put("validDate", "");
+        }
+
+        return personalizationBuilder.build();
     }
 }

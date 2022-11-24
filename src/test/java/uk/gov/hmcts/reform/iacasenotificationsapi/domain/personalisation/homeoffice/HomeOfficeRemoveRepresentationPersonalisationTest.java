@@ -5,9 +5,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_COMPANY_ADDRESS;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,8 +46,8 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
     EmailAddressFinder emailAddressFinder;
 
     private final Long caseId = 12345L;
-    private final String templateIdBeforeListing = "beforeTemplateId";
-    private final String templateIdAfterListing = "afterTemplateId";
+    private final String beforeListingTemplateId = "beforeListingTemplateId";
+    private final String afterListingTemplateId = "afterListingTemplateId";
     private final String iaExUiFrontendUrl = "http://somefrontendurl";
     private final String appealReferenceNumber = "someReferenceNumber";
     private final String ariaListingReference = "someReferenceNumber";
@@ -48,6 +58,9 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
     private String respondentReviewDirectionEmail = "homeoffice-respondent@example.com";
     private String homeOfficeHearingCentreEmail = "hc-taylorhouse@example.com";
     private String homeOfficeEmail = "ho-taylorhouse@example.com";
+    private String legalRepName = "legalRepName";
+    private String legalRepCompanyAddress = "legalRepCompanyAddress";
+    private String legalRepEmailAddress = "legalRepEmailAddress";
 
     private final String addressLine1 = "A";
     private final String addressLine2 = "B";
@@ -78,14 +91,17 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_NAME, String.class)).thenReturn(Optional.of(legalRepName));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(legalRepEmailAddress));
 
+        when(appealService.isAppealListed(asylumCase)).thenReturn(false);
         when((emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeHearingCentreEmail);
         when((emailAddressFinder.getHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeEmail);
 
         homeOfficeRemoveRepresentationPersonalisation =
             new HomeOfficeRemoveRepresentationPersonalisation(
-                templateIdBeforeListing,
-                templateIdAfterListing,
+                beforeListingTemplateId,
+                afterListingTemplateId,
                 apcPrivateBetaInboxHomeOfficeEmailAddress,
                 respondentReviewDirectionEmail,
                 iaExUiFrontendUrl,
@@ -158,13 +174,10 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
 
     @Test
     void should_return_given_template_id() {
-        when(appealService.isAppealListed(asylumCase)).thenReturn(false);
-
-        assertEquals(templateIdBeforeListing, homeOfficeRemoveRepresentationPersonalisation.getTemplateId(asylumCase));
+        assertEquals(beforeListingTemplateId, homeOfficeRemoveRepresentationPersonalisation.getTemplateId(asylumCase));
 
         when(appealService.isAppealListed(asylumCase)).thenReturn(true);
-
-        assertEquals(templateIdAfterListing, homeOfficeRemoveRepresentationPersonalisation.getTemplateId(asylumCase));
+        assertEquals(afterListingTemplateId, homeOfficeRemoveRepresentationPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
@@ -206,5 +219,32 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
         when(asylumCase.read(LEGAL_REP_COMPANY_ADDRESS, AddressUk.class)).thenReturn(Optional.of(addressUk));
 
         assertEquals("", homeOfficeRemoveRepresentationPersonalisation.formatCompanyAddress(asylumCase));
+    }
+
+    @Test
+    void should_return_personalisation_when_all_information_given_case_listed() {
+        when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+
+        Map<String, String> personalisation = homeOfficeRemoveRepresentationPersonalisation.getPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(legalRepName, personalisation.get("legalRepresentativeName"));
+        assertEquals(legalRepEmailAddress, personalisation.get("legalRepresentativeEmailAddress"));
+    }
+
+    @Test
+    void should_return_personalisation_when_all_information_given_and_case_not_listed() {
+        Map<String, String> personalisation = homeOfficeRemoveRepresentationPersonalisation.getPersonalisation(asylumCase);
+
+        assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(legalRepName, personalisation.get("legalRepresentativeName"));
+        assertEquals(legalRepEmailAddress, personalisation.get("legalRepresentativeEmailAddress"));
     }
 }

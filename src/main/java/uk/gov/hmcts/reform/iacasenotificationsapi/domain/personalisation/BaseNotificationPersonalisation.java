@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -26,5 +29,13 @@ public interface BaseNotificationPersonalisation<T extends CaseData> {
 
     default Map<String, String> getPersonalisation(Callback<T> callback) {
         return getPersonalisation(callback.getCaseDetails().getCaseData());
+    }
+
+    default String defaultDateFormat(String dateString) {
+        try {
+            return LocalDate.parse(dateString).format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+        } catch (DateTimeParseException e) {
+            return dateString;
+        }
     }
 }

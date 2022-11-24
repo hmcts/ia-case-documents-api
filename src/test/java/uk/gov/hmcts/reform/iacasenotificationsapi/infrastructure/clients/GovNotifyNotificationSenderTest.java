@@ -118,5 +118,4 @@ public class GovNotifyNotificationSenderTest {
 
         assertEquals(expectedNotificationId.toString(), actualNotificationId);
     }
-
 }
