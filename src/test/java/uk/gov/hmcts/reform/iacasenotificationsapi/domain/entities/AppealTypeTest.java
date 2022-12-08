@@ -14,6 +14,7 @@ public class AppealTypeTest {
         assertEquals(AppealType.from("refusalOfEu").get(), AppealType.EA);
         assertEquals(AppealType.from("refusalOfHumanRights").get(), AppealType.HU);
         assertEquals(AppealType.from("deprivation").get(), AppealType.DC);
+        assertEquals(AppealType.from("euSettlementScheme").get(), AppealType.EU);
     }
 
     @Test
@@ -23,6 +24,6 @@ public class AppealTypeTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(5, AppealType.values().length);
+        assertEquals(6, AppealType.values().length);
     }
 }

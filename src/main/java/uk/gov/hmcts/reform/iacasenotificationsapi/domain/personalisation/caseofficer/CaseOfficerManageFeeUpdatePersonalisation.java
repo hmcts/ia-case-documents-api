@@ -108,7 +108,7 @@ public class CaseOfficerManageFeeUpdatePersonalisation implements EmailNotificat
         String paAppealTypePaymentOption = asylumCase
             .read(AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
 
-        return (isEaAndHuAppeal(asylumCase) && eaHuAppealTypePaymentOption.equals("payOffline"))
+        return (isEaHuEuAppeal(asylumCase) && eaHuAppealTypePaymentOption.equals("payOffline"))
                || (isPaAppeal(asylumCase) && paAppealTypePaymentOption.equals("payOffline"));
     }
 
@@ -119,7 +119,7 @@ public class CaseOfficerManageFeeUpdatePersonalisation implements EmailNotificat
         String paAppealTypePaymentOption = asylumCase
             .read(AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION, String.class).orElse("");
 
-        return (isEaAndHuAppeal(asylumCase) && eaHuAppealTypePaymentOption.equals("payNow"))
+        return (isEaHuEuAppeal(asylumCase) && eaHuAppealTypePaymentOption.equals("payNow"))
                  || (isPaAppeal(asylumCase) &&  Arrays.asList("payNow","payLater").contains(paAppealTypePaymentOption));
     }
 
@@ -129,9 +129,9 @@ public class CaseOfficerManageFeeUpdatePersonalisation implements EmailNotificat
             .map(type -> type == PA).orElse(false);
     }
 
-    protected boolean isEaAndHuAppeal(AsylumCase asylumCase) {
+    protected boolean isEaHuEuAppeal(AsylumCase asylumCase) {
         return asylumCase
             .read(APPEAL_TYPE, AppealType.class)
-            .map(type -> type == EA || type == HU).orElse(false);
+            .map(type -> type == EA || type == HU || type == EU).orElse(false);
     }
 }

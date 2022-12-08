@@ -48,6 +48,7 @@ public class LegalRepresentativePendingPaymentPaidPersonalisation implements Leg
 
         switch (appealType) {
             case EA:
+            case EU:
             case HU:
                 template = legalRepresentativePendingPaymentPaidEaHuTemplateId;
                 break;
