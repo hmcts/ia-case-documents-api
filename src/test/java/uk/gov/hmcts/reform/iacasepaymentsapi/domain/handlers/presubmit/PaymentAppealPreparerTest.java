@@ -400,6 +400,19 @@ class PaymentAppealPreparerTest {
     }
 
     @Test
+    void handling_should_throw_if_appeal_type_is_wrong() {
+
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.DC));
+        assertThatThrownBy(() -> paymentAppealPreparer
+            .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .isExactlyInstanceOf(IllegalStateException.class)
+            .hasMessage("Cannot handle callback");
+    }
+
+    @Test
     void it_can_handle_callback() {
 
         for (Event event : Event.values()) {

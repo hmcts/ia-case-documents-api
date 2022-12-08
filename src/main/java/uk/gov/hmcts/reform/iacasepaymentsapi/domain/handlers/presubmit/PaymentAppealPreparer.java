@@ -2,6 +2,10 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.EA;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.EU;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.HU;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.PA;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_PBA_ACCOUNTS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_SERVICE_REQUEST_ALREADY;
@@ -91,7 +95,7 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && waysToPayEvents.contains(callback.getEvent())
                && isLegalRepJourney
-               && isHuOrEaOrPa(callback.getCaseDetails().getCaseData());
+               && isHuEaEuPa(callback.getCaseDetails().getCaseData());
     }
 
     @Override
@@ -173,13 +177,12 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
             .orElse(true);
     }
 
-    private boolean isHuOrEaOrPa(AsylumCase asylumCase) {
+
+    private boolean isHuEaEuPa(AsylumCase asylumCase) {
         Optional<AppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AppealType.class);
         if (optionalAppealType.isPresent()) {
             AppealType appealType = optionalAppealType.get();
-            return appealType.equals(AppealType.EA)
-                || appealType.equals(AppealType.HU)
-                || appealType.equals(AppealType.PA);
+            return List.of(HU, EA, EU, PA).contains(appealType);
         }
         return false;
     }
