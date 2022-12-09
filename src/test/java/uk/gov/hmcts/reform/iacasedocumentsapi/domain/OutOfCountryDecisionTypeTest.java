@@ -15,6 +15,7 @@ class OutOfCountryDecisionTypeTest {
         assertEquals(OutOfCountryDecisionType.from("refusalOfHumanRights"), Optional.of(REFUSAL_OF_HUMAN_RIGHTS));
         assertEquals(OutOfCountryDecisionType.from("refusalOfProtection"),Optional.of(OutOfCountryDecisionType.REFUSAL_OF_PROTECTION));
         assertEquals(OutOfCountryDecisionType.from("removalOfClient"),Optional.of(OutOfCountryDecisionType.REMOVAL_OF_CLIENT));
+        assertEquals(OutOfCountryDecisionType.from("refusePermit"),Optional.of(OutOfCountryDecisionType.REFUSE_PERMIT));
 
     }
 
@@ -23,6 +24,7 @@ class OutOfCountryDecisionTypeTest {
         assertEquals("A decision either 1) to refuse a human rights claim made following an application for entry clearance or 2) to refuse a permit to enter the UK under the Immigration (European Economic Area) Regulation 2016", REFUSAL_OF_HUMAN_RIGHTS.getDescription());
         assertEquals("A decision to refuse a protection or human rights claim where your client may only apply after leaving the UK", OutOfCountryDecisionType.REFUSAL_OF_PROTECTION.getDescription());
         assertEquals("A decision either 1) to remove your client from the UK under the Immigration (European Economic Area) Regulations 2016, where they are currently outside the UK or 2) to deprive your client of British citizenship, where they are currently outside the UK", OutOfCountryDecisionType.REMOVAL_OF_CLIENT.getDescription());
+        assertEquals("A decision to refuse a permit to enter the UK or entry clearance under the immigration rules and/or the EU Settlement Scheme.", OutOfCountryDecisionType.REFUSE_PERMIT.getDescription());
     }
 
     @Test
@@ -32,7 +34,7 @@ class OutOfCountryDecisionTypeTest {
 
     @Test
     void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(3, OutOfCountryDecisionType.values().length);
+        assertEquals(4, OutOfCountryDecisionType.values().length);
     }
 
     @Test

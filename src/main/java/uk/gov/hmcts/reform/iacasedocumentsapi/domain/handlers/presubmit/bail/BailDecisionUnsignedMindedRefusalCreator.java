@@ -68,7 +68,7 @@ public class BailDecisionUnsignedMindedRefusalCreator implements PreSubmitCallba
 
         bailDocumentHandler.addWithMetadata(
             bailCase,
-            bailDocument,
+            bailDocument,            
             UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA,
             DocumentTag.BAIL_DECISION_UNSIGNED
         );

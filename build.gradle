@@ -3,6 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath("org.yaml:snakeyaml:1.31")
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.11")
     }
 }
@@ -253,10 +254,19 @@ dependencyManagement {
             entry 'tomcat-embed-websocket'
         }
 
-        dependency group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-        // CVE-2022-25857, CVE-2022-38749, CVE-2022-38750, CVE-2022-38751
-        dependency group: 'org.yaml', name: 'snakeyaml', version: '1.32'
+//        // CVE-2021-22060
+//        dependencySet(group: 'org.springframework', version: '5.3.20') {
+//            entry 'spring-core'
+//            entry 'spring-aop'
+//            entry 'spring-beans'
+//            entry 'spring-context'
+//            entry 'spring-expression'
+//            entry 'spring-jcl'
+//            entry 'spring-web'
+//        }
+
+        dependency group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
         //CVE-2021-42550
         dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
@@ -269,6 +279,9 @@ dependencyManagement {
             entry 'log4j-api'
             entry 'log4j-to-slf4j'
         }
+
+        //CVE-2022-25857
+        dependency group: 'org.yaml', name: 'snakeyaml', version: '1.31'
     }
 }
 
@@ -303,7 +316,6 @@ dependencies {
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: versions.jackson
 
-
     compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
 
     compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
@@ -319,11 +331,13 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.8.1'
+
+    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.1'
 
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     compileOnly 'org.projectlombok:lombok:1.18.12'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.31'
 
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.23.2'
@@ -336,6 +350,8 @@ dependencies {
     testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
+    testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.31'
+    
     testCompile group: 'io.rest-assured', name: 'rest-assured-all', version: '4.3.1'
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.3.1'
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
@@ -353,6 +369,19 @@ dependencies {
     contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.0")
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.0")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+
+    integrationTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.31') {
+        force = true
+    }
+
+    functionalTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.31') {
+        force = true
+    }
+
+    contractTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.31') {
+        force = true
+    }
+
 
     integrationTestCompile sourceSets.main.runtimeClasspath
     integrationTestCompile sourceSets.test.runtimeClasspath
