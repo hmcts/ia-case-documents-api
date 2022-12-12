@@ -67,6 +67,8 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
 
+hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
+
 remoteHearingNoticeDocument.contentType: application/pdf
 remoteHearingNoticeDocument.fileExtension: PDF
 remoteHearingNoticeDocument.fileName: "hearing-notice"
@@ -314,3 +316,4 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+  harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}

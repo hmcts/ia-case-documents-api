@@ -203,6 +203,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("adaHearingNotice")
+    public DocumentCreator<AsylumCase> getAdaHearingNoticeDocumentCreator(
+        @Value("${hearingNoticeDocument.contentType}") String contentType,
+        @Value("${hearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("adaHearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("decisionAndReasons")
     public DocumentCreator<AsylumCase> getAndDecisionAndReasonsDocumentCreator(
         @Value("${decisionAndReasons.contentType}") String contentType,
