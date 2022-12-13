@@ -254,6 +254,7 @@ security:
       - "makeNewApplication"
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
+      - "editAppealAfterSubmit"
     citizen:
       - "startAppeal"
       - "editAppeal"
