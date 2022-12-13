@@ -167,6 +167,7 @@ decisionUnsignedDocument.refusal.templateName: ${IA_BAIL_DECISION_REFUSAL_TEMPLA
 
 decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 
+
 bailEndApplication.contentType:  application/pdf
 bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
@@ -270,7 +271,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
       - "recordTheDecision"
-      - "endApplication"
+      - "endApplication"    
       - "uploadSignedDecisionNotice"
     caseworker-ia-homeofficebail:
       - "submitApplication"

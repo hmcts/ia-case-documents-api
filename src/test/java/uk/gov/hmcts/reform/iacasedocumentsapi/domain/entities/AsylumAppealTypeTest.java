@@ -14,6 +14,7 @@ public class AsylumAppealTypeTest {
         assertEquals(AsylumAppealType.from("refusalOfHumanRights").get(), AsylumAppealType.HU);
         assertEquals(AsylumAppealType.from("refusalOfEu").get(), AsylumAppealType.EA);
         assertEquals(AsylumAppealType.from("deprivation").get(), AsylumAppealType.DC);
+        assertEquals(AsylumAppealType.from("euSettlementScheme").get(), AsylumAppealType.EU);
     }
 
     @Test
@@ -23,6 +24,7 @@ public class AsylumAppealTypeTest {
         assertEquals("refusalOfHumanRights", AsylumAppealType.HU.toString());
         assertEquals("refusalOfEu", AsylumAppealType.EA.toString());
         assertEquals("deprivation", AsylumAppealType.DC.toString());
+        assertEquals("euSettlementScheme", AsylumAppealType.EU.toString());
     }
 
     @Test
@@ -32,6 +34,6 @@ public class AsylumAppealTypeTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(5, AsylumAppealType.values().length);
+        assertEquals(6, AsylumAppealType.values().length);
     }
 }

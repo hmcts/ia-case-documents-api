@@ -56,6 +56,23 @@
         <cve>CVE-2022-33915</cve>
     </suppress>
     <suppress>
+        <notes>Temporarily suppressing Spring framework related vulnerabilities</notes>
+        <cve>CVE-2022-25647</cve>
+        <cve>CVE-2022-22971</cve>
+        <cve>CVE-2016-1000027</cve>
+        <cve>CVE-2022-22970</cve>
+        <cve>CVE-2022-34305</cve>
+        <cve>CVE-2022-29885</cve>
+        <cve>CVE-2020-0187</cve>
+        <cve>CVE-2021-31684</cve>
+        <cve>CVE-2021-22044</cve>
+        <cve>CVE-2020-5408</cve>
+        <cve>CVE-2022-22976</cve>
+        <cve>CVE-2021-22119</cve>
+        <cve>CVE-2022-22978</cve>
+        <cve>CVE-2021-22060</cve>
+    </suppress>    
+    <suppress>
         <notes><![CDATA[
             Due to the LaunchDarkly jar having a transitive dependency on 1.26, which is carrying most of the below vulnerabilities.
             CVE-2022-38752 is on 1.32 also.
@@ -76,4 +93,11 @@
         <cve>CVE-2022-41854</cve>
         <cve>CVE-2021-37533</cve>
     </suppress>
+    <suppress>  				
+	<cve>CVE-2022-31690</cve>
+	<cve>CVE-2022-31692</cve>
+	<cve>CVE-2022-42252</cve>
+	<cve>CVE-2021-37533</cve>	
+	<cve>CVE-2022-41854</cve>
+    </suppress>    
 </suppressions>
