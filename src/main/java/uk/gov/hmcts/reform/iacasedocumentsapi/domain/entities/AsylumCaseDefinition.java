@@ -477,7 +477,10 @@ public enum AsylumCaseDefinition {
         "upperTribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     CLARIFYING_QUESTIONS_ANSWERS("clarifyingQuestionsAnswers",
-        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {})
+        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {}),
+
+    IS_ACCELERATED_DETAINED_APPEAL(
+        "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
 
     ;
 
