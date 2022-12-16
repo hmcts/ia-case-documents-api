@@ -30,8 +30,8 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
     private final StringProvider stringProvider;
 
     public AppealSubmissionTemplate(
-        @Value("${appealSubmissionDocument.templateName}") String templateName,
-        StringProvider stringProvider
+            @Value("${appealSubmissionDocument.templateName}") String templateName,
+            StringProvider stringProvider
     ) {
         this.templateName = templateName;
         this.stringProvider = stringProvider;
@@ -43,7 +43,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
     }
 
     public Map<String, Object> mapFieldValues(
-        CaseDetails<AsylumCase> caseDetails
+            CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
@@ -64,9 +64,19 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse("")));
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
+        fieldValues.put("removalOrderDate", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("detentionStatus", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("detentionFacility", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("prisonName", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("ircName", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("otherDetentionFacilityName", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("prisonNOMSNumber", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("dateCustodialSentence", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("bailApplicationNumber", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+
         Optional<ContactPreference> contactPreference = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class);
         if (contactPreference.isPresent()
-            && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+                && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
             fieldValues.put("wantsEmail", YesOrNo.YES);
             fieldValues.put("email", asylumCase.read(EMAIL, String.class).orElse(""));
         } else {
@@ -126,8 +136,8 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             String appealType = optionalAppealType.get();
 
             fieldValues.put(
-                "appealType",
-                stringProvider.get("appealType", appealType).orElse("")
+                    "appealType",
+                    stringProvider.get("appealType", appealType).orElse("")
             );
         }
 
@@ -142,17 +152,17 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 AddressUk appellantAddress = optionalAppellantAddress.get();
 
                 fieldValues.put(
-                    "appellantAddress",
-                    ImmutableMap
-                        .builder()
-                        .put("appellantAddressLine1", appellantAddress.getAddressLine1().orElse(""))
-                        .put("appellantAddressLine2", appellantAddress.getAddressLine2().orElse(""))
-                        .put("appellantAddressLine3", appellantAddress.getAddressLine3().orElse(""))
-                        .put("appellantAddressPostTown", appellantAddress.getPostTown().orElse(""))
-                        .put("appellantAddressCounty", appellantAddress.getCounty().orElse(""))
-                        .put("appellantAddressPostCode", appellantAddress.getPostCode().orElse(""))
-                        .put("appellantAddressCountry", appellantAddress.getCountry().orElse(""))
-                        .build()
+                        "appellantAddress",
+                        ImmutableMap
+                                .builder()
+                                .put("appellantAddressLine1", appellantAddress.getAddressLine1().orElse(""))
+                                .put("appellantAddressLine2", appellantAddress.getAddressLine2().orElse(""))
+                                .put("appellantAddressLine3", appellantAddress.getAddressLine3().orElse(""))
+                                .put("appellantAddressPostTown", appellantAddress.getPostTown().orElse(""))
+                                .put("appellantAddressCounty", appellantAddress.getCounty().orElse(""))
+                                .put("appellantAddressPostCode", appellantAddress.getPostCode().orElse(""))
+                                .put("appellantAddressCountry", appellantAddress.getCountry().orElse(""))
+                                .build()
                 );
             }
         }
@@ -161,61 +171,61 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 .read(APPELLANT_NATIONALITIES);
 
         fieldValues.put(
-            "appellantNationalities",
-            appellantNationalities
-                .orElse(Collections.emptyList())
-                .stream()
-                .filter(idValue -> idValue.getValue().containsKey("code"))
-                .map(idValue -> idValue.getValue().get("code"))
-                .map(code -> stringProvider.get("isoCountries", code))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(nationality -> ImmutableMap.of("nationality", nationality))
-                .collect(Collectors.toList())
+                "appellantNationalities",
+                appellantNationalities
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .filter(idValue -> idValue.getValue().containsKey("code"))
+                        .map(idValue -> idValue.getValue().get("code"))
+                        .map(code -> stringProvider.get("isoCountries", code))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(nationality -> ImmutableMap.of("nationality", nationality))
+                        .collect(Collectors.toList())
         );
 
         Optional<List<String>> groundsOfAppealForDisplay = asylumCase
                 .read(APPEAL_GROUNDS_FOR_DISPLAY);
 
         fieldValues.put(
-            "appealGrounds",
-            groundsOfAppealForDisplay
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(code -> stringProvider.get("appealGrounds", code))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(appealGround -> ImmutableMap.of("appealGround", appealGround))
-                .collect(Collectors.toList())
+                "appealGrounds",
+                groundsOfAppealForDisplay
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .map(code -> stringProvider.get("appealGrounds", code))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(appealGround -> ImmutableMap.of("appealGround", appealGround))
+                        .collect(Collectors.toList())
         );
 
         Optional<List<IdValue<Map<String, String>>>> otherAppeals = asylumCase
                 .read(OTHER_APPEALS);
 
         fieldValues.put(
-            "otherAppeals",
-            otherAppeals
-                .orElse(Collections.emptyList())
-                .stream()
-                .filter(idValue -> idValue.getValue().containsKey("value"))
-                .map(idValue -> idValue.getValue().get("value"))
-                .collect(joining(", "))
+                "otherAppeals",
+                otherAppeals
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .filter(idValue -> idValue.getValue().containsKey("value"))
+                        .map(idValue -> idValue.getValue().get("value"))
+                        .collect(joining(", "))
         );
 
         fieldValues.put("applicationOutOfTimeExplanation", asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class).orElse(""));
         fieldValues.put("submissionOutOfTime", asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put(
-            "applicationOutOfTimeDocumentName",
-            asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)
-                .map(Document::getDocumentFilename)
-                .orElse("")
+                "applicationOutOfTimeDocumentName",
+                asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)
+                        .map(Document::getDocumentFilename)
+                        .orElse("")
         );
 
         return fieldValues;
     }
 
     private String formatDateForRendering(
-        String date
+            String date
     ) {
         if (!Strings.isNullOrEmpty(date)) {
             return LocalDate.parse(date).format(DOCUMENT_DATE_FORMAT);
