@@ -984,6 +984,7 @@ security:
       - "removeLegalRepresentative"
       - "manageFeeUpdate"
       - "recordOutOfTimeDecision"
+      - "markAppealPaid"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
