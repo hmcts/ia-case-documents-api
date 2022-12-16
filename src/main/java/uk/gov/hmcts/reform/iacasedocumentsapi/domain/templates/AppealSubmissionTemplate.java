@@ -64,6 +64,16 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse("")));
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
+        fieldValues.put("removalOrderDate", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("detentionStatus", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("detentionFacility", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("prisonName", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("ircName", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("otherDetentionFacilityName", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("prisonNOMSNumber", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("dateCustodialSentence", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+        fieldValues.put("bailApplicationNumber", formatDateForRendering(asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("")));
+
         Optional<ContactPreference> contactPreference = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class);
         if (contactPreference.isPresent()
             && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
