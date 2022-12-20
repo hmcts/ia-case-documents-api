@@ -39,6 +39,7 @@ hearingCentreName	nottingham	Nottingham Justice Centre
 hearingCentreName	taylorHouse	Taylor House
 hearingCentreName	decisionWithoutHearing	Decision Without Hearing
 hearingCentreName	harmondsworth	Harmondsworth
+hearingCentreName	yarlswood	Yarl's Wood
 hearingCentreAddress	belfast	Belfast Laganside Court, Oxford Street, Belfast, BT1 3LL
 hearingCentreName	remoteHearing	Remote hearing
 hearingCentreAddress	birmingham	IAC Birmingham, Birmingham Justice Centre, 33 Bull Street, Birmingham, B4 6DS
@@ -53,6 +54,7 @@ hearingCentreAddress	newport	IAC Newport, Columbus House, Langstone Business Par
 hearingCentreAddress	northShields	IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR
 hearingCentreAddress	nottingham	Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE
 hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
+hearingCentreAddress	yarlswood	Yarl's Wood Immigration and Asylum Hearing Centre, Hearing Centre A, Twinwoods Business Centre, Thurleigh Road, Bedford, MK44 1FD
 hearingCentreAddress	remoteHearing	Cloud Video Platform (CVP)
 hearingCentreAddress	decisionWithoutHearing	No hearing centre
 hearingCentreAddress	harmondsworth	Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, Harmondsworth, UB7 0HD
