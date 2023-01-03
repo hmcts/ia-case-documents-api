@@ -68,12 +68,15 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appellantInDetention", isDetained);
         if (isDetained.equals(YesOrNo.YES)) {
             StringBuilder sb = new StringBuilder("Detained");
-            YesOrNo isADA = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(null);
-            if (isADA.equals(YesOrNo.YES)) sb.append(" - Accelerated");
+            YesOrNo isAcceleratedDetainedAppeal = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(null);
+            if (isAcceleratedDetainedAppeal.equals(YesOrNo.YES)) {
+                sb.append(" - Accelerated");
+                fieldValues.put("isAcceleratedDetainedAppeal", YesOrNo.YES);
+            }
             fieldValues.put("detentionStatus", sb.toString());
             sb.setLength(0);
 
-            String detentionFacility = asylumCase.read(DETENTION_FACILITY_TYPE, String.class).orElse(null);
+            String detentionFacility = asylumCase.read(DETENTION_FACILITY, String.class).orElse(null);
             String detentionFacilityName = "";
             switch (detentionFacility) {
                 case "immigrationRemovalCentre":
@@ -118,7 +121,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             fieldValues.put("detentionFacilityName", detentionFacilityName);
 
             YesOrNo bailApplications = asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class).orElse(null);
-            fieldValues.put("hasPendingBailApplications", bailApplications);
+            fieldValues.put("hasPendingBailApplication", bailApplications);
             if (bailApplications.equals(YesOrNo.YES)) {
                 fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class).orElse(null));
             }

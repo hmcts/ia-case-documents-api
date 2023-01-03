@@ -486,7 +486,7 @@ public enum AsylumCaseDefinition {
     DETENTION_STATUS(
             "detentionStatus", new TypeReference<String>(){}),
 
-    DETENTION_FACILITY_TYPE(
+    DETENTION_FACILITY(
             "detentionFacility", new TypeReference<String>(){}),
 
     IRC_NAME(
@@ -497,9 +497,6 @@ public enum AsylumCaseDefinition {
 
     OTHER_DETENTION_FACILITY_NAME(
             "otherDetentionFacilityName", new TypeReference<String>(){}),
-
-    CUSTODIAL_SENTENCE_RELEASE_DATE(
-            "dateCustodialSentence", new TypeReference<String>(){}),
 
     HAS_PENDING_BAIL_APPLICATIONS(
             "hasPendingBailApplications", new TypeReference<YesOrNo>() {}),
