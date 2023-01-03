@@ -479,8 +479,36 @@ public enum AsylumCaseDefinition {
     CLARIFYING_QUESTIONS_ANSWERS("clarifyingQuestionsAnswers",
         new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {}),
 
+    APPELLANT_IN_DETENTION(
+            "appellantInDetention", new TypeReference<YesOrNo>() {}
+    ),
+
+    DETENTION_STATUS(
+            "detentionStatus", new TypeReference<String>(){}),
+
+    DETENTION_FACILITY_TYPE(
+            "detentionFacility", new TypeReference<String>(){}),
+
+    IRC_NAME(
+            "ircName", new TypeReference<String>(){}),
+
+    PRISON_NAME(
+            "prisonName", new TypeReference<String>(){}),
+
+    OTHER_DETENTION_FACILITY_NAME(
+            "otherDetentionFacilityName", new TypeReference<String>(){}),
+
+    CUSTODIAL_SENTENCE_RELEASE_DATE(
+            "dateCustodialSentence", new TypeReference<String>(){}),
+
+    HAS_PENDING_BAIL_APPLICATIONS(
+            "hasPendingBailApplications", new TypeReference<YesOrNo>() {}),
+
+    BAIL_APPLICATION_NUMBER(
+            "bailApplicationNumber", new TypeReference<String>(){}),
+
     IS_ACCELERATED_DETAINED_APPEAL(
-        "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
+            "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){})
 
     ;
 
