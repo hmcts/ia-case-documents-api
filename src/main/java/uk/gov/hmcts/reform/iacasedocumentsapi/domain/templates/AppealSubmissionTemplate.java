@@ -87,18 +87,20 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                     detentionFacility = "Prison";
                     detentionFacilityName = asylumCase.read(PRISON_NAME, String.class).orElse(null);
 
-                    String prisonerNOMSNumberValue = "";
-                    String prisonerNOMSNumberField = asylumCase
+                    String prisonerNomsNumberValue = "";
+                    String prisonerNomsNumberField = asylumCase
                             .get("prisonNOMSNumber")
                             .toString()
                             .replaceAll("[{}]", "");
 
-                    if (!prisonerNOMSNumberField.isEmpty()) {
-                        prisonerNOMSNumberValue = prisonerNOMSNumberField
-                                .substring(prisonerNOMSNumberField.lastIndexOf("=") +1);
+                    if (!prisonerNomsNumberField.isEmpty()) {
+                        prisonerNomsNumberValue = prisonerNomsNumberField
+                                .substring(prisonerNomsNumberField.lastIndexOf("=") + 1);
                         fieldValues.put("nomsAvailable", YesOrNo.YES);
-                        fieldValues.put("nomsNumber", prisonerNOMSNumberValue);
-                    } else fieldValues.put("nomsAvailable", YesOrNo.NO);
+                        fieldValues.put("nomsNumber", prisonerNomsNumberValue);
+                    } else {
+                        fieldValues.put("nomsAvailable", YesOrNo.NO);
+                    }
 
                     String prisonerReleaseDateValue = "";
                     String prisonerReleaseDateField = asylumCase
@@ -108,14 +110,19 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
 
                     if (!prisonerReleaseDateField.isEmpty()) {
                         prisonerReleaseDateValue = prisonerReleaseDateField
-                                .substring(prisonerReleaseDateField.lastIndexOf("=") +1);
+                                .substring(prisonerReleaseDateField.lastIndexOf("=") + 1);
                         fieldValues.put("releaseDateProvided", YesOrNo.YES);
                         fieldValues.put("releaseDate", prisonerReleaseDateValue);
-                    } else fieldValues.put("releaseDateProvided", YesOrNo.NO);
+                    } else {
+                        fieldValues.put("releaseDateProvided", YesOrNo.NO);
+                    }
                     break;
                 case "other":
                     detentionFacility = "Other";
                     detentionFacilityName = asylumCase.read(OTHER_DETENTION_FACILITY_NAME, String.class).orElse(null);
+                    break;
+                default:
+                    // Default needed for sonar scan
             }
             fieldValues.put("detentionFacility", detentionFacility);
             fieldValues.put("detentionFacilityName", detentionFacilityName);
