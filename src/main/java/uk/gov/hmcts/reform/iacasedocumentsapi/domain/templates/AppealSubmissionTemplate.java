@@ -64,6 +64,66 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse("")));
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
+        YesOrNo isDetained = asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class).orElse(null);
+        fieldValues.put("appellantInDetention", isDetained);
+        if (isDetained.equals(YesOrNo.YES)) {
+            StringBuilder sb = new StringBuilder("Detained");
+            YesOrNo isADA = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(null);
+            if (isADA.equals(YesOrNo.YES)) sb.append(" - Accelerated");
+            fieldValues.put("detentionStatus", sb.toString());
+            sb.setLength(0);
+
+            String detentionFacility = asylumCase.read(DETENTION_FACILITY_TYPE, String.class).orElse(null);
+            String detentionFacilityName = "";
+            switch (detentionFacility) {
+                case "immigrationRemovalCentre":
+                    detentionFacility = "Immigration Removal Centre";
+                    detentionFacilityName = asylumCase.read(IRC_NAME, String.class).orElse(null);
+                    break;
+                case "prison":
+                    detentionFacility = "Prison";
+                    detentionFacilityName = asylumCase.read(PRISON_NAME, String.class).orElse(null);
+
+                    String prisonerNOMSNumberValue = "";
+                    String prisonerNOMSNumberField = asylumCase
+                            .get("prisonNOMSNumber")
+                            .toString()
+                            .replaceAll("[{}]", "");
+
+                    if (!prisonerNOMSNumberField.isEmpty()) {
+                        prisonerNOMSNumberValue = prisonerNOMSNumberField
+                                .substring(prisonerNOMSNumberField.lastIndexOf("=") +1);
+                        fieldValues.put("nomsAvailable", YesOrNo.YES);
+                        fieldValues.put("nomsNumber", prisonerNOMSNumberValue);
+                    } else fieldValues.put("nomsAvailable", YesOrNo.NO);
+
+                    String prisonerReleaseDateValue = "";
+                    String prisonerReleaseDateField = asylumCase
+                            .get("dateCustodialSentence")
+                            .toString()
+                            .replaceAll("[{}]", "");
+
+                    if (!prisonerReleaseDateField.isEmpty()) {
+                        prisonerReleaseDateValue = prisonerReleaseDateField
+                                .substring(prisonerReleaseDateField.lastIndexOf("=") +1);
+                        fieldValues.put("releaseDateProvided", YesOrNo.YES);
+                        fieldValues.put("releaseDate", prisonerReleaseDateValue);
+                    } else fieldValues.put("releaseDateProvided", YesOrNo.NO);
+                    break;
+                case "other":
+                    detentionFacility = "Other";
+                    detentionFacilityName = asylumCase.read(OTHER_DETENTION_FACILITY_NAME, String.class).orElse(null);
+            }
+            fieldValues.put("detentionFacility", detentionFacility);
+            fieldValues.put("detentionFacilityName", detentionFacilityName);
+
+            YesOrNo bailApplications = asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class).orElse(null);
+            fieldValues.put("hasPendingBailApplications", bailApplications);
+            if (bailApplications.equals(YesOrNo.YES)) {
+                fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class).orElse(null));
+            }
+        }
+
         Optional<ContactPreference> contactPreference = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class);
         if (contactPreference.isPresent()
             && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
