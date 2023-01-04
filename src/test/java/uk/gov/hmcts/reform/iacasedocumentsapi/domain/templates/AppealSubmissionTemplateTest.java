@@ -54,7 +54,14 @@ public class AppealSubmissionTemplateTest {
     private String appellantAddressCounty = "South";
     private String appellantAddressPostCode = "AB1 2CD";
     private String appellantAddressCountry = "Iceland";
+    private YesOrNo appellantInDetention = YesOrNo.YES;
+    private String detentionFacility = "HMCTS Detention Facility";
+    private YesOrNo isAcceleratedDetainedAppeal = YesOrNo.YES;
+    private YesOrNo hasPendingBailApplication = YesOrNo.YES;
+    private String bailApplicationNumber = "BailRef1234";
     private String appealType = "revocationOfProtection";
+    private YesOrNo removalOrderOptions = YesOrNo.YES;
+    private String removalOrderDate = "01-01-2023T16:03:002";
     private String newMatters = "Some new matters";
     private String email = "someone@something.com";
     private String mobileNumber = "07987654321";
@@ -95,14 +102,6 @@ public class AppealSubmissionTemplateTest {
     private String outOfTimeDocumentFileName = "someOutOfTimeDocument.pdf";
 
     private YesOrNo wantsEmail = YesOrNo.YES;
-
-
-    private YesOrNo appellantInDetention = YesOrNo.YES;
-    private String detentionFacility = "DetFac";
-    private YesOrNo isAcceleratedDetainedAppeal = YesOrNo.YES;
-    private YesOrNo hasPendingBailApplication = YesOrNo.YES;
-    private String bailApplicationNumber = "BailRef1234";
-
     private AppealSubmissionTemplate appealSubmissionTemplate;
 
 
@@ -139,10 +138,19 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(Optional.of(isAcceleratedDetainedAppeal).orElse(YesOrNo.NO)));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility));
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
+
         when(asylumCase.read(EMAIL, String.class)).thenReturn(Optional.of(email));
         when(asylumCase.read(APPELLANT_ADDRESS)).thenReturn(Optional.of(addressUk));
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
         when(asylumCase.read(APPELLANT_TITLE, String.class)).thenReturn(Optional.of(appellantTitle));
@@ -150,7 +158,6 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         when(stringProvider.get("appealType", appealType)).thenReturn(Optional.of(appealType));
-
 
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
         when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
@@ -166,12 +173,6 @@ public class AppealSubmissionTemplateTest {
 
         when(stringProvider.get("appealGrounds", "protectionHumanRights")).thenReturn(Optional.of("Human rights"));
 
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(Optional.of(isAcceleratedDetainedAppeal).orElse(null)));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
-
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
         assertEquals(appellantInDetention, templateFieldValues.get("appellantInDetention"));
@@ -180,9 +181,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
         assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
 
-
-
-        assertEquals(34, templateFieldValues.size());
+        assertEquals(36, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("31122020", templateFieldValues.get("CREATED_DATE"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
@@ -228,6 +227,9 @@ public class AppealSubmissionTemplateTest {
         dataSetUp();
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
 
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
+
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(Optional.of(isAcceleratedDetainedAppeal).orElse(null)));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility));
@@ -236,7 +238,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(31, templateFieldValues.size());
+        assertEquals(33, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appealType"));
     }
 
@@ -303,6 +305,9 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class)).thenReturn(Optional.of(dateEntryClearanceDecision));
         when(asylumCase.read(HAS_CORRESPONDENCE_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
+
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(Optional.of(isAcceleratedDetainedAppeal).orElse(null)));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility));
@@ -311,7 +316,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
         assertTrue(templateFieldValues.containsKey("appealOutOfCountry"));
         assertTrue(templateFieldValues.containsKey("decisionLetterReceivedDate"));
         assertTrue(templateFieldValues.containsKey("outOfCountryDecisionType"));
@@ -334,6 +339,8 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(HAS_CORRESPONDENCE_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_OUT_OF_COUNTRY_ADDRESS, String.class)).thenReturn(Optional.ofNullable(oocAddress));
 
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
 
         when(asylumCase.read(HAS_SPONSOR, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(SPONSOR_GIVEN_NAMES, String.class)).thenReturn(Optional.of("Spencer"));
@@ -350,7 +357,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(42, templateFieldValues.size());
+        assertEquals(44, templateFieldValues.size());
         assertTrue(templateFieldValues.containsKey("appellantOutOfCountryAddress"));
         assertTrue(templateFieldValues.containsKey("hasSponsor"));
         assertTrue(templateFieldValues.containsKey("sponsorGivenNames"));
@@ -409,6 +416,8 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.empty());
@@ -423,7 +432,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(31, templateFieldValues.size());
+        assertEquals(33, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appellantAddress"));
     }
 
@@ -440,19 +449,22 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
-        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
-        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
-        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(APPELLANT_TITLE, String.class)).thenReturn(Optional.of(appellantTitle));
-        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of(mobileNumber));
 
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(Optional.of(isAcceleratedDetainedAppeal).orElse(null)));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility));
         when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
         when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
+
+        when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
+        when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
+        when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_TITLE, String.class)).thenReturn(Optional.of(appellantTitle));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of(mobileNumber));
 
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -487,7 +499,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(31, templateFieldValues.size());
+        assertEquals(33, templateFieldValues.size());
 
         assertFalse(templateFieldValues.containsKey("appealType"));
         assertFalse(templateFieldValues.containsKey("appellantAddress"));

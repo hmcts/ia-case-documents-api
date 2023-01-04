@@ -114,6 +114,11 @@ public enum AsylumCaseDefinition {
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
+    REMOVAL_ORDER_OPTIONS(
+            "removalOrderOptions", new TypeReference<YesOrNo>(){}),
+
+    REMOVAL_ORDER_DATE(
+            "removalOrderDate", new TypeReference<String>(){}),
     NEW_MATTERS(
         "newMatters", new TypeReference<String>(){}),
 
@@ -482,10 +487,6 @@ public enum AsylumCaseDefinition {
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
     ),
-
-    DETENTION_STATUS(
-            "detentionStatus", new TypeReference<String>(){}),
-
     DETENTION_FACILITY(
             "detentionFacility", new TypeReference<String>(){}),
 
@@ -494,9 +495,6 @@ public enum AsylumCaseDefinition {
 
     PRISON_NAME(
             "prisonName", new TypeReference<String>(){}),
-
-    OTHER_DETENTION_FACILITY_NAME(
-            "otherDetentionFacilityName", new TypeReference<String>(){}),
 
     HAS_PENDING_BAIL_APPLICATIONS(
             "hasPendingBailApplications", new TypeReference<YesOrNo>() {}),
