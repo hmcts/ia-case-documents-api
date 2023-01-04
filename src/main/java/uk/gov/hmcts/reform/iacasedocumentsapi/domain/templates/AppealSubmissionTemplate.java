@@ -127,7 +127,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             fieldValues.put("detentionFacility", detentionFacility);
             fieldValues.put("detentionFacilityName", detentionFacilityName);
 
-            YesOrNo bailApplications = asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class).orElse(null);
+            YesOrNo bailApplications = asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class).orElse(YesOrNo.NO);
             fieldValues.put("hasPendingBailApplication", bailApplications);
             if (bailApplications.equals(YesOrNo.YES)) {
                 fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class).orElse(null));
