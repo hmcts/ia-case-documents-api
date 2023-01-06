@@ -272,6 +272,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class).orElse(""));
         }
     }
+
     private void populateAddressFields(AsylumCase asylumCase, Map<String, Object> fieldValues) {
         Optional<AddressUk> optionalAppellantAddress = asylumCase.read(APPELLANT_ADDRESS);
 

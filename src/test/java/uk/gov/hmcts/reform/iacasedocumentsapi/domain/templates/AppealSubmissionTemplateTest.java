@@ -12,8 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -555,6 +553,7 @@ public class AppealSubmissionTemplateTest {
         assertFalse(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
     }
+
     @Test
     void test_detained_accelerated_template_fields() {
         dataSetUp();
@@ -571,6 +570,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
 
     }
+
     @Test
     void test_detained_non_accelerated_template_fields() {
         dataSetUp();
@@ -619,6 +619,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(YesOrNo.NO, templateFieldValues.get("hasPendingBailApplication"));
         assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
     }
+
     @Test
     void test_detained_release_date_template_fields() {
         dataSetUp();
@@ -640,6 +641,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
         assertEquals(dateCustodialSentence, templateFieldValues.get("releaseDate"));
     }
+
     @Test
     void test_detained_no_release_date_template_fields() {
         dataSetUp();
@@ -657,6 +659,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(YesOrNo.NO, templateFieldValues.get("releaseDateProvided"));
         assertFalse(templateFieldValues.containsKey("releaseDate"));
     }
+
     @Test
     void test_detained_prison_template_fields() {
         dataSetUp();
