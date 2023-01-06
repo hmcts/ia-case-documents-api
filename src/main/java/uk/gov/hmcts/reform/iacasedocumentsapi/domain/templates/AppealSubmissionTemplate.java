@@ -64,11 +64,11 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse("")));
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
-        Optional<YesOrNo> isDetained = asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class);
+        Optional<YesOrNo> isDetained = Optional.of(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class).orElse(YesOrNo.NO));
         if (isDetained.equals(Optional.of(YesOrNo.YES))) {
             populateDetainedFields(asylumCase, fieldValues);
         }
-        fieldValues.put("appellantInDetention", isDetained.orElse(YesOrNo.NO));
+        fieldValues.put("appellantInDetention", isDetained);
 
         Optional<ContactPreference> contactPreference = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class);
         if (contactPreference.isPresent()

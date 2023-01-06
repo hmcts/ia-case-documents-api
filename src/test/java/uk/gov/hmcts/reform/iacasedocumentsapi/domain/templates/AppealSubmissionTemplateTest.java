@@ -177,7 +177,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(YesOrNo.NO, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
 
         assertEquals(30, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -320,7 +320,7 @@ public class AppealSubmissionTemplateTest {
         assertFalse(templateFieldValues.containsKey("removalOrderDate"));
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
-        assertEquals(YesOrNo.NO, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
         assertFalse(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
         assertFalse(templateFieldValues.containsKey("detentionStatus"));
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
@@ -373,7 +373,7 @@ public class AppealSubmissionTemplateTest {
         assertFalse(templateFieldValues.containsKey("removalOrderDate"));
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
-        assertEquals(YesOrNo.NO, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
         assertFalse(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
         assertFalse(templateFieldValues.containsKey("detentionStatus"));
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
@@ -531,7 +531,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(YesOrNo.NO, templateFieldValues.get("submissionOutOfTime"));
         assertEquals("", templateFieldValues.get("applicationOutOfTimeDocumentName"));
         assertEquals("07987654321", templateFieldValues.get("mobileNumber"));
-        assertEquals(YesOrNo.NO, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
     }
 
     @Test
@@ -540,7 +540,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(YesOrNo.NO, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
 
         assertFalse(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
         assertFalse(templateFieldValues.containsKey("detentionStatus"));
@@ -566,7 +566,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(appellantInDetention, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
 
     }
@@ -583,7 +583,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(appellantInDetention, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isAcceleratedDetainedAppeal"));
     }
 
@@ -678,7 +678,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(appellantInDetention, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
         assertEquals("Prison", templateFieldValues.get("detentionFacility"));
         assertEquals(prisonName, templateFieldValues.get("detentionFacilityName"));
@@ -723,7 +723,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(appellantInDetention, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
         assertEquals("Immigration Removal Centre", templateFieldValues.get("detentionFacility"));
         assertEquals(ircName, templateFieldValues.get("detentionFacilityName"));
@@ -748,7 +748,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(appellantInDetention, templateFieldValues.get("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
         assertEquals("Other", templateFieldValues.get("detentionFacility"));
         assertEquals("Other MoJ Facility", templateFieldValues.get("detentionFacilityName"));
