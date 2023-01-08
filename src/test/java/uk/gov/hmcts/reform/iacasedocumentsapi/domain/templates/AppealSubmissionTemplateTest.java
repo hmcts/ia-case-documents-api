@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate.formatComplexString;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDateTime;
@@ -60,6 +61,7 @@ public class AppealSubmissionTemplateTest {
     private String detentionFacilityOther = "other";
     private String prisonName = "HMP Gartree";
     private String nomsNumber = "{noms=Noms1234}";
+    private String prisonerReleaseDate = "{release=01-01-2025T06:00:000}";
     private String ircName = "MoJ IRC";
     private String otherName = "{otherName=Other MoJ Facility}";
     private YesOrNo isAcceleratedDetainedAppeal = YesOrNo.YES;
@@ -256,6 +258,8 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of(mobileNumber));
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
         when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
         when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.of(otherAppeals));
@@ -284,6 +288,23 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.empty());
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.empty());
 
+    }
+
+    void dataSetUpDetainedPrison() {
+        dataSetUp();
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
+        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
+
+        asylumCase.put("prisonNOMSNumber", nomsNumber);
+        when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
+
+        asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
+        when(asylumCase.get("dateCustodialSentence")).thenReturn(prisonerReleaseDate);
+
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
     }
 
     @Test
@@ -535,11 +556,168 @@ public class AppealSubmissionTemplateTest {
     }
 
     @Test
-    void test_non_detained_template_fields() {
+    void should_be_tolerant_of_missing_detained_data() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.empty());
+
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertEquals("Detained", templateFieldValues.get("detentionStatus"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertEquals("", templateFieldValues.get("detentionFacility"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertEquals("", templateFieldValues.get("detentionFacilityName"));
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertFalse(templateFieldValues.containsKey("nomsAvailable"));
+        assertFalse(templateFieldValues.containsKey("nomsNumber"));
+        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
+        assertFalse(templateFieldValues.containsKey("releaseDate"));
+        assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
+    }
+
+    @Test
+    void should_be_tolerant_of_missing_detained_irc_data() {
+        dataSetUp();
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityIrc));
+        when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(""));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertEquals("Detained", templateFieldValues.get("detentionStatus"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertEquals("Immigration Removal Centre", templateFieldValues.get("detentionFacility"));
+        assertEquals("", templateFieldValues.get("detentionFacilityName"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertEquals("", templateFieldValues.get("detentionFacilityName"));
+
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertEquals("", templateFieldValues.get("bailApplicationNumber"));
+
+        assertFalse(templateFieldValues.containsKey("nomsAvailable"));
+        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
+    }
+
+    @Test
+    void should_be_tolerant_of_missing_detained_prison_data() {
+        dataSetUp();
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
+        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.empty());
+
+        asylumCase.put("prisonNOMSNumber", "");
+        when(asylumCase.get("prisonNOMSNumber")).thenReturn("");
+
+        asylumCase.put("dateCustodialSentence", "");
+        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertEquals("Detained", templateFieldValues.get("detentionStatus"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertEquals("Prison", templateFieldValues.get("detentionFacility"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertEquals("", templateFieldValues.get("detentionFacilityName"));
+
+        assertTrue(templateFieldValues.containsKey("nomsAvailable"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("nomsAvailable"));
+        assertFalse(templateFieldValues.containsKey("nomsNumber"));
+
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("releaseDateProvided"));
+        assertFalse(templateFieldValues.containsKey("releaseDate"));
+
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertEquals("", templateFieldValues.get("bailApplicationNumber"));
+    }
+
+    @Test
+    void should_be_tolerant_of_missing_other_detention_facility_data() {
+        dataSetUp();
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityOther));
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.empty());
+
+        asylumCase.put("otherDetentionFacilityName", "");
+        when(asylumCase.get("otherDetentionFacilityName")).thenReturn("");
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertEquals("Detained", templateFieldValues.get("detentionStatus"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertEquals("Other", templateFieldValues.get("detentionFacility"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertEquals("", templateFieldValues.get("detentionFacilityName"));
+
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertEquals("", templateFieldValues.get("bailApplicationNumber"));
+
+        assertFalse(templateFieldValues.containsKey("nomsAvailable"));
+        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
+    }
+
+
+    @Test
+    void test_non_detained_template_fields() {
+        dataSetUp();
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
 
         assertFalse(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -555,160 +733,188 @@ public class AppealSubmissionTemplateTest {
     }
 
     @Test
-    void test_detained_accelerated_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
-
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityIrc));
-        when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.of(ircName));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-
-        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
-        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
-
-    }
-
-    @Test
     void test_detained_non_accelerated_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        dataSetUpDetainedPrison();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityIrc));
-        when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.of(ircName));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.empty());
-
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertTrue(templateFieldValues.containsKey("nomsAvailable"));
+        assertTrue(templateFieldValues.containsKey("nomsNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isAcceleratedDetainedAppeal"));
-    }
-
-    @Test
-    void test_detained_bail_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
-
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityIrc));
-        when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.of(ircName));
-
-        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
-
+        assertEquals("Detained", templateFieldValues.get("detentionStatus"));
+        assertEquals("Prison", templateFieldValues.get("detentionFacility"));
+        assertEquals(prisonName, templateFieldValues.get("detentionFacilityName"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("nomsAvailable"));
+        assertEquals(formatComplexString(nomsNumber), templateFieldValues.get("nomsNumber"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
         assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
-    }
 
-    @Test
-    void test_detained_no_bail_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityIrc));
-        when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.of(ircName));
-
-        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(YesOrNo.NO, templateFieldValues.get("hasPendingBailApplication"));
-        assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
-    }
-
-    @Test
-    void test_detained_release_date_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
-        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
-        asylumCase.put("prisonNOMSNumber", nomsNumber);
-
-        String dateCustodialSentence = "01-01-2025T06:00:000";
-        asylumCase.put("dateCustodialSentence", dateCustodialSentence);
-        when(asylumCase.get("dateCustodialSentence")).thenReturn(dateCustodialSentence);
-
-
-        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
-        assertEquals(dateCustodialSentence, templateFieldValues.get("releaseDate"));
-    }
-
-    @Test
-    void test_detained_no_release_date_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
-        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
-        asylumCase.put("prisonNOMSNumber", nomsNumber);
-        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
-
-        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(YesOrNo.NO, templateFieldValues.get("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
     }
 
     @Test
     void test_detained_prison_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.ofNullable(isAcceleratedDetainedAppeal));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
-        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
-        asylumCase.put("prisonNOMSNumber", nomsNumber);
-        when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
-
-        String dateCustodialSentence = "01-01-2025T06:00:000";
-        when(asylumCase.get("dateCustodialSentence")).thenReturn(dateCustodialSentence);
-
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.ofNullable(bailApplicationNumber));
-
+        dataSetUpDetainedPrison();
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertTrue(templateFieldValues.containsKey("nomsAvailable"));
+        assertTrue(templateFieldValues.containsKey("nomsNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+        assertEquals("Detained - Accelerated", templateFieldValues.get("detentionStatus"));
         assertEquals("Prison", templateFieldValues.get("detentionFacility"));
         assertEquals(prisonName, templateFieldValues.get("detentionFacilityName"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("nomsAvailable"));
+        assertEquals(formatComplexString(nomsNumber), templateFieldValues.get("nomsNumber"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
+        assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
+        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+
+    }
+
+    @Test
+    void test_detained_prison_no_bail_template_fields() {
+        dataSetUp();
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
+        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
+        asylumCase.put("prisonNOMSNumber", nomsNumber);
+        when(asylumCase.get("prisonNOMSNumber")).thenReturn(Optional.of(nomsNumber));
+        asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
+        when(asylumCase.get("dateCustodialSentence")).thenReturn(Optional.of(prisonerReleaseDate));
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertEquals("Prison", templateFieldValues.get("detentionFacility"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertEquals(prisonName, templateFieldValues.get("detentionFacilityName"));
+
         assertTrue(templateFieldValues.containsKey("nomsAvailable"));
         assertEquals(YesOrNo.YES, templateFieldValues.get("nomsAvailable"));
+
+        assertTrue(templateFieldValues.containsKey("nomsNumber"));
         assertEquals("Noms1234", templateFieldValues.get("nomsNumber"));
+
         assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
         assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
-        assertEquals(dateCustodialSentence, templateFieldValues.get("releaseDate"));
-        assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+        assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
+
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
+    }
+
+    @Test
+    void test_detained_prison_no_release_date_template_fields() {
+        dataSetUpDetainedPrison();
+
+        asylumCase.put("dateCustodialSentence", "");
+        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertEquals("Prison", templateFieldValues.get("detentionFacility"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertEquals(prisonName, templateFieldValues.get("detentionFacilityName"));
+
+        assertTrue(templateFieldValues.containsKey("nomsAvailable"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("nomsAvailable"));
+
+        assertTrue(templateFieldValues.containsKey("nomsNumber"));
+        assertEquals("Noms1234", templateFieldValues.get("nomsNumber"));
+
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("releaseDateProvided"));
+
+        assertFalse(templateFieldValues.containsKey("releaseDate"));
+
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
     }
 
     @Test
     void test_detained_prison_no_noms_template_fields() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.ofNullable(isAcceleratedDetainedAppeal));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
-        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
-        asylumCase.put("prisonNOMSNumber", "");
-        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        dataSetUpDetainedPrison();
 
+        asylumCase.put("prisonNOMSNumber", "");
         when(asylumCase.get("prisonNOMSNumber")).thenReturn("");
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
 
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertEquals("Prison", templateFieldValues.get("detentionFacility"));
+
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertEquals(prisonName, templateFieldValues.get("detentionFacilityName"));
+
+        assertTrue(templateFieldValues.containsKey("nomsAvailable"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("nomsAvailable"));
+
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
+
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+        assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
+
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("hasPendingBailApplication"));
+
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
     }
 
     @Test
@@ -723,16 +929,27 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
-        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
-        assertEquals("Immigration Removal Centre", templateFieldValues.get("detentionFacility"));
-        assertEquals(ircName, templateFieldValues.get("detentionFacilityName"));
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
         assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
         assertFalse(templateFieldValues.containsKey("releaseDate"));
+
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+        assertEquals("Detained - Accelerated", templateFieldValues.get("detentionStatus"));
+        assertEquals("Immigration Removal Centre", templateFieldValues.get("detentionFacility"));
+        assertEquals(ircName, templateFieldValues.get("detentionFacilityName"));
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
         assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+
     }
 
     @Test
@@ -748,16 +965,25 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
-        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
-        assertEquals("Other", templateFieldValues.get("detentionFacility"));
-        assertEquals("Other MoJ Facility", templateFieldValues.get("detentionFacilityName"));
+        assertTrue(templateFieldValues.containsKey("appellantInDetention"));
+        assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
+        assertTrue(templateFieldValues.containsKey("detentionStatus"));
+        assertTrue(templateFieldValues.containsKey("detentionFacility"));
+        assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
+        assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
+        assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
         assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
         assertFalse(templateFieldValues.containsKey("releaseDate"));
+
+        assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
+        assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
+        assertEquals("Detained - Accelerated", templateFieldValues.get("detentionStatus"));
+        assertEquals("Other", templateFieldValues.get("detentionFacility"));
+        assertEquals(formatComplexString(otherName), templateFieldValues.get("detentionFacilityName"));
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
         assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
-
     }
 }

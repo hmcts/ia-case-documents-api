@@ -228,13 +228,11 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 YesOrNo nomsAvailable = YesOrNo.NO;
                 String prisonerNomsNumberField = asylumCase
                         .get("prisonNOMSNumber")
-                        .toString()
-                        .replaceAll("[\\[\\](){}]","");
-                String prisonerNomsNumberValue = "";
+                        .toString();
 
+                String prisonerNomsNumberValue = "";
                 if (!prisonerNomsNumberField.isEmpty()) {
-                    prisonerNomsNumberValue = prisonerNomsNumberField
-                            .substring(prisonerNomsNumberField.lastIndexOf("=") + 1);
+                    prisonerNomsNumberValue = formatComplexString(prisonerNomsNumberField);
                     nomsAvailable = YesOrNo.YES;
                     fieldValues.put("nomsNumber", prisonerNomsNumberValue);
                 }
@@ -243,13 +241,11 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 YesOrNo releaseDateProvided = YesOrNo.NO;
                 String prisonerReleaseDateField = asylumCase
                         .get("dateCustodialSentence")
-                        .toString()
-                        .replaceAll("[\\[\\](){}]","");
-                String prisonerReleaseDateValue = "";
+                        .toString();
 
+                String prisonerReleaseDateValue = "";
                 if (!prisonerReleaseDateField.isEmpty()) {
-                    prisonerReleaseDateValue = prisonerReleaseDateField
-                            .substring(prisonerReleaseDateField.lastIndexOf("=") + 1);
+                    prisonerReleaseDateValue = formatComplexString(prisonerReleaseDateField);
                     releaseDateProvided = YesOrNo.YES;
                     fieldValues.put("releaseDate", prisonerReleaseDateValue);
                 }
@@ -302,4 +298,10 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         }
         return "";
     }
+
+    protected static String formatComplexString(String data) {
+        data = data.replaceAll("[\\[\\](){}]", "");
+        return data.substring(data.lastIndexOf("=") + 1);
+    }
+
 }
