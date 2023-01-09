@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
@@ -30,6 +32,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AppealSubmissionTemplateTest {
 
     private final String templateName = "APPEAL_SUBMISSION_TEMPLATE.docx";
@@ -258,7 +261,25 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of(mobileNumber));
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
+
+        when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.of(ircName));
+
+        asylumCase.put("otherDetentionFacilityName", otherName);
+        when(asylumCase.get("otherDetentionFacilityName")).thenReturn(Optional.of(otherName));
+
+        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
+
+        asylumCase.put("prisonNOMSNumber", nomsNumber);
+        when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
+
+        asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
+        when(asylumCase.get("dateCustodialSentence")).thenReturn(prisonerReleaseDate);
+
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
 
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
         when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.of(appealGroundsForDisplay));
@@ -288,23 +309,6 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.empty());
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.empty());
 
-    }
-
-    void dataSetUpDetainedPrison() {
-        dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
-        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
-
-        asylumCase.put("prisonNOMSNumber", nomsNumber);
-        when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
-
-        asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
-        when(asylumCase.get("dateCustodialSentence")).thenReturn(prisonerReleaseDate);
-
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
     }
 
     @Test
@@ -558,7 +562,6 @@ public class AppealSubmissionTemplateTest {
     @Test
     void should_be_tolerant_of_missing_detained_data() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.empty());
@@ -594,11 +597,9 @@ public class AppealSubmissionTemplateTest {
     @Test
     void should_be_tolerant_of_missing_detained_irc_data() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityIrc));
         when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
         when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(""));
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
@@ -633,11 +634,8 @@ public class AppealSubmissionTemplateTest {
     @Test
     void should_be_tolerant_of_missing_detained_prison_data() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
         when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
         when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.empty());
 
         asylumCase.put("prisonNOMSNumber", "");
@@ -682,10 +680,8 @@ public class AppealSubmissionTemplateTest {
     @Test
     void should_be_tolerant_of_missing_other_detention_facility_data() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityOther));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
         when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.empty());
 
         asylumCase.put("otherDetentionFacilityName", "");
@@ -719,10 +715,10 @@ public class AppealSubmissionTemplateTest {
         assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
     }
 
-
     @Test
     void test_non_detained_template_fields() {
         dataSetUp();
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
         assertEquals(26, templateFieldValues.size());
@@ -744,7 +740,7 @@ public class AppealSubmissionTemplateTest {
 
     @Test
     void test_detained_non_accelerated_template_fields() {
-        dataSetUpDetainedPrison();
+        dataSetUp();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
@@ -779,7 +775,7 @@ public class AppealSubmissionTemplateTest {
 
     @Test
     void test_detained_prison_template_fields() {
-        dataSetUpDetainedPrison();
+        dataSetUp();
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
         assertEquals(36, templateFieldValues.size());
@@ -813,14 +809,6 @@ public class AppealSubmissionTemplateTest {
     @Test
     void test_detained_prison_no_bail_template_fields() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityPrison));
-        when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of(prisonName));
-        asylumCase.put("prisonNOMSNumber", nomsNumber);
-        when(asylumCase.get("prisonNOMSNumber")).thenReturn(Optional.of(nomsNumber));
-        asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
-        when(asylumCase.get("dateCustodialSentence")).thenReturn(Optional.of(prisonerReleaseDate));
         when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
@@ -859,7 +847,7 @@ public class AppealSubmissionTemplateTest {
 
     @Test
     void test_detained_prison_no_release_date_template_fields() {
-        dataSetUpDetainedPrison();
+        dataSetUp();
 
         asylumCase.put("dateCustodialSentence", "");
         when(asylumCase.get("dateCustodialSentence")).thenReturn("");
@@ -900,7 +888,7 @@ public class AppealSubmissionTemplateTest {
 
     @Test
     void test_detained_prison_no_noms_template_fields() {
-        dataSetUpDetainedPrison();
+        dataSetUp();
 
         asylumCase.put("prisonNOMSNumber", "");
         when(asylumCase.get("prisonNOMSNumber")).thenReturn("");
@@ -942,12 +930,7 @@ public class AppealSubmissionTemplateTest {
     @Test
     void test_detained_irc_template_fields() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityIrc));
-        when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.of(ircName));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -979,13 +962,7 @@ public class AppealSubmissionTemplateTest {
     @Test
     void test_detained_other_facility_template_fields() {
         dataSetUp();
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(appellantInDetention));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAcceleratedDetainedAppeal));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityOther));
-        asylumCase.put("otherDetentionFacilityName", otherName);
-        when(asylumCase.get("otherDetentionFacilityName")).thenReturn(Optional.of(otherName));
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
