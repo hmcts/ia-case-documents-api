@@ -25,6 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.BailApplicationStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -68,7 +69,7 @@ public class AppealSubmissionTemplateTest {
     private String ircName = "MoJ IRC";
     private String otherName = "{otherName=Other MoJ Facility}";
     private YesOrNo isAcceleratedDetainedAppeal = YesOrNo.YES;
-    private YesOrNo hasPendingBailApplication = YesOrNo.YES;
+    private BailApplicationStatus hasPendingBailApplication = BailApplicationStatus.YES;
     private String bailApplicationNumber = "BailRef1234";
     private String appealType = "revocationOfProtection";
     private YesOrNo removalOrderOptions = YesOrNo.YES;
@@ -278,7 +279,7 @@ public class AppealSubmissionTemplateTest {
         asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
         when(asylumCase.get("dateCustodialSentence")).thenReturn(prisonerReleaseDate);
 
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(hasPendingBailApplication));
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.class)).thenReturn(Optional.of(hasPendingBailApplication));
         when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
 
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.of(appellantNationalities));
@@ -564,7 +565,7 @@ public class AppealSubmissionTemplateTest {
         dataSetUp();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -585,7 +586,7 @@ public class AppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
         assertEquals("", templateFieldValues.get("detentionFacilityName"));
 
-        assertEquals(YesOrNo.NO, templateFieldValues.get("hasPendingBailApplication"));
+        assertEquals(BailApplicationStatus.NO, templateFieldValues.get("hasPendingBailApplication"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
@@ -809,7 +810,7 @@ public class AppealSubmissionTemplateTest {
     @Test
     void test_detained_prison_no_bail_template_fields() {
         dataSetUp();
-        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.class)).thenReturn(Optional.of(BailApplicationStatus.NO));
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -840,7 +841,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
 
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
-        assertEquals(YesOrNo.NO, templateFieldValues.get("hasPendingBailApplication"));
+        assertEquals(BailApplicationStatus.NO, templateFieldValues.get("hasPendingBailApplication"));
 
         assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
     }
@@ -880,7 +881,7 @@ public class AppealSubmissionTemplateTest {
         assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
-        assertEquals(YesOrNo.YES, templateFieldValues.get("hasPendingBailApplication"));
+        assertEquals(BailApplicationStatus.YES, templateFieldValues.get("hasPendingBailApplication"));
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
@@ -921,7 +922,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
 
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
-        assertEquals(YesOrNo.YES, templateFieldValues.get("hasPendingBailApplication"));
+        assertEquals(BailApplicationStatus.YES, templateFieldValues.get("hasPendingBailApplication"));
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));

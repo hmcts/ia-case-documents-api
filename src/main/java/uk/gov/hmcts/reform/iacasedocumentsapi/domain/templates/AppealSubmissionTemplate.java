@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.BailApplicationStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -262,9 +263,9 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("detentionFacility", detentionFacility);
         fieldValues.put("detentionFacilityName", detentionFacilityName);
 
-        YesOrNo hasBailApplication = asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, YesOrNo.class).orElse(YesOrNo.NO);
+        BailApplicationStatus hasBailApplication = asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.class).orElse(BailApplicationStatus.NO);
         fieldValues.put("hasPendingBailApplication", hasBailApplication);
-        if (hasBailApplication.equals(YesOrNo.YES)) {
+        if (hasBailApplication.equals(BailApplicationStatus.YES)) {
             fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class).orElse(""));
         }
     }
