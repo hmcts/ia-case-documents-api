@@ -497,7 +497,7 @@ public enum AsylumCaseDefinition {
             "prisonName", new TypeReference<String>(){}),
 
     HAS_PENDING_BAIL_APPLICATIONS(
-            "hasPendingBailApplications", new TypeReference<YesOrNo>() {}),
+            "hasPendingBailApplications", new TypeReference<BailApplicationStatus>() {}),
 
     BAIL_APPLICATION_NUMBER(
             "bailApplicationNumber", new TypeReference<String>(){}),
