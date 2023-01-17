@@ -242,13 +242,14 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 fieldValues.put("nomsAvailable", nomsAvailable);
 
                 YesOrNo releaseDateProvided = YesOrNo.NO;
-                String prisonerReleaseDate = formatComplexString(asylumCase
-                        .get("dateCustodialSentence")
-                        .toString());
-
-                if (!prisonerReleaseDate.isBlank()) {
-                    releaseDateProvided = YesOrNo.YES;
-                    fieldValues.put("releaseDate", prisonerReleaseDate);
+                if (asylumCase.containsKey("dateCustodialSentence")) {
+                    String prisonerReleaseDate = formatComplexString(asylumCase
+                            .get("dateCustodialSentence")
+                            .toString());
+                    if (!prisonerReleaseDate.isBlank()) {
+                        releaseDateProvided = YesOrNo.YES;
+                        fieldValues.put("releaseDate", prisonerReleaseDate);
+                    }
                 }
                 fieldValues.put("releaseDateProvided", releaseDateProvided);
                 break;
