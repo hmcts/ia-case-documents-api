@@ -72,7 +72,7 @@ public class AppealSubmissionTemplateTest {
     private BailApplicationStatus hasPendingBailApplication = BailApplicationStatus.YES;
     private String bailApplicationNumber = "BailRef1234";
     private String appealType = "revocationOfProtection";
-    private YesOrNo removalOrderOptions = YesOrNo.YES;
+    private YesOrNo removalOrderOption = YesOrNo.YES;
     private String removalOrderDate = "01-01-2023T16:03:002";
     private String newMatters = "Some new matters";
     private String email = "someone@something.com";
@@ -157,7 +157,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_ADDRESS)).thenReturn(Optional.of(addressUk));
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOption));
         when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
@@ -254,7 +254,10 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOption));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
+
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
@@ -310,6 +313,19 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.empty());
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.empty());
 
+    }
+
+    @Test
+    void should_not_add_removal_date_if_not_present() {
+        dataSetUp();
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(36, templateFieldValues.size());
+        assertTrue(templateFieldValues.containsKey("removalOrderOption"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("removalOrderOption"));
+        assertFalse(templateFieldValues.containsKey("removalOrderDate"));
     }
 
     @Test
@@ -456,7 +472,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.empty());
-        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOption));
         when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
@@ -494,8 +510,6 @@ public class AppealSubmissionTemplateTest {
 
         when(asylumCase.read(APPEAL_TYPE)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOptions));
-        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
@@ -528,6 +542,8 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_GROUNDS_FOR_DISPLAY)).thenReturn(Optional.empty());
         when(asylumCase.read(OTHER_APPEALS)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOption));
+        when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)).thenReturn(Optional.empty());
@@ -535,7 +551,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(27, templateFieldValues.size());
+        assertEquals(26, templateFieldValues.size());
 
         assertFalse(templateFieldValues.containsKey("appealType"));
         assertFalse(templateFieldValues.containsKey("appellantAddress"));
@@ -552,6 +568,10 @@ public class AppealSubmissionTemplateTest {
         assertEquals("", templateFieldValues.get("newMatters"));
         assertEquals(0, ((List) templateFieldValues.get("appellantNationalities")).size());
         assertEquals(0, ((List) templateFieldValues.get("appealGrounds")).size());
+
+        assertEquals(YesOrNo.NO, templateFieldValues.get("removalOrderOption"));
+        assertFalse(templateFieldValues.containsKey("removalOrderDate"));
+
         assertEquals("", templateFieldValues.get("otherAppeals"));
         assertEquals("", templateFieldValues.get("applicationOutOfTimeExplanation"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("submissionOutOfTime"));
@@ -569,7 +589,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(31, templateFieldValues.size());
+        assertEquals(32, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -605,7 +625,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(32, templateFieldValues.size());
+        assertEquals(33, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -626,7 +646,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
-        assertEquals("", templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
@@ -637,7 +657,7 @@ public class AppealSubmissionTemplateTest {
         dataSetUp();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(PRISON_NAME, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(""));
 
         asylumCase.put("prisonNOMSNumber", "");
         when(asylumCase.get("prisonNOMSNumber")).thenReturn("");
@@ -647,7 +667,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(34, templateFieldValues.size());
+        assertEquals(35, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -672,10 +692,10 @@ public class AppealSubmissionTemplateTest {
         assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
-        assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
+        assertEquals(BailApplicationStatus.YES, templateFieldValues.get("hasPendingBailApplication"));
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
-        assertEquals("", templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
     }
 
     @Test
@@ -683,14 +703,14 @@ public class AppealSubmissionTemplateTest {
         dataSetUp();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityOther));
-        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(""));
 
         asylumCase.put("otherDetentionFacilityName", "");
         when(asylumCase.get("otherDetentionFacilityName")).thenReturn("");
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(32, templateFieldValues.size());
+        assertEquals(33, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -710,7 +730,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
-        assertEquals("", templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
@@ -722,7 +742,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(26, templateFieldValues.size());
+        assertEquals(27, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
@@ -746,7 +766,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(37, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -770,7 +790,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
         assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
-        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(bailApplicationNumber), templateFieldValues.get("bailApplicationNumber"));
 
     }
 
@@ -779,7 +799,7 @@ public class AppealSubmissionTemplateTest {
         dataSetUp();
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(37, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -803,7 +823,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
         assertEquals(formatComplexString(prisonerReleaseDate), templateFieldValues.get("releaseDate"));
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
-        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(bailApplicationNumber), templateFieldValues.get("bailApplicationNumber"));
 
     }
 
@@ -814,7 +834,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(35, templateFieldValues.size());
+        assertEquals(36, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -855,7 +875,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(35, templateFieldValues.size());
+        assertEquals(36, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -884,7 +904,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(BailApplicationStatus.YES, templateFieldValues.get("hasPendingBailApplication"));
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
-        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(bailApplicationNumber), templateFieldValues.get("bailApplicationNumber"));
     }
 
     @Test
@@ -896,7 +916,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(35, templateFieldValues.size());
+        assertEquals(36, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -925,7 +945,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals(BailApplicationStatus.YES, templateFieldValues.get("hasPendingBailApplication"));
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
-        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(bailApplicationNumber), templateFieldValues.get("bailApplicationNumber"));
     }
 
     @Test
@@ -935,7 +955,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(32, templateFieldValues.size());
+        assertEquals(33, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -956,7 +976,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals("Immigration Removal Centre", templateFieldValues.get("detentionFacility"));
         assertEquals(ircName, templateFieldValues.get("detentionFacilityName"));
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
-        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(bailApplicationNumber), templateFieldValues.get("bailApplicationNumber"));
 
     }
 
@@ -967,7 +987,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(32, templateFieldValues.size());
+        assertEquals(33, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -988,6 +1008,6 @@ public class AppealSubmissionTemplateTest {
         assertEquals("Other", templateFieldValues.get("detentionFacility"));
         assertEquals(formatComplexString(otherName), templateFieldValues.get("detentionFacilityName"));
         assertEquals(hasPendingBailApplication, templateFieldValues.get("hasPendingBailApplication"));
-        assertEquals(bailApplicationNumber, templateFieldValues.get("bailApplicationNumber"));
+        assertEquals(Optional.of(bailApplicationNumber), templateFieldValues.get("bailApplicationNumber"));
     }
 }
