@@ -279,6 +279,7 @@ public class AppealSubmissionTemplateTest {
         asylumCase.put("prisonNOMSNumber", nomsNumber);
         when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
 
+        when(asylumCase.containsKey("dateCustodialSentence")).thenReturn(true);
         asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
         when(asylumCase.get("dateCustodialSentence")).thenReturn(prisonerReleaseDate);
 
