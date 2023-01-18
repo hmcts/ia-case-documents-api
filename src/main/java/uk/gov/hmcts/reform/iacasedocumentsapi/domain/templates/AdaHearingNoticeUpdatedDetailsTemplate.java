@@ -1,13 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
-
-import java.util.Map;
-
 
 @Component
 public class AdaHearingNoticeUpdatedDetailsTemplate implements DocumentTemplate<AsylumCase> {
