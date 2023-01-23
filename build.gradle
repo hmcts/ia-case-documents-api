@@ -38,7 +38,7 @@ def versions = [
     reformHealthStarter: '0.0.5',
     serenity           : '3.1.20',
     sonarPitest        : '0.5',
-    springBoot         : '2.7.0',
+    springBoot         : '2.7.8',
     springHystrix      : '2.2.10.RELEASE',
     pact_version       : '4.1.7',
     springDoc          : '1.6.8',
@@ -247,7 +247,7 @@ repositories {
 dependencyManagement {
     dependencies {
         // CVE-2019-0232, CVE-2019-0199 - command line injections on windows
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.63') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.71') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-el'
             entry 'tomcat-embed-websocket'
@@ -280,7 +280,7 @@ dependencyManagement {
         }
 
         //CVE-2022-25857
-        dependency group: 'org.yaml', name: 'snakeyaml', version: '1.31'
+        dependency group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     }
 }
 
