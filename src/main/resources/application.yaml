@@ -99,6 +99,11 @@ adaHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 adaHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
 adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-ADA-0002.docx}
 
+AdaSuitabilityDocument.contentType: application/pdf
+AdaSuitabilityDocument.fileExtension: PDF
+AdaSuitabilityDocument.fileName: "ada-suitability"
+AdaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-LET-ENG-007.docx}
+
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"

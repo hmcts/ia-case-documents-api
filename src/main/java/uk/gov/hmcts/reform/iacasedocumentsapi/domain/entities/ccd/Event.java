@@ -28,6 +28,7 @@ public enum Event {
     GENERATE_HEARING_BUNDLE("generateHearingBundle", CaseType.ASYLUM),
     CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle", CaseType.ASYLUM),
     GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons", CaseType.ASYLUM),
+    GENERATE_ADA_SUITABILITY_DOCUMENT("adaSuitability", CaseType.ASYLUM),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons", CaseType.ASYLUM),
     EDIT_CASE_LISTING("editCaseListing", CaseType.ASYLUM),
     END_APPEAL("endAppeal", CaseType.ASYLUM),
