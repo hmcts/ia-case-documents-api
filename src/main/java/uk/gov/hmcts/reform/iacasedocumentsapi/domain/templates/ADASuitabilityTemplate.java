@@ -2,11 +2,14 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,19 +44,27 @@ public class ADASuitabilityTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
 
-        String givenName = asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse("");
-        String familyName = asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse("");
-        String fullName = givenName.concat(" " + familyName);
+        final String givenName = asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse("");
+        final String familyName = asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse("");
+        final String fullName = givenName.concat(" " + familyName);
+
         fieldValues.put("appellantName", fullName);
-//        fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
-//        asylumCase.read(AsylumCaseFieldDefinition.SUITABILITY_REVIEW_DECISION, AdaSuitabilityReviewDecision.class)
+        final AdaSuitabilityReviewDecision adaSuitabilityReviewDecision =
+                asylumCase.read(AsylumCaseDefinition.SUITABILITY_REVIEW_DECISION, AdaSuitabilityReviewDecision.class)
+                        .orElseThrow(() -> new RequiredFieldMissingException("ADA suitability review decision unavailable."));
 
-//        fieldValues.put("adaSuitable", adaSuitability);
-//        String adaSuitabilityReason = asylumCase.read(ADA_SUITABILITY_REASON, String.class).orElse("");
-//        fieldValues.put("adaSuitabilityReason", adaSuitabilityReason);
+        YesOrNo isSuitable = YesOrNo.NO;
+        if (adaSuitabilityReviewDecision.equals(AdaSuitabilityReviewDecision.SUITABLE)) {
+            isSuitable = YesOrNo.YES;
+        }
+        fieldValues.put("suitability", isSuitable);
 
-//        String judgeName = asylumCase.read(JUDGE_NAME, String.class).or("");
+        final String adaSuitabilityReason = asylumCase.read(SUITABILITY_REVIEW_REASON, String.class).orElse("");
+        fieldValues.put("adaSuitabilityReason", adaSuitabilityReason);
+
+        final String judgeName = asylumCase.read(SUITABILITY_REVIEW_JUDGE, String.class).orElse("");
+        fieldValues.put("judgeName", judgeName);
 
         return fieldValues;
     }

@@ -503,7 +503,16 @@ public enum AsylumCaseDefinition {
             "bailApplicationNumber", new TypeReference<String>(){}),
 
     IS_ACCELERATED_DETAINED_APPEAL(
-            "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){})
+            "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
+
+    SUITABILITY_REVIEW_DECISION(
+            "suitabilityReviewDecision", new TypeReference<AdaSuitabilityReviewDecision>(){}),
+
+    SUITABILITY_REVIEW_REASON(
+            "suitabilityReviewReason", new TypeReference<String>(){}),
+
+    SUITABILITY_REVIEW_JUDGE(
+            "suitabilityReviewJudge", new TypeReference<String>(){});
 
     ;
 
