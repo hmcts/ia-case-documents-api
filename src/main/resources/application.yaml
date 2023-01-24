@@ -102,7 +102,7 @@ adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPD
 AdaSuitabilityDocument.contentType: application/pdf
 AdaSuitabilityDocument.fileExtension: PDF
 AdaSuitabilityDocument.fileName: "ada-suitability"
-AdaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-LET-ENG-007.docx}
+AdaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00001.docx}
 
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
@@ -284,6 +284,7 @@ security:
       - "recordTheDecision"
       - "endApplication"    
       - "uploadSignedDecisionNotice"
+      - "adaSuitabilityReview"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"

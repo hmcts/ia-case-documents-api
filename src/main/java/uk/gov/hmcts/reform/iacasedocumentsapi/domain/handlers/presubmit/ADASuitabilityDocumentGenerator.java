@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 @Component
 public class ADASuitabilityDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -57,7 +57,7 @@ public class ADASuitabilityDocumentGenerator implements PreSubmitCallbackHandler
         documentHandler.addWithMetadata(
                 asylumCase,
                 adaSuitabilityDocument,
-                LEGAL_REPRESENTATIVE_DOCUMENTS,
+                TRIBUNAL_DOCUMENTS,
                 DocumentTag.ADA_SUITABILITY
         );
 

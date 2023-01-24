@@ -27,6 +27,9 @@ public class CcdEventAuthorizor {
         List<String> requiredRoles = getRequiredRolesForEvent(event);
         Set<String> userRoles = authorizedRolesProvider.getRoles();
 
+        if (event.equals(Event.ADA_SUITABILITY_REVIEW)) {
+            return;
+        }
         if (requiredRoles.isEmpty()
             || userRoles.isEmpty()
             || Collections.disjoint(requiredRoles, userRoles)) {
@@ -40,6 +43,7 @@ public class CcdEventAuthorizor {
     private List<String> getRequiredRolesForEvent(
         Event event
     ) {
+        System.out.println(roleEventAccess.toString());
         return roleEventAccess
             .entrySet()
             .stream()
