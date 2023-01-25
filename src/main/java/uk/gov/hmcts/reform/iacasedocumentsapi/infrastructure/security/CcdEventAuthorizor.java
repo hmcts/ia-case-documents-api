@@ -27,9 +27,6 @@ public class CcdEventAuthorizor {
         List<String> requiredRoles = getRequiredRolesForEvent(event);
         Set<String> userRoles = authorizedRolesProvider.getRoles();
 
-        if (event.equals(Event.ADA_SUITABILITY_REVIEW)) {
-            return;
-        }
         if (requiredRoles.isEmpty()
             || userRoles.isEmpty()
             || Collections.disjoint(requiredRoles, userRoles)) {
