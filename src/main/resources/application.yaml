@@ -94,6 +94,11 @@ hearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 hearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
 hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641.docx}
 
+adaHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
+adaHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
+adaHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
+adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-ADA-0002.docx}
+
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"

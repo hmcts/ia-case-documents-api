@@ -144,7 +144,12 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
 
         YesOrNo removalOrderOption = asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class).orElse(YesOrNo.NO);
         if (removalOrderOption.equals(YesOrNo.YES)) {
-            fieldValues.put("removalOrderDate", asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse(""));
+            String removalOrderDate = asylumCase.read(REMOVAL_ORDER_DATE, String.class).orElse("");
+            if (removalOrderDate.isBlank()) {
+                removalOrderOption = YesOrNo.NO;
+            } else {
+                fieldValues.put("removalOrderDate", removalOrderDate);
+            }
         }
         fieldValues.put("removalOrderOption", removalOrderOption);
 
@@ -233,35 +238,30 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 detentionFacilityName = asylumCase.read(PRISON_NAME, String.class).orElse("");
 
                 YesOrNo nomsAvailable = YesOrNo.NO;
-                String prisonerNomsNumberField = asylumCase
+                String nomsNumber = formatComplexString(asylumCase
                         .get("prisonNOMSNumber")
-                        .toString();
-
-                String prisonerNomsNumberValue = "";
-                if (!prisonerNomsNumberField.isEmpty()) {
-                    prisonerNomsNumberValue = formatComplexString(prisonerNomsNumberField);
+                        .toString());
+                if (!nomsNumber.isBlank()) {
                     nomsAvailable = YesOrNo.YES;
-                    fieldValues.put("nomsNumber", prisonerNomsNumberValue);
+                    fieldValues.put("nomsNumber", nomsNumber);
                 }
                 fieldValues.put("nomsAvailable", nomsAvailable);
 
                 YesOrNo releaseDateProvided = YesOrNo.NO;
-                String prisonerReleaseDateField = asylumCase
-                        .get("dateCustodialSentence")
-                        .toString();
-
-                String prisonerReleaseDateValue = "";
-                if (!prisonerReleaseDateField.isEmpty()) {
-                    prisonerReleaseDateValue = formatComplexString(prisonerReleaseDateField);
-                    releaseDateProvided = YesOrNo.YES;
-                    fieldValues.put("releaseDate", prisonerReleaseDateValue);
+                if (asylumCase.containsKey("dateCustodialSentence")) {
+                    String prisonerReleaseDate = formatComplexString(asylumCase
+                            .get("dateCustodialSentence")
+                            .toString());
+                    if (!prisonerReleaseDate.isBlank()) {
+                        releaseDateProvided = YesOrNo.YES;
+                        fieldValues.put("releaseDate", prisonerReleaseDate);
+                    }
                 }
                 fieldValues.put("releaseDateProvided", releaseDateProvided);
                 break;
             case "other":
                 detentionFacility = "Other";
-                detentionFacilityName = asylumCase.get("otherDetentionFacilityName").toString().replaceAll("[\\[\\](){}]","");
-                detentionFacilityName = detentionFacilityName.substring(detentionFacilityName.lastIndexOf("=") + 1);
+                detentionFacilityName = formatComplexString(asylumCase.get("otherDetentionFacilityName").toString());
                 break;
             default:
                 // Required for sonar scan. Can never reach here.
@@ -270,10 +270,10 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("detentionFacilityName", detentionFacilityName);
 
         BailApplicationStatus hasBailApplication = asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.class).orElse(BailApplicationStatus.NO);
-        fieldValues.put("hasPendingBailApplication", hasBailApplication);
         if (hasBailApplication.equals(BailApplicationStatus.YES)) {
-            fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class).orElse(""));
+            fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class));
         }
+        fieldValues.put("hasPendingBailApplication", hasBailApplication);
     }
 
     private void populateAddressFields(AsylumCase asylumCase, Map<String, Object> fieldValues) {
