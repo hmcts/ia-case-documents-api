@@ -65,12 +65,12 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
         Optional<String> homeOfficeDecisionDate = asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class);
-        fieldValues.put("homeOfficeDecisionDate", homeOfficeDecisionDate.isPresent() ?
-                formatDateForRendering(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class).orElse("")) : null);
+        fieldValues.put("homeOfficeDecisionDate", homeOfficeDecisionDate.isPresent()
+                ? formatDateForRendering(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class).orElse("")) : null);
 
         Optional<String> decisionLetterReceivedDate = asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class);
-        fieldValues.put("decisionLetterReceivedDate", decisionLetterReceivedDate.isPresent() ?
-                formatDateForRendering(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class).orElse("")) : null);
+        fieldValues.put("decisionLetterReceivedDate", decisionLetterReceivedDate.isPresent()
+                ? formatDateForRendering(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class).orElse("")) : null);
 
         Optional<YesOrNo> isDetained = Optional.of(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class).orElse(YesOrNo.NO));
         if (isDetained.equals(Optional.of(YesOrNo.YES))) {
