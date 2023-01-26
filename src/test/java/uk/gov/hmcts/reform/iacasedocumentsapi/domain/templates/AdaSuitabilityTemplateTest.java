@@ -46,9 +46,6 @@ public class AdaSuitabilityTemplateTest {
 
     @BeforeEach
     void setUp() {
-
-
-
         adaSuitabilityTemplate =
                 new AdaSuitabilityTemplate(
                         templateName,

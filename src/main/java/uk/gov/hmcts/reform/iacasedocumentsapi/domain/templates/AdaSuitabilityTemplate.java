@@ -20,7 +20,7 @@ public class AdaSuitabilityTemplate implements DocumentTemplate<AsylumCase> {
     private final StringProvider stringProvider;
 
     public AdaSuitabilityTemplate(
-            @Value("${AdaSuitabilityDocument.templateName}") String templateName,
+            @Value("${adaSuitabilityDocument.templateName}") String templateName,
             StringProvider stringProvider
     ) {
         this.templateName = templateName;

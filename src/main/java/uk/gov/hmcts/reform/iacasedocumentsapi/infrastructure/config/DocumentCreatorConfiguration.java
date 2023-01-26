@@ -247,9 +247,9 @@ public class DocumentCreatorConfiguration {
 
     @Bean("adaSuitability")
     public DocumentCreator<AsylumCase> getAdaSuitabilityDocumentCreator(
-            @Value("${AdaSuitabilityDocument.contentType}") String contentType,
-            @Value("${AdaSuitabilityDocument.fileExtension}") String fileExtension,
-            @Value("${AdaSuitabilityDocument.fileName}") String fileName,
+            @Value("${adaSuitabilityDocument.contentType}") String contentType,
+            @Value("${adaSuitabilityDocument.fileExtension}") String fileExtension,
+            @Value("${adaSuitabilityDocument.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
             AdaSuitabilityTemplate documentTemplate,
             DocumentGenerator documentGenerator,
