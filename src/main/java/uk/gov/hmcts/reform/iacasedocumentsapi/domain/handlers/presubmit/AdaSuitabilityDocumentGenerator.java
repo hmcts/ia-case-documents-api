@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -14,16 +17,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-
 @Component
-public class ADASuitabilityDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class AdaSuitabilityDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> adaSuitabilityDocumentGenerator;
     private final DocumentHandler documentHandler;
 
-    public ADASuitabilityDocumentGenerator(
+    public AdaSuitabilityDocumentGenerator(
             @Qualifier("adaSuitability") DocumentCreator<AsylumCase> appealSubmissionDocumentCreator,
             DocumentHandler documentHandler
     ) {
@@ -38,8 +38,8 @@ public class ADASuitabilityDocumentGenerator implements PreSubmitCallbackHandler
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return callback.getEvent() == Event.ADA_SUITABILITY_REVIEW &&
-                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
+        return callback.getEvent() == Event.ADA_SUITABILITY_REVIEW
+                && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

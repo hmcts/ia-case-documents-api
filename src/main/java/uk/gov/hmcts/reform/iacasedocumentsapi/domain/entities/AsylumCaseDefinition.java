@@ -514,9 +514,6 @@ public enum AsylumCaseDefinition {
     SUITABILITY_REVIEW_JUDGE(
             "suitabilityReviewJudge", new TypeReference<String>(){});
 
-    ;
-
-
     private final String value;
     private final TypeReference typeReference;
 

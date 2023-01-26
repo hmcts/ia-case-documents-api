@@ -251,7 +251,7 @@ public class DocumentCreatorConfiguration {
             @Value("${AdaSuitabilityDocument.fileExtension}") String fileExtension,
             @Value("${AdaSuitabilityDocument.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            ADASuitabilityTemplate documentTemplate,
+            AdaSuitabilityTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

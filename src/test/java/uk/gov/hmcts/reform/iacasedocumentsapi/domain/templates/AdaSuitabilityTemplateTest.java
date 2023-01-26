@@ -1,5 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,20 +19,12 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class ADASuitabilityTemplateTest {
+public class AdaSuitabilityTemplateTest {
 
     private final String templateName = "ADA_SUITABILITY_TEMPLATE.docx";
     @Mock
@@ -33,7 +32,7 @@ public class ADASuitabilityTemplateTest {
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
-    private ADASuitabilityTemplate adaSuitabilityTemplate;
+    private AdaSuitabilityTemplate adaSuitabilityTemplate;
     private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
     private String appealReferenceNumber = "RP/11111/2020";
     private String legalRepReferenceNumber = "Legal-Rep-Fake-Ref";
@@ -51,7 +50,7 @@ public class ADASuitabilityTemplateTest {
 
 
         adaSuitabilityTemplate =
-                new ADASuitabilityTemplate(
+                new AdaSuitabilityTemplate(
                         templateName,
                         stringProvider
                 );
@@ -72,7 +71,7 @@ public class ADASuitabilityTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(SUITABILITY_REVIEW_DECISION, AdaSuitabilityReviewDecision.class)).thenReturn(Optional.ofNullable(adaSuitability));
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION, AdaSuitabilityReviewDecision.class)).thenReturn(Optional.of(adaSuitability));
         when(asylumCase.read(SUITABILITY_REVIEW_REASON, String.class)).thenReturn(Optional.ofNullable(adaSuitabilityReason));
         when(asylumCase.read(SUITABILITY_REVIEW_JUDGE, String.class)).thenReturn(Optional.ofNullable(adaSuitabilityjudge));
     }
@@ -84,16 +83,16 @@ public class ADASuitabilityTemplateTest {
         Map<String, Object> templateFieldValues = adaSuitabilityTemplate.mapFieldValues(caseDetails);
 
         assertEquals(8, templateFieldValues.size());
-        assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals("[userImage:decisionsandreasons.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
 
-        assertEquals(appellantGivenNames.concat(" " + appellantFamilyName), templateFieldValues.get("fullName"));
+        assertEquals(appellantGivenNames.concat(" " + appellantFamilyName), templateFieldValues.get("appellantFullName"));
 
-        assertEquals(YesOrNo.NO, templateFieldValues.get("suitability"));
+        assertEquals(adaSuitability, templateFieldValues.get("suitability"));
         assertEquals(adaSuitabilityReason, templateFieldValues.get("suitabilityReason"));
-        assertEquals(adaSuitabilityjudge, templateFieldValues.get("suitabilityReason"));
+        assertEquals(adaSuitabilityjudge, templateFieldValues.get("judgeName"));
     }
 
     @ParameterizedTest
@@ -105,16 +104,16 @@ public class ADASuitabilityTemplateTest {
         Map<String, Object> templateFieldValues = adaSuitabilityTemplate.mapFieldValues(caseDetails);
 
         assertEquals(8, templateFieldValues.size());
-        assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals("[userImage:decisionsandreasons.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
 
-        assertEquals(appellantGivenNames.concat(" " + appellantFamilyName), templateFieldValues.get("fullName"));
+        assertEquals(appellantGivenNames.concat(" " + appellantFamilyName), templateFieldValues.get("appellantFullName"));
 
-//        assertEquals(convertAdaSuitabilityToYesOrNo(adaSuitabilityReviewDecision), templateFieldValues.get("suitability"));
+        assertEquals(adaSuitabilityReviewDecision, templateFieldValues.get("suitability"));
         assertEquals(adaSuitabilityReason, templateFieldValues.get("suitabilityReason"));
-        assertEquals(adaSuitabilityjudge, templateFieldValues.get("suitabilityReason"));
+        assertEquals(adaSuitabilityjudge, templateFieldValues.get("judgeName"));
     }
 
 }
