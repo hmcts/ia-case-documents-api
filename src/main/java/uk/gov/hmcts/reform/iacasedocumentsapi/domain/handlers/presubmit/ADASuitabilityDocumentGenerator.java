@@ -38,7 +38,8 @@ public class ADASuitabilityDocumentGenerator implements PreSubmitCallbackHandler
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return callback.getEvent() == Event.ADA_SUITABILITY_REVIEW;
+        return callback.getEvent() == Event.ADA_SUITABILITY_REVIEW &&
+                callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

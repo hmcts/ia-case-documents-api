@@ -101,7 +101,7 @@ adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPD
 
 AdaSuitabilityDocument.contentType: application/pdf
 AdaSuitabilityDocument.fileExtension: PDF
-AdaSuitabilityDocument.fileName: "ada-suitability"
+AdaSuitabilityDocument.fileName: "ADA-suitability-decision"
 AdaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00001.docx}
 
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
