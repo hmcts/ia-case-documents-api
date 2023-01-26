@@ -1,36 +1,27 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.TemplateUtils.*;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -43,6 +34,12 @@ public class ADASuitabilityTemplateTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     private ADASuitabilityTemplate adaSuitabilityTemplate;
+    private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
+    private String appealReferenceNumber = "RP/11111/2020";
+    private String legalRepReferenceNumber = "Legal-Rep-Fake-Ref";
+    private String homeOfficeReferenceNumber = "A1234567/001";
+    private String appellantGivenNames = "John";
+    private String appellantFamilyName = "Doe";
     private AdaSuitabilityReviewDecision adaSuitability = AdaSuitabilityReviewDecision.UNSUITABLE;
     private String adaSuitabilityReason = "This is the reason";
     private String adaSuitabilityjudge = "Judgy Judgerson";

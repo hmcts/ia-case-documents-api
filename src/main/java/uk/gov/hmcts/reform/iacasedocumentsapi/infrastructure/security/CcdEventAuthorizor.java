@@ -40,7 +40,6 @@ public class CcdEventAuthorizor {
     private List<String> getRequiredRolesForEvent(
         Event event
     ) {
-        System.out.println(roleEventAccess.toString());
         return roleEventAccess
             .entrySet()
             .stream()

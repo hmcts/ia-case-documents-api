@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.TemplateUtils.getCaseData;
 @Component
 public class ADASuitabilityTemplate implements DocumentTemplate<AsylumCase> {
     private final String templateName;
@@ -35,7 +34,7 @@ public class ADASuitabilityTemplate implements DocumentTemplate<AsylumCase> {
     public Map<String, Object> mapFieldValues(
             CaseDetails<AsylumCase> caseDetails
     ) {
-        final AsylumCase asylumCase = getCaseData(caseDetails);
+        final AsylumCase asylumCase = caseDetails.getCaseData();
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
