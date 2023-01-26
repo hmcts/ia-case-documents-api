@@ -90,6 +90,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 28;
             case NONE:
                 return 29;
+            case ADA_SUITABILITY:
+                return 30;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
