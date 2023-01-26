@@ -568,6 +568,7 @@ public class AppealSubmissionTemplateTest {
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(null, templateFieldValues.get("homeOfficeDecisionDate"));
+        assertEquals(null, templateFieldValues.get("decisionLetterReceivedDate"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals("", templateFieldValues.get("appellantDateOfBirth"));
