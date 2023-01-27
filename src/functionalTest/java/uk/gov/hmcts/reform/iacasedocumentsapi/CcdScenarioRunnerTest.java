@@ -313,6 +313,11 @@ public class CcdScenarioRunnerTest {
                 .getJudgeAuthorization();
         }
 
+        if ("System".equalsIgnoreCase(credentials)) {
+            return authorizationHeadersProvider
+                    .getSystemAuthorization();
+        }
+
         return new Headers();
     }
 }
