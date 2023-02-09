@@ -460,6 +460,9 @@ public enum AsylumCaseDefinition {
     APP_ADDITIONAL_EVIDENCE_DOCS(
         "appAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    CUSTOM_TRIBUNAL_DOCUMENTS(
+            "customTribunalDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
     RESP_ADDITIONAL_EVIDENCE_DOCS(
         "respAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
