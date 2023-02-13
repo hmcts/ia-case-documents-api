@@ -252,6 +252,7 @@ security:
       - "customiseHearingBundle"
     caseworker-ia-admofficer:
       - "listCase"
+      - "submitAppeal"
       - "editCaseListing"
       - "sendDecisionAndReasons"
       - "adjournHearingWithoutDate"
