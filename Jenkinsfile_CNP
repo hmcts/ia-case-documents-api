@@ -69,11 +69,12 @@ withPipeline(type, product, component) {
     disableLegacyDeployment()
     loadVaultSecrets(secrets)
 
-    afterAlways('functionalTest:preview') {
+    afterSuccess('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
-    afterAlways('functionalTest:aat') {
+    afterSuccess('functionalTest:aat') {
+      
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
