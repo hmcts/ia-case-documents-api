@@ -253,6 +253,7 @@ security:
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
+      - "editAppeal"
       - "editCaseListing"
       - "sendDecisionAndReasons"
       - "adjournHearingWithoutDate"
