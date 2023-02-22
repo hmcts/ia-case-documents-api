@@ -804,6 +804,9 @@ govnotify:
         email: 200ea13a-b583-4471-8d08-650f77eabd8c
       homeOffice:
         email: f90edfba-ac37-47fa-ab55-e429ffa9f372
+      appellant:
+        email: 9dce71ff-5985-4bea-8958-b1dc155132dd
+        sms: f1ce1bb3-ddef-4b6b-95d1-cf4809e2b9d9
   bail:
     key: ${IA_BAIL_GOV_NOTIFY_KEY}
     timeout: 5000
@@ -904,6 +907,7 @@ security:
       - "editAppeal"
       - "uploadAdditionalEvidence"
       - "submitAppeal"
+      - "paymentAppeal"
       - "submitReasonsForAppeal"
       - "submitTimeExtension"
       - "submitClarifyingQuestionAnswers"
@@ -1177,6 +1181,8 @@ appellantDaysToWait:
   afterClarifyingQuestionsAnswers: 5
   afterCmaRequirements: 14
   afterHearingRequirementsSubmitted: 14
+
+appellantDaysToAskReinstate: 14
 
 launchDarkly:
   sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}

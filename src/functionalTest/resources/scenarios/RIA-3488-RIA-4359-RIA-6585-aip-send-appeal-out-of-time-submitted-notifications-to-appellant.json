@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3488-RIA-4359 AIP Send appeal out of time submitted notifications (Email and SMS) and Email to HO",
+  "description": "RIA-3488-RIA-4359-RIA-6585 AIP Send appeal out of time submitted notifications (Email and SMS) and Email to HO",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
     "request": {
       "uri": "/asylum/ccdAboutToSubmit",
@@ -7,13 +7,14 @@
       "input": {
         "id": 34881,
         "eventId": "submitAppeal",
-        "state": "pendingPayment",
+        "state": "appealSubmitted",
         "caseData": {
           "template": "aip-minimal-appeal-submitted.json",
           "replacements": {
             "hearingCentre": "manchester",
             "submissionOutOfTime": "Yes",
             "paAppealTypePaymentOption": "payLater",
+            "appealType": "protection",
             "subscriptions": [
               {
                 "id": "1",
@@ -39,6 +40,7 @@
           "hearingCentre": "manchester",
           "submissionOutOfTime": "Yes",
           "paAppealTypePaymentOption": "payLater",
+          "appealType": "protection",
           "subscriptions": [
             {
               "id": "1",

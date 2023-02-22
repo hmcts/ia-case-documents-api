@@ -60,7 +60,7 @@
         <cve>CVE-2022-42004</cve>
     </suppress>
     <suppress>
-        <notes>Temporarily suppress log4j vulneravilities</notes>
+        <notes>Temporarily suppress log4j vulnerabilities</notes>
         <cve>CVE-2022-33915</cve>
     </suppress>
     <suppress>
@@ -70,9 +70,22 @@
         <cve>CVE-2021-37533</cve>        
     </suppress>
     <suppress>
+        <notes>Temporarily suppress LatencyUtils vulnerabilities</notes>
         <cve>CVE-2021-4277</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress Snakeyaml vulnerabilities</notes>
         <cve>CVE-2021-4235</cve>
+        <cve>CVE-2022-1471</cve>
         <cve>CVE-2022-3064</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress tomcat-embed vulnerabilities</notes>
         <cve>CVE-2022-45143</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress json related vulnerability</notes>
+        <packageUrl regex="true">^pkg:maven/org\.json/json@.*$</packageUrl>
+        <vulnerabilityName>CVE-2022-45688</vulnerabilityName>
     </suppress>
 </suppressions>
