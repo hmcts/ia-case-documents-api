@@ -213,6 +213,8 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 .orElse("")
         );
 
+        fieldValues.put("isAdmin", asylumCase.read(IS_ADMIN, YesOrNo.class).orElse(YesOrNo.NO));
+
         return fieldValues;
     }
 
