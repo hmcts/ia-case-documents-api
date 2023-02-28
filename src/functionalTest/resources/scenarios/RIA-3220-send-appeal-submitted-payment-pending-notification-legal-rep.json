@@ -13,8 +13,10 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "hearingCentre": "taylorHouse",
-          "paAppealTypePaymentOption":"payOffline",
-          "appealType":"protection"
+          "paAppealTypePaymentOption": null,
+          "isRemissionsEnabled": "Yes",
+          "remissionType": "hoWaiverRemission",
+          "appealType": "protection"
         }
       }
     }
@@ -25,15 +27,17 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "paAppealTypePaymentOption":"payOffline",
-        "appealType":"protection",
+        "paAppealTypePaymentOption": null,
+        "isRemissionsEnabled": "Yes",
+        "remissionType": "hoWaiverRemission",
+        "appealType": "protection",
         "notificationsSent": [
           {
             "id": "3220_APPEAL_SUBMITTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "3220_APPEAL_SUBMITTED_HOME_OFFICE",
+            "id": "3220_APPEAL_SUBMITTED_PAY_OFFLINE_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
@@ -59,7 +63,7 @@
         ]
       },
       {
-        "reference": "3220_APPEAL_SUBMITTED_HOME_OFFICE",
+        "reference": "3220_APPEAL_SUBMITTED_PAY_OFFLINE_HOME_OFFICE",
         "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
@@ -73,7 +77,7 @@
       {
         "reference": "3220_APPEAL_SUBMITTED_PAY_OFFLINE_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: Your appeal has been submitted",
+        "subject": "Immigration and Asylum appeal: appeal submitted with remission application",
         "body": [
           "PA/12345/2019",
           "CASE001",
@@ -85,8 +89,8 @@
       },
       {
         "reference": "3220_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
-        "recipient": "{$FEES_ADMIN_OFFICER_EMAIL}",
-        "subject": "Immigration and Asylum appeal: appeal submitted pending payment",
+        "recipient": "payment-exceptions-ao-aat-test@example.com",
+        "subject": "Immigration and Asylum appeal: appeal submitted with remission application",
         "body": [
           "PA/12345/2019",
           "Talha Awan",

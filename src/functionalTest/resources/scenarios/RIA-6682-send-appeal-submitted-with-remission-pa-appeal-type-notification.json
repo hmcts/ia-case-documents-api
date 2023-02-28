@@ -1,20 +1,19 @@
 {
-  "description": "RIA-3689 send appeal submitted with remission and payOffline, for PA appeal notification",
+  "description": "RIA-6682 send appeal submitted with remission and payOffline, for PA appeal notification",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
-      "id": 3689,
+      "id": 6682,
       "eventId": "submitAppeal",
-      "state": "payOffline",
+      "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "isRemissionsEnabled": "Yes",
           "remissionType": "hoWaiverRemission",
-          "appealType": "protection",
-          "paAppealTypePaymentOption": "payOffline"
+          "appealType": "protection"
         }
       }
     }
@@ -29,18 +28,17 @@
         "isRemissionsEnabled": "Yes",
         "remissionType":"hoWaiverRemission",
         "appealType":"protection",
-        "paAppealTypePaymentOption": "payOffline",
         "notificationsSent": [
           {
-            "id": "3689_APPEAL_SUBMITTED_HOME_OFFICE",
+            "id": "6682_APPEAL_SUBMITTED_PAY_OFFLINE_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "3689_APPEAL_SUBMITTED_PAY_OFFLINE_LEGAL_REPRESENTATIVE",
+            "id": "6682_APPEAL_SUBMITTED_PAY_OFFLINE_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "3689_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
+            "id": "6682_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -48,7 +46,7 @@
     },
     "notifications": [
       {
-        "reference": "3689_APPEAL_SUBMITTED_HOME_OFFICE",
+        "reference": "6682_APPEAL_SUBMITTED_PAY_OFFLINE_HOME_OFFICE",
         "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: appeal submitted",
         "body": [
@@ -60,7 +58,7 @@
         ]
       },
       {
-        "reference": "3689_APPEAL_SUBMITTED_PAY_OFFLINE_LEGAL_REPRESENTATIVE",
+        "reference": "6682_APPEAL_SUBMITTED_PAY_OFFLINE_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: appeal submitted with remission application",
         "body": [
@@ -73,8 +71,8 @@
         ]
       },
       {
-        "reference": "3689_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
-        "recipient": "{$PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL}",
+        "reference": "6682_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
+        "recipient": "payment-exceptions-ao-aat-test@example.com",
         "subject": "Immigration and Asylum appeal: appeal submitted with remission application",
         "body": [
           "PA/12345/2019",

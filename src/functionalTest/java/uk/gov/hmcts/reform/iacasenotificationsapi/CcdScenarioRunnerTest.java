@@ -101,7 +101,6 @@ public class CcdScenarioRunnerTest {
             final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
 
             String description = MapValueExtractor.extract(scenario, "description");
-
             Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
 
             Object scenarioFeature = MapValueExtractor.extract(scenario, "launchDarklyKey");
@@ -383,7 +382,7 @@ public class CcdScenarioRunnerTest {
 
         if ("SystemUser".equalsIgnoreCase(credentials)) {
             return authorizationHeadersProvider
-                .getSystemUserAuthorization();
+                    .getSystemUserAuthorization();
         }
 
         return new Headers();

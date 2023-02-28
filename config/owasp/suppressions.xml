@@ -67,7 +67,7 @@
         <cve>CVE-2022-31690</cve>
         <cve>CVE-2022-31692</cve>
         <cve>CVE-2022-42252</cve>
-        <cve>CVE-2021-37533</cve>        
+        <cve>CVE-2021-37533</cve>
     </suppress>
     <suppress>
         <notes>Temporarily suppress LatencyUtils vulnerabilities</notes>
@@ -84,8 +84,7 @@
         <cve>CVE-2022-45143</cve>
     </suppress>
     <suppress>
-        <notes>Temporarily suppress json related vulnerability</notes>
-        <packageUrl regex="true">^pkg:maven/org\.json/json@.*$</packageUrl>
-        <vulnerabilityName>CVE-2022-45688</vulnerabilityName>
+        <notes>Temporarily suppress json and jackson-core related vulnerability</notes>
+        <cve>CVE-2022-45688</cve>
     </suppress>
 </suppressions>

@@ -32,6 +32,7 @@ public class NotificationGeneratorConfiguration {
     @Value("${featureFlag.homeOfficeGovNotifyEnabled}")
     private boolean isHomeOfficeGovNotifyEnabled;
 
+
     @Bean("forceCaseProgressionNotificationGenerator")
     public List<NotificationGenerator> forceCaseProgressionNotificationGenerator(
         RespondentForceCaseProgressionPersonalisation homeOfficePersonalisation,
@@ -2071,18 +2072,18 @@ public class NotificationGeneratorConfiguration {
     public List<NotificationGenerator> submitAppealPayOfflineNotificationHandler(
             LegalRepresentativeAppealSubmittedPayOfflinePersonalisation legalRepresentativeAppealSubmittedPayOfflinePersonalisation,
             AdminOfficerAppealSubmittedPayOfflinePersonalisation adminOfficerAppealSubmittedPayOfflinePersonalisation,
+            HomeOfficeAppealSubmittedPayOfflinePersonalisation homeOfficeAppealSubmittedPayOfflinePersonalisation,
             GovNotifyNotificationSender notificationSender,
             NotificationIdAppender notificationIdAppender
     ) {
+        //RIA-6682
+        List<EmailNotificationPersonalisation> personalisations = newArrayList(homeOfficeAppealSubmittedPayOfflinePersonalisation, legalRepresentativeAppealSubmittedPayOfflinePersonalisation, adminOfficerAppealSubmittedPayOfflinePersonalisation);
 
         return Collections.singletonList(
             new EmailNotificationGenerator(
-                newArrayList(
-                        legalRepresentativeAppealSubmittedPayOfflinePersonalisation,
-                        adminOfficerAppealSubmittedPayOfflinePersonalisation
-                ),
-                notificationSender,
-                notificationIdAppender
+                    personalisations,
+                    notificationSender,
+                    notificationIdAppender
             )
         );
     }
