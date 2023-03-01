@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static java.util.stream.Collectors.joining;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_OTHER_APPEALS;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HasOtherAppeals;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.BailApplicationStatus;
@@ -203,6 +205,13 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                 .map(idValue -> idValue.getValue().get("value"))
                 .collect(joining(", "))
         );
+
+        Optional<HasOtherAppeals> hasOtherAppeals = asylumCase.read(HAS_OTHER_APPEALS, HasOtherAppeals.class);
+        if (hasOtherAppeals.isPresent() && hasOtherAppeals.get().toString().equals(HasOtherAppeals.YES.toString())) {
+            fieldValues.put("hasOtherAppeals", YesOrNo.YES);
+        } else {
+            fieldValues.put("hasOtherAppeals", YesOrNo.NO);
+        }
 
         fieldValues.put("applicationOutOfTimeExplanation", asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class).orElse(""));
         fieldValues.put("submissionOutOfTime", asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(YesOrNo.NO));
