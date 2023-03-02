@@ -518,7 +518,10 @@ public enum AsylumCaseDefinition {
             "suitabilityReviewJudge", new TypeReference<String>(){}),
 
     IS_ADMIN(
-            "isAdmin", new TypeReference<YesOrNo>() {});
+            "isAdmin", new TypeReference<YesOrNo>() {}),
+
+    HAS_OTHER_APPEALS(
+            "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {});
 
     private final String value;
     private final TypeReference typeReference;
