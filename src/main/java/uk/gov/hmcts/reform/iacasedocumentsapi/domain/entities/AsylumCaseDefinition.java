@@ -521,7 +521,7 @@ public enum AsylumCaseDefinition {
             "isAdmin", new TypeReference<YesOrNo>() {}),
 
     HAS_OTHER_APPEALS(
-            "hasOtherAppeals", new TypeReference<String>() {});
+            "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {});
 
     private final String value;
     private final TypeReference typeReference;
