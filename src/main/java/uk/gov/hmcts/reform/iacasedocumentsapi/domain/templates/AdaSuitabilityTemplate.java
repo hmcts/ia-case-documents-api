@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,20 +12,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityRevi
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @Component
 public class AdaSuitabilityTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
-    private final StringProvider stringProvider;
 
     public AdaSuitabilityTemplate(
-            @Value("${adaSuitabilityDocument.templateName}") String templateName,
-            StringProvider stringProvider
+            @Value("${adaSuitabilityDocument.templateName}") String templateName
     ) {
         this.templateName = templateName;
-        this.stringProvider = stringProvider;
     }
 
     public String getName() {
@@ -60,6 +57,8 @@ public class AdaSuitabilityTemplate implements DocumentTemplate<AsylumCase> {
         final String judgeName = asylumCase.read(SUITABILITY_REVIEW_JUDGE, String.class)
                 .orElseThrow(() -> new RequiredFieldMissingException("ADA suitability review decision judge details unavailable."));
         fieldValues.put("judgeName", judgeName);
+
+        fieldValues.put("decisionDate", LocalDate.now().toString());
 
         return fieldValues;
     }
