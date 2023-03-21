@@ -331,7 +331,7 @@ dependencies {
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
-    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.1'
+    compile group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.8'
 
     compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
