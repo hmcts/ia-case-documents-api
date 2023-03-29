@@ -78,8 +78,6 @@ public class AsylumCaseFixtures {
     public static String someUploadResponse() {
         return "{\n"
                +
-               "  \"_embedded\": {\n"
-               +
                "    \"documents\": [\n"
                +
                "      {\n"
@@ -105,8 +103,6 @@ public class AsylumCaseFixtures {
                "    }\n"
                +
                "    ]\n"
-               +
-               "  }\n"
                +
                "}\n";
     }

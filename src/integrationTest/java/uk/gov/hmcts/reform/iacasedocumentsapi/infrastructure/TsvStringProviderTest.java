@@ -94,8 +94,8 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
-                Optional.of("The decision is unlawful under section 6 of the Human Rights Act 1998"),
-                tsvStringProvider.get("appealGrounds", "humanRightsRefusal")
+            Optional.of("The decision is unlawful under section 6 of the Human Rights Act 1998"),
+            tsvStringProvider.get("appealGrounds", "humanRightsRefusal")
         );
 
         assertEquals(
@@ -200,8 +200,8 @@ public class TsvStringProviderTest {
 
 
         assertEquals(
-                Optional.of("Stateless"),
-                tsvStringProvider.get("isoCountries", "ZZ")
+            Optional.of("Stateless"),
+            tsvStringProvider.get("isoCountries", "ZZ")
         );
     }
 
