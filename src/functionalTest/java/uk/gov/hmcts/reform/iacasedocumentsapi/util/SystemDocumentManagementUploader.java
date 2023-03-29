@@ -2,30 +2,26 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import com.google.common.io.ByteStreams;
 import java.io.IOException;
-import java.util.List;
-import org.springframework.context.annotation.ComponentScan;
+import java.util.Collections;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
-import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
-import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
-import uk.gov.hmcts.reform.ccd.document.am.util.InMemoryMultipartFile;
+import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
+import uk.gov.hmcts.reform.document.domain.UploadResponse;
+import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 @Service
-@ComponentScan("uk.gov.hmcts.reform.ccd.document.am.feign")
 public class SystemDocumentManagementUploader {
 
-    private final CaseDocumentClient caseDocumentClient;
-
+    private final DocumentUploadClientApi documentUploadClientApi;
     private final AuthorizationHeadersProvider authorizationHeadersProvider;
 
     public SystemDocumentManagementUploader(
-            CaseDocumentClient caseDocumentClient,
+        DocumentUploadClientApi documentUploadClientApi,
         AuthorizationHeadersProvider authorizationHeadersProvider
     ) {
-        this.caseDocumentClient = caseDocumentClient;
+        this.documentUploadClientApi = documentUploadClientApi;
         this.authorizationHeadersProvider = authorizationHeadersProvider;
     }
 
@@ -55,20 +51,19 @@ public class SystemDocumentManagementUploader {
             );
 
             UploadResponse uploadResponse =
-                    caseDocumentClient
-                            .uploadDocuments(
-                                    accessToken,
-                                    serviceAuthorizationToken,
-                                    "Asylum",
-                                    "IA",
-                                    List.of(file),
-                                    Classification.PUBLIC
-                            );
+                documentUploadClientApi
+                    .upload(
+                        accessToken,
+                        serviceAuthorizationToken,
+                        userId,
+                        Collections.singletonList(file)
+                    );
 
-            uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument =
-                    uploadResponse
-                            .getDocuments()
-                            .get(0);
+            uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
+                uploadResponse
+                    .getEmbedded()
+                    .getDocuments()
+                    .get(0);
 
             return new Document(
                 uploadedDocument
