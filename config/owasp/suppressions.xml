@@ -117,14 +117,16 @@
         <cve>CVE-2022-42252</cve>        
     </suppress>
     <suppress>  				
-	    <cve>CVE-2022-31690</cve>
-	    <cve>CVE-2022-31692</cve>
-	    <cve>CVE-2022-42252</cve>
-	    <cve>CVE-2021-37533</cve>
-	    <cve>CVE-2022-41854</cve>
+	<cve>CVE-2022-31690</cve>
+	<cve>CVE-2022-31692</cve>
+	<cve>CVE-2022-42252</cve>
+	<cve>CVE-2021-37533</cve>
+	<cve>CVE-2022-41854</cve>
     </suppress>
     <suppress>
         <cve>CVE-2022-45688</cve>
         <cve>CVE-2023-24998</cve>
+	<cve>CVE-2022-1471</cve>
+	<cve>CVE-2023-28708</cve>	    
     </suppress>
 </suppressions>
