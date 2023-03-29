@@ -29,8 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
     "docmosis.endpoint=http://127.0.0.1:" + WIREMOCK_PORT,
     "docmosis.render.uri=/docmosis",
     "ccdGatewayUrl=http://127.0.0.1:" + WIREMOCK_PORT,
-    "emBundler.url=http://127.0.0.1:" + WIREMOCK_PORT,
-    "case_document_am.url=http://127.0.0.1:" + WIREMOCK_PORT })
+    "emBundler.url=http://127.0.0.1:" + WIREMOCK_PORT})
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(classes = {TestConfiguration.class, Application.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class SpringBootIntegrationTest {

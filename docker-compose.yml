@@ -30,7 +30,6 @@ services:
       S2S_URL: http://service-auth-provider-api:8080
       IA_IDAM_REDIRECT_URI: http://idam-api
       IDAM_URL: http://idam-api:8080
-      CASE_DOCUMENT_AM_URL: http://ccd-case-document-am-api:4455
       DM_URL: http://dm-store:8080
       CCD_GW_URL: http://ccd-api-gateway-web:3453
       EM_BUNDLER_URL: http://rpa-em-ccd-orchestrator:8060
