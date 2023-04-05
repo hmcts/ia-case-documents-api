@@ -245,7 +245,7 @@ repositories {
 dependencyManagement {
     dependencies {
 
-        dependencySet(group: 'org.yaml', version: '2.0') {
+        dependencySet(group: 'org.yaml', version: '1.33') {
             entry 'snakeyaml'
         }
 
