@@ -41,7 +41,7 @@ def versions = [
     springHystrix      : '2.2.10.RELEASE',
     pact_version       : '4.1.7',
     springDoc          : '1.6.8',
-    snakeyaml          : '1.33',
+    snakeyaml          : '2.0',
     springCloud        : '3.1.1'
 ]
 
@@ -245,11 +245,11 @@ repositories {
 dependencyManagement {
     dependencies {
 
-        dependencySet(group: 'org.yaml', version: '1.33') {
+        dependencySet(group: 'org.yaml', version: '2.0') {
             entry 'snakeyaml'
         }
 
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.69') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.73') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-el'
             entry 'tomcat-embed-websocket'
