@@ -300,9 +300,9 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
     compile group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     compile group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
 
-
-
+    compile group: 'com.github.ben-manes.caffeine', name: 'caffeine'
     // CVE-2019-17195
     compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 
