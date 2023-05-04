@@ -90,7 +90,10 @@
     <suppress>
         <cve>CVE-2023-28708</cve>
         <cve>CVE-2023-20861</cve>
+        <cve>CVE-2023-20862</cve>
+        <cve>CVE-2023-20863</cve>
         <cve>CVE-2023-20860</cve>
+        <cve>CVE-2023-20873</cve>
         <cve>CVE-2023-24998</cve>
     </suppress>
 </suppressions>
