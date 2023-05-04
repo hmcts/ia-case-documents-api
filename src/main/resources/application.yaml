@@ -806,7 +806,29 @@ govnotify:
         email: f90edfba-ac37-47fa-ab55-e429ffa9f372
       appellant:
         email: 9dce71ff-5985-4bea-8958-b1dc155132dd
-        sms: f1ce1bb3-ddef-4b6b-95d1-cf4809e2b9d9
+        sms: f1ce1bb3-ddef-4b6b-95d1-cf4809e2b9d9        
+    createCaseLink:
+      legalRep:
+        beforeListing:
+          email: d5532c41-ea35-4e65-8149-be5858591f1d
+        afterListing:
+          email: 18b58394-000f-4b32-ab14-0fafa5b4b319
+      homeOffice:
+        beforeListing:
+          email: dc4a8d3b-1a51-412c-8bfa-b666a9034e0f
+        afterListing:
+          email: e11f6e7b-1757-4e6c-abff-37d02b97d49b
+    maintainCaseLinks:
+      legalRep:
+        beforeListing:
+          email: 417aa9a1-e7bd-412b-ab84-20fc853e277d
+        afterListing:
+          email: f5ef69fd-9a6b-48d7-8f13-7add6e37defe
+      homeOffice:
+        beforeListing:
+          email: 63c30831-4dd0-4c0a-b70f-4c439dcc66ea
+        afterListing:
+          email: a8cd0fdd-f73b-406d-b3fe-ddda49871598          
   bail:
     key: ${IA_BAIL_GOV_NOTIFY_KEY}
     timeout: 5000
@@ -854,6 +876,18 @@ govnotify:
         email: 84d48a3f-afd6-4759-9219-22cb37bebabb
       editApplicationAfterSubmitWithoutLr:
         email: 160386c8-7fc5-4359-8d3d-f99765af00d5
+      createBailCaseLinkLR:
+        email: ce2a2627-4351-4ae4-b2ba-0edb649a6f04
+      createBailCaseLinkHO:
+        email: c349d1ef-ecda-47b8-b11e-363ecd8bd5a2
+      createBailCaseLinkHOWithoutLR:
+        email: 0539996b-f7db-47ea-9624-1fb716641a03
+      maintainBailCaseLinksHO:
+        email: 63aa8b96-b7c3-4ef9-ac3b-199631463f51
+      maintainBailCaseLinksHOWithoutLR:
+        email: 8d7817bd-635c-4ee8-b8c3-79cc6847a72b
+      maintainBailCaseLinksLR:
+        email: 83fcb9fb-61b2-46a4-b67e-836bf3f78538
       stopLegalRepresenting:
         sms: 14f55cf1-5442-466c-a1fc-bb4a268bc6d8
         legalRep: 402192e3-d493-435a-b00c-c016deaee2ea
@@ -989,6 +1023,8 @@ security:
       - "manageFeeUpdate"
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
+      - "createCaseLink"
+      - "maintainCaseLinks"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -1015,6 +1051,10 @@ security:
       - "editBailApplicationAfterSubmit"
       - "changeBailDirectionDueDate"
       - "makeNewApplication"
+      - "createCaseLink"
+      - "maintainCaseLinks"
+      - "createBailCaseLink"
+      - "maintainBailCaseLinks"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -1059,6 +1099,10 @@ security:
       - "sendBailDirection"
       - "editBailDocuments"
       - "changeBailDirectionDueDate"
+      - "createCaseLink"
+      - "maintainCaseLinks"
+      - "createBailCaseLink"
+      - "maintainBailCaseLinks"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
       - "endAppealAutomatically"

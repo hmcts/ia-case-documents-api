@@ -64,6 +64,36 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> caseLinkAppealNotificationHandler(
+        @Qualifier("caseLinkAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && Event.CREATE_CASE_LINK.equals(callback.getEvent())
+                       && isRepJourney(asylumCase);
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> caseUnlinkAppealNotificationHandler(
+        @Qualifier("caseUnlinkAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && Event.MAINTAIN_CASE_LINKS.equals(callback.getEvent())
+                       && isRepJourney(asylumCase);
+            },
+            notificationGenerators
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> unlinkAppealNotificationHandler(
         @Qualifier("unlinkAppealNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
 

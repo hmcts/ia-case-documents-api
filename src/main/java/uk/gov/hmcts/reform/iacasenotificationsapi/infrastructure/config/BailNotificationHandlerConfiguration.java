@@ -379,6 +379,90 @@ public class BailNotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<BailCase> createBailCaseLinkWithLegalRepNotificationHandler(
+        @Qualifier("createBailCaseLinkNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators
+    ) {
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                             && callback.getEvent() == Event.CREATE_BAIL_CASE_LINK);
+                if (isAllowedBailCase) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+                    return (callback.getEvent() == Event.CREATE_BAIL_CASE_LINK
+                            && isLegallyRepresented(bailCase));
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<BailCase> createBailCaseLinkWithoutLegalRepNotificationHandler(
+        @Qualifier("createBailCaseLinkWithoutLrNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators
+    ) {
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                             && callback.getEvent() == Event.CREATE_BAIL_CASE_LINK);
+                if (isAllowedBailCase) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+                    return (callback.getEvent() == Event.CREATE_BAIL_CASE_LINK
+                            && !isLegallyRepresented(bailCase));
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<BailCase> maintainBailCaseLinksWithLegalRepNotificationHandler(
+        @Qualifier("maintainBailCaseLinksNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators
+    ) {
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                             && callback.getEvent() == Event.MAINTAIN_BAIL_CASE_LINKS);
+                if (isAllowedBailCase) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+                    return (callback.getEvent() == Event.MAINTAIN_BAIL_CASE_LINKS
+                            && isLegallyRepresented(bailCase));
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<BailCase> maintainBailCaseLinksWithoutLegalRepNotificationHandler(
+        @Qualifier("maintainBailCaseLinksWithoutLrNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators
+    ) {
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                             && callback.getEvent() == Event.MAINTAIN_BAIL_CASE_LINKS);
+                if (isAllowedBailCase) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+                    return (callback.getEvent() == Event.MAINTAIN_BAIL_CASE_LINKS
+                            && !isLegallyRepresented(bailCase));
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
     public PostSubmitCallbackHandler<BailCase> stopLegalRepresentingNotificationHandler(
             @Qualifier("stopLegalRepresentingNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators
     ) {
@@ -389,7 +473,7 @@ public class BailNotificationHandlerConfiguration {
                 getErrorHandler()
         );
     }
-                
+
     @Bean
     public PostSubmitCallbackHandler<BailCase> nocChangedLegalRepNotificationHandler(
         @Qualifier("nocChangedLegalRepNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators

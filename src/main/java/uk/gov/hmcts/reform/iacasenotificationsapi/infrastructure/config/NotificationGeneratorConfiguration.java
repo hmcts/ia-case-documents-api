@@ -58,6 +58,38 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("caseLinkAppealNotificationGenerator")
+    public List<NotificationGenerator> caseLinkAppealNotificationGenerator(
+        LegalRepresentativeCaseLinkAppealPersonalisation legalRepresentativeCaseLinkAppealPersonalisation,
+        HomeOfficeCaseLinkPersonalisation homeOfficeCaseLinkPersonalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeCaseLinkAppealPersonalisation, homeOfficeCaseLinkPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("caseUnlinkAppealNotificationGenerator")
+    public List<NotificationGenerator> caseUnlinkAppealNotificationGenerator(
+        LegalRepresentativeCaseUnlinkAppealPersonalisation legalRepresentativeCaseUnlinkAppealPersonalisation,
+        HomeOfficeCaseUnlinkPersonalisation homeOfficeCaseUnlinkPersonalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(legalRepresentativeCaseUnlinkAppealPersonalisation, homeOfficeCaseUnlinkPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("unlinkAppealNotificationGenerator")
     public List<NotificationGenerator> unlinkAppealNotificationGenerator(
         LegalRepresentativeUnlinkAppealPersonalisation legalRepresentativeUnlinkAppealPersonalisation,
