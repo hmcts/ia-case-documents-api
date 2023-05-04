@@ -87,7 +87,7 @@
         <notes>Temporarily suppress json and jackson-core related vulnerability</notes>
         <cve>CVE-2022-45688</cve>
     </suppress>
-    <suppress until="2023-04-18">
+    <suppress>
         <cve>CVE-2023-28708</cve>
         <cve>CVE-2023-20861</cve>
         <cve>CVE-2023-20860</cve>

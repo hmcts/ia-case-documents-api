@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
 
@@ -30,6 +32,7 @@ public class CaseOfficerChangeHearingCentrePersonalisationTest {
     private final String appealReferenceNumber = "someReferenceNumber";
     private final String appellantGivenNames = "someAppellantGivenNames";
     private final String appellantFamilyName = "someAppellantFamilyName";
+    private final String listCaseCaseOfficerEmailAddress = "co-list-case@example.com";
     @Mock
     AsylumCase asylumCase;
     @Mock
@@ -46,7 +49,7 @@ public class CaseOfficerChangeHearingCentrePersonalisationTest {
         when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
         caseOfficerChangeHearingCentrePersonalisation =
-            new CaseOfficerChangeHearingCentrePersonalisation(templateId, emailAddressFinder);
+            new CaseOfficerChangeHearingCentrePersonalisation(templateId, emailAddressFinder,listCaseCaseOfficerEmailAddress);
     }
 
     @Test
@@ -63,6 +66,10 @@ public class CaseOfficerChangeHearingCentrePersonalisationTest {
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.GLASGOW));
+        assertTrue(caseOfficerChangeHearingCentrePersonalisation.getRecipientsList(asylumCase)
+                .contains(listCaseCaseOfficerEmailAddress));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         assertTrue(caseOfficerChangeHearingCentrePersonalisation.getRecipientsList(asylumCase)
                 .contains(hearingCentreEmailAddress));
     }

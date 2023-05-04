@@ -41,6 +41,7 @@ public class EmailAddressFinderTest {
     private final String legalRepEmailAddress = "legalRep@example.com";
 
     private EmailAddressFinder emailAddressFinder;
+    private final String listCaseCaseOfficerEmailAddress = "co-list-case@example.com";
 
     @BeforeEach
     public void setup() {
@@ -58,7 +59,9 @@ public class EmailAddressFinderTest {
             hearingCentreEmailAddresses,
             homeOfficeEmailAddresses,
             homeOfficeFtpaEmailAddresses,
-            bailHearingCentreEmailAddresses
+            bailHearingCentreEmailAddresses,
+            listCaseCaseOfficerEmailAddress
+
         );
     }
 
@@ -239,4 +242,24 @@ public class EmailAddressFinderTest {
         assertEquals("hc-bradford@example.com", emailAddressFinder.getBailHearingCentreEmailAddress(bailCase));
     }
 
+    @Test
+    public void should_return_given_case_officer_list_case_email_address_from_lookup_map() {
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(REMOTE_HEARING));
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(GLASGOW));
+        assertEquals(listCaseCaseOfficerEmailAddress,
+                emailAddressFinder.getListCaseCaseOfficerHearingCentreEmailAddress(asylumCase));
+
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(NORTH_SHIELDS));
+        when(hearingCentreEmailAddresses.get(NORTH_SHIELDS)).thenReturn("ho-north-shields@example.com");
+        assertEquals("ho-north-shields@example.com",
+                emailAddressFinder.getListCaseCaseOfficerHearingCentreEmailAddress(asylumCase));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(GLASGOW));
+        assertEquals(listCaseCaseOfficerEmailAddress,
+                emailAddressFinder.getListCaseCaseOfficerHearingCentreEmailAddress(asylumCase));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(BRADFORD));
+        when(hearingCentreEmailAddresses.get(BRADFORD)).thenReturn("ho-bradford@example.com");
+        assertEquals("ho-bradford@example.com",
+                emailAddressFinder.getListCaseCaseOfficerHearingCentreEmailAddress(asylumCase));
+    }
 }

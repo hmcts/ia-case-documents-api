@@ -41,6 +41,7 @@ class CaseOfficerEditListingPersonalisationTest {
     private String iaExUiFrontendUrl = "http://somefrontendurl";
     private String hearingCentreEmailAddress = "hearingCentre@example.com";
     private String listCaseHearingCentreEmailAddress = "listCaseHearingCentre@example.com";
+    private final String listCaseCaseOfficerEmailAddress = "co-list-case@example.com";
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "someAriaListingReference";
     private String appellantGivenNames = "appellantGivenNames";
@@ -53,7 +54,7 @@ class CaseOfficerEditListingPersonalisationTest {
     @BeforeEach
     public void setup() {
 
-        when(emailAddressFinder.getListCaseHearingCentreEmailAddress(asylumCase)).thenReturn(listCaseHearingCentreEmailAddress);
+        when(emailAddressFinder.getListCaseCaseOfficerHearingCentreEmailAddress(asylumCase)).thenReturn(listCaseHearingCentreEmailAddress);
         when(emailAddressFinder.getHearingCentreEmailAddress(asylumCase)).thenReturn(hearingCentreEmailAddress);
 
         caseOfficerEditListingPersonalisation = new CaseOfficerEditListingPersonalisation(
@@ -80,8 +81,9 @@ class CaseOfficerEditListingPersonalisationTest {
         assertTrue(caseOfficerEditListingPersonalisation.getRecipientsList(asylumCase).contains(listCaseHearingCentreEmailAddress));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+        when(emailAddressFinder.getListCaseCaseOfficerHearingCentreEmailAddress(asylumCase)).thenReturn(listCaseCaseOfficerEmailAddress);
 
-        assertTrue(caseOfficerEditListingPersonalisation.getRecipientsList(asylumCase).contains(hearingCentreEmailAddress));
+        assertTrue(caseOfficerEditListingPersonalisation.getRecipientsList(asylumCase).contains(listCaseCaseOfficerEmailAddress));
     }
 
     @Test

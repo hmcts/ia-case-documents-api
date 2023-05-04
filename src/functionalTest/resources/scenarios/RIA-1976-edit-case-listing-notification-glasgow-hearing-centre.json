@@ -106,7 +106,7 @@
       },
       {
         "reference": "2008_CASE_RE_LISTED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.glasgow}",
+        "recipient": "{$listCaseCaseOfficerEmailAddress}",
         "subject": "Immigration and Asylum appeal: case re-listed",
         "body": [
           "PA/12345/2019",

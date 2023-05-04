@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
@@ -18,12 +21,15 @@ public class CaseOfficerChangeHearingCentrePersonalisation implements EmailNotif
 
     private final String changeHearingCentreHomeOfficeTemplateId;
     private EmailAddressFinder emailAddressFinder;
+    private final String listCaseCaseOfficerEmailAddress;
 
     public CaseOfficerChangeHearingCentrePersonalisation(
             @Value("${govnotify.template.changeHearingCentre.caseOfficer.email}") String changeHearingCentreTemplateId,
-            EmailAddressFinder emailAddressFinder) {
+            EmailAddressFinder emailAddressFinder,
+            @Value("${listCaseCaseOfficerEmailAddress}") String listCaseCaseOfficerEmailAddress) {
         this.changeHearingCentreHomeOfficeTemplateId = changeHearingCentreTemplateId;
         this.emailAddressFinder = emailAddressFinder;
+        this.listCaseCaseOfficerEmailAddress = listCaseCaseOfficerEmailAddress;
     }
 
     @Override
@@ -33,7 +39,13 @@ public class CaseOfficerChangeHearingCentrePersonalisation implements EmailNotif
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return asylumCase.read(HEARING_CENTRE, HearingCentre.class).map(hearingcentre -> {
+            if (Arrays.asList(HearingCentre.GLASGOW, HearingCentre.BELFAST).contains(hearingcentre)) {
+                return Collections.singleton(listCaseCaseOfficerEmailAddress);
+            } else {
+                return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+            }
+        }).orElseThrow(() -> new IllegalStateException("Hearing centre email Address cannot be found"));
     }
 
     @Override

@@ -93,6 +93,8 @@ java:
           alias: IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL
         - name: admin-officer-review-hearing-requirements-email
           alias: IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL
+        - name: case-officer-list-case-email
+          alias: IA_CASE_OFFICER_LIST_CASE_EMAIL
         - name: ctsc-admin-ftpa-decision-email
           alias: IA_CTSC_ADMIN_FTPA_DECISION
         - name: ctsc-admin-ftpa-submitted-email
