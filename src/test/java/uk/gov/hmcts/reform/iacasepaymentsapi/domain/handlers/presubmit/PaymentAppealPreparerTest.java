@@ -24,6 +24,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType.HELP_WITH_FEES;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType.NO_REMISSION;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAID;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
 
 import feign.FeignException;
@@ -42,6 +43,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.DynamicList;
@@ -63,6 +66,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.RefDataService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.ServiceRequestService;
 
+@MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 class PaymentAppealPreparerTest {
@@ -217,6 +221,76 @@ class PaymentAppealPreparerTest {
     }
 
     @ParameterizedTest
+    @MethodSource("paymentStatusParameters")
+    void should_write_payment_status_if_empty(
+        Event event, String hearingType, FeeType feeType, Fee fee
+    ) {
+
+        when(callback.getEvent()).thenReturn(event);
+        when(refDataService.getOrganisationResponse())
+            .thenReturn(organisationResponse);
+
+        List<String> accountsFromOrg = new ArrayList<String>();
+        accountsFromOrg.add("PBA1234567");
+
+        when(refDataService.getOrganisationResponse())
+            .thenReturn(organisationResponse);
+        when(organisationEntityResponse.getPaymentAccount()).thenReturn(accountsFromOrg);
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
+        when(asylumCase.read(PAYMENT_STATUS)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(hearingType));
+        when(feeService.getFee(feeType)).thenReturn(fee);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealPreparer
+            .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        assertThat(callbackResponse.getData()).isEqualTo(asylumCase);
+
+        if (feeType == FeeType.FEE_WITH_HEARING) {
+            verify(asylumCase, times(1)).write(FEE_WITH_HEARING, fee.getAmountAsString());
+        } else {
+            verify(asylumCase, times(1)).write(FEE_WITHOUT_HEARING, fee.getAmountAsString());
+        }
+        verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_PENDING);
+    }
+
+    @ParameterizedTest
+    @MethodSource("paymentStatusPaidParameters")
+    void should_not_write_payment_status_if_not_empty(
+        Event event, String hearingType, FeeType feeType, Fee fee
+    ) {
+
+        when(callback.getEvent()).thenReturn(event);
+        when(refDataService.getOrganisationResponse())
+            .thenReturn(organisationResponse);
+
+        List<String> accountsFromOrg = new ArrayList<String>();
+        accountsFromOrg.add("PBA1234567");
+
+        when(refDataService.getOrganisationResponse())
+            .thenReturn(organisationResponse);
+        when(organisationEntityResponse.getPaymentAccount()).thenReturn(accountsFromOrg);
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
+        when(asylumCase.read(PAYMENT_STATUS)).thenReturn(Optional.of(PAID));
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(hearingType));
+        when(feeService.getFee(feeType)).thenReturn(fee);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse = paymentAppealPreparer
+            .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        assertThat(callbackResponse.getData()).isEqualTo(asylumCase);
+
+        if (feeType == FeeType.FEE_WITH_HEARING) {
+            verify(asylumCase, times(1)).write(FEE_WITH_HEARING, fee.getAmountAsString());
+        } else {
+            verify(asylumCase, times(1)).write(FEE_WITHOUT_HEARING, fee.getAmountAsString());
+        }
+        verify(asylumCase, times(0)).write(PAYMENT_STATUS, PAYMENT_PENDING);
+    }
+
+    @ParameterizedTest
     @MethodSource("feeOptionParameters")
     void should_return_valid_fee_for_decision_with_hearing(
         Event event, String hearingType, FeeType feeType, Fee fee
@@ -310,6 +384,34 @@ class PaymentAppealPreparerTest {
         }
         verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_PENDING);
         verifyNoInteractions(refDataService);
+    }
+
+    private static Stream<Arguments> paymentStatusParameters() {
+
+        Fee feeWithHearing =
+            new Fee("FEE0001", "Fee with hearing", "1", new BigDecimal("140"));
+        Fee feeWithoutHearing =
+            new Fee("FEE0001", "Fee without hearing", "1", new BigDecimal("80"));
+
+        return Stream.of(
+            Arguments.of(
+                Event.RECORD_REMISSION_DECISION, "decisionWithHearing",
+                FeeType.FEE_WITH_HEARING, feeWithHearing)
+        );
+    }
+
+    private static Stream<Arguments> paymentStatusPaidParameters() {
+
+        Fee feeWithHearing =
+            new Fee("FEE0001", "Fee with hearing", "1", new BigDecimal("140"));
+        Fee feeWithoutHearing =
+            new Fee("FEE0001", "Fee without hearing", "1", new BigDecimal("80"));
+
+        return Stream.of(
+            Arguments.of(
+                Event.RECORD_REMISSION_DECISION, "decisionWithHearing",
+                FeeType.FEE_WITH_HEARING, feeWithHearing)
+        );
     }
 
     private static Stream<Arguments> feeOptionParameters() {

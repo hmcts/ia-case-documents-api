@@ -152,7 +152,11 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
             return response;
         }
 
-        asylumCase.write(PAYMENT_STATUS, PAYMENT_PENDING);
+        if (callback.getEvent() != Event.RECORD_REMISSION_DECISION
+            || (callback.getEvent() == Event.RECORD_REMISSION_DECISION
+                && asylumCase.read(PAYMENT_STATUS).isEmpty())) {
+            asylumCase.write(PAYMENT_STATUS, PAYMENT_PENDING);
+        }
 
         YesOrNo hasServiceRequestAlready = asylumCase.read(HAS_SERVICE_REQUEST_ALREADY, YesOrNo.class)
             .orElse(YesOrNo.NO);
