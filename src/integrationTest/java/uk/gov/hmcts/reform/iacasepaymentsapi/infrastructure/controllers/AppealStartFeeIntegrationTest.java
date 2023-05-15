@@ -11,17 +11,14 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.AsylumCaseForTest.
 import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.CallbackForTest.CallbackForTestBuilder.callback;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.security.test.context.support.WithMockUser;
-import ru.lanwen.wiremock.ext.WiremockResolver;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.IaCasePaymentApiClient;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.SpringBootIntegrationTest;
-import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.StaticPortWiremockFactory;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithFeeStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithIdamStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithRefDataStub;
@@ -35,8 +32,7 @@ public class AppealStartFeeIntegrationTest extends SpringBootIntegrationTest
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia-legalrep-solicitor"})
-    public void executionEndpoint(@WiremockResolver.Wiremock(factory = StaticPortWiremockFactory.class)
-                                          WireMockServer server) throws Exception {
+    public void executionEndpoint() throws Exception {
 
         addServiceAuthStub(server);
         addUserInfoStub(server);
