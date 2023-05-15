@@ -14,7 +14,6 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_TYPE;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.tomakehurst.wiremock.WireMockServer;
 import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,9 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
-import ru.lanwen.wiremock.ext.WiremockResolver;
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.SpringBootIntegrationTest;
-import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.StaticPortWiremockFactory;
 import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.WithServiceAuthStub;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
@@ -62,8 +59,7 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
-    public void should_send_multiple_notifications_of_same_type_with_unique_reference_numbers(
-        @WiremockResolver.Wiremock(factory = StaticPortWiremockFactory.class) WireMockServer server) {
+    public void should_send_multiple_notifications_of_same_type_with_unique_reference_numbers() {
 
         addServiceAuthStub(server);
 
