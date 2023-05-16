@@ -10,12 +10,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.DECISION_AND_REASONS_DRAFT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.DECISION;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
-import ru.lanwen.wiremock.ext.WiremockResolver;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -29,9 +27,7 @@ public class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegratio
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
-    public void generates_decision_and_reasons(
-            @WiremockResolver.Wiremock(factory = StaticPortWiremockFactory.class) WireMockServer server
-    ) {
+    public void generates_decision_and_reasons() {
 
         addServiceAuthStub(server);
         addDocumentUploadStub(server);

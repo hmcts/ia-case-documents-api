@@ -7,10 +7,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixture
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder.userWith;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
-import ru.lanwen.wiremock.ext.WiremockResolver;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -25,7 +23,7 @@ public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implem
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
-    public void should_return_500_with_correct_message_when_api_returns_500(@WiremockResolver.Wiremock(factory = StaticPortWiremockFactory.class) WireMockServer server) throws Exception {
+    public void should_return_500_with_correct_message_when_api_returns_500() throws Exception {
         addServiceAuthStub(server);
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
@@ -57,7 +55,7 @@ public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implem
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
-    public void should_return_500_with_correct_message_when_api_returns_400(@WiremockResolver.Wiremock(factory = StaticPortWiremockFactory.class) WireMockServer server) throws Exception {
+    public void should_return_500_with_correct_message_when_api_returns_400() throws Exception {
         addServiceAuthStub(server);
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
