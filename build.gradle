@@ -299,7 +299,7 @@ dependencies {
     // CVE-2021-27568
     compile group: 'net.minidev', name: 'json-smart', version: '2.4.10'
 
-
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
