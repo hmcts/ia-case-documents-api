@@ -84,4 +84,5 @@ If you have some time to spare, you can run the *mutation tests* as follows:
 As the project grows, these tests will take longer and longer to execute but are useful indicators of the quality of the test suite.
 
 More information about mutation testing can be found here:
-http://pitest.org/ 
+http://pitest.org/
+ 
