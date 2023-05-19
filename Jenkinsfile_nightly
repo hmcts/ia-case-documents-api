@@ -159,14 +159,10 @@ withNightlyPipeline(type, product, component) {
   enableFortifyScan()
   enableMutationTest()
 
-  afterSuccess('fortify-scan') {
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-  }
-
   enableSlackNotifications('#ia-tech')
   enableFullFunctionalTest()
 
-  afterSuccess('fortify-scan') {
+  afterAlways('fortify-scan') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
   }
 
