@@ -163,6 +163,11 @@ withNightlyPipeline(type, product, component) {
   enableFullFunctionalTest()
 
   afterAlways('fortify-scan') {
+    echo "Archiving Fortify-scan artifacts."
+    echo "Product: ${product}"
+    echo "Component: ${component}"
+    echo "Environment name: ${env.ENVIRONMENT_NAME}"
+
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
   }
 
