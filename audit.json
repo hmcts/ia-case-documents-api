@@ -5,6 +5,7 @@
   "100000_A Client Error response code was returned by the server_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/bail/ccdAboutToStart_POST": "ignore",
   "100000_A Client Error response code was returned by the server_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/bail/ccdAboutToSubmit_POST": "ignore",
   "100000_A Client Error response code was returned by the server_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/bail/ccdSubmitted_POST": "ignore",
+  "100000_A Client Error response code was returned by the server_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "10021_X-Content-Type-Options Header Missing_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/_GET": "ignore",
   "10021_X-Content-Type-Options Header Missing_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/v3/api-docs_GET": "ignore",
   "10023_Information Disclosure - Debug Error Messages_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/v3/api-docs_GET": "ignore",
@@ -28,5 +29,7 @@
   "10096_Timestamp Disclosure - Unix_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/asylum/ccdAboutToStart_POST": "ignore",
   "10096_Timestamp Disclosure - Unix_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/asylum/ccdAboutToSubmit_POST": "ignore",
-  "10096_Timestamp Disclosure - Unix_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/asylum/ccdSubmitted_POST": "ignore"
+  "10096_Timestamp Disclosure - Unix_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/asylum/ccdSubmitted_POST": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://ia-case-notifications-api-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
+
 }
