@@ -156,6 +156,16 @@ withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
 
   enableSecurityScan()
+
+  /*
+   When the tokens expire (they last only 180 days), follow instructions here to generate new ones:
+   https://tools.hmcts.net/confluence/display/RBS/Fortify+Access+Tokens
+   To access fortify, use MyApps (https://myapps.microsoft.com/)
+
+   The tokens must be stored as secrets in Azure (portal.azure.com) in the the ia-demo vault. Be advised that they may
+   appear duplicated if you add them the first time, but they're not. Don't delete them or you'll need somebody else
+   to recover them.
+   */
   enableFortifyScan()
   enableMutationTest()
 
@@ -163,11 +173,6 @@ withNightlyPipeline(type, product, component) {
   enableFullFunctionalTest()
 
   afterAlways('fortify-scan') {
-    echo "Archiving Fortify-scan artifacts."
-    echo "Product: ${product}"
-    echo "Component: ${component}"
-    echo "Environment name: ${env.ENVIRONMENT_NAME}"
-
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
   }
 
