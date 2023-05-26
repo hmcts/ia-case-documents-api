@@ -188,7 +188,7 @@ project.ext {
 }
 
 jacoco {
-    toolVersion = "0.8.4"
+    toolVersion = "0.8.10"
 }
 
 jacocoTestReport {
