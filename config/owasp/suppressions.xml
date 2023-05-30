@@ -20,4 +20,7 @@
         ]]</notes>
         <cve>CVE-2022-45688</cve>
     </suppress>
+    <suppress until="2024-07-01">
+        <cve>CVE-2023-28709</cve>
+    </suppress>
 </suppressions>
