@@ -43,6 +43,7 @@ public enum Event {
     UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE("uploadAddendumEvidenceHomeOffice"),
     UPLOAD_ADDENDUM_EVIDENCE_ADMIN_OFFICER("uploadAddendumEvidenceAdminOfficer"),
     REQUEST_RESPONSE_REVIEW("requestResponseReview"),
+    DECISION_WITHOUT_HEARING("decisionWithoutHearing"),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons"),
     REQUEST_REASONS_FOR_APPEAL("requestReasonsForAppeal"),
     SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal"),

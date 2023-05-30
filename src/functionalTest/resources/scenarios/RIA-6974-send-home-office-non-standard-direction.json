@@ -1,0 +1,93 @@
+{
+  "description": "RIA-6947 Send Home Office non-standard direction",
+  "enabled": false,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1003,
+      "eventId": "sendDirection",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "currentCaseStateVisibleToHomeOfficeAll": "prepareForHearing",
+          "journeyType": "aip",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "No"
+              }
+            }
+          ],
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Do the non standard thing",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "currentCaseStateVisibleToHomeOfficeAll": "prepareForHearing",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "No"
+            }
+          }
+        ],
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Do the non standard thing",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": ""
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1003_RESPONDENT_NON_STANDARD_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1003_APPELLANT_NON_STANDARD_DIRECTION_OF_HOME_OFFICE_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

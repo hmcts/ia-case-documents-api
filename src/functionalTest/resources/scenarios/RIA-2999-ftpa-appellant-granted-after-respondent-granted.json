@@ -60,7 +60,7 @@
       },
       {
         "reference": "9001_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
-        "recipient": "{$ctscAdminFtpaDecisionEmailAddress}",
+        "recipient": "{$upperTribunalPermissionApplicationsEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
         "body": [
           "PA/12345/2019",

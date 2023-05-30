@@ -23,6 +23,8 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
     public static final String CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT = "currentCaseStateVisibleToHomeOfficeAll flag is not present";
     private final String respondentNonStandardDirectionBeforeListingTemplateId;
     private final String respondentNonStandardDirectionAfterListingTemplateId;
+    private final String respondentNonStandardDirectionToAppellantAndRespondentBeforeListingTemplateId;
+    private final String respondentNonStandardDirectionToAppellantAndRespondentAfterListingTemplateId;
     private final String iaExUiFrontendUrl;
     private final String apcHomeOfficeEmailAddress;
     private final String lartHomeOfficeEmailAddress;
@@ -34,6 +36,8 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
     public RespondentNonStandardDirectionPersonalisation(
         @Value("${govnotify.template.nonStandardDirectionBeforeListing.respondent.email}") String respondentNonStandardDirectionBeforeListingTemplateId,
         @Value("${govnotify.template.nonStandardDirectionAfterListing.respondent.email}") String respondentNonStandardDirectionAfterListingTemplateId,
+        @Value("${govnotify.template.nonStandardDirectionToAppellantAndRespondentBeforeListing.respondent.email}") String respondentNonStandardDirectionToAppellantAndRespondentBeforeListingTemplateId,
+        @Value("${govnotify.template.nonStandardDirectionToAppellantAndRespondentAfterListing.respondent.email}") String respondentNonStandardDirectionToAppellantAndRespondentAfterListingTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         @Value("${apcHomeOfficeEmailAddress}") String apcHomeOfficeEmailAddress,
         @Value("${lartHomeOfficeEmailAddress}") String lartHomeOfficeEmailAddress,
@@ -44,6 +48,8 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
     ) {
         this.respondentNonStandardDirectionBeforeListingTemplateId = respondentNonStandardDirectionBeforeListingTemplateId;
         this.respondentNonStandardDirectionAfterListingTemplateId = respondentNonStandardDirectionAfterListingTemplateId;
+        this.respondentNonStandardDirectionToAppellantAndRespondentBeforeListingTemplateId = respondentNonStandardDirectionToAppellantAndRespondentBeforeListingTemplateId;
+        this.respondentNonStandardDirectionToAppellantAndRespondentAfterListingTemplateId = respondentNonStandardDirectionToAppellantAndRespondentAfterListingTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.apcHomeOfficeEmailAddress = apcHomeOfficeEmailAddress;
         this.lartHomeOfficeEmailAddress = lartHomeOfficeEmailAddress;
@@ -55,8 +61,16 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        return appealService.isAppealListed(asylumCase) ? respondentNonStandardDirectionAfterListingTemplateId
-                : respondentNonStandardDirectionBeforeListingTemplateId;
+        if (directionFinder
+                .findFirst(asylumCase, DirectionTag.NONE)
+                .map(direction -> direction.getParties().equals(Parties.APPELLANT_AND_RESPONDENT))
+                .orElse(false)) {
+            return appealService.isAppealListed(asylumCase)
+                    ? respondentNonStandardDirectionToAppellantAndRespondentAfterListingTemplateId : respondentNonStandardDirectionToAppellantAndRespondentBeforeListingTemplateId;
+        } else {
+            return appealService.isAppealListed(asylumCase)
+                    ? respondentNonStandardDirectionAfterListingTemplateId : respondentNonStandardDirectionBeforeListingTemplateId;
+        }
     }
 
     @Override
@@ -67,13 +81,17 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
                 if (Arrays.asList(
                         State.APPEAL_SUBMITTED,
                         State.PENDING_PAYMENT,
-                        State.AWAITING_RESPONDENT_EVIDENCE
+                        State.AWAITING_RESPONDENT_EVIDENCE,
+                        State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
+                        State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED
                 ).contains(currentState)) {
                     return Collections.singleton(apcHomeOfficeEmailAddress);
                 } else if (Arrays.asList(
                         State.CASE_BUILDING,
                         State.CASE_UNDER_REVIEW,
-                        State.RESPONDENT_REVIEW
+                        State.RESPONDENT_REVIEW,
+                        State.AWAITING_REASONS_FOR_APPEAL,
+                        State.REASONS_FOR_APPEAL_SUBMITTED
                 ).contains(currentState)) {
                     return Collections.singleton(lartHomeOfficeEmailAddress);
                 } else if (Arrays.asList(

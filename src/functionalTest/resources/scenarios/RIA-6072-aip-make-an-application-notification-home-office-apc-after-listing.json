@@ -177,7 +177,7 @@
       {
         "reference": "6072001_MAKE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Immigration and Asylum appeal: The Home Office want to Withdraw",
+        "subject": "Immigration and Asylum appeal: The Home Office want to withdraw from the appeal",
         "body": [
           "PA/12345/2019",
           "PA/12345/2019",

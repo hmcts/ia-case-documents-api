@@ -11,11 +11,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -55,6 +58,7 @@ public class AppellantMakeAnApplicationPersonalisationEmailTest {
     private String otherAfterListingEmailTemplateId = "otherAfterListingEmailtemplateId";
     private String iaAipFrontendUrl = "http://localhost";
     private String applicationType = "someApplicationType";
+    private String applicationTypePhrase = "some application type";
 
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppealHomeOfficeReferenceNumber = "someHomeOfficeReferenceNumber";
@@ -62,8 +66,8 @@ public class AppellantMakeAnApplicationPersonalisationEmailTest {
     private String mockedAppellantGivenNames = "someAppellantGivenNames";
     private String mockedAppellantFamilyName = "someAppellantFamilyName";
     private String mockedAppellantEmailAddress = "appelant@example.net";
-    private String homeOfficeUser = "caseworker-ia-homeofficelart";
-    private String citizenUser = "citizen";
+    private final String homeOfficeUser = "caseworker-ia-homeofficelart";
+    private final String citizenUser = "citizen";
 
     private AppellantMakeAnApplicationPersonalisationEmail appellantMakeAnApplicationPersonalisationEmail;
 
@@ -78,7 +82,6 @@ public class AppellantMakeAnApplicationPersonalisationEmailTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(mockedAppellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(mockedAppellantFamilyName));
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
-        when(makeAnApplication.getType()).thenReturn(applicationType);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
 
         appellantMakeAnApplicationPersonalisationEmail = new AppellantMakeAnApplicationPersonalisationEmail(
@@ -135,8 +138,15 @@ public class AppellantMakeAnApplicationPersonalisationEmailTest {
             .hasMessage("asylumCase must not be null");
     }
 
-    @Test
-    public void should_return_personalisation_when_all_information_given() {
+    @ParameterizedTest
+    @ValueSource(strings = { citizenUser, homeOfficeUser })
+    public void should_return_personalisation_when_all_information_given(String user) {
+        when(userDetails.getRoles()).thenReturn(List.of(user));
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, false))
+            .thenReturn(Optional.of(makeAnApplication));
+        when(makeAnApplication.getType()).thenReturn(applicationType);
+        when(makeAnApplicationService.mapApplicationTypeToPhrase(makeAnApplication))
+            .thenReturn(applicationTypePhrase);
 
         Map<String, String> personalisation =
             appellantMakeAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
@@ -146,7 +156,8 @@ public class AppellantMakeAnApplicationPersonalisationEmailTest {
         assertEquals(mockedAppellantGivenNames, personalisation.get("Given names"));
         assertEquals(mockedAppellantFamilyName, personalisation.get("Family name"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
-        assertEquals(applicationType, personalisation.get("applicationType"));
+        assertEquals(user.equals(citizenUser) ? applicationType : applicationTypePhrase,
+            personalisation.get("applicationType"));
 
         verify(makeAnApplicationService).getMakeAnApplication(asylumCase, false);
     }

@@ -1,7 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_PARTIES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.*;
@@ -10,6 +14,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
@@ -24,6 +30,7 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
     public static final String CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT = "currentCaseStateVisibleToHomeOfficeAll flag is not present";
     private final String respondentChangeDirectionDueDateBeforeListingTemplateId;
     private final String respondentChangeDirectionDueDateAfterListingTemplateId;
+    private final String respondentChangeAppellantDirectionDueDateTemplateId;
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final String apcHomeOfficeEmailAddress;
@@ -35,6 +42,7 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
     public RespondentChangeDirectionDueDatePersonalisation(
         @Value("${govnotify.template.changeDirectionDueDate.respondent.afterListing.email}") String respondentChangeDirectionDueDateAfterListingTemplateId,
         @Value("${govnotify.template.changeDirectionDueDate.respondent.beforeListing.email}") String respondentChangeDirectionDueDateBeforeListingTemplateId,
+        @Value("${govnotify.template.changeDirectionDueDateOfAppellant.homeOffice.email}") String respondentChangeAppellantDirectionDueDateTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
         @Value("${apcHomeOfficeEmailAddress}") String apcHomeOfficeEmailAddress,
@@ -46,6 +54,7 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
         requireNonNull(iaExUiFrontendUrl, "iaExUiFrontendUrl must not be null");
         this.respondentChangeDirectionDueDateAfterListingTemplateId = respondentChangeDirectionDueDateAfterListingTemplateId;
         this.respondentChangeDirectionDueDateBeforeListingTemplateId = respondentChangeDirectionDueDateBeforeListingTemplateId;
+        this.respondentChangeAppellantDirectionDueDateTemplateId = respondentChangeAppellantDirectionDueDateTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.apcHomeOfficeEmailAddress = apcHomeOfficeEmailAddress;
@@ -57,7 +66,13 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        return appealService.isAppealListed(asylumCase) ? respondentChangeDirectionDueDateAfterListingTemplateId : respondentChangeDirectionDueDateBeforeListingTemplateId;
+        if (isAipJourney(asylumCase) && !isDirectionToRespondent(asylumCase)) {
+            return respondentChangeAppellantDirectionDueDateTemplateId;
+        } else {
+            return appealService.isAppealListed(asylumCase)
+                ? respondentChangeDirectionDueDateAfterListingTemplateId
+                : respondentChangeDirectionDueDateBeforeListingTemplateId;
+        }
     }
 
     @Override
@@ -129,12 +144,31 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
 
+        String listingReferenceLine = callback.getCaseDetails().getCaseData()
+            .read(ARIA_LISTING_REFERENCE, String.class)
+            .map(ref -> "\nListing reference: " + ref)
+            .orElse("");
+
         final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
             .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("listingReferenceLine", listingReferenceLine)
             .putAll(personalisationProvider.getPersonalisation(callback));
 
         return listCaseFields.build();
+    }
+
+    private boolean isAipJourney(AsylumCase asylumCase) {
+
+        return asylumCase
+            .read(JOURNEY_TYPE, JourneyType.class)
+            .map(type -> type == AIP).orElse(false);
+    }
+
+    private boolean isDirectionToRespondent(AsylumCase asylumCase) {
+        return asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)
+            .map(Parties -> Parties.equals(Parties.RESPONDENT))
+            .orElse(false);
     }
 }

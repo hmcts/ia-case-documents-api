@@ -10,17 +10,25 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.SubscriberType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
@@ -51,8 +59,9 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
     private String mockedAppealReferenceNumber = "someReferenceNumber";
     private String mockedAppellantMobilePhone = "07123456789";
     private String applicationType = "someApplicationType";
-    private String homeOfficeUser = "caseworker-ia-homeofficelart";
-    private String citizenUser = "citizen";
+    private String applicationTypePhrase = "some application type";
+    private final String homeOfficeUser = "caseworker-ia-homeofficelart";
+    private final String citizenUser = "citizen";
 
     private AppellantMakeAnApplicationPersonalisationSms appellantMakeAnApplicationPersonalisationSms;
 
@@ -70,7 +79,6 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
                 makeAnApplicationService,
                 userDetailsProvider);
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
-        when(makeAnApplication.getType()).thenReturn(applicationType);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
     }
 
@@ -118,18 +126,26 @@ public class AppellantMakeAnApplicationPersonalisationSmsTest {
             .hasMessage("asylumCase must not be null");
     }
 
-    @Test
-    public void should_return_personalisation_when_all_information_given() {
+    @ParameterizedTest
+    @ValueSource(strings = { citizenUser, homeOfficeUser })
+    public void should_return_personalisation_when_all_information_given(String user) {
+        when(userDetails.getRoles()).thenReturn(List.of(user));
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, false))
+            .thenReturn(Optional.of(makeAnApplication));
+        when(makeAnApplication.getType()).thenReturn(applicationType);
+        when(makeAnApplicationService.mapApplicationTypeToPhrase(makeAnApplication))
+            .thenReturn(applicationTypePhrase);
 
         Map<String, String> personalisation =
             appellantMakeAnApplicationPersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
-        assertEquals(applicationType, personalisation.get("applicationType"));
+
+        assertEquals(user.equals(citizenUser) ? applicationType : applicationTypePhrase,
+            personalisation.get("applicationType"));
 
         verify(makeAnApplicationService).getMakeAnApplication(asylumCase, false);
-
     }
 
     @Test

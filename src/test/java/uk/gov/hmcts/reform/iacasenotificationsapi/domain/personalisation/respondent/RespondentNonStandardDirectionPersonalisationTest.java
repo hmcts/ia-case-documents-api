@@ -50,6 +50,8 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     private final Long caseId = 12345L;
     private final String afterListingTemplateId = "afterListingTemplateId";
     private final String beforeListingTemplateId = "beforeListingTemplateId";
+    private final String toAppellantAndRespondentBeforeListingTemplateId = "ToAppellantAndRespondentBeforeListingTemplateId";
+    private final String toAppellantAndRespondentAfterListingTemplateId = "ToAppellantAndRespondentAfterListingTemplateId";
     private final String iaExUiFrontendUrl = "http://localhost";
     private final String apcHomeOfficeEmailAddress = "homeoffice-apc@example.com";
     private final String lartHomeOfficeEmailAddress = "homeoffice-respondent@example.com";
@@ -60,6 +62,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     private String directionDueDate = "2019-08-27";
     private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
+    private String directionParties = "";
     private String appealReferenceNumber = "someReferenceNumber";
     private final String ariaListingReference = "someAriaListingReference";
     private final String homeOfficeRefNumber = "homeOfficeReference";
@@ -92,10 +95,14 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
+        when(direction.getParties()).thenReturn(Parties.RESPONDENT);
 
         respondentNonStandardDirectionPersonalisation = new RespondentNonStandardDirectionPersonalisation(
                 beforeListingTemplateId,
                 afterListingTemplateId,
+                toAppellantAndRespondentBeforeListingTemplateId,
+                toAppellantAndRespondentAfterListingTemplateId,
                 iaExUiFrontendUrl,
                 apcHomeOfficeEmailAddress,
                 lartHomeOfficeEmailAddress,
@@ -124,6 +131,27 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     }
 
     @Test
+    void should_return_the_given_before_listing_template_to_appellant_and_respondent_id() {
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+                .thenReturn(Optional.of(State.FINAL_BUNDLING));
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
+        when(direction.getParties()).thenReturn(Parties.APPELLANT_AND_RESPONDENT);
+
+        assertEquals(toAppellantAndRespondentBeforeListingTemplateId, respondentNonStandardDirectionPersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    void should_return_the_given_after_listing_template_to_appellant_and_respondent_id() {
+        when(appealService.isAppealListed(asylumCase))
+                .thenReturn(true);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
+        when(direction.getParties()).thenReturn(Parties.APPELLANT_AND_RESPONDENT);
+
+        assertEquals(toAppellantAndRespondentAfterListingTemplateId,
+                respondentNonStandardDirectionPersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
     void should_throw_exception_if_current_visible_state_to_home_office_all_is_not_present() {
 
         assertThatThrownBy(() -> respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase))
@@ -137,7 +165,9 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         List<State> apcEmail = newArrayList(
                 State.APPEAL_SUBMITTED,
                 State.PENDING_PAYMENT,
-                State.AWAITING_RESPONDENT_EVIDENCE
+                State.AWAITING_RESPONDENT_EVIDENCE,
+                State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
+                State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED
 
         );
 
@@ -145,7 +175,9 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         List<State> lartEmail = newArrayList(
                 State.CASE_BUILDING,
                 State.CASE_UNDER_REVIEW,
-                State.RESPONDENT_REVIEW
+                State.RESPONDENT_REVIEW,
+                State.AWAITING_REASONS_FOR_APPEAL,
+                State.REASONS_FOR_APPEAL_SUBMITTED
         );
 
         List<State> ftpaEmail = newArrayList(
@@ -263,6 +295,8 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
+        when(direction.getParties()).thenReturn(Parties.RESPONDENT);
 
         Map<String, String> personalisation =
                 respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase);

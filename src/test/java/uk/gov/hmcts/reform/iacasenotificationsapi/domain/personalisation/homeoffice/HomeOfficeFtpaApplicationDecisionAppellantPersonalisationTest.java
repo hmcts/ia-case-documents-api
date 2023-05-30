@@ -4,7 +4,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_JUDGE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_REMADE_RULE_32;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_ALLOWED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_DISMISSED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_REFUSED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_REHEARD35;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_REMADE32;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
@@ -13,6 +23,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -47,14 +59,14 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
     private String allowedTemplateId = "allowedTemplateId";
     private String dismissedTemplateId = "dismissedTemplateId";
 
-    private FtpaDecisionOutcomeType granted = FtpaDecisionOutcomeType.FTPA_GRANTED;
-    private FtpaDecisionOutcomeType partiallyGranted = FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
-    private FtpaDecisionOutcomeType notAdmitted = FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
-    private FtpaDecisionOutcomeType refused = FtpaDecisionOutcomeType.FTPA_REFUSED;
-    private FtpaDecisionOutcomeType reheard = FtpaDecisionOutcomeType.FTPA_REHEARD35;
-    private FtpaDecisionOutcomeType remade = FtpaDecisionOutcomeType.FTPA_REMADE32;
-    private FtpaDecisionOutcomeType allowed = FtpaDecisionOutcomeType.FTPA_ALLOWED;
-    private FtpaDecisionOutcomeType dismissed = FtpaDecisionOutcomeType.FTPA_DISMISSED;
+    private FtpaDecisionOutcomeType granted = FTPA_GRANTED;
+    private FtpaDecisionOutcomeType partiallyGranted = FTPA_PARTIALLY_GRANTED;
+    private FtpaDecisionOutcomeType notAdmitted = FTPA_NOT_ADMITTED;
+    private FtpaDecisionOutcomeType refused = FTPA_REFUSED;
+    private FtpaDecisionOutcomeType reheard = FTPA_REHEARD35;
+    private FtpaDecisionOutcomeType remade = FTPA_REMADE32;
+    private FtpaDecisionOutcomeType allowed = FTPA_ALLOWED;
+    private FtpaDecisionOutcomeType dismissed = FTPA_DISMISSED;
 
     private HomeOfficeFtpaApplicationDecisionAppellantPersonalisation
         homeOfficeFtpaApplicationDecisionAppellantPersonalisation;
@@ -73,7 +85,6 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
                 dismissedTemplateId,
                 personalisationProvider,
                 upperTribunalNoticesEmailAddress
-
             );
     }
 
@@ -135,11 +146,25 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisationTest {
             homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getReferenceId(caseId));
     }
 
-    @Test
-    void should_return_given_email_address_for_correct_states() {
+    @ParameterizedTest
+    @EnumSource(value = FtpaDecisionOutcomeType.class, names = {
+        "FTPA_GRANTED",
+        "FTPA_PARTIALLY_GRANTED",
+        "FTPA_REFUSED",
+        "FTPA_NOT_ADMITTED",
+        "FTPA_REHEARD35",
+        "FTPA_REHEARD32",
+        "FTPA_REMADE32",
+        "FTPA_ALLOWED",
+        "FTPA_DISMISSED"
+    })
+    void should_return_given_email_address_for_correct_states(FtpaDecisionOutcomeType decision) {
+        when(asylumCase.read(FTPA_APPELLANT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(decision));
         Arrays.asList(State.FTPA_SUBMITTED,State.FTPA_DECIDED).stream().forEach(state -> {
             when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_JUDGE, State.class))
                 .thenReturn(Optional.of(state));
+
             assertTrue(homeOfficeFtpaApplicationDecisionAppellantPersonalisation.getRecipientsList(asylumCase)
                 .contains(upperTribunalNoticesEmailAddress));
         });

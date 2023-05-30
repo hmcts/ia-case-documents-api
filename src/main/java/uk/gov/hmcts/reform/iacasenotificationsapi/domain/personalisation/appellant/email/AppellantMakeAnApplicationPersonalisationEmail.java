@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
@@ -81,6 +80,12 @@ public class AppellantMakeAnApplicationPersonalisationEmail implements EmailNoti
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
+        String applicationType = makeAnApplicationService.getMakeAnApplication(asylumCase, false)
+            .map(application -> !hasRole(ROLE_CITIZEN)
+                ? makeAnApplicationService.mapApplicationTypeToPhrase(application)
+                : application.getType())
+            .orElse("");
+
         return
             ImmutableMap
                 .<String, String>builder()
@@ -89,7 +94,7 @@ public class AppellantMakeAnApplicationPersonalisationEmail implements EmailNoti
                 .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
                 .put("Given names", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("Family name", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("applicationType", makeAnApplicationService.getMakeAnApplication(asylumCase, false).map(MakeAnApplication::getType).orElse(""))
+                .put("applicationType", applicationType)
                 .put("Hyperlink to service", iaAipFrontendUrl)
                 .build();
     }

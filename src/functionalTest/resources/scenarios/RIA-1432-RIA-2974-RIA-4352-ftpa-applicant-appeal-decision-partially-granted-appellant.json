@@ -67,7 +67,7 @@
       },
       {
         "reference": "1003_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
-        "recipient": "{$ctscAdminFtpaDecisionEmailAddress}",
+        "recipient": "{$upperTribunalPermissionApplicationsEmailAddress}",
         "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
         "body": [
           "PA/12345/2019",

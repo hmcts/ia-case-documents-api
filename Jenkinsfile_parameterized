@@ -102,6 +102,7 @@ def secrets = [
     secret('home-office-email-apc', 'HOME_OFFICE_EMAIL_APC'),
     secret('home-office-email-lart', 'HOME_OFFICE_EMAIL_LART'),
     secret('upper-tribunal-notices-email', 'IA_UPPER_TRIBUNAL_NOTICES_EMAIL'),
+    secret('utiac-permission-applications-email', 'IA_UPPER_TRIBUNAL_PERMISSION_APPLICATIONS_EMAIL'),
     secret('nbc-email', 'IA_NBC_EMAIL'),
     secret('ctsc-email', 'IA_CTSC_EMAIL'),
 

@@ -139,6 +139,8 @@ java:
           alias: HOME_OFFICE_EMAIL_LART
         - name: upper-tribunal-notices-email
           alias: IA_UPPER_TRIBUNAL_NOTICES_EMAIL
+        - name: utiac-permission-applications-email
+          alias: IA_UPPER_TRIBUNAL_PERMISSION_APPLICATIONS_EMAIL
         - name: nbc-email
           alias: IA_NBC_EMAIL
         - name: ctsc-email

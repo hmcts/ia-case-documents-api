@@ -2,15 +2,21 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.admino
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
@@ -27,6 +33,7 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisationTest {
 
     private Long caseId = 12345L;
     private String adminOfficeEmailAddress = "some-email@example.com";
+    private String upperTribunalPermissionApplicationsEmailAddress = "upperTribunalPermissionApplicationsEmailAddress";
     private String appealReferenceNumber = "someReferenceNumber";
     private String ariaListingReference = "ariaListingReference";
     private String appellantGivenNames = "someAppellantGivenNames";
@@ -46,8 +53,33 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisationTest {
             grantedTemplateId,
             partiallyGrantedTemplateId,
             adminOfficeEmailAddress,
+            upperTribunalPermissionApplicationsEmailAddress,
             personalisationProvider
         );
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = FtpaDecisionOutcomeType.class, names = {
+        "FTPA_GRANTED",
+        "FTPA_PARTIALLY_GRANTED",
+        "FTPA_REFUSED",
+        "FTPA_NOT_ADMITTED",
+        "FTPA_REHEARD35",
+        "FTPA_REHEARD32",
+        "FTPA_REMADE32",
+        "FTPA_ALLOWED",
+        "FTPA_DISMISSED"
+    })
+    void should_return_correct_recipient_email_address(FtpaDecisionOutcomeType decision) {
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(decision));
+
+        String expectedEmailAddress = Set.of(FTPA_GRANTED, FTPA_PARTIALLY_GRANTED).contains(decision)
+            ? upperTribunalPermissionApplicationsEmailAddress
+            : adminOfficeEmailAddress;
+
+        assertTrue(adminOfficerFtpaDecisionRespondentPersonalisation.getRecipientsList(asylumCase)
+            .contains(expectedEmailAddress));
     }
 
     @Test

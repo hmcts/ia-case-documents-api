@@ -2,8 +2,10 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.admino
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -12,25 +14,29 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.FtpaNotificationPersonalisationUtil;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 
 @Service
-public class AdminOfficerFtpaDecisionAppellantPersonalisation implements EmailNotificationPersonalisation {
+public class AdminOfficerFtpaDecisionAppellantPersonalisation implements EmailNotificationPersonalisation, FtpaNotificationPersonalisationUtil {
 
     private final String applicationGrantedAdminTemplateId;
     private final String applicationPartiallyGrantedAdminTemplateId;
     private final String ctscAdminFtpaDecisionEmailAddress;
+    private final String upperTribunalPermissionApplicationsEmailAddress;
     private final PersonalisationProvider personalisationProvider;
 
     public AdminOfficerFtpaDecisionAppellantPersonalisation(
         @Value("${govnotify.template.applicationGranted.admin.email}") String applicationGrantedAdminTemplateId,
         @Value("${govnotify.template.applicationPartiallyGranted.admin.email}") String applicationPartiallyGrantedAdminTemplateId,
         @Value("${ctscAdminFtpaDecisionEmailAddress}") String ctscAdminFtpaDecisionEmailAddress,
+        @Value("${upperTribunalPermissionApplicationsEmailAddress}") String upperTribunalPermissionApplicationsEmailAddress,
         PersonalisationProvider personalisationProvider) {
         this.applicationGrantedAdminTemplateId = applicationGrantedAdminTemplateId;
         this.applicationPartiallyGrantedAdminTemplateId = applicationPartiallyGrantedAdminTemplateId;
         this.ctscAdminFtpaDecisionEmailAddress = ctscAdminFtpaDecisionEmailAddress;
+        this.upperTribunalPermissionApplicationsEmailAddress = upperTribunalPermissionApplicationsEmailAddress;
         this.personalisationProvider = personalisationProvider;
         
     }
@@ -56,7 +62,11 @@ public class AdminOfficerFtpaDecisionAppellantPersonalisation implements EmailNo
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(ctscAdminFtpaDecisionEmailAddress);
+        return ftpaAppellantLjRjDecision(asylumCase)
+            .map(decision -> List.of(FTPA_GRANTED,FTPA_PARTIALLY_GRANTED).contains(decision)
+                ? Set.of(upperTribunalPermissionApplicationsEmailAddress)
+                : Set.of(ctscAdminFtpaDecisionEmailAddress))
+            .orElseThrow(() -> new IllegalStateException("Appellant FTPA decision not present"));
     }
 
     @Override

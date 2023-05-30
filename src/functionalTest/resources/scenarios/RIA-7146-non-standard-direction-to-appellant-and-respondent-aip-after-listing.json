@@ -1,0 +1,96 @@
+{
+  "description": "RIA-7146 Send a non-standard direction to appellant and respondent for aip appeal (after listing)",
+  "enabled": false,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 71462,
+      "eventId": "sendDirection",
+      "state": "preHearing",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "currentCaseStateVisibleToHomeOfficeAll": "preHearing",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "The non-standard direction explanation goes here",
+                "parties": "appellantAndRespondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "currentCaseStateVisibleToHomeOfficeAll": "preHearing",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "The non-standard direction explanation goes here",
+              "parties": "appellantAndRespondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": ""
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "71462_RESPONDENT_NON_STANDARD_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "71462_APPELLANT_NON_STANDARD_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "71462_APPELLANT_NON_STANDARD_DIRECTION_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

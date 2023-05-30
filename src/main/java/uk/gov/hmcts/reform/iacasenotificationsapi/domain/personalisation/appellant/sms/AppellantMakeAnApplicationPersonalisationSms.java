@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
@@ -64,11 +63,17 @@ public class AppellantMakeAnApplicationPersonalisationSms implements SmsNotifica
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
+        String applicationType = makeAnApplicationService.getMakeAnApplication(asylumCase, false)
+            .map(application -> !hasRole(ROLE_CITIZEN)
+                ? makeAnApplicationService.mapApplicationTypeToPhrase(application)
+                : application.getType())
+            .orElse("");
+
         return
             ImmutableMap
                 .<String, String>builder()
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("applicationType", makeAnApplicationService.getMakeAnApplication(asylumCase, false).map(MakeAnApplication::getType).orElse(""))
+                .put("applicationType", applicationType)
                 .put("Hyperlink to service", iaAipFrontendUrl)
                 .build();
     }
