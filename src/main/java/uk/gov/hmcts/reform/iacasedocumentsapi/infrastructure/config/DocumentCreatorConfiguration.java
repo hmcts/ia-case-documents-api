@@ -476,4 +476,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalAdaBuildCase")
+    public DocumentCreator<AsylumCase> getInternalAdaBuildCaseDocumentCreator(
+            @Value("${internalAdaBuildCaseDocument.contentType}") String contentType,
+            @Value("${internalAdaBuildCaseDocument.fileExtension}") String fileExtension,
+            @Value("${internalAdaBuildCaseDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalAdaBuildCaseTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }

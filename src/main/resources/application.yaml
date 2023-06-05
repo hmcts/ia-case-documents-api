@@ -104,6 +104,12 @@ adaSuitabilityDocument.fileExtension: PDF
 adaSuitabilityDocument.fileName: "ADA-suitability-decision"
 adaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00001.docx}
 
+internalAdaBuildCaseDocument.contentType: application/pdf
+internalAdaBuildCaseDocument.fileExtension: PDF
+internalAdaBuildCaseDocument.fileName: "ADA appellant letter-appeal reasons"
+internalAdaBuildCaseDocument.templateName: ${IA_INTERNAL_ADA_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00002.docx}
+internalAdaBuildCaseDocument.hearingSupportResponseDueInWorkingDays: 15
+
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
@@ -250,6 +256,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateHearingBundle"
       - "customiseHearingBundle"
+      - "requestCaseBuilding"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -318,6 +325,11 @@ launchDarkly:
 customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
+  internal:
+    telephoneNumber:
+      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
+    emailAddress:
+      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_EMAIL:AC-ADA-HW@justice.gov.uk}
 
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
@@ -336,3 +348,6 @@ hearingCentreEmailAddresses:
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
+
+govUkHolidays:
+  url: https://www.gov.uk/

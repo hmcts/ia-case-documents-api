@@ -521,7 +521,10 @@ public enum AsylumCaseDefinition {
             "isAdmin", new TypeReference<YesOrNo>() {}),
 
     HAS_OTHER_APPEALS(
-            "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {});
+            "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {}),
+
+    NOTIFICATION_ATTACHMENT_DOCUMENTS(
+            "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){});
 
     private final String value;
     private final TypeReference typeReference;
