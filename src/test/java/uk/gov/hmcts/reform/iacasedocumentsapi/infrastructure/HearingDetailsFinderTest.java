@@ -134,3 +134,4 @@ public class HearingDetailsFinderTest {
         assertEquals(northShieldsHearingCentreUrl, hearingDetailsFinder.getHearingCentreUrl(NORTH_SHIELDS));
     }
 }
+
