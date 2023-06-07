@@ -13,6 +13,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 public class EmailAddressFinder {
 
     private final String listCaseHearingCentreIsNotPresent = "listCaseHearingCentre is not present";
+
+    private final String noEmailAddressDecisionWithoutHearing = "No email address for decisions made without hearing";
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public EmailAddressFinder(
@@ -62,6 +64,8 @@ public class EmailAddressFinder {
             case NOTTINGHAM:
             case COVENTRY:
                 return emailAddressesMap.get(HearingCentre.BIRMINGHAM);
+            case DECISION_WITHOUT_HEARING:
+                return noEmailAddressDecisionWithoutHearing;
             default:
                 return emailAddressesMap.get(hearingCentre);
         }

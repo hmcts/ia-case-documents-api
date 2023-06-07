@@ -420,3 +420,4 @@ applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
+
