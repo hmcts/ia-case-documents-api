@@ -1,6 +1,5 @@
 {
   "description": "RIA-6947 Send Home Office non-standard direction SMS",
-  "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

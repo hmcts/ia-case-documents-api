@@ -1,6 +1,5 @@
 {
   "description": "RIA-7146 Send a non-standard direction to appellant and respondent for aip appeal (before listing)",
-  "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

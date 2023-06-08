@@ -1,6 +1,5 @@
 {
   "description": "RIA-7147 Send appellant and respondent notifications of change direction due date - AIP",
-  "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

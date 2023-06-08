@@ -436,6 +436,31 @@ public class NotificationHandlerConfiguration {
         );
     }
 
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> appellantAndRespondentChangeDirectionDueDateAipNotificationHandler(
+            @Qualifier("appellantAndRespondentChangeDirectionDueDateAipNotificationGenerator")
+                    List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) -> {
+                    AsylumCase asylumCase =
+                            callback
+                                    .getCaseDetails()
+                                    .getCaseData();
+
+                    boolean isAppellantAndRespondent = asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)
+                            .map(Parties -> Parties.equals(Parties.APPELLANT_AND_RESPONDENT))
+                            .orElse(false);
+
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.CHANGE_DIRECTION_DUE_DATE
+                            && isAppellantAndRespondent
+                            && isAipJourney(asylumCase);
+                },
+                notificationGenerators
+        );
+    }
+
     private boolean isOneOfHomeOfficeApiNotifications(Callback<AsylumCase> callback) {
 
         return Arrays.asList(
@@ -1015,6 +1040,48 @@ public class NotificationHandlerConfiguration {
                             && isAipJourney(asylumCase);
                 },
                 notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> aipAppellantAndRespondentDirectionNotificationHandler(
+            @Qualifier("aipAppellantAndRespondentDirectionNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+            DirectionFinder directionFinder) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) -> {
+                    AsylumCase asylumCase =
+                            callback
+                                    .getCaseDetails()
+                                    .getCaseData();
+
+                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                            && callback.getEvent() == Event.SEND_DIRECTION
+                            && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.APPELLANT_AND_RESPONDENT)
+                            && isAipJourney(asylumCase);
+                },
+                notificationGenerators
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> aipAppellantNonStandardDirectionNotificationHandler(
+        @Qualifier("aipAppellantNonStandardDirectionNotificationGenerator") List<NotificationGenerator> notificationGenerators,
+        DirectionFinder directionFinder) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.SEND_DIRECTION
+                    && isValidUserDirection(directionFinder, asylumCase, DirectionTag.NONE, Parties.APPELLANT)
+                    && isAipJourney(asylumCase);
+            },
+            notificationGenerators
         );
     }
 
