@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -28,7 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalAdaBuildCaseTemplateTest {
+public class InternalAdaRequestBuildCaseTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -41,29 +42,27 @@ public class InternalAdaBuildCaseTemplateTest {
     private final int hearingSupportRequirementsDueInWorkingDays = 15;
     private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1234";
     private final String internalAdaCustomerServicesEmailAddress = "example@email.com";
-    private final String now = LocalDate.now().toString();
+    private final LocalDate now = LocalDate.now();
     private final ZonedDateTime zonedDueDateTime = LocalDate.parse("2023-01-01").atStartOfDay(ZoneOffset.UTC);
     private final String hearingSupportRequirementsDueDate = zonedDueDateTime.toLocalDate().toString();
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private final String directionIdValue = "1";
-    private final String directionExplanation = "some explanation";
+    private final String directionExplanation = "Some explanation";
     private final Parties directionParties = Parties.APPELLANT;
     private final String directionDateDue = "2023-06-16";
     private final String directionDateSent = "2023-06-02";
-    private final DirectionTag directionTag = DirectionTag.REQUEST_CASE_BUILDING;
     private final String directionUniqueId = "95e90870-2429-4660-b9c2-4111aff37304";
-    private final String directionType = "requestCaseBuilding";
+    private final String directionType = "someDirectionType";
     private final IdValue<Direction> requestCaseBuildingDirection = new IdValue<>(
-            directionIdValue,
+            "1",
             new Direction(
                     directionExplanation,
                     directionParties,
                     directionDateDue,
                     directionDateSent,
-                    directionTag,
+                    DirectionTag.REQUEST_CASE_BUILDING,
                     Collections.emptyList(),
                     Collections.emptyList(),
                     directionUniqueId,
@@ -71,12 +70,42 @@ public class InternalAdaBuildCaseTemplateTest {
             )
     );
 
-    private InternalAdaBuildCaseTemplate internalAdaBuildCaseTemplate;
+    private final IdValue<Direction> duplicateRequestCaseBuildingDirection = new IdValue<>(
+            "2",
+            new Direction(
+                    directionExplanation,
+                    directionParties,
+                    directionDateDue,
+                    directionDateSent,
+                    DirectionTag.REQUEST_CASE_BUILDING,
+                    Collections.emptyList(),
+                    Collections.emptyList(),
+                    directionUniqueId,
+                    directionType
+            )
+    );
+
+    private final IdValue<Direction> otherDirection = new IdValue<>(
+            "3",
+            new Direction(
+                    directionExplanation,
+                    directionParties,
+                    directionDateDue,
+                    directionDateSent,
+                    DirectionTag.ADA_LIST_CASE,
+                    Collections.emptyList(),
+                    Collections.emptyList(),
+                    directionUniqueId,
+                    directionType
+            )
+    );
+
+    private InternalAdaRequestBuildCaseTemplate internalAdaRequestBuildCaseTemplate;
 
     @BeforeEach
     void setUp() {
-        internalAdaBuildCaseTemplate =
-                new InternalAdaBuildCaseTemplate(
+        internalAdaRequestBuildCaseTemplate =
+                new InternalAdaRequestBuildCaseTemplate(
                         hearingSupportRequirementsDueInWorkingDays,
                         templateName,
                         customerServicesProvider,
@@ -86,7 +115,7 @@ public class InternalAdaBuildCaseTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalAdaBuildCaseTemplate.getName());
+        assertEquals(templateName, internalAdaRequestBuildCaseTemplate.getName());
     }
 
     void dataSetUp() {
@@ -112,7 +141,7 @@ public class InternalAdaBuildCaseTemplateTest {
     void should_map_case_data_to_template_field_values() {
         dataSetUp();
 
-        Map<String, Object> templateFieldValues = internalAdaBuildCaseTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalAdaRequestBuildCaseTemplate.mapFieldValues(caseDetails);
 
         assertEquals(10, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -123,76 +152,33 @@ public class InternalAdaBuildCaseTemplateTest {
         assertEquals(internalAdaCustomerServicesTelephoneNumber, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(internalAdaCustomerServicesEmailAddress, templateFieldValues.get("customerServicesEmail"));
 
-        assertEquals(now, templateFieldValues.get("dateLetterSent"));
-        assertEquals(directionDateDue, templateFieldValues.get("responseDueDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
+        assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.parse(directionDateDue)), templateFieldValues.get("responseDueDate"));
         assertEquals(hearingSupportRequirementsDueDate, templateFieldValues.get("hearingSupportRequirementsDueDate"));
 
     }
 
     @Test
-    void should_throw_when_no_directions_present() {
+    void should_throw_when_request_case_building_direction_not_present() {
         dataSetUp();
         when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> internalAdaBuildCaseTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
-                .hasMessage("No directions found");
-    }
-
-    @Test
-    void should_throw_when_request_case_building_direction_not_present() {
-        dataSetUp();
-
-        final IdValue<Direction> randomDirection = new IdValue<>(
-                "1",
-                new Direction(
-                        "Some explanation",
-                        directionParties,
-                        directionDateDue,
-                        directionDateSent,
-                        DirectionTag.CASE_EDIT,
-                        Collections.emptyList(),
-                        Collections.emptyList(),
-                        directionUniqueId,
-                        "caseEdit"
-                )
-        );
-
-        List<IdValue<Direction>> directionList = new ArrayList<>();
-        directionList.add(randomDirection);
-        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
-
-        assertThatThrownBy(() -> internalAdaBuildCaseTemplate.mapFieldValues(caseDetails))
-                .isExactlyInstanceOf(IllegalStateException.class)
-                .hasMessage("There must be only 1 requestCaseBuilding direction. Either this is not present, or multiple requestCaseBuilding directions exist.");
+                .hasMessage("No requestBuildCase directions found");
 
     }
 
     @Test
     void should_throw_when_multiple_request_case_building_directions_are_present() {
         dataSetUp();
-
-        final IdValue<Direction> randomDirection = new IdValue<>(
-                "2",
-                new Direction(
-                        directionExplanation,
-                        directionParties,
-                        directionDateDue,
-                        directionDateSent,
-                        directionTag,
-                        Collections.emptyList(),
-                        Collections.emptyList(),
-                        directionUniqueId + "123",
-                        directionType
-                )
-        );
         List<IdValue<Direction>> directionList = new ArrayList<>();
         directionList.add(requestCaseBuildingDirection);
-        directionList.add(randomDirection);
+        directionList.add(duplicateRequestCaseBuildingDirection);
         when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
 
-        assertThatThrownBy(() -> internalAdaBuildCaseTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(IllegalStateException.class)
-                .hasMessage("There must be only 1 requestCaseBuilding direction. Either this is not present, or multiple requestCaseBuilding directions exist.");
+                .hasMessage("More than 1 requestCaseBuilding direction");
     }
 }

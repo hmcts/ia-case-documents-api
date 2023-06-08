@@ -104,11 +104,11 @@ adaSuitabilityDocument.fileExtension: PDF
 adaSuitabilityDocument.fileName: "ADA-suitability-decision"
 adaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00001.docx}
 
-internalAdaBuildCaseDocument.contentType: application/pdf
-internalAdaBuildCaseDocument.fileExtension: PDF
-internalAdaBuildCaseDocument.fileName: "ADA appellant letter-appeal reasons"
-internalAdaBuildCaseDocument.templateName: ${IA_INTERNAL_ADA_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00002.docx}
-internalAdaBuildCaseDocument.hearingSupportResponseDueInWorkingDays: 15
+internalAdaRequestBuildCaseDocument.contentType: application/pdf
+internalAdaRequestBuildCaseDocument.fileExtension: PDF
+internalAdaRequestBuildCaseDocument.fileName: "ADA appellant letter-appeal reasons"
+internalAdaRequestBuildCaseDocument.templateName: ${IA_INTERNAL_ADA_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00002.docx}
+internalAdaRequestBuildCaseDocument.hearingSupportResponseDueInWorkingDays: 15
 
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF

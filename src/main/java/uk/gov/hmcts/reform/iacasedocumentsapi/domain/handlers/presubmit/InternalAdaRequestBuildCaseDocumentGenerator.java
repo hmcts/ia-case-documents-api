@@ -19,13 +19,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
-public class InternalAdaBuildCaseDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalAdaRequestBuildCaseDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> internalAdaBuildCaseDocumentGenerator;
     private final DocumentHandler documentHandler;
 
-    public InternalAdaBuildCaseDocumentGenerator(
-            @Qualifier("internalAdaBuildCase") DocumentCreator<AsylumCase> internalAdaRequestBuildCaseDocumentCreator,
+    public InternalAdaRequestBuildCaseDocumentGenerator(
+            @Qualifier("internalAdaRequestBuildCase") DocumentCreator<AsylumCase> internalAdaRequestBuildCaseDocumentCreator,
             DocumentHandler documentHandler
     ) {
         this.internalAdaBuildCaseDocumentGenerator = internalAdaRequestBuildCaseDocumentCreator;

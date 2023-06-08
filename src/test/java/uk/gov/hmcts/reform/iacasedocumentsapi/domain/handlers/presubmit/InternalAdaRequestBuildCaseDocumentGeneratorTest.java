@@ -29,7 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalAdaBuildCaseDocumentGeneratorTest {
+public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
 
     @Mock private DocumentCreator<AsylumCase> internalAdaRequestBuildCaseDocumentCreator;
     @Mock private DocumentHandler documentHandler;
@@ -39,12 +39,12 @@ public class InternalAdaBuildCaseDocumentGeneratorTest {
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
     private final YesOrNo yes = YesOrNo.YES;
-    private InternalAdaBuildCaseDocumentGenerator internalAdaBuildCaseDocumentGenerator;
+    private InternalAdaRequestBuildCaseDocumentGenerator internalAdaRequestBuildCaseDocumentGenerator;
 
     @BeforeEach
     public void setUp() {
-        internalAdaBuildCaseDocumentGenerator =
-                new InternalAdaBuildCaseDocumentGenerator(
+        internalAdaRequestBuildCaseDocumentGenerator =
+                new InternalAdaRequestBuildCaseDocumentGenerator(
                         internalAdaRequestBuildCaseDocumentCreator,
                         documentHandler
                 );
@@ -61,7 +61,7 @@ public class InternalAdaBuildCaseDocumentGeneratorTest {
         when(internalAdaRequestBuildCaseDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalAdaBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalAdaRequestBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -77,12 +77,12 @@ public class InternalAdaBuildCaseDocumentGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
 
-        assertThatThrownBy(() -> internalAdaBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalAdaBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -98,7 +98,7 @@ public class InternalAdaBuildCaseDocumentGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaBuildCaseDocumentGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaRequestBuildCaseDocumentGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -116,7 +116,7 @@ public class InternalAdaBuildCaseDocumentGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaBuildCaseDocumentGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaRequestBuildCaseDocumentGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -135,7 +135,7 @@ public class InternalAdaBuildCaseDocumentGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaBuildCaseDocumentGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaRequestBuildCaseDocumentGenerator.canHandle(callbackStage, callback);
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                         && callback.getEvent().equals(Event.REQUEST_CASE_BUILDING)) {
@@ -151,19 +151,19 @@ public class InternalAdaBuildCaseDocumentGeneratorTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalAdaBuildCaseDocumentGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseDocumentGenerator.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaBuildCaseDocumentGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseDocumentGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaBuildCaseDocumentGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseDocumentGenerator.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalAdaRequestBuildCaseDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }

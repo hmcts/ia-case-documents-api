@@ -523,6 +523,7 @@ public enum AsylumCaseDefinition {
     HAS_OTHER_APPEALS(
             "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {}),
 
+    // Case data section to hold generated documents,so they can be attached to email notifications
     NOTIFICATION_ATTACHMENT_DOCUMENTS(
             "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){});
 
