@@ -13,6 +13,11 @@ public class CustomerServicesProvider {
 
     private final String customerServicesTelephone;
     private final String customerServicesEmail;
+    @Value("${customerServices.internal.telephoneNumber.ada}")
+    private String internalAdaCustomerServicesTelephone;
+    @Value("${customerServices.internal.emailAddress.ada}")
+    private String internalAdaCustomerServicesEmail;
+
 
     public CustomerServicesProvider(
         @Value("${customerServices.telephoneNumber}") String customerServicesTelephone,
@@ -43,5 +48,13 @@ public class CustomerServicesProvider {
     public String getCustomerServicesEmail() {
         requireNonNull(customerServicesEmail);
         return customerServicesEmail;
+    }
+
+    public String getInternalAdaCustomerServicesTelephone() {
+        return internalAdaCustomerServicesTelephone;
+    }
+
+    public String getInternalAdaCustomerServicesEmail() {
+        return internalAdaCustomerServicesEmail;
     }
 }

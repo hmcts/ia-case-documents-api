@@ -330,6 +330,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
 
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
@@ -345,6 +346,8 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
 
     testCompile 'pl.pragmatists:JUnitParams:1.1.1'
+
+    testImplementation group: 'pl.pojo', name: 'pojo-tester', version: '0.7.6'
 
     testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.6') {
         exclude group: "com.github.tomakehurst", module: "wiremock-standalone"

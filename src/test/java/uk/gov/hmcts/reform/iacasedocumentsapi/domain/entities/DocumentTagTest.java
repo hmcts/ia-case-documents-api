@@ -42,10 +42,12 @@ public class DocumentTagTest {
         assertEquals("uploadBailSummary", DocumentTag.BAIL_SUMMARY.toString());
         assertEquals("b1Document", DocumentTag.B1_DOCUMENT.toString());
         assertEquals("", DocumentTag.NONE.toString());
+        assertEquals("requestCaseBuilding", DocumentTag.REQUEST_CASE_BUILDING.toString());
+
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(40, DocumentTag.values().length);
+        assertEquals(41, DocumentTag.values().length);
     }
 }
