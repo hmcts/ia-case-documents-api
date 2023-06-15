@@ -44,7 +44,7 @@ public class InternalAdaRequestBuildCaseTemplateTest {
     private final String internalAdaCustomerServicesEmailAddress = "example@email.com";
     private final LocalDate now = LocalDate.now();
     private final ZonedDateTime zonedDueDateTime = LocalDate.parse("2023-01-01").atStartOfDay(ZoneOffset.UTC);
-    private final String hearingSupportRequirementsDueDate = zonedDueDateTime.toLocalDate().toString();
+    private final LocalDate hearingSupportRequirementsDueDate = zonedDueDateTime.toLocalDate();
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
@@ -154,7 +154,7 @@ public class InternalAdaRequestBuildCaseTemplateTest {
 
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.parse(directionDateDue)), templateFieldValues.get("responseDueDate"));
-        assertEquals(hearingSupportRequirementsDueDate, templateFieldValues.get("hearingSupportRequirementsDueDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(hearingSupportRequirementsDueDate), templateFieldValues.get("hearingSupportRequirementsDueDate"));
 
     }
 
