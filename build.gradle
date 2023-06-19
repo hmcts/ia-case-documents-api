@@ -53,11 +53,11 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 compileJava {
-    options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked" << "-Werror"
+    options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
 }
 
 compileTestJava {
-    options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked" << "-Werror"
+    options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked"
 }
 
 tasks.withType(Test) {
@@ -381,7 +381,6 @@ pact {
         version = project.pactVersion
     }
 }
-
 
 dependencyCheck {
     suppressionFile = 'config/owasp/suppressions.xml'

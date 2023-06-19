@@ -1,51 +1,49 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
+package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
-import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.util.Collections;
-import org.springframework.beans.factory.annotation.Qualifier;
+
+import com.google.common.io.ByteStreams;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
 import uk.gov.hmcts.reform.document.domain.UploadResponse;
 import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-
 
 /**
  * Superseded. Will need to be removed as soon as the "use-ccd-document-am" feature flag is permanently on
  */
-
 @Component
 @Deprecated
-public class DmDocumentManagementUploader {
-
+public class DmSystemDocumentManagementUploader {
     private final DocumentUploadClientApi documentUploadClientApi;
-    private final AuthTokenGenerator serviceAuthorizationTokenGenerator;
-    private final UserDetailsProvider userDetailsProvider;
+    private final AuthorizationHeadersProvider authorizationHeadersProvider;
 
-    public DmDocumentManagementUploader(
+    public DmSystemDocumentManagementUploader(
         DocumentUploadClientApi documentUploadClientApi,
-        AuthTokenGenerator serviceAuthorizationTokenGenerator,
-        @Qualifier("requestUser") UserDetailsProvider userDetailsProvider
+        AuthorizationHeadersProvider authorizationHeadersProvider
     ) {
         this.documentUploadClientApi = documentUploadClientApi;
-        this.serviceAuthorizationTokenGenerator = serviceAuthorizationTokenGenerator;
-        this.userDetailsProvider = userDetailsProvider;
+        this.authorizationHeadersProvider = authorizationHeadersProvider;
     }
 
     public Document upload(
         Resource resource,
         String contentType
     ) {
-        final String serviceAuthorizationToken = serviceAuthorizationTokenGenerator.generate();
-        final UserDetails userDetails = userDetailsProvider.getUserDetails();
-        final String accessToken = userDetails.getAccessToken();
-        final String userId = userDetails.getId();
+        final String serviceAuthorizationToken =
+            authorizationHeadersProvider
+                .getLegalRepresentativeAuthorization()
+                .getValue("ServiceAuthorization");
+
+        final String accessToken =
+            authorizationHeadersProvider
+                .getLegalRepresentativeAuthorization()
+                .getValue("Authorization");
+
+        final String userId = "1";
 
         try {
 
