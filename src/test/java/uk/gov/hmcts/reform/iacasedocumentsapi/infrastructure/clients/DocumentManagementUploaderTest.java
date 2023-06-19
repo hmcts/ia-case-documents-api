@@ -53,13 +53,13 @@ public class DocumentManagementUploaderTest {
 
     @Captor private ArgumentCaptor<List<MultipartFile>> multipartFilesCaptor;
 
-    private DocumentManagementUploader documentManagementUploader;
+    private DmDocumentManagementUploader documentManagementUploader;
 
     @BeforeEach
     public void setUp() {
 
         documentManagementUploader =
-            new DocumentManagementUploader(
+            new DmDocumentManagementUploader(
                 documentUploadClientApi,
                 serviceAuthorizationTokenGenerator,
                 userDetailsProvider

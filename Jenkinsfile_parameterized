@@ -56,6 +56,7 @@ withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.E
     env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.CASE_DOCUMENT_AM_URL = "http://ccd-case-document-am-api-aat.service.core-compute-aat.internal"
     env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_URL = "http://em-ccd-orchestrator-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
@@ -63,11 +64,11 @@ withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.E
 
     loadVaultSecrets(secrets)
 
-    after('functionalTest:preview') {
+    afterAlways('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
-    after('functionalTest:aat') {
+    afterAlways('functionalTest:aat') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
