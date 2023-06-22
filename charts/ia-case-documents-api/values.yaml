@@ -39,3 +39,4 @@ java:
         - hearing-centre-birmingham-email
         - hearing-centre-hatton-cross-email
         - hearing-centre-glasgow-email
+        - app-insights-connection-string
