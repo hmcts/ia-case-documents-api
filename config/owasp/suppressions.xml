@@ -22,5 +22,7 @@
     </suppress>
     <suppress>
         <cve>CVE-2023-28709</cve>
+        <cve>CVE-2023-20883</cve>
+
     </suppress>
 </suppressions>
