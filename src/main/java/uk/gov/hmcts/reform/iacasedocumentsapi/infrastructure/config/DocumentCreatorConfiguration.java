@@ -266,6 +266,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalAdaSuitabilitySuitable")
+    public DocumentCreator<AsylumCase> getInternalAdaSuitabilityLetterSuitableDocumentCreator(
+        @Value("${adaInternalSuitabilityReviewSuitableDocument.contentType}") String contentType,
+        @Value("${adaInternalSuitabilityReviewSuitableDocument.fileExtension}") String fileExtension,
+        @Value("${adaInternalSuitabilityReviewSuitableDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAdaSuitabilityReviewSuitableLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("decisionAndReasons")
     public DocumentCreator<AsylumCase> getAndDecisionAndReasonsDocumentCreator(
         @Value("${decisionAndReasons.contentType}") String contentType,
