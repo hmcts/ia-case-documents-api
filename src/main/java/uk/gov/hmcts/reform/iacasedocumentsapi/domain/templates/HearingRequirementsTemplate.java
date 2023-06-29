@@ -55,10 +55,20 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
             witnessDetails
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(witnessIdValue -> ImmutableMap.of("witnessDetails", witnessIdValue.getValue().getWitnessName()))
+                .map(witnessIdValue ->
+                        ImmutableMap.of("witnessDetails", formatWitnessDetails(witnessIdValue.getValue())))
                 .collect(Collectors.toList())
         );
 
         return fieldValues;
+    }
+
+    private String formatWitnessDetails(WitnessDetails details) {
+        String givenNames = details.getWitnessName();
+        String familyName = details.getWitnessFamilyName();
+
+        return familyName == null || familyName.isEmpty()
+                ? givenNames
+                : String.format("%s %s", givenNames, familyName);
     }
 }
