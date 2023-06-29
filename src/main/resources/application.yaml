@@ -107,7 +107,12 @@ adaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-EN
 adaInternalSuitabilityReviewSuitableDocument.contentType: application/pdf
 adaInternalSuitabilityReviewSuitableDocument.fileExtension: PDF
 adaInternalSuitabilityReviewSuitableDocument.fileName: "ADA-Appellant-letter-suitability-decision-suitable"
-adaInternalSuitabilityReviewSuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00003.docx}
+adaInternalSuitabilityReviewSuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_SUITABLE_TEMPLATE:TB-IAC-DEC-ENG-00003.docx}
+
+adaInternalSuitabilityReviewUnsuitableDocument.contentType: application/pdf
+adaInternalSuitabilityReviewUnsuitableDocument.fileExtension: PDF
+adaInternalSuitabilityReviewUnsuitableDocument.fileName: "ADA-Appellant-letter-suitability-decision-unsuitable"
+adaInternalSuitabilityReviewUnsuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_UNSUITABLE_TEMPLATE:TB-IAC-DEC-ENG-00005.docx}
 
 internalAdaRequestBuildCaseDocument.contentType: application/pdf
 internalAdaRequestBuildCaseDocument.fileExtension: PDF
