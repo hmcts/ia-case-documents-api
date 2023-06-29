@@ -99,6 +99,9 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case REQUEST_CASE_BUILDING:
                 log.warn("REQUEST_CASE_BUILDING tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 33;
+            case INTERNAL_ADA_SUITABILITY:
+                log.warn("INTERNAL_ADA_SUITABILITY tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 34;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
