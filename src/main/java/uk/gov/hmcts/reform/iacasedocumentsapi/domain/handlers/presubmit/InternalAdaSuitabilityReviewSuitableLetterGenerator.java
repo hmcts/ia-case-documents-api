@@ -6,6 +6,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -61,7 +62,9 @@ public class InternalAdaSuitabilityReviewSuitableLetterGenerator implements PreS
 
         Document internalAdaSuitabilitySuitableLetterDocument = internalAdaSuitabilityReviewSuitableLetterGenerator.create(caseDetails);
 
-        final AdaSuitabilityReviewDecision suitabilityDecision = asylumCase.read(SUITABILITY_REVIEW_DECISION, AdaSuitabilityReviewDecision.class).orElse(null);
+        final AdaSuitabilityReviewDecision suitabilityDecision =
+            asylumCase.read(SUITABILITY_REVIEW_DECISION, AdaSuitabilityReviewDecision.class)
+                .orElseThrow(() -> new RequiredFieldMissingException("ADA suitability decision is missing."));
 
         if (suitabilityDecision.equals(AdaSuitabilityReviewDecision.SUITABLE)) {
             documentHandler.addWithMetadata(

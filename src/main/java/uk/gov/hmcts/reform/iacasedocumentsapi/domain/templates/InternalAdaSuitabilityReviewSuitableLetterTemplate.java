@@ -2,11 +2,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateTimeForNotificationAttachmentDocument;
 
-import com.google.common.base.Strings;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +18,6 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplate implements Docum
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
-    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
 
     public InternalAdaSuitabilityReviewSuitableLetterTemplate(
         @Value("${adaInternalSuitabilityReviewSuitableDocument.templateName}") String templateName,
@@ -51,8 +48,7 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplate implements Docum
         fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
 
-        fieldValues.put("hearingDate", formatDateForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
-
+        fieldValues.put("hearingDate", formatDateTimeForNotificationAttachmentDocument(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
         fieldValues.put("hearingType", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(null));
         fieldValues.put("vulnerabilities", asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class).orElse(null));
         fieldValues.put("pastExperiences", asylumCase.read(PAST_EXPERIENCES_TRIBUNAL_RESPONSE, String.class).orElse(null));
@@ -63,15 +59,4 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplate implements Docum
 
         return fieldValues;
     }
-
-    public String formatDateForRendering(
-        String date
-    ) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDateTime.parse(date).format(DOCUMENT_DATE_FORMAT);
-        }
-
-        return "";
-    }
-
 }
