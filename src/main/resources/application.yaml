@@ -104,11 +104,6 @@ adaSuitabilityDocument.fileExtension: PDF
 adaSuitabilityDocument.fileName: "ADA-suitability-decision"
 adaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00001.docx}
 
-adaInternalSuitabilityReviewUnsuitableDocument.contentType: application/pdf
-adaInternalSuitabilityReviewUnsuitableDocument.fileExtension: PDF
-adaInternalSuitabilityReviewUnsuitableDocument.fileName: "ADA-Appellant-letter-suitability-decision-unsuitable"
-adaInternalSuitabilityReviewUnsuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_UNSUITABLE_TEMPLATE:TB-IAC-DEC-ENG-00005.docx}
-
 internalAdaRequestBuildCaseDocument.contentType: application/pdf
 internalAdaRequestBuildCaseDocument.fileExtension: PDF
 internalAdaRequestBuildCaseDocument.fileName: "ADA appellant letter-appeal reasons"
