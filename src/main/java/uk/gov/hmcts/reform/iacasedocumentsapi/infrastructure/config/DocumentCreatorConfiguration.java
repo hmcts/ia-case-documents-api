@@ -273,7 +273,6 @@ public class DocumentCreatorConfiguration {
         @Value("${adaInternalSuitabilityReviewSuitableDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalAdaSuitabilityReviewSuitableLetterTemplate documentTemplate,
-
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
