@@ -44,7 +44,6 @@ public class DocumentTagTest {
         assertEquals("", DocumentTag.NONE.toString());
         assertEquals("requestCaseBuilding", DocumentTag.REQUEST_CASE_BUILDING.toString());
         assertEquals("internalAdaSuitability", DocumentTag.INTERNAL_ADA_SUITABILITY.toString());
-
     }
 
     @Test
