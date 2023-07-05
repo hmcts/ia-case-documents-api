@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3855 decision outcome judge home office notification failure",
+  "description": "RIA-3855 decision outcome judge home office notification failure (AdminOfficer) + RIA-6949 Send notification also to Admin Officer",
   "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -32,6 +32,10 @@
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
+            "id": "3855_APPEAL_OUTCOME_ADMIN",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
             "id": "3855_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
@@ -51,6 +55,16 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "3855_APPEAL_OUTCOME_ADMIN",
+        "recipient": "{$adminEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan"
         ]
       },
       {

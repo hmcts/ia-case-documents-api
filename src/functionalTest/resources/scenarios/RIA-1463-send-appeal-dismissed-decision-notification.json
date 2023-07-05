@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1463 Send appeal (dismissed) decision notification to Home Office and Legal Representative",
+  "description": "RIA-1463 Send appeal (dismissed) decision notification to Home Office and Legal Representative - [Admin notification(RIA-6949)]",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -31,6 +31,10 @@
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
+            "id": "1003_APPEAL_OUTCOME_ADMIN",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
             "id": "1003_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
@@ -50,6 +54,18 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "1003_APPEAL_OUTCOME_ADMIN",
+        "recipient": "{$adminEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "Talha Awan",
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "TAYLORHOUSE",
+          "DISMISSED"
         ]
       },
       {

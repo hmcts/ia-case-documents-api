@@ -90,7 +90,17 @@ def secrets = [
         secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
 
         secret('admin-officer-review-hearing-requirements-email', 'IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL'),
+
+        secret('admin-office-newport-email', 'IA_ADMIN_NEWPORT_EMAIL'),
+        secret('admin-office-taylor-house-email', 'IA_ADMIN_TAYLOR_HOUSE_EMAIL'),
+        secret('admin-office-hatton-cross-email', 'IA_ADMIN_HATTON_CROSS_EMAIL'),
+        secret('admin-office-manchester-email', 'IA_ADMIN_MANCHESTER_EMAIL'),
+        secret('admin-office-glasgow-email', 'IA_ADMIN_GLASGOW_EMAIL'),
+        secret('admin-office-bradford-email', 'IA_ADMIN_BRADFORD_EMAIL'),
+        secret('admin-office-birmingham-email', 'IA_ADMIN_BIRMINGHAM_EMAIL'),
+
         secret('case-officer-list-case-email', 'IA_CASE_OFFICER_LIST_CASE_EMAIL'),
+
 
         secret('ctsc-admin-ftpa-decision-email', 'IA_CTSC_ADMIN_FTPA_DECISION'),
         secret('ctsc-admin-pending-payment-email', 'IA_CTSC_ADMIN_PENDING_PAYMENT_EMAIL'),

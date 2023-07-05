@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
@@ -13,15 +14,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailHearingCentre;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -32,6 +31,8 @@ public class EmailAddressFinderTest {
     @Mock Map<HearingCentre, String> hearingCentreEmailAddresses;
     @Mock Map<HearingCentre, String> homeOfficeEmailAddresses;
     @Mock Map<HearingCentre, String> homeOfficeFtpaEmailAddresses;
+
+    @Mock Map<HearingCentre, String> adminEmailAddresses;
     @Mock Map<BailHearingCentre, String> bailHearingCentreEmailAddresses;
 
     private final HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
@@ -39,6 +40,8 @@ public class EmailAddressFinderTest {
     private final HearingCentre listCaseHearingCentre = HearingCentre.BRADFORD;
     private final String listCaseHearingCenterEmailAddress = "listCaseHearingCentre@example.com";
     private final String legalRepEmailAddress = "legalRep@example.com";
+
+    private final String adminEmailAddress = "adminDets@example.com";
 
     private EmailAddressFinder emailAddressFinder;
     private final String listCaseCaseOfficerEmailAddress = "co-list-case@example.com";
@@ -54,14 +57,24 @@ public class EmailAddressFinderTest {
         when(hearingCentreEmailAddresses.get(hearingCentre)).thenReturn(hearingCentreEmailAddress);
         when(homeOfficeEmailAddresses.get(listCaseHearingCentre)).thenReturn(listCaseHearingCenterEmailAddress);
         when(homeOfficeFtpaEmailAddresses.get(listCaseHearingCentre)).thenReturn(listCaseHearingCenterEmailAddress);
+        when(adminEmailAddresses.get(hearingCentre)).thenReturn(adminEmailAddress);
+
+        given(adminEmailAddresses.get(HearingCentre.BIRMINGHAM)).willReturn("birminghamedets@example.com");
+        given(adminEmailAddresses.get(HearingCentre.NOTTINGHAM)).willReturn("birminghamedets@example.com");
+        given(adminEmailAddresses.get(HearingCentre.COVENTRY)).willReturn("birminghamedets@example.com");
+        given(adminEmailAddresses.get(HearingCentre.BRADFORD)).willReturn("bradfordedets@example.com");
+        given(adminEmailAddresses.get(HearingCentre.NEWCASTLE)).willReturn("bradfordedets@example.com");
+        given(adminEmailAddresses.get(HearingCentre.GLASGOW)).willReturn("glasgowedets@example.com");
+        given(adminEmailAddresses.get(HearingCentre.GLASGOW_TRIBUNAL_CENTRE)).willReturn("glasgowedets@example.com");
+        given(adminEmailAddresses.get(HearingCentre.BELFAST)).willReturn("glasgowedets@example.com");
 
         emailAddressFinder = new EmailAddressFinder(
             hearingCentreEmailAddresses,
             homeOfficeEmailAddresses,
             homeOfficeFtpaEmailAddresses,
             bailHearingCentreEmailAddresses,
+            adminEmailAddresses,
             listCaseCaseOfficerEmailAddress
-
         );
     }
 
@@ -132,6 +145,37 @@ public class EmailAddressFinderTest {
         assertThatThrownBy(() -> emailAddressFinder.getHomeOfficeFtpaEmailAddress(asylumCase))
                 .isExactlyInstanceOf(IllegalStateException.class)
                 .hasMessage("Hearing centre email address not found: taylorHouse");
+    }
+
+    @Test
+    public void should_throw_exception_on_admin_email_when_is_empty() {
+        when(asylumCase.read(AsylumCaseDefinition.HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> emailAddressFinder.getAdminEmailAddress(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("hearingCentre is not present");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "BIRMINGHAM,birminghamedets@example.com",
+        "NOTTINGHAM,birminghamedets@example.com",
+        "COVENTRY,birminghamedets@example.com",
+        "BRADFORD,bradfordedets@example.com",
+        "NEWCASTLE,bradfordedets@example.com",
+        "GLASGOW,glasgowedets@example.com",
+        "GLASGOW_TRIBUNAL_CENTRE,glasgowedets@example.com",
+        "BELFAST,glasgowedets@example.com"
+    })
+    public void should_return_correct_admin_email_address_from_lookup_map(String hearingCentre, String mappedEmail) {
+        // Given
+        // The addresses defined in the adminEmailAddresses
+
+        // When
+        when(asylumCase.read(AsylumCaseDefinition.HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.valueOf(hearingCentre)));
+
+        // Then
+        assertEquals(mappedEmail, emailAddressFinder.getAdminEmailAddress(asylumCase));
     }
 
     @Test

@@ -46,7 +46,7 @@ public class NotificationVerifier implements Verifier {
         if (notificationsSent.isEmpty()) {
             assertFalse(
                 notificationsSent.isEmpty(),
-                description + ": Notifications were delivered"
+                description + ": Notifications were not delivered"
             );
         }
 
@@ -71,7 +71,7 @@ public class NotificationVerifier implements Verifier {
                     assertFalse(
                         true,
                         description
-                            + ": Notification " + expectedReference + " was delivered successfully"
+                            + ": Notification " + expectedReference + " was not delivered successfully"
                     );
                 }
 
@@ -89,7 +89,7 @@ public class NotificationVerifier implements Verifier {
                         description
                             + ": Notification "
                             + expectedReference
-                            + " was delivered with correct reference",
+                            + " was delivered with wrong reference",
                         actualReference,
                         equalTo(expectedReference)
                     );
@@ -98,7 +98,7 @@ public class NotificationVerifier implements Verifier {
                         description
                             + ": Notification "
                             + expectedReference
-                            + " was delivered to correct recipient",
+                            + " was delivered to wrong recipient",
                         actualRecipient,
                         equalTo(expectedRecipient)
                     );
@@ -107,7 +107,7 @@ public class NotificationVerifier implements Verifier {
                         description
                             + ": Notification "
                             + expectedReference
-                            + " was delivered with correct subject content",
+                            + " was delivered with wrong subject content",
                         actualSubject,
                         equalTo(expectedSubject)
                     );
@@ -118,7 +118,7 @@ public class NotificationVerifier implements Verifier {
                             description
                                 + ": Notification "
                                 + expectedReference
-                                + " was delivered with correct body content",
+                                + " was delivered with wrong body content",
                             actualBody,
                             equalTo((String) expectedBodyUnknownType)
                         );
@@ -133,7 +133,7 @@ public class NotificationVerifier implements Verifier {
                                 description
                                     + ": Notification "
                                     + expectedReference
-                                    + " was delivered with correct body content match",
+                                    + " was delivered with wrong body content match",
                                 actualBody,
                                 containsString(expectedBodyMatch)
                             );
@@ -143,7 +143,7 @@ public class NotificationVerifier implements Verifier {
                 } catch (NotificationClientException e) {
                     assertFalse(
                         true,
-                        description + ": Notification " + deliveredNotificationId + " was found on GovNotify"
+                        description + ": Notification " + deliveredNotificationId + " was not found on GovNotify"
                     );
                 }
             });

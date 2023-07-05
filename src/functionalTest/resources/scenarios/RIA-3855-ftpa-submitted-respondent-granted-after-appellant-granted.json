@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3855 FTPA submitted Respondent FTPA Decision home office notification failed",
+  "description": "RIA-3855 FTPA submitted Respondent FTPA Decision home office notification failed (Judge)",
   "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

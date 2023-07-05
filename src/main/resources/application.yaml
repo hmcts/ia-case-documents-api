@@ -782,6 +782,9 @@ govnotify:
                 email: 850a3cff-a60c-4eec-9e94-a2dc42cfbaeb
               afterListing:
                 email: f5f65291-9440-4af7-897b-3c9fa957e51a
+    decisionAndReasonsTemplateUploaded:
+      admin:
+        email: 489aadaf-2d48-4ea4-a388-bbc6d6942e91
     requestNewHearingRequirements:
       legalRep:
         email: fd709bf4-095c-4734-8f88-9a9feba9fd81
@@ -1194,6 +1197,16 @@ idam:
     services: ${IA_S2S_AUTHORIZED_SERVICES:ccd,ccd_data,ccd_gw,ccd_ps,iac}
 
 ### Email addresses
+
+adminEmailAddresses:
+  newport: ${IA_ADMIN_NEWPORT_EMAIL:newportedets@example.com}
+  taylorHouse: ${IA_ADMIN_TAYLOR_HOUSE_EMAIL:taylorhouseedets@example.com}
+  hattonCross: ${IA_ADMIN_HATTON_CROSS_EMAIL:hattonxedets@example.com}
+  manchester: ${IA_ADMIN_MANCHESTER_EMAIL:manchesteredets@example.com}
+  glasgow: ${IA_ADMIN_GLASGOW_EMAIL:glasgowedets@example.com}
+  bradford: ${IA_ADMIN_BRADFORD_EMAIL:bradfordedets@example.com}
+  birmingham: ${IA_ADMIN_BIRMINGHAM_EMAIL:birminghamedets@example.com}
+
 hearingCentreEmailAddresses:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester@example.com}

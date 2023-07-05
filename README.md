@@ -26,6 +26,13 @@ The following environment variables are required when running the api without it
 | IA_IDAM_REDIRECT_URI  |  http://localhost:3451/oauth2redirect |
 | IA_S2S_SECRET  |  some-s2s-secret |
 | IA_S2S_MICROSERVICE  |  some-s2s-gateway |
+| IA_ADMIN_NEWPORT_EMAIL | some-email |
+| IA_ADMIN_TAYLOR_HOUSE_EMAIL | some-email |
+| IA_ADMIN_HATTON_CROSS_EMAIL | some-email |
+| IA_ADMIN_MANCHESTER_EMAIL | some-email |
+| IA_ADMIN_GLASGOW_EMAIL | some-email |
+| IA_ADMIN_BRADFORD_EMAIL | some-email |
+| IA_ADMIN_BIRMINGHAM_EMAIL | some-email |
 | IA_HEARING_CENTRE_BRADFORD_EMAIL |  some-email |
 | IA_HEARING_CENTRE_MANCHESTER_EMAIL |  some-email |
 | IA_HEARING_CENTRE_NEWPORT_EMAIL |  some-email |

@@ -1,20 +1,18 @@
 {
-  "description": "RIA-3855 decision outcome judge home office notification failure (Judge) + RIA-6949 Send notification also to Admin Officer",
-  "launchDarklyKey": "tcw-notifications-feature:true",
+  "description": "RIA-6949 appeal outcome notification Admin Officer nottingham",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "Judge",
+    "credentials": "judge",
     "input": {
-      "id": 3855,
+      "id": 6949,
       "eventId": "sendDecisionAndReasons",
       "state": "decided",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "ariaListingReference": "LP/12345/2019",
-          "listCaseHearingCentre": "bradford",
           "isDecisionAllowed": "allowed",
-          "homeOfficeAppealDecidedInstructStatus": "FAIL"
+          "hearingCentre": "nottingham"
         }
       }
     }
@@ -25,31 +23,34 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "ariaListingReference": "LP/12345/2019",
         "isDecisionAllowed": "allowed",
+        "hearingCentre": "nottingham",
         "notificationsSent": [
           {
-            "id": "3855_APPEAL_OUTCOME_HOME_OFFICE",
+            "id": "6949_APPEAL_OUTCOME_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "3855_APPEAL_OUTCOME_ADMIN",
+            "id": "6949_APPEAL_OUTCOME_ADMIN",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "3855_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+            "id": "6949_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
+
         ]
       }
     },
     "notifications": [
       {
-        "reference": "3855_APPEAL_OUTCOME_HOME_OFFICE",
+        "reference": "6949_APPEAL_OUTCOME_HOME_OFFICE",
         "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
-          "PA/12345/2019",
           "LP/12345/2019",
+          "PA/12345/2019",
           "A1234567",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
@@ -57,18 +58,21 @@
           "{$customerServices.emailAddress}"
         ]
       },
+
       {
-        "reference": "3855_APPEAL_OUTCOME_ADMIN",
-        "recipient": "{$adminEmailAddresses.taylorHouse}",
+        "reference": "6949_APPEAL_OUTCOME_ADMIN",
+        "recipient": "{$adminEmailAddresses.birmingham}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
+          "Talha Awan",
           "PA/12345/2019",
           "LP/12345/2019",
-          "Talha Awan"
+          "NOTTINGHAM",
+          "ALLOWED"
         ]
       },
       {
-        "reference": "3855_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+        "reference": "6949_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: decision and reasons",
         "body": [
@@ -80,18 +84,8 @@
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
         ]
-      },
-      {
-        "reference": "3855_APPEAL_OUTCOME_HO_NOTIFICATION_FAILED_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.bradford}",
-        "subject": "Immigration and Asylum appeal: A notification to the respondent has failed",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
       }
+
     ]
   }
 }
