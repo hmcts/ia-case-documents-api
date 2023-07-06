@@ -88,6 +88,7 @@ class HearingRequirementsTemplateTest {
             );
 
         witness1.setWitnessName("Some Witness");
+        witness1.setWitnessFamilyName("Some Witness Family");
         witness2.setWitnessName("Another Witness");
 
         witnessDetails =
@@ -192,7 +193,7 @@ class HearingRequirementsTemplateTest {
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
@@ -294,7 +295,7 @@ class HearingRequirementsTemplateTest {
         assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
@@ -345,7 +346,7 @@ class HearingRequirementsTemplateTest {
         assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
