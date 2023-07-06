@@ -22,6 +22,7 @@ public enum DocumentTag {
     DECISION_AND_REASONS_DRAFT("decisionAndReasons", CaseType.ASYLUM),
     REHEARD_DECISION_AND_REASONS_DRAFT("reheardDecisionAndReasons", CaseType.ASYLUM),
     DECISION_AND_REASONS_COVER_LETTER("decisionAndReasonsCoverLetter", CaseType.ASYLUM),
+    INTERNAL_ADA_DECISION_AND_REASONS_LETTER("internalAdaDecisionAndReasonsLetter", CaseType.ASYLUM),
     FINAL_DECISION_AND_REASONS_PDF("finalDecisionAndReasonsPdf", CaseType.ASYLUM),
     APPEAL_SKELETON_BUNDLE("submitCaseBundle", CaseType.ASYLUM),
     END_APPEAL("endAppeal", CaseType.ASYLUM),

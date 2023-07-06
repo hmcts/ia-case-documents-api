@@ -551,13 +551,34 @@ public class DocumentCreatorConfiguration {
             DocumentUploader documentUploader
     ) {
         return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalAdaDecisionsAndReasonsAllowed")
+    public DocumentCreator<AsylumCase> getInternalAdaDecisionsAndReasonsAllowedDocumentCreator(
+        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.contentType}") String contentType,
+        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.fileExtension}") String fileExtension,
+        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAdaDecisionsAndReasonsAllowedLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 
