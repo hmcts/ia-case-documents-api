@@ -1,11 +1,14 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 
 
 @Service
@@ -50,11 +53,15 @@ public class CustomerServicesProvider {
         return customerServicesEmail;
     }
 
-    public String getInternalAdaCustomerServicesTelephone() {
-        return internalAdaCustomerServicesTelephone;
+    public String getInternalCustomerServicesTelephone(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && isAcceleratedDetainedAppeal(asylumCase)
+                ? internalAdaCustomerServicesTelephone
+                : customerServicesTelephone;
     }
 
-    public String getInternalAdaCustomerServicesEmail() {
-        return internalAdaCustomerServicesEmail;
+    public String getInternalCustomerServicesEmail(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && isAcceleratedDetainedAppeal(asylumCase)
+                ? internalAdaCustomerServicesEmail
+                : customerServicesEmail;
     }
 }

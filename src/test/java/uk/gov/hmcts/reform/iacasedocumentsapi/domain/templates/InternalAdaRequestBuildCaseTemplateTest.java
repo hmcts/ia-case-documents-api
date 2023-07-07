@@ -126,8 +126,8 @@ public class InternalAdaRequestBuildCaseTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
-        when(customerServicesProvider.getInternalAdaCustomerServicesTelephone()).thenReturn(internalAdaCustomerServicesTelephoneNumber);
-        when(customerServicesProvider.getInternalAdaCustomerServicesEmail()).thenReturn(internalAdaCustomerServicesEmailAddress);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalAdaCustomerServicesTelephoneNumber);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalAdaCustomerServicesEmailAddress);
 
         List<IdValue<Direction>> directionList = new ArrayList<>();
         directionList.add(requestCaseBuildingDirection);
