@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.HoReviewEvidenceLetterTemplate;
 
 @Configuration
 public class DocumentCreatorConfiguration {
@@ -525,6 +526,27 @@ public class DocumentCreatorConfiguration {
             @Value("${internalAdaRequestBuildCaseDocument.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
             InternalAdaRequestBuildCaseTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("hoReviewEvidenceLetter")
+    public DocumentCreator<AsylumCase> getHoReviewEvidenceLetterCreator(
+            @Value("${hoReviewEvidenceLetter.contentType}") String contentType,
+            @Value("${hoReviewEvidenceLetter.fileExtension}") String fileExtension,
+            @Value("${hoReviewEvidenceLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            HoReviewEvidenceLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

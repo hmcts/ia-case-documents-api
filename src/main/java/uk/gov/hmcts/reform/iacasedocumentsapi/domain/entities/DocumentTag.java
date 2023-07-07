@@ -40,6 +40,8 @@ public enum DocumentTag {
     NOTICE_OF_DECISION_UT_TRANSFER("noticeOfDecisionUtTransfer", CaseType.ASYLUM),
 
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
+    REQUEST_RESPONDENT_REVIEW("requestRespondentReview", CaseType.ASYLUM),
+
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
