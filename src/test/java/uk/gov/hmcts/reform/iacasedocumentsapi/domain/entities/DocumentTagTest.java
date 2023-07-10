@@ -45,10 +45,11 @@ public class DocumentTagTest {
         assertEquals("requestCaseBuilding", DocumentTag.REQUEST_CASE_BUILDING.toString());
         assertEquals("internalAdaSuitability", DocumentTag.INTERNAL_ADA_SUITABILITY.toString());
         assertEquals("requestRespondentReview", DocumentTag.REQUEST_RESPONDENT_REVIEW.toString());
+        assertEquals("internalAdaDecisionAndReasonsLetter", DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(43, DocumentTag.values().length);
+        assertEquals(44, DocumentTag.values().length);
     }
 }
