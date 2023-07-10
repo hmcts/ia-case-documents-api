@@ -46,8 +46,8 @@ public class HoReviewEvidenceLetterTemplate implements DocumentTemplate<AsylumCa
         fieldValues.put("dateLetterSent", getFormattedDate(dateProvider.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("directionDueDate", getFormattedDate(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.RESPONDENT_REVIEW))));
-        fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalAdaCustomerServicesTelephone());
-        fieldValues.put("ADAemail", customerServicesProvider.getInternalAdaCustomerServicesEmail());
+        fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
+        fieldValues.put("ADAemail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         return fieldValues;
     }
 

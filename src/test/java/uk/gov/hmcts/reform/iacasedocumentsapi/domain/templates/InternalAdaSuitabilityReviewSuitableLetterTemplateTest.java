@@ -6,7 +6,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
@@ -78,8 +79,10 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplateTest {
         when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(inCamera));
         when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(otherHearingRequest));
 
-        when(customerServicesProvider.getInternalAdaCustomerServicesTelephone()).thenReturn(internalAdaCustomerServicesTelephoneNumber);
-        when(customerServicesProvider.getInternalAdaCustomerServicesEmail()).thenReturn(internalAdaCustomerServicesEmailAddress);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase))
+                .thenReturn(internalAdaCustomerServicesTelephoneNumber);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase))
+                .thenReturn(internalAdaCustomerServicesEmailAddress);
     }
 
     @Test
