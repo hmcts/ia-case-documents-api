@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.HoReviewEvidenceLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaDecisionsAndReasonsAllowedLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaSuitabilityReviewSuitableLetterTemplate;
 
 @Configuration
 public class DocumentCreatorConfiguration {
