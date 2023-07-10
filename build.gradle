@@ -247,7 +247,7 @@ dependencyManagement {
             entry 'snakeyaml'
         }
 
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.73') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.78') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-el'
             entry 'tomcat-embed-websocket'
