@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.HoReviewEvidenceLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaDecisionsAndReasonsAllowedLetterTemplate;
 
 @Configuration
 public class DocumentCreatorConfiguration {
@@ -551,13 +552,34 @@ public class DocumentCreatorConfiguration {
             DocumentUploader documentUploader
     ) {
         return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalAdaDecisionsAndReasonsAllowed")
+    public DocumentCreator<AsylumCase> getInternalAdaDecisionsAndReasonsAllowedDocumentCreator(
+        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.contentType}") String contentType,
+        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.fileExtension}") String fileExtension,
+        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAdaDecisionsAndReasonsAllowedLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 
