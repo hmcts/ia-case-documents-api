@@ -204,6 +204,10 @@ hoReviewEvidenceLetter.fileExtension: PDF
 hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
 hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
 
+uploadAppealResponseMaintainedLetter.contentType: application/pdf
+uploadAppealResponseMaintainedLetter.fileExtension: PDF
+uploadAppealResponseMaintainedLetter.fileName: "HO-Response-Letter"
+uploadAppealResponseMaintainedLetter.templateName: ${IA_HO_REVIEW_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00004.docx}
 
 bailEndApplication.contentType:  application/pdf
 bailEndApplication.fileExtension: PDF
@@ -323,7 +327,9 @@ security:
       - "submitApplication"
       - "makeNewApplication"
     caseworker-ia-system:
-      - "endAppealAutomatically"
+      - "submitReasonsForAppeal"
+    caseworker-ia-homeofficelart:
+      - "uploadHomeOfficeAppealResponse"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}

@@ -42,6 +42,7 @@ public enum DocumentTag {
 
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     REQUEST_RESPONDENT_REVIEW("requestRespondentReview", CaseType.ASYLUM),
+    UPLOAD_THE_APPEAL_RESPONSE("uploadTheAppealResponse", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),

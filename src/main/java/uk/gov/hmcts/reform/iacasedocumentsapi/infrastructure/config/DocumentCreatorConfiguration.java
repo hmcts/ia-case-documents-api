@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.HoReviewEv
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaDecisionsAndReasonsAllowedLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaSuitabilityReviewSuitableLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaSuitabilityReviewUnsuitableLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.UploadAppealResponseMaintainedDecisionLetterTemplate;
 
 @Configuration
 public class DocumentCreatorConfiguration {
@@ -582,6 +583,27 @@ public class DocumentCreatorConfiguration {
             documentTemplate,
             documentGenerator,
             documentUploader
+        );
+    }
+
+    @Bean("uploadTheAppealResponseLetter")
+    public DocumentCreator<AsylumCase> getUploadAppealResponseMaintainedLetterCreator(
+            @Value("${uploadAppealResponseMaintainedLetter.contentType}") String contentType,
+            @Value("${uploadAppealResponseMaintainedLetter.fileExtension}") String fileExtension,
+            @Value("${uploadAppealResponseMaintainedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            UploadAppealResponseMaintainedDecisionLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
         );
     }
 
