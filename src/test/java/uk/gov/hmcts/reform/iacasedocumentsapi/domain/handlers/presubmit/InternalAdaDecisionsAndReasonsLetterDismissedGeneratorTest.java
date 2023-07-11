@@ -1,6 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
-import org.junit.jupiter.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +26,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")

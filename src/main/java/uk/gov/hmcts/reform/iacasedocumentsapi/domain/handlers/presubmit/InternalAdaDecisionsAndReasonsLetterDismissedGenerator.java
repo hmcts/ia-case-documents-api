@@ -1,5 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
@@ -15,12 +19,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_ALLOWED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 @Component
 public class InternalAdaDecisionsAndReasonsLetterDismissedGenerator implements PreSubmitCallbackHandler<AsylumCase> {
