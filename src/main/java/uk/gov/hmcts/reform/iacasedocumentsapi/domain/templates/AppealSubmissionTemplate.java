@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
@@ -54,7 +56,9 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appealSubmissionDate", formatDateForRendering(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class).orElse("")));
         fieldValues.put("legalRepresentativeEmailAddress", asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""));
-        fieldValues.put("legalRepName", asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""));
+        fieldValues.put("legalRepName", formatLegalRepName(
+            asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""),
+            asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class).orElse("")));
         fieldValues.put("legalRepCompany", asylumCase.read(LEGAL_REP_COMPANY, String.class).orElse(""));
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
@@ -222,5 +226,13 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         }
 
         return "";
+    }
+
+    private String formatLegalRepName(@NonNull String firstName, @NonNull String lastName) {
+        if (!(lastName.isEmpty() || firstName.isEmpty())) {
+            return firstName + " " + lastName;
+        }
+
+        return firstName;
     }
 }
