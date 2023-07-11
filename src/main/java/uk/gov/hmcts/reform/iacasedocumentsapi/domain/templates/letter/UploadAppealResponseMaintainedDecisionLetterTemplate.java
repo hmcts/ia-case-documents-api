@@ -56,8 +56,8 @@ public class UploadAppealResponseMaintainedDecisionLetterTemplate implements Doc
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(dateProvider.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalAdaCustomerServicesTelephone());
-        fieldValues.put("ADAemail", customerServicesProvider.getInternalAdaCustomerServicesEmail());
+        fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
+        fieldValues.put("ADAemail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("suitabilityAssessmentHearingDate", getFormattedDate(getSaHearingDate(asylumCase)));
         fieldValues.put("hearingDate", getFormattedDate(getLocalDateForFieldValue(asylumCase, LIST_CASE_HEARING_DATE)));
         fieldValues.put("caseBuildingDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.REQUEST_CASE_BUILDING))));
