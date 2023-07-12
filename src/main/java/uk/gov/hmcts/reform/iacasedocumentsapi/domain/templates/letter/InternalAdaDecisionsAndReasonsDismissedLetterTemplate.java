@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getCaseDirectionsBasedOnTag;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getDirectionDueDate;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
@@ -72,9 +73,6 @@ public class InternalAdaDecisionsAndReasonsDismissedLetterTemplate implements Do
             throw new IllegalStateException("More than 1 respondent review direction");
         }
 
-        Direction requestBuildCaseDirection = requestBuildCaseDirectionList.get(0);
-        Direction respondendReviewDirection = respondendReviewDirectionList.get(0);
-
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("ADAemail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
@@ -89,8 +87,8 @@ public class InternalAdaDecisionsAndReasonsDismissedLetterTemplate implements Do
                 .calculateDueDate(ZonedDateTime.now(), ftpaDueInWorkingDays)
                 .toLocalDate()));
 
-        fieldValues.put("responseDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(requestBuildCaseDirection.getDateDue())));
-        fieldValues.put("hoReviewAppealDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(respondendReviewDirection.getDateDue())));
+        fieldValues.put("responseDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.REQUEST_CASE_BUILDING))));
+        fieldValues.put("hoReviewAppealDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.RESPONDENT_REVIEW))));
 
         return fieldValues;
     }
