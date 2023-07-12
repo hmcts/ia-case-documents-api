@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -30,44 +31,41 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
-    @Mock
-    private DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator;
-    @Mock
-    private DocumentHandler documentHandler;
+class InternalAdaDecisionsAndReasonsLetterGeneratorTest {
 
-    @Mock
-    private Callback<AsylumCase> callback;
-    @Mock
-    private CaseDetails<AsylumCase> caseDetails;
-    @Mock
-    private AsylumCase asylumCase;
-    @Mock
-    private Document uploadedDocument;
-    private InternalAdaDecisionsAndReasonsLetterDismissedGenerator internalAdaDecisionsAndReasonsLetterDismissedGenerator;
+    @Mock private DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator;
+    @Mock private DocumentHandler documentHandler;
+
+    @Mock private Callback<AsylumCase> callback;
+    @Mock private CaseDetails<AsylumCase> caseDetails;
+    @Mock private AsylumCase asylumCase;
+    @Mock private Document uploadedDocument;
+    private InternalAdaDecisionsAndReasonsLetterGenerator internalAdaDecisionsAndReasonsLetterGenerator;
 
     @BeforeEach
     public void setUp() {
-        internalAdaDecisionsAndReasonsLetterDismissedGenerator =
-                new InternalAdaDecisionsAndReasonsLetterDismissedGenerator(
-                        internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator,
-                        documentHandler
-                );
+        internalAdaDecisionsAndReasonsLetterGenerator =
+            new InternalAdaDecisionsAndReasonsLetterGenerator(
+                internalAdaDecisionsAndReasonsLetterAllowedDocumentCreator,
+                internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator,
+                documentHandler
+            );
     }
 
     @Test
-    public void should_create_internal_ada_appeal_decided_dismissed_pdf_and_append_to_notifications_documents() {
+    public void should_create_internal_ada_appeal_decided_allowed_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SEND_DECISION_AND_REASONS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.DISMISSED));
+        when(callback.getCaseDetails().getCaseData().read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.ALLOWED));
 
-        when(internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAdaDecisionsAndReasonsLetterAllowedDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalAdaDecisionsAndReasonsLetterDismissedGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            internalAdaDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -76,33 +74,49 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
     }
 
     @Test
-    public void handling_should_throw_if_cannot_handle() {
+    public void should_call_internal_ada_decisions_and_reasons_letter_dismissed_creator() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SEND_DECISION_AND_REASONS);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.DISMISSED));
+
+        internalAdaDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        verify(internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator, times(1)).create(caseDetails);
+    }
+
+    @Test
+    public void handling_should_throw_if_cannot_actually_handle() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterDismissedGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
-                .hasMessage("Cannot handle callback")
-                .isExactlyInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+            .hasMessage("Cannot handle callback")
+            .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterDismissedGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-                .hasMessage("Cannot handle callback")
-                .isExactlyInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .hasMessage("Cannot handle callback")
+            .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void it_cannot_handle_callback_if_is_admin_is_missing() {
+
         for (Event event : Event.values()) {
+
             when(callback.getEvent()).thenReturn(event);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaDecisionsAndReasonsLetterDismissedGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaDecisionsAndReasonsLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -111,14 +125,16 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
 
     @Test
     public void it_cannot_handle_callback_if_is_ada_is_missing() {
+
         for (Event event : Event.values()) {
+
             when(callback.getEvent()).thenReturn(event);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaDecisionsAndReasonsLetterDismissedGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaDecisionsAndReasonsLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -127,7 +143,9 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
 
     @Test
     public void it_cannot_handle_callback_if_appeal_decision_is_dismissed() {
+
         for (Event event : Event.values()) {
+
             when(callback.getEvent()).thenReturn(event);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -135,7 +153,7 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.DISMISSED));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaDecisionsAndReasonsLetterDismissedGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaDecisionsAndReasonsLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -144,14 +162,16 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
 
     @Test
     public void it_cannot_handle_callback_if_appeal_decision_is_missing() {
+
         for (Event event : Event.values()) {
+
             when(callback.getEvent()).thenReturn(event);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaDecisionsAndReasonsLetterDismissedGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaDecisionsAndReasonsLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -167,16 +187,18 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.empty());
 
-        when(internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAdaDecisionsAndReasonsLetterAllowedDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
-        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterDismissedGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-                .isExactlyInstanceOf(RequiredFieldMissingException.class)
-                .hasMessage("Appeal decision is missing.");
+        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .isExactlyInstanceOf(RequiredFieldMissingException.class)
+            .hasMessage("Appeal decision is missing.");
     }
 
     @Test
     public void it_should_only_handle_about_to_submit_and_send_decisions_and_reasons_event() {
+
         for (Event event : Event.values()) {
+
             when(callback.getEvent()).thenReturn(event);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -184,10 +206,10 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaDecisionsAndReasonsLetterDismissedGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalAdaDecisionsAndReasonsLetterGenerator.canHandle(callbackStage, callback);
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                        && callback.getEvent().equals(Event.SEND_DECISION_AND_REASONS)) {
+                    && callback.getEvent().equals(Event.SEND_DECISION_AND_REASONS)) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -199,21 +221,22 @@ class InternalAdaDecisionsAndReasonsLetterDismissedGeneratorTest {
 
     @Test
     public void should_not_allow_null_arguments() {
-        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterDismissedGenerator.canHandle(null, callback))
-                .hasMessage("callbackStage must not be null")
-                .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterDismissedGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
-                .hasMessage("callback must not be null")
-                .isExactlyInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterGenerator.canHandle(null, callback))
+            .hasMessage("callbackStage must not be null")
+            .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterDismissedGenerator.handle(null, callback))
-                .hasMessage("callbackStage must not be null")
-                .isExactlyInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+            .hasMessage("callback must not be null")
+            .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterDismissedGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
-                .hasMessage("callback must not be null")
-                .isExactlyInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterGenerator.handle(null, callback))
+            .hasMessage("callbackStage must not be null")
+            .isExactlyInstanceOf(NullPointerException.class);
+
+        assertThatThrownBy(() -> internalAdaDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+            .hasMessage("callback must not be null")
+            .isExactlyInstanceOf(NullPointerException.class);
     }
 
 }

@@ -15,21 +15,23 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
-public class InternalAdaDecisionsAndReasonsLetterDismissedGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalAdaDecisionsAndReasonsLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
+    private final DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedCreator;
     private final DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalAdaDecisionsAndReasonsLetterDismissedGenerator(
+    public InternalAdaDecisionsAndReasonsLetterGenerator(
+            @Qualifier("internalAdaDecisionsAndReasonsAllowed") DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedCreator,
             @Qualifier("internalAdaDecisionsAndReasonsDismissed") DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedCreator,
             DocumentHandler documentHandler
     ) {
+        this.internalAdaDecisionsAndReasonsLetterAllowedCreator = internalAdaDecisionsAndReasonsLetterAllowedCreator;
         this.internalAdaDecisionsAndReasonsLetterDismissedCreator = internalAdaDecisionsAndReasonsLetterDismissedCreator;
         this.documentHandler = documentHandler;
     }
@@ -60,16 +62,22 @@ public class InternalAdaDecisionsAndReasonsLetterDismissedGenerator implements P
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalAdaDecisionsAndReasonsLetterDismissed = internalAdaDecisionsAndReasonsLetterDismissedCreator.create(caseDetails);
 
         final AppealDecision appealDecision =
                 asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)
                         .orElseThrow(() -> new RequiredFieldMissingException("Appeal decision is missing."));
 
-        if (appealDecision.equals(AppealDecision.DISMISSED)) {
+        if (appealDecision.equals(AppealDecision.ALLOWED)) {
             documentHandler.addWithMetadata(
                     asylumCase,
-                    internalAdaDecisionsAndReasonsLetterDismissed,
+                    internalAdaDecisionsAndReasonsLetterAllowedCreator.create(caseDetails),
+                    NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                    DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER
+            );
+        } else {
+            documentHandler.addWithMetadata(
+                    asylumCase,
+                    internalAdaDecisionsAndReasonsLetterDismissedCreator.create(caseDetails),
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
                     DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER
             );
