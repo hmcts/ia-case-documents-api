@@ -328,6 +328,7 @@ security:
       - "makeNewApplication"
     caseworker-ia-system:
       - "submitReasonsForAppeal"
+      - "endAppealAutomatically"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
 
