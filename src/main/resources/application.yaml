@@ -157,6 +157,11 @@ decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 hearingBundle.fileExtension: PDF
 hearingBundle.fileName: "hearing-bundle"
 
+internalAdaHearingBundle.contentType: application/pdf
+internalAdaHearingBundle.fileExtension: PDF
+internalAdaHearingBundle.fileName: "ADA appellant hearing bundle"
+internalAdaHearingBundle.templateName: ${IA_INTERNAL_ADA_HEARING_BUNDLE_TEMPLATE:TB-IAC-DEC-ENG-00007.docx}
+
 appealSkeletonBundle.fileExtension: PDF
 appealSkeletonBundle.fileName: "appeal-skeleton-argument"
 
@@ -288,6 +293,7 @@ security:
       - "generateHearingBundle"
       - "customiseHearingBundle"
       - "requestCaseBuilding"
+      - "asyncStitchingComplete"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -295,6 +301,7 @@ security:
       - "draftHearingRequirements"
       - "buildCase"
       - "submitCase"
+      - "generateHearingBundle"
       - "uploadAdditionalEvidence"
       - "editCaseListing"
       - "sendDecisionAndReasons"
@@ -329,6 +336,7 @@ security:
       - "endApplication"    
       - "uploadSignedDecisionNotice"
       - "adaSuitabilityReview"
+      - "generateHearingBundle"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"

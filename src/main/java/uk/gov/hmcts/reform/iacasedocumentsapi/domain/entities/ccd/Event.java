@@ -26,6 +26,8 @@ public enum Event {
     CREATE_CASE_SUMMARY("createCaseSummary", CaseType.ASYLUM),
     REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence", CaseType.ASYLUM),
     GENERATE_HEARING_BUNDLE("generateHearingBundle", CaseType.ASYLUM),
+    ASYNC_STITCHING_COMPLETE("asyncStitchingComplete", CaseType.ASYLUM),
+
     CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle", CaseType.ASYLUM),
     GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons", CaseType.ASYLUM),
     ADA_SUITABILITY_REVIEW("adaSuitabilityReview", CaseType.ASYLUM),
