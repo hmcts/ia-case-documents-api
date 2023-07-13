@@ -603,4 +603,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("uploadTheAppealResponseLetter")
+    public DocumentCreator<AsylumCase> getUploadAppealResponseMaintainedLetterCreator(
+            @Value("${uploadAppealResponseMaintainedLetter.contentType}") String contentType,
+            @Value("${uploadAppealResponseMaintainedLetter.fileExtension}") String fileExtension,
+            @Value("${uploadAppealResponseMaintainedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            UploadAppealResponseMaintainedDecisionLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }

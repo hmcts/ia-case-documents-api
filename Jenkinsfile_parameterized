@@ -36,7 +36,10 @@ def secrets = [
 
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
-        secret('gov-call-charges-url', 'IA_BAIL_GOV_CALL_CHARGES_URL')
+        secret('gov-call-charges-url', 'IA_BAIL_GOV_CALL_CHARGES_URL'),
+
+        secret('test-homeoffice-lart-username', 'TEST_HOMEOFFICE_LART_USERNAME'),
+        secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD')
     ]
 ]
 

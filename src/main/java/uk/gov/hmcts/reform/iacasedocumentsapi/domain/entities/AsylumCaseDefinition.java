@@ -525,7 +525,10 @@ public enum AsylumCaseDefinition {
 
     // Case data section to hold generated documents,so they can be attached to email notifications
     NOTIFICATION_ATTACHMENT_DOCUMENTS(
-            "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){});
+            "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    APPEAL_REVIEW_OUTCOME(
+        "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){});
 
     private final String value;
     private final TypeReference typeReference;

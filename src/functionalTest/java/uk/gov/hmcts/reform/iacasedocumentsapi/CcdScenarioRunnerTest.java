@@ -318,6 +318,11 @@ public class CcdScenarioRunnerTest {
                     .getSystemAuthorization();
         }
 
+        if ("HomeOfficeLart".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                    .getHomeOfficeLartAuthorization();
+        }
         return new Headers();
     }
 }
