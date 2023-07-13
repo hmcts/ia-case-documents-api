@@ -10,11 +10,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.HoReviewEvidenceLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaDecisionsAndReasonsAllowedLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaSuitabilityReviewSuitableLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaSuitabilityReviewUnsuitableLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.UploadAppealResponseMaintainedDecisionLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.*;
 
 @Configuration
 public class DocumentCreatorConfiguration {
@@ -583,6 +579,27 @@ public class DocumentCreatorConfiguration {
             documentTemplate,
             documentGenerator,
             documentUploader
+        );
+    }
+
+    @Bean("internalAdaDecisionsAndReasonsDismissed")
+    public DocumentCreator<AsylumCase> getInternalAdaDecisionsAndReasonsDismissedDocumentCreator(
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.contentType}") String contentType,
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.fileExtension}") String fileExtension,
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalAdaDecisionsAndReasonsDismissedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
         );
     }
 
