@@ -6,8 +6,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalAdaSuitabilityReviewSuitableLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +49,37 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplateTest {
     private final String singleSexCourt = "Single-sex response";
     private final String inCamera = "Private hearing response";
     private final String otherHearingRequest = "Other response";
+    private final Parties directionParties = Parties.RESPONDENT;
+
+    private final IdValue<Direction> respondentReviewDirection = new IdValue<>(
+        "1",
+        new Direction(
+            "HO Review Request Direction",
+            directionParties,
+            "2023-08-16",
+            "2023-06-02",
+            DirectionTag.RESPONDENT_REVIEW,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            "95e90870-2429-4660-b9c2-4111aff37304",
+            "someDirectionType"
+        )
+    );
+
+    private final IdValue<Direction> requestCaseBuildingDirection = new IdValue<>(
+        "1",
+        new Direction(
+            "Case Building Request Direction",
+            directionParties,
+            "2023-08-02",
+            "2023-06-05",
+            DirectionTag.REQUEST_CASE_BUILDING,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            "95e90870-2429-4660-b9c2-4111aff45604",
+            "someDirectionType"
+        )
+    );
 
     private InternalAdaSuitabilityReviewSuitableLetterTemplate internalAdaSuitabilityReviewSuitableLetterTemplate;
 
@@ -65,8 +98,13 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplateTest {
     }
 
     void dataSetUp() {
+        List<IdValue<Direction>> directionList = new ArrayList<>();
+        directionList.add(respondentReviewDirection);
+        directionList.add(requestCaseBuildingDirection);
+
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
+        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -92,7 +130,7 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplateTest {
 
         Map<String, Object> templateFieldValues = internalAdaSuitabilityReviewSuitableLetterTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(16, templateFieldValues.size());
+        assertEquals(18, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -108,6 +146,8 @@ public class InternalAdaSuitabilityReviewSuitableLetterTemplateTest {
         assertEquals(singleSexCourt, templateFieldValues.get("singleSexCourt"));
         assertEquals(inCamera, templateFieldValues.get("inCamera"));
         assertEquals(otherHearingRequest, templateFieldValues.get("otherHearingRequest"));
+        assertEquals("2 Aug 2023", templateFieldValues.get("caseBuildingDueDate"));
+        assertEquals("16 Aug 2023", templateFieldValues.get("requestRespondentReviewDueDate"));
 
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
     }
