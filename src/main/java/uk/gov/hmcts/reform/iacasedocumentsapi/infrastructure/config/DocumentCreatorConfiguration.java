@@ -624,13 +624,13 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalAdaHearingBundle")
-    public DocumentCreator<AsylumCase> getInternalAdaHearingBundleDocumentCreator(
+    @Bean("internalDetHearingBundle")
+    public DocumentCreator<AsylumCase> getInternalDetHearingBundleDocumentCreator(
             @Value("${internalAdaHearingBundle.contentType}") String contentType,
             @Value("${internalAdaHearingBundle.fileExtension}") String fileExtension,
             @Value("${internalAdaHearingBundle.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalAdaGenerateHearingBundleTemplate documentTemplate,
+            InternalDetGenerateHearingBundleTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

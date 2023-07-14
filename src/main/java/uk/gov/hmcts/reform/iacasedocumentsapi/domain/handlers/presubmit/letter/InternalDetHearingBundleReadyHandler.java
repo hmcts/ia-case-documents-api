@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import java.util.Collections;
@@ -28,16 +28,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 @Component
-public class InternalAdaHearingBundleReadyHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetHearingBundleReadyHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> internalAdaHearingBundleReadyGenerator;
+    private final DocumentCreator<AsylumCase> internalDetHearingBundleReadyGenerator;
     private final DocumentHandler documentHandler;
 
-    public InternalAdaHearingBundleReadyHandler(
-            @Qualifier("internalAdaHearingBundle") DocumentCreator<AsylumCase> internalAdaGenerateHearingBundleGenerator,
+    public InternalDetHearingBundleReadyHandler(
+            @Qualifier("internalDetHearingBundle") DocumentCreator<AsylumCase> internalDetHearingBundleReadyGenerator,
             DocumentHandler documentHandler
     ) {
-        this.internalAdaHearingBundleReadyGenerator = internalAdaGenerateHearingBundleGenerator;
+        this.internalDetHearingBundleReadyGenerator = internalDetHearingBundleReadyGenerator;
         this.documentHandler = documentHandler;
     }
 
@@ -53,8 +53,7 @@ public class InternalAdaHearingBundleReadyHandler implements PreSubmitCallbackHa
                         && callback.getCaseDetails().getState() != State.FTPA_DECIDED
                         && "DONE".equalsIgnoreCase(getStitchStatus(callback))
                         && isInternalCase(callback.getCaseDetails().getCaseData())
-                        && isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData());
-
+                        && isAppellantInDetention(callback.getCaseDetails().getCaseData());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -68,11 +67,11 @@ public class InternalAdaHearingBundleReadyHandler implements PreSubmitCallbackHa
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalAdaGenerateHearingBundleDocument = internalAdaHearingBundleReadyGenerator.create(caseDetails);
+        Document internalDetGenerateHearingBundleDocument = internalDetHearingBundleReadyGenerator.create(caseDetails);
 
         documentHandler.addWithMetadata(
                 asylumCase,
-                internalAdaGenerateHearingBundleDocument,
+                internalDetGenerateHearingBundleDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.HEARING_BUNDLE_READY_LETTER
         );
