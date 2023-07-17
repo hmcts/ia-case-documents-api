@@ -18,12 +18,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
-public class InternalAdaGenerateHearingBundleTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
 
-    public InternalAdaGenerateHearingBundleTemplate(
+    public InternalDetGenerateHearingBundleTemplate(
             @Value("${internalAdaHearingBundle.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider
     ) {

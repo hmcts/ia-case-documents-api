@@ -40,7 +40,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDoc
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalAdaHearingBundleReadyHandlerTest {
+public class InternalDetHearingBundleReadyHandlerTest {
 
     @Mock private DocumentCreator<AsylumCase> internalAdaGenerateHearingBundleDocumentCreator;
     @Mock private DocumentHandler documentHandler;
@@ -76,12 +76,12 @@ public class InternalAdaHearingBundleReadyHandlerTest {
 
     private List<IdValue<Bundle>> caseBundles = new ArrayList<>();
 
-    private InternalAdaHearingBundleReadyHandler internalAdaHearingBundleReadyHandler;
+    private InternalDetHearingBundleReadyHandler internalDetHearingBundleReadyHandler;
 
     @BeforeEach
     public void setUp() {
-        internalAdaHearingBundleReadyHandler =
-                new InternalAdaHearingBundleReadyHandler(
+        internalDetHearingBundleReadyHandler =
+                new InternalDetHearingBundleReadyHandler(
                         internalAdaGenerateHearingBundleDocumentCreator,
                         documentHandler
                 );
@@ -92,7 +92,7 @@ public class InternalAdaHearingBundleReadyHandlerTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yes));
 
         caseBundles.add(bundleEntry);
 
@@ -106,7 +106,7 @@ public class InternalAdaHearingBundleReadyHandlerTest {
         when(internalAdaGenerateHearingBundleDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalAdaHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalDetHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -119,12 +119,12 @@ public class InternalAdaHearingBundleReadyHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        assertThatThrownBy(() -> internalAdaHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalDetHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalAdaHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalDetHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -141,7 +141,7 @@ public class InternalAdaHearingBundleReadyHandlerTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.empty());
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaHearingBundleReadyHandler.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetHearingBundleReadyHandler.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -149,7 +149,7 @@ public class InternalAdaHearingBundleReadyHandlerTest {
     }
 
     @Test
-    public void it_cannot_handle_callback_if_is_ada_is_missing() {
+    public void it_cannot_handle_callback_if_is_detained_is_missing() {
         // isAda defaults to false if not present
 
         for (Event event : Event.values()) {
@@ -157,10 +157,10 @@ public class InternalAdaHearingBundleReadyHandlerTest {
             when(callback.getEvent()).thenReturn(event);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
-            when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.empty());
+            when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.empty());
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaHearingBundleReadyHandler.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetHearingBundleReadyHandler.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -177,7 +177,7 @@ public class InternalAdaHearingBundleReadyHandlerTest {
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalAdaHearingBundleReadyHandler.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetHearingBundleReadyHandler.canHandle(callbackStage, callback);
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && callback.getEvent().equals(Event.ASYNC_STITCHING_COMPLETE)) {
                     assertTrue(canHandle);
@@ -195,7 +195,7 @@ public class InternalAdaHearingBundleReadyHandlerTest {
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.ofNullable(yesOrNo));
 
-        boolean canHandle = internalAdaHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDetHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         if (yesOrNo == yes) {
             assertTrue(canHandle);
@@ -206,11 +206,11 @@ public class InternalAdaHearingBundleReadyHandlerTest {
 
     @ParameterizedTest
     @EnumSource(YesOrNo.class)
-    public void it_should_only_handle_ada_cases(YesOrNo yesOrNo) {
+    public void it_should_only_handle_internal_detained_cases(YesOrNo yesOrNo) {
 
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.ofNullable(yesOrNo));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.ofNullable(yesOrNo));
 
-        boolean canHandle = internalAdaHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDetHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         if (yesOrNo == yes) {
             assertTrue(canHandle);
@@ -224,7 +224,7 @@ public class InternalAdaHearingBundleReadyHandlerTest {
 
         when(asylumCase.read(CASE_BUNDLES)).thenReturn(Optional.empty());
 
-        assertFalse(internalAdaHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalDetHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
@@ -249,28 +249,28 @@ public class InternalAdaHearingBundleReadyHandlerTest {
         when(asylumCase.read(CASE_BUNDLES)).thenReturn(Optional.of(caseBundles));
 
         if (stitchStatus.equals(bundleStitchStatus.get())) {
-            assertTrue(internalAdaHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+            assertTrue(internalDetHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
         } else {
-            assertFalse(internalAdaHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+            assertFalse(internalDetHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
         }
     }
 
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalAdaHearingBundleReadyHandler.canHandle(null, callback))
+        assertThatThrownBy(() -> internalDetHearingBundleReadyHandler.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetHearingBundleReadyHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaHearingBundleReadyHandler.handle(null, callback))
+        assertThatThrownBy(() -> internalDetHearingBundleReadyHandler.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalAdaHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetHearingBundleReadyHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }

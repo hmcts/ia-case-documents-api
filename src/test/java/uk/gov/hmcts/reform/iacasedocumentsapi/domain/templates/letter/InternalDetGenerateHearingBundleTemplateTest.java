@@ -24,7 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalAdaGenerateHearingBundleTemplateTest {
+public class InternalDetGenerateHearingBundleTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -42,12 +42,12 @@ public class InternalAdaGenerateHearingBundleTemplateTest {
     private final String listCaseHearingDateTime = "2023-07-10T20:23:35";
     private final String listCaseHearingDate = "2023-07-10";
     private final HearingCentre listCaseHearingCentre = HearingCentre.BIRMINGHAM;
-    private InternalAdaGenerateHearingBundleTemplate internalAdaGenerateHearingBundleTemplate;
+    private InternalDetGenerateHearingBundleTemplate internalDetGenerateHearingBundleTemplate;
 
     @BeforeEach
     void setUp() {
-        internalAdaGenerateHearingBundleTemplate =
-                new InternalAdaGenerateHearingBundleTemplate(
+        internalDetGenerateHearingBundleTemplate =
+                new InternalDetGenerateHearingBundleTemplate(
                         templateName,
                         customerServicesProvider
                 );
@@ -55,7 +55,7 @@ public class InternalAdaGenerateHearingBundleTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalAdaGenerateHearingBundleTemplate.getName());
+        assertEquals(templateName, internalDetGenerateHearingBundleTemplate.getName());
     }
 
     void dataSetUp() {
@@ -82,7 +82,7 @@ public class InternalAdaGenerateHearingBundleTemplateTest {
     void should_map_case_data_to_template_field_values() {
         dataSetUp();
 
-        Map<String, Object> templateFieldValues = internalAdaGenerateHearingBundleTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalDetGenerateHearingBundleTemplate.mapFieldValues(caseDetails);
 
         assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -105,7 +105,7 @@ public class InternalAdaGenerateHearingBundleTemplateTest {
         dataSetUp();
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> internalAdaGenerateHearingBundleTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalDetGenerateHearingBundleTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
                 .hasMessage("List case hearing date not found.");
 
@@ -116,7 +116,7 @@ public class InternalAdaGenerateHearingBundleTemplateTest {
         dataSetUp();
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> internalAdaGenerateHearingBundleTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalDetGenerateHearingBundleTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
                 .hasMessage("List case hearing centre not found.");
 

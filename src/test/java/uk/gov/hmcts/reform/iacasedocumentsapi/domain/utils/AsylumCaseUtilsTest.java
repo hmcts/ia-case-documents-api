@@ -94,6 +94,18 @@ public class AsylumCaseUtilsTest {
 
     @ParameterizedTest
     @EnumSource(value = YesOrNo.class)
+    void should_return_correct_value_for_is_detained(YesOrNo yesOrNo) {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
+
+        if (yesOrNo.equals(YES)) {
+            assertTrue(AsylumCaseUtils.isAppellantInDetention(asylumCase));
+        } else {
+            assertFalse(AsylumCaseUtils.isAppellantInDetention(asylumCase));
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class)
     void should_return_correct_value_for_isAdmin(YesOrNo yesOrNo) {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 

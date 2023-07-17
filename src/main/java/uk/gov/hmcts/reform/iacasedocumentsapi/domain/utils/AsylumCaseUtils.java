@@ -21,6 +21,10 @@ public class AsylumCaseUtils {
         // prevent public constructor for Sonar
     }
 
+    public static boolean isAppellantInDetention(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class).orElse(NO).equals(YES);
+    }
+
     public static boolean isAcceleratedDetainedAppeal(AsylumCase asylumCase) {
         return asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)
                 .orElse(NO)
