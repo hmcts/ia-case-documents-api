@@ -51,7 +51,7 @@ public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
     }
 
     @Test
-    public void should_create_internal_ada_request_case_building_pdf_and_append_to_tribunal_documents_for_the_case() {
+    public void should_create_internal_ada_request_case_building_pdf_and_append_to_notification_attachment_documents_for_the_case() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.REQUEST_CASE_BUILDING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
