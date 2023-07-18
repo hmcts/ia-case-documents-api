@@ -28,6 +28,7 @@ java:
         - em-stitching-enabled
         - docmosis-access-key
         - launch-darkly-sdk-key
+        - ia-config-validator-secret
         - AppInsightsInstrumentationKey
         - customer-services-telephone
         - customer-services-email
