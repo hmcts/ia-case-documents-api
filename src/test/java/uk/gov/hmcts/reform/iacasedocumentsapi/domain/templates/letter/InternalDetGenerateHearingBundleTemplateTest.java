@@ -33,7 +33,7 @@ public class InternalDetGenerateHearingBundleTemplateTest {
     private CustomerServicesProvider customerServicesProvider;
     private final String templateName = "TB-IAC-DEC-ENG-00007.docx";
     private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1711";
-    private final String internalAdaCustomerServicesEmailAddress = "AC-ADA-HW@justice.gov.uk";
+    private final String internalAdaCustomerServicesEmailAddress = "IAC-ADA-HW@justice.gov.uk";
     private final LocalDate now = LocalDate.now();
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String homeOfficeReferenceNumber = "A1234567/001";
