@@ -371,7 +371,7 @@ customerServices:
     telephoneNumber:
       ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
     emailAddress:
-      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_EMAIL:AC-ADA-HW@justice.gov.uk}
+      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_EMAIL:IAC-ADA-HW@justice.gov.uk}
 
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
