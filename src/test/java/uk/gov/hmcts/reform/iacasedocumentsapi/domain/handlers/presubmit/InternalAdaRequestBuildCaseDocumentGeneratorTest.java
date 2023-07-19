@@ -23,6 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRequestBuildCaseDocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
@@ -32,6 +33,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
 
     @Mock private DocumentCreator<AsylumCase> internalAdaRequestBuildCaseDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> internalDetainedRequestBuildCaseDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -39,13 +41,14 @@ public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
     private final YesOrNo yes = YesOrNo.YES;
-    private InternalAdaRequestBuildCaseDocumentGenerator internalAdaRequestBuildCaseDocumentGenerator;
+    private InternalRequestBuildCaseDocumentGenerator internalAdaRequestBuildCaseDocumentGenerator;
 
     @BeforeEach
     public void setUp() {
         internalAdaRequestBuildCaseDocumentGenerator =
-                new InternalAdaRequestBuildCaseDocumentGenerator(
+                new InternalRequestBuildCaseDocumentGenerator(
                         internalAdaRequestBuildCaseDocumentCreator,
+                        internalDetainedRequestBuildCaseDocumentCreator,
                         documentHandler
                 );
     }

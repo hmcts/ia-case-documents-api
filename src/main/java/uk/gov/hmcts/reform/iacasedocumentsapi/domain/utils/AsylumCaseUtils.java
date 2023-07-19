@@ -31,6 +31,12 @@ public class AsylumCaseUtils {
                 .equals(YES);
     }
 
+    public static boolean isDetainedAppeal(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)
+                .orElse(NO)
+                .equals(YES);
+    }
+
     public static boolean isInternalCase(AsylumCase asylumCase) {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
     }

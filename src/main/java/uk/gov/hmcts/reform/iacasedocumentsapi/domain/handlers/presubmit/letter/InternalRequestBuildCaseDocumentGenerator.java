@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -19,16 +19,19 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
-public class InternalAdaRequestBuildCaseDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalRequestBuildCaseDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> internalAdaBuildCaseDocumentGenerator;
+    private final DocumentCreator<AsylumCase> internalDetainedBuildCaseDocumentGenerator;
     private final DocumentHandler documentHandler;
 
-    public InternalAdaRequestBuildCaseDocumentGenerator(
+    public InternalRequestBuildCaseDocumentGenerator(
             @Qualifier("internalAdaRequestBuildCase") DocumentCreator<AsylumCase> internalAdaRequestBuildCaseDocumentCreator,
+            @Qualifier("internalDetainedRequestBuildCase") DocumentCreator<AsylumCase> internalDetainedRequestBuildCaseDocumentCreator,
             DocumentHandler documentHandler
     ) {
         this.internalAdaBuildCaseDocumentGenerator = internalAdaRequestBuildCaseDocumentCreator;
+        this.internalDetainedBuildCaseDocumentGenerator = internalDetainedRequestBuildCaseDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -44,7 +47,7 @@ public class InternalAdaRequestBuildCaseDocumentGenerator implements PreSubmitCa
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == Event.REQUEST_CASE_BUILDING
             && isInternalCase(asylumCase)
-            && isAcceleratedDetainedAppeal(asylumCase);
+            && isDetainedAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -58,11 +61,12 @@ public class InternalAdaRequestBuildCaseDocumentGenerator implements PreSubmitCa
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalAdaBuildCaseDocument = internalAdaBuildCaseDocumentGenerator.create(caseDetails);
+        Document internalBuildCaseDocument = isAcceleratedDetainedAppeal(asylumCase) ?
+                internalAdaBuildCaseDocumentGenerator.create(caseDetails) : internalDetainedBuildCaseDocumentGenerator.create(caseDetails);
 
         documentHandler.addWithMetadata(
                 asylumCase,
-                internalAdaBuildCaseDocument,
+                internalBuildCaseDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.REQUEST_CASE_BUILDING
         );
