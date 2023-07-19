@@ -10,6 +10,7 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "isAcceleratedDetainedAppeal": "Yes",
+          "appellantInDetention": "Yes",
           "directions": [
             {
               "id": "1",

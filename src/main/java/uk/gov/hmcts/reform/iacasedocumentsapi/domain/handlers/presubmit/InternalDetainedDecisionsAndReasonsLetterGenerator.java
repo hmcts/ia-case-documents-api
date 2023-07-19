@@ -20,14 +20,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
-public class InternalAdaDecisionsAndReasonsLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetainedDecisionsAndReasonsLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedCreator;
     private final DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalAdaDecisionsAndReasonsLetterGenerator(
-            @Qualifier("internalAdaDecisionsAndReasonsAllowed") DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedCreator,
+    public InternalDetainedDecisionsAndReasonsLetterGenerator(
+            @Qualifier("internalDetainedDecisionsAndReasonsAllowed") DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedCreator,
             @Qualifier("internalAdaDecisionsAndReasonsDismissed") DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedCreator,
             DocumentHandler documentHandler
     ) {
@@ -48,7 +48,7 @@ public class InternalAdaDecisionsAndReasonsLetterGenerator implements PreSubmitC
         return callback.getEvent() == Event.SEND_DECISION_AND_REASONS
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && isInternalCase(asylumCase)
-                && isAcceleratedDetainedAppeal(asylumCase);
+                && isAppellantInDetention(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
