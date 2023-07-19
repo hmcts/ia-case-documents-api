@@ -10,6 +10,7 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "isAcceleratedDetainedAppeal": "Yes",
+          "appellantInDetention": "Yes",
           "isDecisionAllowed": "allowed",
           "finalDecisionAndReasonsDocument": {
             "document_url": "{$FIXTURE_DOC3_DOC_URL}",

@@ -561,13 +561,13 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalAdaDecisionsAndReasonsAllowed")
-    public DocumentCreator<AsylumCase> getInternalAdaDecisionsAndReasonsAllowedDocumentCreator(
-        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.contentType}") String contentType,
-        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.fileExtension}") String fileExtension,
-        @Value("${internalAdaDecisionsAndReasonsAllowedLetter.fileName}") String fileName,
+    @Bean("internalDetainedDecisionsAndReasonsAllowed")
+    public DocumentCreator<AsylumCase> getInternalDetainedDecisionsAndReasonsAllowedDocumentCreator(
+        @Value("${internalDetainedDecisionsAndReasonsAllowedLetter.contentType}") String contentType,
+        @Value("${internalDetainedDecisionsAndReasonsAllowedLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedDecisionsAndReasonsAllowedLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalAdaDecisionsAndReasonsAllowedLetterTemplate documentTemplate,
+        InternalDetainedDecisionsAndReasonsAllowedLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
