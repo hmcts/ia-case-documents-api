@@ -73,6 +73,7 @@ public class CustomerServicesProviderTest {
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         assertEquals(internalAdaCustomerServicesTelephone,
                 customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
@@ -88,6 +89,7 @@ public class CustomerServicesProviderTest {
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         assertEquals(customerServicesTelephone,
                 customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));

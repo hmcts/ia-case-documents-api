@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import com.google.common.collect.ImmutableMap;
@@ -54,7 +55,7 @@ public class CustomerServicesProvider {
     }
 
     public String getInternalCustomerServicesTelephone(AsylumCase asylumCase) {
-        return isInternalCase(asylumCase) && isAcceleratedDetainedAppeal(asylumCase)
+        return isInternalCase(asylumCase) && isAppellantInDetention(asylumCase)
                 ? internalAdaCustomerServicesTelephone
                 : customerServicesTelephone;
     }

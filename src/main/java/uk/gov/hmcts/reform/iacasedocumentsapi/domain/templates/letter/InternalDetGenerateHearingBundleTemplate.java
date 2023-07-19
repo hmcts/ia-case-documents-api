@@ -12,23 +12,26 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @Component
 public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     public InternalDetGenerateHearingBundleTemplate(
             @Value("${internalAdaHearingBundle.templateName}") String templateName,
-            CustomerServicesProvider customerServicesProvider
+            CustomerServicesProvider customerServicesProvider,
+            HearingDetailsFinder hearingDetailsFinder
     ) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     public String getName() {
@@ -53,10 +56,7 @@ public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplat
         LocalDateTime hearingDateTime = LocalDateTime.parse(listCaseHearingDate);
         fieldValues.put("hearingDate", formatDateForNotificationAttachmentDocument(hearingDateTime.toLocalDate()));
         fieldValues.put("hearingTime", hearingDateTime.toLocalTime());
-
-        final HearingCentre listCaseHearingLocation = asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new RequiredFieldMissingException("List case hearing centre not found."));
-        fieldValues.put("hearingLocation", listCaseHearingLocation.getValue());
+        fieldValues.put("hearingLocation", hearingDetailsFinder.getHearingCentreName(asylumCase));
 
         return fieldValues;
     }

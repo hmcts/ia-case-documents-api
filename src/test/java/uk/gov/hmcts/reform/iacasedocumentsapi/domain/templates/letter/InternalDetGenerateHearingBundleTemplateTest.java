@@ -20,6 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingExcepti
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -31,6 +32,7 @@ public class InternalDetGenerateHearingBundleTemplateTest {
     private AsylumCase asylumCase;
     @Mock
     private CustomerServicesProvider customerServicesProvider;
+    @Mock private HearingDetailsFinder hearingDetailsFinder;
     private final String templateName = "TB-IAC-DEC-ENG-00007.docx";
     private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1711";
     private final String internalAdaCustomerServicesEmailAddress = "IAC-ADA-HW@justice.gov.uk";
@@ -41,7 +43,7 @@ public class InternalDetGenerateHearingBundleTemplateTest {
     private final String appellantFamilyName = "Doe";
     private final String listCaseHearingDateTime = "2023-07-10T20:23:35";
     private final String listCaseHearingDate = "2023-07-10";
-    private final HearingCentre listCaseHearingCentre = HearingCentre.BIRMINGHAM;
+    private final String listCaseHearingCentre = HearingCentre.BIRMINGHAM.toString();
     private InternalDetGenerateHearingBundleTemplate internalDetGenerateHearingBundleTemplate;
 
     @BeforeEach
@@ -49,7 +51,8 @@ public class InternalDetGenerateHearingBundleTemplateTest {
         internalDetGenerateHearingBundleTemplate =
                 new InternalDetGenerateHearingBundleTemplate(
                         templateName,
-                        customerServicesProvider
+                        customerServicesProvider,
+                        hearingDetailsFinder
                 );
     }
 
@@ -70,8 +73,7 @@ public class InternalDetGenerateHearingBundleTemplateTest {
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalAdaCustomerServicesEmailAddress);
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(listCaseHearingDateTime));
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(listCaseHearingCentre));
-
+        when(hearingDetailsFinder.getHearingCentreName(asylumCase)).thenReturn(listCaseHearingCentre);
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(internalAdaCustomerServicesEmailAddress);
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(internalAdaCustomerServicesTelephoneNumber);
 
@@ -96,7 +98,7 @@ public class InternalDetGenerateHearingBundleTemplateTest {
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.parse(listCaseHearingDate)), templateFieldValues.get("hearingDate"));
         assertEquals(LocalDateTime.parse(listCaseHearingDateTime).toLocalTime(), templateFieldValues.get("hearingTime"));
-        assertEquals(listCaseHearingCentre.getValue(), templateFieldValues.get("hearingLocation"));
+        assertEquals(listCaseHearingCentre, templateFieldValues.get("hearingLocation"));
 
     }
 
@@ -108,17 +110,6 @@ public class InternalDetGenerateHearingBundleTemplateTest {
         assertThatThrownBy(() -> internalDetGenerateHearingBundleTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
                 .hasMessage("List case hearing date not found.");
-
-    }
-
-    @Test
-    void should_throw_when_list_case_hearing_centre_not_present() {
-        dataSetUp();
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> internalDetGenerateHearingBundleTemplate.mapFieldValues(caseDetails))
-                .isExactlyInstanceOf(RequiredFieldMissingException.class)
-                .hasMessage("List case hearing centre not found.");
 
     }
 }
