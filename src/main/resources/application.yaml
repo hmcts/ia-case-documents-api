@@ -894,7 +894,7 @@ govnotify:
         beforeListing:
           email: 63c30831-4dd0-4c0a-b70f-4c439dcc66ea
         afterListing:
-          email: a8cd0fdd-f73b-406d-b3fe-ddda49871598          
+          email: a8cd0fdd-f73b-406d-b3fe-ddda49871598
   bail:
     key: ${IA_BAIL_GOV_NOTIFY_KEY}
     timeout: 5000
@@ -1123,7 +1123,7 @@ security:
       - "maintainCaseLinks"
       - "createBailCaseLink"
       - "maintainBailCaseLinks"
-      - "decisionWithoutHearing"      
+      - "decisionWithoutHearing"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -1317,3 +1317,8 @@ launchDarkly:
   sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}
   connectionTimeout: 5000
   socketTimeout: 5000
+
+ia:
+  config:
+    validator:
+      secret: ${IA_CONFIG_VALIDATOR_SECRET:}

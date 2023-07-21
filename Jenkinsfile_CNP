@@ -120,6 +120,7 @@ def secrets = [
         secret('ctsc-email', 'IA_CTSC_EMAIL'),
 
         secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY'),
+        secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
 
         secret('bail-hearing-centre-bradford-email', 'IA_BAIL_HEARING_CENTRE_BRADFORD_EMAIL'),
         secret('bail-hearing-centre-birmingham-email', 'IA_BAIL_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
