@@ -124,7 +124,6 @@ internalDetainedRequestBuildCaseDocument.contentType: application/pdf
 internalDetainedRequestBuildCaseDocument.fileExtension: PDF
 internalDetainedRequestBuildCaseDocument.fileName: "Appellant letter-detained-appeal reasons"
 internalDetainedRequestBuildCaseDocument.templateName: ${IA_INTERNAL_DETAINED_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00009.docx}
-internalDetainedRequestBuildCaseDocument.hearingSupportResponseDueInWorkingDays: 15
 
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF

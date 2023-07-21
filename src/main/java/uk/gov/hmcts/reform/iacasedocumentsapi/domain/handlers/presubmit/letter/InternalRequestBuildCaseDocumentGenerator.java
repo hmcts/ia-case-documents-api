@@ -61,7 +61,8 @@ public class InternalRequestBuildCaseDocumentGenerator implements PreSubmitCallb
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalBuildCaseDocument = isAcceleratedDetainedAppeal(asylumCase) ?
+        Document internalBuildCaseDocument = isAcceleratedDetainedAppeal(asylumCase)
+            ?
                 internalAdaBuildCaseDocumentGenerator.create(caseDetails) : internalDetainedBuildCaseDocumentGenerator.create(caseDetails);
 
         documentHandler.addWithMetadata(

@@ -30,12 +30,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
+public class InternalRequestBuildCaseDocumentGeneratorTest {
 
     @Mock private DocumentCreator<AsylumCase> internalAdaRequestBuildCaseDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> internalDetainedRequestBuildCaseDocumentCreator;
     @Mock private DocumentHandler documentHandler;
-
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -59,6 +58,7 @@ public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
         when(callback.getEvent()).thenReturn(Event.REQUEST_CASE_BUILDING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yes));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
 
         when(internalAdaRequestBuildCaseDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
@@ -135,6 +135,7 @@ public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
+            when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yes));
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {

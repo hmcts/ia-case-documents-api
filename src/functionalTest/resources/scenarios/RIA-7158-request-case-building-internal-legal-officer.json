@@ -9,6 +9,7 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
+          "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "Yes",
           "directions": [
             {
