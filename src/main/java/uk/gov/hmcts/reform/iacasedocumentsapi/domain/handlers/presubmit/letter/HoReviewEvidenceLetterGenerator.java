@@ -42,7 +42,7 @@ public class HoReviewEvidenceLetterGenerator implements PreSubmitCallbackHandler
         return callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && AsylumCaseUtils.isInternalCase(callback.getCaseDetails().getCaseData())
-                && AsylumCaseUtils.isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData());
+                && AsylumCaseUtils.isAppellantInDetention(callback.getCaseDetails().getCaseData());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

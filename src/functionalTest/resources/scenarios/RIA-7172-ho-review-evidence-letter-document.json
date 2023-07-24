@@ -10,6 +10,7 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "Yes",
           "directions": [
             {
@@ -38,6 +39,7 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "Yes",
         "notificationAttachmentDocuments": [
           {
