@@ -8,7 +8,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.P
 
 import java.util.Arrays;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
