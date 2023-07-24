@@ -256,7 +256,7 @@ public class AsylumPreSubmitCallbackDispatcherTest {
     @Test
     public void should_sort_handlers_by_name() {
         PreSubmitCallbackHandler<AsylumCase> h1 = new AppealSubmissionCreator(
-            mock(DocumentCreator.class), mock(DocumentHandler.class)
+            mock(DocumentCreator.class), mock(DocumentCreator.class), mock(DocumentHandler.class)
         );
 
 

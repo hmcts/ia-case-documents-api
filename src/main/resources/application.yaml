@@ -226,6 +226,11 @@ bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
 bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
 
+internalAppealSubmissionNonAdaDocument.contentType: application/pdf
+internalAppealSubmissionNonAdaDocument.fileExtension: PDF
+internalAppealSubmissionNonAdaDocument.fileName: "appeal-form"
+internalAppealSubmissionNonAdaDocument.templateName: ${IA_INTERNAL_NON_ADA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-DEC-ENG-00010.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}

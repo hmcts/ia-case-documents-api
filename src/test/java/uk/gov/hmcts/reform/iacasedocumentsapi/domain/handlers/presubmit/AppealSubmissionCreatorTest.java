@@ -4,14 +4,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
 
 import java.util.Arrays;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -19,6 +23,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
@@ -27,6 +33,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class AppealSubmissionCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -42,6 +49,7 @@ public class AppealSubmissionCreatorTest {
         appealSubmissionCreator =
             new AppealSubmissionCreator(
                 appealSubmissionDocumentCreator,
+                internalAppealSubmissionDocumentCreator,
                 documentHandler
             );
     }
@@ -219,5 +227,26 @@ public class AppealSubmissionCreatorTest {
         assertThatThrownBy(() -> appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    public void should_call_internal_appeal_submission_creator_when_case_is_internal_non_ada_appealant_in_detention() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PAID));
+
+        when(asylumCase.read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payOffline"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(internalAppealSubmissionDocumentCreator, times(1)).create(caseDetails);
     }
 }

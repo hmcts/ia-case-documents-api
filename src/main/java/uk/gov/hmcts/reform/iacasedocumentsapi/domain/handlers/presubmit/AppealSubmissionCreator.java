@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,13 +27,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
+    private final DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public AppealSubmissionCreator(
         @Qualifier("appealSubmission") DocumentCreator<AsylumCase> appealSubmissionDocumentCreator,
+        @Qualifier("internalAppealSubmissionNonAda") DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.appealSubmissionDocumentCreator = appealSubmissionDocumentCreator;
+        this.internalAppealSubmissionDocumentCreator = internalAppealSubmissionDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -80,7 +84,13 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+        Document appealSubmission;
+
+        if (isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
+            appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
+        } else {
+            appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+        }
 
         documentHandler.addWithMetadata(
             asylumCase,
@@ -91,5 +101,6 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
+
 }
 

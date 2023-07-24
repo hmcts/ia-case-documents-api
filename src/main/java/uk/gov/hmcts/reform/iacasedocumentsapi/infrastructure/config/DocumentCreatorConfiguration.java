@@ -645,4 +645,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalAppealSubmissionNonAda")
+    public DocumentCreator<AsylumCase> getInternalAppealSubmissionDocumentCreator(
+            @Value("${internalAppealSubmissionNonAdaDocument.contentType}") String contentType,
+            @Value("${internalAppealSubmissionNonAdaDocument.fileExtension}") String fileExtension,
+            @Value("${internalAppealSubmissionNonAdaDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalAppealSubmissionNonAdaTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }
