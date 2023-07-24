@@ -8,7 +8,7 @@ public class Message {
     private String messageHeader;
     private String messageBody;
 
-    public Message(){
+    public Message() {
 
     }
 
