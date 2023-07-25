@@ -120,6 +120,11 @@ internalAdaRequestBuildCaseDocument.fileName: "ADA appellant letter-appeal reaso
 internalAdaRequestBuildCaseDocument.templateName: ${IA_INTERNAL_ADA_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00002.docx}
 internalAdaRequestBuildCaseDocument.hearingSupportResponseDueInWorkingDays: 15
 
+internalDetainedRequestBuildCaseDocument.contentType: application/pdf
+internalDetainedRequestBuildCaseDocument.fileExtension: PDF
+internalDetainedRequestBuildCaseDocument.fileName: "Appellant letter-detained-appeal reasons"
+internalDetainedRequestBuildCaseDocument.templateName: ${IA_INTERNAL_DETAINED_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00009.docx}
+
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"

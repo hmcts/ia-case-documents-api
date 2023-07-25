@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -19,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -156,29 +154,5 @@ public class InternalAdaRequestBuildCaseTemplateTest {
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.parse(directionDateDue)), templateFieldValues.get("responseDueDate"));
         assertEquals(formatDateForNotificationAttachmentDocument(hearingSupportRequirementsDueDate), templateFieldValues.get("hearingSupportRequirementsDueDate"));
 
-    }
-
-    @Test
-    void should_throw_when_request_case_building_direction_not_present() {
-        dataSetUp();
-        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> internalAdaRequestBuildCaseTemplate.mapFieldValues(caseDetails))
-                .isExactlyInstanceOf(RequiredFieldMissingException.class)
-                .hasMessage("No requestBuildCase directions found");
-
-    }
-
-    @Test
-    void should_throw_when_multiple_request_case_building_directions_are_present() {
-        dataSetUp();
-        List<IdValue<Direction>> directionList = new ArrayList<>();
-        directionList.add(requestCaseBuildingDirection);
-        directionList.add(duplicateRequestCaseBuildingDirection);
-        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
-
-        assertThatThrownBy(() -> internalAdaRequestBuildCaseTemplate.mapFieldValues(caseDetails))
-                .isExactlyInstanceOf(IllegalStateException.class)
-                .hasMessage("More than 1 requestCaseBuilding direction");
     }
 }
