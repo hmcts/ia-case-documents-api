@@ -85,18 +85,21 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document appealSubmission;
+        DocumentTag documentTag;
 
         if (isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
             appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
+            documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION_NON_ADA_IN_TIME;
         } else {
             appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+            documentTag = DocumentTag.APPEAL_SUBMISSION;
         }
 
         documentHandler.addWithMetadata(
             asylumCase,
             appealSubmission,
             LEGAL_REPRESENTATIVE_DOCUMENTS,
-            DocumentTag.APPEAL_SUBMISSION
+            documentTag
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
