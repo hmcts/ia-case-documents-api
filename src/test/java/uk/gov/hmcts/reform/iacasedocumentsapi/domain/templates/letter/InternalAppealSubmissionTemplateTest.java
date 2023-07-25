@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalAppealSubmissionNonAdaTemplateTest {
+class InternalAppealSubmissionTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -39,12 +39,12 @@ class InternalAppealSubmissionNonAdaTemplateTest {
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
     private final String appealSubmissionDate = "2023-07-10";
-    private InternalAppealSubmissionNonAdaTemplate internalAppealSubmissionNonAdaTemplate;
+    private InternalAppealSubmissionTemplate internalAppealSubmissionTemplate;
 
     @BeforeEach
     void setUp() {
-        internalAppealSubmissionNonAdaTemplate =
-                new InternalAppealSubmissionNonAdaTemplate(
+        internalAppealSubmissionTemplate =
+                new InternalAppealSubmissionTemplate(
                         templateName,
                         customerServicesProvider
                 );
@@ -52,7 +52,7 @@ class InternalAppealSubmissionNonAdaTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalAppealSubmissionNonAdaTemplate.getName());
+        assertEquals(templateName, internalAppealSubmissionTemplate.getName());
     }
 
     void dataSetUp() {
@@ -71,7 +71,7 @@ class InternalAppealSubmissionNonAdaTemplateTest {
     void should_map_case_data_to_template_field_values() {
         dataSetUp();
 
-        Map<String, Object> templateFieldValues = internalAppealSubmissionNonAdaTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
         assertEquals(9, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -90,7 +90,7 @@ class InternalAppealSubmissionNonAdaTemplateTest {
         dataSetUp();
         when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> internalAppealSubmissionNonAdaTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalAppealSubmissionTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(IllegalStateException.class)
                 .hasMessage("appealSubmissionDate is missing");
 

@@ -32,7 +32,7 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
     public AppealSubmissionCreator(
         @Qualifier("appealSubmission") DocumentCreator<AsylumCase> appealSubmissionDocumentCreator,
-        @Qualifier("internalAppealSubmissionNonAda") DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator,
+        @Qualifier("internalAppealSubmission") DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.appealSubmissionDocumentCreator = appealSubmissionDocumentCreator;

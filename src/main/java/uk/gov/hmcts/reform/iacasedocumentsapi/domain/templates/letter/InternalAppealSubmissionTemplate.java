@@ -15,13 +15,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
-public class InternalAppealSubmissionNonAdaTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalAppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
 
-    public InternalAppealSubmissionNonAdaTemplate(
-            @Value("${internalAppealSubmissionNonAdaDocument.templateName}") String templateName,
+    public InternalAppealSubmissionTemplate(
+            @Value("${internalAppealSubmissionDocument.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider
     ) {
         this.templateName = templateName;
