@@ -128,3 +128,5 @@ auth.provider.service.client.baseUrl: ${S2S_URL:http://127.0.0.1:4502}
 idam.s2s-auth.totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
 idam.s2s-auth.microservice: ${IA_S2S_MICROSERVICE:something}
 idam.s2s-auth.url: ${S2S_URL:http://127.0.0.1:4502}
+
+ia.config.validator.secret: ${IA_CONFIG_VALIDATOR_SECRET:}
