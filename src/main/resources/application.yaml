@@ -67,6 +67,8 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
 
+hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
+
 remoteHearingNoticeDocument.contentType: application/pdf
 remoteHearingNoticeDocument.fileExtension: PDF
 remoteHearingNoticeDocument.fileName: "hearing-notice"
@@ -92,6 +94,37 @@ hearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 hearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
 hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641.docx}
 
+adaHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
+adaHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
+adaHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
+adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-ADA-0002.docx}
+
+adaSuitabilityDocument.contentType: application/pdf
+adaSuitabilityDocument.fileExtension: PDF
+adaSuitabilityDocument.fileName: "ADA-suitability-decision"
+adaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00001.docx}
+
+adaInternalSuitabilityReviewSuitableDocument.contentType: application/pdf
+adaInternalSuitabilityReviewSuitableDocument.fileExtension: PDF
+adaInternalSuitabilityReviewSuitableDocument.fileName: "ADA-Appellant-letter-suitability-decision-suitable"
+adaInternalSuitabilityReviewSuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_SUITABLE_TEMPLATE:TB-IAC-DEC-ENG-00003.docx}
+
+adaInternalSuitabilityReviewUnsuitableDocument.contentType: application/pdf
+adaInternalSuitabilityReviewUnsuitableDocument.fileExtension: PDF
+adaInternalSuitabilityReviewUnsuitableDocument.fileName: "ADA-Appellant-letter-suitability-decision-unsuitable"
+adaInternalSuitabilityReviewUnsuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_UNSUITABLE_TEMPLATE:TB-IAC-DEC-ENG-00005.docx}
+
+internalAdaRequestBuildCaseDocument.contentType: application/pdf
+internalAdaRequestBuildCaseDocument.fileExtension: PDF
+internalAdaRequestBuildCaseDocument.fileName: "ADA appellant letter-appeal reasons"
+internalAdaRequestBuildCaseDocument.templateName: ${IA_INTERNAL_ADA_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00002.docx}
+internalAdaRequestBuildCaseDocument.hearingSupportResponseDueInWorkingDays: 15
+
+internalDetainedRequestBuildCaseDocument.contentType: application/pdf
+internalDetainedRequestBuildCaseDocument.fileExtension: PDF
+internalDetainedRequestBuildCaseDocument.fileName: "Appellant letter-detained-appeal reasons"
+internalDetainedRequestBuildCaseDocument.templateName: ${IA_INTERNAL_DETAINED_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00009.docx}
+
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
@@ -107,15 +140,33 @@ decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
 
+internalDetainedDecisionsAndReasonsAllowedLetter.contentType: application/pdf
+internalDetainedDecisionsAndReasonsAllowedLetter.fileExtension: PDF
+internalDetainedDecisionsAndReasonsAllowedLetter.fileName: "ADA-Appellant-letter-appeal-decided-allowed"
+internalDetainedDecisionsAndReasonsAllowedLetter.templateName: ${IA_ADA_INTERNAL_DECISIONS_AND_REASONS_ALLOWED_TEMPLATE:TB-IAC-DEC-ENG-00006.docx}
+internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueInWorkingDays: 7
+internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueCalendarDays: 14
+
 aipDecisionAndReasonsCoverLetter.contentType:  application/pdf
 aipDecisionAndReasonsCoverLetter.fileExtension: PDF
 aipDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 aipDecisionAndReasonsCoverLetter.templateName: ${IA_AIP_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00807.docx}
 
+internalAdaDecisionsAndReasonsDismissedLetter.contentType: application/pdf
+internalAdaDecisionsAndReasonsDismissedLetter.fileExtension: PDF
+internalAdaDecisionsAndReasonsDismissedLetter.fileName: "ADA-Appellant-letter-appeal-decided-dismissed"
+internalAdaDecisionsAndReasonsDismissedLetter.templateName: ${IA_ADA_INTERNAL_DECISIONS_AND_REASONS_DISMISSED_TEMPLATE:TB-IAC-DEC-ENG-00008.docx}
+internalAdaDecisionsAndReasonsDismissedLetter.ftpaDueInWorkingDays: 7
+
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
 hearingBundle.fileExtension: PDF
 hearingBundle.fileName: "hearing-bundle"
+
+internalAdaHearingBundle.contentType: application/pdf
+internalAdaHearingBundle.fileExtension: PDF
+internalAdaHearingBundle.fileName: "ADA appellant hearing bundle"
+internalAdaHearingBundle.templateName: ${IA_INTERNAL_ADA_HEARING_BUNDLE_TEMPLATE:TB-IAC-DEC-ENG-00007.docx}
 
 appealSkeletonBundle.fileExtension: PDF
 appealSkeletonBundle.fileName: "appeal-skeleton-argument"
@@ -165,6 +216,15 @@ decisionUnsignedDocument.refusal.templateName: ${IA_BAIL_DECISION_REFUSAL_TEMPLA
 
 decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 
+hoReviewEvidenceLetter.contentType: application/pdf
+hoReviewEvidenceLetter.fileExtension: PDF
+hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
+hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
+
+uploadAppealResponseMaintainedLetter.contentType: application/pdf
+uploadAppealResponseMaintainedLetter.fileExtension: PDF
+uploadAppealResponseMaintainedLetter.fileName: "HO-Response-Letter"
+uploadAppealResponseMaintainedLetter.templateName: ${IA_HO_REVIEW_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00004.docx}
 
 bailEndApplication.contentType:  application/pdf
 bailEndApplication.fileExtension: PDF
@@ -238,8 +298,17 @@ security:
       - "editAppealAfterSubmit"
       - "generateHearingBundle"
       - "customiseHearingBundle"
+      - "requestCaseBuilding"
+      - "asyncStitchingComplete"
     caseworker-ia-admofficer:
       - "listCase"
+      - "submitAppeal"
+      - "editAppeal"
+      - "draftHearingRequirements"
+      - "buildCase"
+      - "submitCase"
+      - "generateHearingBundle"
+      - "uploadAdditionalEvidence"
       - "editCaseListing"
       - "sendDecisionAndReasons"
       - "adjournHearingWithoutDate"
@@ -252,6 +321,7 @@ security:
       - "makeNewApplication"
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
+      - "editAppealAfterSubmit"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -271,11 +341,16 @@ security:
       - "recordTheDecision"
       - "endApplication"    
       - "uploadSignedDecisionNotice"
+      - "adaSuitabilityReview"
+      - "generateHearingBundle"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
     caseworker-ia-system:
+      - "submitReasonsForAppeal"
       - "endAppealAutomatically"
+    caseworker-ia-homeofficelart:
+      - "uploadHomeOfficeAppealResponse"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
@@ -298,6 +373,11 @@ launchDarkly:
 customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
+  internal:
+    telephoneNumber:
+      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
+    emailAddress:
+      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_EMAIL:IAC-ADA-HW@justice.gov.uk}
 
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
@@ -315,3 +395,7 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+  harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
+
+govUkHolidays:
+  url: https://www.gov.uk/

@@ -1,0 +1,29 @@
+{
+  "homeOfficeReferenceNumber": "A1234567",
+  "isAdmin": "Yes",
+  "homeOfficeDecisionDate": "{$TODAY}",
+  "appellantTitle": "Mr",
+  "appellantGivenNames": "Talha",
+  "appellantFamilyName": "Awan",
+  "appellantDateOfBirth": "{$TODAY-7300}",
+  "appellantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "Iceland": "IS"
+      }
+    }
+  ],
+  "appellantHasFixedAddress": "No",
+  "appealType": "protection",
+  "appealGroundsProtection": {
+    "values": [
+      "refugeeConvention"
+    ]
+  },
+  "hasNewMatters": "No",
+  "hasOtherAppeals": "No",
+  "appealReferenceNumber": "PA/12345/2019",
+  "sendDirectionActionAvailable": "Yes",
+  "hearingCentre": "taylorHouse"
+}

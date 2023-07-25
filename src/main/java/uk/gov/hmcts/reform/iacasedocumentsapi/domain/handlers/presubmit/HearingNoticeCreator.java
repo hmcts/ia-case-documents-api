@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,15 +29,18 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public HearingNoticeCreator(
         @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
         @Qualifier("remoteHearingNotice") DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator,
+        @Qualifier("adaHearingNotice") DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
         this.remoteHearingNoticeDocumentCreator = remoteHearingNoticeDocumentCreator;
+        this.adaHearingNoticeDocumentCreator = adaHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -68,11 +73,12 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         if (listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
-            hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
+            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
+            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
         }
 
-        if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
-             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
+        if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YES))
+             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YES)).orElse(false)))) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNotice,

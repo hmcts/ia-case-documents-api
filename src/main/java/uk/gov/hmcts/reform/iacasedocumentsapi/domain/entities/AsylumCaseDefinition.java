@@ -114,6 +114,11 @@ public enum AsylumCaseDefinition {
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
+    REMOVAL_ORDER_OPTIONS(
+            "removalOrderOptions", new TypeReference<YesOrNo>(){}),
+
+    REMOVAL_ORDER_DATE(
+            "removalOrderDate", new TypeReference<String>(){}),
     NEW_MATTERS(
         "newMatters", new TypeReference<String>(){}),
 
@@ -455,6 +460,9 @@ public enum AsylumCaseDefinition {
     APP_ADDITIONAL_EVIDENCE_DOCS(
         "appAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    CUSTOM_TRIBUNAL_DOCUMENTS(
+            "customTribunalDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
     RESP_ADDITIONAL_EVIDENCE_DOCS(
         "respAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
@@ -477,10 +485,50 @@ public enum AsylumCaseDefinition {
         "upperTribunalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     CLARIFYING_QUESTIONS_ANSWERS("clarifyingQuestionsAnswers",
-        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {})
+        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {}),
 
-    ;
+    APPELLANT_IN_DETENTION(
+            "appellantInDetention", new TypeReference<YesOrNo>() {}
+    ),
+    DETENTION_FACILITY(
+            "detentionFacility", new TypeReference<String>(){}),
 
+    IRC_NAME(
+            "ircName", new TypeReference<String>(){}),
+
+    PRISON_NAME(
+            "prisonName", new TypeReference<String>(){}),
+
+    HAS_PENDING_BAIL_APPLICATIONS(
+            "hasPendingBailApplications", new TypeReference<BailApplicationStatus>() {}),
+
+    BAIL_APPLICATION_NUMBER(
+            "bailApplicationNumber", new TypeReference<String>(){}),
+
+    IS_ACCELERATED_DETAINED_APPEAL(
+            "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
+
+    SUITABILITY_REVIEW_DECISION(
+            "suitabilityReviewDecision", new TypeReference<AdaSuitabilityReviewDecision>(){}),
+
+    SUITABILITY_REVIEW_REASON(
+            "suitabilityReviewReason", new TypeReference<String>(){}),
+
+    SUITABILITY_REVIEW_JUDGE(
+            "suitabilityReviewJudge", new TypeReference<String>(){}),
+
+    IS_ADMIN(
+            "isAdmin", new TypeReference<YesOrNo>() {}),
+
+    HAS_OTHER_APPEALS(
+            "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {}),
+
+    // Case data section to hold generated documents,so they can be attached to email notifications
+    NOTIFICATION_ATTACHMENT_DOCUMENTS(
+            "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    APPEAL_REVIEW_OUTCOME(
+        "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){});
 
     private final String value;
     private final TypeReference typeReference;

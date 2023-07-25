@@ -60,10 +60,13 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
                 .getCaseDetails()
                 .getCaseData();
 
+        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         asylumCase.clear(HMCTS);
         asylumCase.write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         asylumCase.clear(AsylumCaseDefinition.CASE_BUNDLES);
-        asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-upper-tribunal-bundle-config.yaml");
+        asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
+                isOrWasAda ? "iac-upper-tribunal-bundle-inc-tribunal-config.yaml" : "iac-upper-tribunal-bundle-config.yaml");
+
         asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase));
 
         final PreSubmitCallbackResponse<AsylumCase> response =

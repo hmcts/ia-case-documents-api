@@ -1,0 +1,231 @@
+{
+  "description": "RIA-6612 Generate hearing bundle with Tribunal Document (Ada Suitabilty) - stitching enabled",
+  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "eventId": "generateHearingBundle",
+      "state": "preHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "legalRepReferenceNumber": "REF54321",
+          "suitabilityReviewDecision": "suitable",
+          "hearingDocuments": [
+            {
+              "id": "2",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY-7}",
+                "tag": "hearingNotice"
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY-14}",
+                "tag": "caseSummary"
+              }
+            }
+          ],
+          "legalRepresentativeDocuments": [
+            {
+              "id": "3",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC3_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC3_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY}",
+                "tag": "caseArgument"
+              }
+            },
+            {
+              "id": "3",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY}",
+                "tag": "homeOfficeDecisionLetter"
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY}",
+                "tag": "appealSubmission"
+              }
+            }
+          ],
+          "respondentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY}",
+                "tag": "additionalEvidence"
+              }
+            }
+          ],
+          "tribunalDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY}",
+                "tag": "adaSuitability"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "legalRepReferenceNumber": "REF54321",
+        "hearingDocuments": [
+          {
+            "id": "2",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY-7}",
+              "tag": "hearingNotice"
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY-14}",
+              "tag": "caseSummary"
+            }
+          }
+        ],
+        "legalRepresentativeDocuments": [
+          {
+            "id": "3",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC3_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC3_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "caseArgument"
+            }
+          },
+          {
+            "id": "3",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "homeOfficeDecisionLetter"
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "appealSubmission"
+            }
+          }
+        ],
+        "respondentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "additionalEvidence"
+            }
+          }
+        ],
+        "tribunalDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "adaSuitability"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

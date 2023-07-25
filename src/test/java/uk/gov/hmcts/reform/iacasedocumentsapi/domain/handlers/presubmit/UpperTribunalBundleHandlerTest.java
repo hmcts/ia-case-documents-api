@@ -14,10 +14,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -70,9 +73,12 @@ class UpperTribunalBundleHandlerTest {
         caseBundles.add(new IdValue<>("1", bundle));
     }
 
-    @Test
-    void should_successfully_handle_the_callback() {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
+    void should_successfully_handle_the_callback(String maybeDecision) {
 
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
+                ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             upperTribunalBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -84,7 +90,8 @@ class UpperTribunalBundleHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase).write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-upper-tribunal-bundle-config.yaml");
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
+                maybeDecision.isEmpty() ? "iac-upper-tribunal-bundle-config.yaml" : "iac-upper-tribunal-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020");
     }
 

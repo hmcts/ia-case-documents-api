@@ -22,10 +22,11 @@ public class DirectionTagTest {
         assertEquals("requestClarifyingQuestions", DirectionTag.REQUEST_CLARIFYING_QUESTIONS.toString());
         assertEquals("requestCmaRequirements", DirectionTag.REQUEST_CMA_REQUIREMENTS.toString());
         assertEquals("", DirectionTag.NONE.toString());
+        assertEquals("adaListCase", DirectionTag.ADA_LIST_CASE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(14, DirectionTag.values().length);
+        assertEquals(15, DirectionTag.values().length);
     }
 }

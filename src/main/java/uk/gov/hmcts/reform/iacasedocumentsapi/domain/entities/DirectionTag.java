@@ -18,6 +18,7 @@ public enum DirectionTag {
     REQUEST_REASONS_FOR_APPEAL("requestReasonsForAppeal"),
     REQUEST_CLARIFYING_QUESTIONS("requestClarifyingQuestions"),
     REQUEST_CMA_REQUIREMENTS("requestCmaRequirements"),
+    ADA_LIST_CASE("adaListCase"),
 
     @JsonEnumDefaultValue
     NONE("");

@@ -31,6 +31,8 @@ public class DocumentTagTest {
         assertEquals("upperTribunalBundle", DocumentTag.UPPER_TRIBUNAL_BUNDLE.toString());
         assertEquals("appealReasons", DocumentTag.APPEAL_REASONS.toString());
         assertEquals("clarifyingQuestions", DocumentTag.CLARIFYING_QUESTIONS.toString());
+        assertEquals("appealForm", DocumentTag.APPEAL_FORM.toString());
+        assertEquals("noticeOfDecisionUtTransfer", DocumentTag.NOTICE_OF_DECISION_UT_TRANSFER.toString());
         assertEquals("bailSubmission", DocumentTag.BAIL_SUBMISSION.toString());
         assertEquals("uploadTheBailEvidenceDocs", DocumentTag.BAIL_EVIDENCE.toString());
         assertEquals("bailDecisionUnsigned", DocumentTag.BAIL_DECISION_UNSIGNED.toString());
@@ -40,10 +42,16 @@ public class DocumentTagTest {
         assertEquals("uploadBailSummary", DocumentTag.BAIL_SUMMARY.toString());
         assertEquals("b1Document", DocumentTag.B1_DOCUMENT.toString());
         assertEquals("", DocumentTag.NONE.toString());
+        assertEquals("requestCaseBuilding", DocumentTag.REQUEST_CASE_BUILDING.toString());
+        assertEquals("internalAdaSuitability", DocumentTag.INTERNAL_ADA_SUITABILITY.toString());
+        assertEquals("requestRespondentReview", DocumentTag.REQUEST_RESPONDENT_REVIEW.toString());
+        assertEquals("internalAdaDecisionAndReasonsLetter", DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER.toString());
+        assertEquals("uploadTheAppealResponse", DocumentTag.UPLOAD_THE_APPEAL_RESPONSE.toString());
+        assertEquals("hearingBundleReadyLetter", DocumentTag.HEARING_BUNDLE_READY_LETTER.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(37, DocumentTag.values().length);
+        assertEquals(46, DocumentTag.values().length);
     }
 }

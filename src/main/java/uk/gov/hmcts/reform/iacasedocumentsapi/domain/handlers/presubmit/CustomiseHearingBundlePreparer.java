@@ -4,10 +4,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -63,8 +60,8 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     }
 
     public void prepareCustomDocuments(AsylumCase asylumCase, boolean isCaseReheard) {
-
-        getMappingFields(isCaseReheard).forEach((sourceField,targetField)  ->
+        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
+        getMappingFields(isCaseReheard, isOrWasAda).forEach((sourceField,targetField)  ->
             populateCustomCollections(asylumCase, sourceField, targetField)
         );
 
@@ -105,6 +102,10 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
                 if ("The respondent".equals(documentWithMetadata.getValue().getSuppliedBy())) {
                     customDocuments = documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
                 }
+            } else if (targetField == CUSTOM_TRIBUNAL_DOCUMENTS) {
+                if (documentWithMetadata.getValue().getTag() == DocumentTag.ADA_SUITABILITY) {
+                    customDocuments = documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
+                }
             } else {
                 customDocuments = documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
             }
@@ -112,27 +113,33 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         asylumCase.clear(targetField);
         asylumCase.write(targetField, customDocuments);
+
     }
 
-    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase) {
-
+    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isOrWasAda) {
+        Map<AsylumCaseDefinition, AsylumCaseDefinition> fieldMapping;
         if (isReheardCase) {
-            return  Map.of(
+            fieldMapping = new HashMap<>(Map.of(
                 APP_ADDITIONAL_EVIDENCE_DOCS, CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS,
                 RESP_ADDITIONAL_EVIDENCE_DOCS, CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS,
                 FTPA_APPELLANT_DOCUMENTS, CUSTOM_FTPA_APPELLANT_DOCS,
                 FTPA_RESPONDENT_DOCUMENTS, CUSTOM_FTPA_RESPONDENT_DOCS,
                 FINAL_DECISION_AND_REASONS_DOCUMENTS, CUSTOM_FINAL_DECISION_AND_REASONS_DOCS,
                 REHEARD_HEARING_DOCUMENTS, CUSTOM_REHEARD_HEARING_DOCS,
-                ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
+                ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS));
 
         } else {
-            return  Map.of(
+            fieldMapping = new HashMap<>(Map.of(
                 HEARING_DOCUMENTS, CUSTOM_HEARING_DOCUMENTS,
                 LEGAL_REPRESENTATIVE_DOCUMENTS, CUSTOM_LEGAL_REP_DOCUMENTS,
                 ADDITIONAL_EVIDENCE_DOCUMENTS, CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS,
-                RESPONDENT_DOCUMENTS, CUSTOM_RESPONDENT_DOCUMENTS);
+                RESPONDENT_DOCUMENTS, CUSTOM_RESPONDENT_DOCUMENTS));
+            if (isOrWasAda) {
+                //With Tribunal Documents
+                fieldMapping.put(TRIBUNAL_DOCUMENTS, CUSTOM_TRIBUNAL_DOCUMENTS);
+            }
         }
+        return fieldMapping;
     }
 
 }
