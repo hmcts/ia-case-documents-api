@@ -23,4 +23,5 @@ java:
         - AppInsightsInstrumentationKey
         - system-username
         - system-password
+        - app-insights-connection-string
         - ia-config-validator-secret

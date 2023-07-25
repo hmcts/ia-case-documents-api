@@ -19,4 +19,5 @@ java:
         - s2s-secret
         - s2s-microservice
         - AppInsightsInstrumentationKey
+        - app-insights-connection-string
         - ia-config-validator-secret
