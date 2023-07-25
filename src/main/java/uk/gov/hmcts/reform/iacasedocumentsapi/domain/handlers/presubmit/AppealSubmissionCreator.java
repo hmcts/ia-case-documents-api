@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
@@ -86,19 +85,22 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
         Document appealSubmission;
         DocumentTag documentTag;
+        AsylumCaseDefinition documentField;
 
         if (isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
             appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
             documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
+            documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;
         } else {
             appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
             documentTag = DocumentTag.APPEAL_SUBMISSION;
+            documentField = LEGAL_REPRESENTATIVE_DOCUMENTS;
         }
 
         documentHandler.addWithMetadata(
             asylumCase,
             appealSubmission,
-            LEGAL_REPRESENTATIVE_DOCUMENTS,
+            documentField,
             documentTag
         );
 
