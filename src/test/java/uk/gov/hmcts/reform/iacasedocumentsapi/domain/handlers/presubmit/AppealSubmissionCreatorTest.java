@@ -247,6 +247,6 @@ public class AppealSubmissionCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(internalAppealSubmissionDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadata(eq(asylumCase), any(), eq(LEGAL_REPRESENTATIVE_DOCUMENTS), eq(DocumentTag.INTERNAL_APPEAL_SUBMISSION));
+        verify(documentHandler, times(1)).addWithMetadata(eq(asylumCase), any(), eq(NOTIFICATION_ATTACHMENT_DOCUMENTS), eq(DocumentTag.INTERNAL_APPEAL_SUBMISSION));
     }
 }
