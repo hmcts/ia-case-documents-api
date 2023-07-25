@@ -48,7 +48,7 @@ public class DocumentTagTest {
         assertEquals("internalAdaDecisionAndReasonsLetter", DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER.toString());
         assertEquals("uploadTheAppealResponse", DocumentTag.UPLOAD_THE_APPEAL_RESPONSE.toString());
         assertEquals("hearingBundleReadyLetter", DocumentTag.HEARING_BUNDLE_READY_LETTER.toString());
-        assertEquals("internalAppealSubmissionNonAdaInTime", DocumentTag.INTERNAL_APPEAL_SUBMISSION_NON_ADA_IN_TIME.toString());
+        assertEquals("internalAppealSubmission", DocumentTag.INTERNAL_APPEAL_SUBMISSION.toString());
     }
 
     @Test

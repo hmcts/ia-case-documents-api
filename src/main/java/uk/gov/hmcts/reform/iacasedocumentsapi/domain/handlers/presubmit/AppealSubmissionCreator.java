@@ -89,7 +89,7 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
         if (isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
             appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
-            documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION_NON_ADA_IN_TIME;
+            documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
         } else {
             appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
             documentTag = DocumentTag.APPEAL_SUBMISSION;

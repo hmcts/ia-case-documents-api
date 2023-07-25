@@ -647,9 +647,9 @@ public class DocumentCreatorConfiguration {
 
     @Bean("internalAppealSubmission")
     public DocumentCreator<AsylumCase> getInternalAppealSubmissionDocumentCreator(
-            @Value("${internalAppealSubmissionNonAdaDocument.contentType}") String contentType,
-            @Value("${internalAppealSubmissionNonAdaDocument.fileExtension}") String fileExtension,
-            @Value("${internalAppealSubmissionNonAdaDocument.fileName}") String fileName,
+            @Value("${internalAppealSubmissionDocument.contentType}") String contentType,
+            @Value("${internalAppealSubmissionDocument.fileExtension}") String fileExtension,
+            @Value("${internalAppealSubmissionDocument.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
             InternalAppealSubmissionTemplate documentTemplate,
             DocumentGenerator documentGenerator,
