@@ -624,6 +624,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedDecisionsAndReasonsDismissed")
+    public DocumentCreator<AsylumCase> getInternalDetainedDecisionsAndReasonsDismissedDocumentCreator(
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.contentType}") String contentType,
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.fileExtension}") String fileExtension,
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedDecisionsAndReasonsDismissedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("uploadTheAppealResponseLetter")
     public DocumentCreator<AsylumCase> getUploadAppealResponseMaintainedLetterCreator(
             @Value("${uploadAppealResponseMaintainedLetter.contentType}") String contentType,
