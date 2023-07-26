@@ -7,7 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixture
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public interface GivensBuilder {
 
