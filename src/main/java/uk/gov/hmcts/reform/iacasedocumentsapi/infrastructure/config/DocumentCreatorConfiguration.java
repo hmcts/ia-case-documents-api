@@ -666,4 +666,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalAppealSubmission")
+    public DocumentCreator<AsylumCase> getInternalAppealSubmissionDocumentCreator(
+            @Value("${internalAppealSubmissionDocument.contentType}") String contentType,
+            @Value("${internalAppealSubmissionDocument.fileExtension}") String fileExtension,
+            @Value("${internalAppealSubmissionDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalAppealSubmissionTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }

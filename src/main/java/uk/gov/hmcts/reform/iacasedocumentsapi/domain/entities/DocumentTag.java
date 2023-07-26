@@ -10,6 +10,7 @@ public enum DocumentTag {
     RESPONDENT_EVIDENCE("respondentEvidence", CaseType.ASYLUM),
     APPEAL_RESPONSE("appealResponse", CaseType.ASYLUM),
     APPEAL_SUBMISSION("appealSubmission", CaseType.ASYLUM),
+    INTERNAL_APPEAL_SUBMISSION("internalAppealSubmission", CaseType.ASYLUM),
     ADDITIONAL_EVIDENCE("additionalEvidence", CaseType.ASYLUM),
     HEARING_REQUIREMENTS("hearingRequirements", CaseType.ASYLUM),
     HEARING_NOTICE("hearingNotice", CaseType.ASYLUM),
