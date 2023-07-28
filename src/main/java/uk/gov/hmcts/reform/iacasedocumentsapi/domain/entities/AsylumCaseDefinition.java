@@ -527,6 +527,9 @@ public enum AsylumCaseDefinition {
     NOTIFICATION_ATTACHMENT_DOCUMENTS(
             "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    RECORDED_OUT_OF_TIME_DECISION(
+            "recordedOutOfTimeDecision", new TypeReference<YesOrNo>(){}),
+
     APPEAL_REVIEW_OUTCOME(
         "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){});
 

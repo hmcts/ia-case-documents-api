@@ -236,6 +236,11 @@ internalAppealSubmissionDocument.fileExtension: PDF
 internalAppealSubmissionDocument.fileName: "appeal-form"
 internalAppealSubmissionDocument.templateName: ${IA_INTERNAL_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-DEC-ENG-00010.docx}
 
+internalAppealCanProceedDocument.contentType: application/pdf
+internalAppealCanProceedDocument.fileExtension: PDF
+internalAppealCanProceedDocument.fileName: "appeal-form"
+internalAppealCanProceedDocument.templateName: ${IA_INTERNAL_APPEAL_CAN_PROCEED_TEMPLATE:TB-IAC-DEC-ENG-00012.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -305,6 +310,7 @@ security:
       - "customiseHearingBundle"
       - "requestCaseBuilding"
       - "asyncStitchingComplete"
+      - "recordOutOfTimeDecision"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"

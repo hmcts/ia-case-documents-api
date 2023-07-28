@@ -687,4 +687,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalAppealCanProceedLetter")
+    public DocumentCreator<AsylumCase> getInternalAppealCanProceedLetterCreator(
+            @Value("${internalAppealCanProceedDocument.contentType}") String contentType,
+            @Value("${internalAppealCanProceedDocument.fileExtension}") String fileExtension,
+            @Value("${internalAppealCanProceedDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalAppealCanProceedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }
