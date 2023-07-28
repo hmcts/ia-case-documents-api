@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7215 Internal detained non-ADA send decision and reasons - allowed - document PDF",
+  "description": "RIA-7216 Internal detained non-ADA send decision and reasons - dismissed - document PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -11,7 +11,7 @@
         "replacements": {
           "isAcceleratedDetainedAppeal": "No",
           "appellantInDetention": "Yes",
-          "isDecisionAllowed": "allowed",
+          "isDecisionAllowed": "dismissed",
           "finalDecisionAndReasonsDocument": {
             "document_url": "{$FIXTURE_DOC3_DOC_URL}",
             "document_binary_url": "{$FIXTURE_DOC3_DOC_URL_BINARY}",
@@ -49,7 +49,7 @@
               "tag": "internalDetDecisionAndReasonsLetter",
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_filename": "PA 12345 2019-Awan-ADA-Appellant-letter-appeal-decided-allowed.PDF",
+                "document_filename": "PA 12345 2019-Awan-ADA-Appellant-letter-appeal-decided-dismissed.PDF",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
               },
               "suppliedBy": "",

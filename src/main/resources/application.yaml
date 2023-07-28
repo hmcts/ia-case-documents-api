@@ -156,7 +156,9 @@ internalAdaDecisionsAndReasonsDismissedLetter.contentType: application/pdf
 internalAdaDecisionsAndReasonsDismissedLetter.fileExtension: PDF
 internalAdaDecisionsAndReasonsDismissedLetter.fileName: "ADA-Appellant-letter-appeal-decided-dismissed"
 internalAdaDecisionsAndReasonsDismissedLetter.templateName: ${IA_ADA_INTERNAL_DECISIONS_AND_REASONS_DISMISSED_TEMPLATE:TB-IAC-DEC-ENG-00008.docx}
+internalDetainedDecisionsAndReasonsDismissedLetter.templateName: ${IA_DET_INTERNAL_DECISIONS_AND_REASONS_DISMISSED_TEMPLATE:TB-IAC-DEC-ENG-00011.docx}
 internalAdaDecisionsAndReasonsDismissedLetter.ftpaDueInWorkingDays: 7
+internalDetainedDecisionsAndReasonsDismissedLetter.ftpaDueCalendarDays: 14
 
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 

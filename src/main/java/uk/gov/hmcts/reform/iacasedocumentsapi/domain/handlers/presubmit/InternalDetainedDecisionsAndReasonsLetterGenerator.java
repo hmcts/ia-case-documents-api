@@ -24,15 +24,18 @@ public class InternalDetainedDecisionsAndReasonsLetterGenerator implements PreSu
 
     private final DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedCreator;
     private final DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedCreator;
+    private final DocumentCreator<AsylumCase> internalDetainedDecisionsAndReasonsLetterDismissedCreator;
     private final DocumentHandler documentHandler;
 
     public InternalDetainedDecisionsAndReasonsLetterGenerator(
             @Qualifier("internalDetainedDecisionsAndReasonsAllowed") DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedCreator,
             @Qualifier("internalAdaDecisionsAndReasonsDismissed") DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedCreator,
+            @Qualifier("internalDetainedDecisionsAndReasonsDismissed") DocumentCreator<AsylumCase> internalDetainedDecisionsAndReasonsLetterDismissedCreator,
             DocumentHandler documentHandler
     ) {
         this.internalAdaDecisionsAndReasonsLetterAllowedCreator = internalAdaDecisionsAndReasonsLetterAllowedCreator;
         this.internalAdaDecisionsAndReasonsLetterDismissedCreator = internalAdaDecisionsAndReasonsLetterDismissedCreator;
+        this.internalDetainedDecisionsAndReasonsLetterDismissedCreator = internalDetainedDecisionsAndReasonsLetterDismissedCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -72,14 +75,21 @@ public class InternalDetainedDecisionsAndReasonsLetterGenerator implements PreSu
                     asylumCase,
                     internalAdaDecisionsAndReasonsLetterAllowedCreator.create(caseDetails),
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                    DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER
+                    DocumentTag.INTERNAL_DET_DECISION_AND_REASONS_LETTER
             );
-        } else {
+        } else if (appealDecision.equals(AppealDecision.DISMISSED) && isAcceleratedDetainedAppeal(asylumCase)) {
             documentHandler.addWithMetadata(
                     asylumCase,
                     internalAdaDecisionsAndReasonsLetterDismissedCreator.create(caseDetails),
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                    DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER
+                    DocumentTag.INTERNAL_DET_DECISION_AND_REASONS_LETTER
+            );
+        } else if (appealDecision.equals(AppealDecision.DISMISSED) && !isAcceleratedDetainedAppeal(asylumCase)) {
+            documentHandler.addWithMetadata(
+                    asylumCase,
+                    internalDetainedDecisionsAndReasonsLetterDismissedCreator.create(caseDetails),
+                    NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                    DocumentTag.INTERNAL_DET_DECISION_AND_REASONS_LETTER
             );
         }
         return new PreSubmitCallbackResponse<>(asylumCase);
