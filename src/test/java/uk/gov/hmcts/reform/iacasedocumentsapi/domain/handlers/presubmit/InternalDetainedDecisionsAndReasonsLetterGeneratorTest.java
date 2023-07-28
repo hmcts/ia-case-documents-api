@@ -35,6 +35,7 @@ class InternalDetainedDecisionsAndReasonsLetterGeneratorTest {
 
     @Mock private DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterAllowedDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> internalDetainedDecisionsAndReasonsLetterDismissedCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -49,6 +50,7 @@ class InternalDetainedDecisionsAndReasonsLetterGeneratorTest {
             new InternalDetainedDecisionsAndReasonsLetterGenerator(
                 internalAdaDecisionsAndReasonsLetterAllowedDocumentCreator,
                 internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator,
+                internalDetainedDecisionsAndReasonsLetterDismissedCreator,
                 documentHandler
             );
     }
@@ -70,21 +72,37 @@ class InternalDetainedDecisionsAndReasonsLetterGeneratorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_ADA_DECISION_AND_REASONS_LETTER);
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DET_DECISION_AND_REASONS_LETTER);
     }
 
     @Test
-    public void should_call_internal_detained_decisions_and_reasons_letter_dismissed_creator() {
+    public void should_call_internal_detained_ada_decisions_and_reasons_letter_dismissed_creator() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SEND_DECISION_AND_REASONS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.DISMISSED));
 
         internalDetainedDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         verify(internalAdaDecisionsAndReasonsLetterDismissedDocumentCreator, times(1)).create(caseDetails);
+    }
+
+    @Test
+    public void should_call_internal_detained_non_ada_decisions_and_reasons_letter_dismissed_creator() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SEND_DECISION_AND_REASONS);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(callback.getCaseDetails().getCaseData().read(IS_DECISION_ALLOWED, AppealDecision.class)).thenReturn(Optional.of(AppealDecision.DISMISSED));
+
+        internalDetainedDecisionsAndReasonsLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        verify(internalDetainedDecisionsAndReasonsLetterDismissedCreator, times(1)).create(caseDetails);
     }
 
     @Test
