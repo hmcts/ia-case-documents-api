@@ -4,8 +4,10 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import com.google.common.collect.ImmutableMap;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,14 @@ public class AsylumCaseUtils {
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .build();
+    }
+
+    public static String dueDatePlusNumberOfWeeks(AsylumCase asylumCase, int numberOfWeeks) {
+        LocalDate appealSubmissionDate = asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)
+                .map(LocalDate::parse)
+                .orElseThrow(() -> new IllegalStateException("appealSubmissionDate is missing"));
+
+        return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusWeeks(numberOfWeeks));
     }
 
 }
