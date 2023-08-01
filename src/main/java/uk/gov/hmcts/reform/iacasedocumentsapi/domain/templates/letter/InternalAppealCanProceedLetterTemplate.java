@@ -19,7 +19,7 @@ public class InternalAppealCanProceedLetterTemplate implements DocumentTemplate<
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
-    private int fourWeeks = 4;
+    private int fourWeeksAfterSubmissionDate = 4;
 
     public InternalAppealCanProceedLetterTemplate(
             @Value("${internalAppealCanProceedDocument.templateName}") String templateName,
@@ -45,7 +45,7 @@ public class InternalAppealCanProceedLetterTemplate implements DocumentTemplate<
         fieldValues.put("detainedEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("dueDate", dueDatePlusNumberOfWeeks(asylumCase, fourWeeks));
+        fieldValues.put("dueDate", dueDatePlusNumberOfWeeks(asylumCase, fourWeeksAfterSubmissionDate));
 
         return fieldValues;
     }
