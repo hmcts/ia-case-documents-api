@@ -51,10 +51,11 @@ public class EventTest {
         assertEquals("unknown", Event.UNKNOWN.toString());
         assertEquals("requestCaseBuilding", Event.REQUEST_CASE_BUILDING.toString());
         assertEquals("uploadHomeOfficeAppealResponse", Event.UPLOAD_HOME_OFFICE_APPEAL_RESPONSE.toString());
+        assertEquals("recordOutOfTimeDecision", Event.RECORD_OUT_OF_TIME_DECISION.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(45, Event.values().length);
+        assertEquals(46, Event.values().length);
     }
 }
