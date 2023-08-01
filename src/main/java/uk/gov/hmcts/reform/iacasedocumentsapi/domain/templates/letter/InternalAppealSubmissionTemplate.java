@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
@@ -45,7 +44,7 @@ public class InternalAppealSubmissionTemplate implements DocumentTemplate<Asylum
         fieldValues.put("detainedEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("dueDate", AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, fourWeeks));
+        fieldValues.put("dueDate", dueDatePlusNumberOfWeeks(asylumCase, fourWeeks));
 
         return fieldValues;
     }
