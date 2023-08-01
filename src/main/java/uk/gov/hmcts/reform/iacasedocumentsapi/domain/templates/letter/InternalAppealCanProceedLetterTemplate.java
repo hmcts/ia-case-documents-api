@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.dueDatePlusNumberOfWeeks;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
@@ -19,6 +19,7 @@ public class InternalAppealCanProceedLetterTemplate implements DocumentTemplate<
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
+    private int fourWeeksAfterSubmissionDate = 4;
 
     public InternalAppealCanProceedLetterTemplate(
             @Value("${internalAppealCanProceedDocument.templateName}") String templateName,
@@ -44,16 +45,9 @@ public class InternalAppealCanProceedLetterTemplate implements DocumentTemplate<
         fieldValues.put("detainedEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("dueDate", dueDatePlusFourWeeks(asylumCase));
+        fieldValues.put("dueDate", dueDatePlusNumberOfWeeks(asylumCase, fourWeeksAfterSubmissionDate));
 
         return fieldValues;
     }
 
-    private String dueDatePlusFourWeeks(AsylumCase asylumCase) {
-        LocalDate appealSubmissionDate = asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)
-                .map(LocalDate::parse)
-                .orElseThrow(() -> new IllegalStateException("appealSubmissionDate is missing"));
-
-        return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusWeeks(4));
-    }
 }
