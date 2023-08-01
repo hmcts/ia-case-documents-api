@@ -729,4 +729,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedRequestRespondentEvidence")
+    public DocumentCreator<AsylumCase> getInternalDetainedRequestRespondentEvidenceCreator(
+            @Value("${internalDetainedRequestRespondentEvidence.contentType}") String contentType,
+            @Value("${internalDetainedRequestRespondentEvidence.fileExtension}") String fileExtension,
+            @Value("${internalDetainedRequestRespondentEvidence.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedRequestRespondentEvidenceTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }

@@ -44,6 +44,7 @@ public enum DocumentTag {
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     REQUEST_RESPONDENT_REVIEW("requestRespondentReview", CaseType.ASYLUM),
     UPLOAD_THE_APPEAL_RESPONSE("uploadTheAppealResponse", CaseType.ASYLUM),
+    INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER("internalRequestRespondentEvidenceLetter", CaseType.ASYLUM),
 
     HEARING_BUNDLE_READY_LETTER("hearingBundleReadyLetter", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
