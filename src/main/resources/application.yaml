@@ -417,3 +417,5 @@ hearingCentreEmailAddresses:
 
 govUkHolidays:
   url: https://www.gov.uk/
+
+fourWeeksAfterSubmissionDate: 4
