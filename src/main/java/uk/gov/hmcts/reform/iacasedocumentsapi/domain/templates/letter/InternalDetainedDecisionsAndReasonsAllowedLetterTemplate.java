@@ -52,7 +52,6 @@ public class InternalDetainedDecisionsAndReasonsAllowedLetterTemplate implements
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("ADAemail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));

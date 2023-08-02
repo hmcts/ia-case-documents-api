@@ -42,7 +42,6 @@ public class HoReviewEvidenceLetterTemplate implements DocumentTemplate<AsylumCa
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("dateLetterSent", getFormattedDate(dateProvider.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("directionDueDate", getFormattedDate(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.RESPONDENT_REVIEW))));

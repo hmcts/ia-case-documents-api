@@ -39,7 +39,6 @@ public class InternalAdaSuitabilityReviewUnsuitableLetterTemplate implements Doc
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("ADAemail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));

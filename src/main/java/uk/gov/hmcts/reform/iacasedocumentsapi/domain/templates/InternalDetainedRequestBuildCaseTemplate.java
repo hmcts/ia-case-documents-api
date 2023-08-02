@@ -41,7 +41,6 @@ public class InternalDetainedRequestBuildCaseTemplate implements DocumentTemplat
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
