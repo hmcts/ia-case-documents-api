@@ -1,9 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
 
-import com.google.common.base.Strings;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,8 +45,8 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("hearingDate", formatDateForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
-        fieldValues.put("hearingTime", formatTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
+        fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
+        fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
 
         if (listedHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
             fieldValues.put("remoteHearing", "Remote hearing");
@@ -80,23 +79,4 @@ public class HearingNoticeFieldMapper {
         return fieldValues;
     }
 
-    public String formatDateForRendering(
-        String date
-    ) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDateTime.parse(date).format(DOCUMENT_DATE_FORMAT);
-        }
-
-        return "";
-    }
-
-    public String formatTimeForRendering(
-        String date
-    ) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDateTime.parse(date).format(DOCUMENT_TIME_FORMAT);
-        }
-
-        return "";
-    }
 }

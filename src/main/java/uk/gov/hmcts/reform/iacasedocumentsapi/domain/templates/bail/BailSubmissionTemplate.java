@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
@@ -71,7 +70,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         }
         final boolean isLegallyRepresentedCase = isLegalRep || hasLegalRep;
 
-        fieldValues.put("applicantDateOfBirth", formatDateForRendering(bailCase.read(APPLICANT_DATE_OF_BIRTH, String.class).orElse("")));
+        fieldValues.put("applicantDateOfBirth", formatDateForRendering(bailCase.read(APPLICANT_DATE_OF_BIRTH, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         String gender = bailCase.read(APPLICANT_GENDER, String.class).orElse("");
         fieldValues.put("applicantGender", gender);
         if (gender.equals("Other")) {
@@ -108,7 +107,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             fieldValues.put("ircName", bailCase.read(IRC_NAME, String.class).orElse(""));
         }
 
-        fieldValues.put("applicantArrivalInUKDate", formatDateForRendering(bailCase.read(APPLICANT_ARRIVAL_IN_UK, String.class).orElse("")));
+        fieldValues.put("applicantArrivalInUKDate", formatDateForRendering(bailCase.read(APPLICANT_ARRIVAL_IN_UK, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
 
         fieldValues.put("hasAppealHearingPending", bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class).orElse(""));
         switch (bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class).orElse("")) {
@@ -165,7 +164,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
 
         fieldValues.put("applicantBeenRefusedBail", bailCase.read(APPLICANT_BEEN_REFUSED_BAIL, YesOrNo.class).orElse(YesOrNo.NO));
         if (bailCase.read(APPLICANT_BEEN_REFUSED_BAIL, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("bailHearingDate", formatDateForRendering(bailCase.read(BAIL_HEARING_DATE, String.class).orElse("")));
+            fieldValues.put("bailHearingDate", formatDateForRendering(bailCase.read(BAIL_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
 
         }
         fieldValues.put("agreesToBoundByFinancialCond", bailCase.read(AGREES_TO_BOUND_BY_FINANCIAL_COND, YesOrNo.class).orElse(YesOrNo.NO));
@@ -229,7 +228,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             fieldValues.put("supporterTelephoneNumber1", bailCase.read(SUPPORTER_TELEPHONE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporterMobileNumber1", bailCase.read(SUPPORTER_MOBILE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporterEmailAddress1", bailCase.read(SUPPORTER_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporterDOB", formatDateForRendering(bailCase.read(SUPPORTER_DOB, String.class).orElse("")));
+            fieldValues.put("supporterDOB", formatDateForRendering(bailCase.read(SUPPORTER_DOB, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
             fieldValues.put("supporterRelation", bailCase.read(SUPPORTER_RELATION, String.class).orElse(""));
             fieldValues.put("supporterOccupation", bailCase.read(SUPPORTER_OCCUPATION, String.class).orElse(""));
             fieldValues.put("supporterImmigration", bailCase.read(SUPPORTER_IMMIGRATION, String.class).orElse(""));
@@ -279,7 +278,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             fieldValues.put("supporter2TelephoneNumber1", bailCase.read(SUPPORTER_2_TELEPHONE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporter2MobileNumber1", bailCase.read(SUPPORTER_2_MOBILE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporter2EmailAddress1", bailCase.read(SUPPORTER_2_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporter2DOB", formatDateForRendering(bailCase.read(SUPPORTER_2_DOB, String.class).orElse("")));
+            fieldValues.put("supporter2DOB", formatDateForRendering(bailCase.read(SUPPORTER_2_DOB, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
             fieldValues.put("supporter2Relation", bailCase.read(SUPPORTER_2_RELATION, String.class).orElse(""));
             fieldValues.put("supporter2Occupation", bailCase.read(SUPPORTER_2_OCCUPATION, String.class).orElse(""));
             fieldValues.put("supporter2Immigration", bailCase.read(SUPPORTER_2_IMMIGRATION, String.class).orElse(""));
@@ -328,7 +327,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             fieldValues.put("supporter3TelephoneNumber1", bailCase.read(SUPPORTER_3_TELEPHONE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporter3MobileNumber1", bailCase.read(SUPPORTER_3_MOBILE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporter3EmailAddress1", bailCase.read(SUPPORTER_3_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporter3DOB", formatDateForRendering(bailCase.read(SUPPORTER_3_DOB, String.class).orElse("")));
+            fieldValues.put("supporter3DOB", formatDateForRendering(bailCase.read(SUPPORTER_3_DOB, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
             fieldValues.put("supporter3Relation", bailCase.read(SUPPORTER_3_RELATION, String.class).orElse(""));
             fieldValues.put("supporter3Occupation", bailCase.read(SUPPORTER_3_OCCUPATION, String.class).orElse(""));
             fieldValues.put("supporter3Immigration", bailCase.read(SUPPORTER_3_IMMIGRATION, String.class).orElse(""));
@@ -376,7 +375,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             fieldValues.put("supporter4TelephoneNumber1", bailCase.read(SUPPORTER_4_TELEPHONE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporter4MobileNumber1", bailCase.read(SUPPORTER_4_MOBILE_NUMBER_1, String.class).orElse(""));
             fieldValues.put("supporter4EmailAddress1", bailCase.read(SUPPORTER_4_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporter4DOB", formatDateForRendering(bailCase.read(SUPPORTER_4_DOB, String.class).orElse("")));
+            fieldValues.put("supporter4DOB", formatDateForRendering(bailCase.read(SUPPORTER_4_DOB, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
             fieldValues.put("supporter4Relation", bailCase.read(SUPPORTER_4_RELATION, String.class).orElse(""));
             fieldValues.put("supporter4Occupation", bailCase.read(SUPPORTER_4_OCCUPATION, String.class).orElse(""));
             fieldValues.put("supporter4Immigration", bailCase.read(SUPPORTER_4_IMMIGRATION, String.class).orElse(""));
@@ -423,12 +422,4 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         }
     }
 
-    private String formatDateForRendering(
-        String date
-    ) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDate.parse(date).format(DOCUMENT_DATE_FORMAT);
-        }
-        return "";
-    }
 }

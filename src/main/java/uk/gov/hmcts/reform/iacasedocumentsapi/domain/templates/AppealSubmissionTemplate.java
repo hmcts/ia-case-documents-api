@@ -3,10 +3,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 import static java.util.stream.Collectors.joining;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_OTHER_APPEALS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,7 +54,7 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("CREATED_DATE", caseDetails.getCreatedDate().format(DOCUMENT_DATE_FORMAT));
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("appealSubmissionDate", formatDateForRendering(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class).orElse("")));
+        fieldValues.put("appealSubmissionDate", formatDateForRendering(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("legalRepresentativeEmailAddress", asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""));
         fieldValues.put("legalRepName", asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""));
         fieldValues.put("legalRepCompany", asylumCase.read(LEGAL_REP_COMPANY, String.class).orElse(""));
@@ -63,16 +62,16 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
-        fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse("")));
+        fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
         Optional<String> homeOfficeDecisionDate = asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class);
         fieldValues.put("homeOfficeDecisionDate", homeOfficeDecisionDate.isPresent()
-                ? formatDateForRendering(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class).orElse("")) : null);
+                ? formatDateForRendering(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT) : null);
 
         Optional<String> decisionLetterReceivedDate = asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class);
         fieldValues.put("decisionLetterReceivedDate", decisionLetterReceivedDate.isPresent()
-                ? formatDateForRendering(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class).orElse("")) : null);
+                ? formatDateForRendering(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT) : null);
 
         Optional<YesOrNo> isDetained = Optional.of(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class).orElse(YesOrNo.NO));
         if (isDetained.equals(Optional.of(YesOrNo.YES))) {
@@ -104,11 +103,11 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
 
                 if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_HUMAN_RIGHTS || decisionType == OutOfCountryDecisionType.REFUSE_PERMIT) {
                     fieldValues.put("gwfReferenceNumber", asylumCase.read(GWF_REFERENCE_NUMBER, String.class).orElse(null));
-                    fieldValues.put("dateEntryClearanceDecision", formatDateForRendering(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class).orElse(null)));
+                    fieldValues.put("dateEntryClearanceDecision", formatDateForRendering(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class).orElse(null), DOCUMENT_DATE_FORMAT));
                     fieldValues.put("decisionLetterReceived", YesOrNo.NO);
 
                 } else if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_PROTECTION) {
-                    fieldValues.put("dateClientLeaveUk", formatDateForRendering(asylumCase.read(DATE_CLIENT_LEAVE_UK, String.class).orElse(null)));
+                    fieldValues.put("dateClientLeaveUk", formatDateForRendering(asylumCase.read(DATE_CLIENT_LEAVE_UK, String.class).orElse(null), DOCUMENT_DATE_FORMAT));
                     fieldValues.put("didClientLeaveUk", YesOrNo.YES);
                 }
             }
@@ -308,13 +307,6 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
                             .build()
             );
         }
-    }
-
-    private String formatDateForRendering(String date) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDate.parse(date).format(DOCUMENT_DATE_FORMAT);
-        }
-        return "";
     }
 
     protected static String formatComplexString(String data) {

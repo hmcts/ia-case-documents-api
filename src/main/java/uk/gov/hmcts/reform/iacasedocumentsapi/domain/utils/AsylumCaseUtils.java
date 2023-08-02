@@ -6,8 +6,11 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -85,5 +88,18 @@ public class AsylumCaseUtils {
         return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusWeeks(numberOfWeeks));
     }
 
-}
+    public static String formatDateForRendering(String date, DateTimeFormatter formatter) {
+        if (!Strings.isNullOrEmpty(date)) {
+            return LocalDate.parse(date).format(formatter);
+        }
+        return "";
+    }
 
+    public static String formatDateTimeForRendering(String date, DateTimeFormatter formatter) {
+        if (!Strings.isNullOrEmpty(date)) {
+            return LocalDateTime.parse(date).format(formatter);
+        }
+        return "";
+    }
+
+}
