@@ -45,7 +45,6 @@ public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplat
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
