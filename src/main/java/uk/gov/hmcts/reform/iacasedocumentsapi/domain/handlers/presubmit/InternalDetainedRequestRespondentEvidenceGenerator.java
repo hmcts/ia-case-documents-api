@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
@@ -44,8 +45,8 @@ public class InternalDetainedRequestRespondentEvidenceGenerator implements PreSu
 
         return callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && AsylumCaseUtils.isInternalCase(callback.getCaseDetails().getCaseData())
-                && AsylumCaseUtils.isAppellantInDetention(callback.getCaseDetails().getCaseData())
+                && AsylumCaseUtils.isInternalCase(asylumCase)
+                && AsylumCaseUtils.isAppellantInDetention(asylumCase)
                 && !isAcceleratedDetainedAppeal(asylumCase);
     }
 
