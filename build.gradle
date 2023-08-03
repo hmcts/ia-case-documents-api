@@ -335,6 +335,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
 
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
