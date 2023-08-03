@@ -20,16 +20,7 @@
         ]]</notes>
         <cve>CVE-2022-45688</cve>
     </suppress>
-    <suppress until="2023-07-29">
-        <cve>CVE-2023-20860</cve>
-        <cve>CVE-2023-20863</cve>
-        <cve>CVE-2023-20873</cve>
+    <suppress until="2023-08-31">
         <cve>CVE-2023-35116</cve><!-- 2023-08-03 jackson-databind 2.15.2 (the latest version at time of checking) is still vulnerable. Try again when a new version comes out. -->
-    </suppress>
-    <suppress until="2023-06-01">
-        <notes>![CDATA[
-            Delaying spring upgrade until later date.
-            ]]</notes>
-        <cve>CVE-2023-20883</cve>
     </suppress>
 </suppressions>
