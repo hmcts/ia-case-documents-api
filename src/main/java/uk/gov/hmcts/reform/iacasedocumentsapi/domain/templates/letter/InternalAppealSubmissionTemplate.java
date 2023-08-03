@@ -40,7 +40,6 @@ public class InternalAppealSubmissionTemplate implements DocumentTemplate<Asylum
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("detainedEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
