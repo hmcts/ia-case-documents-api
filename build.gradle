@@ -39,7 +39,7 @@ def versions = [
     sonarPitest        : '0.5',
     springHystrix      : '2.2.10.RELEASE',
     pact_version       : '4.1.38',
-    springDoc          : '1.6.8',
+    springDoc          : '1.7.0',
     springCloud        : '3.1.6'
 ]
 
