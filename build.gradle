@@ -11,7 +11,7 @@ plugins {
   id 'jacoco'
   id "info.solidsoft.pitest" version '1.5.2'
   id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '2.7.11'
+  id 'org.springframework.boot' version '2.7.14'
   id 'uk.gov.hmcts.java' version '0.12.43'
   id 'org.owasp.dependencycheck' version '8.2.1'
   id 'com.github.ben-manes.versions' version '0.42.0'
@@ -256,7 +256,7 @@ def versions = [
 dependencyManagement {
   dependencies {
     // CVE-2018-10237 - Unbounded memory allocation
-    dependencySet(group: 'com.google.guava', version: '31.1-jre') {
+    dependencySet(group: 'com.google.guava', version: '32.1.2-jre') {
       entry 'guava'
     }
 
@@ -264,22 +264,22 @@ dependencyManagement {
       entry 'commons-fileupload'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.0') {
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.2') {
       entry 'jackson-databind'
       entry 'jackson-core'
       entry 'jackson-annotations'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.15.0') {
+    dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.15.2') {
       entry 'jackson-dataformat-yaml'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.15.0') {
+    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.15.2') {
       entry 'jackson-datatype-jsr310'
       entry 'jackson-datatype-jdk8'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.module', version: '2.15.0') {
+    dependencySet(group: 'com.fasterxml.jackson.module', version: '2.15.2') {
       entry 'jackson-module-parameter-names'
       entry 'jackson-module-afterburner'
     }
