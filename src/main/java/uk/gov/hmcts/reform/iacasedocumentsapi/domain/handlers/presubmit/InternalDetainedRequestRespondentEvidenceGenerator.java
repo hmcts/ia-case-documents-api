@@ -1,7 +1,8 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -19,16 +20,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 
 @Component
-public class HoReviewEvidenceLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetainedRequestRespondentEvidenceGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> hoReviewEvidenceLetterCreator;
+    private final DocumentCreator<AsylumCase> internalDetainedRequestRespondentEvidenceCreator;
     private final DocumentHandler documentHandler;
 
-    public HoReviewEvidenceLetterGenerator(
-            @Qualifier("hoReviewEvidenceLetter") DocumentCreator<AsylumCase> hoReviewEvidenceLetterCreator,
+    public InternalDetainedRequestRespondentEvidenceGenerator(
+            @Qualifier("internalDetainedRequestRespondentEvidence") DocumentCreator<AsylumCase> internalDetainedRequestRespondentEvidenceCreator,
             DocumentHandler documentHandler
     ) {
-        this.hoReviewEvidenceLetterCreator = hoReviewEvidenceLetterCreator;
+        this.internalDetainedRequestRespondentEvidenceCreator = internalDetainedRequestRespondentEvidenceCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -39,10 +40,13 @@ public class HoReviewEvidenceLetterGenerator implements PreSubmitCallbackHandler
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+        return callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && AsylumCaseUtils.isInternalCase(callback.getCaseDetails().getCaseData())
-                && AsylumCaseUtils.isAppellantInDetention(callback.getCaseDetails().getCaseData());
+                && AsylumCaseUtils.isInternalCase(asylumCase)
+                && AsylumCaseUtils.isAppellantInDetention(asylumCase)
+                && !isAcceleratedDetainedAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -56,12 +60,12 @@ public class HoReviewEvidenceLetterGenerator implements PreSubmitCallbackHandler
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document hoReviewEvidenceLetter = hoReviewEvidenceLetterCreator.create(caseDetails);
+        Document internalDetainedRequestRespondentEvidenceLetter = internalDetainedRequestRespondentEvidenceCreator.create(caseDetails);
         documentHandler.addWithMetadata(
                 asylumCase,
-                hoReviewEvidenceLetter,
+                internalDetainedRequestRespondentEvidenceLetter,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.REQUEST_RESPONDENT_REVIEW
+                DocumentTag.INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

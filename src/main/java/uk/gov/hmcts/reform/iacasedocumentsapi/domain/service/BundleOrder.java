@@ -105,8 +105,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case REQUEST_RESPONDENT_REVIEW:
                 log.warn("REQUEST_RESPONDENT_REVIEW tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 35;
-            case INTERNAL_ADA_DECISION_AND_REASONS_LETTER:
-                log.warn("INTERNAL_ADA_DECISION_AND_REASONS_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+            case INTERNAL_DET_DECISION_AND_REASONS_LETTER:
+                log.warn("INTERNAL_DET_DECISION_AND_REASONS_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 36;
             case UPLOAD_THE_APPEAL_RESPONSE:
                 log.warn("UPLOAD_THE_APPEAL_RESPONSE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
@@ -114,6 +114,12 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case HEARING_BUNDLE_READY_LETTER:
                 log.warn("HEARING BUNDLE READY_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 38;
+            case INTERNAL_APPEAL_SUBMISSION:
+                log.warn("INTERNAL_APPEAL_SUBMISSION tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 39;
+            case INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER:
+                log.warn("INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 40;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

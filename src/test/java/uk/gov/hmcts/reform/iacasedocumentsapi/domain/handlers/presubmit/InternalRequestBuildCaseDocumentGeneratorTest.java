@@ -23,29 +23,31 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRequestBuildCaseDocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
+public class InternalRequestBuildCaseDocumentGeneratorTest {
 
     @Mock private DocumentCreator<AsylumCase> internalAdaRequestBuildCaseDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> internalDetainedRequestBuildCaseDocumentCreator;
     @Mock private DocumentHandler documentHandler;
-
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
     private final YesOrNo yes = YesOrNo.YES;
-    private InternalAdaRequestBuildCaseDocumentGenerator internalAdaRequestBuildCaseDocumentGenerator;
+    private InternalRequestBuildCaseDocumentGenerator internalAdaRequestBuildCaseDocumentGenerator;
 
     @BeforeEach
     public void setUp() {
         internalAdaRequestBuildCaseDocumentGenerator =
-                new InternalAdaRequestBuildCaseDocumentGenerator(
+                new InternalRequestBuildCaseDocumentGenerator(
                         internalAdaRequestBuildCaseDocumentCreator,
+                        internalDetainedRequestBuildCaseDocumentCreator,
                         documentHandler
                 );
     }
@@ -56,6 +58,7 @@ public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
         when(callback.getEvent()).thenReturn(Event.REQUEST_CASE_BUILDING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yes));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
 
         when(internalAdaRequestBuildCaseDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
@@ -132,6 +135,7 @@ public class InternalAdaRequestBuildCaseDocumentGeneratorTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
+            when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yes));
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yes));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {

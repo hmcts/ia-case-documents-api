@@ -1,7 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -12,23 +13,21 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 
 @Component
-public class HoReviewEvidenceLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalAppealCanProceedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> hoReviewEvidenceLetterCreator;
+    private final DocumentCreator<AsylumCase> internalAppealCanProceedLetterCreator;
     private final DocumentHandler documentHandler;
 
-    public HoReviewEvidenceLetterGenerator(
-            @Qualifier("hoReviewEvidenceLetter") DocumentCreator<AsylumCase> hoReviewEvidenceLetterCreator,
+    public InternalAppealCanProceedLetterGenerator(
+            @Qualifier("internalAppealCanProceedLetter") DocumentCreator<AsylumCase> internalAppealCanProceedLetterCreator,
             DocumentHandler documentHandler
     ) {
-        this.hoReviewEvidenceLetterCreator = hoReviewEvidenceLetterCreator;
+        this.internalAppealCanProceedLetterCreator = internalAppealCanProceedLetterCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -39,10 +38,13 @@ public class HoReviewEvidenceLetterGenerator implements PreSubmitCallbackHandler
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+        return callback.getEvent() == Event.RECORD_OUT_OF_TIME_DECISION
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && AsylumCaseUtils.isInternalCase(callback.getCaseDetails().getCaseData())
-                && AsylumCaseUtils.isAppellantInDetention(callback.getCaseDetails().getCaseData());
+                && isInternalCase(asylumCase)
+                && isAppellantInDetention(asylumCase)
+                && !isAcceleratedDetainedAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -56,14 +58,13 @@ public class HoReviewEvidenceLetterGenerator implements PreSubmitCallbackHandler
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document hoReviewEvidenceLetter = hoReviewEvidenceLetterCreator.create(caseDetails);
         documentHandler.addWithMetadata(
                 asylumCase,
-                hoReviewEvidenceLetter,
+                internalAppealCanProceedLetterCreator.create(caseDetails),
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.REQUEST_RESPONDENT_REVIEW
-        );
+                DocumentTag.RECORD_OUT_OF_TIME_DECISION_DOCUMENT);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
+
 }

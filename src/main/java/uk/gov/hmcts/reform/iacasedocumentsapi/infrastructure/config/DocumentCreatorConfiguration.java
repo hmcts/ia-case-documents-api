@@ -540,6 +540,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedRequestBuildCase")
+    public DocumentCreator<AsylumCase> getInternalDetainedBuildCaseDocumentCreator(
+            @Value("${internalDetainedRequestBuildCaseDocument.contentType}") String contentType,
+            @Value("${internalDetainedRequestBuildCaseDocument.fileExtension}") String fileExtension,
+            @Value("${internalDetainedRequestBuildCaseDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedRequestBuildCaseTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("hoReviewEvidenceLetter")
     public DocumentCreator<AsylumCase> getHoReviewEvidenceLetterCreator(
             @Value("${hoReviewEvidenceLetter.contentType}") String contentType,
@@ -603,6 +624,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedDecisionsAndReasonsDismissed")
+    public DocumentCreator<AsylumCase> getInternalDetainedDecisionsAndReasonsDismissedDocumentCreator(
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.contentType}") String contentType,
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.fileExtension}") String fileExtension,
+            @Value("${internalAdaDecisionsAndReasonsDismissedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedDecisionsAndReasonsDismissedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("uploadTheAppealResponseLetter")
     public DocumentCreator<AsylumCase> getUploadAppealResponseMaintainedLetterCreator(
             @Value("${uploadAppealResponseMaintainedLetter.contentType}") String contentType,
@@ -631,6 +673,69 @@ public class DocumentCreatorConfiguration {
             @Value("${internalAdaHearingBundle.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
             InternalDetGenerateHearingBundleTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalAppealSubmission")
+    public DocumentCreator<AsylumCase> getInternalAppealSubmissionDocumentCreator(
+            @Value("${internalAppealSubmissionDocument.contentType}") String contentType,
+            @Value("${internalAppealSubmissionDocument.fileExtension}") String fileExtension,
+            @Value("${internalAppealSubmissionDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalAppealSubmissionTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalAppealCanProceedLetter")
+    public DocumentCreator<AsylumCase> getInternalAppealCanProceedLetterCreator(
+            @Value("${internalAppealCanProceedDocument.contentType}") String contentType,
+            @Value("${internalAppealCanProceedDocument.fileExtension}") String fileExtension,
+            @Value("${internalAppealCanProceedDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalAppealCanProceedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalDetainedRequestRespondentEvidence")
+    public DocumentCreator<AsylumCase> getInternalDetainedRequestRespondentEvidenceCreator(
+            @Value("${internalDetainedRequestRespondentEvidence.contentType}") String contentType,
+            @Value("${internalDetainedRequestRespondentEvidence.fileExtension}") String fileExtension,
+            @Value("${internalDetainedRequestRespondentEvidence.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedRequestRespondentEvidenceTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

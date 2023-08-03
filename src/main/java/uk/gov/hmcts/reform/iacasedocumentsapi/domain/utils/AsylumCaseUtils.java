@@ -4,8 +4,13 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +32,12 @@ public class AsylumCaseUtils {
 
     public static boolean isAcceleratedDetainedAppeal(AsylumCase asylumCase) {
         return asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)
+                .orElse(NO)
+                .equals(YES);
+    }
+
+    public static boolean isDetainedAppeal(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)
                 .orElse(NO)
                 .equals(YES);
     }
@@ -62,6 +73,7 @@ public class AsylumCaseUtils {
 
         return ImmutableMap
                 .<String, String>builder()
+                .put("hmcts", "[userImage:hmcts.png]")
                 .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
@@ -69,5 +81,26 @@ public class AsylumCaseUtils {
                 .build();
     }
 
-}
+    public static String dueDatePlusNumberOfWeeks(AsylumCase asylumCase, int numberOfWeeks) {
+        LocalDate appealSubmissionDate = asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)
+                .map(LocalDate::parse)
+                .orElseThrow(() -> new IllegalStateException("appealSubmissionDate is missing"));
 
+        return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusWeeks(numberOfWeeks));
+    }
+
+    public static String formatDateForRendering(String date, DateTimeFormatter formatter) {
+        if (!Strings.isNullOrEmpty(date)) {
+            return LocalDate.parse(date).format(formatter);
+        }
+        return "";
+    }
+
+    public static String formatDateTimeForRendering(String date, DateTimeFormatter formatter) {
+        if (!Strings.isNullOrEmpty(date)) {
+            return LocalDateTime.parse(date).format(formatter);
+        }
+        return "";
+    }
+
+}

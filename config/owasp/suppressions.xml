@@ -7,7 +7,7 @@
             As we don't use those constructs, we are not affected by it.
             The suppression will be a long-term one. 
             An expiry to the suppression is kept to allow re-evaluating whether
-            we are still unaffected by it.
+            we're still unaffected by it.
         ]]></notes>
         <cve>CVE-2016-1000027</cve>
     </suppress>
@@ -30,5 +30,6 @@
         <cve>CVE-2023-20883</cve>
         <cve>CVE-2023-35116</cve>
         <cve>CVE-2023-2976</cve>
+        <cve>CVE-2023-34034</cve>    
     </suppress>
 </suppressions>
