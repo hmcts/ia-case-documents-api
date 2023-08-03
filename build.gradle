@@ -258,12 +258,6 @@ dependencyManagement {
             entry 'snakeyaml'
         }
 
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.73') {
-            entry 'tomcat-embed-core'
-            entry 'tomcat-embed-el'
-            entry 'tomcat-embed-websocket'
-        }
-
         dependencySet(group: 'commons-fileupload', version: '1.5') {
             entry 'commons-fileupload'
         }
