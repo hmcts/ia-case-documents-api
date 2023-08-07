@@ -248,6 +248,11 @@ internalDetainedRequestRespondentEvidence.fileExtension: PDF
 internalDetainedRequestRespondentEvidence.fileName: "detained-appellant-request-respondent-evidence-notice"
 internalDetainedRequestRespondentEvidence.templateName: ${IA_INTERNAL_DETAINED_REQUEST_RESPONDENT_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00010.docx}
 
+internalDetainedEndAppealAutomatically.contentType:  application/pdf
+internalDetainedEndAppealAutomatically.fileExtension: PDF
+internalDetainedEndAppealAutomatically.fileName: "detained-appellant-request-respondent-evidence-notice"
+internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}

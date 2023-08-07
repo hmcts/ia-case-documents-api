@@ -49,10 +49,11 @@ public class DocumentTagTest {
         assertEquals("uploadTheAppealResponse", DocumentTag.UPLOAD_THE_APPEAL_RESPONSE.toString());
         assertEquals("hearingBundleReadyLetter", DocumentTag.HEARING_BUNDLE_READY_LETTER.toString());
         assertEquals("internalAppealSubmission", DocumentTag.INTERNAL_APPEAL_SUBMISSION.toString());
+        assertEquals("internalEndAppealAutomatically", DocumentTag.INTERNAL_END_APPEAL_AUTOMATICALLY.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(48, DocumentTag.values().length);
+        assertEquals(49, DocumentTag.values().length);
     }
 }
