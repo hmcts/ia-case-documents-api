@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HasOtherAppeals;
@@ -133,10 +134,10 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
             }
         }
 
-        Optional<String> optionalAppealType = asylumCase.read(APPEAL_TYPE);
+        Optional<AsylumAppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AsylumAppealType.class);
 
         if (optionalAppealType.isPresent()) {
-            String appealType = optionalAppealType.get();
+            String appealType = optionalAppealType.get().getValue();
             fieldValues.put(
                 "appealType",
                 stringProvider.get("appealType", appealType).orElse("")

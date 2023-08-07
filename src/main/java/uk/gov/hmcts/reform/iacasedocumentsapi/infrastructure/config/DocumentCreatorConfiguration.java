@@ -792,4 +792,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetMarkAsPaidLetter")
+    public DocumentCreator<AsylumCase> getInternalDetMarkAsPaidLetterLetterCreator(
+            @Value("${internalDetainedMarkAppealPaid.contentType}") String contentType,
+            @Value("${internalDetainedMarkAppealPaid.fileExtension}") String fileExtension,
+            @Value("${internalDetainedMarkAppealPaid.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetMarkAsPaidLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }
