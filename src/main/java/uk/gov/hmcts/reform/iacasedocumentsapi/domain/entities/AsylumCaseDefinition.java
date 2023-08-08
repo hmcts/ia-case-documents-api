@@ -531,7 +531,13 @@ public enum AsylumCaseDefinition {
             "recordedOutOfTimeDecision", new TypeReference<YesOrNo>(){}),
 
     APPEAL_REVIEW_OUTCOME(
-        "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){});
+        "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){}),
+
+    REMISSION_TYPE(
+        "remissionType", new TypeReference<RemissionType>(){}),
+
+    REMISSION_REJECTED_DATE_PLUS_14DAYS(
+            "remissionRejectedDatePlus14days", new TypeReference<String>(){});
 
     private final String value;
     private final TypeReference typeReference;

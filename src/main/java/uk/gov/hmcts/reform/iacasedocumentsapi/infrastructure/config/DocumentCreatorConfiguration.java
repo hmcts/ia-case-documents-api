@@ -750,4 +750,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalEndAppealAutomaticallyNotice")
+    public DocumentCreator<AsylumCase> getInternalEndAppealAutomaticallyDocumentCreator(
+            @Value("${internalDetainedEndAppealAutomatically.contentType}") String contentType,
+            @Value("${internalDetainedEndAppealAutomatically.fileExtension}") String fileExtension,
+            @Value("${internalDetainedEndAppealAutomatically.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalEndAppealAutomaticallyTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }
