@@ -250,7 +250,7 @@ internalDetainedRequestRespondentEvidence.templateName: ${IA_INTERNAL_DETAINED_R
 
 internalDetainedEndAppealAutomatically.contentType:  application/pdf
 internalDetainedEndAppealAutomatically.fileExtension: PDF
-internalDetainedEndAppealAutomatically.fileName: "detained-appellant-request-respondent-evidence-notice"
+internalDetainedEndAppealAutomatically.fileName: "detained-appellant-end-appeal-automaticaly-notice"
 internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
