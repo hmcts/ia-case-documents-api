@@ -537,7 +537,13 @@ public enum AsylumCaseDefinition {
         "remissionType", new TypeReference<RemissionType>(){}),
 
     REMISSION_REJECTED_DATE_PLUS_14DAYS(
-            "remissionRejectedDatePlus14days", new TypeReference<String>(){});
+            "remissionRejectedDatePlus14days", new TypeReference<String>(){}),
+
+    CCD_REFERENCE_NUMBER_FOR_DISPLAY(
+            "ccdReferenceNumberForDisplay", new TypeReference<String>(){}),
+
+    FEE_AMOUNT_GBP(
+            "feeAmountGbp", new TypeReference<String>(){});
 
     private final String value;
     private final TypeReference typeReference;

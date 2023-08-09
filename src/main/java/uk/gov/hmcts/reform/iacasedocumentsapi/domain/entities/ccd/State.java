@@ -25,6 +25,8 @@ public enum State {
     AWAITING_CMA_REQUIREMENTS("awaitingCmaRequirements"),
     CMA_ADJUSTMENTS_AGREED("cmaAdjustmentsAgreed"),
     FTPA_DECIDED("ftpaDecided"),
+    PENDING_PAYMENT("pendingPayment"),
+
 
 
     @JsonEnumDefaultValue
