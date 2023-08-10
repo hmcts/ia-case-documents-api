@@ -45,6 +45,7 @@ public enum Event {
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     UPLOAD_HOME_OFFICE_APPEAL_RESPONSE("uploadHomeOfficeAppealResponse", CaseType.ASYLUM),
     RECORD_OUT_OF_TIME_DECISION("recordOutOfTimeDecision", CaseType.ASYLUM),
+    REQUEST_RESPONSE_REVIEW("requestResponseReview", CaseType.ASYLUM),
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
     RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),
     END_APPLICATION("endApplication", CaseType.BAIL),
