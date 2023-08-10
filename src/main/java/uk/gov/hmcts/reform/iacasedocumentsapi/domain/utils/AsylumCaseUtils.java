@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -103,4 +106,32 @@ public class AsylumCaseUtils {
         return "";
     }
 
+    public static boolean isEaHuEuAppeal(AsylumCase asylumCase) {
+        return asylumCase
+                .read(APPEAL_TYPE, AsylumAppealType.class)
+                .map(type -> type == EA || type == HU || type == EU).orElse(false);
+    }
+
+    public static double getFeeBeforeRemission(AsylumCase asylumCase) {
+        double feeAmountInPence = Double.parseDouble(asylumCase.read(FEE_AMOUNT_GBP, String.class)
+                .orElseThrow(() -> new RequiredFieldMissingException("Fee amount not found")));
+        return feeAmountInPence / 100;
+    }
+
+    private static double getAmountRemitted(AsylumCase asylumCase) {
+        double feeAmountInPence = Double.parseDouble(asylumCase.read(AMOUNT_REMITTED, String.class)
+                .orElseThrow(() -> new RequiredFieldMissingException("Amount remitted not found")));
+        return feeAmountInPence / 100;
+    }
+
+    public static double getFeeRemission(AsylumCase asylumCase) {
+        RemissionType remissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class)
+                .orElseThrow(() -> new RequiredFieldMissingException("Remission type not found"));
+
+        if (remissionType.equals(RemissionType.NO_REMISSION)) {
+            return 0;
+        } else {
+            return getAmountRemitted(asylumCase);
+        }
+    }
 }

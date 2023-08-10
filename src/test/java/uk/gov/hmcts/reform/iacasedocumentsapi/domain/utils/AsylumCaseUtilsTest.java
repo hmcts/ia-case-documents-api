@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.NO_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.ArrayList;
@@ -17,10 +21,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
@@ -159,6 +161,57 @@ public class AsylumCaseUtilsTest {
 
         assertEquals(directionTag, returnedDirection.get(0).getTag());
 
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = AsylumAppealType.class)
+    void should_return_true_if_ea_hu_eu_appeal_type(AsylumAppealType appealType) {
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        if (List.of(HU, EA, EU).contains(appealType)) {
+            assertTrue(AsylumCaseUtils.isEaHuEuAppeal(asylumCase));
+        } else {
+            assertFalse(AsylumCaseUtils.isEaHuEuAppeal(asylumCase));
+        }
+    }
+
+    @Test
+    void should_throw_for_fee_amount_not_present() {
+        assertThatThrownBy(() -> AsylumCaseUtils.getFeeBeforeRemission(asylumCase))
+                .isExactlyInstanceOf(RequiredFieldMissingException.class)
+                .hasMessage("Fee amount not found");
+    }
+
+    @Test
+    void should_return_fee_amount() {
+        when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.of("14000"));
+        assertEquals(140, AsylumCaseUtils.getFeeBeforeRemission(asylumCase));
+    }
+
+    @Test
+    void should_throw_for_remission_type_not_present() {
+        assertThatThrownBy(() -> AsylumCaseUtils.getFeeRemission(asylumCase))
+                .isExactlyInstanceOf(RequiredFieldMissingException.class)
+                .hasMessage("Remission type not found");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = RemissionType.class)
+    void should_return_amount_remitted(RemissionType remissionType) {
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
+        if (remissionType.equals(NO_REMISSION)) {
+            assertEquals(0, AsylumCaseUtils.getFeeRemission(asylumCase));
+        } else {
+            when(asylumCase.read(AMOUNT_REMITTED, String.class)).thenReturn(Optional.of("8000"));
+            assertEquals(80, AsylumCaseUtils.getFeeRemission(asylumCase));
+        }
+    }
+
+    @Test
+    void should_throw_for_amount_remitted_not_present() {
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.HO_WAIVER_REMISSION));
+        assertThatThrownBy(() -> AsylumCaseUtils.getFeeRemission(asylumCase))
+                .isExactlyInstanceOf(RequiredFieldMissingException.class)
+                .hasMessage("Amount remitted not found");
     }
 }
 
