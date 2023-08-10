@@ -549,7 +549,11 @@ public enum AsylumCaseDefinition {
             "amountRemitted", new TypeReference<String>(){}),
 
     PAID_AMOUNT(
-            "paidAmount", new TypeReference<String>(){});
+            "paidAmount", new TypeReference<String>(){}),
+
+    REMISSION_DECISION(
+            "remissionDecision", new TypeReference<RemissionDecision>(){});
+
 
     private final String value;
     private final TypeReference typeReference;

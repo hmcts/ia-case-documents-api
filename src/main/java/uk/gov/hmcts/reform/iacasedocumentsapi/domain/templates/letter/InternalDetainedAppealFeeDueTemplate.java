@@ -19,14 +19,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 
 @Component
-public class InternalDetainedAppealPaymentDueTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalDetainedAppealFeeDueTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
     private final int calenderDaysToPayAppealFee = 14;
 
-    public InternalDetainedAppealPaymentDueTemplate(
-            @Value("${internalDetainedNoRemissionPaymentDue.templateName}") String templateName,
+    public InternalDetainedAppealFeeDueTemplate(
+            @Value("${internalDetainedAppealFeeDue.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider
     ) {
         this.templateName = templateName;

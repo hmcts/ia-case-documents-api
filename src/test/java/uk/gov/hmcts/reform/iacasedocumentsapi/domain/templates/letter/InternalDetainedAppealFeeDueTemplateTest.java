@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDetainedAppealPaymentDueTemplateTest {
+public class InternalDetainedAppealFeeDueTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -44,12 +44,12 @@ public class InternalDetainedAppealPaymentDueTemplateTest {
     private final double feeRemission = 0;
     private final double totalAmountToPay = (feeAmountInPounds - feeRemission);
     private final String deadlineDate = formatDateForNotificationAttachmentDocument(now.plusDays(calenderDaysToPayAppealFee));
-    private InternalDetainedAppealPaymentDueTemplate internalDetainedAppealPaymentDueTemplate;
+    private InternalDetainedAppealFeeDueTemplate internalDetainedAppealFeeDueTemplate;
 
     @BeforeEach
     void setUp() {
-        internalDetainedAppealPaymentDueTemplate =
-                new InternalDetainedAppealPaymentDueTemplate(
+        internalDetainedAppealFeeDueTemplate =
+                new InternalDetainedAppealFeeDueTemplate(
                         templateName,
                         customerServicesProvider
                 );
@@ -57,7 +57,7 @@ public class InternalDetainedAppealPaymentDueTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalDetainedAppealPaymentDueTemplate.getName());
+        assertEquals(templateName, internalDetainedAppealFeeDueTemplate.getName());
     }
 
     void dataSetUp() {
@@ -79,7 +79,7 @@ public class InternalDetainedAppealPaymentDueTemplateTest {
     void should_map_case_data_to_template_field_values() {
         dataSetUp();
 
-        Map<String, Object> templateFieldValues = internalDetainedAppealPaymentDueTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalDetainedAppealFeeDueTemplate.mapFieldValues(caseDetails);
 
         assertEquals(13, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -103,7 +103,7 @@ public class InternalDetainedAppealPaymentDueTemplateTest {
         dataSetUp();
         when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> internalDetainedAppealPaymentDueTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
                 .hasMessage("Fee amount not found");
 
@@ -114,7 +114,7 @@ public class InternalDetainedAppealPaymentDueTemplateTest {
         dataSetUp();
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> internalDetainedAppealPaymentDueTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
                 .hasMessage("Remission type not found");
 
