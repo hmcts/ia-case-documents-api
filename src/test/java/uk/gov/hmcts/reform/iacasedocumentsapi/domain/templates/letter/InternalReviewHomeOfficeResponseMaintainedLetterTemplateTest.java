@@ -6,8 +6,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +16,11 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -43,6 +46,26 @@ class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
     private final int dueInCalendarDays = 5;
     private InternalReviewHomeOfficeResponseMaintainedLetterTemplate internalReviewHomeOfficeResponseMaintainedLetterTemplate;
     private Map<String, Object> fieldValuesMap;
+    private final String directionExplanation = "Some explanation";
+    private final Parties directionParties = Parties.APPELLANT;
+    private final String directionDateDue = "2023-06-16";
+    private final String directionDateSent = "2023-06-02";
+    private final String directionUniqueId = "95e90870-2429-4660-b9c2-4111aff37304";
+    private final String directionType = "someDirectionType";
+    private final IdValue<Direction> hoReviewMaintainedDirection = new IdValue<>(
+            "1",
+            new Direction(
+                    directionExplanation,
+                    directionParties,
+                    directionDateDue,
+                    directionDateSent,
+                    DirectionTag.REQUEST_RESPONSE_REVIEW,
+                    Collections.emptyList(),
+                    Collections.emptyList(),
+                    directionUniqueId,
+                    directionType
+            )
+    );
 
     @BeforeEach
     public void setUp() {
@@ -67,6 +90,9 @@ class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        List<IdValue<Direction>> directionList = new ArrayList<>();
+        directionList.add(hoReviewMaintainedDirection);
+        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
         when(dateProvider.now()).thenReturn(LocalDate.now());
     }
 
@@ -80,7 +106,7 @@ class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
-        assertEquals(LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dueDate"));
+        assertEquals("21 Jun 2023", fieldValuesMap.get("dueDate"));
     }
 
 }
