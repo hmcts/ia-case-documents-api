@@ -1,5 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REVIEW_OUTCOME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealReviewOutcome;
@@ -14,11 +20,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
-
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REVIEW_OUTCOME;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 
 @Component
 public class InternalReviewHomeOfficeResponseLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -44,8 +45,8 @@ public class InternalReviewHomeOfficeResponseLetterGenerator implements PreSubmi
 
         return callback.getEvent() == Event.REQUEST_RESPONSE_REVIEW
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && AsylumCaseUtils.isInternalCase(asylumCase)
-                && !AsylumCaseUtils.isAcceleratedDetainedAppeal(asylumCase)
+                && isInternalCase(asylumCase)
+                && !isAcceleratedDetainedAppeal(asylumCase)
                 && getAppealReviewOutcome(asylumCase).equals("decisionMaintained");
     }
 

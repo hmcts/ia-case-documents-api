@@ -231,7 +231,7 @@ uploadAppealResponseMaintainedLetter.templateName: ${IA_HO_REVIEW_DECISION_MAINT
 internalReviewHomeOfficeResponseMaintainedLetter.contentType: application/pdf
 internalReviewHomeOfficeResponseMaintainedLetter.fileExtension: PDF
 internalReviewHomeOfficeResponseMaintainedLetter.fileName: "Review-HO-Response-Letter"
-internalReviewHomeOfficeResponseMaintainedLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00013.docx}
+internalReviewHomeOfficeResponseMaintainedLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00013.doc}
 internalReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays: 5
 
 bailEndApplication.contentType:  application/pdf
@@ -334,6 +334,7 @@ security:
       - "requestCaseBuilding"
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
+      - "requestResponseReview"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
