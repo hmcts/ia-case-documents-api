@@ -42,7 +42,7 @@ public class InternalDetainedAppealFeeDueTemplateTest {
     private final String feeAmountInPence = "14000";
     private final double feeAmountInPounds = Double.parseDouble(feeAmountInPence) / 100;
     private final double feeRemission = 0;
-    private final double totalAmountToPay = (feeAmountInPounds - feeRemission);
+    private final double totalAmountToPay = feeAmountInPounds - feeRemission;
     private final String deadlineDate = formatDateForNotificationAttachmentDocument(now.plusDays(calenderDaysToPayAppealFee));
     private InternalDetainedAppealFeeDueTemplate internalDetainedAppealFeeDueTemplate;
 
@@ -93,8 +93,8 @@ public class InternalDetainedAppealFeeDueTemplateTest {
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
         assertEquals(deadlineDate, templateFieldValues.get("deadlineDate"));
 
-        assertEquals(feeAmountInPounds, templateFieldValues.get("feeBeforeRemission"));
-        assertEquals(feeRemission, templateFieldValues.get("feeRemission"));
+        assertEquals(String.valueOf(feeAmountInPounds), templateFieldValues.get("feeBeforeRemission"));
+        assertEquals("0.0", templateFieldValues.get("feeRemission"));
         assertEquals(totalAmountToPay, templateFieldValues.get("totalAmountToPay"));
     }
 

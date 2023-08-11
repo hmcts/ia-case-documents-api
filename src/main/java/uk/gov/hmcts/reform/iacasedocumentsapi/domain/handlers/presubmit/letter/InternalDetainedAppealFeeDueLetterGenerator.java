@@ -2,17 +2,14 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.REJECTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isEaHuEuAppeal;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
@@ -53,10 +50,6 @@ public class InternalDetainedAppealFeeDueLetterGenerator implements PreSubmitCal
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        String appealType = String.valueOf(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)
-                .orElseThrow(() -> new RequiredFieldMissingException("Appeal type not found")));
-        boolean isHuEaEu = List.of(HU.getValue(), EA.getValue(), EU.getValue()).contains(appealType);
-
         boolean isNoRemission = asylumCase.read(REMISSION_TYPE, RemissionType.class)
                 .map(remission -> remission == RemissionType.NO_REMISSION).orElse(false);
 
@@ -78,7 +71,7 @@ public class InternalDetainedAppealFeeDueLetterGenerator implements PreSubmitCal
                 && AsylumCaseUtils.isInternalCase(asylumCase)
                 && AsylumCaseUtils.isAppellantInDetention(asylumCase)
                 && !isAcceleratedDetainedAppeal(asylumCase)
-                && isHuEaEu;
+                && isEaHuEuAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
