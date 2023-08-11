@@ -2,17 +2,17 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.REJECTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isEaHuEuAppeal;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -28,16 +28,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 
 
 @Component
-public class InternalDetainedNoRemissionPaymentDueLetter implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetainedAppealFeeDueLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> internalDetainedNoRemissionPaymentDueCreator;
+    private final DocumentCreator<AsylumCase> internalDetainedAppealFeeDueCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalDetainedNoRemissionPaymentDueLetter(
-            @Qualifier("internalDetainedNoRemissionPaymentDue") DocumentCreator<AsylumCase> internalDetainedNoRemissionPaymentDueCreator,
+    public InternalDetainedAppealFeeDueLetterGenerator(
+            @Qualifier("internalDetainedAppealFeeDue") DocumentCreator<AsylumCase> internalDetainedAppealFeeDueCreator,
             DocumentHandler documentHandler
     ) {
-        this.internalDetainedNoRemissionPaymentDueCreator = internalDetainedNoRemissionPaymentDueCreator;
+        this.internalDetainedAppealFeeDueCreator = internalDetainedAppealFeeDueCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -50,21 +50,28 @@ public class InternalDetainedNoRemissionPaymentDueLetter implements PreSubmitCal
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        String appealType = String.valueOf(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)
-                .orElseThrow(() -> new RequiredFieldMissingException("Appeal type not found")));
-        boolean isHuEaEu = List.of(HU.getValue(), EA.getValue(), EU.getValue()).contains(appealType);
-
         boolean isNoRemission = asylumCase.read(REMISSION_TYPE, RemissionType.class)
                 .map(remission -> remission == RemissionType.NO_REMISSION).orElse(false);
 
-        return callback.getEvent() == Event.SUBMIT_APPEAL
+        boolean isRemissionPartiallyApprovedOrRejected = asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+            .map(decision -> PARTIALLY_APPROVED == decision || REJECTED == decision)
+            .orElse(false);
+
+        boolean isSubmitAppealNoRemissionScenario =
+                callback.getEvent() == Event.SUBMIT_APPEAL
+                && isNoRemission;
+
+        boolean isRecordRemissionDecisionPartiallyApprovedRejectedScenario =
+               callback.getEvent() == Event.RECORD_REMISSION_DECISION
+               && isRemissionPartiallyApprovedOrRejected;
+
+        return (isSubmitAppealNoRemissionScenario || isRecordRemissionDecisionPartiallyApprovedRejectedScenario)
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getCaseDetails().getState().equals(State.PENDING_PAYMENT)
                 && AsylumCaseUtils.isInternalCase(asylumCase)
                 && AsylumCaseUtils.isAppellantInDetention(asylumCase)
                 && !isAcceleratedDetainedAppeal(asylumCase)
-                && isNoRemission
-                && isHuEaEu;
+                && isEaHuEuAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -78,10 +85,10 @@ public class InternalDetainedNoRemissionPaymentDueLetter implements PreSubmitCal
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalDetainedNoRemissionPaymentDueLetter = internalDetainedNoRemissionPaymentDueCreator.create(caseDetails);
+        Document internalDetainedAppealFeeDueLetter = internalDetainedAppealFeeDueCreator.create(caseDetails);
         documentHandler.addWithMetadata(
                 asylumCase,
-                internalDetainedNoRemissionPaymentDueLetter,
+            internalDetainedAppealFeeDueLetter,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER
         );
