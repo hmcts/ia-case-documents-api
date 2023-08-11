@@ -47,6 +47,7 @@ public enum Event {
     RECORD_OUT_OF_TIME_DECISION("recordOutOfTimeDecision", CaseType.ASYLUM),
     MARK_APPEAL_PAID("markAppealPaid", CaseType.ASYLUM),
     RECORD_REMISSION_DECISION("recordRemissionDecision", CaseType.ASYLUM),
+    REQUEST_RESPONSE_REVIEW("requestResponseReview", CaseType.ASYLUM),
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
     RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),
     END_APPLICATION("endApplication", CaseType.BAIL),

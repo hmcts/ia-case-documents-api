@@ -813,4 +813,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalReviewHomeOfficeResponseMaintainedLetter")
+    public DocumentCreator<AsylumCase> getInternalReviewHomeOfficeResponseLetterCreator(
+            @Value("${internalReviewHomeOfficeResponseMaintainedLetter.contentType}") String contentType,
+            @Value("${internalReviewHomeOfficeResponseMaintainedLetter.fileExtension}") String fileExtension,
+            @Value("${internalReviewHomeOfficeResponseMaintainedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalReviewHomeOfficeResponseMaintainedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }
