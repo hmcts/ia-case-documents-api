@@ -121,7 +121,7 @@ public class AsylumCaseUtils {
     private static double getAmountRemitted(AsylumCase asylumCase) {
         Optional<RemissionDecision> remissionDecision = asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
 
-        if (remissionDecision.isPresent() && remissionDecision.equals(RemissionDecision.REJECTED)) {
+        if (remissionDecision.isPresent() && remissionDecision.get().equals(RemissionDecision.REJECTED)) {
             return 0;
         } else {
             double feeAmountInPence = Double.parseDouble(asylumCase.read(AMOUNT_REMITTED, String.class)
