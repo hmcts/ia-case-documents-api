@@ -28,11 +28,12 @@ public class StateTest {
         assertEquals("unknown", State.UNKNOWN.toString());
         assertEquals("awaitingCmaRequirements", State.AWAITING_CMA_REQUIREMENTS.toString());
         assertEquals("cmaAdjustmentsAgreed", State.CMA_ADJUSTMENTS_AGREED.toString());
+        assertEquals("pendingPayment", State.PENDING_PAYMENT.toString());
 
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(21, State.values().length);
+        assertEquals(22, State.values().length);
     }
 }
