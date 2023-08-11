@@ -53,6 +53,7 @@ public class EventTest {
         assertEquals("uploadHomeOfficeAppealResponse", Event.UPLOAD_HOME_OFFICE_APPEAL_RESPONSE.toString());
         assertEquals("recordOutOfTimeDecision", Event.RECORD_OUT_OF_TIME_DECISION.toString());
         assertEquals("markAppealPaid", Event.MARK_APPEAL_PAID.toString());
+        assertEquals("recordRemissionDecision", Event.RECORD_REMISSION_DECISION.toString());
     }
 
     @Test

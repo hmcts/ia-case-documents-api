@@ -771,13 +771,13 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalDetainedNoRemissionPaymentDue")
-    public DocumentCreator<AsylumCase> getInternalDetainedNoRemissionPaymentDueCreator(
-            @Value("${internalDetainedNoRemissionPaymentDue.contentType}") String contentType,
-            @Value("${internalDetainedNoRemissionPaymentDue.fileExtension}") String fileExtension,
-            @Value("${internalDetainedNoRemissionPaymentDue.fileName}") String fileName,
+    @Bean("internalDetainedAppealFeeDue")
+    public DocumentCreator<AsylumCase> getinternalDetainedAppealFeeDueCreator(
+            @Value("${internalDetainedAppealFeeDue.contentType}") String contentType,
+            @Value("${internalDetainedAppealFeeDue.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAppealFeeDue.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDetainedAppealPaymentDueTemplate documentTemplate,
+            InternalDetainedAppealFeeDueTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

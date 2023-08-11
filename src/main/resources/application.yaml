@@ -259,10 +259,10 @@ internalDetainedEndAppealAutomatically.fileExtension: PDF
 internalDetainedEndAppealAutomatically.fileName: "detained-appellant-end-appeal-automaticaly-notice"
 internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003.docx}
 
-internalDetainedNoRemissionPaymentDue.contentType:  application/pdf
-internalDetainedNoRemissionPaymentDue.fileExtension: PDF
-internalDetainedNoRemissionPaymentDue.fileName: "internal-detained-payment-due-no-remission-letter"
-internalDetainedNoRemissionPaymentDue.templateName: ${IA_INTERNAL_DETAINED_REQUEST_RESPONDENT_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00001.docx}
+internalDetainedAppealFeeDue.contentType:  application/pdf
+internalDetainedAppealFeeDue.fileExtension: PDF
+internalDetainedAppealFeeDue.fileName: "internal-detained-appeal-fee-is-due-letter"
+internalDetainedAppealFeeDue.templateName: ${IA_INTERNAL_DETAINED_APPEAL_FEE_IS_DUE_TEMPLATE:TB-IAC-LET-ENG-00001.docx}
 
 internalDetainedMarkAppealPaid.contentType:  application/pdf
 internalDetainedMarkAppealPaid.fileExtension: PDF
@@ -364,6 +364,7 @@ security:
       - "uploadSignedDecisionNotice"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "recordRemissionDecision"
     citizen:
       - "startAppeal"
       - "editAppeal"

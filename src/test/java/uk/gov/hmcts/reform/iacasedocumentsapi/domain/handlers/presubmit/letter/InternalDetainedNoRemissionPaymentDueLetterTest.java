@@ -47,12 +47,12 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
     @Mock private Document uploadedDocument;
     private final YesOrNo yes = YesOrNo.YES;
     private final YesOrNo no = YesOrNo.NO;
-    private InternalDetainedNoRemissionPaymentDueLetter internalDetainedNoRemissionPaymentDueLetter;
+    private InternalDetainedAppealFeeDueLetterGenerator internalDetainedAppealFeeDueLetterGenerator;
 
     @BeforeEach
     public void setUp() {
-        internalDetainedNoRemissionPaymentDueLetter =
-                new InternalDetainedNoRemissionPaymentDueLetter(
+        internalDetainedAppealFeeDueLetterGenerator =
+                new InternalDetainedAppealFeeDueLetterGenerator(
                         internalDetainedNoRemissionPaymentDueLetterCreator,
                         documentHandler
                 );
@@ -75,7 +75,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
         when(internalDetainedNoRemissionPaymentDueLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalDetainedNoRemissionPaymentDueLetter.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalDetainedAppealFeeDueLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -88,12 +88,12 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        assertThatThrownBy(() -> internalDetainedNoRemissionPaymentDueLetter.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalDetainedNoRemissionPaymentDueLetter.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -108,7 +108,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.empty());
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -125,7 +125,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
             when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.empty());
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -142,7 +142,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(callbackStage, callback);
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && callback.getEvent().equals(Event.SUBMIT_APPEAL)) {
                     assertTrue(canHandle);
@@ -160,7 +160,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
 
         when(caseDetails.getState()).thenReturn(state);
 
-        boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         if (state.equals(State.PENDING_PAYMENT)) {
             assertTrue(canHandle);
@@ -175,7 +175,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         if (yesOrNo == yes) {
             assertTrue(canHandle);
@@ -190,7 +190,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
 
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         if (yesOrNo == yes) {
             assertTrue(canHandle);
@@ -205,7 +205,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
 
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         if (yesOrNo == no) {
             assertTrue(canHandle);
@@ -220,7 +220,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
 
         when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
 
-        boolean canHandle = internalDetainedNoRemissionPaymentDueLetter.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         if (List.of(HU.getValue(), EA.getValue(), EU.getValue()).contains(appealType.getValue())) {
             assertTrue(canHandle);
@@ -232,19 +232,19 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalDetainedNoRemissionPaymentDueLetter.canHandle(null, callback))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueLetterGenerator.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedNoRemissionPaymentDueLetter.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedNoRemissionPaymentDueLetter.handle(null, callback))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueLetterGenerator.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedNoRemissionPaymentDueLetter.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetainedAppealFeeDueLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }
