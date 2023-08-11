@@ -126,6 +126,9 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_APPEAL_FEE_DUE_LETTER:
                 log.warn("INTERNAL_APPEAL_FEE_DUE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 42;
+            case INTERNAL_DET_MARK_AS_PAID_LETTER:
+                log.warn("INTERNAL_DET_MARK_AS_PAID_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 43;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

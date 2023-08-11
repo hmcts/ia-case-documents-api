@@ -1,19 +1,18 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
-import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
@@ -21,23 +20,22 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
-
 
 @Component
-public class InternalDetainedNoRemissionPaymentDueLetter implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetMarkAsPaidLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> internalDetainedNoRemissionPaymentDueCreator;
+    private final DocumentCreator<AsylumCase> internalDetMarkAsPaidLetterLetterCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalDetainedNoRemissionPaymentDueLetter(
-            @Qualifier("internalDetainedNoRemissionPaymentDue") DocumentCreator<AsylumCase> internalDetainedNoRemissionPaymentDueCreator,
+    public InternalDetMarkAsPaidLetterGenerator(
+            @Qualifier("internalDetMarkAsPaidLetter") DocumentCreator<AsylumCase> internalDetMarkAsPaidLetterLetterCreator,
             DocumentHandler documentHandler
     ) {
-        this.internalDetainedNoRemissionPaymentDueCreator = internalDetainedNoRemissionPaymentDueCreator;
+        this.internalDetMarkAsPaidLetterLetterCreator = internalDetMarkAsPaidLetterLetterCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -49,22 +47,26 @@ public class InternalDetainedNoRemissionPaymentDueLetter implements PreSubmitCal
         requireNonNull(callback, "callback must not be null");
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+        State currentState = callback.getCaseDetails().getState();
 
-        String appealType = String.valueOf(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)
-                .orElseThrow(() -> new RequiredFieldMissingException("Appeal type not found")));
-        boolean isHuEaEu = List.of(HU.getValue(), EA.getValue(), EU.getValue()).contains(appealType);
+        boolean isCorrectAppealTypePA = asylumCase
+                .read(APPEAL_TYPE, AsylumAppealType.class)
+                .map(type -> type == PA).orElse(false);
 
-        boolean isNoRemission = asylumCase.read(REMISSION_TYPE, RemissionType.class)
-                .map(remission -> remission == RemissionType.NO_REMISSION).orElse(false);
+        boolean isCorrectAppealTypeAndStateEaHuEu =
+                isEaHuEuAppeal(asylumCase) && (currentState == State.APPEAL_SUBMITTED);
 
-        return callback.getEvent() == Event.SUBMIT_APPEAL
+        Optional<PaymentStatus> paymentStatus = asylumCase
+                .read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class);
+
+        return callback.getEvent() == Event.MARK_APPEAL_PAID
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getCaseDetails().getState().equals(State.PENDING_PAYMENT)
-                && AsylumCaseUtils.isInternalCase(asylumCase)
-                && AsylumCaseUtils.isAppellantInDetention(asylumCase)
-                && !isAcceleratedDetainedAppeal(asylumCase)
-                && isNoRemission
-                && isHuEaEu;
+                && (isCorrectAppealTypePA || isCorrectAppealTypeAndStateEaHuEu)
+                && paymentStatus.isPresent()
+                && paymentStatus.get().equals(PaymentStatus.PAID)
+                && isInternalCase(asylumCase)
+                && isAppellantInDetention(asylumCase)
+                && !isAcceleratedDetainedAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -78,12 +80,12 @@ public class InternalDetainedNoRemissionPaymentDueLetter implements PreSubmitCal
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalDetainedNoRemissionPaymentDueLetter = internalDetainedNoRemissionPaymentDueCreator.create(caseDetails);
+        Document internalDetMarkAsPaidLetter = internalDetMarkAsPaidLetterLetterCreator.create(caseDetails);
         documentHandler.addWithMetadata(
                 asylumCase,
-                internalDetainedNoRemissionPaymentDueLetter,
+                internalDetMarkAsPaidLetter,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER
+                DocumentTag.INTERNAL_DET_MARK_AS_PAID_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
