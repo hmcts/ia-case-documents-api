@@ -264,6 +264,11 @@ internalDetainedNoRemissionPaymentDue.fileExtension: PDF
 internalDetainedNoRemissionPaymentDue.fileName: "internal-detained-payment-due-no-remission-letter"
 internalDetainedNoRemissionPaymentDue.templateName: ${IA_INTERNAL_DETAINED_REQUEST_RESPONDENT_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00001.docx}
 
+internalDetainedMarkAppealPaid.contentType:  application/pdf
+internalDetainedMarkAppealPaid.fileExtension: PDF
+internalDetainedMarkAppealPaid.fileName: "detained-appellant-mark-appeal-paid-notice"
+internalDetainedMarkAppealPaid.templateName: ${IA_INTERNAL_DETAINED_MARK_APPEAL_PAID_TEMPLATE:TB-IAC-LET-ENG-00004.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -334,6 +339,7 @@ security:
       - "requestCaseBuilding"
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
+      - "markAppealPaid"
       - "requestResponseReview"
     caseworker-ia-admofficer:
       - "listCase"
@@ -357,6 +363,7 @@ security:
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
       - "editAppealAfterSubmit"
+      - "markAppealPaid"
     citizen:
       - "startAppeal"
       - "editAppeal"

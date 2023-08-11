@@ -97,7 +97,7 @@ public enum AsylumCaseDefinition {
         "appellantAddress", new TypeReference<AddressUk>(){}),
 
     APPEAL_TYPE(
-        "appealType", new TypeReference<String>(){}),
+        "appealType", new TypeReference<AsylumAppealType>(){}),
 
     REASONS_FOR_APPEAL_DECISION(
         "reasonsForAppealDecision", new TypeReference<String>(){}),
@@ -543,7 +543,13 @@ public enum AsylumCaseDefinition {
             "ccdReferenceNumberForDisplay", new TypeReference<String>(){}),
 
     FEE_AMOUNT_GBP(
-            "feeAmountGbp", new TypeReference<String>(){});
+            "feeAmountGbp", new TypeReference<String>(){}),
+
+    AMOUNT_REMITTED(
+            "amountRemitted", new TypeReference<String>(){}),
+
+    PAID_AMOUNT(
+            "paidAmount", new TypeReference<String>(){});
 
     private final String value;
     private final TypeReference typeReference;
