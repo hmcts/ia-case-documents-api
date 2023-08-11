@@ -119,9 +119,15 @@ public class AsylumCaseUtils {
     }
 
     private static double getAmountRemitted(AsylumCase asylumCase) {
-        double feeAmountInPence = Double.parseDouble(asylumCase.read(AMOUNT_REMITTED, String.class)
+        Optional<RemissionDecision> remissionDecision = asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
+
+        if (remissionDecision.isPresent() && remissionDecision.get().equals(RemissionDecision.REJECTED)) {
+            return 0;
+        } else {
+            double feeAmountInPence = Double.parseDouble(asylumCase.read(AMOUNT_REMITTED, String.class)
                 .orElseThrow(() -> new RequiredFieldMissingException("Amount remitted not found")));
-        return feeAmountInPence / 100;
+            return feeAmountInPence / 100;
+        }
     }
 
     public static double getFeeRemission(AsylumCase asylumCase) {
