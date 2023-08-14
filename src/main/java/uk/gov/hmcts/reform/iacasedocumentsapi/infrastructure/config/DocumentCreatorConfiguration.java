@@ -834,4 +834,24 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedListCase")
+    public DocumentCreator<AsylumCase> getInternalDetainedListCaseDocumentCreator(
+        @Value("${internalDetainedListCaseLetter.contentType}") String contentType,
+        @Value("${internalDetainedListCaseLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedListCaseLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedListCaseLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 }

@@ -269,6 +269,11 @@ internalDetainedMarkAppealPaid.fileExtension: PDF
 internalDetainedMarkAppealPaid.fileName: "detained-appellant-mark-appeal-paid-notice"
 internalDetainedMarkAppealPaid.templateName: ${IA_INTERNAL_DETAINED_MARK_APPEAL_PAID_TEMPLATE:TB-IAC-LET-ENG-00004.docx}
 
+internalDetainedListCaseLetter.contentType: application/pdf
+internalDetainedListCaseLetter.fileExtension: PDF
+internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
+internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
