@@ -65,7 +65,7 @@ public class InternalDetainedListCaseLetterGenerator implements PreSubmitCallbac
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalDetainedListCaseLetter,
-            TRIBUNAL_DOCUMENTS,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
             DocumentTag.INTERNAL_LIST_CASE_LETTER
         );
 
