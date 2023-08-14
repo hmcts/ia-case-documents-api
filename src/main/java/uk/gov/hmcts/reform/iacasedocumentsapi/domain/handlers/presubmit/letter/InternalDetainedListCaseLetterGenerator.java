@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Objects;
@@ -62,7 +61,7 @@ public class InternalDetainedListCaseLetterGenerator implements PreSubmitCallbac
 
         Document internalDetainedListCaseLetter = documentCreator.create(caseDetails);
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+        documentHandler.addWithMetadata(
             asylumCase,
             internalDetainedListCaseLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,

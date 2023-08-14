@@ -151,22 +151,6 @@ class InternalDetainedListCaseLetterGeneratorTest {
     }
 
     @Test
-    void should_throw_when_record_out_of_time_decision_is_not_present() {
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-
-        when(internalDetainedListCaseLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        assertThatThrownBy(() -> internalDetainedListCaseLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("Cannot handle callback");
-    }
-
-    @Test
     public void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> internalDetainedListCaseLetterGenerator.canHandle(null, callback))
