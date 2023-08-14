@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7556 Internal detained non-ADA request respondent evidence - document PDF",
+  "description": "RIA-7556 Internal detained non-ADA request HO response review - decision maintained",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -42,6 +42,7 @@
         "isAdmin": "Yes",
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
+        "appealReviewOutcome": "decisionMaintained",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
@@ -53,7 +54,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "uploadTheAppealResponse"
+              "tag": "internalDetainedRequestHomeOfficeResponseReview"
             }
           }
         ]

@@ -53,10 +53,11 @@ public class DocumentTagTest {
         assertEquals("internalAppealFeeDueLetter", DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER.toString());
         assertEquals("internalDetMarkAsPaidLetter", DocumentTag.INTERNAL_DET_MARK_AS_PAID_LETTER.toString());
         assertEquals("internalListCaseLetter", DocumentTag.INTERNAL_LIST_CASE_LETTER.toString());
+        assertEquals("internalDetainedRequestHomeOfficeResponseReview", DocumentTag.INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(52, DocumentTag.values().length);
+        assertEquals(53, DocumentTag.values().length);
     }
 }
