@@ -49,6 +49,7 @@ public enum DocumentTag {
     INTERNAL_END_APPEAL_AUTOMATICALLY("internalEndAppealAutomatically", CaseType.ASYLUM),
     INTERNAL_APPEAL_FEE_DUE_LETTER("internalAppealFeeDueLetter", CaseType.ASYLUM),
     INTERNAL_DET_MARK_AS_PAID_LETTER("internalDetMarkAsPaidLetter", CaseType.ASYLUM),
+    INTERNAL_LIST_CASE_LETTER("internalListCaseLetter", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
