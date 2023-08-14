@@ -236,7 +236,7 @@ internalDetainedReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays: 5
 
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.contentType: application/pdf
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileExtension: PDF
-internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileName: " Review-Home-Office-Response-Decision-Withdrawn"
+internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileName: "Review-Home-Office-Response-Decision-Withdrawn"
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_WITHDRAWN_TEMPLATE:TB-IAC-LET-ENG-00014.docx}
 
 bailEndApplication.contentType:  application/pdf
