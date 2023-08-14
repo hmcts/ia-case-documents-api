@@ -836,9 +836,9 @@ public class DocumentCreatorConfiguration {
 
     @Bean("internalDetainedListCase")
     public DocumentCreator<AsylumCase> getInternalDetainedListCaseDocumentCreator(
-        @Value("${internalDetainedEndAppealAutomatically.contentType}") String contentType,
-        @Value("${internalDetainedEndAppealAutomatically.fileExtension}") String fileExtension,
-        @Value("${internalDetainedEndAppealAutomatically.fileName}") String fileName,
+        @Value("${internalDetainedListCaseLetter.contentType}") String contentType,
+        @Value("${internalDetainedListCaseLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedListCaseLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalDetainedListCaseLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
