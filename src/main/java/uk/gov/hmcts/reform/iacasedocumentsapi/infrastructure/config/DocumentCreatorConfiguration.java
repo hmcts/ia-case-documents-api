@@ -854,4 +854,26 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+
+    @Bean("internalDetainedRequestHearingRequirements")
+    public DocumentCreator<AsylumCase> getInternalDetainedRequestHearingRequirementsCreator(
+            @Value("${internalDetainedRequestHearingRequirements.contentType}") String contentType,
+            @Value("${internalDetainedRequestHearingRequirements.fileExtension}") String fileExtension,
+            @Value("${internalDetainedRequestHearingRequirements.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedRequestHearingRequirementsTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }

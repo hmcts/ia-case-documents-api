@@ -274,6 +274,11 @@ internalDetainedListCaseLetter.fileExtension: PDF
 internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
 internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
 
+internalDetainedRequestHearingRequirements.contentType:  application/pdf
+internalDetainedRequestHearingRequirements.fileExtension: PDF
+internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"
+internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_REQUEST_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-LET-ENG-00006.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -346,6 +351,7 @@ security:
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
       - "requestResponseReview"
+      - "requestHearingRequirementsFeature"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
