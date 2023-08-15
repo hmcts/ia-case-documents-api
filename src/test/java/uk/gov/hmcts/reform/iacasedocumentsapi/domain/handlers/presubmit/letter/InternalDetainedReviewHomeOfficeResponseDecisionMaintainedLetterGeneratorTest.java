@@ -29,9 +29,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalReviewHomeOfficeResponseLetterGeneratorTest {
+class InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGeneratorTest {
     @Mock
-    private DocumentCreator<AsylumCase> internalReviewHomeOfficeResponseLetterCreator;
+    private DocumentCreator<AsylumCase> internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterCreator;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
@@ -42,13 +42,13 @@ class InternalReviewHomeOfficeResponseLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
-    private InternalReviewHomeOfficeResponseLetterGenerator internalReviewHomeOfficeResponseLetterGenerator;
+    private InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator;
 
     @BeforeEach
     public void setUp() {
-        internalReviewHomeOfficeResponseLetterGenerator =
-                new InternalReviewHomeOfficeResponseLetterGenerator(
-                        internalReviewHomeOfficeResponseLetterCreator,
+        internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator =
+                new InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator(
+                        internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterCreator,
                         documentHandler
                 );
     }
@@ -63,33 +63,33 @@ class InternalReviewHomeOfficeResponseLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(callback.getCaseDetails().getCaseData().read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)).thenReturn(Optional.of(AppealReviewOutcome.DECISION_MAINTAINED));
 
-        when(internalReviewHomeOfficeResponseLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalReviewHomeOfficeResponseLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.UPLOAD_THE_APPEAL_RESPONSE);
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW);
     }
 
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalReviewHomeOfficeResponseLetterGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalReviewHomeOfficeResponseLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalReviewHomeOfficeResponseLetterGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalReviewHomeOfficeResponseLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }
@@ -108,7 +108,7 @@ class InternalReviewHomeOfficeResponseLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)).thenReturn(Optional.of(AppealReviewOutcome.DECISION_MAINTAINED));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalReviewHomeOfficeResponseLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.canHandle(callbackStage, callback);
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                         && callback.getEvent().equals(Event.REQUEST_RESPONSE_REVIEW)) {
@@ -135,7 +135,7 @@ class InternalReviewHomeOfficeResponseLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)).thenReturn(Optional.of(AppealReviewOutcome.DECISION_MAINTAINED));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalReviewHomeOfficeResponseLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -155,7 +155,7 @@ class InternalReviewHomeOfficeResponseLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)).thenReturn(Optional.of(AppealReviewOutcome.DECISION_MAINTAINED));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalReviewHomeOfficeResponseLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -175,7 +175,7 @@ class InternalReviewHomeOfficeResponseLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)).thenReturn(Optional.of(AppealReviewOutcome.DECISION_WITHDRAWN));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalReviewHomeOfficeResponseLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -195,7 +195,7 @@ class InternalReviewHomeOfficeResponseLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)).thenReturn(Optional.of(AppealReviewOutcome.DECISION_MAINTAINED));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalReviewHomeOfficeResponseLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);

@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
-class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
+class InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -44,7 +44,7 @@ class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
     private final String templateName = "INTERNAL_REVIEW_HOME_OFFICE_RESPONSE_NOTICE_TEMPLATE.docx";
     private final String logo = "[userImage:hmcts.png]";
     private final int dueInCalendarDays = 5;
-    private InternalReviewHomeOfficeResponseMaintainedLetterTemplate internalReviewHomeOfficeResponseMaintainedLetterTemplate;
+    private InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate;
     private Map<String, Object> fieldValuesMap;
     private final String directionExplanation = "Some explanation";
     private final Parties directionParties = Parties.APPELLANT;
@@ -69,8 +69,8 @@ class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
 
     @BeforeEach
     public void setUp() {
-        internalReviewHomeOfficeResponseMaintainedLetterTemplate =
-                new InternalReviewHomeOfficeResponseMaintainedLetterTemplate(
+        internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate =
+                new InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate(
                         templateName,
                         dateProvider,
                         customerServicesProvider,
@@ -79,7 +79,7 @@ class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalReviewHomeOfficeResponseMaintainedLetterTemplate.getName());
+        assertEquals(templateName, internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate.getName());
     }
 
     void dataSetup() {
@@ -99,7 +99,7 @@ class InternalReviewHomeOfficeResponseMaintainedLetterTemplateTest {
     @Test
     void should_populate_template() {
         dataSetup();
-        fieldValuesMap = internalReviewHomeOfficeResponseMaintainedLetterTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));

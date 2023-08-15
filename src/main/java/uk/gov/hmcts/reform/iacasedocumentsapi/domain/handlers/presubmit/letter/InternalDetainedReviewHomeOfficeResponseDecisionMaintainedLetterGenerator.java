@@ -21,13 +21,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
-public class InternalReviewHomeOfficeResponseLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> internalReviewHomeOfficeResponseLetterCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalReviewHomeOfficeResponseLetterGenerator(
-            @Qualifier("internalReviewHomeOfficeResponseMaintainedLetter") DocumentCreator<AsylumCase> internalReviewHomeOfficeResponseLetterCreator,
+    public InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterGenerator(
+            @Qualifier("internalDetainedReviewHomeOfficeResponseDecisionMaintainedLetter") DocumentCreator<AsylumCase> internalReviewHomeOfficeResponseLetterCreator,
             DocumentHandler documentHandler
     ) {
         this.internalReviewHomeOfficeResponseLetterCreator = internalReviewHomeOfficeResponseLetterCreator;
@@ -47,7 +47,7 @@ public class InternalReviewHomeOfficeResponseLetterGenerator implements PreSubmi
                 && isInternalCase(asylumCase)
                 && !isAcceleratedDetainedAppeal(asylumCase)
                 && isAppellantInDetention(asylumCase)
-                && getAppealReviewOutcome(asylumCase).equals("decisionMaintained");
+                && getAppealReviewOutcome(asylumCase).equals(AppealReviewOutcome.DECISION_MAINTAINED);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -66,16 +66,14 @@ public class InternalReviewHomeOfficeResponseLetterGenerator implements PreSubmi
                 asylumCase,
                 uploadTheAppealResponseLetter,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.UPLOAD_THE_APPEAL_RESPONSE
+                DocumentTag.INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    private String getAppealReviewOutcome(AsylumCase asylumCase) {
-        AppealReviewOutcome appealReviewOutcome = asylumCase.read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)
+    private AppealReviewOutcome getAppealReviewOutcome(AsylumCase asylumCase) {
+        return asylumCase.read(APPEAL_REVIEW_OUTCOME, AppealReviewOutcome.class)
                 .orElseThrow(() -> new IllegalStateException("Appeal review outcome is not present"));
-
-        return appealReviewOutcome.toString();
     }
 }
