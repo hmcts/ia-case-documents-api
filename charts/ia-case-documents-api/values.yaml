@@ -28,6 +28,7 @@ java:
         - em-stitching-enabled
         - docmosis-access-key
         - launch-darkly-sdk-key
+        - ia-config-validator-secret
         - AppInsightsInstrumentationKey
         - customer-services-telephone
         - customer-services-email
@@ -39,3 +40,4 @@ java:
         - hearing-centre-birmingham-email
         - hearing-centre-hatton-cross-email
         - hearing-centre-glasgow-email
+        - app-insights-connection-string

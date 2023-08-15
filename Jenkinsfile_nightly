@@ -2,7 +2,7 @@
 
 properties([
     // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-    pipelineTriggers([cron('H 22 * * *')]),
+    pipelineTriggers([cron('H 8 * * 1-5')]),
     parameters([
         string(name: 'URL_TO_TEST', defaultValue: 'http://ia-case-documents-api-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
         string(name: 'SecurityRules',
@@ -37,6 +37,9 @@ def secrets = [
         secret('s2s-secret', 'IA_S2S_SECRET'),
         secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
         secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY'),
+        secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
+
+        secret('app-insights-connection-string', 'app-insights-connection-string'),
 
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
