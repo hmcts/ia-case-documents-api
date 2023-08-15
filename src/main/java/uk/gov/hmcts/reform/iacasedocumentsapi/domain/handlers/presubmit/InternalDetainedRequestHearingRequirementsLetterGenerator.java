@@ -68,13 +68,6 @@ public class InternalDetainedRequestHearingRequirementsLetterGenerator implement
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER
         );
-        documentHandler.addWithMetadata(
-                asylumCase,
-                internalDetainedRequestRespondentEvidenceLetter,
-                LEGAL_REPRESENTATIVE_DOCUMENTS,
-                DocumentTag.HEARING_NOTICE
-        );
-
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }
