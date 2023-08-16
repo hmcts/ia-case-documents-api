@@ -138,8 +138,8 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.40'
-    configDir = new File(rootDir, 'config/checkstyle')
+    toolVersion = '10.12.0'
+    configDirectory.set(new File(rootDir, 'config/checkstyle'))
 }
 
 
