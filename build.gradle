@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:3.2.3")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.11")
     }
 }
 
@@ -138,8 +138,8 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.12.0'
-    configDirectory.set(new File(rootDir, 'config/checkstyle'))
+    toolVersion = '8.40'
+    configDir = new File(rootDir, 'config/checkstyle')
 }
 
 
