@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
-public class InternalReviewHomeOfficeResponseMaintainedLetterTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private final String templateName;
@@ -26,11 +26,11 @@ public class InternalReviewHomeOfficeResponseMaintainedLetterTemplate implements
     private final CustomerServicesProvider customerServicesProvider;
     private final int dueInCalendarDays;
 
-    public InternalReviewHomeOfficeResponseMaintainedLetterTemplate(
-            @Value("${internalReviewHomeOfficeResponseMaintainedLetter.templateName}") String templateName,
+    public InternalDetainedReviewHomeOfficeResponseDecisionMaintainedLetterTemplate(
+            @Value("${internalDetainedReviewHomeOfficeResponseMaintainedLetter.templateName}") String templateName,
             DateProvider dateProvider,
             CustomerServicesProvider customerServicesProvider,
-            @Value("${internalReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays}") int dueInCalendarDays) {
+            @Value("${internalDetainedReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays}") int dueInCalendarDays) {
         this.templateName = templateName;
         this.dateProvider = dateProvider;
         this.customerServicesProvider = customerServicesProvider;

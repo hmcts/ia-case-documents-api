@@ -228,11 +228,16 @@ uploadAppealResponseMaintainedLetter.fileExtension: PDF
 uploadAppealResponseMaintainedLetter.fileName: "HO-Response-Letter"
 uploadAppealResponseMaintainedLetter.templateName: ${IA_HO_REVIEW_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00004.docx}
 
-internalReviewHomeOfficeResponseMaintainedLetter.contentType: application/pdf
-internalReviewHomeOfficeResponseMaintainedLetter.fileExtension: PDF
-internalReviewHomeOfficeResponseMaintainedLetter.fileName: "Review-HO-Response-Letter"
-internalReviewHomeOfficeResponseMaintainedLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00013.doc}
-internalReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays: 5
+internalDetainedReviewHomeOfficeResponseMaintainedLetter.contentType: application/pdf
+internalDetainedReviewHomeOfficeResponseMaintainedLetter.fileExtension: PDF
+internalDetainedReviewHomeOfficeResponseMaintainedLetter.fileName: "Review-HO-Response-Letter"
+internalDetainedReviewHomeOfficeResponseMaintainedLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00013.doc}
+internalDetainedReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays: 5
+
+internalDetainedReviewHomeOfficeResponseWithdrawnLetter.contentType: application/pdf
+internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileExtension: PDF
+internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileName: "Review-Home-Office-Response-Decision-Withdrawn"
+internalDetainedReviewHomeOfficeResponseWithdrawnLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_WITHDRAWN_TEMPLATE:TB-IAC-LET-ENG-00014.docx}
 
 bailEndApplication.contentType:  application/pdf
 bailEndApplication.fileExtension: PDF
@@ -268,6 +273,16 @@ internalDetainedMarkAppealPaid.contentType:  application/pdf
 internalDetainedMarkAppealPaid.fileExtension: PDF
 internalDetainedMarkAppealPaid.fileName: "detained-appellant-mark-appeal-paid-notice"
 internalDetainedMarkAppealPaid.templateName: ${IA_INTERNAL_DETAINED_MARK_APPEAL_PAID_TEMPLATE:TB-IAC-LET-ENG-00004.docx}
+
+internalDetainedListCaseLetter.contentType: application/pdf
+internalDetainedListCaseLetter.fileExtension: PDF
+internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
+internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
+
+internalDetainedRequestHearingRequirements.contentType:  application/pdf
+internalDetainedRequestHearingRequirements.fileExtension: PDF
+internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"
+internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_REQUEST_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-LET-ENG-00006.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -341,6 +356,7 @@ security:
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
       - "requestResponseReview"
+      - "requestHearingRequirementsFeature"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
