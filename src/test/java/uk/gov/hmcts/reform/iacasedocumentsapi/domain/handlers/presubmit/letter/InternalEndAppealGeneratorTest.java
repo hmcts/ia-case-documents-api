@@ -70,7 +70,7 @@ class InternalEndAppealGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase, uploadedDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_END_APPEAL
+                DocumentTag.END_APPEAL
         );
     }
 

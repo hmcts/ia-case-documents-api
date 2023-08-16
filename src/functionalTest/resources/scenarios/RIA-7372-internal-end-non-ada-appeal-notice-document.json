@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7372 end appeal automatically notice document PDF",
+  "description": "RIA-7372 end appeal for non Ada notice document PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -13,7 +13,8 @@
           "endAppealDate": "2022-08-01",
           "appellantInDetention": "Yes",
           "isAdmin": "Yes",
-          "appealSubmissionDate": "{$TODAY}"
+          "appealSubmissionDate": "{$TODAY}",
+          "isAcceleratedDetainedAppeal": "No"
         }
       }
     }
@@ -27,6 +28,7 @@
         "appellantInDetention": "Yes",
         "isAdmin": "Yes",
         "appealSubmissionDate": "{$TODAY}",
+        "isAcceleratedDetainedAppeal": "No",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
@@ -38,7 +40,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalEndAppeal"
+              "tag": "endAppeal"
             }
           }
         ]

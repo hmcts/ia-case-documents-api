@@ -65,7 +65,7 @@ public class InternalEndAppealGenerator implements PreSubmitCallbackHandler<Asyl
                 asylumCase,
                 internalEndAppealNotice,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_END_APPEAL
+                DocumentTag.END_APPEAL
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
