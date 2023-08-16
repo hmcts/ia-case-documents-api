@@ -74,7 +74,7 @@ class InternalEndAppealTemplateTest {
     }
 
     @ParameterizedTest
-    @MethodSource("shoudReturnNonAdaOrAda")
+    @MethodSource("getAdaAndNonAdaArguments")
     void should_populate_template_correctly(String email, YesOrNo yesOrNo) {
         dataSetup();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
@@ -97,7 +97,7 @@ class InternalEndAppealTemplateTest {
         }
     }
 
-    private static Stream<Arguments> shoudReturnNonAdaOrAda() {
+    private static Stream<Arguments> getAdaAndNonAdaArguments() {
 
         return Stream.of(
                 Arguments.of("IAC-ADA-HW@justice.gov.uk", YesOrNo.YES),

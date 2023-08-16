@@ -21,6 +21,8 @@ public class InternalEndAppealTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
+    private final String adaFormName = "IAFT-ADA4: Make an application – Accelerated detained appeal (ADA)";
+    private final String nonAdaFormName = "IAFT-DE4: Make an application – Detained appeal";
 
     public InternalEndAppealTemplate(
             @Value("${internalDetainedEndAppeal.templateName}") String templateName,
@@ -53,7 +55,7 @@ public class InternalEndAppealTemplate implements DocumentTemplate<AsylumCase> {
 
     private String resolveFormName(AsylumCase asylumCase) {
         return isAcceleratedDetainedAppeal(asylumCase)
-                ? "IAFT-ADA4: Make an application – Accelerated detained appeal (ADA)"
-                : "IAFT-DE4: Make an application – Detained appeal";
+                ? adaFormName
+                : nonAdaFormName;
     }
 }
