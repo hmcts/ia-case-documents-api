@@ -16,8 +16,8 @@
             {
               "id": "1",
               "value": {
-                "witnessName": "Peter",
-                "witnessFamilyName": "Chan"
+                "witnessName": "Witness",
+                "witnessFamilyName": "1"
               }
             }
           ],
@@ -49,29 +49,29 @@
           },
           "isAnyWitnessInterpreterRequired": "Yes",
           "witness1": {
-            "witnessName": "Peter",
-            "witnessFamilyName": "Chan"
+            "witnessName": "Witness",
+            "witnessFamilyName": "1"
           },
           "witnessListElement1": {
             "value": [{
-              "code": "Peter Chan",
-              "label": "Peter Chan"
+              "code": "Witness 1",
+              "label": "Witness 1"
             }
             ],
             "list_items": [{
-              "code": "Peter Chan",
-              "label": "Peter Chan"
+              "code": "Witness 1",
+              "label": "Witness 1"
             }
             ]
           },
           "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
           "witness1InterpreterSpokenLanguage": {
             "languageManualEntry": ["Yes"],
-            "languageManualEntryDescription": "Peter Chan spoken language"
+            "languageManualEntryDescription": "Witness 1 spoken language"
           },
           "witness1InterpreterSignLanguage": {
             "languageManualEntry": ["Yes"],
-            "languageManualEntryDescription": "Peter Chan sign language"
+            "languageManualEntryDescription": "Witness 1 sign language"
           },
           "isHearingRoomNeeded": "Yes",
           "isHearingLoopNeeded": "Yes",
@@ -122,8 +122,8 @@
           {
             "id": "1",
             "value": {
-              "witnessName": "Peter",
-              "witnessFamilyName": "Chan"
+              "witnessName": "Witness",
+              "witnessFamilyName": "1"
             }
           }
         ],
@@ -155,29 +155,29 @@
         },
         "isAnyWitnessInterpreterRequired": "Yes",
         "witness1": {
-          "witnessName": "Peter",
-          "witnessFamilyName": "Chan"
+          "witnessName": "Witness",
+          "witnessFamilyName": "1"
         },
         "witnessListElement1": {
           "value": [{
-            "code": "Peter Chan",
-            "label": "Peter Chan"
+            "code": "Witness 1",
+            "label": "Witness 1"
           }
           ],
           "list_items": [{
-            "code": "Peter Chan",
-            "label": "Peter Chan"
+            "code": "Witness 1",
+            "label": "Witness 1"
           }
           ]
         },
         "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
         "witness1InterpreterSpokenLanguage": {
           "languageManualEntry": ["Yes"],
-          "languageManualEntryDescription": "Peter Chan spoken language"
+          "languageManualEntryDescription": "Witness 1 spoken language"
         },
         "witness1InterpreterSignLanguage": {
           "languageManualEntry": ["Yes"],
-          "languageManualEntryDescription": "Peter Chan sign language"
+          "languageManualEntryDescription": "Witness 1 sign language"
         },
         "isHearingRoomNeeded": "Yes",
         "isHearingLoopNeeded": "Yes",
