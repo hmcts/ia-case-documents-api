@@ -37,6 +37,9 @@ def secrets = [
         secret('s2s-secret', 'IA_S2S_SECRET'),
         secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
         secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY'),
+        secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
+
+        secret('app-insights-connection-string', 'app-insights-connection-string'),
 
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
