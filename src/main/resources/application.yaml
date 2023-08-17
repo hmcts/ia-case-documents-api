@@ -284,6 +284,11 @@ internalDetainedRequestHearingRequirements.fileExtension: PDF
 internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"
 internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_REQUEST_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-LET-ENG-00006.docx}
 
+internalDetainedEndAppeal.contentType:  application/pdf
+internalDetainedEndAppeal.fileExtension: PDF
+internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
+internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
