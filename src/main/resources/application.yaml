@@ -331,6 +331,7 @@ security:
       - "payAndSubmitAppeal"
       - "submitApplication"
       - "makeNewApplication"
+      - "requestHearingRequirementsFeature"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
