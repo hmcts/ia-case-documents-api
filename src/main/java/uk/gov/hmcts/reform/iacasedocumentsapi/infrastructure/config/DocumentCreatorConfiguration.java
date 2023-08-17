@@ -897,4 +897,25 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("internalEndAppealNotice")
+    public DocumentCreator<AsylumCase> getInternalEndAppealDocumentCreator(
+            @Value("${internalDetainedEndAppeal.contentType}") String contentType,
+            @Value("${internalDetainedEndAppeal.fileExtension}") String fileExtension,
+            @Value("${internalDetainedEndAppeal.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalEndAppealTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
