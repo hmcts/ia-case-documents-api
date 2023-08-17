@@ -289,6 +289,11 @@ internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
 internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
 
+internalDetainedEditCaseListingLetter.contentType: application/pdf
+internalDetainedEditCaseListingLetter.fileExtension: PDF
+internalDetainedEditCaseListingLetter.fileName: "detained-appellant-edit-case-listing-letter"
+internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
