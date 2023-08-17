@@ -230,13 +230,13 @@ uploadAppealResponseMaintainedLetter.templateName: ${IA_HO_REVIEW_DECISION_MAINT
 
 internalDetainedReviewHomeOfficeResponseMaintainedLetter.contentType: application/pdf
 internalDetainedReviewHomeOfficeResponseMaintainedLetter.fileExtension: PDF
-internalDetainedReviewHomeOfficeResponseMaintainedLetter.fileName: "Review-HO-Response-Letter"
+internalDetainedReviewHomeOfficeResponseMaintainedLetter.fileName: "Detained appellant letter_HO response when decision maintained"
 internalDetainedReviewHomeOfficeResponseMaintainedLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00013.doc}
 internalDetainedReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays: 5
 
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.contentType: application/pdf
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileExtension: PDF
-internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileName: "Review-Home-Office-Response-Decision-Withdrawn"
+internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileName: "Detained appellant letter_HO response when decision withdrawn"
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_WITHDRAWN_TEMPLATE:TB-IAC-LET-ENG-00014.docx}
 
 bailEndApplication.contentType:  application/pdf
@@ -283,6 +283,11 @@ internalDetainedRequestHearingRequirements.contentType:  application/pdf
 internalDetainedRequestHearingRequirements.fileExtension: PDF
 internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"
 internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_REQUEST_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-LET-ENG-00006.docx}
+
+internalDetainedEndAppeal.contentType:  application/pdf
+internalDetainedEndAppeal.fileExtension: PDF
+internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
+internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -331,6 +336,7 @@ security:
       - "payAndSubmitAppeal"
       - "submitApplication"
       - "makeNewApplication"
+      - "requestHearingRequirementsFeature"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
