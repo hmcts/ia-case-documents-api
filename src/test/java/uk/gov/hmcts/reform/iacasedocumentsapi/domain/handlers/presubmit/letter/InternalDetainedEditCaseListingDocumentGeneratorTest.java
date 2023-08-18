@@ -122,6 +122,37 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
     }
 
     @Test
+    public void handling_should_throw_if_non_ada_case_details_before_is_missing() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(internalDetainedEditCaseListingLetterCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+
+        assertThatThrownBy(() -> internalDetainedEditCaseListingDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+                .hasMessage("previous case data is not present")
+                .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    public void handling_should_throw_if_ada_case_details_before_is_missing() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(internalDetainedEditCaseListingLetterCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+
+        assertThatThrownBy(() -> internalDetainedEditCaseListingDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+                .hasMessage("previous case data is not present")
+                .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     public void it_cannot_handle_callback_if_is_admin_is_missing() {
 
         for (Event event : Event.values()) {

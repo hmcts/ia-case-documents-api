@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -105,5 +106,37 @@ public class InternalDetainedEditCaseListingLetterTemplateTest {
         assertEquals(formattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
+    }
+
+    @Test
+    void should_throw_when_list_case_hearing_centre_not_present() {
+        dataSetUp();
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> internalDetainedEditCaseListingLetterTemplate.mapFieldValues(caseDetails, caseDetailsBefore))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("listCaseHearingCentre is not present");
+
+    }
+
+    @Test
+    void should_throw_when_list_case_hearing_centre_before_not_present() {
+        dataSetUp();
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> internalDetainedEditCaseListingLetterTemplate.mapFieldValues(caseDetails, caseDetailsBefore))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("listCaseHearingCentre (before) is not present");
+
+    }
+
+    @Test
+    public void should_throw_exception_when_hearing_centre_name_cannot_be_found() {
+        dataSetUp();
+        when(stringProvider.get("hearingCentreName", HearingCentre.TAYLOR_HOUSE.toString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> internalDetainedEditCaseListingLetterTemplate.mapFieldValues(caseDetails, caseDetailsBefore))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("listCaseHearingCentre (before) is not present");
     }
 }
