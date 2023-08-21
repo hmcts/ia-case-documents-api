@@ -52,6 +52,7 @@ public enum DocumentTag {
     INTERNAL_LIST_CASE_LETTER("internalListCaseLetter", CaseType.ASYLUM),
     INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER("internalRequestHearingRequirementsLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW("internalDetainedRequestHomeOfficeResponseReview", CaseType.ASYLUM),
+    INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER("internalDetainedEditCaseListingLetter", CaseType.ASYLUM),
     INTERNAL_DET_MARK_AS_ADA_LETTER("internalDetMarkAsAdaLetter", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),

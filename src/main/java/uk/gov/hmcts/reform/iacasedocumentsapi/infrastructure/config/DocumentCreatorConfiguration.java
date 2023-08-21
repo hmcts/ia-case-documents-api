@@ -919,6 +919,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetEditCaseListingLetter")
+    public DocumentCreator<AsylumCase> getInternalDetEditCaseListingLetterCreator(
+            @Value("${internalDetainedEditCaseListingLetter.contentType}") String contentType,
+            @Value("${internalDetainedEditCaseListingLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedEditCaseListingLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedEditCaseListingLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalMarkAsAdaNotice")
     public DocumentCreator<AsylumCase> getInternalMarkAsAdaDocumentCreator(
             @Value("${internalMarkAppealAsAda.contentType}") String contentType,
