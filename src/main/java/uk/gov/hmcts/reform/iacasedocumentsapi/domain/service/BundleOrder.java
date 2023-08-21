@@ -138,6 +138,9 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW:
                 log.warn("INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 46;
+            case INTERNAL_DET_MARK_AS_ADA_LETTER:
+                log.warn("INTERNAL_DET_MARK_AS_ADA_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 47;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

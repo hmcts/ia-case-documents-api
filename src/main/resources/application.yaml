@@ -289,6 +289,11 @@ internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
 internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
 
+internalMarkAppealAsAda.contentType:  application/pdf
+internalMarkAppealAsAda.fileExtension: PDF
+internalMarkAppealAsAda.fileName: "detained-appellant-mark-as-ada-notice"
+internalMarkAppealAsAda.templateName: ${IA_INTERNAL_MARK_APPEAL_AS_ADA_TEMPLATE:TB-IAC-LET-ENG-00008.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -363,6 +368,7 @@ security:
       - "markAppealPaid"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
+      - "markAppealAsAda"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -387,6 +393,7 @@ security:
       - "editAppealAfterSubmit"
       - "markAppealPaid"
       - "recordRemissionDecision"
+      - "markAppealAsAda"
     citizen:
       - "startAppeal"
       - "editAppeal"
