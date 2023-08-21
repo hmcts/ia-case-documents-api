@@ -65,20 +65,23 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
                         .collect(Collectors.toList())
         );
 
+        setAppellantInterpreterLanguage(asylumCase, fieldValues);
         fieldValues.put("isAnyWitnessInterpreterRequired", asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class).orElse(YesOrNo.NO));
+        setWinessInterpreterLanguage(asylumCase, fieldValues);
 
-        // set appellant interpreter language information
-        Optional<InterpreterLanguageRefData> appellantSpokenInterpreterLanguage = asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-        Optional<InterpreterLanguageRefData> appellantSignInterpreterLanguage = asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
+        return fieldValues;
+    }
 
-        StringBuilder appellantInterpreterLanguageDisplayString = new StringBuilder();
-        appellantInterpreterLanguageDisplayString.append(constructInterpreterLanguageString(appellantSpokenInterpreterLanguage, SPOKEN_LANGUAGE));
-        appellantInterpreterLanguageDisplayString.append(constructInterpreterLanguageString(appellantSignInterpreterLanguage, SIGN_LANGUAGE));
+    private String formatWitnessDetails(WitnessDetails details) {
+        String givenNames = details.getWitnessName();
+        String familyName = details.getWitnessFamilyName();
 
-        fieldValues.put("appellantInterpreterLanguage", appellantInterpreterLanguageDisplayString.toString());
+        return familyName == null || familyName.isEmpty()
+                ? givenNames
+                : String.format("%s %s", givenNames, familyName);
+    }
 
+    private void setWinessInterpreterLanguage(AsylumCase asylumCase, Map<String, Object> fieldValues) {
         // set witness interpreter language information
         int numberOfWitnesses = asylumCase.read(WITNESS_DETAILS, List.class).orElse(Collections.emptyList()).size();
         List<WitnessInterpreterLanguageInformation> witnessInterpreterLanguageInformationList = new ArrayList<>();
@@ -110,17 +113,20 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
         }
 
         fieldValues.put("witnessInterpreterInformationList", witnessInterpreterLanguageInformationList);
-
-        return fieldValues;
     }
 
-    private String formatWitnessDetails(WitnessDetails details) {
-        String givenNames = details.getWitnessName();
-        String familyName = details.getWitnessFamilyName();
+    private void setAppellantInterpreterLanguage(AsylumCase asylumCase, Map<String, Object> fieldValues) {
+        // set appellant interpreter language information
+        Optional<InterpreterLanguageRefData> appellantSpokenInterpreterLanguage = asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)
+                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
+        Optional<InterpreterLanguageRefData> appellantSignInterpreterLanguage = asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)
+                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
-        return familyName == null || familyName.isEmpty()
-                ? givenNames
-                : String.format("%s %s", givenNames, familyName);
+        StringBuilder appellantInterpreterLanguageDisplayString = new StringBuilder();
+        appellantInterpreterLanguageDisplayString.append(constructInterpreterLanguageString(appellantSpokenInterpreterLanguage, SPOKEN_LANGUAGE));
+        appellantInterpreterLanguageDisplayString.append(constructInterpreterLanguageString(appellantSignInterpreterLanguage, SIGN_LANGUAGE));
+
+        fieldValues.put("appellantInterpreterLanguage", appellantInterpreterLanguageDisplayString.toString());
     }
 
     private StringBuilder constructInterpreterLanguageString(Optional<InterpreterLanguageRefData> interpreterLanguageRefData, String typeOfLanguage) {
