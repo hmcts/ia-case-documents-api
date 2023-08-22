@@ -10,7 +10,6 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "isAcceleratedDetainedAppeal": "Yes",
           "appellantInDetention": "Yes",
           "isAdmin": "Yes",
           "appealSubmissionDate": "{$TODAY}",
@@ -25,7 +24,6 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "isAcceleratedDetainedAppeal": "Yes",
         "reasonAppealMarkedAsAda": "Some explanation",
         "appellantInDetention": "Yes",
         "isAdmin": "Yes",

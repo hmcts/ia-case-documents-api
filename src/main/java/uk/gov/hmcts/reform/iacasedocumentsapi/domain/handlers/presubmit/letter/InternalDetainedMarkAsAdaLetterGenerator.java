@@ -43,8 +43,7 @@ public class InternalDetainedMarkAsAdaLetterGenerator implements PreSubmitCallba
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.MARK_APPEAL_AS_ADA
                 && isInternalCase(asylumCase)
-                && isAppellantInDetention(asylumCase)
-                && isAcceleratedDetainedAppeal(asylumCase);
+                && isAppellantInDetention(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
