@@ -56,10 +56,11 @@ public class EventTest {
         assertEquals("recordRemissionDecision", Event.RECORD_REMISSION_DECISION.toString());
         assertEquals("requestHearingRequirementsFeature", Event.REQUEST_HEARING_REQUIREMENTS_FEATURE.toString());
         assertEquals("markAppealAsAda", Event.MARK_APPEAL_AS_ADA.toString());
+        assertEquals("decideAnApplication", Event.DECIDE_AN_APPLICATION.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(51, Event.values().length);
+        assertEquals(52, Event.values().length);
     }
 }
