@@ -165,6 +165,16 @@ pmd {
     ]
 }
 
+task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
+
+    systemProperty "scenario", System.getProperty('scenario')
+    systemProperty "file.encoding", "UTF-8"
+
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    finalizedBy aggregate
+}
+
 task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verification') {
     testClassesDirs = sourceSets.smokeTest.output.classesDirs
     classpath = sourceSets.smokeTest.runtimeClasspath
