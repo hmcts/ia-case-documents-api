@@ -18,7 +18,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @Component
 public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
-    private static final String DECISION_GRANTED = "Granted";
     private static final String timeExtentionContent = "The Tribunal will give you more time to complete your next task. You will get a notification with the new date soon.";
     private static final String adjournExpediteTransferOrUpdateHearingReqsContent = "The details of your hearing will be updated. The Tribunal will contact you when this happens.";
     private static final String judgesReviewContent = "The decision on your original request will be overturned. The Tribunal will contact you if there is something you need to do next.";
@@ -65,7 +64,13 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
             applicationDecisionReason = makeAnApplication.getDecisionReason();
         }
 
-        boolean applicationGranted = DECISION_GRANTED.equals(applicationDecision);
+        Optional<MakeAnApplicationTypes> optionalApplicationType = MakeAnApplicationTypes.from(applicationType);
+        MakeAnApplicationTypes makeAnApplicationTypes;
+        if (optionalApplicationType.isPresent()) {
+            makeAnApplicationTypes = optionalApplicationType.get();
+        } else {
+            throw new IllegalStateException("Application type could not be parsed");
+        }
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(dateProvider.now()));
@@ -73,7 +78,8 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("applicationType", applicationType);
         fieldValues.put("applicationReason", applicationDecisionReason);
-        fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(MakeAnApplicationTypes.from(applicationType).get()));
+
+        fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(makeAnApplicationTypes));
 
 
         return fieldValues;
