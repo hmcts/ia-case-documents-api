@@ -304,7 +304,7 @@ dependencies {
     implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 
     // CVE-2021-27568
-    implementation group: 'net.minidev', name: 'json-smart', version: '2.4.10'
+    implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
 
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
