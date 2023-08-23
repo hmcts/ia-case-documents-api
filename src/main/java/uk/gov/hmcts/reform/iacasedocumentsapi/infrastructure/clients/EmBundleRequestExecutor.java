@@ -57,8 +57,6 @@ public class EmBundleRequestExecutor {
         PreSubmitCallbackResponse<AsylumCase> response;
 
         log.info("EmBundleRequestExecutor: " + endpoint);
-        log.info("Payload: " + payload.getCaseDetails().getId());
-
         try {
             response =
                 restTemplate

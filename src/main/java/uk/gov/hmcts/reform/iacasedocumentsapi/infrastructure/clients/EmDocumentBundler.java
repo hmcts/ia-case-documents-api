@@ -57,7 +57,6 @@ public class EmDocumentBundler implements DocumentBundler {
 
         log.info("EM URL: " + emBundlerUrl);
         log.info("EM STITCHING URL: " + emBundlerStitchUri);
-        log.info("Payload: " + payload.getCaseDetails().getId());
         PreSubmitCallbackResponse<BundleCaseData> response =
             bundleRequestExecutor.post(
                 payload,
