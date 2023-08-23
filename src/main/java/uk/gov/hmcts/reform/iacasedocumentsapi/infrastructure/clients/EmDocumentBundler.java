@@ -65,7 +65,7 @@ public class EmDocumentBundler implements DocumentBundler {
             );
 
 
-        log.info("response: " + response.getData().getCaseBundles().get(0).getId());
+        log.info("response: " + response.toString());
 
         Document bundle =
             response
