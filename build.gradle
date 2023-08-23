@@ -315,7 +315,7 @@ dependencies {
 
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
 
-    implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.8'
 
     implementation group: 'uk.gov.hmcts.reform', name: 'document-management-client', version: '7.0.0'
     implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
