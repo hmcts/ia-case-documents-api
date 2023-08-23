@@ -552,7 +552,16 @@ public enum AsylumCaseDefinition {
             "paidAmount", new TypeReference<String>(){}),
 
     REMISSION_DECISION(
-            "remissionDecision", new TypeReference<RemissionDecision>(){});
+            "remissionDecision", new TypeReference<RemissionDecision>(){}),
+
+    REASON_APPEAL_MARKED_AS_ADA(
+            "reasonAppealMarkedAsAda", new TypeReference<String>(){}),
+
+    MAKE_AN_APPLICATIONS(
+            "makeAnApplications", new TypeReference<List<IdValue<MakeAnApplication>>>(){}),
+
+    DECIDE_AN_APPLICATION_ID(
+            "decideAnApplicationId", new TypeReference<String>(){});
 
 
     private final String value;

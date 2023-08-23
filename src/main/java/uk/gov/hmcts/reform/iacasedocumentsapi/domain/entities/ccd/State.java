@@ -26,6 +26,9 @@ public enum State {
     CMA_ADJUSTMENTS_AGREED("cmaAdjustmentsAgreed"),
     FTPA_DECIDED("ftpaDecided"),
     PENDING_PAYMENT("pendingPayment"),
+    ADJOURNED("adjourned"),
+    FTPA_SUBMITTED("ftpaSubmitted"),
+
 
 
 

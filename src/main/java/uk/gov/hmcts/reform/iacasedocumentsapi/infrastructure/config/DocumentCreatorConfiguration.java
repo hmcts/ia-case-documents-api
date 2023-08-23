@@ -939,4 +939,46 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("internalMarkAsAdaNotice")
+    public DocumentCreator<AsylumCase> getInternalMarkAsAdaDocumentCreator(
+            @Value("${internalMarkAppealAsAda.contentType}") String contentType,
+            @Value("${internalMarkAppealAsAda.fileExtension}") String fileExtension,
+            @Value("${internalMarkAppealAsAda.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedMarkAsAdaLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter")
+    public DocumentCreator<AsylumCase> getinternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterCreator(
+            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.contentType}") String contentType,
+            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }

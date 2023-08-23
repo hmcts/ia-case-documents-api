@@ -294,6 +294,16 @@ internalDetainedEditCaseListingLetter.fileExtension: PDF
 internalDetainedEditCaseListingLetter.fileName: "detained-appellant-edit-case-listing-letter"
 internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
 
+internalMarkAppealAsAda.contentType:  application/pdf
+internalMarkAppealAsAda.fileExtension: PDF
+internalMarkAppealAsAda.fileName: "detained-appellant-mark-as-ada-notice"
+internalMarkAppealAsAda.templateName: ${IA_INTERNAL_MARK_APPEAL_AS_ADA_TEMPLATE:TB-IAC-LET-ENG-00008.docx}
+
+internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.contentType: application/pdf
+internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileExtension: PDF
+internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileName: "appellant-letter-application-granted"
+internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_AND_ADA_DECIDE_AN_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00015.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -368,6 +378,8 @@ security:
       - "markAppealPaid"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
+      - "markAppealAsAda"
+      - "decideAnApplication"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -392,6 +404,7 @@ security:
       - "editAppealAfterSubmit"
       - "markAppealPaid"
       - "recordRemissionDecision"
+      - "markAppealAsAda"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -413,6 +426,7 @@ security:
       - "uploadSignedDecisionNotice"
       - "adaSuitabilityReview"
       - "generateHearingBundle"
+      - "decideAnApplication"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
