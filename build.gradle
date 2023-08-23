@@ -166,30 +166,6 @@ pmd {
 }
 
 
-task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
-
-    systemProperty "scenario", System.getProperty('scenario')
-    systemProperty "file.encoding", "UTF-8"
-
-    testClassesDirs = sourceSets.functionalTest.output.classesDirs
-    classpath = sourceSets.functionalTest.runtimeClasspath
-    finalizedBy aggregate
-}
-
-task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verification') {
-    testClassesDirs = sourceSets.smokeTest.output.classesDirs
-    classpath = sourceSets.smokeTest.runtimeClasspath
-}
-
-
-task contract(type: Test, description: 'Runs the pact contract tests.', group: 'Verification') {
-    description = "Runs the consumer Pact tests"
-    useJUnitPlatform()
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-
-}
-
 
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
@@ -199,14 +175,6 @@ jacoco {
     toolVersion = "0.8.10"
 }
 
-jacocoTestReport {
-    executionData(test, integration)
-    reports {
-        xml.required = true
-        csv.required = false
-        xml.getOutputLocation().set(file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"))
-    }
-}
 
 pitest {
     junit5PluginVersion = '0.15'
@@ -238,9 +206,6 @@ sonarqube {
                                          "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCaseBuilder.java"
     }
 }
-
-project.tasks['sonarqube'].dependsOn test, integration, jacocoTestReport
-project.tasks['sonarqube'].group = "Verification"
 
 repositories {
     mavenLocal()
