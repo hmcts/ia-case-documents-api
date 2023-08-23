@@ -960,4 +960,25 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter")
+    public DocumentCreator<AsylumCase> getinternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterCreator(
+            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.contentType}") String contentType,
+            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
