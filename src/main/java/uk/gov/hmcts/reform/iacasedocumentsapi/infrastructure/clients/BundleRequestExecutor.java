@@ -57,6 +57,29 @@ public class BundleRequestExecutor {
         PreSubmitCallbackResponse<BundleCaseData> response;
 
         try {
+
+            HttpEntity<String> responseString = restTemplate.exchange(
+                "http://em-ccdorc-ia-case-api-pr-1569.preview.platform.hmcts.net",
+                HttpMethod.GET,
+                requestEntity,
+                String.class,
+                new ParameterizedTypeReference<PreSubmitCallbackResponse<BundleCaseData>>() {
+                }
+            );
+
+            log.info("Response String" + responseString);
+
+            HttpEntity<String> responseString2 = restTemplate.exchange(
+                "http://em-ccdorc-ia-case-api-pr-1569.preview.platform.hmcts.net/api/stitch-ccd-bundles",
+                HttpMethod.GET,
+                requestEntity,
+                String.class,
+                new ParameterizedTypeReference<PreSubmitCallbackResponse<BundleCaseData>>() {
+                }
+            );
+
+            log.info("Response String2" + responseString2);
+
             response =
                 restTemplate
                     .exchange(
