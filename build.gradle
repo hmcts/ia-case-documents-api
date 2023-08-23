@@ -165,7 +165,10 @@ pmd {
     ]
 }
 
-
+task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verification') {
+    testClassesDirs = sourceSets.smokeTest.output.classesDirs
+    classpath = sourceSets.smokeTest.runtimeClasspath
+}
 
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
