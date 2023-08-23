@@ -486,6 +486,8 @@ ia:
 logging:
   level:
     org:
+      apache:
+        http=DEBUG:
       springframework:
         web:
           client:
