@@ -68,7 +68,7 @@ public class BundleRequestExecutor {
                     ).getBody();
 
         } catch (RestClientResponseException e) {
-
+            log.info("e: " + e);
             throw new DocumentServiceResponseException(
                 "Couldn't create bundle using API: " + endpoint,
                 e
