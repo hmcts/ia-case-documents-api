@@ -304,6 +304,11 @@ internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileExtension: PD
 internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileName: "appellant-letter-application-granted"
 internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_AND_ADA_DECIDE_AN_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00015.docx}
 
+internalDetainedApplyForFtpaRespondentLetter.contentType: application/pdf
+internalDetainedApplyForFtpaRespondentLetter.fileExtension: PDF
+internalDetainedApplyForFtpaRespondentLetter.fileName: "apply-for-ftpa-respondent-letter"
+internalDetainedApplyForFtpaRespondentLetter.templateName: ${IA_INTERNAL_DETAINED_APPLY_FOR_FTPA_RESPONDENT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00009.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -435,6 +440,10 @@ security:
       - "endAppealAutomatically"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
+    caseworker-ia-homeofficepou:
+      - "applyForFTPARespondent"
+    caseworker-ia-respondentofficer:
+      - "applyForFTPARespondent"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}

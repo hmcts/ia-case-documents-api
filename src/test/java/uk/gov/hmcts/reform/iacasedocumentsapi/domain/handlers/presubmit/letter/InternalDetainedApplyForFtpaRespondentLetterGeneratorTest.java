@@ -28,10 +28,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalDetainedMarkAsAdaLetterGeneratorTest {
+class InternalDetainedApplyForFtpaRespondentLetterGeneratorTest {
 
     @Mock
-    private DocumentCreator<AsylumCase> internalDetainedMarkAsAdaLetterCreator;
+    private DocumentCreator<AsylumCase> internalDetainedFtpaSubmittedCreator;
     @Mock
     private DocumentHandler documentHandler;
 
@@ -43,17 +43,17 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
-    private InternalDetainedMarkAsAdaLetterGenerator internalDetainedMarkAsAdaLetterGenerator;
+    private InternalDetainedApplyForFtpaRespondentLetterGenerator internalDetainedApplyForFtpaRespondentLetterGenerator;
 
     @BeforeEach
     public void setUp() {
-        internalDetainedMarkAsAdaLetterGenerator =
-                new InternalDetainedMarkAsAdaLetterGenerator(
-                        internalDetainedMarkAsAdaLetterCreator,
+        internalDetainedApplyForFtpaRespondentLetterGenerator =
+                new InternalDetainedApplyForFtpaRespondentLetterGenerator(
+                        internalDetainedFtpaSubmittedCreator,
                         documentHandler
                 );
 
-        when(callback.getEvent()).thenReturn(Event.MARK_APPEAL_AS_ADA);
+        when(callback.getEvent()).thenReturn(Event.APPLY_FOR_FTPA_RESPONDENT);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -62,12 +62,12 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
     }
 
     @Test
-    void should_create_mark_as_ada_letter_and_append_to_notification_attachment_documents() {
+    void should_create_apply_for_ftpa_reposndent_letter_and_append_to_notification_attachment_documents() {
 
-        when(internalDetainedMarkAsAdaLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalDetainedFtpaSubmittedCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalDetainedMarkAsAdaLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalDetainedApplyForFtpaRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -75,7 +75,7 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadata(
                 asylumCase, uploadedDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DET_MARK_AS_ADA_LETTER
+                DocumentTag.INTERNAL_APPLY_FOR_FTPA_RESPONDENT
         );
     }
 
@@ -86,12 +86,12 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        assertThatThrownBy(() -> internalDetainedMarkAsAdaLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalDetainedApplyForFtpaRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalDetainedMarkAsAdaLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalDetainedApplyForFtpaRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -107,7 +107,7 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedMarkAsAdaLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedApplyForFtpaRespondentLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -126,7 +126,7 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
             when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedMarkAsAdaLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedApplyForFtpaRespondentLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -134,7 +134,7 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
     }
 
     @Test
-    void it_should_only_handle_about_to_submit_and_mark_as_ada_event() {
+    void it_should_only_handle_about_to_submit_and_apply_for_ftpa_respondent_event() {
 
         for (Event event : Event.values()) {
 
@@ -143,10 +143,10 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedMarkAsAdaLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalDetainedApplyForFtpaRespondentLetterGenerator.canHandle(callbackStage, callback);
 
                 if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                        && callback.getEvent().equals(Event.MARK_APPEAL_AS_ADA)) {
+                        && callback.getEvent().equals(Event.APPLY_FOR_FTPA_RESPONDENT)) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -159,19 +159,19 @@ class InternalDetainedMarkAsAdaLetterGeneratorTest {
     @Test
     void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalDetainedMarkAsAdaLetterGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalDetainedApplyForFtpaRespondentLetterGenerator.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedMarkAsAdaLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetainedApplyForFtpaRespondentLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedMarkAsAdaLetterGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalDetainedApplyForFtpaRespondentLetterGenerator.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedMarkAsAdaLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDetainedApplyForFtpaRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }
