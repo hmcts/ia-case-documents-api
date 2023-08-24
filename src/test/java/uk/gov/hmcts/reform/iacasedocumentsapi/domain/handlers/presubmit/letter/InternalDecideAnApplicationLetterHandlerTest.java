@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,11 +43,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandlerTest {
-
+public class InternalDecideAnApplicationLetterHandlerTest {
 
     @Mock
     private DocumentCreator<AsylumCase> internalApplicationDecidedLetterCreator;
+    @Mock
+    private DocumentCreator<AsylumCase> internalApplicationDecidedRefusedLetterCreator;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
@@ -73,13 +75,14 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
             decisionGranted,
             State.APPEAL_SUBMITTED.toString(),
             "caseworker-ia-admofficer");
-    private InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandler internalDecideAnApplicationLetterHandler;
+    private InternalDecideAnApplicationLetterHandler internalDecideAnApplicationLetterHandler;
 
     @BeforeEach
     public void setUp() {
         internalDecideAnApplicationLetterHandler =
-                new InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandler(
+                new InternalDecideAnApplicationLetterHandler(
                         internalApplicationDecidedLetterCreator,
+                        internalApplicationDecidedRefusedLetterCreator,
                         documentHandler,
                         makeAnApplicationService
                 );
@@ -105,7 +108,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
         when(internalApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalDecideAnApplicationLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -123,7 +126,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -176,7 +179,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
                 boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(callbackStage, callback);
 
-                if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && callback.getEvent().equals(Event.DECIDE_AN_APPLICATION)) {
+                if (callbackStage == ABOUT_TO_SUBMIT && callback.getEvent().equals(Event.DECIDE_AN_APPLICATION)) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -191,7 +194,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
     public void it_should_only_handle_internal_cases(YesOrNo yesOrNo) {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback);
 
         if (yesOrNo == yes) {
             assertTrue(canHandle);
@@ -205,17 +208,16 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
     public void it_should_handle_both_internal_detained_cases_and_internal_ada_cases(YesOrNo yesOrNo) {
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback);
 
         assertTrue(canHandle);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {decisionGranted, decisionRefused, decisionPending})
-    public void it_should_only_handle_granted_applications(String decision) {
+    public void it_should_only_generate_the_letter_for_granted_and_refused_applications(String decision) {
         List<IdValue<MakeAnApplication>> testApplications = new ArrayList<>();
-
-        MakeAnApplication testApplication = new MakeAnApplication(
+        final MakeAnApplication testApplication = new MakeAnApplication(
                 "Admin Officer",
                 MakeAnApplicationTypes.ADJOURN.getValue(),
                 "someRandomDetails",
@@ -224,19 +226,25 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
                 decision.toString(),
                 State.APPEAL_SUBMITTED.toString(),
                 "caseworker-ia-admofficer");
-
         testApplications.add(new IdValue<>("1", testApplication));
 
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-        
-        if (decision.equals(decisionGranted.toString())) {
-            assertTrue(canHandle);
+        when(internalApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        if (List.of(decisionGranted, decisionRefused).contains(decision)) {
+            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER);
         } else {
-            assertFalse(canHandle);
+            verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER);
         }
     }
 
@@ -247,7 +255,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
@@ -255,7 +263,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }

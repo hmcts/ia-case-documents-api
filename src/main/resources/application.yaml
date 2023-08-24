@@ -299,10 +299,15 @@ internalMarkAppealAsAda.fileExtension: PDF
 internalMarkAppealAsAda.fileName: "detained-appellant-mark-as-ada-notice"
 internalMarkAppealAsAda.templateName: ${IA_INTERNAL_MARK_APPEAL_AS_ADA_TEMPLATE:TB-IAC-LET-ENG-00008.docx}
 
-internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.contentType: application/pdf
-internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileExtension: PDF
-internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileName: "appellant-letter-application-granted"
-internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_AND_ADA_DECIDE_AN_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00015.docx}
+internalDecideAnApplicationDecisionGrantedLetter.contentType: application/pdf
+internalDecideAnApplicationDecisionGrantedLetter.fileExtension: PDF
+internalDecideAnApplicationDecisionGrantedLetter.fileName: "appellant-letter-application-granted"
+internalDecideAnApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00015.docx}
+
+internalDecideAnApplicationDecisionRefusedLetter.contentType: application/pdf
+internalDecideAnApplicationDecisionRefusedLetter.fileExtension: PDF
+internalDecideAnApplicationDecisionRefusedLetter.fileName: "appellant-letter-application-refused"
+internalDecideAnApplicationDecisionRefusedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPLICATION_DECISION_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00016.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
