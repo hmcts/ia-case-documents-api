@@ -56,7 +56,6 @@ public class EmBundleRequestExecutor {
 
         PreSubmitCallbackResponse<AsylumCase> response;
 
-        log.info("EmBundleRequestExecutor: " + endpoint);
         try {
             response =
                 restTemplate
@@ -68,10 +67,7 @@ public class EmBundleRequestExecutor {
                         }
                     ).getBody();
 
-            log.info("response EmBundleRequestExecutor: " + response.toString());
-
         } catch (RestClientResponseException e) {
-            log.info("e: " + e);
             throw new DocumentServiceResponseException(
                 "Couldn't create bundle using API: " + endpoint,
                 e

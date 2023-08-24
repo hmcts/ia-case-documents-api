@@ -1,4 +1,3 @@
-/*
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -9,7 +8,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,7 +58,6 @@ public class BundleRequestExecutorTest {
     }
 
     @Test
-    @Ignore
     public void should_invoke_endpoint_with_given_payload_and_return_200_with_no_errors() {
 
         when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
@@ -113,7 +110,6 @@ public class BundleRequestExecutorTest {
     }
 
     @Test
-    @Ignore
     public void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> bundleRequestExecutor.post(null, ENDPOINT))
@@ -126,7 +122,6 @@ public class BundleRequestExecutorTest {
     }
 
     @Test
-    @Ignore
     public void should_handle_http_server_exception_when_calling_api() {
 
         when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
@@ -151,7 +146,6 @@ public class BundleRequestExecutorTest {
     }
 
     @Test
-    @Ignore
     public void should_handle_http_client_exception_when_calling_api() {
 
         when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
@@ -175,4 +169,3 @@ public class BundleRequestExecutorTest {
 
 
 }
-*/
