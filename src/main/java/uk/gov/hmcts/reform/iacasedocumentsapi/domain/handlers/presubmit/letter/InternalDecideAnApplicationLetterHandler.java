@@ -23,19 +23,23 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 
 
 @Component
-public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionRefusedLetter;
     private final DocumentHandler documentHandler;
     private final MakeAnApplicationService makeAnApplicationService;
     private final String decisionGranted = "Granted";
+    private final String decisionRefused = "Refused";
 
-    public InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandler(
-            @Qualifier("internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter") DocumentCreator<AsylumCase> internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter,
+    public InternalDecideAnApplicationLetterHandler(
+            @Qualifier("internalDecideAnApplicationDecisionGrantedLetter") DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionGrantedLetter,
+            @Qualifier("internalDecideAnApplicationDecisionRefusedLetter") DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionRefusedLetter,
             DocumentHandler documentHandler,
             MakeAnApplicationService makeAnApplicationService
     ) {
-        this.internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter = internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter;
+        this.internalDecideAnApplicationDecisionGrantedLetter = internalDecideAnApplicationDecisionGrantedLetter;
+        this.internalDecideAnApplicationDecisionRefusedLetter = internalDecideAnApplicationDecisionRefusedLetter;
         this.documentHandler = documentHandler;
         this.makeAnApplicationService = makeAnApplicationService;
     }
@@ -48,17 +52,10 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
         requireNonNull(callback, "callback must not be null");
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        Optional<MakeAnApplication> optionalMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
-        if (!optionalMakeAnApplication.isPresent()) {
-            return false;
-        }
-        boolean applicationGranted = optionalMakeAnApplication.get().getDecision().equals(decisionGranted);
-
         return callback.getEvent() == Event.DECIDE_AN_APPLICATION
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && isInternalCase(asylumCase)
-                && isAppellantInDetention(asylumCase)
-                && applicationGranted;
+                && isAppellantInDetention(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -72,10 +69,25 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterHandl
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document applicationGrantedLetter = internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.create(caseDetails);
+        Optional<MakeAnApplication> optionalMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
+        if (!optionalMakeAnApplication.isPresent()) {
+            throw new IllegalStateException("Application not found");
+        }
+        boolean applicationGranted = optionalMakeAnApplication.get().getDecision().equals(decisionGranted);
+        boolean applicationRefused = optionalMakeAnApplication.get().getDecision().equals(decisionRefused);
+
+        Document documentForUpload;
+        if (applicationGranted) {
+            documentForUpload = internalDecideAnApplicationDecisionGrantedLetter.create(caseDetails);
+        } else if (applicationRefused) {
+            documentForUpload = internalDecideAnApplicationDecisionRefusedLetter.create(caseDetails);
+        } else {
+            return new PreSubmitCallbackResponse<>(asylumCase);
+        }
+
         documentHandler.addWithMetadata(
                 asylumCase,
-                applicationGrantedLetter,
+                documentForUpload,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER
         );

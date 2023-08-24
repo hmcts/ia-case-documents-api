@@ -30,7 +30,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplateTest {
+public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -51,18 +51,16 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
     private final String transferOutOfAdaContent = "Your appeal will continue but will no longer be decided within 25 working days. The Tribunal will change the date of your hearing. The Tribunal will contact you with a new date for your hearing and to tell you what will happen next with your appeal.";
     private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1711";
     private final String internalAdaCustomerServicesEmailAddress = "IAC-ADA-HW@justice.gov.uk";
-    private final String internalDetainedCustomerServicesTelephoneNumber = "0300 123 1711";
-    private final String internalDetainedCustomerServicesEmailAddress = "contactia@justice.gov.uk";
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate;
+    private InternalDecideAnApplicationDecisionGrantedLetterTemplate internalDecideAnApplicationDecisionGrantedLetterTemplate;
 
     @BeforeEach
     void setUp() {
-        internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate =
-                new InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate(
+        internalDecideAnApplicationDecisionGrantedLetterTemplate =
+                new InternalDecideAnApplicationDecisionGrantedLetterTemplate(
                         templateName,
                         dateProvider,
                         customerServicesProvider,
@@ -88,7 +86,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate.getName());
+        assertEquals(templateName, internalDecideAnApplicationDecisionGrantedLetterTemplate.getName());
     }
 
     @ParameterizedTest
@@ -112,7 +110,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
 
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        Map<String, Object> templateFieldValues = internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -158,7 +156,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
 
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        assertThatThrownBy(() -> internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails))
                 .hasMessage("Application type could not be parsed")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
