@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -48,8 +49,10 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
     private final String withdrawnContent = "The Tribunal will end the appeal. The Tribunal will contact you when this happens.";
     private final String updateUpdateDetailsOrOtherContent = "The Tribunal will contact you when it makes the changes you requested.";
     private final String transferOutOfAdaContent = "Your appeal will continue but will no longer be decided within 25 working days. The Tribunal will change the date of your hearing. The Tribunal will contact you with a new date for your hearing and to tell you what will happen next with your appeal.";
-    private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1234";
-    private final String internalAdaCustomerServicesEmailAddress = "example@email.com";
+    private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1711";
+    private final String internalAdaCustomerServicesEmailAddress = "IAC-ADA-HW@justice.gov.uk";
+    private final String internalDetainedCustomerServicesTelephoneNumber = "0300 123 1711";
+    private final String internalDetainedCustomerServicesEmailAddress = "contactia@justice.gov.uk";
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
@@ -131,7 +134,32 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
             case WITHDRAW -> assertEquals(withdrawnContent, templateFieldValues.get("whatHappensNextContent"));
             case UPDATE_APPEAL_DETAILS, OTHER -> assertEquals(updateUpdateDetailsOrOtherContent, templateFieldValues.get("whatHappensNextContent"));
             case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> assertEquals(transferOutOfAdaContent, templateFieldValues.get("whatHappensNextContent"));
-            default -> assertEquals(true, true);
+            default -> { }
         }
+    }
+
+    @Test
+    void should_throw_exception_if_application_type_cannot_be_parsed() {
+        dataSetup();
+        List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
+        final MakeAnApplication testApplication = new MakeAnApplication(
+                "Admin Officer",
+                "someRandomApplicationTypeThatShouldCauseAnException",
+                "someRandomDetails",
+                new ArrayList<>(),
+                LocalDate.now().toString(),
+                "Granted",
+                State.APPEAL_SUBMITTED.toString(),
+                "caseworker-ia-admofficer");
+        makeAnApplications.add(new IdValue<>("1", testApplication));
+
+        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
+
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
+
+        assertThatThrownBy(() -> internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails))
+                .hasMessage("Application type could not be parsed")
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 }
