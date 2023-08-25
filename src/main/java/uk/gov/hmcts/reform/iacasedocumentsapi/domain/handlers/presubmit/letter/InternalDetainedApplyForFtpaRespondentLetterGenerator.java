@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
@@ -60,7 +61,12 @@ public class InternalDetainedApplyForFtpaRespondentLetterGenerator implements Pr
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document internalMarkAsAdaNotice = documentCreator.create(caseDetails);
-
+        documentHandler.addWithMetadata(
+                asylumCase,
+                internalMarkAsAdaNotice,
+                LEGAL_REPRESENTATIVE_DOCUMENTS,
+                DocumentTag.INTERNAL_APPLY_FOR_FTPA_RESPONDENT
+        );
         documentHandler.addWithMetadata(
                 asylumCase,
                 internalMarkAsAdaNotice,
