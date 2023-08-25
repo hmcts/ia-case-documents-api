@@ -2,7 +2,7 @@
   "description": "RIA-7328 Internal detained apply for FTPA respondent as Ada",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "HomeOfficePou",
+    "credentials": "HomeOfficePOU",
     "input": {
       "id": 7328,
       "eventId": "applyForFTPARespondent",
