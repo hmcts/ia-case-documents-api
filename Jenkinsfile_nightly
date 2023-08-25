@@ -52,7 +52,7 @@ def secrets = [
         secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD'),
 
         secret('test-homeoffice-pou-username', 'TEST_HOMEOFFICE_POU_USERNAME'),
-        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
+        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD')
     ]
 ]
 
