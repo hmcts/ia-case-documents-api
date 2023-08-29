@@ -1,7 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WitnessDetails {
 
+    private String witnessPartyId;
     private String witnessName;
     private String witnessFamilyName;
 
@@ -11,6 +15,11 @@ public class WitnessDetails {
 
     public WitnessDetails(String witnessName) {
         this.witnessName = witnessName;
+    }
+
+    public WitnessDetails(String witnessName, String witnessFamilyName) {
+        this.witnessName = witnessName;
+        this.witnessFamilyName = witnessFamilyName;
     }
 
     public String getWitnessName() {
