@@ -147,6 +147,9 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_DECIDE_AN_APPLICATION_LETTER:
                 log.warn("INTERNAL_DECIDE_AN_APPLICATION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 49;
+            case INTERNAL_APPLY_FOR_FTPA_RESPONDENT:
+                log.warn("INTERNAL_APPLY_FOR_FTPA_RESPONDENT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 49;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

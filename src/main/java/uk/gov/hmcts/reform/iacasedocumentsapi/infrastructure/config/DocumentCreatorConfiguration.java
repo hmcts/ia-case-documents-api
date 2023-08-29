@@ -1002,4 +1002,25 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("internalApplyForFtpaRespondent")
+    public DocumentCreator<AsylumCase> getInternalFtpaSubmittedDocumentCreator(
+            @Value("${internalDetainedApplyForFtpaRespondentLetter.contentType}") String contentType,
+            @Value("${internalDetainedApplyForFtpaRespondentLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedApplyForFtpaRespondentLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedApplyForFtpaRespondentLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
