@@ -1023,4 +1023,25 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("internalDetainedTransferOutOfAdaLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedTransferOutOfAdaLetterCreator(
+            @Value("${internalDetainedTransferOutOfAdaLetter.contentType}") String contentType,
+            @Value("${internalDetainedTransferOutOfAdaLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedTransferOutOfAdaLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedTransferOutOfAdaTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }

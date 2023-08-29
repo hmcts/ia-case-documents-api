@@ -314,6 +314,11 @@ internalDetainedApplyForFtpaRespondentLetter.fileExtension: PDF
 internalDetainedApplyForFtpaRespondentLetter.fileName: "apply-for-ftpa-respondent-letter"
 internalDetainedApplyForFtpaRespondentLetter.templateName: ${IA_INTERNAL_DETAINED_APPLY_FOR_FTPA_RESPONDENT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00009.docx}
 
+internalDetainedTransferOutOfAdaLetter.contentType: application/pdf
+internalDetainedTransferOutOfAdaLetter.fileExtension: PDF
+internalDetainedTransferOutOfAdaLetter.fileName: "detained-appellant-transferred-out-of-ada"
+internalDetainedTransferOutOfAdaLetter.templateName: ${IA_INTERNAL_DETAINED_TRANSFERRED_OUT_OF_ADA_LETTER_TEMPLATE:TB-IAC-DEC-ENG-00014.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -390,6 +395,7 @@ security:
       - "requestHearingRequirementsFeature"
       - "markAppealAsAda"
       - "decideAnApplication"
+      - "transferOutOfAda"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -437,6 +443,7 @@ security:
       - "adaSuitabilityReview"
       - "generateHearingBundle"
       - "decideAnApplication"
+      - "transferOutOfAda"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
