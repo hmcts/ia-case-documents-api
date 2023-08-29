@@ -961,13 +961,34 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter")
+    @Bean("internalDecideAnApplicationDecisionGrantedLetter")
     public DocumentCreator<AsylumCase> getinternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterCreator(
-            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.contentType}") String contentType,
-            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileExtension}") String fileExtension,
-            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.fileName}") String fileName,
+            @Value("${internalDecideAnApplicationDecisionGrantedLetter.contentType}") String contentType,
+            @Value("${internalDecideAnApplicationDecisionGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDecideAnApplicationDecisionGrantedLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate documentTemplate,
+            InternalDecideAnApplicationDecisionGrantedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalDecideAnApplicationDecisionRefusedLetter")
+    public DocumentCreator<AsylumCase> getinternalDetainedDecideAnApplicationDecisionRefusedLetterCreator(
+            @Value("${internalDecideAnApplicationDecisionRefusedLetter.contentType}") String contentType,
+            @Value("${internalDecideAnApplicationDecisionRefusedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDecideAnApplicationDecisionRefusedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDecideAnApplicationDecisionRefusedLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

@@ -1,12 +1,14 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
@@ -16,30 +18,30 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService;
 
 @Component
-public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalDecideAnApplicationDecisionRefusedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
-    private static final String timeExtentionContent = "The Tribunal will give you more time to complete your next task. You will get a notification with the new date soon.";
-    private static final String adjournExpediteTransferOrUpdateHearingReqsContent = "The details of your hearing will be updated. The Tribunal will contact you when this happens.";
-    private static final String judgesReviewContent = "The decision on your original request will be overturned. The Tribunal will contact you if there is something you need to do next.";
-    private static final String linkOrUnlinkContent = "This appeal will be linked or unlinked. The Tribunal will contact you when this happens.";
-    private static final String withdrawnContent = "The Tribunal will end the appeal. The Tribunal will contact you when this happens.";
-    private static final String updateUpdateDetailsOrOtherContent = "The Tribunal will contact you when it makes the changes you requested.";
-    private static final String transferOutOfAdaContent = "Your appeal will continue but will no longer be decided within 25 working days. The Tribunal will change the date of your hearing. The Tribunal will contact you with a new date for your hearing and to tell you what will happen next with your appeal.";
+    private static final String judgeRole = "caseworker-ia-iacjudge";
+    private static final String legalOfficerRole = "caseworker-ia-caseofficer";
+    private static final String applicationRefusedAdaFormName = "IAFT-ADA4: Make an application – Accelerated detained appeal (ADA)";
+    private static final String applicationRefusedDetainedNonAdaFormName = "IAFT-DE4: Make an application – Detained appeal";
     private final String templateName;
     private final DateProvider dateProvider;
     private final CustomerServicesProvider customerServicesProvider;
     private final MakeAnApplicationService makeAnApplicationService;
+    private final UserDetailsProvider userDetailsProvider;
 
 
-    public InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTemplate(
-            @Value("${internalDetainedAndAdaDecideAnApplicationDecisionGrantedLetter.templateName}") String templateName,
+    public InternalDecideAnApplicationDecisionRefusedLetterTemplate(
+            @Value("${internalDecideAnApplicationDecisionRefusedLetter.templateName}") String templateName,
             DateProvider dateProvider,
             CustomerServicesProvider customerServicesProvider,
-            MakeAnApplicationService makeAnApplicationService) {
+            MakeAnApplicationService makeAnApplicationService,
+            UserDetailsProvider userDetailsProvider) {
         this.templateName = templateName;
         this.dateProvider = dateProvider;
         this.customerServicesProvider = customerServicesProvider;
         this.makeAnApplicationService = makeAnApplicationService;
+        this.userDetailsProvider = userDetailsProvider;
     }
 
     public String getName() {
@@ -72,15 +74,24 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
             throw new IllegalStateException("Application type could not be parsed");
         }
 
+        final boolean applicationDecidedByLegalOfficer = userDetailsProvider.getUserDetails().getRoles().contains(legalOfficerRole);
+        final boolean applicationDecidedByJudge = userDetailsProvider.getUserDetails().getRoles().contains(judgeRole);
+
+        String applicationDecidedBy = "";
+        if (applicationDecidedByLegalOfficer) {
+            applicationDecidedBy = "Legal Officer";
+        } else if (applicationDecidedByJudge) {
+            applicationDecidedBy = "Judge";
+        }
+
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(dateProvider.now()));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("applicationType", applicationType);
         fieldValues.put("applicationReason", applicationDecisionReason);
-
-        fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(makeAnApplicationTypes));
-
+        fieldValues.put("decisionMaker", applicationDecidedBy);
+        fieldValues.put("formName", getFormName(asylumCase));
 
         return fieldValues;
     }
@@ -89,16 +100,7 @@ public class InternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterTempl
         return makeAnApplicationService.getMakeAnApplication(asylumCase, true);
     }
 
-    private String getWhatHappensNextContent(MakeAnApplicationTypes makeAnApplicationTypes) {
-        return switch (makeAnApplicationTypes) {
-            case TIME_EXTENSION -> timeExtentionContent;
-            case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS -> adjournExpediteTransferOrUpdateHearingReqsContent;
-            case JUDGE_REVIEW, JUDGE_REVIEW_LO -> judgesReviewContent;
-            case LINK_OR_UNLINK -> linkOrUnlinkContent;
-            case WITHDRAW -> withdrawnContent;
-            case UPDATE_APPEAL_DETAILS, OTHER -> updateUpdateDetailsOrOtherContent;
-            case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> transferOutOfAdaContent;
-            default -> "Unknown";
-        };
+    private String getFormName(AsylumCase asylumCase) {
+        return isAcceleratedDetainedAppeal(asylumCase) ? applicationRefusedAdaFormName : applicationRefusedDetainedNonAdaFormName;
     }
 }
