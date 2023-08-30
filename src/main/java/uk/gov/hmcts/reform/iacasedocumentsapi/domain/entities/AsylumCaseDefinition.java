@@ -561,7 +561,11 @@ public enum AsylumCaseDefinition {
             "makeAnApplications", new TypeReference<List<IdValue<MakeAnApplication>>>(){}),
 
     DECIDE_AN_APPLICATION_ID(
-            "decideAnApplicationId", new TypeReference<String>(){});
+            "decideAnApplicationId", new TypeReference<String>(){}),
+    TRANSFER_OUT_OF_ADA_REASON(
+            "transferOutOfAdaReason", new TypeReference<String>(){}),
+    TRANSFER_OUT_OF_ADA_MORE_DETAILS(
+            "transferOutOfAdaMoreDetails", new TypeReference<String>(){});
 
 
     private final String value;

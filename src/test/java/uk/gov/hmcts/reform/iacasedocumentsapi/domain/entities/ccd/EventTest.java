@@ -58,10 +58,11 @@ public class EventTest {
         assertEquals("markAppealAsAda", Event.MARK_APPEAL_AS_ADA.toString());
         assertEquals("decideAnApplication", Event.DECIDE_AN_APPLICATION.toString());
         assertEquals("applyForFTPARespondent", Event.APPLY_FOR_FTPA_RESPONDENT.toString());
+        assertEquals("transferOutOfAda", Event.TRANSFER_OUT_OF_ADA.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(53, Event.values().length);
+        assertEquals(54, Event.values().length);
     }
 }
