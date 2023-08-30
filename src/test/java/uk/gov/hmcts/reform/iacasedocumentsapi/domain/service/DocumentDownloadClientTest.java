@@ -1,10 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import java.io.IOException;
-import java.util.HashMap;
-
 import feign.FeignException;
-import feign.Request;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
-public class DocumentDownloadClientTest {
+class DocumentDownloadClientTest {
     @Mock
     private FeatureToggler featureToggler;
     @Mock
@@ -45,7 +40,7 @@ public class DocumentDownloadClientTest {
     }
 
     @Test
-    void should_use_cdam_when_feature_flag_true() throws IOException {
+    void should_use_cdam_when_feature_flag_true() {
         // Given
         given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
 
@@ -57,7 +52,7 @@ public class DocumentDownloadClientTest {
     }
 
     @Test
-    void should_use_dm_when_feature_flag_false() throws IOException {
+    void should_use_dm_when_feature_flag_false() {
         // Given
         given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(false);
 
@@ -69,7 +64,7 @@ public class DocumentDownloadClientTest {
     }
 
     @Test
-    void should_use_fallback_when_cdam_fails() throws IOException {
+    void should_use_fallback_when_cdam_fails() {
         // Given
         given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
         given(featureToggler.getValue(eq("use-ccd-document-am-fallback"), anyBoolean())).willReturn(true);
@@ -88,7 +83,7 @@ public class DocumentDownloadClientTest {
     }
 
     @Test
-    void should_not_use_fallback_when_cdam_fails() throws IOException {
+    void should_not_use_fallback_when_cdam_fails() {
         // Given
         given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
         given(featureToggler.getValue(eq("use-ccd-document-am-fallback"), anyBoolean())).willReturn(false);
