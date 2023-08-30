@@ -57,6 +57,7 @@ public enum DocumentTag {
     INTERNAL_DECIDE_AN_APPLICATION_LETTER("internalDecideAnApplicationLetter", CaseType.ASYLUM),
     INTERNAL_APPLY_FOR_FTPA_RESPONDENT("internalApplyForFtpaRespondent", CaseType.ASYLUM),
     INTERNAL_DETAINED_TRANSFER_OUT_OF_ADA_LETTER("internalDetainedTransferOutOfAdaLetter", CaseType.ASYLUM),
+    INTERNAL_FTPA_SUBMITTED_LETTER("internalFtpaSubmittedLetter", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
