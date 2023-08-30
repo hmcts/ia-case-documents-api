@@ -153,8 +153,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_DETAINED_TRANSFER_OUT_OF_ADA_LETTER:
                 log.warn("INTERNAL_DETAINED_TRANSFER_OUT_OF_ADA_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 51;
-            case INTERNAL_FTPA_SUBMITTED_LETTER:
-                log.warn("INTERNAL_FTPA_SUBMITTED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+            case INTERNAL_FTPA_SUBMITTED_APPELLANT_LETTER:
+                log.warn("INTERNAL_FTPA_SUBMITTED_APPELLANT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 52;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
