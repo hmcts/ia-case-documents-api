@@ -65,7 +65,7 @@ public class InternalApplyForFtpaAppellantLetterGenerator implements PreSubmitCa
                 asylumCase,
                 documentForUpload,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_FTPA_SUBMITTED_LETTER
+                DocumentTag.INTERNAL_FTPA_SUBMITTED_APPELLANT_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

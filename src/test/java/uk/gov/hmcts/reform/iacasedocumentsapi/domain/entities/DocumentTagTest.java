@@ -60,7 +60,7 @@ public class DocumentTagTest {
         assertEquals("internalDecideAnApplicationLetter", DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER.toString());
         assertEquals("internalApplyForFtpaRespondent", DocumentTag.INTERNAL_APPLY_FOR_FTPA_RESPONDENT.toString());
         assertEquals("internalDetainedTransferOutOfAdaLetter", DocumentTag.INTERNAL_DETAINED_TRANSFER_OUT_OF_ADA_LETTER.toString());
-        assertEquals("internalFtpaSubmittedLetter", DocumentTag.INTERNAL_FTPA_SUBMITTED_LETTER.toString());
+        assertEquals("internalFtpaSubmittedAppellantLetter", DocumentTag.INTERNAL_FTPA_SUBMITTED_APPELLANT_LETTER.toString());
     }
 
     @Test
