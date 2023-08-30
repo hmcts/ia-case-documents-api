@@ -1,7 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 
+import feign.FeignException;
+import feign.Request;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,11 +16,15 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DmDocumentD
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -59,6 +66,43 @@ public class DocumentDownloadClientTest {
 
         // Then
         verify(dmDocumentDownloadClient, times(1)).download(null);
+    }
+
+    @Test
+    void should_use_fallback_when_cdam_fails() throws IOException {
+        // Given
+        given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
+        given(featureToggler.getValue(eq("use-ccd-document-am-fallback"), anyBoolean())).willReturn(true);
+
+        FeignException exception = mock(FeignException.class);
+        given(exception.status()).willReturn(403);
+
+        given(cdamDocumentDownloadClient.download(any())).willThrow(exception);
+
+        // When
+        documentDownloadClient.download(null);
+
+        // Then
+        verify(cdamDocumentDownloadClient, times(1)).download(null);
+        verify(dmDocumentDownloadClient, times(1)).download(null);
+    }
+
+    @Test
+    void should_not_use_fallback_when_cdam_fails() throws IOException {
+        // Given
+        given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
+        given(featureToggler.getValue(eq("use-ccd-document-am-fallback"), anyBoolean())).willReturn(false);
+
+        FeignException exception = mock(FeignException.class);
+        given(exception.status()).willReturn(403);
+
+        given(cdamDocumentDownloadClient.download(any())).willThrow(exception);
+
+        // When, Then
+        assertThrows(FeignException.class, () -> documentDownloadClient.download(null));
+
+        verify(cdamDocumentDownloadClient, times(1)).download(null);
+        verifyNoInteractions(dmDocumentDownloadClient);
     }
 
 }
