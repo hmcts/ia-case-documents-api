@@ -1,11 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 
 import feign.FeignException;
+import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
+@Component("requestUser")
 public class IdamUserDetailsProvider implements UserDetailsProvider {
 
     private final AccessTokenProvider accessTokenProvider;
