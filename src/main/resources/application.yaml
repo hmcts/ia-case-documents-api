@@ -319,6 +319,11 @@ internalDetainedTransferOutOfAdaLetter.fileExtension: PDF
 internalDetainedTransferOutOfAdaLetter.fileName: "detained-appellant-transferred-out-of-ada"
 internalDetainedTransferOutOfAdaLetter.templateName: ${IA_INTERNAL_DETAINED_TRANSFERRED_OUT_OF_ADA_LETTER_TEMPLATE:TB-IAC-DEC-ENG-00014.docx}
 
+internalApplyForFtpaAppellantLetter.contentType: application/pdf
+internalApplyForFtpaAppellantLetter.fileExtension: PDF
+internalApplyForFtpaAppellantLetter.fileName: "apply-for-ftpa-appellant-letter"
+internalApplyForFtpaAppellantLetter.templateName: ${IA_INTERNAL_APPLY_FOR_FTPA_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00017.docx}
+
 internalAppellantFtpaDecidedGrantedLetter.contentType: application/pdf
 internalAppellantFtpaDecidedGrantedLetter.fileExtension: PDF
 internalAppellantFtpaDecidedGrantedLetter.fileName: "appellant-ftpa-decided-granted-letter"
@@ -426,6 +431,7 @@ security:
       - "markAppealPaid"
       - "recordRemissionDecision"
       - "markAppealAsAda"
+      - "applyForFTPAAppellant"
     citizen:
       - "startAppeal"
       - "editAppeal"

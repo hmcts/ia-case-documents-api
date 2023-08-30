@@ -1045,7 +1045,28 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalAppellantFtpaDecidedGrantedLetter")
+    @Bean("internalApplyForFtpaAppellantLetter")
+    public DocumentCreator<AsylumCase> getInternalApplyForFtpaAppellantLetterCreator(
+            @Value("${internalApplyForFtpaAppellantLetter.contentType}") String contentType,
+            @Value("${internalApplyForFtpaAppellantLetter.fileExtension}") String fileExtension,
+            @Value("${internalApplyForFtpaAppellantLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalApplyForFtpaAppellantLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+  
+  @Bean("internalAppellantFtpaDecidedGrantedLetter")
     public DocumentCreator<AsylumCase> getInternalAppellantFtpaDecidedGrantedLetterCreator(
         @Value("${internalAppellantFtpaDecidedGrantedLetter.contentType}") String contentType,
         @Value("${internalAppellantFtpaDecidedGrantedLetter.fileExtension}") String fileExtension,

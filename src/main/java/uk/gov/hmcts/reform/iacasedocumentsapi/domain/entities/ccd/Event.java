@@ -50,6 +50,7 @@ public enum Event {
     REQUEST_RESPONSE_REVIEW("requestResponseReview", CaseType.ASYLUM),
     MARK_APPEAL_AS_ADA("markAppealAsAda", CaseType.ASYLUM),
     APPLY_FOR_FTPA_RESPONDENT("applyForFTPARespondent", CaseType.ASYLUM),
+    APPLY_FOR_FTPA_APPELLANT("applyForFTPAAppellant", CaseType.ASYLUM),
     DECIDE_AN_APPLICATION("decideAnApplication", CaseType.ASYLUM),
     TRANSFER_OUT_OF_ADA("transferOutOfAda", CaseType.ASYLUM),
     RESIDENT_JUDGE_FTPA_DECISION("residentJudgeFtpaDecision", CaseType.ASYLUM),
