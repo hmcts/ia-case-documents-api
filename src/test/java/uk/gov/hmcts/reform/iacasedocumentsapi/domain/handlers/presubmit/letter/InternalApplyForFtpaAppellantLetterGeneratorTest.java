@@ -72,7 +72,7 @@ public class InternalApplyForFtpaAppellantLetterGeneratorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_FTPA_SUBMITTED_LETTER);
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_FTPA_SUBMITTED_APPELLANT_LETTER);
     }
 
     @Test
