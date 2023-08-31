@@ -1,0 +1,22 @@
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
+
+import com.fasterxml.jackson.annotation.JsonValue;
+
+public enum FtpaDecisionOutcomeType {
+
+    FTPA_GRANTED("granted"),
+    FTPA_PARTIALLY_GRANTED("partiallyGranted"),
+    FTPA_REFUSED("refused");
+
+    @JsonValue
+    private final String value;
+
+    FtpaDecisionOutcomeType(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+}
