@@ -392,6 +392,7 @@ security:
       - "submitApplication"
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
+      - "applyForFTPAAppellant"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
