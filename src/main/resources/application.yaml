@@ -334,6 +334,11 @@ internalDetainedHoFtpaDecidedGrantedLetter.fileExtension: PDF
 internalDetainedHoFtpaDecidedGrantedLetter.fileName: "ho-ftpa-decided-granted-letter"
 internalDetainedHoFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00019.docx}
 
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.contentType: application/pdf
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileExtension: PDF
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileName: "ho-ftpa-decided-partially-granted-letter"
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_PARTIALLY_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00021.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
