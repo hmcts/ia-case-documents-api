@@ -14,12 +14,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
-public class InternalHoFtpaDecidedPatiallyGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalHoFtpaDecidedPartiallyGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
 
-    public InternalHoFtpaDecidedPatiallyGrantedLetterTemplate(
+    public InternalHoFtpaDecidedPartiallyGrantedLetterTemplate(
             @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider) {
         this.templateName = templateName;

@@ -1114,7 +1114,7 @@ public class DocumentCreatorConfiguration {
             @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileExtension}") String fileExtension,
             @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalHoFtpaDecidedPatiallyGrantedLetterTemplate documentTemplate,
+            InternalHoFtpaDecidedPartiallyGrantedLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

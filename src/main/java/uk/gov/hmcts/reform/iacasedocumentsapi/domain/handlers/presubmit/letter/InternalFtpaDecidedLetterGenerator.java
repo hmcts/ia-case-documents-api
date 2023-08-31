@@ -102,6 +102,12 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
             }
             documentTag = DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER;
         }
+        documentHandler.addWithMetadata(
+                asylumCase,
+                documentForUpload,
+                LEGAL_REPRESENTATIVE_DOCUMENTS,
+                documentTag
+        );
 
         documentHandler.addWithMetadata(
                 asylumCase,

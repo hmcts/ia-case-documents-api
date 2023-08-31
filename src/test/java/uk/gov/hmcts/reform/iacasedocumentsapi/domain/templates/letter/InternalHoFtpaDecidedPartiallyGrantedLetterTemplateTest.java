@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
-class InternalHoFtpaDecidedPatiallyGrantedLetterTemplateTest {
+class InternalHoFtpaDecidedPartiallyGrantedLetterTemplateTest {
 
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
@@ -38,18 +38,18 @@ class InternalHoFtpaDecidedPatiallyGrantedLetterTemplateTest {
     private String appealReferenceNumber = "HU/11111/2022";
     private final String templateName = "INTERNAL_HO_FTPA_DECIDED_PARTIALLY_GRANTED_NOTICE_TEMPLATE.docx";
     private final String logo = "[userImage:hmcts.png]";
-    private InternalHoFtpaDecidedPatiallyGrantedLetterTemplate internalHoFtpaDecidedPatiallyGrantedLetterTemplate;
+    private InternalHoFtpaDecidedPartiallyGrantedLetterTemplate internalHoFtpaDecidedPartiallyGrantedLetterTemplate;
     private Map<String, Object> fieldValuesMap;
 
     @BeforeEach
     public void setUp() {
-        internalHoFtpaDecidedPatiallyGrantedLetterTemplate =
-                new InternalHoFtpaDecidedPatiallyGrantedLetterTemplate(templateName, customerServicesProvider);
+        internalHoFtpaDecidedPartiallyGrantedLetterTemplate =
+                new InternalHoFtpaDecidedPartiallyGrantedLetterTemplate(templateName, customerServicesProvider);
     }
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalHoFtpaDecidedPatiallyGrantedLetterTemplate.getName());
+        assertEquals(templateName, internalHoFtpaDecidedPartiallyGrantedLetterTemplate.getName());
     }
 
     void dataSetup() {
@@ -65,7 +65,7 @@ class InternalHoFtpaDecidedPatiallyGrantedLetterTemplateTest {
     @Test
     void should_populate_template() {
         dataSetup();
-        fieldValuesMap = internalHoFtpaDecidedPatiallyGrantedLetterTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = internalHoFtpaDecidedPartiallyGrantedLetterTemplate.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
