@@ -324,6 +324,11 @@ internalApplyForFtpaAppellantLetter.fileExtension: PDF
 internalApplyForFtpaAppellantLetter.fileName: "apply-for-ftpa-appellant-letter"
 internalApplyForFtpaAppellantLetter.templateName: ${IA_INTERNAL_APPLY_FOR_FTPA_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00017.docx}
 
+internalAppellantFtpaDecidedGrantedLetter.contentType: application/pdf
+internalAppellantFtpaDecidedGrantedLetter.fileExtension: PDF
+internalAppellantFtpaDecidedGrantedLetter.fileName: "appellant-ftpa-decided-granted-letter"
+internalAppellantFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00018.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -450,6 +455,7 @@ security:
       - "generateHearingBundle"
       - "decideAnApplication"
       - "transferOutOfAda"
+      - "residentJudgeFtpaDecision"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
