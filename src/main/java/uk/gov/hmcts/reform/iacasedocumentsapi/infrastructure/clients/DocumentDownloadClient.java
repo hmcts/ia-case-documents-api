@@ -34,7 +34,7 @@ public class DocumentDownloadClient {
      * <p>
      *     Added on: 2023-08-30<br/>
      *     Incident: INC5541389<br/>
-     *     Related ticket: RPMO-3511
+     *     Related ticket: RPMO-3511.
      * </p>
      * <p>
      *     This is a fallback method to allow using the unsecured document store (dm) as opposed to the secured one
@@ -50,8 +50,8 @@ public class DocumentDownloadClient {
      *     3. delete this method
      * </p>
      *
-     * @param documentBinaryUrl
-     * @return
+     * @param documentBinaryUrl The url
+     * @return A resource
      */
     private Resource downloadWithFallback(String documentBinaryUrl) {
         try {
