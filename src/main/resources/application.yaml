@@ -329,6 +329,11 @@ internalAppellantFtpaDecidedGrantedLetter.fileExtension: PDF
 internalAppellantFtpaDecidedGrantedLetter.fileName: "appellant-ftpa-decided-granted-letter"
 internalAppellantFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00018.docx}
 
+internalDetainedHoFtpaDecidedGrantedLetter.contentType: application/pdf
+internalDetainedHoFtpaDecidedGrantedLetter.fileExtension: PDF
+internalDetainedHoFtpaDecidedGrantedLetter.fileName: "ho-ftpa-decided-granted-letter"
+internalDetainedHoFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00019.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}

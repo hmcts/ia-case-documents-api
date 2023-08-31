@@ -26,34 +26,37 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter;
     private final DocumentHandler documentHandler;
     private final String ftpaApplicantAppellant = "appellant";
 
     public InternalFtpaDecidedLetterGenerator(
-        @Qualifier("internalAppellantFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter,
-        DocumentHandler documentHandler
+            @Qualifier("internalAppellantFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter,
+            @Qualifier("internalHoFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter,
+            DocumentHandler documentHandler
     ) {
         this.internalAppellantFtpaDecidedGrantedLetter = internalAppellantFtpaDecidedGrantedLetter;
+        this.internalHoFtpaDecidedGrantedLetter = internalHoFtpaDecidedGrantedLetter;
         this.documentHandler = documentHandler;
     }
 
     public boolean canHandle(
-        PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+            PreSubmitCallbackStage callbackStage,
+            Callback<AsylumCase> callback
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION
-               && isInternalCase(asylumCase)
-               && isAppellantInDetention(asylumCase);
+                && callback.getEvent() == Event.RESIDENT_JUDGE_FTPA_DECISION
+                && isInternalCase(asylumCase)
+                && isAppellantInDetention(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
-        PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+            PreSubmitCallbackStage callbackStage,
+            Callback<AsylumCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
@@ -63,11 +66,15 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Optional<FtpaDecisionOutcomeType> ftpaAppellantDecisionOutcomeType = asylumCase
-            .read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
+                .read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
+
+        Optional<FtpaDecisionOutcomeType> ftpaRespondentDecisionOutcomeType = asylumCase
+                .read(FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
 
         Optional<String> ftpaApplicantType = asylumCase.read(FTPA_APPLICANT_TYPE, String.class);
 
         Document documentForUpload;
+        DocumentTag documentTag;
 
         if (ftpaApplicantType.equals(Optional.of(ftpaApplicantAppellant))) {
             if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_GRANTED))) {
@@ -75,15 +82,21 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
             } else {
                 return new PreSubmitCallbackResponse<>(asylumCase);
             }
+            documentTag = DocumentTag.INTERNAL_APPELLANT_FTPA_DECIDED_LETTER;
         } else {
-            return new PreSubmitCallbackResponse<>(asylumCase);
+            if (ftpaRespondentDecisionOutcomeType.equals(Optional.of(FTPA_GRANTED))) {
+                documentForUpload = internalHoFtpaDecidedGrantedLetter.create(caseDetails);
+            } else {
+                return new PreSubmitCallbackResponse<>(asylumCase);
+            }
+            documentTag = DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER;
         }
 
         documentHandler.addWithMetadata(
-            asylumCase,
-            documentForUpload,
-            NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_APPELLANT_FTPA_DECIDED_LETTER
+                asylumCase,
+                documentForUpload,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                documentTag
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
