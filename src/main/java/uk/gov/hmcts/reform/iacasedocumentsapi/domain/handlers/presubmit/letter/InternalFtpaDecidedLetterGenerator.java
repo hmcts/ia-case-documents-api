@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
@@ -27,16 +28,19 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
 
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter;
     private final DocumentHandler documentHandler;
     private final String ftpaApplicantAppellant = "appellant";
 
     public InternalFtpaDecidedLetterGenerator(
             @Qualifier("internalAppellantFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter,
             @Qualifier("internalHoFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter,
+            @Qualifier("internalHoFtpaDecidedPartiallyGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter,
             DocumentHandler documentHandler
     ) {
         this.internalAppellantFtpaDecidedGrantedLetter = internalAppellantFtpaDecidedGrantedLetter;
         this.internalHoFtpaDecidedGrantedLetter = internalHoFtpaDecidedGrantedLetter;
+        this.internalHoFtpaDecidedPartiallyGrantedLetter = internalHoFtpaDecidedPartiallyGrantedLetter;
         this.documentHandler = documentHandler;
     }
 
@@ -86,6 +90,8 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
         } else {
             if (ftpaRespondentDecisionOutcomeType.equals(Optional.of(FTPA_GRANTED))) {
                 documentForUpload = internalHoFtpaDecidedGrantedLetter.create(caseDetails);
+            } else if (ftpaRespondentDecisionOutcomeType.equals(Optional.of(FTPA_PARTIALLY_GRANTED))) {
+                documentForUpload = internalHoFtpaDecidedPartiallyGrantedLetter.create(caseDetails);
             } else {
                 return new PreSubmitCallbackResponse<>(asylumCase);
             }
