@@ -565,8 +565,11 @@ public enum AsylumCaseDefinition {
     TRANSFER_OUT_OF_ADA_REASON(
             "transferOutOfAdaReason", new TypeReference<String>(){}),
     TRANSFER_OUT_OF_ADA_MORE_DETAILS(
-            "transferOutOfAdaMoreDetails", new TypeReference<String>(){});
-
+            "transferOutOfAdaMoreDetails", new TypeReference<String>(){}),
+    FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE(
+            "ftpaAppellantRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
+    FTPA_APPLICANT_TYPE(
+            "ftpaApplicantType", new TypeReference<String>(){});
 
     private final String value;
     private final TypeReference typeReference;

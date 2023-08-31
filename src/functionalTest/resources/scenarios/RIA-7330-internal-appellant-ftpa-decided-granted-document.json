@@ -1,0 +1,48 @@
+{
+  "description": "RIA-7330 Internal appellant ftpa decided - granted letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 7330,
+      "eventId": "residentJudgeFtpaDecision",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "appellantInDetention": "Yes",
+          "ftpaAppellantRjDecisionOutcomeType": "granted",
+          "ftpaApplicantType": "appellant"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "appellantInDetention": "Yes",
+        "ftpaAppellantRjDecisionOutcomeType": "granted",
+        "ftpaApplicantType": "appellant",
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "internalAppellantFtpaDecidedLetter",
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_filename": "PA 12345 2019-Awan-appellant-ftpa-decided-granted-letter.PDF",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
+              },
+              "suppliedBy": "",
+              "description": "",
+              "dateUploaded": "{$TODAY}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
