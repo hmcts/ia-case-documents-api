@@ -1114,7 +1114,28 @@ public class DocumentCreatorConfiguration {
             @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileExtension}") String fileExtension,
             @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalHoFtpaDecidedPatiallyGrantedLetterTemplate documentTemplate,
+            InternalHoFtpaDecidedPartiallyGrantedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalHoFtpaDecidedRefusedLetter")
+    public DocumentCreator<AsylumCase> getInternalHoFtpaDecidedRefusedDocumentCreator(
+            @Value("${internalDetainedHoFtpaDecidedRefusedLetter.contentType}") String contentType,
+            @Value("${internalDetainedHoFtpaDecidedRefusedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedHoFtpaDecidedRefusedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalHoFtpaDecidedRefusedLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

@@ -9,6 +9,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,6 +40,8 @@ class InternalFtpaDecidedLetterGeneratorTest {
     @Mock
     private DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedCreator;
     @Mock
+    private DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedCreator;
+    @Mock
     private DocumentHandler documentHandler;
     @Mock
     private Callback<AsylumCase> callback;
@@ -58,6 +62,7 @@ class InternalFtpaDecidedLetterGeneratorTest {
                     internalAppelantFtpaDecidedCreator,
                     internalHoFtpaDecidedGrantedCreator,
                     internalHoFtpaDecidedPartiallyGrantedCreator,
+                    internalHoFtpaDecidedRefusedCreator,
                     documentHandler
             );
 
@@ -117,6 +122,28 @@ class InternalFtpaDecidedLetterGeneratorTest {
         when(asylumCase.read(FTPA_APPLICANT_TYPE, String.class)).thenReturn(Optional.of(ftpaApplicantRespondent));
 
         when(internalHoFtpaDecidedPartiallyGrantedCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                internalFtpaDecidedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadata(
+                asylumCase,
+                uploadedDocument,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER
+        );
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = FtpaDecisionOutcomeType.class, names = {"FTPA_REFUSED", "FTPA_NOT_ADMITTED"})
+    void should_create_internal_ho_ftpa_decided_refused_letter_and_append_to_notification_attachment_documents(FtpaDecisionOutcomeType ftpaDecisionOutcomeType) {
+        when(asylumCase.read(FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(ftpaDecisionOutcomeType));
+        when(asylumCase.read(FTPA_APPLICANT_TYPE, String.class)).thenReturn(Optional.of(ftpaApplicantRespondent));
+
+        when(internalHoFtpaDecidedRefusedCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 internalFtpaDecidedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
