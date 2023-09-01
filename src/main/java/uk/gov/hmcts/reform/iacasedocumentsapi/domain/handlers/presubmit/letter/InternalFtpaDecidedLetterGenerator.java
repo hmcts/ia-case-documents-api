@@ -26,6 +26,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedLetter;
@@ -34,12 +35,14 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
 
     public InternalFtpaDecidedLetterGenerator(
             @Qualifier("internalAppellantFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter,
+            @Qualifier("internalAppellantFtpaDecidedPartiallyGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedLetter,
             @Qualifier("internalHoFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter,
             @Qualifier("internalHoFtpaDecidedPartiallyGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter,
             @Qualifier("internalHoFtpaDecidedRefusedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedLetter,
             DocumentHandler documentHandler
     ) {
         this.internalAppellantFtpaDecidedGrantedLetter = internalAppellantFtpaDecidedGrantedLetter;
+        this.internalAppellantFtpaDecidedPartiallyGrantedLetter = internalAppellantFtpaDecidedPartiallyGrantedLetter;
         this.internalHoFtpaDecidedGrantedLetter = internalHoFtpaDecidedGrantedLetter;
         this.internalHoFtpaDecidedPartiallyGrantedLetter = internalHoFtpaDecidedPartiallyGrantedLetter;
         this.internalHoFtpaDecidedRefusedLetter = internalHoFtpaDecidedRefusedLetter;
@@ -85,6 +88,8 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
         if (ftpaApplicantType.equals(Optional.of(ftpaApplicantAppellant))) {
             if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_GRANTED))) {
                 documentForUpload = internalAppellantFtpaDecidedGrantedLetter.create(caseDetails);
+            } else if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_PARTIALLY_GRANTED))) {
+                documentForUpload = internalAppellantFtpaDecidedPartiallyGrantedLetter.create(caseDetails);
             } else {
                 return new PreSubmitCallbackResponse<>(asylumCase);
             }
@@ -102,12 +107,6 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
             }
             documentTag = DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER;
         }
-        documentHandler.addWithMetadata(
-                asylumCase,
-                documentForUpload,
-                LEGAL_REPRESENTATIVE_DOCUMENTS,
-                documentTag
-        );
 
         documentHandler.addWithMetadata(
                 asylumCase,
