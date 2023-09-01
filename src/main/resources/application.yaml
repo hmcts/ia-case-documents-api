@@ -344,6 +344,13 @@ internalDetainedHoFtpaDecidedRefusedLetter.fileExtension: PDF
 internalDetainedHoFtpaDecidedRefusedLetter.fileName: "ho-ftpa-decided-refused-letter"
 internalDetainedHoFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00022.docx}
 
+internalAppellantFtpaDecidedPartiallyGrantedLetter.contentType: application/pdf
+internalAppellantFtpaDecidedPartiallyGrantedLetter.fileExtension: PDF
+internalAppellantFtpaDecidedPartiallyGrantedLetter.fileName: "appellant-ftpa-decided-partially-granted-letter"
+internalAppellantFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_PARTIALLY_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00020.docx}
+internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaAdaDueCalendarDays: 14
+internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaNonAdaDueCalendarDays: 7
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
