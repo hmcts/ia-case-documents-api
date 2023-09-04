@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7332 Internal appellant ftpa decided - refused letter",
+  "description": "RIA-7332 Internal appellant ftpa decided - refused letter - non-ADA",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -11,6 +11,7 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
           "ftpaAppellantRjDecisionOutcomeType": "refused",
           "ftpaApplicantType": "appellant"
         }
@@ -24,6 +25,7 @@
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
         "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
         "ftpaAppellantRjDecisionOutcomeType": "refused",
         "ftpaApplicantType": "appellant",
         "notificationAttachmentDocuments": [
