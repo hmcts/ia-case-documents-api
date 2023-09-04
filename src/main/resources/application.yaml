@@ -351,6 +351,13 @@ internalAppellantFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_A
 internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaAdaDueWorkingDays: 7
 internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaNonAdaDueCalendarDays: 14
 
+internalAppellantFtpaDecidedRefusedLetter.contentType: application/pdf
+internalAppellantFtpaDecidedRefusedLetter.fileExtension: PDF
+internalAppellantFtpaDecidedRefusedLetter.fileName: "appellant-ftpa-decided-refused-letter"
+internalAppellantFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00023.docx}
+internalAppellantFtpaDecidedRefusedLetter.ftpaAdaDueWorkingDays: 7
+internalAppellantFtpaDecidedRefusedLetter.ftpaNonAdaDueCalendarDays: 14
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
