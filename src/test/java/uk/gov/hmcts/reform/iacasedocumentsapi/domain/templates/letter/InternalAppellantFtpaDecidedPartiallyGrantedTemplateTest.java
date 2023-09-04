@@ -1,14 +1,17 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DueDateService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -35,6 +39,8 @@ class InternalAppellantFtpaDecidedPartiallyGrantedTemplateTest {
     private DateProvider dateProvider;
     @Mock
     private CustomerServicesProvider customerServicesProvider;
+    @Mock
+    private DueDateService dueDateService;
     private final String templateName = "TB-IAC-LET-ENG-00020.docx";
     private final String customerServicesTelephone = "0300 123 1711";
     private final String customerServicesEmail = "email@example.com";
@@ -42,9 +48,11 @@ class InternalAppellantFtpaDecidedPartiallyGrantedTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private final int adaDueInCalendarDays = 7;
+    private final int adaDueInWorkingDays = 7;
     private final int nonAdaDueInCalendarDays = 14;
     private final LocalDate now = LocalDate.now();
+    private final ZonedDateTime zonedDueDateTime = LocalDate.parse("2023-01-01").atStartOfDay(ZoneOffset.UTC);
+    private final LocalDate utApplicationDueDate = zonedDueDateTime.toLocalDate();
     private InternalAppellantFtpaDecidedPartiallyGrantedTemplate internalAppellantFtpaDecidedPartiallyGrantedTemplate;
 
     @BeforeEach
@@ -54,7 +62,8 @@ class InternalAppellantFtpaDecidedPartiallyGrantedTemplateTest {
                 templateName,
                 dateProvider,
                 customerServicesProvider,
-                adaDueInCalendarDays,
+                dueDateService,
+                adaDueInWorkingDays,
                 nonAdaDueInCalendarDays
             );
     }
@@ -73,11 +82,12 @@ class InternalAppellantFtpaDecidedPartiallyGrantedTemplateTest {
             .thenReturn(customerServicesEmail);
 
         when(dateProvider.now()).thenReturn(LocalDate.now());
+        when(dueDateService.calculateDueDate(any(), eq(adaDueInWorkingDays))).thenReturn(zonedDueDateTime);
     }
 
     @Test
     void should_return_template_name() {
-        Assertions.assertEquals(templateName, internalAppellantFtpaDecidedPartiallyGrantedTemplate.getName());
+        assertEquals(templateName, internalAppellantFtpaDecidedPartiallyGrantedTemplate.getName());
     }
 
     @Test
@@ -100,11 +110,11 @@ class InternalAppellantFtpaDecidedPartiallyGrantedTemplateTest {
     }
 
     @Test
-    void should_return_7_calendar_days_for_ada() {
+    void should_return_7_working_days_for_ada() {
         dataSetup();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         Map<String, Object> templateFieldValues = internalAppellantFtpaDecidedPartiallyGrantedTemplate.mapFieldValues(caseDetails);
-        Assertions.assertEquals(formatDateForNotificationAttachmentDocument(now.plusDays(adaDueInCalendarDays)), templateFieldValues.get("utApplicationDeadline"));
+        assertEquals(formatDateForNotificationAttachmentDocument(utApplicationDueDate), templateFieldValues.get("utApplicationDeadline"));
     }
 
     @Test
@@ -112,6 +122,6 @@ class InternalAppellantFtpaDecidedPartiallyGrantedTemplateTest {
         dataSetup();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         Map<String, Object> templateFieldValues = internalAppellantFtpaDecidedPartiallyGrantedTemplate.mapFieldValues(caseDetails);
-        Assertions.assertEquals(formatDateForNotificationAttachmentDocument(now.plusDays(nonAdaDueInCalendarDays)), templateFieldValues.get("utApplicationDeadline"));
+        assertEquals(formatDateForNotificationAttachmentDocument(now.plusDays(nonAdaDueInCalendarDays)), templateFieldValues.get("utApplicationDeadline"));
     }
 }
