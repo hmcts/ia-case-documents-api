@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7330 Internal appellant ftpa decided - granted letter - ADA",
+  "description": "RIA-7330 Internal appellant ftpa decided - granted letter - non-ADA",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
