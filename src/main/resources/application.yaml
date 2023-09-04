@@ -329,6 +329,28 @@ internalAppellantFtpaDecidedGrantedLetter.fileExtension: PDF
 internalAppellantFtpaDecidedGrantedLetter.fileName: "appellant-ftpa-decided-granted-letter"
 internalAppellantFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00018.docx}
 
+internalDetainedHoFtpaDecidedGrantedLetter.contentType: application/pdf
+internalDetainedHoFtpaDecidedGrantedLetter.fileExtension: PDF
+internalDetainedHoFtpaDecidedGrantedLetter.fileName: "ho-ftpa-decided-granted-letter"
+internalDetainedHoFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00019.docx}
+
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.contentType: application/pdf
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileExtension: PDF
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileName: "ho-ftpa-decided-partially-granted-letter"
+internalDetainedHoFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_PARTIALLY_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00021.docx}
+
+internalDetainedHoFtpaDecidedRefusedLetter.contentType: application/pdf
+internalDetainedHoFtpaDecidedRefusedLetter.fileExtension: PDF
+internalDetainedHoFtpaDecidedRefusedLetter.fileName: "ho-ftpa-decided-refused-letter"
+internalDetainedHoFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00022.docx}
+
+internalAppellantFtpaDecidedPartiallyGrantedLetter.contentType: application/pdf
+internalAppellantFtpaDecidedPartiallyGrantedLetter.fileExtension: PDF
+internalAppellantFtpaDecidedPartiallyGrantedLetter.fileName: "appellant-ftpa-decided-partially-granted-letter"
+internalAppellantFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_PARTIALLY_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00020.docx}
+internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaAdaDueCalendarDays: 7
+internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaNonAdaDueCalendarDays: 14
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -377,6 +399,7 @@ security:
       - "submitApplication"
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
+      - "applyForFTPAAppellant"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"

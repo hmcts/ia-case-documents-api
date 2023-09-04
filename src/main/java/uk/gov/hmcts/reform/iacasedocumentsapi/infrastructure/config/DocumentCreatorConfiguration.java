@@ -1086,4 +1086,88 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("internalHoFtpaDecidedGrantedLetter")
+    public DocumentCreator<AsylumCase> getInternalHoFtpaDecidedGrantedDocumentCreator(
+            @Value("${internalDetainedHoFtpaDecidedGrantedLetter.contentType}") String contentType,
+            @Value("${internalDetainedHoFtpaDecidedGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedHoFtpaDecidedGrantedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalHoFtpaDecidedGrantedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalHoFtpaDecidedPartiallyGrantedLetter")
+    public DocumentCreator<AsylumCase> getInternalHoFtpaDecidedPartiallyGrantedDocumentCreator(
+            @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.contentType}") String contentType,
+            @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalHoFtpaDecidedPartiallyGrantedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalHoFtpaDecidedRefusedLetter")
+    public DocumentCreator<AsylumCase> getInternalHoFtpaDecidedRefusedDocumentCreator(
+            @Value("${internalDetainedHoFtpaDecidedRefusedLetter.contentType}") String contentType,
+            @Value("${internalDetainedHoFtpaDecidedRefusedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedHoFtpaDecidedRefusedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalHoFtpaDecidedRefusedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalAppellantFtpaDecidedPartiallyGrantedLetter")
+    public DocumentCreator<AsylumCase> getInternalAppellantFtpaDecidedPartiallyGrantedLetterCreator(
+        @Value("${internalAppellantFtpaDecidedPartiallyGrantedLetter.contentType}") String contentType,
+        @Value("${internalAppellantFtpaDecidedPartiallyGrantedLetter.fileExtension}") String fileExtension,
+        @Value("${internalAppellantFtpaDecidedPartiallyGrantedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAppellantFtpaDecidedPartiallyGrantedTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 }
