@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi;
 
 import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -14,8 +13,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.StreamSupport;
+import lombok.SneakyThrows;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.LaunchDarklyFeatureToggler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 
@@ -49,15 +50,26 @@ public class CcdScenarioRunnerTest {
     @Autowired private ObjectMapper objectMapper;
     @Autowired private List<Fixture> fixtures;
     @Autowired private List<Verifier> verifiers;
+
     @MockBean
-    LaunchDarklyFeatureToggler featureToggler;
+    static RequestUserAccessTokenProvider requestUserAccessTokenProvider;
+
+    private static String accessToken = null;
+
+    @BeforeAll
+    @SneakyThrows
+    public static void authenticateMe(@Autowired AuthorizationHeadersProvider authorizationHeadersProvider) {
+        accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
+        Thread.sleep(1000);
+        assertNotNull(accessToken);
+    }
 
     @BeforeEach
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        when(featureToggler.getValue(anyString(), anyBoolean())).thenReturn(false);
+        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
     }
 
     @Test
