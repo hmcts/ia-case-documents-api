@@ -5,6 +5,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DueDateService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
@@ -21,19 +23,22 @@ public class InternalAppellantFtpaDecidedPartiallyGrantedTemplate implements Doc
     private final String templateName;
     private final DateProvider dateProvider;
     private final CustomerServicesProvider customerServicesProvider;
-    private final int adaDueInCalendarDays;
+    private final DueDateService dueDateService;
+    private final int adaDueWorkingDays;
     private final int nonAdaDueInCalendarDays;
 
     public InternalAppellantFtpaDecidedPartiallyGrantedTemplate(
         @Value("${internalAppellantFtpaDecidedPartiallyGrantedLetter.templateName}") String templateName,
         DateProvider dateProvider,
         CustomerServicesProvider customerServicesProvider,
-        @Value("${internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaAdaDueCalendarDays}") int adaDueInCalendarDays,
+        DueDateService dueDateService,
+        @Value("${internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaAdaDueWorkingDays}") int adaDueWorkingDays,
         @Value("${internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaNonAdaDueCalendarDays}") int nonAdaDueInCalendarDays) {
         this.templateName = templateName;
         this.dateProvider = dateProvider;
         this.customerServicesProvider = customerServicesProvider;
-        this.adaDueInCalendarDays = adaDueInCalendarDays;
+        this.dueDateService = dueDateService;
+        this.adaDueWorkingDays = adaDueWorkingDays;
         this.nonAdaDueInCalendarDays = nonAdaDueInCalendarDays;
     }
 
@@ -48,7 +53,7 @@ public class InternalAppellantFtpaDecidedPartiallyGrantedTemplate implements Doc
         final Map<String, Object> fieldValues = new HashMap<>();
 
         LocalDate dueDate = isAcceleratedDetainedAppeal(asylumCase)
-            ? LocalDate.now().plusDays(adaDueInCalendarDays)
+            ? dueDateService.calculateDueDate(ZonedDateTime.now(), adaDueWorkingDays).toLocalDate()
             : LocalDate.now().plusDays(nonAdaDueInCalendarDays);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));

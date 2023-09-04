@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7331 Internal appellant ftpa decided - partially granted letter",
+  "description": "RIA-7331 Internal appellant ftpa decided - partially granted letter - non-ADA",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -11,6 +11,7 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
           "ftpaAppellantRjDecisionOutcomeType": "partiallyGranted",
           "ftpaApplicantType": "appellant"
         }
@@ -24,6 +25,7 @@
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
         "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
         "ftpaAppellantRjDecisionOutcomeType": "partiallyGranted",
         "ftpaApplicantType": "appellant",
         "notificationAttachmentDocuments": [
