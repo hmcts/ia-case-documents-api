@@ -27,6 +27,7 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
 
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter;
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedRefusedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedLetter;
@@ -36,6 +37,7 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
     public InternalFtpaDecidedLetterGenerator(
             @Qualifier("internalAppellantFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter,
             @Qualifier("internalAppellantFtpaDecidedPartiallyGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedLetter,
+            @Qualifier("internalAppellantFtpaDecidedRefusedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedRefusedLetter,
             @Qualifier("internalHoFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter,
             @Qualifier("internalHoFtpaDecidedPartiallyGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter,
             @Qualifier("internalHoFtpaDecidedRefusedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedLetter,
@@ -43,6 +45,7 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
     ) {
         this.internalAppellantFtpaDecidedGrantedLetter = internalAppellantFtpaDecidedGrantedLetter;
         this.internalAppellantFtpaDecidedPartiallyGrantedLetter = internalAppellantFtpaDecidedPartiallyGrantedLetter;
+        this.internalAppellantFtpaDecidedRefusedLetter = internalAppellantFtpaDecidedRefusedLetter;
         this.internalHoFtpaDecidedGrantedLetter = internalHoFtpaDecidedGrantedLetter;
         this.internalHoFtpaDecidedPartiallyGrantedLetter = internalHoFtpaDecidedPartiallyGrantedLetter;
         this.internalHoFtpaDecidedRefusedLetter = internalHoFtpaDecidedRefusedLetter;
@@ -90,6 +93,8 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
                 documentForUpload = internalAppellantFtpaDecidedGrantedLetter.create(caseDetails);
             } else if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_PARTIALLY_GRANTED))) {
                 documentForUpload = internalAppellantFtpaDecidedPartiallyGrantedLetter.create(caseDetails);
+            } else if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_REFUSED))) {
+                documentForUpload = internalAppellantFtpaDecidedRefusedLetter.create(caseDetails);
             } else {
                 return new PreSubmitCallbackResponse<>(asylumCase);
             }
