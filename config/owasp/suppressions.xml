@@ -20,7 +20,8 @@
       ]]</notes>
     <cve>CVE-2022-45688</cve>
   </suppress>
-  <suppress until="2023-08-31">
-    <cve>CVE-2023-35116</cve><!-- 2023-08-03 jackson-databind 2.15.2 (latest at the time of writing) still has the vulnerability. Try again when there's a new version available -->
+  <suppress until="2023-09-30">
+    <cve>CVE-2023-35116</cve><!-- 2023-09-04 jackson-databind 2.15.2 (latest at the time of writing) still has the vulnerability. Try again when there's a new version available -->
+    <cve>CVE-2023-41080</cve><!-- 2023-09-05apache tomcat vulnerability -->
   </suppress>
 </suppressions>
