@@ -961,13 +961,34 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalDecideAnApplicationDecisionGrantedLetter")
-    public DocumentCreator<AsylumCase> getinternalDetainedAndAdaDecideAnApplicationDecisionGrantedLetterCreator(
-            @Value("${internalDecideAnApplicationDecisionGrantedLetter.contentType}") String contentType,
-            @Value("${internalDecideAnApplicationDecisionGrantedLetter.fileExtension}") String fileExtension,
-            @Value("${internalDecideAnApplicationDecisionGrantedLetter.fileName}") String fileName,
+    @Bean("internalDecideAnAppellantApplicationDecisionGrantedLetter")
+    public DocumentCreator<AsylumCase> getinternalDecideAnAppellantApplicationDecisionGrantedLetterCreator(
+            @Value("${internalDecideAnAppellantApplicationDecisionGrantedLetter.contentType}") String contentType,
+            @Value("${internalDecideAnAppellantApplicationDecisionGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDecideAnAppellantApplicationDecisionGrantedLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDecideAnApplicationDecisionGrantedLetterTemplate documentTemplate,
+            InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalDecideHomeOfficeApplicationDecisionGrantedLetter")
+    public DocumentCreator<AsylumCase> getinternalDecideHomeOfficeApplicationDecisionGrantedLetterCreator(
+            @Value("${internalDecideHomeOfficeApplicationDecisionGrantedLetter.contentType}") String contentType,
+            @Value("${internalDecideHomeOfficeApplicationDecisionGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDecideHomeOfficeApplicationDecisionGrantedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
