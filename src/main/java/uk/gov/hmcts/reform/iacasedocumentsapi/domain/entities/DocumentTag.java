@@ -60,6 +60,7 @@ public enum DocumentTag {
     INTERNAL_FTPA_SUBMITTED_APPELLANT_LETTER("internalFtpaSubmittedAppellantLetter", CaseType.ASYLUM),
     INTERNAL_APPELLANT_FTPA_DECIDED_LETTER("internalAppellantFtpaDecidedLetter", CaseType.ASYLUM),
     INTERNAL_HO_FTPA_DECIDED_LETTER("internalHoFtpaDecidedLetter", CaseType.ASYLUM),
+    INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER("internalHearingRequirementsUpdatedLetter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
