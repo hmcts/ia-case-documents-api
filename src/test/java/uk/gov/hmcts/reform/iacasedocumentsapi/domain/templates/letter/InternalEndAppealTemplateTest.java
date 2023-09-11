@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -44,7 +46,7 @@ class InternalEndAppealTemplateTest {
     private String homeOfficeReferenceNumber = "123654";
     private String appealReferenceNumber = "HU/11111/2022";
     private String appealEndDate = "2023-07-01";
-    private String judgeName = "Mr.Test";
+    private String approverType = "Legal Officer";
     private final String templateName = "INTERNAL_END_APPEAL_NOTICE_TEMPLATE.docx";
     private final String logo = "[userImage:hmcts.png]";
     private InternalEndAppealTemplate internalEndAppealTemplate;
@@ -69,7 +71,7 @@ class InternalEndAppealTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(appealEndDate));
-        when(asylumCase.read(END_APPEAL_APPROVER_NAME, String.class)).thenReturn(Optional.of(judgeName));
+        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(approverType));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
     }
 
@@ -87,7 +89,7 @@ class InternalEndAppealTemplateTest {
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
-        assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
+        assertEquals("1 Jul 2023", fieldValuesMap.get("endAppealDate"));
         if (yesOrNo.equals(YesOrNo.YES)) {
             assertEquals(adaEmail, fieldValuesMap.get("customerServicesEmail"));
             assertEquals(adaFormName, fieldValuesMap.get("formName"));
@@ -95,6 +97,16 @@ class InternalEndAppealTemplateTest {
             assertEquals(nonAdaEmail, fieldValuesMap.get("customerServicesEmail"));
             assertEquals(nonAdaFormName, fieldValuesMap.get("formName"));
         }
+    }
+
+    @Test
+    void should_throw_if_end_appeal_date_is_not_present() {
+        dataSetup();
+        when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> internalEndAppealTemplate.mapFieldValues(caseDetails))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("End appeal date is missing");
     }
 
     private static Stream<Arguments> getAdaAndNonAdaArguments() {
