@@ -63,6 +63,7 @@ public class CcdScenarioRunnerTest {
         Thread.sleep(1000);
         assertNotNull(accessToken);
     }
+
     @BeforeEach
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
