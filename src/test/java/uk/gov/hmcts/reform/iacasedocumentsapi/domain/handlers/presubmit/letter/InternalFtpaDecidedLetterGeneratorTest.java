@@ -34,7 +34,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 class InternalFtpaDecidedLetterGeneratorTest {
 
     @Mock
-    private DocumentCreator<AsylumCase> internalAppelantFtpaDecidedCreator;
+    private DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedCreator;
+    @Mock
+    private DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedCreator;
+    @Mock
+    private DocumentCreator<AsylumCase> internalAppellantFtpaDecidedRefusedCreator;
     @Mock
     private DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedCreator;
     @Mock
@@ -59,11 +63,13 @@ class InternalFtpaDecidedLetterGeneratorTest {
     public void setUp() {
         internalFtpaDecidedLetterGenerator =
             new InternalFtpaDecidedLetterGenerator(
-                    internalAppelantFtpaDecidedCreator,
-                    internalHoFtpaDecidedGrantedCreator,
-                    internalHoFtpaDecidedPartiallyGrantedCreator,
-                    internalHoFtpaDecidedRefusedCreator,
-                    documentHandler
+                internalAppellantFtpaDecidedGrantedCreator,
+                internalAppellantFtpaDecidedPartiallyGrantedCreator,
+                internalAppellantFtpaDecidedRefusedCreator,
+                internalHoFtpaDecidedGrantedCreator,
+                internalHoFtpaDecidedPartiallyGrantedCreator,
+                internalHoFtpaDecidedRefusedCreator,
+                documentHandler
             );
 
         when(callback.getEvent()).thenReturn(Event.RESIDENT_JUDGE_FTPA_DECISION);
@@ -79,7 +85,49 @@ class InternalFtpaDecidedLetterGeneratorTest {
         when(asylumCase.read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_GRANTED));
         when(asylumCase.read(FTPA_APPLICANT_TYPE, String.class)).thenReturn(Optional.of(ftpaApplicantAppellant));
 
-        when(internalAppelantFtpaDecidedCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantFtpaDecidedGrantedCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            internalFtpaDecidedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadata(
+            asylumCase,
+            uploadedDocument,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.INTERNAL_APPELLANT_FTPA_DECIDED_LETTER
+        );
+    }
+
+    @Test
+    void should_create_internal_appellant_ftpa_decided_partially_granted_letter_and_append_to_notification_attachment_documents() {
+        when(asylumCase.read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED));
+        when(asylumCase.read(FTPA_APPLICANT_TYPE, String.class)).thenReturn(Optional.of(ftpaApplicantAppellant));
+
+        when(internalAppellantFtpaDecidedPartiallyGrantedCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            internalFtpaDecidedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadata(
+            asylumCase,
+            uploadedDocument,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.INTERNAL_APPELLANT_FTPA_DECIDED_LETTER
+        );
+    }
+
+    @Test
+    void should_create_internal_appellant_ftpa_decided_refused_letter_and_append_to_notification_attachment_documents() {
+        when(asylumCase.read(FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class)).thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REFUSED));
+        when(asylumCase.read(FTPA_APPLICANT_TYPE, String.class)).thenReturn(Optional.of(ftpaApplicantAppellant));
+
+        when(internalAppellantFtpaDecidedRefusedCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             internalFtpaDecidedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

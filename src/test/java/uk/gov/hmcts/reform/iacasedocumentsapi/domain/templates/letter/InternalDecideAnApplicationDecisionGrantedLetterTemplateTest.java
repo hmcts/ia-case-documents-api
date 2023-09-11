@@ -49,6 +49,8 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
     private final String withdrawnContent = "The Tribunal will end the appeal. The Tribunal will contact you when this happens.";
     private final String updateUpdateDetailsOrOtherContent = "The Tribunal will contact you when it makes the changes you requested.";
     private final String transferOutOfAdaContent = "Your appeal will continue but will no longer be decided within 25 working days. The Tribunal will change the date of your hearing. The Tribunal will contact you with a new date for your hearing and to tell you what will happen next with your appeal.";
+    private static final String reinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
+
     private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1711";
     private final String internalAdaCustomerServicesEmailAddress = "IAC-ADA-HW@justice.gov.uk";
     private final String appealReferenceNumber = "RP/11111/2020";
@@ -130,6 +132,7 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
             case JUDGE_REVIEW, JUDGE_REVIEW_LO -> assertEquals(judgesReviewContent, templateFieldValues.get("whatHappensNextContent"));
             case LINK_OR_UNLINK -> assertEquals(linkOrUnlinkContent, templateFieldValues.get("whatHappensNextContent"));
             case WITHDRAW -> assertEquals(withdrawnContent, templateFieldValues.get("whatHappensNextContent"));
+            case REINSTATE -> assertEquals(reinstateAppealContent, templateFieldValues.get("whatHappensNextContent"));
             case UPDATE_APPEAL_DETAILS, OTHER -> assertEquals(updateUpdateDetailsOrOtherContent, templateFieldValues.get("whatHappensNextContent"));
             case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> assertEquals(transferOutOfAdaContent, templateFieldValues.get("whatHappensNextContent"));
             default -> { }

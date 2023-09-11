@@ -344,6 +344,20 @@ internalDetainedHoFtpaDecidedRefusedLetter.fileExtension: PDF
 internalDetainedHoFtpaDecidedRefusedLetter.fileName: "ho-ftpa-decided-refused-letter"
 internalDetainedHoFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00022.docx}
 
+internalAppellantFtpaDecidedPartiallyGrantedLetter.contentType: application/pdf
+internalAppellantFtpaDecidedPartiallyGrantedLetter.fileExtension: PDF
+internalAppellantFtpaDecidedPartiallyGrantedLetter.fileName: "appellant-ftpa-decided-partially-granted-letter"
+internalAppellantFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_PARTIALLY_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00020.docx}
+internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaAdaDueWorkingDays: 7
+internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaNonAdaDueCalendarDays: 14
+
+internalAppellantFtpaDecidedRefusedLetter.contentType: application/pdf
+internalAppellantFtpaDecidedRefusedLetter.fileExtension: PDF
+internalAppellantFtpaDecidedRefusedLetter.fileName: "appellant-ftpa-decided-refused-letter"
+internalAppellantFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00023.docx}
+internalAppellantFtpaDecidedRefusedLetter.ftpaAdaDueWorkingDays: 7
+internalAppellantFtpaDecidedRefusedLetter.ftpaNonAdaDueCalendarDays: 14
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -488,6 +502,7 @@ security:
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
+case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
 
 idam:
   baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}

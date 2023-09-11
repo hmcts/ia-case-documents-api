@@ -25,6 +25,7 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplate implements
     private static final String withdrawnContent = "The Tribunal will end the appeal. The Tribunal will contact you when this happens.";
     private static final String updateUpdateDetailsOrOtherContent = "The Tribunal will contact you when it makes the changes you requested.";
     private static final String transferOutOfAdaContent = "Your appeal will continue but will no longer be decided within 25 working days. The Tribunal will change the date of your hearing. The Tribunal will contact you with a new date for your hearing and to tell you what will happen next with your appeal.";
+    private static final String reinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
     private final String templateName;
     private final DateProvider dateProvider;
     private final CustomerServicesProvider customerServicesProvider;
@@ -94,6 +95,7 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplate implements
             case JUDGE_REVIEW, JUDGE_REVIEW_LO -> judgesReviewContent;
             case LINK_OR_UNLINK -> linkOrUnlinkContent;
             case WITHDRAW -> withdrawnContent;
+            case REINSTATE -> reinstateAppealContent;
             case UPDATE_APPEAL_DETAILS, OTHER -> updateUpdateDetailsOrOtherContent;
             case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> transferOutOfAdaContent;
             default -> "Unknown";
