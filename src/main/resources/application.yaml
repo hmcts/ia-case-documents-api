@@ -358,6 +358,11 @@ internalAppellantFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_APPELLANT_
 internalAppellantFtpaDecidedRefusedLetter.ftpaAdaDueWorkingDays: 7
 internalAppellantFtpaDecidedRefusedLetter.ftpaNonAdaDueCalendarDays: 14
 
+internalHearingRequirementsUpdated.contentType: application/pdf
+internalHearingRequirementsUpdated.fileExtension: PDF
+internalHearingRequirementsUpdated.fileName: "hearing-requirements-updated-letter"
+internalHearingRequirementsUpdated.templateName: ${IA_INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
