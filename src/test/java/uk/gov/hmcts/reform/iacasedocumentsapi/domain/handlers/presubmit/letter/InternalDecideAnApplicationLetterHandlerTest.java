@@ -43,14 +43,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDecideAnAppellantApplicationLetterHandlerTest {
+public class InternalDecideAnApplicationLetterHandlerTest {
 
     @Mock
-    private DocumentCreator<AsylumCase> internalAppellantApplicationDecidedLetterCreator;
+    private DocumentCreator<AsylumCase> internalAppellantApplicationGrantedLetterCreator;
     @Mock
-    private DocumentCreator<AsylumCase> internalAppellantApplicationDecidedRefusedLetterCreator;
+    private DocumentCreator<AsylumCase> internalAppellantApplicationRefusedLetterCreator;
     @Mock
-    private DocumentCreator<AsylumCase> internalHomeOfficeApplicationDecidedLetterCreator;
+    private DocumentCreator<AsylumCase> internalHomeOfficeApplicationGrantedLetterCreator;
+    @Mock
+    private DocumentCreator<AsylumCase> internalHomeOfficeApplicationRefusedLetterCreator;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
@@ -85,9 +87,10 @@ public class InternalDecideAnAppellantApplicationLetterHandlerTest {
     public void setUp() {
         internalDecideAnAppellantApplicationLetterHandler =
                 new InternalDecideAnApplicationLetterHandler(
-                        internalAppellantApplicationDecidedLetterCreator,
-                        internalAppellantApplicationDecidedRefusedLetterCreator,
-                        internalHomeOfficeApplicationDecidedLetterCreator,
+                        internalAppellantApplicationGrantedLetterCreator,
+                        internalAppellantApplicationRefusedLetterCreator,
+                        internalHomeOfficeApplicationGrantedLetterCreator,
+                        internalHomeOfficeApplicationRefusedLetterCreator,
                         documentHandler,
                         makeAnApplicationService
                 );
@@ -105,12 +108,15 @@ public class InternalDecideAnAppellantApplicationLetterHandlerTest {
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
 
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(makeAnApplication));
+
+        when(internalAppellantApplicationGrantedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantApplicationRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalHomeOfficeApplicationGrantedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalHomeOfficeApplicationRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
     }
 
-    @Test // change
+    @Test
     public void should_create_application_decided_letter_and_append_to_notification_attachment_documents() {
-
-        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
@@ -220,7 +226,7 @@ public class InternalDecideAnAppellantApplicationLetterHandlerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {decisionGranted, decisionRefused, decisionPending})
-    public void it_should_only_generate_the_letter_for_granted_and_refused_applications(String decision) {
+    public void it_should_only_generate_the_appellant_letter_for_granted_and_refused_applications_only(String decision) {
         List<IdValue<MakeAnApplication>> testApplications = new ArrayList<>();
         final MakeAnApplication testApplication = new MakeAnApplication(
                 "Admin Officer",
@@ -237,9 +243,6 @@ public class InternalDecideAnAppellantApplicationLetterHandlerTest {
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -254,16 +257,16 @@ public class InternalDecideAnAppellantApplicationLetterHandlerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {adminOfficerRole, respondentRole})
-    public void it_should_generate_the_granted_letter_for_both_appellant_and_respondent_applications(String user) {
+    @ValueSource(strings = {decisionGranted, decisionRefused, decisionPending})
+    public void it_should_only_generate_the_home_office_letter_for_granted_and_refused_applications_only(String decision) {
         List<IdValue<MakeAnApplication>> testApplications = new ArrayList<>();
         final MakeAnApplication testApplication = new MakeAnApplication(
-                user,
+                "Respondent",
                 MakeAnApplicationTypes.ADJOURN.getValue(),
                 "someRandomDetails",
                 new ArrayList<>(),
                 LocalDate.now().toString(),
-                decisionGranted,
+                decision.toString(),
                 State.APPEAL_SUBMITTED.toString(),
                 "caseworker-ia-admofficer");
         testApplications.add(new IdValue<>("1", testApplication));
@@ -272,56 +275,19 @@ public class InternalDecideAnAppellantApplicationLetterHandlerTest {
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        if (user.equals(adminOfficerRole)) {
-            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
+        if (List.of(decisionGranted, decisionRefused).contains(decision)) {
+            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER);
         } else {
             verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER);
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {adminOfficerRole, respondentRole})
-    public void it_should_generate_the_refused_letter_for_both_appellant_and_respondent_applications(String user) {
-        List<IdValue<MakeAnApplication>> testApplications = new ArrayList<>();
-        final MakeAnApplication testApplication = new MakeAnApplication(
-                user,
-                MakeAnApplicationTypes.ADJOURN.getValue(),
-                "someRandomDetails",
-                new ArrayList<>(),
-                LocalDate.now().toString(),
-                decisionRefused,
-                State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
-        testApplications.add(new IdValue<>("1", testApplication));
-
-        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
-        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
-
-        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        if (user.equals(adminOfficerRole)) {
-            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
-        } else {
-            verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER);
-        }
-    }
 
     @ParameterizedTest
     @ValueSource(strings = {adminOfficerRole, respondentRole})
@@ -341,9 +307,6 @@ public class InternalDecideAnAppellantApplicationLetterHandlerTest {
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
-
-        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);

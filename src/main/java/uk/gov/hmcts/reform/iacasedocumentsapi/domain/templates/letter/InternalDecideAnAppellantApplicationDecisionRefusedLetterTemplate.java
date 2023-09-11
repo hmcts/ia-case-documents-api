@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService;
 
 @Component
-public class InternalDecideAnApplicationDecisionRefusedLetterTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private static final String judgeRole = "caseworker-ia-iacjudge";
     private static final String legalOfficerRole = "caseworker-ia-caseofficer";
@@ -31,8 +31,8 @@ public class InternalDecideAnApplicationDecisionRefusedLetterTemplate implements
     private final UserDetailsProvider userDetailsProvider;
 
 
-    public InternalDecideAnApplicationDecisionRefusedLetterTemplate(
-            @Value("${internalDecideAnApplicationDecisionRefusedLetter.templateName}") String templateName,
+    public InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplate(
+            @Value("${internalDecideAnAppellantApplicationDecisionRefusedLetter.templateName}") String templateName,
             DateProvider dateProvider,
             CustomerServicesProvider customerServicesProvider,
             MakeAnApplicationService makeAnApplicationService,

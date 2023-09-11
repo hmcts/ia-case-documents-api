@@ -1003,13 +1003,34 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalDecideAnApplicationDecisionRefusedLetter")
-    public DocumentCreator<AsylumCase> getinternalDetainedDecideAnApplicationDecisionRefusedLetterCreator(
-            @Value("${internalDecideAnApplicationDecisionRefusedLetter.contentType}") String contentType,
-            @Value("${internalDecideAnApplicationDecisionRefusedLetter.fileExtension}") String fileExtension,
-            @Value("${internalDecideAnApplicationDecisionRefusedLetter.fileName}") String fileName,
+    @Bean("internalDecideAnAppellantApplicationDecisionRefusedLetter")
+    public DocumentCreator<AsylumCase> getinternalDetainedDecideAnAppellantApplicationDecisionRefusedLetterCreator(
+            @Value("${internalDecideAnAppellantApplicationDecisionRefusedLetter.contentType}") String contentType,
+            @Value("${internalDecideAnAppellantApplicationDecisionRefusedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDecideAnAppellantApplicationDecisionRefusedLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDecideAnApplicationDecisionRefusedLetterTemplate documentTemplate,
+            InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalDecideHomeOfficeApplicationDecisionRefusedLetter")
+    public DocumentCreator<AsylumCase> getinternalDecideHomeOfficeApplicationDecisionRefusedLetterCreator(
+            @Value("${internalDecideHomeOfficeApplicationDecisionRefusedLetter.contentType}") String contentType,
+            @Value("${internalDecideHomeOfficeApplicationDecisionRefusedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDecideHomeOfficeApplicationDecisionRefusedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
