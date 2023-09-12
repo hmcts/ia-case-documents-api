@@ -55,7 +55,7 @@ spring:
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
 appealSubmissionDocument.fileName: "appeal-form"
-appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00676.docx}
+appealSubmissionDocument.templateName: TB-IAC-APP-ENG-00676.docx
 
 hearingRequirementsDocument.contentType: application/pdf
 hearingRequirementsDocument.fileExtension: PDF
@@ -175,9 +175,9 @@ ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
 docmosis.endpoint: ${DOCMOSIS_ENDPOINT}
-docmosis.render.uri: ${DOCMOSIS_RENDER_URL:/rs/render}
-docmosis.status.uri: ${DOCMOSIS_STATUS_URL:/rs/status}
-docmosis.convert.uri: ${DOCMOSIS_CONVERT_URL:/rs/convert}
+docmosis.render.uri: /rs/render
+docmosis.status.uri: /rs/status
+docmosis.convert.uri: /rs/convert
 
 
 emBundler.url: ${EM_BUNDLER_URL:http://localhost:4623}
