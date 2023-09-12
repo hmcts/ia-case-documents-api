@@ -1,25 +1,26 @@
 {
-  "description": "RIA-7844 internal detained (non-ada) application decided letter (Reinstate - Refused)",
+  "description": "RIA-7368 internal ADA application decided letter (Adjourn - Refused)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 7844,
+      "id": 73681,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
             {
               "id": "1",
               "value": {
-                "type":"Reinstate an ended appeal",
+                "type":"Adjourn",
                 "details":"",
                 "evidence":[],
-                "applicant":"Admin Officer",
+                "applicant":"Respondent",
                 "date":"{$TODAY}",
                 "decision":"Refused",
                 "state":"appealSubmitted",
@@ -48,11 +49,11 @@
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "PA 12345 2019-Awan-appellant-letter-application-refused.PDF"
+                "document_filename": "PA 12345 2019-Awan-respondent-letter-application-refused.PDF"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnAppellantApplicationLetter"
+              "tag": "internalDecideHomeOfficeApplicationLetter"
             }
           }
         ]

@@ -1,10 +1,10 @@
 {
-  "description": "RIA-7364 internal detained (non-ada) application decided letter (Expedite - Granted)",
+  "description": "RIA-7367 internal detained (non-ada) application decided letter (Expedite - Granted)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 73646,
+      "id": 73676,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
@@ -19,7 +19,7 @@
                 "type":"Expedite",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Respondent",
                 "date":"{$TODAY}",
                 "decision":"Granted",
                 "state":"appealSubmitted",
@@ -48,11 +48,11 @@
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "PA 12345 2019-Awan-appellant-letter-application-granted.PDF"
+                "document_filename": "PA 12345 2019-Awan-respondent-letter-application-granted.PDF"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideHomeOfficeApplicationLetter"
             }
           }
         ]

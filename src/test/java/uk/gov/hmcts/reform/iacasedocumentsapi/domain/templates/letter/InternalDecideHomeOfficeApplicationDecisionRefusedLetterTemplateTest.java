@@ -4,21 +4,24 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -30,7 +33,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
+public class InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplateTest {
+
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -41,28 +45,29 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
     private CustomerServicesProvider customerServicesProvider;
     @Mock
     private MakeAnApplicationService makeAnApplicationService;
-    private final String templateName = "TB-IAC-DEC-ENG-00015.docx";
-    private final String timeExtentionContent = "The Tribunal will give you more time to complete your next task. You will get a notification with the new date soon.";
-    private final String adjournExpediteTransferOrUpdateHearingReqsContent = "The details of your hearing will be updated. The Tribunal will contact you when this happens.";
-    private final String judgesReviewContent = "The decision on your original request will be overturned. The Tribunal will contact you if there is something you need to do next.";
-    private final String linkOrUnlinkContent = "This appeal will be linked or unlinked. The Tribunal will contact you when this happens.";
-    private final String withdrawnContent = "The Tribunal will end the appeal. The Tribunal will contact you when this happens.";
-    private final String updateUpdateDetailsOrOtherContent = "The Tribunal will contact you when it makes the changes you requested.";
-    private final String transferOutOfAdaContent = "Your appeal will continue but will no longer be decided within 25 working days. The Tribunal will change the date of your hearing. The Tribunal will contact you with a new date for your hearing and to tell you what will happen next with your appeal.";
-    private static final String reinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
-
+    private final String templateName = "TB-IAC-DEC-ENG-00016.docx";
     private final String internalAdaCustomerServicesTelephoneNumber = "0300 123 1711";
     private final String internalAdaCustomerServicesEmailAddress = "IAC-ADA-HW@justice.gov.uk";
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private InternalDecideAnApplicationDecisionGrantedLetterTemplate internalDecideAnApplicationDecisionGrantedLetterTemplate;
+    private List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
+    private final MakeAnApplication application = new MakeAnApplication(
+            "Admin Officer",
+            "Adjourn",
+            "someRandomDetails",
+            new ArrayList<>(),
+            LocalDate.now().toString(),
+            "Refused",
+            State.APPEAL_SUBMITTED.toString(),
+            "caseworker-ia-admofficer");
+    private InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate internalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate;
 
     @BeforeEach
     void setUp() {
-        internalDecideAnApplicationDecisionGrantedLetterTemplate =
-                new InternalDecideAnApplicationDecisionGrantedLetterTemplate(
+        internalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate =
+                new InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate(
                         templateName,
                         dateProvider,
                         customerServicesProvider,
@@ -84,37 +89,27 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
                 .thenReturn(internalAdaCustomerServicesEmailAddress);
 
         when(dateProvider.now()).thenReturn(LocalDate.now());
+
+        makeAnApplications.add(new IdValue<>("1", application));
+
+        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
+
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(application));
     }
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalDecideAnApplicationDecisionGrantedLetterTemplate.getName());
+        assertEquals(templateName, internalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate.getName());
     }
 
-    @ParameterizedTest
-    @EnumSource(value = MakeAnApplicationTypes.class)
-    void should_map_case_data_to_template_field_values(MakeAnApplicationTypes makeAnApplicationTypes) {
+    @Test
+    void should_map_case_data_to_template_field_values() {
         dataSetup();
-        List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
-        final MakeAnApplication testApplication = new MakeAnApplication(
-                "Admin Officer",
-                makeAnApplicationTypes.getValue(),
-                "someRandomDetails",
-                new ArrayList<>(),
-                LocalDate.now().toString(),
-                "Granted",
-                State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
-        makeAnApplications.add(new IdValue<>("1", testApplication));
-        
-        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));
-        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
 
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
+        Map<String, Object> templateFieldValues = internalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate.mapFieldValues(caseDetails);
 
-        Map<String, Object> templateFieldValues = internalDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(11, templateFieldValues.size());
+        assertEquals(10, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -123,20 +118,8 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
         assertEquals(internalAdaCustomerServicesTelephoneNumber, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(internalAdaCustomerServicesEmailAddress, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(dateProvider.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(testApplication.getType(), templateFieldValues.get("applicationType"));
-        assertEquals(testApplication.getDecisionReason(), templateFieldValues.get("applicationReason"));
-
-        switch (makeAnApplicationTypes) {
-            case TIME_EXTENSION -> assertEquals(timeExtentionContent, templateFieldValues.get("whatHappensNextContent"));
-            case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS -> assertEquals(adjournExpediteTransferOrUpdateHearingReqsContent, templateFieldValues.get("whatHappensNextContent"));
-            case JUDGE_REVIEW, JUDGE_REVIEW_LO -> assertEquals(judgesReviewContent, templateFieldValues.get("whatHappensNextContent"));
-            case LINK_OR_UNLINK -> assertEquals(linkOrUnlinkContent, templateFieldValues.get("whatHappensNextContent"));
-            case WITHDRAW -> assertEquals(withdrawnContent, templateFieldValues.get("whatHappensNextContent"));
-            case REINSTATE -> assertEquals(reinstateAppealContent, templateFieldValues.get("whatHappensNextContent"));
-            case UPDATE_APPEAL_DETAILS, OTHER -> assertEquals(updateUpdateDetailsOrOtherContent, templateFieldValues.get("whatHappensNextContent"));
-            case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> assertEquals(transferOutOfAdaContent, templateFieldValues.get("whatHappensNextContent"));
-            default -> { }
-        }
+        assertEquals(application.getType(), templateFieldValues.get("applicationType"));
+        assertEquals(application.getDecisionReason(), templateFieldValues.get("applicationReason"));
     }
 
     @Test
@@ -159,7 +142,7 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
 
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        assertThatThrownBy(() -> internalDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate.mapFieldValues(caseDetails))
                 .hasMessage("Application type could not be parsed")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }

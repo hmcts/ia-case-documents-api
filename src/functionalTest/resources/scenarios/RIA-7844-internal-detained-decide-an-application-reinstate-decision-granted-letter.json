@@ -19,7 +19,7 @@
                 "type":"Reinstate an ended appeal",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Admin Officer",
                 "date":"{$TODAY}",
                 "decision":"Granted",
                 "state":"appealSubmitted",
@@ -52,7 +52,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideAnAppellantApplicationLetter"
             }
           }
         ]

@@ -1,10 +1,10 @@
 {
-  "description": "RIA-7844 internal detained (non-ada) application decided letter (Reinstate - Refused)",
+  "description": "RIA-7365 internal detained (non-ada) application decided letter (Adjourn - Refused)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 7844,
+      "id": 73655,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
@@ -16,7 +16,7 @@
             {
               "id": "1",
               "value": {
-                "type":"Reinstate an ended appeal",
+                "type":"Adjourn",
                 "details":"",
                 "evidence":[],
                 "applicant":"Admin Officer",
