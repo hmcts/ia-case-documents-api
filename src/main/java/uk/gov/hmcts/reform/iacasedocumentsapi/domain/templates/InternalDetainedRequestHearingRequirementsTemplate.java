@@ -5,11 +5,9 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DueDateService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,15 +19,12 @@ public class InternalDetainedRequestHearingRequirementsTemplate implements Docum
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
-    private final DueDateService dueDateService;
 
     public InternalDetainedRequestHearingRequirementsTemplate(
             @Value("${internalDetainedRequestHearingRequirements.templateName}") String templateName,
-            CustomerServicesProvider customerServicesProvider,
-            DueDateService dueDateService) {
+            CustomerServicesProvider customerServicesProvider) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
-        this.dueDateService = dueDateService;
     }
 
     public String getName() {
@@ -55,7 +50,7 @@ public class InternalDetainedRequestHearingRequirementsTemplate implements Docum
 
     private String getHearingRequirementsSubmissionDeadline(AsylumCase asylumCase) {
         LocalDate directionDueDate = LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.REQUEST_RESPONSE_REVIEW));
-        return formatDateForNotificationAttachmentDocument(dueDateService.calculateDueDate(directionDueDate.atStartOfDay(ZoneOffset.UTC), 5).toLocalDate());
+        return formatDateForNotificationAttachmentDocument(directionDueDate.plusDays(5));
     }
 
 }
