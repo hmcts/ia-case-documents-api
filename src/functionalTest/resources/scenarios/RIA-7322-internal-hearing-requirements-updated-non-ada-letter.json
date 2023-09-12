@@ -11,8 +11,7 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "No",
-          "listCaseHearingDate": "2023-09-25T14:30:00"
+          "isAcceleratedDetainedAppeal": "No"
         }
       }
     }
@@ -25,7 +24,6 @@
       "replacements": {
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
-        "listCaseHearingDate": "2023-09-25T14:30:00",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
