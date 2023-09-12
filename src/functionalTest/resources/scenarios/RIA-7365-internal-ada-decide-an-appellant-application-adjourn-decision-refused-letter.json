@@ -1,10 +1,10 @@
 {
-  "description": "RIA-7365 internal ADA application decided letter (Expedite - Refused)",
+  "description": "RIA-7365 internal ADA application decided letter (Adjourn - Refused)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 73652,
+      "id": 73651,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
@@ -17,10 +17,10 @@
             {
               "id": "1",
               "value": {
-                "type":"Expedite",
+                "type":"Adjourn",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Admin Officer",
                 "date":"{$TODAY}",
                 "decision":"Refused",
                 "state":"appealSubmitted",
@@ -53,7 +53,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideAnAppellantApplicationLetter"
             }
           }
         ]

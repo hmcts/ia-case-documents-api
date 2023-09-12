@@ -144,8 +144,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_DET_MARK_AS_ADA_LETTER:
                 log.warn("INTERNAL_DET_MARK_AS_ADA_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 48;
-            case INTERNAL_DECIDE_AN_APPLICATION_LETTER:
-                log.warn("INTERNAL_DECIDE_AN_APPLICATION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+            case INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER:
+                log.warn("INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 49;
             case INTERNAL_APPLY_FOR_FTPA_RESPONDENT:
                 log.warn("INTERNAL_APPLY_FOR_FTPA_RESPONDENT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
@@ -164,6 +164,9 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 54;
             case INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER:
                 log.warn("INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 55;
+            case INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER:
+                log.warn("INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 55;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());

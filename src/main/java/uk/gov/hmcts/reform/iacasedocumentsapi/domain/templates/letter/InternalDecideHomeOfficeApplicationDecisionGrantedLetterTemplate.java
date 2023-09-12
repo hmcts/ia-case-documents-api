@@ -3,7 +3,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
@@ -15,25 +17,24 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService;
 
-@Component
-public class InternalDecideAnApplicationDecisionGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
-    private static final String timeExtentionContent = "The Tribunal will give you more time to complete your next task. You will get a notification with the new date soon.";
-    private static final String adjournExpediteTransferOrUpdateHearingReqsContent = "The details of your hearing will be updated. The Tribunal will contact you when this happens.";
-    private static final String judgesReviewContent = "The decision on your original request will be overturned. The Tribunal will contact you if there is something you need to do next.";
-    private static final String linkOrUnlinkContent = "This appeal will be linked or unlinked. The Tribunal will contact you when this happens.";
-    private static final String withdrawnContent = "The Tribunal will end the appeal. The Tribunal will contact you when this happens.";
-    private static final String updateUpdateDetailsOrOtherContent = "The Tribunal will contact you when it makes the changes you requested.";
-    private static final String transferOutOfAdaContent = "Your appeal will continue but will no longer be decided within 25 working days. The Tribunal will change the date of your hearing. The Tribunal will contact you with a new date for your hearing and to tell you what will happen next with your appeal.";
+@Component
+public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
+    private static final String timeExtentionContent = "The Tribunal will give the Home Office more time to complete its next task. You will get a notification with the new date soon.";
+    private static final String adjournExpediteTransferOrUpdateHearingReqsContent = "The details of the hearing will be updated and you will be sent a new Notice of Hearing with the agreed changes.";
+    private static final String judgesReviewContent = "The decision on the Home Office’s original request will be overturned. You will be notified if there is something you need to do next.";
+    private static final String linkOrUnlinkContent = "This appeal will be linked to or unlinked from the appeal in the Home Office application. You will be notified when this happens.";
+    private static final String withdrawnContent = "The Tribunal will end the appeal. You will be notified when this happens.";
     private static final String reinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
+    private static final String applicationTypeOtherContent = "You will be notified when the Tribunal makes the changes the Home Office asked for.";
     private final String templateName;
     private final DateProvider dateProvider;
     private final CustomerServicesProvider customerServicesProvider;
     private final MakeAnApplicationService makeAnApplicationService;
 
 
-    public InternalDecideAnApplicationDecisionGrantedLetterTemplate(
-            @Value("${internalDecideAnApplicationDecisionGrantedLetter.templateName}") String templateName,
+    public InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate(
+            @Value("${internalDecideHomeOfficeApplicationDecisionGrantedLetter.templateName}") String templateName,
             DateProvider dateProvider,
             CustomerServicesProvider customerServicesProvider,
             MakeAnApplicationService makeAnApplicationService) {
@@ -57,12 +58,14 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplate implements
 
         String applicationType = "";
         String applicationDecision = "";
-        String applicationDecisionReason = "No reason given";
+        String applicationDecisionReason = "";
         if (optionalMakeAnApplication.isPresent()) {
             MakeAnApplication makeAnApplication = optionalMakeAnApplication.get();
             applicationType = makeAnApplication.getType();
             applicationDecision = makeAnApplication.getDecision();
             applicationDecisionReason = makeAnApplication.getDecisionReason();
+        } else {
+            throw new IllegalStateException("Home Office application not found.");
         }
 
         Optional<MakeAnApplicationTypes> optionalApplicationType = MakeAnApplicationTypes.from(applicationType);
@@ -96,9 +99,9 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplate implements
             case LINK_OR_UNLINK -> linkOrUnlinkContent;
             case WITHDRAW -> withdrawnContent;
             case REINSTATE -> reinstateAppealContent;
-            case UPDATE_APPEAL_DETAILS, OTHER -> updateUpdateDetailsOrOtherContent;
-            case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> transferOutOfAdaContent;
-            default -> "Unknown";
+            case OTHER -> applicationTypeOtherContent;
+            default -> "";
         };
     }
+
 }

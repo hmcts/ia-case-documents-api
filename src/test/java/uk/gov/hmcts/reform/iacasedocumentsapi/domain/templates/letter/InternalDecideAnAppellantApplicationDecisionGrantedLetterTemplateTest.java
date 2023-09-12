@@ -30,7 +30,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
+public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -57,12 +57,12 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private InternalDecideAnApplicationDecisionGrantedLetterTemplate internalDecideAnApplicationDecisionGrantedLetterTemplate;
+    private InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplate internalDecideAnAppellantApplicationDecisionGrantedLetterTemplate;
 
     @BeforeEach
     void setUp() {
-        internalDecideAnApplicationDecisionGrantedLetterTemplate =
-                new InternalDecideAnApplicationDecisionGrantedLetterTemplate(
+        internalDecideAnAppellantApplicationDecisionGrantedLetterTemplate =
+                new InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplate(
                         templateName,
                         dateProvider,
                         customerServicesProvider,
@@ -88,7 +88,7 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalDecideAnApplicationDecisionGrantedLetterTemplate.getName());
+        assertEquals(templateName, internalDecideAnAppellantApplicationDecisionGrantedLetterTemplate.getName());
     }
 
     @ParameterizedTest
@@ -112,7 +112,7 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
 
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        Map<String, Object> templateFieldValues = internalDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalDecideAnAppellantApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -159,7 +159,7 @@ public class InternalDecideAnApplicationDecisionGrantedLetterTemplateTest {
 
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        assertThatThrownBy(() -> internalDecideAnApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails))
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails))
                 .hasMessage("Application type could not be parsed")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }

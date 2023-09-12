@@ -1,10 +1,10 @@
 {
-  "description": "RIA-7364 internal detained (non-ada) application decided letter (Judges review - Granted)",
+  "description": "RIA-7364 internal detained (non-ada) application decided letter (Adjourn - Granted)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 73647,
+      "id": 73645,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
@@ -16,10 +16,10 @@
             {
               "id": "1",
               "value": {
-                "type":"Judge's review of Legal Officer decision",
+                "type":"Adjourn",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Admin Officer",
                 "date":"{$TODAY}",
                 "decision":"Granted",
                 "state":"appealSubmitted",
@@ -52,7 +52,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideAnAppellantApplicationLetter"
             }
           }
         ]
