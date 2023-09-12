@@ -1,10 +1,10 @@
 {
-  "description": "RIA-7365 internal detained (non-ada) application decided letter (Transfer out of ada - Refused)",
+  "description": "RIA-7365 internal detained (non-ada) application decided letter (Adjourn - Refused)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 73658,
+      "id": 73655,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
@@ -16,10 +16,10 @@
             {
               "id": "1",
               "value": {
-                "type":"Transfer out of accelerated detained appeals process",
+                "type":"Adjourn",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Admin Officer",
                 "date":"{$TODAY}",
                 "decision":"Refused",
                 "state":"appealSubmitted",
@@ -52,7 +52,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideAnAppellantApplicationLetter"
             }
           }
         ]

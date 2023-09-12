@@ -1,26 +1,25 @@
 {
-  "description": "RIA-7364 internal ADA application decided letter (Judges review - Granted)",
+  "description": "RIA-7364 internal detained (non-ada) application decided letter (Expedite - Granted)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 73643,
+      "id": 73646,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "Yes",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
             {
               "id": "1",
               "value": {
-                "type":"Judge's review of Legal Officer decision",
+                "type":"Expedite",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Admin Officer",
                 "date":"{$TODAY}",
                 "decision":"Granted",
                 "state":"appealSubmitted",
@@ -53,7 +52,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideAnAppellantApplicationLetter"
             }
           }
         ]
