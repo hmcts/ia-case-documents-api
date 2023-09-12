@@ -35,8 +35,6 @@ public class InternalHearingRequirementsUpdatedLetterTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private final String listCaseHearingDate = "2023-09-25T14:30:00.000";
-    private final String formattedListCaseHearingDate = "25 September 2023";
     private final String customerServicesTelephone = "0300 123 1711";
     private final String customerServicesEmail = "email@example.com";
 
@@ -63,7 +61,6 @@ public class InternalHearingRequirementsUpdatedLetterTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(listCaseHearingDate));
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(customerServicesTelephone);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(customerServicesEmail);
         when(dateProvider.now()).thenReturn(LocalDate.now());
@@ -75,13 +72,12 @@ public class InternalHearingRequirementsUpdatedLetterTemplateTest {
 
         Map<String, Object> templateFieldValues = internalHearingRequirementsUpdatedLetterTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(8, templateFieldValues.size());
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(formatDateForNotificationAttachmentDocument(dateProvider.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formattedListCaseHearingDate, templateFieldValues.get("hearingDate"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
     }
