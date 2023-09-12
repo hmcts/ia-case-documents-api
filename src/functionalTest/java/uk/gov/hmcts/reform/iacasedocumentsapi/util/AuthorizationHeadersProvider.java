@@ -257,7 +257,7 @@ public class AuthorizationHeadersProvider {
             new Header("Authorization", accessToken)
         );
     }
-    
+
     public Headers getSystemAuthorization() {
 
         MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
