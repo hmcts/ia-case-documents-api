@@ -1,25 +1,26 @@
 {
-  "description": "RIA-7365 internal detained (non-ada) application decided letter (Expedite - Refused)",
+  "description": "RIA-7365 internal ADA application decided letter (Judges review - Refused)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 73656,
+      "id": 73653,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
             {
               "id": "1",
               "value": {
-                "type":"Expedite",
+                "type":"Judge's review of Legal Officer decision",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Admin Officer",
                 "date":"{$TODAY}",
                 "decision":"Refused",
                 "state":"appealSubmitted",
@@ -52,7 +53,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideAnAppellantApplicationLetter"
             }
           }
         ]

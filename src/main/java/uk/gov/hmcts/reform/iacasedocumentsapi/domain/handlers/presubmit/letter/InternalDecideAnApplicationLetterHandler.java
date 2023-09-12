@@ -25,21 +25,28 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @Component
 public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionGrantedLetter;
-    private final DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionRefusedLetter;
+    private final DocumentCreator<AsylumCase> internalDecideAnAppellantApplicationDecisionGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalDecideAnAppellantApplicationDecisionRefusedLetter;
+    private final DocumentCreator<AsylumCase> internalDecideHomeOfficeApplicationDecisionGrantedLetter;
+    private final DocumentCreator<AsylumCase> internalDecideHomeOfficeApplicationDecisionRefusedLetter;
     private final DocumentHandler documentHandler;
     private final MakeAnApplicationService makeAnApplicationService;
     private final String decisionGranted = "Granted";
     private final String decisionRefused = "Refused";
+    private final String applicationApplicantNameWhenAppellant = "Admin Officer";
 
     public InternalDecideAnApplicationLetterHandler(
-            @Qualifier("internalDecideAnApplicationDecisionGrantedLetter") DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionGrantedLetter,
-            @Qualifier("internalDecideAnApplicationDecisionRefusedLetter") DocumentCreator<AsylumCase> internalDecideAnApplicationDecisionRefusedLetter,
+            @Qualifier("internalDecideAnAppellantApplicationDecisionGrantedLetter") DocumentCreator<AsylumCase> internalDecideAnAppellantApplicationDecisionGrantedLetter,
+            @Qualifier("internalDecideAnAppellantApplicationDecisionRefusedLetter") DocumentCreator<AsylumCase> internalDecideAnAppellantApplicationDecisionRefusedLetter,
+            @Qualifier("internalDecideHomeOfficeApplicationDecisionGrantedLetter") DocumentCreator<AsylumCase> internalDecideHomeOfficeApplicationDecisionGrantedLetter,
+            @Qualifier("internalDecideHomeOfficeApplicationDecisionRefusedLetter") DocumentCreator<AsylumCase> internalDecideHomeOfficeApplicationDecisionRefusedLetter,
             DocumentHandler documentHandler,
             MakeAnApplicationService makeAnApplicationService
     ) {
-        this.internalDecideAnApplicationDecisionGrantedLetter = internalDecideAnApplicationDecisionGrantedLetter;
-        this.internalDecideAnApplicationDecisionRefusedLetter = internalDecideAnApplicationDecisionRefusedLetter;
+        this.internalDecideAnAppellantApplicationDecisionGrantedLetter = internalDecideAnAppellantApplicationDecisionGrantedLetter;
+        this.internalDecideAnAppellantApplicationDecisionRefusedLetter = internalDecideAnAppellantApplicationDecisionRefusedLetter;
+        this.internalDecideHomeOfficeApplicationDecisionGrantedLetter = internalDecideHomeOfficeApplicationDecisionGrantedLetter;
+        this.internalDecideHomeOfficeApplicationDecisionRefusedLetter = internalDecideHomeOfficeApplicationDecisionRefusedLetter;
         this.documentHandler = documentHandler;
         this.makeAnApplicationService = makeAnApplicationService;
     }
@@ -73,14 +80,28 @@ public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallba
         if (!optionalMakeAnApplication.isPresent()) {
             throw new IllegalStateException("Application not found");
         }
+
+        boolean isAppellantApplication = optionalMakeAnApplication.get().getApplicant().equals(applicationApplicantNameWhenAppellant);
+
         boolean applicationGranted = optionalMakeAnApplication.get().getDecision().equals(decisionGranted);
         boolean applicationRefused = optionalMakeAnApplication.get().getDecision().equals(decisionRefused);
 
         Document documentForUpload;
+        DocumentTag documentTagForUpload = DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER;
         if (applicationGranted) {
-            documentForUpload = internalDecideAnApplicationDecisionGrantedLetter.create(caseDetails);
+            if (isAppellantApplication) {
+                documentForUpload = internalDecideAnAppellantApplicationDecisionGrantedLetter.create(caseDetails);
+            } else {
+                documentTagForUpload = DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER;
+                documentForUpload = internalDecideHomeOfficeApplicationDecisionGrantedLetter.create(caseDetails);
+            }
         } else if (applicationRefused) {
-            documentForUpload = internalDecideAnApplicationDecisionRefusedLetter.create(caseDetails);
+            if (isAppellantApplication) {
+                documentForUpload = internalDecideAnAppellantApplicationDecisionRefusedLetter.create(caseDetails);
+            } else {
+                documentTagForUpload = DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER;
+                documentForUpload = internalDecideHomeOfficeApplicationDecisionRefusedLetter.create(caseDetails);
+            }
         } else {
             return new PreSubmitCallbackResponse<>(asylumCase);
         }
@@ -89,7 +110,7 @@ public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallba
                 asylumCase,
                 documentForUpload,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER
+                documentTagForUpload
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
