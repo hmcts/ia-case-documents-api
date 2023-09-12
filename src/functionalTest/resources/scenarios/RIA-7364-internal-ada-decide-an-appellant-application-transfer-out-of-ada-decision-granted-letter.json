@@ -1,16 +1,17 @@
 {
-  "description": "RIA-7364 internal detained (non-ada) application decided letter (Transfer out of ada - Granted)",
+  "description": "RIA-7364 internal ADA application decided letter (Transfer out of ada- Granted)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 73648,
+      "id": 73644,
       "eventId": "decideAnApplication",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
             {
@@ -19,7 +20,7 @@
                 "type":"Transfer out of accelerated detained appeals process",
                 "details":"",
                 "evidence":[],
-                "applicant":"",
+                "applicant":"Admin Officer",
                 "date":"{$TODAY}",
                 "decision":"Granted",
                 "state":"appealSubmitted",
@@ -52,7 +53,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalDecideAnApplicationLetter"
+              "tag": "internalDecideAnAppellantApplicationLetter"
             }
           }
         ]

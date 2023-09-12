@@ -43,12 +43,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDecideAnApplicationLetterHandlerTest {
+public class InternalDecideAnAppellantApplicationLetterHandlerTest {
 
     @Mock
-    private DocumentCreator<AsylumCase> internalApplicationDecidedLetterCreator;
+    private DocumentCreator<AsylumCase> internalAppellantApplicationDecidedLetterCreator;
     @Mock
-    private DocumentCreator<AsylumCase> internalApplicationDecidedRefusedLetterCreator;
+    private DocumentCreator<AsylumCase> internalAppellantApplicationDecidedRefusedLetterCreator;
+    @Mock
+    private DocumentCreator<AsylumCase> internalHomeOfficeApplicationDecidedLetterCreator;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
@@ -65,6 +67,8 @@ public class InternalDecideAnApplicationLetterHandlerTest {
     private final String decisionGranted = "Granted";
     private final String decisionRefused = "Refused";
     private final String decisionPending = "Pending";
+    private final String adminOfficerRole = "Admin Officer";
+    private final String respondentRole = "Respondent";
     private List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
     private final MakeAnApplication makeAnApplication = new MakeAnApplication(
             "Admin Officer",
@@ -75,14 +79,15 @@ public class InternalDecideAnApplicationLetterHandlerTest {
             decisionGranted,
             State.APPEAL_SUBMITTED.toString(),
             "caseworker-ia-admofficer");
-    private InternalDecideAnApplicationLetterHandler internalDecideAnApplicationLetterHandler;
+    private InternalDecideAnApplicationLetterHandler internalDecideAnAppellantApplicationLetterHandler;
 
     @BeforeEach
     public void setUp() {
-        internalDecideAnApplicationLetterHandler =
+        internalDecideAnAppellantApplicationLetterHandler =
                 new InternalDecideAnApplicationLetterHandler(
-                        internalApplicationDecidedLetterCreator,
-                        internalApplicationDecidedRefusedLetterCreator,
+                        internalAppellantApplicationDecidedLetterCreator,
+                        internalAppellantApplicationDecidedRefusedLetterCreator,
+                        internalHomeOfficeApplicationDecidedLetterCreator,
                         documentHandler,
                         makeAnApplicationService
                 );
@@ -105,15 +110,15 @@ public class InternalDecideAnApplicationLetterHandlerTest {
     @Test // change
     public void should_create_application_decided_letter_and_append_to_notification_attachment_documents() {
 
-        when(internalApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+                internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER);
+        verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
     }
 
     @Test
@@ -121,12 +126,12 @@ public class InternalDecideAnApplicationLetterHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -142,7 +147,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.empty());
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(callbackStage, callback);
+                boolean canHandle = internalDecideAnAppellantApplicationLetterHandler.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -160,7 +165,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
             when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.empty());
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(callbackStage, callback);
+                boolean canHandle = internalDecideAnAppellantApplicationLetterHandler.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -177,7 +182,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(callbackStage, callback);
+                boolean canHandle = internalDecideAnAppellantApplicationLetterHandler.canHandle(callbackStage, callback);
 
                 if (callbackStage == ABOUT_TO_SUBMIT && callback.getEvent().equals(Event.DECIDE_AN_APPLICATION)) {
                     assertTrue(canHandle);
@@ -194,7 +199,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
     public void it_should_only_handle_internal_cases(YesOrNo yesOrNo) {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDecideAnAppellantApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback);
 
         if (yesOrNo == yes) {
             assertTrue(canHandle);
@@ -208,7 +213,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
     public void it_should_handle_both_internal_detained_cases_and_internal_ada_cases(YesOrNo yesOrNo) {
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        boolean canHandle = internalDecideAnApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalDecideAnAppellantApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback);
 
         assertTrue(canHandle);
     }
@@ -232,38 +237,151 @@ public class InternalDecideAnApplicationLetterHandlerTest {
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
 
-        when(internalApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-        when(internalApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+                internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
         if (List.of(decisionGranted, decisionRefused).contains(decision)) {
-            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER);
+            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
         } else {
-            verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPLICATION_LETTER);
+            verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {adminOfficerRole, respondentRole})
+    public void it_should_generate_the_granted_letter_for_both_appellant_and_respondent_applications(String user) {
+        List<IdValue<MakeAnApplication>> testApplications = new ArrayList<>();
+        final MakeAnApplication testApplication = new MakeAnApplication(
+                user,
+                MakeAnApplicationTypes.ADJOURN.getValue(),
+                "someRandomDetails",
+                new ArrayList<>(),
+                LocalDate.now().toString(),
+                decisionGranted,
+                State.APPEAL_SUBMITTED.toString(),
+                "caseworker-ia-admofficer");
+        testApplications.add(new IdValue<>("1", testApplication));
+
+        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
+
+        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        if (user.equals(adminOfficerRole)) {
+            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
+        } else {
+            verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {adminOfficerRole, respondentRole})
+    public void it_should_generate_the_refused_letter_for_both_appellant_and_respondent_applications(String user) {
+        List<IdValue<MakeAnApplication>> testApplications = new ArrayList<>();
+        final MakeAnApplication testApplication = new MakeAnApplication(
+                user,
+                MakeAnApplicationTypes.ADJOURN.getValue(),
+                "someRandomDetails",
+                new ArrayList<>(),
+                LocalDate.now().toString(),
+                decisionRefused,
+                State.APPEAL_SUBMITTED.toString(),
+                "caseworker-ia-admofficer");
+        testApplications.add(new IdValue<>("1", testApplication));
+
+        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
+
+        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        if (user.equals(adminOfficerRole)) {
+            verify(documentHandler, times(1)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
+        } else {
+            verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {adminOfficerRole, respondentRole})
+    public void it_should_not_generate_any_letters_for_any_user_when_decision_is_pending(String user) {
+        List<IdValue<MakeAnApplication>> testApplications = new ArrayList<>();
+        final MakeAnApplication testApplication = new MakeAnApplication(
+                user,
+                MakeAnApplicationTypes.ADJOURN.getValue(),
+                "someRandomDetails",
+                new ArrayList<>(),
+                LocalDate.now().toString(),
+                decisionPending,
+                State.APPEAL_SUBMITTED.toString(),
+                "caseworker-ia-admofficer");
+        testApplications.add(new IdValue<>("1", testApplication));
+
+        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
+
+        when(internalAppellantApplicationDecidedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantApplicationDecidedRefusedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER);
+        verify(documentHandler, times(0)).addWithMetadata(asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER);
+    }
+
+    @Test
+    public void should_throw_if_application_not_found() {
+        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.empty());
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.empty());
+        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, callback))
+                .hasMessage("Application not found")
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.canHandle(null, callback))
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationLetterHandler.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationLetterHandler.canHandle(ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(null, callback))
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationLetterHandler.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDecideAnApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalDecideAnAppellantApplicationLetterHandler.handle(ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }
