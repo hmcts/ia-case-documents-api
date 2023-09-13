@@ -308,12 +308,8 @@ public class NotificationHandlerConfiguration {
     public PreSubmitCallbackHandler<AsylumCase> appealOutcomeAdminNotificationHandler(
             @Qualifier("appealOutcomeAdminNotificationGenerator") List<NotificationGenerator> notificationGenerators) {
         return new NotificationHandler(
-                (callbackStage, callback) -> {
-                    AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
-                    return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                            && callback.getEvent() == Event.SEND_DECISION_AND_REASONS
-                            && isRepJourney(asylumCase);
-                },
+                (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.SEND_DECISION_AND_REASONS,
                 notificationGenerators
         );
     }
