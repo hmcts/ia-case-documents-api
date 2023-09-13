@@ -1,9 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_APPROVER_NAME;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.END_APPEAL_DATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
@@ -47,8 +45,9 @@ public class InternalEndAppealTemplate implements DocumentTemplate<AsylumCase> {
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("decisionMaker", caseDetails.getCaseData().read(END_APPEAL_APPROVER_NAME, String.class).orElse(""));
-        fieldValues.put("endAppealDate", caseDetails.getCaseData().read(END_APPEAL_DATE, String.class).orElse(""));
+        fieldValues.put("decisionMaker", caseDetails.getCaseData().read(END_APPEAL_APPROVER_TYPE, String.class).orElse(""));
+        fieldValues.put("endAppealDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(asylumCase.read(END_APPEAL_DATE, String.class)
+                .orElseThrow(() -> new IllegalStateException("End appeal date is missing")))));
         fieldValues.put("formName", resolveFormName(asylumCase));
         return fieldValues;
     }

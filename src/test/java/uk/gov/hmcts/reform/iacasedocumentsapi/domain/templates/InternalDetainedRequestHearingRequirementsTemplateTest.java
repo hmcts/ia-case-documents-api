@@ -13,17 +13,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DueDateService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -38,8 +33,6 @@ class InternalDetainedRequestHearingRequirementsTemplateTest {
     private AsylumCase asylumCase;
     @Mock
     private CustomerServicesProvider customerServicesProvider;
-    @Mock
-    private DueDateService mockDueDateService;
     private final String templateName = "TB-IAC-GNO-ENG-00006.docx";
     private final String customerServicesTelephone = "0300 123 1711";
     private final String customerServicesEmail = "IAC-ADA-HW@justice.gov.uk";
@@ -56,7 +49,6 @@ class InternalDetainedRequestHearingRequirementsTemplateTest {
     private final String directionDateSent = "2023-06-02";
     private final String directionUniqueId = "95e90870-2429-4660-b9c2-4111aff37304";
     private final String directionType = "someDirectionType";
-    private final ZonedDateTime zonedDueDateTime = LocalDate.parse("2023-08-17").atStartOfDay(ZoneOffset.UTC);
 
     private final IdValue<Direction> requestResponseReviewDirection = new IdValue<>(
             "1",
@@ -78,8 +70,7 @@ class InternalDetainedRequestHearingRequirementsTemplateTest {
         internalDetainedRequestHearingRequirementsTemplate =
                 new InternalDetainedRequestHearingRequirementsTemplate(
                         templateName,
-                        customerServicesProvider,
-                        mockDueDateService
+                        customerServicesProvider
                 );
     }
 
@@ -102,7 +93,6 @@ class InternalDetainedRequestHearingRequirementsTemplateTest {
         List<IdValue<Direction>> directionList = new ArrayList<>();
         directionList.add(requestResponseReviewDirection);
         when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
-        when(mockDueDateService.calculateDueDate(any(), eq(5))).thenReturn(zonedDueDateTime);
     }
 
     @Test
@@ -119,7 +109,7 @@ class InternalDetainedRequestHearingRequirementsTemplateTest {
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
-        assertEquals("17 Aug 2023", templateFieldValues.get("hearingReqSubmissionDeadline"));
+        assertEquals("15 Aug 2023", templateFieldValues.get("hearingReqSubmissionDeadline"));
 
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
     }
