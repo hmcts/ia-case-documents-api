@@ -64,6 +64,7 @@ public class DocumentTagTest {
         assertEquals("internalAppellantFtpaDecidedLetter", DocumentTag.INTERNAL_APPELLANT_FTPA_DECIDED_LETTER.toString());
         assertEquals("internalHoFtpaDecidedLetter", DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER.toString());
         assertEquals("internalHearingRequirementsUpdatedLetter", DocumentTag.INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER.toString());
+        assertEquals("internalNonStandardDirectionToAppellantLetter", DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER.toString());
     }
 
     @Test
