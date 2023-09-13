@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 
 public class EventTest {
 
@@ -61,10 +62,11 @@ public class EventTest {
         assertEquals("transferOutOfAda", Event.TRANSFER_OUT_OF_ADA.toString());
         assertEquals("applyForFTPAAppellant", Event.APPLY_FOR_FTPA_APPELLANT.toString());
         assertEquals("residentJudgeFtpaDecision", Event.RESIDENT_JUDGE_FTPA_DECISION.toString());
+        assertEquals("internalMaintainCaseLinks", DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(56, Event.values().length);
+        assertEquals(57, Event.values().length);
     }
 }

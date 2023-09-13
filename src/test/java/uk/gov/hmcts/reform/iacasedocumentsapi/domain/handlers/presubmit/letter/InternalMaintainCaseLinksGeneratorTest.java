@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalEndAppealGeneratorTest {
+class InternalMaintainCaseLinksGeneratorTest {
     @Mock
     private DocumentCreator<AsylumCase> documentCreator;
     @Mock
@@ -42,18 +43,18 @@ class InternalEndAppealGeneratorTest {
     @Mock
     private Document uploadedDocument;
 
-    private InternalEndAppealGenerator internalEndAppealGenerator;
+    private InternalMaintainCaseLinksGenerator internalMaintainCaseLinksGenerator;
 
     @BeforeEach
     void setUp() {
-        internalEndAppealGenerator =
-                new InternalEndAppealGenerator(documentCreator, documentHandler);
+        internalMaintainCaseLinksGenerator =
+                new InternalMaintainCaseLinksGenerator(documentCreator, documentHandler);
     }
 
     @Test
     void should_create_internal_detained_end_appeal_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.END_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.MAINTAIN_CASE_LINKS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -62,7 +63,7 @@ class InternalEndAppealGeneratorTest {
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalMaintainCaseLinksGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -70,7 +71,7 @@ class InternalEndAppealGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase, uploadedDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.END_APPEAL
+                DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS
         );
     }
 
@@ -82,12 +83,12 @@ class InternalEndAppealGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinksGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinksGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -104,7 +105,7 @@ class InternalEndAppealGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalEndAppealGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalMaintainCaseLinksGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -122,7 +123,7 @@ class InternalEndAppealGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalEndAppealGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalMaintainCaseLinksGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -132,21 +133,20 @@ class InternalEndAppealGeneratorTest {
     @Test
     void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinksGenerator.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalMaintainCaseLinksGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinksGenerator.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalMaintainCaseLinksGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }
-
 }

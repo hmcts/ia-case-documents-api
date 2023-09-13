@@ -64,10 +64,11 @@ public class DocumentTagTest {
         assertEquals("internalAppellantFtpaDecidedLetter", DocumentTag.INTERNAL_APPELLANT_FTPA_DECIDED_LETTER.toString());
         assertEquals("internalHoFtpaDecidedLetter", DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER.toString());
         assertEquals("internalHearingRequirementsUpdatedLetter", DocumentTag.INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER.toString());
+        assertEquals("internalMaintainCaseLinks", DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(64, DocumentTag.values().length);
+        assertEquals(65, DocumentTag.values().length);
     }
 }

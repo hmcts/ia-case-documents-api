@@ -373,6 +373,11 @@ internalHearingRequirementsUpdated.fileExtension: PDF
 internalHearingRequirementsUpdated.fileName: "hearing-requirements-updated-letter"
 internalHearingRequirementsUpdated.templateName: ${IA_INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
 
+internalDetainedMaintainCaseLinks.contentType:  application/pdf
+internalDetainedMaintainCaseLinks.fileExtension: PDF
+internalDetainedMaintainCaseLinks.fileName: "detained-appellant-maintain-case-links-notice"
+internalDetainedMaintainCaseLinks.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINKS_TEMPLATE:TB-IAC-LET-ENG-00026.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -451,6 +456,7 @@ security:
       - "markAppealAsAda"
       - "decideAnApplication"
       - "transferOutOfAda"
+      - "maintainCaseLinks"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -477,6 +483,7 @@ security:
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
+      - "maintainCaseLinks"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -501,6 +508,7 @@ security:
       - "decideAnApplication"
       - "transferOutOfAda"
       - "residentJudgeFtpaDecision"
+      - "maintainCaseLinks"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
