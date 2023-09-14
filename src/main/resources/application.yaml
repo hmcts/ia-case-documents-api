@@ -492,6 +492,7 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
     caseworker-ia-iacjudge:
+      - "sendDirection"
       - "generateDecisionAndReasons"
       - "endAppeal"
       - "sendDecisionAndReasons"
