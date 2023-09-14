@@ -1254,4 +1254,25 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("internalMaintainCaseLinksLetter")
+    public DocumentCreator<AsylumCase> getInternalMaintainCaseLinksLetterCreator(
+            @Value("${internalDetainedMaintainCaseLinks.contentType}") String contentType,
+            @Value("${internalDetainedMaintainCaseLinks.fileExtension}") String fileExtension,
+            @Value("${internalDetainedMaintainCaseLinks.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalMaintainCaseLinksTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
