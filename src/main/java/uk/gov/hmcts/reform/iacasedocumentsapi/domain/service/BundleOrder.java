@@ -167,7 +167,10 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 55;
             case INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER:
                 log.warn("INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                return 55;
+                return 56;
+            case INTERNAL_MAINTAIN_CASE_LINKS_LETTER:
+                log.warn("INTERNAL_MAINTAIN_CASE_LINKS_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 57;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
