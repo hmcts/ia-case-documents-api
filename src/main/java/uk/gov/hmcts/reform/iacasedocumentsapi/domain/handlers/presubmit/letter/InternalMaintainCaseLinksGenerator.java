@@ -65,7 +65,7 @@ public class InternalMaintainCaseLinksGenerator implements PreSubmitCallbackHand
                 asylumCase,
                 internalMaintainCaseLinks,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS
+                DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

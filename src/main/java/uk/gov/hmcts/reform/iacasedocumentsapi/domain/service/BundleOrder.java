@@ -168,7 +168,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER:
                 log.warn("INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 56;
-            case INTERNAL_MAINTAIN_CASE_LINKS:
+            case INTERNAL_MAINTAIN_CASE_LINKS_LETTER:
                 log.warn("INTERNAL_MAINTAIN_CASE_LINKS_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 57;
             default:

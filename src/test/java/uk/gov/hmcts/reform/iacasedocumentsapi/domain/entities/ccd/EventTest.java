@@ -62,7 +62,7 @@ public class EventTest {
         assertEquals("transferOutOfAda", Event.TRANSFER_OUT_OF_ADA.toString());
         assertEquals("applyForFTPAAppellant", Event.APPLY_FOR_FTPA_APPELLANT.toString());
         assertEquals("residentJudgeFtpaDecision", Event.RESIDENT_JUDGE_FTPA_DECISION.toString());
-        assertEquals("internalMaintainCaseLinks", DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS.toString());
+        assertEquals("internalMaintainCaseLinks", DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS_LETTER.toString());
     }
 
     @Test
