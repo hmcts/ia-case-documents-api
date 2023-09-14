@@ -8,7 +8,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -18,6 +21,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
+
 @Component
 public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCallbackHandler<AsylumCase>{
 
@@ -38,12 +43,14 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
+
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && callback.getEvent() == Event.UPDATE_HEARING_REQUIREMENTS
+            && callback.getEvent() == Event.SEND_DIRECTION
             && isInternalCase(asylumCase)
-            && isAppellantInDetention(asylumCase);
+            && isAppellantInDetention(asylumCase)
+            && isRecipientAppellant(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -67,5 +74,15 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
+    }
+
+    //method to check if the recipient is APPELLANT only
+    private boolean isRecipientAppellant(AsylumCase asylumCase) {
+        Direction direction = AsylumCaseUtils.getCaseDirections(asylumCase)
+            .stream()
+            .filter(dir -> dir.getValue().getTag() == DirectionTag.NONE)
+            .findFirst().get().getValue();
+        return direction.getParties() == Parties.APPELLANT;
+
     }
 }
