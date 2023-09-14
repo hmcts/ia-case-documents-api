@@ -23,12 +23,10 @@ public class InternalNonStandardDirectionLetterTemplate implements DocumentTempl
 
         private final String templateName;
         private final CustomerServicesProvider customerServicesProvider;
-
         private final DirectionFinder directionFinder;
 
-
         public InternalNonStandardDirectionLetterTemplate(
-            @Value("${internalNonStandardDirectionLetters.templateName}") String templateName,
+            @Value("${internalNonStandardDirectionLetter.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider,
             DirectionFinder directionFinder) {
                 this.templateName = templateName;
