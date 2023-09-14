@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
@@ -30,7 +29,6 @@ public class InternalNonStandardDirectionLetterTemplate implements DocumentTempl
 
         public InternalNonStandardDirectionLetterTemplate(
             @Value("${internalNonStandardDirectionLetters.templateName}") String templateName,
-            DateProvider dateProvider,
             CustomerServicesProvider customerServicesProvider,
             DirectionFinder directionFinder) {
                 this.templateName = templateName;
