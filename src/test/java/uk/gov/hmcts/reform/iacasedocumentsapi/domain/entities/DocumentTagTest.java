@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseType;
 
 public class DocumentTagTest {
 
@@ -65,10 +66,11 @@ public class DocumentTagTest {
         assertEquals("internalHoFtpaDecidedLetter", DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER.toString());
         assertEquals("internalHearingRequirementsUpdatedLetter", DocumentTag.INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER.toString());
         assertEquals("internalMaintainCaseLinksLetter", DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS_LETTER.toString());
+        assertEquals("internalUploadAdditionalEvidenceLetter", DocumentTag.INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_LETTER.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(65, DocumentTag.values().length);
+        assertEquals(66, DocumentTag.values().length);
     }
 }
