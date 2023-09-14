@@ -52,7 +52,7 @@ class InternalMaintainCaseLinksGeneratorTest {
     }
 
     @Test
-    void should_create_internal_detained_end_appeal_pdf_and_append_to_notifications_documents() {
+    void should_create_internal_detained_maintain_case_links_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.MAINTAIN_CASE_LINKS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
