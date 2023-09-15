@@ -20,13 +20,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
-public class InternalMaintainCaseLinksGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalMaintainCaseUnlinkAppealGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalMaintainCaseLinksGenerator(
-            @Qualifier("internalMaintainCaseLinksLetter") DocumentCreator<AsylumCase> documentCreator,
+    public InternalMaintainCaseUnlinkAppealGenerator(
+            @Qualifier("internalMaintainCaseUnlinkAppealLetter") DocumentCreator<AsylumCase> documentCreator,
             DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
@@ -59,13 +59,13 @@ public class InternalMaintainCaseLinksGenerator implements PreSubmitCallbackHand
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalMaintainCaseLinks = documentCreator.create(caseDetails);
+        Document internalMaintainCaseUnlinkAppeal = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
-                internalMaintainCaseLinks,
+                internalMaintainCaseUnlinkAppeal,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_MAINTAIN_CASE_LINKS_LETTER
+                DocumentTag.MAINTAIN_CASE_UNLINK_APPEAL_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

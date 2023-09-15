@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
-class InternalMaintainCaseLinksTemplateTest {
+class InternalMaintainCaseUnlinkAppealTemplateTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
@@ -38,18 +38,18 @@ class InternalMaintainCaseLinksTemplateTest {
     private String appealReferenceNumber = "HU/11111/2022";
     private final String templateName = "IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINKS_TEMPLATE.docx";
     private final String logo = "[userImage:hmcts.png]";
-    private InternalMaintainCaseLinksTemplate internalMaintainCaseLinksTemplate;
+    private InternalMaintainCaseUnlinkAppealTemplate internalMaintainCaseUnlinkAppealTemplate;
     private Map<String, Object> fieldValuesMap;
 
     @BeforeEach
     public void setUp() {
-        internalMaintainCaseLinksTemplate =
-                new InternalMaintainCaseLinksTemplate(templateName, customerServicesProvider);
+        internalMaintainCaseUnlinkAppealTemplate =
+                new InternalMaintainCaseUnlinkAppealTemplate(templateName, customerServicesProvider);
     }
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalMaintainCaseLinksTemplate.getName());
+        assertEquals(templateName, internalMaintainCaseUnlinkAppealTemplate.getName());
     }
 
     void dataSetup() {
@@ -66,7 +66,7 @@ class InternalMaintainCaseLinksTemplateTest {
     @Test
     void should_populate_template_correctly() {
         dataSetup();
-        fieldValuesMap = internalMaintainCaseLinksTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = internalMaintainCaseUnlinkAppealTemplate.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
