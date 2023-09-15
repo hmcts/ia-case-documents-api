@@ -1256,7 +1256,7 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("internalMaintainCaseUnlinkAppealLetter")
-    public DocumentCreator<AsylumCase> getInternalMaintainCaseLinksLetterCreator(
+    public DocumentCreator<AsylumCase> getInternalMaintainCaseUnlinkAppealLetterCreator(
             @Value("${internalDetainedMaintainCaseUnlinkAppeal.contentType}") String contentType,
             @Value("${internalDetainedMaintainCaseUnlinkAppeal.fileExtension}") String fileExtension,
             @Value("${internalDetainedMaintainCaseUnlinkAppeal.fileName}") String fileName,
