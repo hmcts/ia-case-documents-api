@@ -373,10 +373,10 @@ internalHearingRequirementsUpdated.fileExtension: PDF
 internalHearingRequirementsUpdated.fileName: "hearing-requirements-updated-letter"
 internalHearingRequirementsUpdated.templateName: ${IA_INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
 
-internalDetainedMaintainCaseLinks.contentType:  application/pdf
-internalDetainedMaintainCaseLinks.fileExtension: PDF
-internalDetainedMaintainCaseLinks.fileName: "detained-appellant-maintain-case-links-notice"
-internalDetainedMaintainCaseLinks.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINKS_TEMPLATE:TB-IAC-LET-ENG-00026.docx}
+internalDetainedMaintainCaseUnlinkAppeal.contentType:  application/pdf
+internalDetainedMaintainCaseUnlinkAppeal.fileExtension: PDF
+internalDetainedMaintainCaseUnlinkAppeal.fileName: "detained-appellant-maintain-case-unlink-appeal-notice"
+internalDetainedMaintainCaseUnlinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_UNLINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00026.docx}
 
 internalUploadAdditionalEvidence.contentType:  application/pdf
 internalUploadAdditionalEvidence.fileExtension: PDF

@@ -14,13 +14,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Component
-public class InternalMaintainCaseLinksTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalMaintainCaseUnlinkAppealTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
 
-    public InternalMaintainCaseLinksTemplate(
-            @Value("${internalDetainedMaintainCaseLinks.templateName}") String templateName,
+    public InternalMaintainCaseUnlinkAppealTemplate(
+            @Value("${internalDetainedMaintainCaseUnlinkAppeal.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
