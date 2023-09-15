@@ -1275,4 +1275,25 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("internalUploadAdditionalEvidenceLetter")
+    public DocumentCreator<AsylumCase> getInternalUploadAdditionalEvidenceLetterCreator(
+        @Value("${internalUploadAdditionalEvidence.contentType}") String contentType,
+        @Value("${internalUploadAdditionalEvidence.fileExtension}") String fileExtension,
+        @Value("${internalUploadAdditionalEvidence.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalUploadAdditionalEvidenceLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 }

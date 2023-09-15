@@ -378,6 +378,11 @@ internalDetainedMaintainCaseUnlinkAppeal.fileExtension: PDF
 internalDetainedMaintainCaseUnlinkAppeal.fileName: "detained-appellant-maintain-case-unlink-appeal-notice"
 internalDetainedMaintainCaseUnlinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_UNLINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00026.docx}
 
+internalUploadAdditionalEvidence.contentType:  application/pdf
+internalUploadAdditionalEvidence.fileExtension: PDF
+internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
+internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -484,6 +489,7 @@ security:
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
       - "maintainCaseLinks"
+      - "uploadAddendumEvidenceAdminOfficer"
     citizen:
       - "startAppeal"
       - "editAppeal"
