@@ -1255,13 +1255,13 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalMaintainCaseLinksLetter")
-    public DocumentCreator<AsylumCase> getInternalMaintainCaseLinksLetterCreator(
-            @Value("${internalDetainedMaintainCaseLinks.contentType}") String contentType,
-            @Value("${internalDetainedMaintainCaseLinks.fileExtension}") String fileExtension,
-            @Value("${internalDetainedMaintainCaseLinks.fileName}") String fileName,
+    @Bean("internalMaintainCaseUnlinkAppealLetter")
+    public DocumentCreator<AsylumCase> getInternalMaintainCaseUnlinkAppealLetterCreator(
+            @Value("${internalDetainedMaintainCaseUnlinkAppeal.contentType}") String contentType,
+            @Value("${internalDetainedMaintainCaseUnlinkAppeal.fileExtension}") String fileExtension,
+            @Value("${internalDetainedMaintainCaseUnlinkAppeal.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalMaintainCaseLinksTemplate documentTemplate,
+            InternalMaintainCaseUnlinkAppealTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
