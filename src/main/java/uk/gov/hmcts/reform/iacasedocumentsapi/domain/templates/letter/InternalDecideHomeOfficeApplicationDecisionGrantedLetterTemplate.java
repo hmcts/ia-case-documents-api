@@ -20,12 +20,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 
 @Component
 public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
-    private static final String timeExtentionContent = "The Tribunal will give the Home Office more time to complete its next task. You will get a notification with the new date soon.";
-    private static final String adjournExpediteTransferOrUpdateHearingReqsContent = "The details of the hearing will be updated and you will be sent a new Notice of Hearing with the agreed changes.";
-    private static final String judgesReviewContent = "The decision on the Home Office’s original request will be overturned. You will be notified if there is something you need to do next.";
-    private static final String linkOrUnlinkContent = "This appeal will be linked to or unlinked from the appeal in the Home Office application. You will be notified when this happens.";
-    private static final String withdrawnContent = "The Tribunal will end the appeal. You will be notified when this happens.";
-    private static final String reinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
+    private static final String homeOfficetimeExtentionContent = "The Tribunal will give the Home Office more time to complete its next task. You will get a notification with the new date soon.";
+    private static final String homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent = "The details of the hearing will be updated and you will be sent a new Notice of Hearing with the agreed changes.";
+    private static final String homeOfficeJudgesReviewContent = "The decision on the Home Office’s original request will be overturned. You will be notified if there is something you need to do next.";
+    private static final String homeOfficeLinkOrUnlinkContent = "This appeal will be linked to or unlinked from the appeal in the Home Office application. You will be notified when this happens.";
+    private static final String homeOfficeWithdrawnContent = "The Tribunal will end the appeal. You will be notified when this happens.";
+    private static final String homeOfficeReinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
     private static final String applicationTypeOtherContent = "You will be notified when the Tribunal makes the changes the Home Office asked for.";
     private final String templateName;
     private final DateProvider dateProvider;
@@ -93,12 +93,12 @@ public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate im
 
     private String getWhatHappensNextContent(MakeAnApplicationTypes makeAnApplicationTypes) {
         return switch (makeAnApplicationTypes) {
-            case TIME_EXTENSION -> timeExtentionContent;
-            case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS -> adjournExpediteTransferOrUpdateHearingReqsContent;
-            case JUDGE_REVIEW, JUDGE_REVIEW_LO -> judgesReviewContent;
-            case LINK_OR_UNLINK -> linkOrUnlinkContent;
-            case WITHDRAW -> withdrawnContent;
-            case REINSTATE -> reinstateAppealContent;
+            case TIME_EXTENSION -> homeOfficetimeExtentionContent;
+            case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS -> homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent;
+            case JUDGE_REVIEW, JUDGE_REVIEW_LO -> homeOfficeJudgesReviewContent;
+            case LINK_OR_UNLINK -> homeOfficeLinkOrUnlinkContent;
+            case WITHDRAW -> homeOfficeWithdrawnContent;
+            case REINSTATE -> homeOfficeReinstateAppealContent;
             case OTHER -> applicationTypeOtherContent;
             default -> "";
         };
