@@ -2,13 +2,13 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static java.util.stream.Collectors.joining;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_OTHER_APPEALS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 
-import com.google.common.collect.ImmutableMap;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
@@ -17,11 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HasOtherAppeals;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.BailApplicationStatus;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @Component
@@ -52,17 +48,13 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
+        fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("CREATED_DATE", caseDetails.getCreatedDate().format(DOCUMENT_DATE_FORMAT));
-        fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appealSubmissionDate", formatDateForRendering(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("legalRepresentativeEmailAddress", asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""));
         fieldValues.put("legalRepName", asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""));
         fieldValues.put("legalRepCompany", asylumCase.read(LEGAL_REP_COMPANY, String.class).orElse(""));
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
-        fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("appellantTitle", asylumCase.read(APPELLANT_TITLE, String.class).orElse(""));
 
