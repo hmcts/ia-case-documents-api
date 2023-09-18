@@ -25,7 +25,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 
 @Component
 public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCallbackHandler<AsylumCase>{
-
     private final DocumentCreator<AsylumCase> internalNonStandardDirectionLetterCreator;
     private final DocumentHandler documentHandler;
 
