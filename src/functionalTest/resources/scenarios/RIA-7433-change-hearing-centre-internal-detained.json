@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7281 Internal detained ADA edit case listing hearing notice PDF (IAC Newcastle) - previously (IAC Nottingham)",
+  "description": "RIA-7433 Internal detained ADA change hearing centre PDF (IAC Newcastle) - previously (IAC Nottingham)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
