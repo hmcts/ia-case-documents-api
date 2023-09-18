@@ -56,7 +56,7 @@ public enum Event {
     RESIDENT_JUDGE_FTPA_DECISION("residentJudgeFtpaDecision", CaseType.ASYLUM),
     MAINTAIN_CASE_LINKS("maintainCaseLinks", CaseType.ASYLUM),
     UPLOAD_ADDENDUM_EVIDENCE_ADMIN_OFFICER("uploadAddendumEvidenceAdminOfficer", CaseType.ASYLUM),
-
+    CHANGE_HEARING_CENTRE("changeHearingCentre", CaseType.ASYLUM),
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
     RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),
     END_APPLICATION("endApplication", CaseType.BAIL),

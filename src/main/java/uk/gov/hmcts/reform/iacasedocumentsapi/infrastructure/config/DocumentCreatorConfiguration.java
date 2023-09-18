@@ -1296,4 +1296,25 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("internalChangeHearingCentreLetter")
+    public DocumentCreator<AsylumCase> getInternalChangeHearingCentreLetterCreator(
+        @Value("${internalChangeHearingCentreLetter.contentType}") String contentType,
+        @Value("${internalChangeHearingCentreLetter.fileExtension}") String fileExtension,
+        @Value("${internalChangeHearingCentreLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalChangeHearingCentreLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
