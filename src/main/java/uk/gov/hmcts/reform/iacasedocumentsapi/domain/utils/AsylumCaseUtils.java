@@ -77,6 +77,15 @@ public class AsylumCaseUtils {
         return ImmutableMap
                 .<String, String>builder()
                 .put("hmcts", "[userImage:hmcts.png]")
+                .putAll(getAppellantPersonalisationWithoutUserImage(asylumCase))
+                .build();
+    }
+
+    public static Map<String, String> getAppellantPersonalisationWithoutUserImage(AsylumCase asylumCase) {
+        requireNonNull(asylumCase, "asylumCase must not be null");
+
+        return ImmutableMap
+                .<String, String>builder()
                 .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
