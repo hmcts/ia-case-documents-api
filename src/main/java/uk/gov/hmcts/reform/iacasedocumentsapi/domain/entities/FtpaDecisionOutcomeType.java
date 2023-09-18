@@ -7,7 +7,10 @@ public enum FtpaDecisionOutcomeType {
     FTPA_GRANTED("granted"),
     FTPA_PARTIALLY_GRANTED("partiallyGranted"),
     FTPA_REFUSED("refused"),
-    FTPA_NOT_ADMITTED("notAdmitted");
+    FTPA_NOT_ADMITTED("notAdmitted"),
+    FTPA_REHEARD35("reheardRule35"),
+    FTPA_REHEARD32("reheardRule32"),
+    FTPA_REMADE32("remadeRule32");
 
     @JsonValue
     private final String value;
