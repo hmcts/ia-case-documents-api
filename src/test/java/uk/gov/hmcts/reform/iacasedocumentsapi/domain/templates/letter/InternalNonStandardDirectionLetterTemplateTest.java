@@ -11,6 +11,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.form
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -41,31 +43,34 @@ public class InternalNonStandardDirectionLetterTemplateTest {
     @Mock
     private Direction direction;
     private InternalNonStandardDirectionLetterTemplate  internalNonStandardDirectionLetterTemplate;
-    private final String telephoneNumber = "0300 123 1711" ;
+    private final String telephoneNumber = "0300 123 1711";
     private final String email = "IAC-ADA-HW@justice.gov.uk";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final LocalDate now = LocalDate.now();
     private final String templateName = "TB-IAC-LET-ENG-00028.docx";
-    private final LocalDate directionDueDate = LocalDate.now();
+
     private final String directionExplanation = "test reasons new direction sent";
-    private Map<String, Object> fieldValuesMap;
 
     public InternalNonStandardDirectionLetterTemplateTest() {
     }
 
+    @BeforeEach
     public void setUp() {
         internalNonStandardDirectionLetterTemplate =
             new InternalNonStandardDirectionLetterTemplate(
                 templateName,
                 customerServicesProvider,
-                directionFinder);
+                directionFinder
+            );
     }
+
     @Test
     void should_return_template_name() {
         assertEquals(templateName, internalNonStandardDirectionLetterTemplate.getName());
     }
+
     void dataSetUp() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -80,10 +85,10 @@ public class InternalNonStandardDirectionLetterTemplateTest {
     }
 
     @Test
-    void should_map_case_data_to_template_field_values(){
+    void should_map_case_data_to_template_field_values() {
         dataSetUp();
         Map<String, Object> templateFieldValues = internalNonStandardDirectionLetterTemplate.mapFieldValues(caseDetails);
-        assertEquals(8, templateFieldValues.size());
+        assertEquals(7, templateFieldValues.size());
         assertEquals(customerServicesProvider, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesProvider, templateFieldValues.get("customerServicesEmail"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -93,6 +98,7 @@ public class InternalNonStandardDirectionLetterTemplateTest {
         assertEquals(directionExplanation, templateFieldValues.get("reasonForAppointment"));
 
     }
+
     @Test
     void should_throw_exception_when_direction_is_not_present() {
         dataSetUp();
