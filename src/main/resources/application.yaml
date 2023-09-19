@@ -383,6 +383,11 @@ internalUploadAdditionalEvidence.fileExtension: PDF
 internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
 internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
 
+internalDetainedMaintainCaseLinkAppeal.contentType:  application/pdf
+internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
+internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
+internalDetainedMaintainCaseLinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00033.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -462,6 +467,7 @@ security:
       - "decideAnApplication"
       - "transferOutOfAda"
       - "maintainCaseLinks"
+      - "createCaseLink"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -490,6 +496,7 @@ security:
       - "applyForFTPAAppellant"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
+      - "createCaseLink"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -515,6 +522,7 @@ security:
       - "transferOutOfAda"
       - "residentJudgeFtpaDecision"
       - "maintainCaseLinks"
+      - "createCaseLink"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
