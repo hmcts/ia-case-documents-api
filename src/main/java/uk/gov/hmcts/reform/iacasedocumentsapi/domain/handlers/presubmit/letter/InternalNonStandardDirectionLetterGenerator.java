@@ -1,14 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
@@ -21,19 +20,21 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 
 @Component
-public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCallbackHandler<AsylumCase>{
+public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
     private final DocumentCreator<AsylumCase> internalNonStandardDirectionLetterCreator;
     private final DocumentHandler documentHandler;
+    private final DirectionFinder directionFinder;
 
     public  InternalNonStandardDirectionLetterGenerator(
         @Qualifier("InternalNonStandardDirLetter") DocumentCreator<AsylumCase> internalNonStandardDirectionLetterCreator,
-        DocumentHandler documentHandler
-    ) {
+        DocumentHandler documentHandler,
+        DirectionFinder directionFinder) {
         this.internalNonStandardDirectionLetterCreator = internalNonStandardDirectionLetterCreator;
         this.documentHandler = documentHandler;
+        this.directionFinder = directionFinder;
     }
 
     public boolean canHandle(
@@ -68,7 +69,7 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
         documentHandler.addWithMetadata(
             asylumCase,
             uploadDocument,
-            TRIBUNAL_DOCUMENTS,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
             DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER
         );
 
@@ -77,11 +78,9 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
 
     //method to check if the recipient is APPELLANT only
     private boolean isRecipientAppellant(AsylumCase asylumCase) {
-        Direction direction = AsylumCaseUtils.getCaseDirections(asylumCase)
-            .stream()
-            .filter(dir -> dir.getValue().getTag() == DirectionTag.NONE)
-            .findFirst().get().getValue();
-        return direction.getParties() == Parties.APPELLANT;
-
+        return directionFinder
+            .findFirst(asylumCase, DirectionTag.NONE)
+            .map(direction -> direction.getParties().equals(Parties.APPELLANT))
+            .orElse(false);
     }
 }
