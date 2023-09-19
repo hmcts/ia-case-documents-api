@@ -47,7 +47,10 @@ class InternalMaintainCaseLinkAppealTemplateTest {
     private final String logo = "[userImage:hmcts.png]";
     private InternalMaintainCaseLinkAppealTemplate internalMaintainCaseLinkAppealTemplate;
     private Map<String, Object> fieldValuesMap;
-    private final List<String> reasonsForLink = List.of("CLRC001", "CLRC002");
+   private final List<AbstractMap.SimpleEntry<String, String>> pairList = List.of(
+            new AbstractMap.SimpleEntry<>("reason", "Same Party"),
+            new AbstractMap.SimpleEntry<>("reason", "Same child/ren")
+    );
 
     @BeforeEach
     public void setUp() {
@@ -69,6 +72,7 @@ class InternalMaintainCaseLinkAppealTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_LINKS)).thenReturn(Optional.of(createCaseLinksFixtures()));
     }
 
     @Test
@@ -81,13 +85,14 @@ class InternalMaintainCaseLinkAppealTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
+        assertEquals(pairList, fieldValuesMap.get("reason"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
     }
 
     @Test
     void should_throw_when_case_links_are_not_present() {
         dataSetup();
-        when(asylumCase.read(CASE_LINKS, List.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CASE_LINKS)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> internalMaintainCaseLinkAppealTemplate.mapFieldValues(caseDetails))
                 .isExactlyInstanceOf(IllegalStateException.class)
@@ -98,14 +103,7 @@ class InternalMaintainCaseLinkAppealTemplateTest {
     @Test
     void should_resolve_reasons_from_latest_create_link_event() {
         dataSetup();
-        when(asylumCase.read(CASE_LINKS)).thenReturn(Optional.of(createCaseLinksFixtures()));
-
         fieldValuesMap = internalMaintainCaseLinkAppealTemplate.mapFieldValues(caseDetails);
-        List<AbstractMap.SimpleEntry<String, String>> pairList = List.of(
-                new AbstractMap.SimpleEntry<>("reason", "Same Party"),
-                new AbstractMap.SimpleEntry<>("reason", "Same child/ren")
-        );
-
         assertEquals(pairList, fieldValuesMap.get("reason"));
     }
 
