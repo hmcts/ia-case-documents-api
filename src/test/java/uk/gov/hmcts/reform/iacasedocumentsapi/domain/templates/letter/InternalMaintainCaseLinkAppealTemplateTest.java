@@ -47,7 +47,7 @@ class InternalMaintainCaseLinkAppealTemplateTest {
     private final String logo = "[userImage:hmcts.png]";
     private InternalMaintainCaseLinkAppealTemplate internalMaintainCaseLinkAppealTemplate;
     private Map<String, Object> fieldValuesMap;
-   private final List<AbstractMap.SimpleEntry<String, String>> pairList = List.of(
+    private final List<AbstractMap.SimpleEntry<String, String>> pairList = List.of(
             new AbstractMap.SimpleEntry<>("reason", "Same Party"),
             new AbstractMap.SimpleEntry<>("reason", "Same child/ren")
     );
