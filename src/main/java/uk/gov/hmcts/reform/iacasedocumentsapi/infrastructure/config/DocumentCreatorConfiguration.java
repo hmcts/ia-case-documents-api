@@ -1308,13 +1308,34 @@ public class DocumentCreatorConfiguration {
             DocumentUploader documentUploader
     ) {
         return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("InternalNonStandardDirLetter")
+    public DocumentCreator<AsylumCase> getInternalNonStandardDirCreator(
+        @Value("${internalNonStandardDirectionLetter.contentType}") String contentType,
+        @Value("${internalNonStandardDirectionLetter.fileExtension}") String fileExtension,
+        @Value("${internalNonStandardDirectionLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalNonStandardDirectionLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 }
