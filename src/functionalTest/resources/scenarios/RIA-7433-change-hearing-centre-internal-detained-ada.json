@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7433 Internal detained non-ADA change hearing centre PDF (IAC Newcastle) - previously (IAC Nottingham)",
+  "description": "RIA-7433 Internal detained ADA change hearing centre PDF (IAC Newcastle) - previously (IAC Nottingham)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -12,6 +12,7 @@
           "listCaseHearingCentre": "newcastle",
           "listCaseHearingLength": "30",
           "listCaseHearingDate": "2023-09-22T13:30:00",
+          "isAcceleratedDetainedAppeal": "Yes",
           "appellantInDetention": "Yes"
         }
       },
@@ -32,6 +33,7 @@
         "listCaseHearingCentre": "newcastle",
         "listCaseHearingLength": "30",
         "listCaseHearingDate": "2023-09-22T13:30:00",
+        "isAcceleratedDetainedAppeal": "Yes",
         "appellantInDetention": "Yes",
         "notificationAttachmentDocuments": [
           {
