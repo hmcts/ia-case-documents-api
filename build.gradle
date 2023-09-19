@@ -40,7 +40,7 @@ def versions = [
     springHystrix      : '2.2.10.RELEASE',
     pact_version       : '4.1.38',
     springDoc          : '1.6.8',
-    springCloud        : '3.1.6'
+    springCloud        : '3.1.8'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
@@ -356,7 +356,7 @@ dependencies {
 
     testImplementation 'pl.pragmatists:JUnitParams:1.1.1'
 
-    testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.6') {
+    testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.8') {
         exclude group: "com.github.tomakehurst", module: "wiremock-standalone"
     }
 
