@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.WhatHappensNextContentUtils.getWhatHappensNextContent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 
 @Component
 public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate implements DocumentTemplate<AsylumCase> {
-    private static final String homeOfficetimeExtentionContent = "The Tribunal will give the Home Office more time to complete its next task. You will get a notification with the new date soon.";
-    private static final String homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent = "The details of the hearing will be updated and you will be sent a new Notice of Hearing with the agreed changes.";
-    private static final String homeOfficeJudgesReviewContent = "The decision on the Home Office’s original request will be overturned. You will be notified if there is something you need to do next.";
-    private static final String homeOfficeLinkOrUnlinkContent = "This appeal will be linked to or unlinked from the appeal in the Home Office application. You will be notified when this happens.";
-    private static final String homeOfficeWithdrawnContent = "The Tribunal will end the appeal. You will be notified when this happens.";
-    private static final String homeOfficeReinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
-    private static final String applicationTypeOtherContent = "You will be notified when the Tribunal makes the changes the Home Office asked for.";
+
     private final String templateName;
     private final DateProvider dateProvider;
     private final CustomerServicesProvider customerServicesProvider;
@@ -54,7 +49,7 @@ public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate im
         final AsylumCase asylumCase = caseDetails.getCaseData();
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        Optional<MakeAnApplication> optionalMakeAnApplication = getMakeAnApplication(asylumCase);
+        Optional<MakeAnApplication> optionalMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
 
         String applicationType = "";
         String applicationDecision = "";
@@ -82,26 +77,9 @@ public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate im
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("applicationType", applicationType);
         fieldValues.put("applicationReason", applicationDecisionReason);
-        fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(makeAnApplicationTypes));
+        fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(makeAnApplicationTypes, false));
 
         return fieldValues;
-    }
-
-    private Optional<MakeAnApplication> getMakeAnApplication(AsylumCase asylumCase) {
-        return makeAnApplicationService.getMakeAnApplication(asylumCase, true);
-    }
-
-    private String getWhatHappensNextContent(MakeAnApplicationTypes makeAnApplicationTypes) {
-        return switch (makeAnApplicationTypes) {
-            case TIME_EXTENSION -> homeOfficetimeExtentionContent;
-            case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS -> homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent;
-            case JUDGE_REVIEW, JUDGE_REVIEW_LO -> homeOfficeJudgesReviewContent;
-            case LINK_OR_UNLINK -> homeOfficeLinkOrUnlinkContent;
-            case WITHDRAW -> homeOfficeWithdrawnContent;
-            case REINSTATE -> homeOfficeReinstateAppealContent;
-            case OTHER -> applicationTypeOtherContent;
-            default -> "";
-        };
     }
 
 }
