@@ -383,6 +383,12 @@ internalUploadAdditionalEvidence.fileExtension: PDF
 internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
 internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
 
+internalNonStandardDirectionLetter.contentType: application/pdf
+internalNonStandardDirectionLetter.fileExtension: PDF
+internalNonStandardDirectionLetter.fileName: "non-standard-direction-to-appellant-letter"
+internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00028.docx}
+
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -500,6 +506,7 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
     caseworker-ia-iacjudge:
+      - "sendDirection"
       - "generateDecisionAndReasons"
       - "endAppeal"
       - "sendDecisionAndReasons"
