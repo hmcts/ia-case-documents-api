@@ -63,10 +63,11 @@ public class EventTest {
         assertEquals("residentJudgeFtpaDecision", Event.RESIDENT_JUDGE_FTPA_DECISION.toString());
         assertEquals("maintainCaseLinks", Event.MAINTAIN_CASE_LINKS.toString());
         assertEquals("uploadAddendumEvidenceAdminOfficer", Event.UPLOAD_ADDENDUM_EVIDENCE_ADMIN_OFFICER.toString());
+        assertEquals("requestResponseAmend", Event.REQUEST_RESPONSE_AMEND.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(58, Event.values().length);
+        assertEquals(59, Event.values().length);
     }
 }
