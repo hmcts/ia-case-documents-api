@@ -29,7 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalMaintainCaseUnlinkAppealGeneratorTest {
+class InternalMaintainCaseLinkAppealGeneratorTest {
     @Mock
     private DocumentCreator<AsylumCase> documentCreator;
     @Mock
@@ -43,18 +43,18 @@ class InternalMaintainCaseUnlinkAppealGeneratorTest {
     @Mock
     private Document uploadedDocument;
 
-    private InternalMaintainCaseUnlinkAppealGenerator internalMaintainCaseUnlinkAppealGenerator;
+    private InternalMaintainCaseLinkAppealGenerator internalMaintainCaseLinkAppealGenerator;
 
     @BeforeEach
     void setUp() {
-        internalMaintainCaseUnlinkAppealGenerator =
-                new InternalMaintainCaseUnlinkAppealGenerator(documentCreator, documentHandler);
+        internalMaintainCaseLinkAppealGenerator =
+                new InternalMaintainCaseLinkAppealGenerator(documentCreator, documentHandler);
     }
 
     @Test
-    void should_create_internal_detained_maintain_case_unlink_appeal_pdf_and_append_to_notifications_documents() {
+    void should_create_internal_detained_maintain_case_link_appeal_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.MAINTAIN_CASE_LINKS);
+        when(callback.getEvent()).thenReturn(Event.CREATE_CASE_LINK);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -63,7 +63,7 @@ class InternalMaintainCaseUnlinkAppealGeneratorTest {
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalMaintainCaseUnlinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalMaintainCaseLinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -71,7 +71,7 @@ class InternalMaintainCaseUnlinkAppealGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase, uploadedDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.MAINTAIN_CASE_UNLINK_APPEAL_LETTER
+                DocumentTag.MAINTAIN_CASE_LINK_APPEAL_LETTER
         );
     }
 
@@ -83,12 +83,12 @@ class InternalMaintainCaseUnlinkAppealGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        assertThatThrownBy(() -> internalMaintainCaseUnlinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalMaintainCaseUnlinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -105,7 +105,7 @@ class InternalMaintainCaseUnlinkAppealGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalMaintainCaseUnlinkAppealGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalMaintainCaseLinkAppealGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -123,7 +123,7 @@ class InternalMaintainCaseUnlinkAppealGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalMaintainCaseUnlinkAppealGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalMaintainCaseLinkAppealGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -133,19 +133,19 @@ class InternalMaintainCaseUnlinkAppealGeneratorTest {
     @Test
     void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalMaintainCaseUnlinkAppealGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinkAppealGenerator.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalMaintainCaseUnlinkAppealGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalMaintainCaseLinkAppealGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalMaintainCaseUnlinkAppealGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalMaintainCaseLinkAppealGenerator.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalMaintainCaseUnlinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalMaintainCaseLinkAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }
