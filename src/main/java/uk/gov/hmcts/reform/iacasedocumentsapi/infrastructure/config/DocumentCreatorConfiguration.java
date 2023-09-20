@@ -1296,4 +1296,25 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("internalHomeOfficeAmendAppealResponseLetter")
+    public DocumentCreator<AsylumCase> getInternalHomeOfficeAmendAppealResponseLetterCreator(
+            @Value("${internalHomeOfficeAmendAppealResponse.contentType}") String contentType,
+            @Value("${internalHomeOfficeAmendAppealResponse.fileExtension}") String fileExtension,
+            @Value("${internalHomeOfficeAmendAppealResponse.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalHomeOfficeAmendAppealResponseTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
