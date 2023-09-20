@@ -4,7 +4,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -25,7 +24,6 @@ public class InternalNonStandardDirectionLetterTemplate implements DocumentTempl
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
     private final DirectionFinder directionFinder;
-    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
 
     public InternalNonStandardDirectionLetterTemplate(
         @Value("${internalNonStandardDirectionLetter.templateName}") String templateName,
