@@ -1,10 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 public enum AsylumCaseDefinition {
@@ -579,7 +580,10 @@ public enum AsylumCaseDefinition {
         "sendDirectionParties", new TypeReference<Parties>(){}),
 
     FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE(
-            "ftpaRespondentRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){});
+            "ftpaRespondentRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
+    CASE_LINKS(
+            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){});
 
 
 
