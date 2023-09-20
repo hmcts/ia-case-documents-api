@@ -57,6 +57,7 @@ public enum Event {
     MAINTAIN_CASE_LINKS("maintainCaseLinks", CaseType.ASYLUM),
     UPLOAD_ADDENDUM_EVIDENCE_ADMIN_OFFICER("uploadAddendumEvidenceAdminOfficer", CaseType.ASYLUM),
     CREATE_CASE_LINK("createCaseLink", CaseType.ASYLUM),
+    REQUEST_RESPONSE_AMEND("requestResponseAmend", CaseType.ASYLUM),
 
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
     RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),

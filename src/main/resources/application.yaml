@@ -388,6 +388,11 @@ internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
 internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
 internalDetainedMaintainCaseLinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00033.docx}
 
+internalHomeOfficeAmendAppealResponse.contentType:  application/pdf
+internalHomeOfficeAmendAppealResponse.fileExtension: PDF
+internalHomeOfficeAmendAppealResponse.fileName: "home-office-amend-appeal-response"
+internalHomeOfficeAmendAppealResponse.templateName: ${IA_INTERNAL_HOME_OFFICE_AMEND_APPEAL_RESPONSE_TEMPLATE:TB-IAC-LET-ENG-00029.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -468,6 +473,7 @@ security:
       - "transferOutOfAda"
       - "maintainCaseLinks"
       - "createCaseLink"
+      - "requestResponseAmend"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
