@@ -8,14 +8,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SEND_DIRECTION_PARTIES;
 
-import java.util.ArrayList;
+
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -54,7 +53,7 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
     @Mock
     private DocumentHandler documentHandler;
     @Mock
-    private DirectionFinder directionFinder ;
+    private DirectionFinder directionFinder;
     @Mock
     private Callback<AsylumCase> callback;
     @Mock
@@ -71,47 +70,39 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
     private final String directionUniqueId = "95e90870-2429-4660-b9c2-4111aff37304";
     private final String directionType = "someDirectionType";
 
-    private final IdValue<Direction> directionOne = new IdValue<>(
-        "1",
-        new Direction(
-            directionExplanation,
-            directionParties,
-            directionDateDue,
-            directionDateSent,
-            DirectionTag.NONE,
-            Collections.emptyList(),
-            Collections.emptyList(),
-            directionUniqueId,
-            directionType
-        )
+    private final Direction directionOne = new Direction(
+        directionExplanation,
+        directionParties,
+        directionDateDue,
+        directionDateSent,
+        DirectionTag.NONE,
+        Collections.emptyList(),
+        Collections.emptyList(),
+        directionUniqueId,
+        directionType
     );
-    private final IdValue<Direction> directionTwo = new IdValue<>(
-        "1",
-        new Direction(
-            directionExplanation,
-            Parties.LEGAL_REPRESENTATIVE,
-            directionDateDue,
-            directionDateSent,
-            DirectionTag.NONE,
-            Collections.emptyList(),
-            Collections.emptyList(),
-            directionUniqueId,
-            directionType
-        )
+    private final Direction directionTwo = new Direction(
+        directionExplanation,
+        Parties.LEGAL_REPRESENTATIVE,
+        directionDateDue,
+        directionDateSent,
+        DirectionTag.NONE,
+        Collections.emptyList(),
+        Collections.emptyList(),
+        directionUniqueId,
+        directionType
     );
-    private final IdValue<Direction> directionThree = new IdValue<>(
-        "1",
-        new Direction(
-            directionExplanation,
-            directionParties,
-            directionDateDue,
-            directionDateSent,
-            DirectionTag.CASE_EDIT,
-            Collections.emptyList(),
-            Collections.emptyList(),
-            directionUniqueId,
-            directionType
-        )
+
+    private final Direction directionThree = new Direction(
+        directionExplanation,
+        directionParties,
+        directionDateDue,
+        directionDateSent,
+        DirectionTag.CASE_EDIT,
+        Collections.emptyList(),
+        Collections.emptyList(),
+        directionUniqueId,
+        directionType
     );
 
 
@@ -125,11 +116,8 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
     }
 
     @Test
-    public void should_create_internal_non_standard_direction_letter_and_append_to_notifications_documents() {
+    public void should_create_internal_non_standard_direction_Nonada_letter_and_append_to_notifications_documents() {
 
-        List<IdValue<Direction>> directionList = new ArrayList<>();
-        directionList.add(directionOne);
-        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -137,6 +125,9 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
             Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(
             Optional.of(YesOrNo.YES));
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionOne));
+        when(asylumCase.read(SEND_DIRECTION_PARTIES)).thenReturn(Optional.of(Parties.APPELLANT));
+
         when(internalNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
@@ -153,12 +144,40 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
     }
 
     @Test
+    public void should_create_internal_non_standard_direction_ada_letter_and_append_to_notifications_documents() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(
+            Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(
+            Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(
+            Optional.of(YesOrNo.YES));
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionOne));
+        when(asylumCase.read(SEND_DIRECTION_PARTIES)).thenReturn(Optional.of(Parties.APPELLANT));
+
+        when(internalNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            internalNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadata(
+            asylumCase, uploadedDocument,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER
+
+
+        );
+    }
+
+    @Test
     public void incorrect_parties_test() {
 
-        List<IdValue<Direction>> directionList = new ArrayList<>();
-
-        directionList.add(directionTwo);
-        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -167,6 +186,7 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(
             Optional.of(YesOrNo.YES));
         when(internalNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionTwo));
 
         assertThatThrownBy(
             () -> internalNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
@@ -177,20 +197,14 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
     @Test
     public void incorrect_direction_test() {
 
-        List<IdValue<Direction>> directionList = new ArrayList<>();
-
-        directionList.add(directionThree);
-        when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(
             Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(
             Optional.of(YesOrNo.YES));
         when(internalNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        when(internalNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionThree));
 
         assertThatThrownBy(
             () -> internalNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
@@ -198,27 +212,6 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    public void should_create_internal_non_standard_direction_ada_letter_and_append_to_notifications_documents() {
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(internalNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            internalNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(documentHandler, times(1)).addWithMetadata(
-            asylumCase, uploadedDocument,
-            NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER
-        );
-    }
 
     @Test
     public void it_cannot_handle_callback_if_is_admin_is_missing() {

@@ -60,7 +60,6 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
-
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
