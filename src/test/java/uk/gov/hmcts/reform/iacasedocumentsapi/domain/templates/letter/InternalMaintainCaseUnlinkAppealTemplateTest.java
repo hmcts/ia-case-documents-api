@@ -36,7 +36,7 @@ class InternalMaintainCaseUnlinkAppealTemplateTest {
     private String appellantFamilyName = "Smith";
     private String homeOfficeReferenceNumber = "123654";
     private String appealReferenceNumber = "HU/11111/2022";
-    private final String templateName = "IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINKS_TEMPLATE.docx";
+    private final String templateName = "INTERNAL_DETAINED_MAINTAIN_CASE_UNLINK_APPEAL_TEMPLATE.docx";
     private final String logo = "[userImage:hmcts.png]";
     private InternalMaintainCaseUnlinkAppealTemplate internalMaintainCaseUnlinkAppealTemplate;
     private Map<String, Object> fieldValuesMap;
