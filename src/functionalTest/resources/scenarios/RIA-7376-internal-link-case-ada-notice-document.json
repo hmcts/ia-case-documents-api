@@ -16,20 +16,53 @@
           "isAcceleratedDetainedAppeal": "Yes",
           "caseLinks": [
             {
-              "id": "1694608745673292",
+              "id": "1",
               "value": {
                 "CaseType": "Asylum",
-                "CaseReference": "1694608745673292",
+                "CaseReference": "1",
+                "CreatedDatetime": "2023-09-15 16:09:34",
                 "ReasonForLink": [
                   {
                     "id": "f0768aed-7e52-43cf-b35c-5cd45781e80b",
                     "value": {
-                      "Reason": "CLRC015",
-                      "OtherDescription": ""
+                      "Reason": "CLRC015"
+                    }
+                  },
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80q",
+                    "value": {
+                      "Reason": "CLRC014"
+                    }
+                  },
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80w",
+                    "value": {
+                      "Reason": "CLRC013"
+                    }
+                  },
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80e",
+                    "value": {
+                      "Reason": "CLRC012"
                     }
                   }
-                ],
-                "CreatedDateTime": "2023-09-15T16:09:34.487"
+                ]
+              }
+            },
+            {
+              "id": "2",
+              "value": {
+                "CaseType": "Asylum",
+                "CaseReference": "2",
+                "CreatedDatetime": "2023-09-15 16:05:34",
+                "ReasonForLink": [
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80b",
+                    "value": {
+                      "Reason": "CLRC015"
+                    }
+                  }
+                ]
               }
             }
           ]
