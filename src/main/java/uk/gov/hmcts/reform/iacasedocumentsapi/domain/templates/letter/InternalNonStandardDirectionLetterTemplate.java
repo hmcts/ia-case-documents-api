@@ -43,10 +43,14 @@ public class InternalNonStandardDirectionLetterTemplate implements DocumentTempl
         CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
-
         final Map<String, Object> fieldValues = new HashMap<>();
 
         Optional<Direction> direction = directionFinder.findFirst(asylumCase, DirectionTag.NONE);
+
+        if (direction.isEmpty()){
+            throw new IllegalStateException("Could not find non-standard direction");
+
+        }
 
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));

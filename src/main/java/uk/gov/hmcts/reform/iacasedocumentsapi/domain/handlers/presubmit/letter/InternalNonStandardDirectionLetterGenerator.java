@@ -75,7 +75,6 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    //method to check if the recipient is APPELLANT only
     private boolean isRecipientAppellant(AsylumCase asylumCase) {
         return directionFinder
             .findFirst(asylumCase, DirectionTag.NONE)
