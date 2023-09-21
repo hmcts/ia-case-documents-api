@@ -47,7 +47,7 @@ public class InternalNonStandardDirectionLetterTemplate implements DocumentTempl
 
         Optional<Direction> direction = directionFinder.findFirst(asylumCase, DirectionTag.NONE);
 
-        if (direction.isEmpty()){
+        if (direction.isEmpty()) {
             throw new IllegalStateException("Could not find non-standard direction");
 
         }
