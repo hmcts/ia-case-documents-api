@@ -4,12 +4,25 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "eventId": "SendDirection",
+      "eventId": "sendDirection",
       "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "isAcceleratedDetainedAppeal": "No"
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Review the built case",
+                "parties": "appellant",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ]
         }
       }
     }
