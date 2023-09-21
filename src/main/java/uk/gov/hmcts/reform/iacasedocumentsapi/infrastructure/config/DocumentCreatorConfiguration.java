@@ -1339,7 +1339,7 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("InternalNonStandardDirLetter")
+    @Bean("internalNonStandardDirectionLetter")
     public DocumentCreator<AsylumCase> getInternalNonStandardDirCreator(
         @Value("${internalNonStandardDirectionLetter.contentType}") String contentType,
         @Value("${internalNonStandardDirectionLetter.fileExtension}") String fileExtension,

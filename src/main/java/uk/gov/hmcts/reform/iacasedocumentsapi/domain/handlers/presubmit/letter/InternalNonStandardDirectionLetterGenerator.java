@@ -29,7 +29,7 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
     private final DirectionFinder directionFinder;
 
     public  InternalNonStandardDirectionLetterGenerator(
-        @Qualifier("InternalNonStandardDirLetter") DocumentCreator<AsylumCase> internalNonStandardDirectionLetterCreator,
+        @Qualifier("internalNonStandardDirectionLetter") DocumentCreator<AsylumCase> internalNonStandardDirectionLetterCreator,
         DocumentHandler documentHandler,
         DirectionFinder directionFinder) {
         this.internalNonStandardDirectionLetterCreator = internalNonStandardDirectionLetterCreator;
