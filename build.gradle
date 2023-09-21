@@ -380,8 +380,7 @@ dependencies {
     }
 
     //pact contract testing
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.2.14"
 
     contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
