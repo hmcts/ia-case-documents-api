@@ -18,7 +18,7 @@ public class AsylumCase extends HashMap<String, Object> implements CaseData {
     public AsylumCase() {
         objectMapper.registerModule(new Jdk8Module());
 
-        JavaTimeModule javaTimeModule=new JavaTimeModule();
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
 
         javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
 
