@@ -38,7 +38,7 @@ def versions = [
     serenity           : '3.2.3',
     sonarPitest        : '0.5',
     springHystrix      : '2.2.10.RELEASE',
-    pact_version       : '4.1.38',
+    pact_version       : '4.6.3',
     springDoc          : '1.6.8',
     springCloud        : '3.1.6'
 ]
