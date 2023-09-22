@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -560,6 +561,14 @@ class CustomiseHearingBundleHandlerTest {
         assertThatThrownBy(() -> customiseHearingBundleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void test_contains_not_null() {
+        IdValue<DocumentWithMetadata> legalRepDocWithMetadata =
+                new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
+        Boolean bool = customiseHearingBundleHandler.contains(List.of(), legalRepDocWithMetadata);
+        assertThat(bool).isNotNull();
     }
 
     private DocumentWithDescription createDocumentWithDescription() {
