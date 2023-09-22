@@ -19,8 +19,8 @@ public class CaseLink {
     String caseReference;
     @JsonProperty("CaseType")
     String caseType;
-    @JsonProperty("CreatedDatetime")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("CreatedDateTime")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     LocalDateTime createdDateTime;
     @JsonProperty("ReasonForLink")
     List<IdValue<ReasonForLink>> reasonsForLink;
