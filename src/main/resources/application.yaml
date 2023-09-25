@@ -383,6 +383,7 @@ internalUploadAdditionalEvidence.fileExtension: PDF
 internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
 internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
 
+<<<<<<< HEAD
 internalDetainedMaintainCaseLinkAppeal.contentType:  application/pdf
 internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
 internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
@@ -397,6 +398,11 @@ internalNonStandardDirectionLetter.contentType: application/pdf
 internalNonStandardDirectionLetter.fileExtension: PDF
 internalNonStandardDirectionLetter.fileName: "non-standard-direction-to-appellant-letter"
 internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00028.docx}
+
+internalChangeDueDateLetter.contentType:  application/pdf
+internalChangeDueDateLetter.fileExtension: PDF
+internalChangeDueDateLetter.fileName: "appellant-change-direction-due-date-letter"
+internalChangeDueDateLetter.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00034.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
