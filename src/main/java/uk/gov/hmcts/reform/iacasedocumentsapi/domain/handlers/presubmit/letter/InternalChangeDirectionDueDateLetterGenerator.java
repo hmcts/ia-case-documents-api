@@ -64,11 +64,11 @@ public class InternalChangeDirectionDueDateLetterGenerator implements PreSubmitC
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalUploadAdditionalEvidenceLetter = documentCreator.create(caseDetails);
+        Document internalChangeDirectionDueDateLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalUploadAdditionalEvidenceLetter,
+            internalChangeDirectionDueDateLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
             DocumentTag.INTERNAL_CHANGE_DIRECTION_DUE_DATE_LETTER
         );
