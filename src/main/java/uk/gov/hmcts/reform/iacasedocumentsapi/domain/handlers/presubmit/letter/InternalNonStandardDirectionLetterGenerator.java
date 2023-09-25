@@ -78,7 +78,7 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
     private boolean isRecipientAppellant(AsylumCase asylumCase) {
         return directionFinder
             .findFirst(asylumCase, DirectionTag.NONE)
-            .map(direction -> direction.getParties().equals(Parties.APPELLANT))
+            .map(direction -> direction.getParties().equals(Parties.APPELLANT) || direction.getParties().equals(Parties.APPELLANT_AND_RESPONDENT))
             .orElse(false);
     }
 }
