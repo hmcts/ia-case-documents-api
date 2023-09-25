@@ -66,10 +66,11 @@ class DocumentTagTest {
         assertEquals("internalHearingRequirementsUpdatedLetter", DocumentTag.INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER.toString());
         assertEquals("maintainCaseUnlinkAppealLetter", DocumentTag.MAINTAIN_CASE_UNLINK_APPEAL_LETTER.toString());
         assertEquals("internalUploadAdditionalEvidenceLetter", DocumentTag.INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_LETTER.toString());
+        assertEquals("internalChangeDirectionDueDateLetter", DocumentTag.INTERNAL_CHANGE_DIRECTION_DUE_DATE_LETTER.toString());
     }
 
     @Test
     void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(66, DocumentTag.values().length);
+        assertEquals(67, DocumentTag.values().length);
     }
 }

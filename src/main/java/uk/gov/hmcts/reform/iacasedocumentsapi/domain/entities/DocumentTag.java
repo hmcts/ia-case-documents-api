@@ -64,6 +64,7 @@ public enum DocumentTag {
     INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER("internalHearingRequirementsUpdatedLetter", CaseType.ASYLUM),
     MAINTAIN_CASE_UNLINK_APPEAL_LETTER("maintainCaseUnlinkAppealLetter", CaseType.ASYLUM),
     INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_LETTER("internalUploadAdditionalEvidenceLetter", CaseType.ASYLUM),
+    INTERNAL_CHANGE_DIRECTION_DUE_DATE_LETTER("internalChangeDirectionDueDateLetter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),

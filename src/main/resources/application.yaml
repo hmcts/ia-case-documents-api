@@ -383,6 +383,11 @@ internalUploadAdditionalEvidence.fileExtension: PDF
 internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
 internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
 
+internalChangeDueDateLetter.contentType:  application/pdf
+internalChangeDueDateLetter.fileExtension: PDF
+internalChangeDueDateLetter.fileName: "appellant-change-direction-due-date-letter"
+internalChangeDueDateLetter.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00034.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}

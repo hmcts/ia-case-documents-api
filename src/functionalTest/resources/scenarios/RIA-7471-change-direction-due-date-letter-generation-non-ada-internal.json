@@ -1,0 +1,122 @@
+{
+  "description": "RIA-7471 - letter generation on change direction due date - internal non-ada",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "eventId": "changeDirectionDueDate",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "appellantInDetention": "Yes",
+          "directions": [
+            {
+              "id": "2",
+              "value": {
+                "explanation": "Do the second thing",
+                "parties": "appellant",
+                "dateDue": "2023-10-15",
+                "dateSent": "2023-09-25",
+                "tag": "",
+                "previousDates": [
+                  {
+                    "id": "1",
+                    "value": {
+                      "dateDue": "2023-01-05",
+                      "dateSent": "2023-01-01"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Do the first thing",
+                "parties": "appellantAndRespondent",
+                "dateDue": "2018-12-31",
+                "dateSent": "2018-12-25",
+                "tag": ""
+              }
+            }
+          ],
+          "directionList": "Direction 1",
+          "directionEditDateDue": "2023-12-31"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "appellantInDetention": "Yes",
+        "directions": [
+          {
+            "id": "2",
+            "value": {
+              "explanation": "Do the second thing",
+              "parties": "appellant",
+              "dateDue": "2023-12-31",
+              "dateSent": "{$TODAY}",
+              "tag": "",
+              "previousDates": [
+                {
+                  "id": "2",
+                  "value": {
+                    "dateDue": "2023-10-15",
+                    "dateSent": "2023-09-25"
+                  }
+                },
+                {
+                  "id": "1",
+                  "value": {
+                    "dateDue": "2023-01-05",
+                    "dateSent": "2023-01-01"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Do the first thing",
+              "parties": "appellantAndRespondent",
+              "dateDue": "2023-10-15",
+              "dateSent": "2018-12-25",
+              "tag": ""
+            }
+          }
+        ],
+        "lastModifiedDirection": {
+          "explanation": "Do the second thing",
+          "parties": "appellant",
+          "dateDue": "2023-12-31",
+          "dateSent": "{$TODAY}",
+          "tag": "",
+          "previousDates": []
+        },
+        "editableDirections": null,
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 12345 2019-Awan-detained-appellant-change-direction-due-date-letter.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "internalChangeDirectionDueDateLetter"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

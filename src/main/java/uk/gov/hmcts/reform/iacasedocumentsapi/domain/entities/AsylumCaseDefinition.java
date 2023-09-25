@@ -574,6 +574,13 @@ public enum AsylumCaseDefinition {
 
     FTPA_APPLICANT_TYPE(
             "ftpaApplicantType", new TypeReference<String>(){}),
+    DIRECTION_EDIT_DATE_DUE(
+            "directionEditDateDue", new TypeReference<String>(){}),
+
+    DIRECTION_EDIT_EXPLANATION(
+            "directionEditExplanation", new TypeReference<String>(){}),
+    DIRECTION_EDIT_PARTIES(
+            "directionEditParties", new TypeReference<Parties>(){}),
 
     FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE(
             "ftpaRespondentRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){});
