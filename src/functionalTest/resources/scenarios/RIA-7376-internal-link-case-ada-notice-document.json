@@ -20,7 +20,7 @@
               "value": {
                 "CaseType": "Asylum",
                 "CaseReference": "1",
-                "CreatedDatetime": "2023-09-15 16:09:34",
+                "CreatedDateTime": "2023-09-22T15:54:09.839",
                 "ReasonForLink": [
                   {
                     "id": "f0768aed-7e52-43cf-b35c-5cd45781e80b",
@@ -54,7 +54,7 @@
               "value": {
                 "CaseType": "Asylum",
                 "CaseReference": "2",
-                "CreatedDatetime": "2023-09-15 16:05:34",
+                "CreatedDateTime": "2023-09-21T15:54:09.839",
                 "ReasonForLink": [
                   {
                     "id": "f0768aed-7e52-43cf-b35c-5cd45781e80b",
