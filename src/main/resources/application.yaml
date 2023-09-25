@@ -388,6 +388,21 @@ internalChangeHearingCentreLetter.fileExtension: PDF
 internalChangeHearingCentreLetter.fileName: "appellant-change-hearing-centre-letter"
 internalChangeHearingCentreLetter.templateName: ${IA_INTERNAL_CHANGE_HEARING_CENTRE_TEMPLATE:TB-IAC-LET-ENG-00032.docx}
 
+internalDetainedMaintainCaseLinkAppeal.contentType:  application/pdf
+internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
+internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
+internalDetainedMaintainCaseLinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00033.docx}
+
+internalHomeOfficeAmendAppealResponse.contentType:  application/pdf
+internalHomeOfficeAmendAppealResponse.fileExtension: PDF
+internalHomeOfficeAmendAppealResponse.fileName: "home-office-amend-appeal-response"
+internalHomeOfficeAmendAppealResponse.templateName: ${IA_INTERNAL_HOME_OFFICE_AMEND_APPEAL_RESPONSE_TEMPLATE:TB-IAC-LET-ENG-00029.docx}
+
+internalNonStandardDirectionLetter.contentType: application/pdf
+internalNonStandardDirectionLetter.fileExtension: PDF
+internalNonStandardDirectionLetter.fileName: "non-standard-direction-to-appellant-letter"
+internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00028.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -468,6 +483,8 @@ security:
       - "transferOutOfAda"
       - "maintainCaseLinks"
       - "changeHearingCentre"
+      - "createCaseLink"
+      - "requestResponseAmend"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -496,6 +513,7 @@ security:
       - "applyForFTPAAppellant"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
+      - "createCaseLink"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -506,6 +524,7 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
     caseworker-ia-iacjudge:
+      - "sendDirection"
       - "generateDecisionAndReasons"
       - "endAppeal"
       - "sendDecisionAndReasons"
@@ -521,6 +540,7 @@ security:
       - "transferOutOfAda"
       - "residentJudgeFtpaDecision"
       - "maintainCaseLinks"
+      - "createCaseLink"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"

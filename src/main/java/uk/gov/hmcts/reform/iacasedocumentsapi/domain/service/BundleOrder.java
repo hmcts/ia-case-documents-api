@@ -177,6 +177,15 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_CHANGE_HEARING_CENTRE_LETTER:
                 log.warn("INTERNAL_CHANGE_HEARING_CENTRE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 59;
+            case MAINTAIN_CASE_LINK_APPEAL_LETTER:
+                log.warn("MAINTAIN_CASE_LINK_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 60;
+            case AMEND_HOME_OFFICE_APPEAL_RESPONSE:
+                log.warn("AMEND_HOME_OFFICE_APPEAL_RESPONSE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 61;
+            case INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER:
+                log.warn("INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 62;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

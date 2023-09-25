@@ -22,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingExcepti
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 
 public class AsylumCaseUtils {
 
@@ -148,5 +149,15 @@ public class AsylumCaseUtils {
         } else {
             return getAmountRemitted(asylumCase);
         }
+    }
+
+    public static boolean isValidUserDirection(
+            DirectionFinder directionFinder, AsylumCase asylumCase,
+            DirectionTag directionTag, Parties parties
+    ) {
+        return directionFinder
+                .findFirst(asylumCase, directionTag)
+                .map(direction -> direction.getParties().equals(parties))
+                .orElse(false);
     }
 }
