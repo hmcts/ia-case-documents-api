@@ -7,6 +7,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,5 +71,9 @@ public class BailDecisionUnsignedMindedRefusalTemplateTest {
         assertTrue(fieldValuesMap.containsKey("reasonsJudgeIsMindedDetails"));
     }
 
+    @Test
+    void test_get_name() {
+        Assertions.assertThat(bailDecisionUnsignedMindedRefusalTemplate.getName()).isEqualTo(templateName);
+    }
 }
 
