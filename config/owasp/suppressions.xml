@@ -23,4 +23,13 @@
     <suppress until="2023-09-30">
         <cve>CVE-2023-35116</cve><!-- 2023-09-04 jackson-databind 2.15.2 (the latest version at time of checking) is still vulnerable. Try again when a new version comes out. -->
     </suppress>
+    <suppress>
+        <notes>Temporarily suppressing spring-security related vulnerabilities</notes>
+        <cve>CVE-2022-31690</cve>
+        <cve>CVE-2022-31692</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppressing tomcat-embed related vulnerabilities</notes>
+        <cve>CVE-2022-42252</cve>
+    </suppress>
 </suppressions>

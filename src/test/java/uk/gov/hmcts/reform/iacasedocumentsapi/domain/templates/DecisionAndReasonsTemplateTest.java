@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.MANCHESTER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class DecisionAndReasonsTemplateTest {
     @Test
     public void should_map_case_data_to_template_field_values() {
 
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("some-appeal-ref"));
 
@@ -118,6 +120,7 @@ public class DecisionAndReasonsTemplateTest {
     @Test
     public void should_be_tolerant_of_missing_data() {
 
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("some-appeal-ref"));
 
@@ -125,7 +128,6 @@ public class DecisionAndReasonsTemplateTest {
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of("2020-12-25T12:34:56"));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of("some-given-name"));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("some-family-name"));
-        when(asylumCase.read(ANONYMITY_ORDER, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         when(asylumCase.read(APPELLANT_REPRESENTATIVE, String.class)).thenReturn(Optional.of("some-appellant-rep"));
         when(asylumCase.read(RESPONDENT_REPRESENTATIVE, String.class)).thenReturn(Optional.of("some-respondent-rep"));
@@ -133,12 +135,10 @@ public class DecisionAndReasonsTemplateTest {
         when(asylumCase.read(CASE_INTRODUCTION_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-introduction"));
         when(asylumCase.read(APPELLANT_CASE_SUMMARY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-summary"));
 
-        when(asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(AGREED_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-immigration-history"));
         when(asylumCase.read(RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-respondents-immigration-history"));
         when(asylumCase.read(IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-immigration-disagreement"));
 
-        when(asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-schedule"));
         when(asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-disputed-schedule"));
         when(asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-schedule-disagreement"));
@@ -158,6 +158,10 @@ public class DecisionAndReasonsTemplateTest {
         when(asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.empty());
 
+        when(asylumCase.read(ANONYMITY_ORDER, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)).thenReturn(Optional.empty());
+
         when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of("Manchester"));
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -175,19 +179,19 @@ public class DecisionAndReasonsTemplateTest {
         assertEquals(templateFieldValues.get("appellantGivenNames"), "some-given-name");
         assertEquals(templateFieldValues.get("appellantFamilyName"), "some-family-name");
 
-        assertEquals(templateFieldValues.get("anonymityOrder"), "No");
+        assertEquals(templateFieldValues.get("anonymityOrder"), "");
         assertEquals(templateFieldValues.get("appellantRepresentative"), "some-appellant-rep");
         assertEquals(templateFieldValues.get("respondentRepresentative"), "some-respondent-rep");
 
         assertEquals(templateFieldValues.get("caseIntroductionDescription"), "");
         assertEquals(templateFieldValues.get("appellantCaseSummaryDescription"), "");
 
-        assertEquals(templateFieldValues.get("immigrationHistoryAgreement"), "No");
+        assertEquals(templateFieldValues.get("immigrationHistoryAgreement"), "");
         assertEquals(templateFieldValues.get("agreedImmigrationHistory"), "");
         assertEquals(templateFieldValues.get("respondentsImmigrationHistoryDescription"), "");
         assertEquals(templateFieldValues.get("immigrationHistoryDisagreementDescription"), "");
 
-        assertEquals(templateFieldValues.get("scheduleIssueAgreement"), "No");
+        assertEquals(templateFieldValues.get("scheduleIssueAgreement"), "");
         assertEquals(templateFieldValues.get("appellantsScheduleOfIssuesDescription"), "");
         assertEquals(templateFieldValues.get("appellantsDisputedScheduleOfIssuesDescription"), "");
         assertEquals(templateFieldValues.get("scheduleOfIssuesDisagreementDescription"), "");
@@ -199,6 +203,7 @@ public class DecisionAndReasonsTemplateTest {
     @Test
     public void should_be_tolerant_of_missing_hearing_date() {
 
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("some-appeal-ref"));
 
@@ -260,8 +265,10 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void handling_should_throw_if_anonymity_order_not_present() {
+    public void handling_should_throw_if_anonymity_order_not_present_and_caseFlagSetAsideReheardExists_not_set() {
 
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("some-appeal-ref"));
 
@@ -269,7 +276,20 @@ public class DecisionAndReasonsTemplateTest {
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of("2020-12-25T12:34:56"));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of("some-given-name"));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("some-family-name"));
-        when(asylumCase.read(ANONYMITY_ORDER, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        when(asylumCase.read(APPELLANT_REPRESENTATIVE, String.class)).thenReturn(Optional.of("some-appellant-rep"));
+        when(asylumCase.read(RESPONDENT_REPRESENTATIVE, String.class)).thenReturn(Optional.of("some-respondent-rep"));
+
+        when(asylumCase.read(CASE_INTRODUCTION_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-introduction"));
+        when(asylumCase.read(APPELLANT_CASE_SUMMARY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-summary"));
+
+        when(asylumCase.read(AGREED_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-immigration-history"));
+        when(asylumCase.read(RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-respondents-immigration-history"));
+        when(asylumCase.read(IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-immigration-disagreement"));
+
+        when(asylumCase.read(APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-schedule"));
+        when(asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-disputed-schedule"));
+        when(asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-schedule-disagreement"));
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -283,8 +303,9 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void handling_should_throw_if_immigration_history_agreement_not_present() {
+    public void handling_should_throw_if_immigration_history_agreement_not_present_and_caseFlagSetAsideReheardExists_not_set() {
 
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("some-appeal-ref"));
 
@@ -300,7 +321,14 @@ public class DecisionAndReasonsTemplateTest {
         when(asylumCase.read(CASE_INTRODUCTION_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-introduction"));
         when(asylumCase.read(APPELLANT_CASE_SUMMARY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-summary"));
 
-        when(asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(AGREED_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-immigration-history"));
+        when(asylumCase.read(RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-respondents-immigration-history"));
+        when(asylumCase.read(IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-immigration-disagreement"));
+
+        when(asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-schedule"));
+        when(asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-disputed-schedule"));
+        when(asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-schedule-disagreement"));
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -314,8 +342,9 @@ public class DecisionAndReasonsTemplateTest {
     }
 
     @Test
-    public void handling_should_throw_if_schedule_of_issues_agreement_not_present() {
+    public void handling_should_throw_if_schedule_of_issues_agreement_not_present_and_caseFlagSetAsideReheardExists_not_set() {
 
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("some-appeal-ref"));
 
@@ -331,12 +360,13 @@ public class DecisionAndReasonsTemplateTest {
         when(asylumCase.read(CASE_INTRODUCTION_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-introduction"));
         when(asylumCase.read(APPELLANT_CASE_SUMMARY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-case-summary"));
 
-        when(asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(AGREED_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-immigration-history"));
         when(asylumCase.read(RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION, String.class)).thenReturn(Optional.of("some-respondents-immigration-history"));
         when(asylumCase.read(IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-immigration-disagreement"));
 
-        when(asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-agreed-schedule"));
+        when(asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of("some-disputed-schedule"));
+        when(asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("some-schedule-disagreement"));
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -61,8 +62,6 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         fieldValues.put("hearingTime", formatTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
         fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
-        fieldValues.put("anonymityOrder", asylumCase.read(ANONYMITY_ORDER, YesOrNo.class)
-                .orElseThrow(() -> new IllegalStateException("anonymity order must be present")).toString());
 
         fieldValues.put("appellantRepresentative", asylumCase.read(APPELLANT_REPRESENTATIVE, String.class).orElse(""));
         fieldValues.put("respondentRepresentative", asylumCase.read(RESPONDENT_REPRESENTATIVE, String.class).orElse(""));
@@ -70,18 +69,32 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         fieldValues.put("caseIntroductionDescription", asylumCase.read(CASE_INTRODUCTION_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("appellantCaseSummaryDescription", asylumCase.read(APPELLANT_CASE_SUMMARY_DESCRIPTION, String.class).orElse(""));
 
-        fieldValues.put("immigrationHistoryAgreement", asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class)
-                .orElseThrow(() -> new IllegalStateException("immigrationHistoryAgreement must be present")).toString());
         fieldValues.put("agreedImmigrationHistory", asylumCase.read(AGREED_IMMIGRATION_HISTORY_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("respondentsImmigrationHistoryDescription", asylumCase.read(RESPONDENTS_IMMIGRATION_HISTORY_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("immigrationHistoryDisagreementDescription", asylumCase.read(IMMIGRATION_HISTORY_DISAGREEMENT_DESCRIPTION, String.class).orElse(""));
 
-        fieldValues.put("scheduleIssueAgreement", asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)
-                .orElseThrow(() -> new IllegalStateException("scheduleOfIssuesAgreement must be present")).toString());
         fieldValues.put("appellantsScheduleOfIssuesDescription", asylumCase.read(APPELLANTS_AGREED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("appellantsDisputedScheduleOfIssuesDescription", asylumCase.read(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("scheduleOfIssuesDisagreementDescription", asylumCase.read(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("currentYear", String.valueOf(LocalDate.now().getYear()));
+
+        if (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)) {
+            Optional<YesOrNo> anonimityOrderOptional = asylumCase.read(ANONYMITY_ORDER, YesOrNo.class);
+            fieldValues.put("anonymityOrder", anonimityOrderOptional.isPresent() ? anonimityOrderOptional.get().toString() : "");
+
+            Optional<YesOrNo> scheduleIssueAgreementOptional = asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class);
+            fieldValues.put("scheduleIssueAgreement", scheduleIssueAgreementOptional.isPresent() ? scheduleIssueAgreementOptional.get().toString() : "");
+
+            Optional<YesOrNo> immigrationsHistoryAgreementOptional = asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class);
+            fieldValues.put("immigrationHistoryAgreement", immigrationsHistoryAgreementOptional.isPresent() ? immigrationsHistoryAgreementOptional.get().toString() : "");
+        } else {
+            fieldValues.put("anonymityOrder", asylumCase.read(ANONYMITY_ORDER, YesOrNo.class)
+                .orElseThrow(() -> new IllegalStateException("anonymity order must be present")).toString());
+            fieldValues.put("scheduleIssueAgreement", asylumCase.read(SCHEDULE_OF_ISSUES_AGREEMENT, YesOrNo.class)
+                .orElseThrow(() -> new IllegalStateException("scheduleOfIssuesAgreement must be present")).toString());
+            fieldValues.put("immigrationHistoryAgreement", asylumCase.read(IMMIGRATION_HISTORY_AGREEMENT, YesOrNo.class)
+                .orElseThrow(() -> new IllegalStateException("immigrationHistoryAgreement must be present")).toString());
+        }
 
         return fieldValues;
     }
