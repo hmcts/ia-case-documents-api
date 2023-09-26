@@ -1297,15 +1297,15 @@ public class DocumentCreatorConfiguration {
         );
     }
   
-  @Bean("internalMaintainCaseLinkAppealLetter")
+    @Bean("internalMaintainCaseLinkAppealLetter")
     public DocumentCreator<AsylumCase> getInternalMaintainCaseLinkAppealLetterCreator(
-            @Value("${internalDetainedMaintainCaseLinkAppeal.contentType}") String contentType,
-            @Value("${internalDetainedMaintainCaseLinkAppeal.fileExtension}") String fileExtension,
-            @Value("${internalDetainedMaintainCaseLinkAppeal.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalMaintainCaseLinkAppealTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
+        @Value("${internalDetainedMaintainCaseLinkAppeal.contentType}") String contentType,
+        @Value("${internalDetainedMaintainCaseLinkAppeal.fileExtension}") String fileExtension,
+        @Value("${internalDetainedMaintainCaseLinkAppeal.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalMaintainCaseLinkAppealTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
     ) {
         return new DocumentCreator<>(
                 contentType,
@@ -1338,6 +1338,7 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
     @Bean("internalHomeOfficeAmendAppealResponseLetter")
     public DocumentCreator<AsylumCase> getInternalHomeOfficeAmendAppealResponseLetterCreator(
         @Value("${internalHomeOfficeAmendAppealResponse.contentType}") String contentType,
