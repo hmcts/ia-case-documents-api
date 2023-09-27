@@ -67,7 +67,7 @@ public enum DocumentTag {
     INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_LETTER("internalUploadAdditionalEvidenceLetter", CaseType.ASYLUM),
     AMEND_HOME_OFFICE_APPEAL_RESPONSE("amendHomeOfficeAppealResponse", CaseType.ASYLUM),
     INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER("internalNonStandardDirectionToAppellantLetter", CaseType.ASYLUM),
-
+    IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER("homeOfficeNonStandardDirectionToHOLetter", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
@@ -76,6 +76,7 @@ public enum DocumentTag {
     UPLOAD_DOCUMENT("uploadDocument", CaseType.BAIL),
     BAIL_SUMMARY("uploadBailSummary", CaseType.BAIL),
     B1_DOCUMENT("b1Document", CaseType.BAIL),
+
 
     @JsonEnumDefaultValue
     NONE("", CaseType.UNKNOWN);

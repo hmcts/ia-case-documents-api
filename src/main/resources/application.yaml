@@ -398,6 +398,11 @@ internalNonStandardDirectionLetter.fileExtension: PDF
 internalNonStandardDirectionLetter.fileName: "non-standard-direction-to-appellant-letter"
 internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00028.docx}
 
+homeOfficeNonStandardDirectionLetter.contentType: application/pdf
+homeOfficeNonStandardDirectionLetter.fileExtension: PDF
+homeOfficeNonStandardDirectionLetter.fileName: "home-office-non-standard-direction-letter"
+homeOfficeNonStandardDirectionLetter.templateName: ${IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:TB-IAC-LET-ENG-00041.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
