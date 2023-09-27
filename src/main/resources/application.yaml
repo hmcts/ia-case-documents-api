@@ -383,6 +383,11 @@ internalUploadAdditionalEvidence.fileExtension: PDF
 internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
 internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
 
+internalChangeHearingCentreLetter.contentType: application/pdf
+internalChangeHearingCentreLetter.fileExtension: PDF
+internalChangeHearingCentreLetter.fileName: "appellant-change-hearing-centre-letter"
+internalChangeHearingCentreLetter.templateName: ${IA_INTERNAL_CHANGE_HEARING_CENTRE_TEMPLATE:TB-IAC-LET-ENG-00032.docx}
+
 internalDetainedMaintainCaseLinkAppeal.contentType:  application/pdf
 internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
 internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
@@ -483,6 +488,7 @@ security:
       - "decideAnApplication"
       - "transferOutOfAda"
       - "maintainCaseLinks"
+      - "changeHearingCentre"
       - "createCaseLink"
       - "requestResponseAmend"
     caseworker-ia-admofficer:
