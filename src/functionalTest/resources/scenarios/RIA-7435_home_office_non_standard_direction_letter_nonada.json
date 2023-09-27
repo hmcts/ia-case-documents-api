@@ -16,7 +16,7 @@
               "id": "1",
               "value": {
                 "explanation": "Review the built case",
-                "parties": "appellant",
+                "parties": "Respondent",
                 "dateDue": "{$TODAY+14}",
                 "dateSent": "{$TODAY}",
                 "tag": ""
