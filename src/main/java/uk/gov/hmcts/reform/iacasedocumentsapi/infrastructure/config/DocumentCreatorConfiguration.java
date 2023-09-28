@@ -1296,7 +1296,7 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
-  
+
     @Bean("internalMaintainCaseLinkAppealLetter")
     public DocumentCreator<AsylumCase> getInternalMaintainCaseLinkAppealLetterCreator(
         @Value("${internalDetainedMaintainCaseLinkAppeal.contentType}") String contentType,
@@ -1381,4 +1381,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+
+    @Bean("internalEditAppealNotice")
+    public DocumentCreator<AsylumCase> getInternalEditAppealDocumentCreator(
+            @Value("${internalDetainedEditAppeal.contentType}") String contentType,
+            @Value("${internalDetainedEditAppeal.fileExtension}") String fileExtension,
+            @Value("${internalDetainedEditAppeal.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalEditAppealLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
