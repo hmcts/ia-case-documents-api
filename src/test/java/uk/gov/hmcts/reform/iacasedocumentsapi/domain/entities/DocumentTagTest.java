@@ -70,10 +70,12 @@ class DocumentTagTest {
         assertEquals("maintainCaseLinkAppealLetter", DocumentTag.MAINTAIN_CASE_LINK_APPEAL_LETTER.toString());
         assertEquals("amendHomeOfficeAppealResponse", DocumentTag.AMEND_HOME_OFFICE_APPEAL_RESPONSE.toString());
         assertEquals("internalNonStandardDirectionToAppellantLetter", DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER.toString());
+        assertEquals("internalEditAppealLetter", DocumentTag.INTERNAL_EDIT_APPEAL_LETTER.toString());
+
     }
 
     @Test
     void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(70, DocumentTag.values().length);
+        assertEquals(71, DocumentTag.values().length);
     }
 }
