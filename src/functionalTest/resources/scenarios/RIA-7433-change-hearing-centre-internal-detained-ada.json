@@ -9,9 +9,7 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "newcastle",
-          "listCaseHearingLength": "30",
-          "listCaseHearingDate": "2023-09-22T13:30:00",
+          "hearingCentre": "newcastle",
           "isAcceleratedDetainedAppeal": "Yes",
           "appellantInDetention": "Yes"
         }
@@ -19,7 +17,7 @@
       "caseDataBefore": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "nottingham"
+          "hearingCentre": "nottingham"
         }
       }
     }
@@ -30,9 +28,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
-        "listCaseHearingCentre": "newcastle",
-        "listCaseHearingLength": "30",
-        "listCaseHearingDate": "2023-09-22T13:30:00",
+        "hearingCentre": "newcastle",
         "isAcceleratedDetainedAppeal": "Yes",
         "appellantInDetention": "Yes",
         "notificationAttachmentDocuments": [
