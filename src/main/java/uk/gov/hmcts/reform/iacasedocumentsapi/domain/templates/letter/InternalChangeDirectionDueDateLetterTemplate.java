@@ -50,8 +50,8 @@ public class InternalChangeDirectionDueDateLetterTemplate implements DocumentTem
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("directionDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(directionEditDueDate)));
-        fieldValues.put("directionExplanation", directionEditExplanation);
+        fieldValues.put("dueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(directionEditDueDate)));
+        fieldValues.put("directionExplaination", directionEditExplanation);
         return fieldValues;
     }
 
