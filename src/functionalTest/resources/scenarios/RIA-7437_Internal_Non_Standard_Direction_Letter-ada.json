@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7437 Internal (ada) non standard direction to appelent letter",
+  "description": "RIA-7437 Internal (ada) non standard direction to appellant letter",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
