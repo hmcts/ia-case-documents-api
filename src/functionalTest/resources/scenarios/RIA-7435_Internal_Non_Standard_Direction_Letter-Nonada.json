@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7437 Internal (ada) non standard direction to appellant letter",
+  "description": "RIA-7435 Internal (Non-ada) non standard direction to respondent letter",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -10,13 +10,13 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
           "directions": [
             {
               "id": "1",
               "value": {
                 "explanation": "Review the built case",
-                "parties": "appellant",
+                "parties": "Respondent",
                 "dateDue": "{$TODAY+14}",
                 "dateSent": "{$TODAY}",
                 "tag": ""
@@ -39,10 +39,10 @@
           {
             "id": "1",
             "value": {
-              "tag": "internalNonStandardDirectionToAppellantLetter",
+              "tag": "homeOfficeNonStandardDirectionToHOLetter",
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_filename": "PA 12345 2019-Awan-non-standard-direction-to-appellant-letter.PDF",
+                "document_filename": "PA 12345 2019-Awan-home-office-non-standard-direction-letter.PDF",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
               },
               "suppliedBy": "",
