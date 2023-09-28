@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
@@ -48,12 +48,12 @@ public class InternalChangeHearingCentreLetterTemplate implements DocumentTempla
 
         final HearingCentre listedHearingCentre =
             asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .read(HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         final HearingCentre listedHearingCentreBefore =
                 asylumCaseBefore
-                        .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                        .read(HEARING_CENTRE, HearingCentre.class)
                         .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
 
         final String hearingCentreNameBefore =

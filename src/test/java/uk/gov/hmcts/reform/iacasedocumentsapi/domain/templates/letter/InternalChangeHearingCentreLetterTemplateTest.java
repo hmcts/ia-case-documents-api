@@ -63,9 +63,9 @@ public class InternalChangeHearingCentreLetterTemplateTest {
         when(mockAsylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(mockAsylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(mockAsylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(mockAsylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+        when(mockAsylumCase.read(HEARING_CENTRE, HearingCentre.class))
                 .thenReturn(Optional.of(HearingCentre.MANCHESTER));
-        when(mockAsylumCaseBefore.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+        when(mockAsylumCaseBefore.read(AsylumCaseDefinition.HEARING_CENTRE, HearingCentre.class))
                 .thenReturn(Optional.of(HearingCentre.BIRMINGHAM));
         when(stringProvider.get("hearingCentreName", HearingCentre.BIRMINGHAM.toString())).thenReturn(Optional.of("Birmingham"));
         when(stringProvider.get("hearingCentreName", HearingCentre.MANCHESTER.toString())).thenReturn(Optional.of("Manchester"));
@@ -90,7 +90,7 @@ public class InternalChangeHearingCentreLetterTemplateTest {
 
     @Test
     void should_throw_when_list_case_hearing_centre_not_present() {
-        when(mockAsylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+        when(mockAsylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> internalChangeHearingCentreLetterTemplate.mapFieldValues(mockCaseDetails, mockCaseDetailsBefore))
                 .isExactlyInstanceOf(IllegalStateException.class)
@@ -100,7 +100,7 @@ public class InternalChangeHearingCentreLetterTemplateTest {
 
     @Test
     void should_throw_when_list_case_hearing_centre_before_not_present() {
-        when(mockAsylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+        when(mockAsylumCaseBefore.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> internalChangeHearingCentreLetterTemplate.mapFieldValues(mockCaseDetails, mockCaseDetailsBefore))
                 .isExactlyInstanceOf(IllegalStateException.class)
