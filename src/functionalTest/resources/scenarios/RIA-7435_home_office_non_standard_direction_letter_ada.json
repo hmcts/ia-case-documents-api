@@ -15,7 +15,7 @@
             {
               "id": "1",
               "value": {
-                "explanation": "Review the built case",
+                "explanation": "some explanation",
                 "parties": "respondent",
                 "dateDue": "{$TODAY+14}",
                 "dateSent": "{$TODAY}",
