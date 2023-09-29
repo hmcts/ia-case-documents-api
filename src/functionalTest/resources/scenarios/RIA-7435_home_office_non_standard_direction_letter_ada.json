@@ -35,7 +35,6 @@
       "replacements": {
         "appellantInDetention": "Yes",
         "isAdmin": "Yes",
-        "parties": "respondent",
         "tribunalDocuments": [
           {
             "id": "1",
