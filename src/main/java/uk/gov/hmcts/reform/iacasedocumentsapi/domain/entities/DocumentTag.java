@@ -74,6 +74,7 @@ public enum DocumentTag {
     INTERNAL_EDIT_APPEAL_LETTER("internalEditAppealLetter", CaseType.ASYLUM),
     HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER("homeOfficeNonStandardDirectionToHOLetter", CaseType.ASYLUM),
     INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER("internalHoChangeDirectionDueDateLetter", CaseType.ASYLUM),
+    INTERNAL_REINSTATE_APPEAL_LETTER("internalReinstateAppealLetter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),

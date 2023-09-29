@@ -75,11 +75,11 @@ class DocumentTagTest {
         assertEquals("homeOfficeUploadAdditionalAddendumEvidenceLetter", DocumentTag.HOME_OFFICE_UPLOAD_ADDITIONAL_ADDENDUM_EVIDENCE_LETTER.toString());
         assertEquals("legalOfficerUploadAdditionalEvidenceLetter", DocumentTag.LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER.toString());
         assertEquals("internalHoChangeDirectionDueDateLetter", DocumentTag.INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER.toString());
-
+        assertEquals("internalReinstateAppealLetter", DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER.toString());
     }
 
     @Test
     void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(76, DocumentTag.values().length);
+        assertEquals(77, DocumentTag.values().length);
     }
 }
