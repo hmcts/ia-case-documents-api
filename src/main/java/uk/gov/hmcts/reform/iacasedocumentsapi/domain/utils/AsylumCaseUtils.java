@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
+
 
 public class AsylumCaseUtils {
 
@@ -159,5 +159,27 @@ public class AsylumCaseUtils {
                 .findFirst(asylumCase, directionTag)
                 .map(direction -> direction.getParties().equals(parties))
                 .orElse(false);
+    }
+
+    public static List<IdValue<DocumentWithMetadata>> getAddendumEvidenceDocuments(AsylumCase asylumCase) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingAdditionalEvidenceDocuments =
+                asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        if (maybeExistingAdditionalEvidenceDocuments.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return maybeExistingAdditionalEvidenceDocuments.get();
+    }
+
+
+    public static Optional<IdValue<DocumentWithMetadata>> getLatestAddendumEvidenceDocument(AsylumCase asylumCase) {
+        List<IdValue<DocumentWithMetadata>> addendums = getAddendumEvidenceDocuments(asylumCase);
+
+        if (addendums.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Optional<IdValue<DocumentWithMetadata>> optionalLatestAddendum = addendums.stream().findFirst();
+        return Optional.of(optionalLatestAddendum.get());
     }
 }

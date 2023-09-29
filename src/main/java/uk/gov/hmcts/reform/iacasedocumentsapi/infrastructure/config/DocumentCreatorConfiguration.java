@@ -1297,6 +1297,48 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalHomeOfficeUploadAdditionalAddendumEvidenceLetter")
+    public DocumentCreator<AsylumCase> getInternalHomeOfficeUploadAdditionalAddendumEvidenceLetterCreator(
+            @Value("${internalHomeOfficeUploadAdditionalAddendumEvidence.contentType}") String contentType,
+            @Value("${internalHomeOfficeUploadAdditionalAddendumEvidence.fileExtension}") String fileExtension,
+            @Value("${internalHomeOfficeUploadAdditionalAddendumEvidence.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalHomeOfficeUploadAdditionalAndAddendumEvidenceTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalLegalOfficerUploadAdditionalEvidenceLetter")
+    public DocumentCreator<AsylumCase> getInternalLegalOfficerUploadAdditionalEvidenceLetterCreator(
+            @Value("${internalLegalOfficerUploadAdditionalEvidence.contentType}") String contentType,
+            @Value("${internalLegalOfficerUploadAdditionalEvidence.fileExtension}") String fileExtension,
+            @Value("${internalLegalOfficerUploadAdditionalEvidence.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalLegalOfficerUploadAdditionalAndAddendumEvidenceTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalMaintainCaseLinkAppealLetter")
     public DocumentCreator<AsylumCase> getInternalMaintainCaseLinkAppealLetterCreator(
         @Value("${internalDetainedMaintainCaseLinkAppeal.contentType}") String contentType,
