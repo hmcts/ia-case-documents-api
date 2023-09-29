@@ -406,7 +406,7 @@ internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRE
 internalChangeDueDateLetter.contentType:  application/pdf
 internalChangeDueDateLetter.fileExtension: PDF
 internalChangeDueDateLetter.fileName: "appellant-change-direction-due-date-letter"
-internalChangeDueDateLetter.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00034.docx}
+internalChangeDueDateLetter.templateName: ${IA_INTERNAL_CHANGE_DUE_DATE_LETTER_TEMPLATE :TB-IAC-LET-ENG-00034.docx}
 
 internalDetainedEditAppeal.contentType:  application/pdf
 internalDetainedEditAppeal.fileExtension: PDF
