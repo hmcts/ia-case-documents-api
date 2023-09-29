@@ -79,6 +79,56 @@ public class TsvStringProviderTest {
         );
 
         assertEquals(
+                Optional.of("Harmondsworth"),
+                tsvStringProvider.get("hearingCentreName", "harmondsworth")
+        );
+
+        assertEquals(
+                Optional.of("Hendon"),
+                tsvStringProvider.get("hearingCentreName", "hendon")
+        );
+
+        assertEquals(
+                Optional.of("Yarl's Wood"),
+                tsvStringProvider.get("hearingCentreName", "yarlsWood")
+        );
+
+        assertEquals(
+                Optional.of("Bradford & Keighley"),
+                tsvStringProvider.get("hearingCentreName", "bradfordKeighley")
+        );
+
+        assertEquals(
+                Optional.of("MCC Minshull st"),
+                tsvStringProvider.get("hearingCentreName", "mccMinshull")
+        );
+
+        assertEquals(
+                Optional.of("MCC Crown Square"),
+                tsvStringProvider.get("hearingCentreName", "mccCrownSquare")
+        );
+
+        assertEquals(
+                Optional.of("Manchester Mags"),
+                tsvStringProvider.get("hearingCentreName", "manchesterMags")
+        );
+
+        assertEquals(
+                Optional.of("NTH Tyne Mags"),
+                tsvStringProvider.get("hearingCentreName", "nthTyneMags")
+        );
+
+        assertEquals(
+                Optional.of("Leeds Mags"),
+                tsvStringProvider.get("hearingCentreName", "leedsMags")
+        );
+
+        assertEquals(
+                Optional.of("Alloa Sherrif Court"),
+                tsvStringProvider.get("hearingCentreName", "alloaSherrif")
+        );
+
+        assertEquals(
             Optional.of("Removing the appellant from the UK would breach the UK's obligation under the Refugee Convention"),
             tsvStringProvider.get("appealGrounds", "protectionRefugeeConvention")
         );
@@ -181,6 +231,56 @@ public class TsvStringProviderTest {
         assertEquals(
             Optional.of("IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU"),
             tsvStringProvider.get("hearingCentreAddress", "taylorHouse")
+        );
+
+        assertEquals(
+                Optional.of("Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"),
+                tsvStringProvider.get("hearingCentreAddress", "harmondsworth")
+        );
+
+        assertEquals(
+                Optional.of("Hendon Magistrates' Court, The Court House, The Hyde, NW9 7BY"),
+                tsvStringProvider.get("hearingCentreAddress", "hendon")
+        );
+
+        assertEquals(
+                Optional.of("Yarl's Wood Immigration and Asylum Hearing Centre, Twinwood Road, MK44 1FD"),
+                tsvStringProvider.get("hearingCentreAddress", "yarlsWood")
+        );
+
+        assertEquals(
+                Optional.of("Bradford and Keighley Magistrates' Court and Family Court, The Tyrls, PO Box 187, BD1 1JL"),
+                tsvStringProvider.get("hearingCentreAddress", "bradfordKeighley")
+        );
+
+        assertEquals(
+                Optional.of("Manchester Crown Court (Minshull St), The Court House, Minshull Street, M1 3FS"),
+                tsvStringProvider.get("hearingCentreAddress", "mccMinshull")
+        );
+
+        assertEquals(
+                Optional.of("Manchester Crown Court (Crown Square), Courts of Justice, Crown Square, M3 3FL"),
+                tsvStringProvider.get("hearingCentreAddress", "mccCrownSquare")
+        );
+
+        assertEquals(
+                Optional.of("Manchester Magistrates' Court, Crown Square, Manchester, Greater Manchester M60 1PR"),
+                tsvStringProvider.get("hearingCentreAddress", "manchesterMags")
+        );
+
+        assertEquals(
+                Optional.of("North Tyneside Magistrates' Court, Tynemouth Road, The Court House, NE30 1AG"),
+                tsvStringProvider.get("hearingCentreAddress", "nthTyneMags")
+        );
+
+        assertEquals(
+                Optional.of("Leeds Magistrates' Court and Family Court, Westgate, LS1 3BY"),
+                tsvStringProvider.get("hearingCentreAddress", "leedsMags")
+        );
+
+        assertEquals(
+                Optional.of("Alloa Sheriff Court, 47 Drysdale Street, Alloa, FK10 1JA"),
+                tsvStringProvider.get("hearingCentreAddress", "alloaSherrif")
         );
 
         assertEquals(
