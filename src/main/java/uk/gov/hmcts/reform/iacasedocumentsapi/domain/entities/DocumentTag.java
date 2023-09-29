@@ -66,6 +66,8 @@ public enum DocumentTag {
     MAINTAIN_CASE_LINK_APPEAL_LETTER("maintainCaseLinkAppealLetter", CaseType.ASYLUM),
     INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_LETTER("internalUploadAdditionalEvidenceLetter", CaseType.ASYLUM),
     INTERNAL_CHANGE_HEARING_CENTRE_LETTER("internalChangeHearingCentreLetter", CaseType.ASYLUM),
+    HOME_OFFICE_UPLOAD_ADDITIONAL_ADDENDUM_EVIDENCE_LETTER("homeOfficeUploadAdditionalAddendumEvidenceLetter", CaseType.ASYLUM),
+    LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER("legalOfficerUploadAdditionalEvidenceLetter", CaseType.ASYLUM),
     AMEND_HOME_OFFICE_APPEAL_RESPONSE("amendHomeOfficeAppealResponse", CaseType.ASYLUM),
     INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER("internalNonStandardDirectionToAppellantLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_APPEAL_LETTER("internalEditAppealLetter", CaseType.ASYLUM),
