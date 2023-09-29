@@ -69,11 +69,12 @@ public class InternalUploadAdditionalEvidenceGenerator implements PreSubmitCallb
 
             DocumentWithMetadata addendum = latestAddendum.get().getValue();
 
-            if (!addendum.getUploadedBy().equals(LEGAL_OFFICER_ADDENDUM_UPLOADED_BY_LABEL)) {
+            if (addendum.getSuppliedBy() == null || addendum.getUploadedBy() == null) {
                 return false;
             }
 
-            if (!addendum.getSuppliedBy().equals(LEGAL_OFFICER_ADDENDUM_SUPPLIED_BY_LABEL)) {
+            if (!addendum.getUploadedBy().equals(LEGAL_OFFICER_ADDENDUM_UPLOADED_BY_LABEL) ||
+                    !addendum.getSuppliedBy().equals(LEGAL_OFFICER_ADDENDUM_SUPPLIED_BY_LABEL)) {
                 return false;
             }
         }
