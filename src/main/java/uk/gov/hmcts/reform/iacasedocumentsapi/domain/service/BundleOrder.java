@@ -200,6 +200,10 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 66;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
+            case HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:
+                log.warn("IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 67;
+
         }
     }
 }
