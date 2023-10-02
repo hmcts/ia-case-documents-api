@@ -36,8 +36,7 @@ public class BundleOrderTest {
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)
             .collect(Collectors.toList());
-
-        assertEquals(67, sortedTags.size());
+        assertEquals(68, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,

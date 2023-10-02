@@ -70,6 +70,7 @@ public enum DocumentTag {
     LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER("legalOfficerUploadAdditionalEvidenceLetter", CaseType.ASYLUM),
     AMEND_HOME_OFFICE_APPEAL_RESPONSE("amendHomeOfficeAppealResponse", CaseType.ASYLUM),
     INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER("internalNonStandardDirectionToAppellantLetter", CaseType.ASYLUM),
+    INTERNAL_CHANGE_DIRECTION_DUE_DATE_LETTER("internalChangeDirectionDueDateLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_APPEAL_LETTER("internalEditAppealLetter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
