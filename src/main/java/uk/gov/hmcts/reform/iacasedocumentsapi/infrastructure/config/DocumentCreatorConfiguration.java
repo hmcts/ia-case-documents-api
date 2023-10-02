@@ -1423,6 +1423,28 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalChangeDueDateLetter")
+    public DocumentCreator<AsylumCase> getInternalChangeDueDateLetterCreator(
+        @Value("${internalChangeDueDateLetter.contentType}") String contentType,
+        @Value("${internalChangeDueDateLetter.fileExtension}") String fileExtension,
+        @Value("${internalChangeDueDateLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalChangeDirectionDueDateLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+
     @Bean("internalEditAppealNotice")
     public DocumentCreator<AsylumCase> getInternalEditAppealDocumentCreator(
         @Value("${internalDetainedEditAppeal.contentType}") String contentType,

@@ -413,6 +413,11 @@ internalNonStandardDirectionLetter.fileExtension: PDF
 internalNonStandardDirectionLetter.fileName: "non-standard-direction-to-appellant-letter"
 internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00028.docx}
 
+internalChangeDueDateLetter.contentType:  application/pdf
+internalChangeDueDateLetter.fileExtension: PDF
+internalChangeDueDateLetter.fileName: "appellant-change-direction-due-date-letter"
+internalChangeDueDateLetter.templateName: ${IA_INTERNAL_CHANGE_DUE_DATE_LETTER_TEMPLATE :TB-IAC-LET-ENG-00034.docx}
+
 internalDetainedEditAppeal.contentType:  application/pdf
 internalDetainedEditAppeal.fileExtension: PDF
 internalDetainedEditAppeal.fileName: "detained-appellant-edit-appeal-notice"
