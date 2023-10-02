@@ -388,6 +388,16 @@ internalChangeHearingCentreLetter.fileExtension: PDF
 internalChangeHearingCentreLetter.fileName: "appellant-change-hearing-centre-letter"
 internalChangeHearingCentreLetter.templateName: ${IA_INTERNAL_CHANGE_HEARING_CENTRE_TEMPLATE:TB-IAC-LET-ENG-00032.docx}
 
+internalHomeOfficeUploadAdditionalAddendumEvidence.contentType:  application/pdf
+internalHomeOfficeUploadAdditionalAddendumEvidence.fileExtension: PDF
+internalHomeOfficeUploadAdditionalAddendumEvidence.fileName: "appellant letter_HO-evidence"
+internalHomeOfficeUploadAdditionalAddendumEvidence.templateName: ${IA_INTERNAL_HOME_OFFICE_UPLOAD_ADDITIONAL_ADDENDUM_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00035.docx}
+
+internalLegalOfficerUploadAdditionalEvidence.contentType:  application/pdf
+internalLegalOfficerUploadAdditionalEvidence.fileExtension: PDF
+internalLegalOfficerUploadAdditionalEvidence.fileName: "appellant letter_LO-evidence"
+internalLegalOfficerUploadAdditionalEvidence.templateName: ${IA_INTERNAL_LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00036.docx}
+
 internalDetainedMaintainCaseLinkAppeal.contentType:  application/pdf
 internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
 internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
@@ -496,6 +506,7 @@ security:
       - "changeHearingCentre"
       - "createCaseLink"
       - "requestResponseAmend"
+      - "uploadAddendumEvidence"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -561,10 +572,19 @@ security:
       - "endAppealAutomatically"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
+      - "uploadAdditionalEvidenceHomeOffice"
+      - "uploadAddendumEvidenceHomeOffice"
     caseworker-ia-homeofficepou:
       - "applyForFTPARespondent"
+      - "uploadAdditionalEvidenceHomeOffice"
+      - "uploadAddendumEvidenceHomeOffice"
     caseworker-ia-respondentofficer:
       - "applyForFTPARespondent"
+      - "uploadAdditionalEvidenceHomeOffice"
+      - "uploadAddendumEvidenceHomeOffice"
+    caseworker-ia-homeofficeapc:
+      - "uploadAdditionalEvidenceHomeOffice"
+      - "uploadAddendumEvidenceHomeOffice"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
