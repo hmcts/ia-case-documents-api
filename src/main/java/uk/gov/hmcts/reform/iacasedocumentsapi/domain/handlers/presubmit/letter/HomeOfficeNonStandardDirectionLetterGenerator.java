@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
@@ -69,13 +69,12 @@ public class HomeOfficeNonStandardDirectionLetterGenerator implements PreSubmitC
         documentHandler.addWithMetadata(
             asylumCase,
             uploadDocument,
-            TRIBUNAL_DOCUMENTS,
-            DocumentTag.IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
-
     private boolean isRecipientRespondent(AsylumCase asylumCase) {
         return directionFinder
             .findFirst(asylumCase, DirectionTag.NONE)

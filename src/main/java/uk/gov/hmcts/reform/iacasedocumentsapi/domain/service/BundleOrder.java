@@ -195,7 +195,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER:
                 log.warn("LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 65;
-            case IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:
+            case HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:
                 log.warn("IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 66;
             default:

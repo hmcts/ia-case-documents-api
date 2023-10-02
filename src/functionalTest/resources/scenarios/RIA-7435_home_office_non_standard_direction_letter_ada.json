@@ -35,7 +35,7 @@
       "replacements": {
         "appellantInDetention": "Yes",
         "isAdmin": "Yes",
-        "tribunalDocuments": [
+        "notificationAttachmentDocuments": [
           {
             "id": "1",
             "value": {

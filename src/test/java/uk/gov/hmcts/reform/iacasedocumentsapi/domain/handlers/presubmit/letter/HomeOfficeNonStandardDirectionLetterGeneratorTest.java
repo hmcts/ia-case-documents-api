@@ -9,8 +9,8 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SEND_DIRECTION_PARTIES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -135,8 +135,8 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
 
         verify(documentHandler, times(1)).addWithMetadata(
             asylumCase, uploadedDocument,
-            TRIBUNAL_DOCUMENTS,
-            DocumentTag.IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
         );
     }
 
@@ -165,8 +165,8 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
 
         verify(documentHandler, times(1)).addWithMetadata(
             asylumCase, uploadedDocument,
-            TRIBUNAL_DOCUMENTS,
-            DocumentTag.IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
 
 
         );
