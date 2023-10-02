@@ -26,8 +26,10 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +37,8 @@ public class AsylumCaseUtilsTest {
 
     @Mock
     private AsylumCase asylumCase;
+    @Mock
+    private Document document;
     private final String directionExplanation = "some explanation";
     private final Parties directionParties = Parties.APPELLANT;
     private final String directionDateDue = "2023-06-16";
@@ -83,6 +87,30 @@ public class AsylumCaseUtilsTest {
                     Collections.emptyList(),
                     directionUniqueId,
                     directionType
+            )
+    );
+
+    private final String legalOfficerAddendumUploadedByLabel = "TCW";
+    private final String legalOfficerAddendumUploadSuppliedByLabel = "The respondent";
+    private final IdValue<DocumentWithMetadata> addendumOne = new IdValue<>(
+            "1",
+            new DocumentWithMetadata(
+                    document,
+                    "Some description",
+                    "2018-12-25", DocumentTag.ADDENDUM_EVIDENCE,
+                    legalOfficerAddendumUploadSuppliedByLabel,
+                    legalOfficerAddendumUploadedByLabel
+            )
+    );
+
+    private final IdValue<DocumentWithMetadata> addendumTwo = new IdValue<>(
+            "2",
+            new DocumentWithMetadata(
+                    document,
+                    "Some description",
+                    "2018-12-26", DocumentTag.ADDENDUM_EVIDENCE,
+                    legalOfficerAddendumUploadSuppliedByLabel,
+                    legalOfficerAddendumUploadedByLabel
             )
     );
 
@@ -225,6 +253,35 @@ public class AsylumCaseUtilsTest {
         assertThatThrownBy(() -> AsylumCaseUtils.getFeeRemission(asylumCase))
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
                 .hasMessage("Amount remitted not found");
+    }
+
+    @Test
+    void should_get_addendum_document_when_present() {
+        List<IdValue<DocumentWithMetadata>> addendumDocuments = new ArrayList<>();
+        addendumDocuments.add(addendumOne);
+        when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(addendumDocuments));
+
+        assertEquals(addendumDocuments, AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
+        assertEquals(Optional.of(addendumOne), AsylumCaseUtils.getLatestAddendumEvidenceDocument(asylumCase));
+    }
+
+    @Test
+    void should_get_addendum_documents_when_more_than_one_exists() {
+        List<IdValue<DocumentWithMetadata>> addendumDocuments = new ArrayList<>();
+        addendumDocuments.add(addendumOne);
+        addendumDocuments.add(addendumTwo);
+        when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(addendumDocuments));
+
+        assertEquals(addendumDocuments, AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
+        assertEquals(2, AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase).size());
+    }
+
+    @Test
+    void should_return_empty_list_when_no_addendum_evidence_documents_present() {
+        when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.empty());
+
+        assertEquals(Collections.emptyList(), AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
+        assertEquals(Optional.empty(), AsylumCaseUtils.getLatestAddendumEvidenceDocument(asylumCase));
     }
 }
 
