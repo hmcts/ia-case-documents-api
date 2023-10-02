@@ -59,7 +59,9 @@ public enum Event {
     CHANGE_HEARING_CENTRE("changeHearingCentre", CaseType.ASYLUM),
     CREATE_CASE_LINK("createCaseLink", CaseType.ASYLUM),
     REQUEST_RESPONSE_AMEND("requestResponseAmend", CaseType.ASYLUM),
-
+    UPLOAD_ADDITIONAL_EVIDENCE_HOME_OFFICE("uploadAdditionalEvidenceHomeOffice", CaseType.ASYLUM),
+    UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE("uploadAddendumEvidenceHomeOffice", CaseType.ASYLUM),
+    UPLOAD_ADDENDUM_EVIDENCE("uploadAddendumEvidence", CaseType.ASYLUM),
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
     RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),
     END_APPLICATION("endApplication", CaseType.BAIL),
