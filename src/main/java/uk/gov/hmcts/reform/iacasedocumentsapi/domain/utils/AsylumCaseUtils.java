@@ -180,7 +180,8 @@ public class AsylumCaseUtils {
         }
 
         Optional<IdValue<DocumentWithMetadata>> optionalLatestAddendum = addendums.stream().findFirst();
-        return Optional.of(optionalLatestAddendum.get());
+
+        return optionalLatestAddendum.isEmpty() ? Optional.empty() : Optional.of(optionalLatestAddendum.get());
     }
 }
 
