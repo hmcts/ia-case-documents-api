@@ -75,6 +75,7 @@ public class HomeOfficeNonStandardDirectionLetterGenerator implements PreSubmitC
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
+
     private boolean isRecipientRespondent(AsylumCase asylumCase) {
         return directionFinder
             .findFirst(asylumCase, DirectionTag.NONE)
