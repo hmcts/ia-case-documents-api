@@ -189,6 +189,9 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_EDIT_APPEAL_LETTER:
                 log.warn("INTERNAL_EDIT_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 63;
+            case INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER:
+                log.warn("INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 63;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

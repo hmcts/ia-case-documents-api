@@ -583,8 +583,16 @@ public enum AsylumCaseDefinition {
             "ftpaRespondentRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
     CASE_LINKS(
-            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){});
+            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){}),
 
+    DIRECTION_EDIT_DATE_DUE(
+            "directionEditDateDue", new TypeReference<String>(){}),
+
+    DIRECTION_EDIT_EXPLANATION(
+            "directionEditExplanation", new TypeReference<String>(){}),
+
+    DIRECTION_EDIT_PARTIES(
+            "directionEditParties", new TypeReference<Parties>(){});
 
 
     private final String value;

@@ -408,6 +408,11 @@ internalDetainedEditAppeal.fileExtension: PDF
 internalDetainedEditAppeal.fileName: "detained-appellant-edit-appeal-notice"
 internalDetainedEditAppeal.templateName: ${INTERNAL_EDIT_APPEAL_NOTICE_TEMPLATE:TB-IAC-LET-ENG-00038.docx}
 
+internalHoChangeDirectionDueDateLetter.contentType:  application/pdf
+internalHoChangeDirectionDueDateLetter.fileExtension: PDF
+internalHoChangeDirectionDueDateLetter.fileName: "internal-ho-change-direction-due-date-letter"
+internalHoChangeDirectionDueDateLetter.templateName: ${IA_INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_TEMPLATE:TB-IAC-LET-ENG-00037.docx}
+
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -547,6 +552,7 @@ security:
       - "residentJudgeFtpaDecision"
       - "maintainCaseLinks"
       - "createCaseLink"
+      - "changeDirectionDueDate"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
