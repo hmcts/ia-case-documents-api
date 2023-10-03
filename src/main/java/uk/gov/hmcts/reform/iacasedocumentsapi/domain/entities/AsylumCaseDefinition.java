@@ -592,8 +592,6 @@ public enum AsylumCaseDefinition {
     CASE_LINKS(
             "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){});
 
-
-
     private final String value;
     private final TypeReference typeReference;
 

@@ -1443,8 +1443,7 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
-  
-  
+
     @Bean("internalEditAppealNotice")
     public DocumentCreator<AsylumCase> getInternalEditAppealDocumentCreator(
         @Value("${internalDetainedEditAppeal.contentType}") String contentType,
@@ -1487,4 +1486,26 @@ public class DocumentCreatorConfiguration {
 
         );
     }
+
+    @Bean("internalHoChangeDueDateLetter")
+    public DocumentCreator<AsylumCase> getInternalHoChangeDueDateLetterCreator(
+            @Value("${internalHoChangeDirectionDueDateLetter.contentType}") String contentType,
+            @Value("${internalHoChangeDirectionDueDateLetter.fileExtension}") String fileExtension,
+            @Value("${internalHoChangeDirectionDueDateLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalHoChangeDirectionDueDateLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }
