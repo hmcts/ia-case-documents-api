@@ -135,7 +135,7 @@ public class AsylumCaseUtils {
             return 0;
         } else {
             double feeAmountInPence = Double.parseDouble(asylumCase.read(AMOUNT_REMITTED, String.class)
-                .orElseThrow(() -> new RequiredFieldMissingException("Amount remitted not found")));
+                    .orElseThrow(() -> new RequiredFieldMissingException("Amount remitted not found")));
             return feeAmountInPence / 100;
         }
     }
@@ -189,4 +189,21 @@ public class AsylumCaseUtils {
                 .map(parties -> parties.equals(Parties.RESPONDENT))
                 .orElse(false);
     }
+
+    public static Map<String, String> getDirectionDueDateAndExplanation(AsylumCase asylumCase) {
+        requireNonNull(asylumCase, "asylumCase must not be null");
+
+        String directionEditDueDate = asylumCase.read(DIRECTION_EDIT_DATE_DUE, String.class)
+                .orElseThrow(() -> new IllegalStateException("Direction edit date due is not present"));
+
+        String directionEditExplanation = asylumCase.read(DIRECTION_EDIT_EXPLANATION, String.class)
+                .orElseThrow(() -> new IllegalStateException("Direction edit explanation is not present"));
+
+        return ImmutableMap
+                .<String, String>builder()
+                .put("dueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(directionEditDueDate)))
+                .put("directionExplaination", directionEditExplanation)
+                .build();
+    }
+
 }
