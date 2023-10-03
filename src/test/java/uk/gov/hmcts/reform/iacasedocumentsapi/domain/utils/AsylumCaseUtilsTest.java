@@ -296,4 +296,21 @@ public class AsylumCaseUtilsTest {
         }
     }
 
+    @Test
+    void should_throw_if_direction_edit_date_due_not_present() {
+        when(asylumCase.read(DIRECTION_EDIT_DATE_DUE, String.class)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> AsylumCaseUtils.getDirectionDueDateAndExplanation(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("Direction edit date due is not present");
+    }
+
+    @Test
+    void should_throw_if_direction_edit_explanation_not_present() {
+        when(asylumCase.read(DIRECTION_EDIT_DATE_DUE, String.class)).thenReturn(Optional.of("2020-12-25"));
+        when(asylumCase.read(DIRECTION_EDIT_EXPLANATION, String.class)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> AsylumCaseUtils.getDirectionDueDateAndExplanation(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("Direction edit explanation is not present");
+    }
+
 }
