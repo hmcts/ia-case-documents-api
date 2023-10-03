@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_DATE_DUE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_EXPLANATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getDirectionDueDateAndExplanation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
@@ -40,18 +39,11 @@ public class InternalHoChangeDirectionDueDateLetterTemplate implements DocumentT
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        String directionEditDueDate = asylumCase.read(DIRECTION_EDIT_DATE_DUE, String.class)
-                .orElseThrow(() -> new IllegalStateException("Direction edit date due is not present"));
-
-        String directionEditExplanation = asylumCase.read(DIRECTION_EDIT_EXPLANATION, String.class)
-                .orElseThrow(() -> new IllegalStateException("Direction edit explanation is not present"));
-
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("dueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(directionEditDueDate)));
-        fieldValues.put("directionExplaination", directionEditExplanation);
+        fieldValues.putAll(getDirectionDueDateAndExplanation(asylumCase));
         return fieldValues;
     }
 
