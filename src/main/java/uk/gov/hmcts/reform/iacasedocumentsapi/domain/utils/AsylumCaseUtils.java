@@ -135,7 +135,7 @@ public class AsylumCaseUtils {
             return 0;
         } else {
             double feeAmountInPence = Double.parseDouble(asylumCase.read(AMOUNT_REMITTED, String.class)
-                    .orElseThrow(() -> new RequiredFieldMissingException("Amount remitted not found")));
+                .orElseThrow(() -> new RequiredFieldMissingException("Amount remitted not found")));
             return feeAmountInPence / 100;
         }
     }
