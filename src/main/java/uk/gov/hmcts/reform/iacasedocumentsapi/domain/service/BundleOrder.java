@@ -198,6 +198,9 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER:
                 log.warn("LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 66;
+            case INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER:
+                log.warn("INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 67;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
             case HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:
