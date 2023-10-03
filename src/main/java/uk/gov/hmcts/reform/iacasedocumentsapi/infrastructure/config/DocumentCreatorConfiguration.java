@@ -1465,4 +1465,26 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("homeOfficeNonStandardDirectionLetter")
+    public DocumentCreator<AsylumCase> getHomeOfficeNonStandardDirCreator(
+        @Value("${homeOfficeNonStandardDirectionLetter.contentType}") String contentType,
+        @Value("${homeOfficeNonStandardDirectionLetter.fileExtension}") String fileExtension,
+        @Value("${homeOfficeNonStandardDirectionLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HomeOfficeNonStandardDirectionLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+
+        );
+    }
 }
