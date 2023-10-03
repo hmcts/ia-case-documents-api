@@ -20,7 +20,7 @@
       ]]</notes>
     <cve>CVE-2022-45688</cve>
   </suppress>
-  <suppress until="2023-09-30">
+  <suppress until="2023-11-30">
     <cve>CVE-2023-35116</cve><!-- 2023-09-04 jackson-databind 2.15.2 (latest at the time of writing) still has the vulnerability. Try again when there's a new version available -->
   </suppress>
 </suppressions>
