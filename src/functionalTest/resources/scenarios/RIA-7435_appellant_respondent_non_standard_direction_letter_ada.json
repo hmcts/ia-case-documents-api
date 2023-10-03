@@ -1,0 +1,71 @@
+{
+  "description": "RIA-7435 Internal (Ada) non standard direction to appellant & respondent letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "eventId": "sendDirection",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "some explanation",
+                "parties": "appellantAndRespondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "appellantInDetention": "Yes",
+        "isAdmin": "Yes",
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "internalNonStandardDirectionToAppellantLetter",
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "suppliedBy": "",
+              "description": "",
+              "dateUploaded": "{$TODAY}"
+            }
+          },
+          {
+            "id": "2",
+            "value": {
+              "tag": "internalNonStandardDirectionToRespondentLetter",
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "suppliedBy": "",
+              "description": "",
+              "dateUploaded": "{$TODAY}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
