@@ -16,7 +16,7 @@
       "automerge": true
     }
   ],
-  "timezone": "America/Los_Angeles",
+  "timezone": "Europe/London",
   "schedule": [
     "before 3am every weekday"
   ]
