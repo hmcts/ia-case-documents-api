@@ -3,8 +3,12 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.WhatHappensNextContentUtils.getWhatHappensNextContent;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService.APPLICATION_DECISION_REASON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService.APPLICATION_TYPE;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
@@ -47,31 +51,15 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplate i
         final Map<String, Object> fieldValues = new HashMap<>();
 
         Optional<MakeAnApplication> optionalMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
-
-        String applicationType = "";
-        String applicationDecision = "";
-        String applicationDecisionReason = "No reason given";
-        if (optionalMakeAnApplication.isPresent()) {
-            MakeAnApplication makeAnApplication = optionalMakeAnApplication.get();
-            applicationType = makeAnApplication.getType();
-            applicationDecision = makeAnApplication.getDecision();
-            applicationDecisionReason = makeAnApplication.getDecisionReason();
-        }
-
-        Optional<MakeAnApplicationTypes> optionalApplicationType = MakeAnApplicationTypes.from(applicationType);
-        MakeAnApplicationTypes makeAnApplicationTypes;
-        if (optionalApplicationType.isPresent()) {
-            makeAnApplicationTypes = optionalApplicationType.get();
-        } else {
-            throw new IllegalStateException("Application type could not be parsed");
-        }
+        Map<String, String> applicationPropeties = makeAnApplicationService.retrieveApplicationProperties(optionalMakeAnApplication);
+        MakeAnApplicationTypes makeAnApplicationTypes = makeAnApplicationService.getApplicationTypes(applicationPropeties.get(APPLICATION_TYPE));
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(dateProvider.now()));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
-        fieldValues.put("applicationType", applicationType);
-        fieldValues.put("applicationReason", applicationDecisionReason);
+        fieldValues.put("applicationType", applicationPropeties.get(APPLICATION_TYPE));
+        fieldValues.put("applicationReason", applicationPropeties.get(APPLICATION_DECISION_REASON));
         fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(makeAnApplicationTypes, true));
 
         return fieldValues;

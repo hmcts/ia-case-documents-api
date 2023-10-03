@@ -1,34 +1,23 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.ADJOURN;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.EXPEDITE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.JUDGE_REVIEW;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.LINK_OR_UNLINK;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.REINSTATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.TIME_EXTENSION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.TRANSFER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.UPDATE_APPEAL_DETAILS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.UPDATE_HEARING_REQUIREMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.WITHDRAW;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @Service
 public class MakeAnApplicationService {
-
+    public static final String APPLICATION_TYPE = "applicationType";
+    public static final String APPLICATION_DECISION = "applicationDecision";
+    public static final String APPLICATION_DECISION_REASON = "applicationDecisionReason";
     private static final Map<String,String> APPLICATION_PHRASE = Map.ofEntries(
             Map.entry(ADJOURN.toString(), "change the hearing date"),
             Map.entry(EXPEDITE.toString(), "have the hearing sooner"),
@@ -63,7 +52,7 @@ public class MakeAnApplicationService {
     }
 
     public boolean isApplicationListed(State state) {
-        if (Arrays.asList(
+        return Arrays.asList(
                 State.ADJOURNED,
                 State.PREPARE_FOR_HEARING,
                 State.FINAL_BUNDLING,
@@ -72,15 +61,36 @@ public class MakeAnApplicationService {
                 State.DECIDED,
                 State.FTPA_SUBMITTED,
                 State.FTPA_DECIDED
-        ).contains(state)) {
-            return true;
-        } else {
-            return false;
-        }
+        ).contains(state);
     }
 
     public String mapApplicationTypeToPhrase(MakeAnApplication application) {
         return APPLICATION_PHRASE.get(application.getType());
+    }
+
+    public Map<String, String> retrieveApplicationProperties(Optional<MakeAnApplication> optionalMakeAnApplication) {
+        String applicationType = "";
+        String applicationDecision = "";
+        String applicationDecisionReason = "No reason given";
+        if (optionalMakeAnApplication.isPresent()) {
+            MakeAnApplication makeAnApplication = optionalMakeAnApplication.get();
+            applicationType = makeAnApplication.getType();
+            applicationDecision = makeAnApplication.getDecision();
+            applicationDecisionReason = makeAnApplication.getDecisionReason();
+        }
+
+        return Map.of(APPLICATION_TYPE, applicationType,
+                APPLICATION_DECISION, applicationDecision,
+                APPLICATION_DECISION_REASON, applicationDecisionReason);
+    }
+
+    public MakeAnApplicationTypes getApplicationTypes(String applicationType) {
+        Optional<MakeAnApplicationTypes> optionalApplicationType = MakeAnApplicationTypes.from(applicationType);
+        if (optionalApplicationType.isPresent()) {
+            return optionalApplicationType.get();
+        } else {
+            throw new IllegalStateException("Application type could not be parsed");
+        }
     }
 }
 
