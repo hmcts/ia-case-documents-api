@@ -423,6 +423,11 @@ internalDetainedEditAppeal.fileExtension: PDF
 internalDetainedEditAppeal.fileName: "detained-appellant-edit-appeal-notice"
 internalDetainedEditAppeal.templateName: ${INTERNAL_EDIT_APPEAL_NOTICE_TEMPLATE:TB-IAC-LET-ENG-00038.docx}
 
+homeOfficeNonStandardDirectionLetter.contentType: application/pdf
+homeOfficeNonStandardDirectionLetter.fileExtension: PDF
+homeOfficeNonStandardDirectionLetter.fileName: "home-office-non-standard-direction-letter"
+homeOfficeNonStandardDirectionLetter.templateName: ${IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:TB-IAC-LET-ENG-00041.docx}
+
 internalHoChangeDirectionDueDateLetter.contentType:  application/pdf
 internalHoChangeDirectionDueDateLetter.fileExtension: PDF
 internalHoChangeDirectionDueDateLetter.fileName: "internal-ho-change-direction-due-date-letter"
