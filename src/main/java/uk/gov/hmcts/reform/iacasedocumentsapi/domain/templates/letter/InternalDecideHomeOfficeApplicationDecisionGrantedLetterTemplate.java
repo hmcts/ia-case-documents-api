@@ -63,13 +63,7 @@ public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate im
             throw new IllegalStateException("Home Office application not found.");
         }
 
-        Optional<MakeAnApplicationTypes> optionalApplicationType = MakeAnApplicationTypes.from(applicationType);
-        MakeAnApplicationTypes makeAnApplicationTypes;
-        if (optionalApplicationType.isPresent()) {
-            makeAnApplicationTypes = optionalApplicationType.get();
-        } else {
-            throw new IllegalStateException("Application type could not be parsed");
-        }
+        MakeAnApplicationTypes makeAnApplicationTypes = makeAnApplicationService.getApplicationTypes(applicationType);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(dateProvider.now()));
