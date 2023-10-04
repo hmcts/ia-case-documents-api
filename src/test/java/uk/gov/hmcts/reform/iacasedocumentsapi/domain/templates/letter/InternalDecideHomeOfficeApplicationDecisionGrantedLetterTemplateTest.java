@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -114,6 +114,7 @@ public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplateTes
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
 
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
+        when(makeAnApplicationService.getApplicationTypes(any())).thenReturn(makeAnApplicationTypes);
 
         Map<String, Object> templateFieldValues = internalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails);
 
@@ -140,30 +141,4 @@ public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplateTes
             default -> { }
         }
     }
-
-    @Test
-    void should_throw_exception_if_application_type_cannot_be_parsed() {
-        dataSetup();
-        List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
-        final MakeAnApplication testApplication = new MakeAnApplication(
-                "Respondent",
-                "someRandomApplicationTypeThatShouldCauseAnException",
-                "someRandomDetails",
-                new ArrayList<>(),
-                LocalDate.now().toString(),
-                "Granted",
-                State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
-        makeAnApplications.add(new IdValue<>("1", testApplication));
-
-        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));
-        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
-
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
-
-        assertThatThrownBy(() -> internalDecideHomeOfficeApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails))
-                .hasMessage("Application type could not be parsed")
-                .isExactlyInstanceOf(IllegalStateException.class);
-    }
-
 }

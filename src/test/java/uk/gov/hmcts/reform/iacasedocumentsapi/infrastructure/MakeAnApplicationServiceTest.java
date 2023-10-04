@@ -1,14 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.MAKE_AN_APPLICATIONS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class MakeAnApplicationServiceTest {
+class MakeAnApplicationServiceTest {
     @Mock
     private AsylumCase asylumCase;
     @Mock
@@ -76,20 +78,20 @@ public class MakeAnApplicationServiceTest {
     }
 
     @Test
-    public void should_return_application_when_not_decided() {
+    void should_return_application_when_not_decided() {
         Optional<MakeAnApplication> makeAnApplicationOptional = makeAnApplicationService.getMakeAnApplication(asylumCase, false);
         assertEquals("Withdraw", makeAnApplicationOptional.get().getType());
     }
 
     @Test
-    public void should_return_application_when_decided() {
+    void should_return_application_when_decided() {
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of(decideAnApplicationId));
         Optional<MakeAnApplication> makeAnApplicationOptional = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
         assertEquals("Other", makeAnApplicationOptional.get().getType());
     }
 
     @Test
-    public void isAppealListed() {
+    void isAppealListed() {
         State state = State.APPEAL_SUBMITTED;
         assertFalse(makeAnApplicationService.isApplicationListed(state));
 
@@ -99,7 +101,7 @@ public class MakeAnApplicationServiceTest {
 
     @ParameterizedTest
     @EnumSource(value = MakeAnApplicationTypes.class)
-    public void shouldMapApplicationTypeToPhrase(MakeAnApplicationTypes makeAnApplicationTypes) {
+    void shouldMapApplicationTypeToPhrase(MakeAnApplicationTypes makeAnApplicationTypes) {
         when(makeAnApplication.getType()).thenReturn(makeAnApplicationTypes.toString());
 
         String expectedPhrase = makeAnApplicationService.mapApplicationTypeToPhrase(makeAnApplication);
@@ -141,6 +143,32 @@ public class MakeAnApplicationServiceTest {
             default:
                 break;
         }
+    }
+
+    @Test
+    void should_throw_exception_if_application_type_cannot_be_parsed() {
+        assertThatThrownBy(() -> makeAnApplicationService.getApplicationTypes("test"))
+                .hasMessage("Application type could not be parsed")
+                .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void should_retrieve_correct_application_properties() {
+        final MakeAnApplication testApplication = new MakeAnApplication(
+                "Admin Officer",
+                "someRandomApplicationTypeThatShouldCauseAnException",
+                "someRandomDetails",
+                new ArrayList<>(),
+                LocalDate.now().toString(),
+                "Granted",
+                State.APPEAL_SUBMITTED.toString(),
+                "caseworker-ia-admofficer");
+        testApplication.setDecisionReason("No reason");
+
+        Map<String, String> applicationPropertiesMap = makeAnApplicationService.retrieveApplicationProperties(Optional.of(testApplication));
+        assertEquals(applicationPropertiesMap.get(APPLICATION_TYPE), testApplication.getType());
+        assertEquals(applicationPropertiesMap.get(APPLICATION_DECISION), testApplication.getDecision());
+        assertEquals(applicationPropertiesMap.get(APPLICATION_DECISION_REASON), testApplication.getDecisionReason());
     }
 }
 

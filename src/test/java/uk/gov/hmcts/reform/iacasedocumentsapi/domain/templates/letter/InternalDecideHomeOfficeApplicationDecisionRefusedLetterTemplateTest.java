@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -90,12 +91,21 @@ public class InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplateTes
 
         when(dateProvider.now()).thenReturn(LocalDate.now());
 
+        application.setDecisionReason("No reason");
         makeAnApplications.add(new IdValue<>("1", application));
 
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
 
+        Map<String, String> applicationPropeties = Map.of(
+                APPLICATION_TYPE, application.getType(),
+                APPLICATION_DECISION, application.getDecision(),
+                APPLICATION_DECISION_REASON, application.getDecisionReason()
+        );
+
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(application));
+        when(makeAnApplicationService.retrieveApplicationProperties(any())).thenReturn(applicationPropeties);
+        when(makeAnApplicationService.getApplicationTypes(any())).thenReturn(MakeAnApplicationTypes.ADJOURN);
     }
 
     @Test
@@ -122,28 +132,4 @@ public class InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplateTes
         assertEquals(application.getDecisionReason(), templateFieldValues.get("applicationReason"));
     }
 
-    @Test
-    void should_throw_exception_if_application_type_cannot_be_parsed() {
-        dataSetup();
-        List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
-        final MakeAnApplication testApplication = new MakeAnApplication(
-                "Admin Officer",
-                "someRandomApplicationTypeThatShouldCauseAnException",
-                "someRandomDetails",
-                new ArrayList<>(),
-                LocalDate.now().toString(),
-                "Granted",
-                State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
-        makeAnApplications.add(new IdValue<>("1", testApplication));
-
-        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));
-        when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
-
-        when(makeAnApplicationService.getMakeAnApplication(asylumCase, true)).thenReturn(Optional.of(testApplication));
-
-        assertThatThrownBy(() -> internalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate.mapFieldValues(caseDetails))
-                .hasMessage("Application type could not be parsed")
-                .isExactlyInstanceOf(IllegalStateException.class);
-    }
 }
