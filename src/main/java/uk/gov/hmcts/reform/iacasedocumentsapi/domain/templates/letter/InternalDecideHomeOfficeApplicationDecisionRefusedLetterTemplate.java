@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService.APPLICATION_DECISION_REASON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService.APPLICATION_TYPE;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -47,35 +48,18 @@ public class InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate im
         final AsylumCase asylumCase = caseDetails.getCaseData();
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        Optional<MakeAnApplication> optionalMakeAnApplication = getMakeAnApplication(asylumCase);
-
-        String applicationType = "";
-        String applicationDecisionReason = "No reason given";
-        if (optionalMakeAnApplication.isPresent()) {
-            MakeAnApplication makeAnApplication = optionalMakeAnApplication.get();
-            applicationType = makeAnApplication.getType();
-            applicationDecisionReason = makeAnApplication.getDecisionReason();
-        }
-
-        Optional<MakeAnApplicationTypes> optionalApplicationType = MakeAnApplicationTypes.from(applicationType);
-        MakeAnApplicationTypes makeAnApplicationTypes;
-        if (optionalApplicationType.isPresent()) {
-            makeAnApplicationTypes = optionalApplicationType.get();
-        } else {
-            throw new IllegalStateException("Application type could not be parsed");
-        }
+        Optional<MakeAnApplication> optionalMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
+        Map<String, String> applicationPropeties = makeAnApplicationService.retrieveApplicationProperties(optionalMakeAnApplication);
+        makeAnApplicationService.getApplicationTypes(applicationPropeties.get(APPLICATION_TYPE));
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(dateProvider.now()));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
-        fieldValues.put("applicationType", applicationType);
-        fieldValues.put("applicationReason", applicationDecisionReason);
+        fieldValues.put("applicationType", applicationPropeties.get(APPLICATION_TYPE));
+        fieldValues.put("applicationReason", applicationPropeties.get(APPLICATION_DECISION_REASON));
 
         return fieldValues;
     }
 
-    private Optional<MakeAnApplication> getMakeAnApplication(AsylumCase asylumCase) {
-        return makeAnApplicationService.getMakeAnApplication(asylumCase, true);
-    }
 }
