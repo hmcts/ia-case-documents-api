@@ -590,7 +590,16 @@ public enum AsylumCaseDefinition {
             "ftpaRespondentRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
     CASE_LINKS(
-            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){});
+            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){}),
+
+    REINSTATE_APPEAL_DATE(
+        "reinstateAppealDate", new TypeReference<String>(){}),
+
+    REINSTATE_APPEAL_REASON(
+        "reinstateAppealReason", new TypeReference<String>(){}),
+
+    REINSTATED_DECISION_MAKER(
+        "reinstatedDecisionMaker", new TypeReference<String>(){});
 
     private final String value;
     private final TypeReference typeReference;
