@@ -433,6 +433,11 @@ internalHoChangeDirectionDueDateLetter.fileExtension: PDF
 internalHoChangeDirectionDueDateLetter.fileName: "internal-ho-change-direction-due-date-letter"
 internalHoChangeDirectionDueDateLetter.templateName: ${IA_INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_TEMPLATE:TB-IAC-LET-ENG-00037.docx}
 
+internalDetainedReinstateAppealLetter.contentType:  application/pdf
+internalDetainedReinstateAppealLetter.fileExtension: PDF
+internalDetainedReinstateAppealLetter.fileName: "internal-detained-reinstate-appeal-letter"
+internalDetainedReinstateAppealLetter.templateName: ${INTERNAL_REINSTATE_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-00050.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -516,6 +521,7 @@ security:
       - "createCaseLink"
       - "requestResponseAmend"
       - "uploadAddendumEvidence"
+      - "reinstateAppeal"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -545,6 +551,7 @@ security:
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
+      - "reinstateAppeal"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -573,6 +580,7 @@ security:
       - "maintainCaseLinks"
       - "createCaseLink"
       - "changeDirectionDueDate"
+      - "reinstateAppeal"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"

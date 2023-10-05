@@ -1508,4 +1508,24 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalReinstateAppealLetter")
+    public DocumentCreator<AsylumCase> getInternalReinstateAppealLetterCreator(
+        @Value("${internalDetainedReinstateAppealLetter.contentType}") String contentType,
+        @Value("${internalDetainedReinstateAppealLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedReinstateAppealLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalReinstateAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 }
