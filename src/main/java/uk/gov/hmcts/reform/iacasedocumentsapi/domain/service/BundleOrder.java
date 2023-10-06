@@ -201,8 +201,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER:
                 log.warn("INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 67;
-            case HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:
-                log.warn("IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+            case INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER:
+                log.warn("INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 68;
             case INTERNAL_REINSTATE_APPEAL_LETTER:
                 log.warn("INTERNAL_REINSTATE_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());

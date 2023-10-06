@@ -72,7 +72,7 @@ public enum DocumentTag {
     INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER("internalNonStandardDirectionToAppellantLetter", CaseType.ASYLUM),
     INTERNAL_CHANGE_DIRECTION_DUE_DATE_LETTER("internalChangeDirectionDueDateLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_APPEAL_LETTER("internalEditAppealLetter", CaseType.ASYLUM),
-    HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER("homeOfficeNonStandardDirectionToHOLetter", CaseType.ASYLUM),
+    INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER("internalNonStandardDirectionToRespondentLetter", CaseType.ASYLUM),
     INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER("internalHoChangeDirectionDueDateLetter", CaseType.ASYLUM),
     INTERNAL_REINSTATE_APPEAL_LETTER("internalReinstateAppealLetter", CaseType.ASYLUM),
 

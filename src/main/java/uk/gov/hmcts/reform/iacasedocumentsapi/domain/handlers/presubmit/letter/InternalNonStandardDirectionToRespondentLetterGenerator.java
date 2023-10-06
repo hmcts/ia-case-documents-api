@@ -21,15 +21,18 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
+/*
+This class is to generate letter when a Non Standard Direction is sent to respondent or appellant and respondent.
+ */
 
 @Component
-public class HomeOfficeNonStandardDirectionLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalNonStandardDirectionToRespondentLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> homeOfficeNonStandardDirectionLetterCreator;
     private final DocumentHandler documentHandler;
     private final DirectionFinder directionFinder;
 
-    public HomeOfficeNonStandardDirectionLetterGenerator(
+    public InternalNonStandardDirectionToRespondentLetterGenerator(
         @Qualifier("homeOfficeNonStandardDirectionLetter")
         DocumentCreator<AsylumCase> homeOfficeNonStandardDirectionLetterCreator,
         DocumentHandler documentHandler,
@@ -70,7 +73,7 @@ public class HomeOfficeNonStandardDirectionLetterGenerator implements PreSubmitC
             asylumCase,
             uploadDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
+            DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
@@ -79,7 +82,7 @@ public class HomeOfficeNonStandardDirectionLetterGenerator implements PreSubmitC
     private boolean isRecipientRespondent(AsylumCase asylumCase) {
         return directionFinder
             .findFirst(asylumCase, DirectionTag.NONE)
-            .map(direction -> direction.getParties().equals(Parties.RESPONDENT))
+            .map(direction -> direction.getParties().equals(Parties.RESPONDENT) || direction.getParties().equals(Parties.APPELLANT_AND_RESPONDENT))
             .orElse(false);
     }
 }
