@@ -162,8 +162,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_HO_FTPA_DECIDED_LETTER:
                 log.warn("INTERNAL_HO_FTPA_DECIDED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 54;
-            case INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER:
-                log.warn("INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+            case INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER:
+                log.warn("INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 55;
             case INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER:
                 log.warn("INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
