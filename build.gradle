@@ -309,7 +309,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.7'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
 
