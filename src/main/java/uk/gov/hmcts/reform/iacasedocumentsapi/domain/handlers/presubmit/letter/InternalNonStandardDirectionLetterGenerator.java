@@ -21,6 +21,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
+/*
+This class is to generate letter when a Non Standard Direction is sent to appellant or appellant and respondent.
+ */
 
 @Component
 public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
