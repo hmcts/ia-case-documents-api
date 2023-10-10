@@ -1,21 +1,32 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CHANGE_ORGANISATION_REQUEST_FIELD;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 
 import com.google.common.collect.ImmutableMap;
+
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
-public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
+public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implements EmailNotificationPersonalisation {
 
     private final String legalRepUploadedAdditionalEvidenceBeforeListingTemplateId;
     private final String legalRepUploadedAdditionalEvidenceAfterListingTemplateId;
@@ -44,6 +55,20 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implemen
     }
 
     @Override
+    public Set<String> getRecipientsList(AsylumCase asylumCase) {
+        if (isAipJourney(asylumCase) || asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class)
+                .map(it -> it.getCaseRoleId() == null)
+                .orElse(false)) {
+
+            return Collections.emptySet();
+        } else {
+            return Collections.singleton(asylumCase
+                    .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
+                    .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present")));
+        }
+    }
+
+    @Override
     public String getReferenceId(Long caseId) {
         return caseId + "_UPLOADED_ADDITIONAL_EVIDENCE_LEGAL_REP";
     }
@@ -67,4 +92,12 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implemen
 
         return appealListed.isPresent();
     }
+
+    private boolean isAipJourney(AsylumCase asylumCase) {
+
+        return asylumCase
+                .read(JOURNEY_TYPE, JourneyType.class)
+                .map(type -> type == AIP).orElse(false);
+    }
+
 }

@@ -1,14 +1,21 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CHANGE_ORGANISATION_REQUEST_FIELD;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 
 import com.google.common.collect.ImmutableMap;
+
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +26,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -39,7 +50,6 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
     @Mock
     CustomerServicesProvider customerServicesProvider;
 
-    private Long caseId = 12345L;
     private String beforeListingTemplateId = "beforeListingTemplateId";
     private String afterListingTemplateId = "afterListingTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
@@ -67,6 +77,52 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
                 personalisationProvider,
                 customerServicesProvider
             );
+    }
+
+    @Test
+    public void should_return_given_email_address_from_asylum_case() {
+        when(asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class))
+                .thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class))
+                .thenReturn(Optional.of(legalRepEmailAddress));
+
+        assertTrue(legalRepresentativeUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase)
+                .contains(legalRepEmailAddress));
+    }
+
+    @Test
+    public void should_return_empty_recipients_from_asylum_case_for_aip_journey() {
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(AIP));
+
+        assertThat(legalRepresentativeUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase)).isEmpty();
+    }
+
+    @Test
+    public void should_return_given_email_address_for_change_org_request_field_and_field() {
+        Value caseRole =
+                new Value("[LEGALREPRESENTATIVE]", "Legal Representative");
+        when(asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class))
+                .thenReturn(Optional.of(
+                        new ChangeOrganisationRequest(
+                                new DynamicList(caseRole, newArrayList(caseRole)),
+                                LocalDateTime.now().toString(),
+                                "1"
+                        )
+                ));
+
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class))
+                .thenReturn(Optional.of(legalRepEmailAddress));
+
+        assertTrue(legalRepresentativeUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase)
+                .contains(legalRepEmailAddress));
+    }
+
+    @Test
+    public void should_return_given_email_address_for_empty_change_org_request_field_and_field() {
+        when(asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class))
+                .thenReturn(Optional.of(new ChangeOrganisationRequest(null, null, null)));
+
+        assertTrue(legalRepresentativeUploadAdditionalEvidencePersonalisation.getRecipientsList(asylumCase).isEmpty());
     }
 
     @Test
