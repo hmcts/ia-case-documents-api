@@ -368,10 +368,10 @@ internalAppellantFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_APPELLANT_
 internalAppellantFtpaDecidedRefusedLetter.ftpaAdaDueWorkingDays: 7
 internalAppellantFtpaDecidedRefusedLetter.ftpaNonAdaDueCalendarDays: 14
 
-internalHearingRequirementsUpdated.contentType: application/pdf
-internalHearingRequirementsUpdated.fileExtension: PDF
-internalHearingRequirementsUpdated.fileName: "hearing-requirements-updated-letter"
-internalHearingRequirementsUpdated.templateName: ${IA_INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
+internalHearingAdjustmentsUpdated.contentType: application/pdf
+internalHearingAdjustmentsUpdated.fileExtension: PDF
+internalHearingAdjustmentsUpdated.fileName: "hearing-adjustments-updated-letter"
+internalHearingAdjustmentsUpdated.templateName: ${IA_INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
 
 internalDetainedMaintainCaseUnlinkAppeal.contentType:  application/pdf
 internalDetainedMaintainCaseUnlinkAppeal.fileExtension: PDF
@@ -522,6 +522,7 @@ security:
       - "requestResponseAmend"
       - "uploadAddendumEvidence"
       - "reinstateAppeal"
+      - "UpdateHearingAdjustments"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -581,6 +582,7 @@ security:
       - "createCaseLink"
       - "changeDirectionDueDate"
       - "reinstateAppeal"
+      - "UpdateHearingAdjustments"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
