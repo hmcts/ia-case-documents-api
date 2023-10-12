@@ -14,6 +14,10 @@
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
       "automerge": true
+    },
+    {
+      "packagePatterns": ["^ccd-case-document-am-client$"],
+      "enabled": false
     }
   ],
   "timezone": "Europe/London",
