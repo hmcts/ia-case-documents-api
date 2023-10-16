@@ -1,10 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -20,16 +21,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
-public class InternalHearingRequirementsUpdatedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalReinstateAppealLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> internalHearingRequirementsUpdatedLetter;
+    private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalHearingRequirementsUpdatedLetterGenerator(
-        @Qualifier("internalHearingRequirementsUpdatedLetter") DocumentCreator<AsylumCase> internalHearingRequirementsUpdatedLetter,
+    public InternalReinstateAppealLetterGenerator(
+        @Qualifier("internalReinstateAppealLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
-        this.internalHearingRequirementsUpdatedLetter = internalHearingRequirementsUpdatedLetter;
+        this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -37,12 +38,15 @@ public class InternalHearingRequirementsUpdatedLetterGenerator implements PreSub
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
     ) {
-        requireNonNull(callbackStage, "callbackStage must not be null");
-        requireNonNull(callback, "callback must not be null");
+        Objects.requireNonNull(callbackStage, "callbackStage must not be null");
+        Objects.requireNonNull(callback, "callback must not be null");
+
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
+        Event event = callback.getEvent();
+
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.UPDATE_HEARING_REQUIREMENTS
+               && callback.getEvent() == REINSTATE_APPEAL
                && isInternalCase(asylumCase)
                && isAppellantInDetention(asylumCase);
     }
@@ -58,16 +62,15 @@ public class InternalHearingRequirementsUpdatedLetterGenerator implements PreSub
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document documentForUpload = internalHearingRequirementsUpdatedLetter.create(caseDetails);
+        Document internalReinstateAppealLetter = documentCreator.create(caseDetails);
 
-        documentHandler.addWithMetadata(
+        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            documentForUpload,
+            internalReinstateAppealLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER
+            DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
-
 }

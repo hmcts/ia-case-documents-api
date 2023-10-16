@@ -14,11 +14,15 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -43,7 +47,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
+public class InternalNonStandardDirectionToRespondentLetterGeneratorTest {
 
     @Mock
     private DocumentCreator<AsylumCase> homeOfficeNonStandardDirectionLetterCreator;
@@ -59,7 +63,7 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
-    private HomeOfficeNonStandardDirectionLetterGenerator homeOfficeNonStandardDirectionLetterGenerator;
+    private InternalNonStandardDirectionToRespondentLetterGenerator internalNonStandardDirectionToRespondentLetterGenerator;
     private final String directionExplanation = "some explanation";
     private final Parties directionParties = Parties.RESPONDENT;
     private final String directionDateDue = "2023-06-16";
@@ -105,43 +109,16 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
 
     @BeforeEach
     public void setUp() {
-        homeOfficeNonStandardDirectionLetterGenerator = new
-            HomeOfficeNonStandardDirectionLetterGenerator(
+        internalNonStandardDirectionToRespondentLetterGenerator = new
+                InternalNonStandardDirectionToRespondentLetterGenerator(
             homeOfficeNonStandardDirectionLetterCreator,
             documentHandler,
             directionFinder);
     }
 
-    @Test
-    public void should_create_home_office_non_standard_direction_Nonada_letter_and_append_to_notifications_documents() {
-
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(
-            Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(
-            Optional.of(YesOrNo.YES));
-        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionOne));
-        when(asylumCase.read(SEND_DIRECTION_PARTIES)).thenReturn(Optional.of(Parties.RESPONDENT));
-
-        when(homeOfficeNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            homeOfficeNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(documentHandler, times(1)).addWithMetadata(
-            asylumCase, uploadedDocument,
-            NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
-        );
-    }
-
-    @Test
-    public void should_create_home_office_non_standard_direction_letter_and_append_to_notifications_documents() {
+    @ParameterizedTest
+    @MethodSource("getAdaAndNonAdaArguments")
+    public void should_create_home_office_non_standard_direction_letter_and_append_to_notifications_documents(Parties party, YesOrNo isAda) {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
@@ -151,14 +128,14 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(
             Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(
-            Optional.of(YesOrNo.YES));
+            Optional.of(isAda));
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionOne));
-        when(asylumCase.read(SEND_DIRECTION_PARTIES)).thenReturn(Optional.of(Parties.RESPONDENT));
+        when(asylumCase.read(SEND_DIRECTION_PARTIES)).thenReturn(Optional.of(party));
 
         when(homeOfficeNonStandardDirectionLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            homeOfficeNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            internalNonStandardDirectionToRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -166,9 +143,7 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadata(
             asylumCase, uploadedDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER
-
-
+            DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER
         );
     }
 
@@ -186,7 +161,7 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionTwo));
 
         assertThatThrownBy(
-            () -> homeOfficeNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            () -> internalNonStandardDirectionToRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -204,7 +179,7 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionThree));
 
         assertThatThrownBy(
-            () -> homeOfficeNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            () -> internalNonStandardDirectionToRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -222,7 +197,7 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
                 Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = homeOfficeNonStandardDirectionLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalNonStandardDirectionToRespondentLetterGenerator.canHandle(callbackStage, callback);
                 Assertions.assertFalse(canHandle);
             }
             Mockito.reset(callback);
@@ -241,7 +216,7 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
                 Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = homeOfficeNonStandardDirectionLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalNonStandardDirectionToRespondentLetterGenerator.canHandle(callbackStage, callback);
                 Assertions.assertFalse(canHandle);
             }
             Mockito.reset(callback);
@@ -251,25 +226,35 @@ public class HomeOfficeNonStandardDirectionLetterGeneratorTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> homeOfficeNonStandardDirectionLetterGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalNonStandardDirectionToRespondentLetterGenerator.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(
-            () -> homeOfficeNonStandardDirectionLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
+            () -> internalNonStandardDirectionToRespondentLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
                 null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> homeOfficeNonStandardDirectionLetterGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalNonStandardDirectionToRespondentLetterGenerator.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(
-            () -> homeOfficeNonStandardDirectionLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
+            () -> internalNonStandardDirectionToRespondentLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
                 null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
+    }
+
+    private static Stream<Arguments> getAdaAndNonAdaArguments() {
+
+        return Stream.of(
+                Arguments.of("RESPONDENT", YesOrNo.YES),
+                Arguments.of("RESPONDENT", YesOrNo.NO),
+                Arguments.of("APPELLANT_AND_RESPONDENT", YesOrNo.YES),
+                Arguments.of("APPELLANT_AND_RESPONDENT", YesOrNo.NO)
+        );
     }
 }
 

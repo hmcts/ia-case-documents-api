@@ -1234,13 +1234,13 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalHearingRequirementsUpdatedLetter")
-    public DocumentCreator<AsylumCase> getInternalHearingRequirementsUpdatedLetterCreator(
-        @Value("${internalHearingRequirementsUpdated.contentType}") String contentType,
-        @Value("${internalHearingRequirementsUpdated.fileExtension}") String fileExtension,
-        @Value("${internalHearingRequirementsUpdated.fileName}") String fileName,
+    @Bean("internalHearingAdjustmentsUpdatedLetter")
+    public DocumentCreator<AsylumCase> getInternalHearingAdjustmentsUpdatedLetterCreator(
+        @Value("${internalHearingAdjustmentsUpdated.contentType}") String contentType,
+        @Value("${internalHearingAdjustmentsUpdated.fileExtension}") String fileExtension,
+        @Value("${internalHearingAdjustmentsUpdated.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalHearingRequirementsUpdatedLetterTemplate documentTemplate,
+        InternalHearingAdjustmentsUpdatedLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
@@ -1508,4 +1508,24 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalReinstateAppealLetter")
+    public DocumentCreator<AsylumCase> getInternalReinstateAppealLetterCreator(
+        @Value("${internalDetainedReinstateAppealLetter.contentType}") String contentType,
+        @Value("${internalDetainedReinstateAppealLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedReinstateAppealLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalReinstateAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 }

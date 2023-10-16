@@ -19,7 +19,6 @@ public enum Event {
     ADD_APPEAL_RESPONSE("addAppealResponse", CaseType.ASYLUM),
     REQUEST_HEARING_REQUIREMENTS("requestHearingRequirements", CaseType.ASYLUM),
     DRAFT_HEARING_REQUIREMENTS("draftHearingRequirements", CaseType.ASYLUM),
-    UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
     CHANGE_DIRECTION_DUE_DATE("changeDirectionDueDate", CaseType.ASYLUM),
     UPLOAD_ADDITIONAL_EVIDENCE("uploadAdditionalEvidence", CaseType.ASYLUM),
     LIST_CASE("listCase", CaseType.ASYLUM),
@@ -62,12 +61,18 @@ public enum Event {
     UPLOAD_ADDITIONAL_EVIDENCE_HOME_OFFICE("uploadAdditionalEvidenceHomeOffice", CaseType.ASYLUM),
     UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE("uploadAddendumEvidenceHomeOffice", CaseType.ASYLUM),
     UPLOAD_ADDENDUM_EVIDENCE("uploadAddendumEvidence", CaseType.ASYLUM),
+    REINSTATE_APPEAL("reinstateAppeal", CaseType.ASYLUM),
+
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
     RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),
     END_APPLICATION("endApplication", CaseType.BAIL),
     MAKE_NEW_APPLICATION("makeNewApplication", CaseType.BAIL),
     EDIT_BAIL_APPLICATION_AFTER_SUBMIT("editBailApplicationAfterSubmit", CaseType.BAIL),
     UPLOAD_SIGNED_DECISION_NOTICE("uploadSignedDecisionNotice", CaseType.BAIL),
+
+    UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
+    UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments", CaseType.ASYLUM),
+
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);
 

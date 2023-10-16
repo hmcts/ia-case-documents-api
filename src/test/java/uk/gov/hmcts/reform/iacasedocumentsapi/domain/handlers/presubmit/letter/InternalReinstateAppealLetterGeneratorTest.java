@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +29,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalHearingRequirementsUpdatedLetterGeneratorTest {
+class InternalReinstateAppealLetterGeneratorTest {
+
     @Mock
-    private DocumentCreator<AsylumCase> internalHearingRequirementsUpdatedLetterCreator;
+    private DocumentCreator<AsylumCase> documentCreator;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
@@ -41,60 +43,56 @@ class InternalHearingRequirementsUpdatedLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
-    private InternalHearingRequirementsUpdatedLetterGenerator internalHearingRequirementsUpdatedLetterGenerator;
+
+    private InternalReinstateAppealLetterGenerator internalReinstateAppealLetterGenerator;
 
     @BeforeEach
-    public void setUp() {
-        internalHearingRequirementsUpdatedLetterGenerator =
-            new InternalHearingRequirementsUpdatedLetterGenerator(
-                internalHearingRequirementsUpdatedLetterCreator,
-                documentHandler
-            );
+    void setUp() {
+        internalReinstateAppealLetterGenerator =
+            new InternalReinstateAppealLetterGenerator(documentCreator, documentHandler);
     }
 
     @Test
-    public void should_create_internal_hearing_requirements_updated_pdf_and_append_to_notifications_documents() {
+    void should_create_internal_reinstate_appeal_letter_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.UPDATE_HEARING_REQUIREMENTS);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getEvent()).thenReturn(Event.REINSTATE_APPEAL);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        when(internalHearingRequirementsUpdatedLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            internalHearingRequirementsUpdatedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            internalReinstateAppealLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(documentHandler, times(1)).addWithMetadata(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER
+            DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER
         );
     }
 
     @Test
-    public void handling_should_throw_if_cannot_actually_handle() {
+    void handling_should_throw_if_cannot_actually_handle() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        assertThatThrownBy(() -> internalHearingRequirementsUpdatedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalReinstateAppealLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalHearingRequirementsUpdatedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+
+        assertThatThrownBy(() -> internalReinstateAppealLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void it_cannot_handle_callback_if_is_admin_is_missing() {
+    void it_cannot_handle_callback_if_is_admin_is_missing() {
 
         for (Event event : Event.values()) {
 
@@ -104,7 +102,7 @@ class InternalHearingRequirementsUpdatedLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalHearingRequirementsUpdatedLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalReinstateAppealLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -112,7 +110,7 @@ class InternalHearingRequirementsUpdatedLetterGeneratorTest {
     }
 
     @Test
-    public void it_cannot_handle_callback_if_is_detained_is_missing() {
+    void it_cannot_handle_callback_if_is_detained_is_missing() {
 
         for (Event event : Event.values()) {
 
@@ -122,7 +120,7 @@ class InternalHearingRequirementsUpdatedLetterGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalHearingRequirementsUpdatedLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalReinstateAppealLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -130,22 +128,23 @@ class InternalHearingRequirementsUpdatedLetterGeneratorTest {
     }
 
     @Test
-    public void should_not_allow_null_arguments() {
+    void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalHearingRequirementsUpdatedLetterGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalReinstateAppealLetterGenerator.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalHearingRequirementsUpdatedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalReinstateAppealLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalHearingRequirementsUpdatedLetterGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalReinstateAppealLetterGenerator.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalHearingRequirementsUpdatedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalReinstateAppealLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
+
 }

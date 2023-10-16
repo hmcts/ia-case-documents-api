@@ -368,10 +368,10 @@ internalAppellantFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_APPELLANT_
 internalAppellantFtpaDecidedRefusedLetter.ftpaAdaDueWorkingDays: 7
 internalAppellantFtpaDecidedRefusedLetter.ftpaNonAdaDueCalendarDays: 14
 
-internalHearingRequirementsUpdated.contentType: application/pdf
-internalHearingRequirementsUpdated.fileExtension: PDF
-internalHearingRequirementsUpdated.fileName: "hearing-requirements-updated-letter"
-internalHearingRequirementsUpdated.templateName: ${IA_INTERNAL_HEARING_REQUIREMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
+internalHearingAdjustmentsUpdated.contentType: application/pdf
+internalHearingAdjustmentsUpdated.fileExtension: PDF
+internalHearingAdjustmentsUpdated.fileName: "hearing-adjustments-updated-letter"
+internalHearingAdjustmentsUpdated.templateName: ${IA_INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
 
 internalDetainedMaintainCaseUnlinkAppeal.contentType:  application/pdf
 internalDetainedMaintainCaseUnlinkAppeal.fileExtension: PDF
@@ -432,6 +432,11 @@ internalHoChangeDirectionDueDateLetter.contentType:  application/pdf
 internalHoChangeDirectionDueDateLetter.fileExtension: PDF
 internalHoChangeDirectionDueDateLetter.fileName: "internal-ho-change-direction-due-date-letter"
 internalHoChangeDirectionDueDateLetter.templateName: ${IA_INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_TEMPLATE:TB-IAC-LET-ENG-00037.docx}
+
+internalDetainedReinstateAppealLetter.contentType:  application/pdf
+internalDetainedReinstateAppealLetter.fileExtension: PDF
+internalDetainedReinstateAppealLetter.fileName: "internal-detained-reinstate-appeal-letter"
+internalDetainedReinstateAppealLetter.templateName: ${INTERNAL_REINSTATE_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-00050.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -516,6 +521,8 @@ security:
       - "createCaseLink"
       - "requestResponseAmend"
       - "uploadAddendumEvidence"
+      - "reinstateAppeal"
+      - "UpdateHearingAdjustments"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -545,6 +552,7 @@ security:
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
+      - "reinstateAppeal"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -573,6 +581,8 @@ security:
       - "maintainCaseLinks"
       - "createCaseLink"
       - "changeDirectionDueDate"
+      - "reinstateAppeal"
+      - "UpdateHearingAdjustments"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"

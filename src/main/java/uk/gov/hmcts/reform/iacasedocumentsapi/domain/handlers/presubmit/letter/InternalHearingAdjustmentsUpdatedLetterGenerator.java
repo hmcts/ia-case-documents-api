@@ -8,9 +8,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -20,24 +18,19 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
-/*
-This class is to generate letter when a Non Standard Direction is sent to appellant or appellant and respondent.
- */
 
 @Component
-public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
-    private final DocumentCreator<AsylumCase> internalNonStandardDirectionLetterCreator;
-    private final DocumentHandler documentHandler;
-    private final DirectionFinder directionFinder;
+public class InternalHearingAdjustmentsUpdatedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    public  InternalNonStandardDirectionLetterGenerator(
-        @Qualifier("internalNonStandardDirectionLetter") DocumentCreator<AsylumCase> internalNonStandardDirectionLetterCreator,
-        DocumentHandler documentHandler,
-        DirectionFinder directionFinder) {
-        this.internalNonStandardDirectionLetterCreator = internalNonStandardDirectionLetterCreator;
+    private final DocumentCreator<AsylumCase> internalHearingAdjustmentsUpdatedLetter;
+    private final DocumentHandler documentHandler;
+
+    public InternalHearingAdjustmentsUpdatedLetterGenerator(
+        @Qualifier("internalHearingAdjustmentsUpdatedLetter") DocumentCreator<AsylumCase> internalHearingAdjustmentsUpdatedLetter,
+        DocumentHandler documentHandler
+    ) {
+        this.internalHearingAdjustmentsUpdatedLetter = internalHearingAdjustmentsUpdatedLetter;
         this.documentHandler = documentHandler;
-        this.directionFinder = directionFinder;
     }
 
     public boolean canHandle(
@@ -46,14 +39,12 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
-
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && callback.getEvent() == Event.SEND_DIRECTION
-            && isInternalCase(asylumCase)
-            && isAppellantInDetention(asylumCase)
-            && isRecipientAppellant(asylumCase);
+               && callback.getEvent() == Event.UPDATE_HEARING_ADJUSTMENTS
+               && isInternalCase(asylumCase)
+               && isAppellantInDetention(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -63,25 +54,20 @@ public class InternalNonStandardDirectionLetterGenerator implements PreSubmitCal
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
+
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document uploadDocument = internalNonStandardDirectionLetterCreator.create(caseDetails);
+        Document documentForUpload = internalHearingAdjustmentsUpdatedLetter.create(caseDetails);
 
         documentHandler.addWithMetadata(
             asylumCase,
-            uploadDocument,
+            documentForUpload,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER
+            DocumentTag.INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    private boolean isRecipientAppellant(AsylumCase asylumCase) {
-        return directionFinder
-            .findFirst(asylumCase, DirectionTag.NONE)
-            .map(direction -> direction.getParties().equals(Parties.APPELLANT) || direction.getParties().equals(Parties.APPELLANT_AND_RESPONDENT))
-            .orElse(false);
-    }
 }
