@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,12 +15,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.StreamSupport;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
@@ -27,7 +30,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 
@@ -37,15 +42,28 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 public class CcdScenarioRunnerTest {
 
     @Value("${targetInstance}") private String targetInstance;
-
+    @Autowired FeatureToggler featureToggler;
     @Autowired private Environment environment;
     @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
     @Autowired private MapValueExpander mapValueExpander;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private List<Fixture> fixtures;
     @Autowired private List<Verifier> verifiers;
+    @MockBean RequestUserAccessTokenProvider requestUserAccessTokenProvider;
 
-    @Before
+    @BeforeEach
+    void authenticateMe() {
+        String accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertNotNull(accessToken);
+        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
+    }
+
+    @BeforeEach
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
@@ -311,6 +329,12 @@ public class CcdScenarioRunnerTest {
 
             return authorizationHeadersProvider
                 .getJudgeAuthorization();
+        }
+
+        if ("System".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getSystemAuthorization();
         }
 
         return new Headers();

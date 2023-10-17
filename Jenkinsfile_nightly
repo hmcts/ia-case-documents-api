@@ -31,6 +31,8 @@ def secrets = [
 
         secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
         secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
+        secret('system-username', 'SYSTEM_USERNAME'),
+        secret('system-password', 'SYSTEM_PASSWORD'),
 
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),
