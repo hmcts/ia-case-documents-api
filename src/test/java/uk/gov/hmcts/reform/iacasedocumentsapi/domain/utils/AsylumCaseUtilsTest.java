@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -285,14 +284,26 @@ public class AsylumCaseUtilsTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "LEGAL_REPRESENTATIVE", "RESPONDENT", "APPELLANT", "BOTH", "APPELLANT_AND_RESPONDENT" })
-    void should_return_correct_value_for_is_direction_party_respondent(String party) {
-        when(asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)).thenReturn(Optional.of(Parties.valueOf(party)));
-
-        if (party.equals("RESPONDENT")) {
-            assertTrue(AsylumCaseUtils.isDirectionPartyRespondent(asylumCase));
+    @EnumSource(value = Parties.class)
+    void should_return_correct_value_for_is_direction_party_respondent(Parties party) {
+        when(asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)).thenReturn(Optional.of(Parties.RESPONDENT));
+        if (party == Parties.RESPONDENT) {
+            assertTrue(AsylumCaseUtils.isDirectionPartyValid(asylumCase, party));
         } else {
-            assertFalse(AsylumCaseUtils.isDirectionPartyRespondent(asylumCase));
+            assertFalse(AsylumCaseUtils.isDirectionPartyValid(asylumCase, party));
+
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Parties.class)
+    void should_return_correct_value_for_is_direction_party_appellant(Parties party) {
+        when(asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)).thenReturn(Optional.of(Parties.APPELLANT));
+        if (party == Parties.APPELLANT) {
+            assertTrue(AsylumCaseUtils.isDirectionPartyValid(asylumCase, party));
+        } else {
+            assertFalse(AsylumCaseUtils.isDirectionPartyValid(asylumCase, party));
+
         }
     }
 

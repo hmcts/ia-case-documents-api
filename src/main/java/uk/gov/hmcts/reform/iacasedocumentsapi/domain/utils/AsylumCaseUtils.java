@@ -184,9 +184,9 @@ public class AsylumCaseUtils {
         return optionalLatestAddendum.isEmpty() ? Optional.empty() : Optional.of(optionalLatestAddendum.get());
     }
 
-    public static boolean isDirectionPartyRespondent(AsylumCase asylumCase) {
+    public static boolean isDirectionPartyValid(AsylumCase asylumCase, Parties party) {
         return asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)
-                .map(parties -> parties.equals(Parties.RESPONDENT))
+                .map(parties -> parties.equals(party))
                 .orElse(false);
     }
 

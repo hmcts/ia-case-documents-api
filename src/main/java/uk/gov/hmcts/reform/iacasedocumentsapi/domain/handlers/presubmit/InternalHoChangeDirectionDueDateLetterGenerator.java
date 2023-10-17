@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -46,7 +47,7 @@ public class InternalHoChangeDirectionDueDateLetterGenerator implements PreSubmi
                 && Event.CHANGE_DIRECTION_DUE_DATE == event
                 && isInternalCase(asylumCase)
                 && isAppellantInDetention(asylumCase)
-                && isDirectionPartyRespondent(asylumCase);
+                && isDirectionPartyValid(asylumCase, Parties.RESPONDENT);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
