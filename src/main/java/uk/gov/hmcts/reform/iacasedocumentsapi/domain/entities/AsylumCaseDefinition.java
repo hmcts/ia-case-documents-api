@@ -357,8 +357,6 @@ public enum AsylumCaseDefinition {
     DATES_TO_AVOID_YES_NO(
         "datesToAvoidYesNo", new TypeReference<YesOrNo>(){}),
 
-    IS_OUT_OF_COUNTRY_ENABLED(
-            "isOutOfCountryEnabled", new TypeReference<YesOrNo>(){}),
     REMOTE_VIDEO_CALL(
             "remoteVideoCall", new TypeReference<YesOrNo>(){}),
 
