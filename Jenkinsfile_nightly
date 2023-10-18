@@ -12,6 +12,7 @@ properties([
 ])
 
 @Library("Infrastructure")
+import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
 def product = "ia"
@@ -58,6 +59,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+GradleBuilder builder = new GradleBuilder(this, product)
+
 withNightlyPipeline(type, product, component) {
     env.TEST_URL = params.URL_TO_TEST
     env.Rules = params.SecurityRules
@@ -80,4 +83,52 @@ withNightlyPipeline(type, product, component) {
     enableSlackNotifications('#ia-tech')
     enableFullFunctionalTest()
 
+    before('fullFunctionalTest') {
+        try {
+            builder.gradle('test')
+            builder.gradle('integration')
+            builder.gradle('smoke')
+        } finally {
+            junit '**/test-results/**/*.xml'
+        }
+    }
+
+    afterAlways('fullFunctionalTest') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/functional",
+                reportFiles          : 'index.html',
+                reportName           : 'IAC Case Documents Functional Test Report'
+        ])
+        publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/test",
+                reportFiles          : "index.html",
+                reportName           : "IAC Case Documents Unit Test Report"
+        ]
+        publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/smoke",
+                reportFiles          : "index.html",
+                reportName           : "IAC Case Documents Smoke Test Report"
+        ]
+        publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/integration",
+                reportFiles          : "index.html",
+                reportName           : "IAC Case Documents Integration Test Report"
+        ]
+
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/**/*'
+    }
 }
