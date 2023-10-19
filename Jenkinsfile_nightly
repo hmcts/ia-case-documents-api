@@ -92,6 +92,17 @@ withNightlyPipeline(type, product, component) {
         }
     }
 
+    afterAlways('mutationTest') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/pitest",
+                reportFiles          : 'index.html',
+                reportName           : 'IAC Timed Event Service Mutation Test Report'
+        ])
+    }
+
     afterAlways('fullFunctionalTest') {
         publishHTML([
                 allowMissing         : true,
