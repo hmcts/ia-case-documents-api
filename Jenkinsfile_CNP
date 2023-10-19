@@ -38,7 +38,8 @@ def secrets = [
         secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
 
         secret('app-insights-connection-string', 'app-insights-connection-string'),
-
+        secret('system-username', 'SYSTEM_USERNAME'),
+        secret('system-password', 'SYSTEM_PASSWORD'),
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
         secret('gov-call-charges-url', 'IA_BAIL_GOV_CALL_CHARGES_URL')
