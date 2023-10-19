@@ -112,7 +112,7 @@ class HearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(17, templateFieldValues.size());
+        assertEquals(18, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -164,7 +164,7 @@ class HearingNoticeFieldMapperTest {
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(17, templateFieldValues.size());
+        assertEquals(18, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -275,7 +275,7 @@ class HearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(17, templateFieldValues.size());
+        assertEquals(18, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
