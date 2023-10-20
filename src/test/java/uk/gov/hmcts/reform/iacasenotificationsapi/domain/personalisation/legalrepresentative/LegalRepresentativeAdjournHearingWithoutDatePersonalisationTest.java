@@ -99,7 +99,7 @@ public class LegalRepresentativeAdjournHearingWithoutDatePersonalisationTest {
 
         Map<String, String> personalisation =
             legalRepresentativeAdjournHearingWithoutDatePersonalisation.getPersonalisation(asylumCase);
-
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
     }
 }

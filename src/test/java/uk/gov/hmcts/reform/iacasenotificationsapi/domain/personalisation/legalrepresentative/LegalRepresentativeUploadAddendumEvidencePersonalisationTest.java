@@ -78,6 +78,7 @@ public class LegalRepresentativeUploadAddendumEvidencePersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeUploadAddendumEvidencePersonalisation.getPersonalisation(callback);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 

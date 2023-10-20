@@ -84,6 +84,7 @@ public class HomeOfficeAppealSubmittedPayOfflinePersonalisationTest {
         Map<String, String> personalisation =
                 homeOfficeAppealSubmittedPayOfflinePersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 

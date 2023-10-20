@@ -143,6 +143,7 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeUploadAdditionalEvidencePersonalisation.getPersonalisation(callback);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 

@@ -94,6 +94,7 @@ public class CaseOfficerAdjournHearingWithoutDatePersonalisationTest {
         Map<String, String> personalisation =
             caseOfficerAdjournHearingWithoutDatePersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
     }
 }

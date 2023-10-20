@@ -100,6 +100,7 @@ public class HomeOfficeHearingBundleReadyPersonalisationTest {
         Map<String, String> personalisation =
             homeOfficeHearingBundleReadyPersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
         assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());

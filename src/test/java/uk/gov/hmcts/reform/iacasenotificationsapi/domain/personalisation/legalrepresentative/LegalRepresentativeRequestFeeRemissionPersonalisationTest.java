@@ -61,6 +61,7 @@ class LegalRepresentativeRequestFeeRemissionPersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeRequestFeeRemissionPersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
 
     }
@@ -71,6 +72,7 @@ class LegalRepresentativeRequestFeeRemissionPersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeRequestFeeRemissionPersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 }

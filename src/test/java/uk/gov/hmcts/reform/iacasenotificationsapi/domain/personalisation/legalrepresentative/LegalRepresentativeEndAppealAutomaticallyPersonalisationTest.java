@@ -110,6 +110,7 @@ public class LegalRepresentativeEndAppealAutomaticallyPersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeEndAppealAutomaticallyPersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(homeOfficeRefNumber, personalisation.get("homeOfficeReferenceNumber"));
@@ -132,6 +133,7 @@ public class LegalRepresentativeEndAppealAutomaticallyPersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeEndAppealAutomaticallyPersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals("", personalisation.get("appealReferenceNumber"));
         assertEquals("", personalisation.get("appellantGivenNames"));

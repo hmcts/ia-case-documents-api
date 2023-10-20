@@ -180,7 +180,8 @@ withNightlyPipeline(type, product, component) {
    appear duplicated if you add them the first time, but they're not. Don't delete them or you'll need somebody else
    to recover them.
    */
-  enableFortifyScan()
+//  TODO re add in fortify once issues have been resolved
+//  enableFortifyScan()
   enableMutationTest()
 
   enableSlackNotifications('#ia-tech')

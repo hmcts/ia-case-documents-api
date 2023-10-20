@@ -123,6 +123,7 @@ class LegalRepresentativeRemoveRepresentationPersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeRemoveRepresentationPersonalisation.getPersonalisation(callback);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
@@ -139,6 +140,7 @@ class LegalRepresentativeRemoveRepresentationPersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeRemoveRepresentationPersonalisation.getPersonalisation(callback);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());

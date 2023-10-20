@@ -192,6 +192,7 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
         Map<String, String> personalisation =
             homeOfficeRemoveRepresentationPersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 

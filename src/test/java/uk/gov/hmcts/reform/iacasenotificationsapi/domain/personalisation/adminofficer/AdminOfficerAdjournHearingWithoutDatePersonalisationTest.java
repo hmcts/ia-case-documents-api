@@ -85,6 +85,7 @@ public class AdminOfficerAdjournHearingWithoutDatePersonalisationTest {
         Map<String, String> personalisation =
             adminOfficerdjournHearingWithoutDatePersonalisation.getPersonalisation(asylumCase);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
     }
 }

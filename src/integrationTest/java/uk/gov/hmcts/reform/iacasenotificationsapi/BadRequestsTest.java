@@ -51,7 +51,7 @@ public class BadRequestsTest extends SpringBootIntegrationTest {
         runClientRequest(
             ABOUT_TO_SUBMIT_PATH,
             MediaType.APPLICATION_JSON,
-            "{  \"foo\": \"bar\"}",
+            "random string",
             HttpStatus.BAD_REQUEST.value()
         );
     }

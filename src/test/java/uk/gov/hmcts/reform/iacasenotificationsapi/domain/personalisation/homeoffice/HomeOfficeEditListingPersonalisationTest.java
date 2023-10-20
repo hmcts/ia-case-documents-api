@@ -112,6 +112,7 @@ class HomeOfficeEditListingPersonalisationTest {
 
         Map<String, String> personalisation = homeOfficeEditListingPersonalisation.getPersonalisation(callback);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
     }
 

@@ -104,6 +104,7 @@ public class LegalRepresentativeRequestHearingRequirementsPersonalisationTest {
         Map<String, String> personalisation =
             legalRepresentativeRequestHearingRequirementsPersonalisation.getPersonalisation(asylumCase);
 
+        Assertions.assertThat(personalisation).isNotEmpty();
         Assertions.assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());

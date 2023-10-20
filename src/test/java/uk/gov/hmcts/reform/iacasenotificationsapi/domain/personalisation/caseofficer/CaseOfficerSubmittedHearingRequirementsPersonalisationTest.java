@@ -94,6 +94,7 @@ public class CaseOfficerSubmittedHearingRequirementsPersonalisationTest {
         Map<String, String> personalisation =
             caseOfficerSubmittedHearingRequirementsPersonalisation.getPersonalisation(callback);
 
+        assertThat(personalisation).isNotEmpty();
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
     }
 
