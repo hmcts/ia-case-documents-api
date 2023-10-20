@@ -199,6 +199,7 @@ public class CmaAppointmentNoticeTemplateTest {
         assertEquals(directionExplanation, templateFieldValues.get("reasonForAppointment"));
         assertEquals(MANCHESTER.toString(), templateFieldValues.get("hearingCentreName"));
         assertEquals(hearingCentreUrl, templateFieldValues.get("hearingCentreUrl"));
+        assertEquals(isIntegrated, templateFieldValues.get("isIntegrated"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
@@ -279,6 +280,7 @@ public class CmaAppointmentNoticeTemplateTest {
         assertEquals(directionExplanation, templateFieldValues.get("reasonForAppointment"));
         assertEquals(frontendUrl, templateFieldValues.get("aipFrontendUrl"));
         assertEquals(hearingCentreUrl, templateFieldValues.get("hearingCentreUrl"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isIntegrated"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
