@@ -88,6 +88,30 @@ withNightlyPipeline(type, product, component) {
             builder.gradle('test')
             builder.gradle('smoke')
         } finally {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/test",
+                    reportFiles          : "index.html",
+                    reportName           : "IAC Case Documents Unit Test Report"
+            ]
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/smoke",
+                    reportFiles          : "index.html",
+                    reportName           : "IAC Case Documents Smoke Test Report"
+            ]
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/integration",
+                    reportFiles          : "index.html",
+                    reportName           : "IAC Case Documents Integration Test Report"
+            ]
             junit '**/test-results/**/*.xml'
         }
     }
@@ -112,30 +136,6 @@ withNightlyPipeline(type, product, component) {
                 reportFiles          : 'index.html',
                 reportName           : 'IAC Case Documents Functional Test Report'
         ])
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/test",
-                reportFiles          : "index.html",
-                reportName           : "IAC Case Documents Unit Test Report"
-        ]
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/smoke",
-                reportFiles          : "index.html",
-                reportName           : "IAC Case Documents Smoke Test Report"
-        ]
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/integration",
-                reportFiles          : "index.html",
-                reportName           : "IAC Case Documents Integration Test Report"
-        ]
 
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/**/*'
