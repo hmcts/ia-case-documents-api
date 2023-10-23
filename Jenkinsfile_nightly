@@ -85,8 +85,9 @@ withNightlyPipeline(type, product, component) {
 
     before('fullFunctionalTest') {
         try {
-            builder.gradle('test')
             builder.gradle('smoke')
+            builder.gradle('test')
+            builder.gradle('integration')
         } finally {
             publishHTML target: [
                     allowMissing         : true,

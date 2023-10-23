@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 
 @Slf4j
@@ -36,9 +37,7 @@ public class IaCaseDocumentsApiClient {
                         .header("ServiceAuthorization", SERVICE_JWT_TOKEN)
                         .content(objectMapper.writeValueAsString(callback.build()))
                         .contentType(APPLICATION_JSON_VALUE)
-                )
-                .andReturn();
-
+                ).andReturn();
             return objectMapper.readValue(
                 response.getResponse().getContentAsString(),
                 PreSubmitCallbackResponseForTest.class
