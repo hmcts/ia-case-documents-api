@@ -35,6 +35,10 @@
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
       "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ],
   "prConcurrentLimit": 3
