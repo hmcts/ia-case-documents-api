@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.EmBundleRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -100,14 +101,17 @@ class EmBundleRequestExecutorTest {
         final String actualAcceptHeader = actualRequestEntity.getHeaders().getFirst(HttpHeaders.ACCEPT);
         final String actualServiceAuthorizationHeader = actualRequestEntity.getHeaders().getFirst(SERVICE_AUTHORIZATION);
         final String actualAuthorizationHeader = actualRequestEntity.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        final Callback<AsylumCase> actualPostBody = (Callback<AsylumCase>) actualRequestEntity.getBody();
+        final EmBundleRequest actualPostBody = (EmBundleRequest) actualRequestEntity.getBody();
+
+        EmBundleRequest emBundleRequest = new EmBundleRequest(callback);
 
         assertThat(actualContentTypeHeader).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
         assertThat(actualAcceptHeader).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
         assertThat(actualServiceAuthorizationHeader).isEqualTo(SERVICE_TOKEN);
         assertThat(actualAuthorizationHeader).isEqualTo(ACCESS_TOKEN);
-        assertThat(actualPostBody).isEqualTo(callback);
-
+        assertThat(actualPostBody).isEqualTo(emBundleRequest);
+        assertThat(actualPostBody.getCaseTypeId()).isEqualTo("Asylum");
+        assertThat(actualPostBody.getJurisdictionId()).isEqualTo("IA");
     }
 
     @Test
