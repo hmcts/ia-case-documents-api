@@ -25,7 +25,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentSer
 class SendDecisionAndReasonsOrchestratorTest {
 
     @Mock private DocumentHandler documentHandler;
-    @Mock private SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
     @Mock private SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -40,7 +39,6 @@ class SendDecisionAndReasonsOrchestratorTest {
         sendDecisionAndReasonsOrchestrator =
             new SendDecisionAndReasonsOrchestrator(
                 documentHandler,
-                sendDecisionAndReasonsPdfService,
                 sendDecisionAndReasonsCoverLetterService);
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -56,7 +54,6 @@ class SendDecisionAndReasonsOrchestratorTest {
             .isExactlyInstanceOf(NullPointerException.class);
 
         verifyNoInteractions(documentHandler);
-        verifyNoInteractions(sendDecisionAndReasonsPdfService);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
@@ -72,44 +69,6 @@ class SendDecisionAndReasonsOrchestratorTest {
             .isExactlyInstanceOf(DocumentServiceResponseException.class);
 
         verifyNoInteractions(documentHandler);
-        verifyNoInteractions(sendDecisionAndReasonsPdfService);
-
-        verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
-        verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
-    }
-
-    @Test
-    void throws_and_fails_with_exception_when_pdf_generation_returns_null() {
-
-        when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
-            .thenReturn(coverLetter);
-
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
-            .thenReturn(null);
-
-        assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
-            .hasMessage("Document to pdf conversion failed")
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        verifyNoInteractions(documentHandler);
-
-        verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
-        verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
-    }
-
-    @Test
-    void throws_and_fails_with_exception_when_pdf_generation_throws() {
-
-        when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
-            .thenReturn(coverLetter);
-
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
-            .thenThrow(RuntimeException.class);
-
-        assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
-            .isInstanceOf(RuntimeException.class);
-
-        verifyNoInteractions(documentHandler);
 
         verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
@@ -120,9 +79,8 @@ class SendDecisionAndReasonsOrchestratorTest {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
-
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
-            .thenReturn(pdf);
+        when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
+                .thenReturn(Optional.of(pdf));
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
 
@@ -159,12 +117,11 @@ class SendDecisionAndReasonsOrchestratorTest {
 
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
+                .thenReturn(Optional.of(pdf));
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
-
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
-            .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
 
@@ -202,12 +159,11 @@ class SendDecisionAndReasonsOrchestratorTest {
 
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
+                .thenReturn(Optional.of(pdf));
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
-
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
-            .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
 

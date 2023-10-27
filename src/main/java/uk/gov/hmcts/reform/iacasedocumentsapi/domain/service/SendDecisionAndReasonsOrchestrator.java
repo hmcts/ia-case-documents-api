@@ -16,16 +16,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 public class SendDecisionAndReasonsOrchestrator {
 
     private final DocumentHandler documentHandler;
-    private final SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
     private final SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService;
 
     public SendDecisionAndReasonsOrchestrator(
         DocumentHandler documentHandler,
-        SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService,
         SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService
     ) {
         this.documentHandler = documentHandler;
-        this.sendDecisionAndReasonsPdfService = sendDecisionAndReasonsPdfService;
         this.sendDecisionAndReasonsCoverLetterService = sendDecisionAndReasonsCoverLetterService;
     }
 
