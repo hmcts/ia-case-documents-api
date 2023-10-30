@@ -37,4 +37,11 @@ public class WitnessDetails {
     public void setWitnessFamilyName(String witnessFamilyName) {
         this.witnessFamilyName = witnessFamilyName;
     }
+
+    public String buildWitnessFullName() {
+        String givenNames = getWitnessName() == null ? " " : getWitnessName();
+        String familyName = getWitnessFamilyName() == null ? " " : getWitnessFamilyName();
+
+        return !(givenNames.isBlank() || familyName.isBlank()) ? givenNames + " " + familyName : givenNames;
+    }
 }
