@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: 17
       - name: Run Swagger Publisher
-        run: ./gradlew integration --tests uk.gov.hmcts.reform.iacasedocumentsapi.config.SwaggerPublisher
+        run: ./gradlew integration --tests uk.gov.hmcts.reform.iacasedocumentsapi.config.OpenApiPublisher
       - name: Commit to repository
         run: |
           mkdir swagger-staging

@@ -64,6 +64,8 @@ public class CmaAppointmentNoticeTemplateTest {
 
     private String directionExplanation = "an explanation";
 
+    private YesOrNo isIntegrated = YesOrNo.NO;
+
     private CmaAppointmentNoticeTemplate cmaAppointmentNoticeTemplate;
 
     @BeforeEach
@@ -173,10 +175,11 @@ public class CmaAppointmentNoticeTemplateTest {
         when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_CMA_REQUIREMENTS)).thenReturn(Optional.of(direction));
 
         when((hearingDetailsFinder.getHearingCentreUrl(MANCHESTER))).thenReturn(hearingCentreUrl);
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(isIntegrated));
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(23, templateFieldValues.size());
+        assertEquals(24, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -196,6 +199,7 @@ public class CmaAppointmentNoticeTemplateTest {
         assertEquals(directionExplanation, templateFieldValues.get("reasonForAppointment"));
         assertEquals(MANCHESTER.toString(), templateFieldValues.get("hearingCentreName"));
         assertEquals(hearingCentreUrl, templateFieldValues.get("hearingCentreUrl"));
+        assertEquals(isIntegrated, templateFieldValues.get("isIntegrated"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
@@ -249,11 +253,12 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(PAST_EXPERIENCES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.empty());
 
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(23, templateFieldValues.size());
+        assertEquals(24, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
@@ -275,6 +280,7 @@ public class CmaAppointmentNoticeTemplateTest {
         assertEquals(directionExplanation, templateFieldValues.get("reasonForAppointment"));
         assertEquals(frontendUrl, templateFieldValues.get("aipFrontendUrl"));
         assertEquals(hearingCentreUrl, templateFieldValues.get("hearingCentreUrl"));
+        assertEquals(YesOrNo.NO, templateFieldValues.get("isIntegrated"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
