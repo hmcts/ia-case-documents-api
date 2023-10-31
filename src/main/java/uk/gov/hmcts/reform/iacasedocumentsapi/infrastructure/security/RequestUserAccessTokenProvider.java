@@ -15,7 +15,8 @@ public class RequestUserAccessTokenProvider implements AccessTokenProvider {
             .orElseThrow(() -> new IllegalStateException("Request access token not present"));
     }
 
-    public Optional<String> tryGetAccessToken() {
+    public Optional<String>
+    tryGetAccessToken() {
 
         if (RequestContextHolder.getRequestAttributes() == null) {
             throw new IllegalStateException("No current HTTP request");
