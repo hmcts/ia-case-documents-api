@@ -27,7 +27,7 @@ variable "common_tags" {
 }
 
 variable "capacity" {
-  default = "1"
+  default = "2"
 }
 
 variable "instance_size" {
