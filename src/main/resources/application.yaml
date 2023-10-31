@@ -523,6 +523,9 @@ security:
       - "uploadAddendumEvidence"
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
+      - "buildCase"
+      - "listCase"
+      - "draftHearingRequirements"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -553,6 +556,7 @@ security:
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
       - "reinstateAppeal"
+      - "buildCase"
     citizen:
       - "startAppeal"
       - "editAppeal"
