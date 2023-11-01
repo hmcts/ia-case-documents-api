@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,24 @@ public class WitnessDetailsTest {
     }
 
     @Test
-    public void should_build_witness_full_name() {
+    public void should_build_witness_full_name_if_names_present() {
         assertEquals(witnessName + " " + witnessFamilyName, witnessDetails.buildWitnessFullName());
+    }
+
+    @Test
+    public void should_build_witness_full_name_if_names_not_present() {
+        WitnessDetails witnessDetails2 = new WitnessDetails();
+        assertEquals(" ", witnessDetails2.buildWitnessFullName());
+    }
+
+    @Test
+    public void should_initialize_object() {
+        WitnessDetails witnessDetails3 = new WitnessDetails(witnessName);
+        assertEquals(witnessName, witnessDetails3.getWitnessName());
+        assertNull(witnessDetails3.getWitnessFamilyName());
+
+        WitnessDetails witnessDetails4 = new WitnessDetails(witnessName, witnessFamilyName);
+        assertEquals(witnessName, witnessDetails4.getWitnessName());
+        assertEquals(witnessFamilyName, witnessDetails4.getWitnessFamilyName());
     }
 }
