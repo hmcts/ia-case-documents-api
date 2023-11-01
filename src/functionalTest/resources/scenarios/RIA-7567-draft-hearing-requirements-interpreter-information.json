@@ -52,18 +52,6 @@
             "witnessName": "Witness",
             "witnessFamilyName": "1"
           },
-          "witnessListElement1": {
-            "value": [{
-              "code": "Witness 1",
-              "label": "Witness 1"
-            }
-            ],
-            "list_items": [{
-              "code": "Witness 1",
-              "label": "Witness 1"
-            }
-            ]
-          },
           "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
           "witness1InterpreterSpokenLanguage": {
             "languageManualEntry": ["Yes"],
@@ -157,18 +145,6 @@
         "witness1": {
           "witnessName": "Witness",
           "witnessFamilyName": "1"
-        },
-        "witnessListElement1": {
-          "value": [{
-            "code": "Witness 1",
-            "label": "Witness 1"
-          }
-          ],
-          "list_items": [{
-            "code": "Witness 1",
-            "label": "Witness 1"
-          }
-          ]
         },
         "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
         "witness1InterpreterSpokenLanguage": {

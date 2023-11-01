@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,12 @@ public class WitnessDetailsTest {
     @Test
     public void should_hold_onto_values() {
 
-        Assertions.assertEquals(witnessName, witnessDetails.getWitnessName());
-        Assertions.assertEquals(witnessFamilyName, witnessDetails.getWitnessFamilyName());
+        assertEquals(witnessName, witnessDetails.getWitnessName());
+        assertEquals(witnessFamilyName, witnessDetails.getWitnessFamilyName());
+    }
+
+    @Test
+    public void should_build_witness_full_name() {
+        assertEquals(witnessName + " " + witnessFamilyName, witnessDetails.buildWitnessFullName());
     }
 }
