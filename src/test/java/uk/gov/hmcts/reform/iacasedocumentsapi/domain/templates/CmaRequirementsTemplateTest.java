@@ -55,6 +55,6 @@ class CmaRequirementsTemplateTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
 
         Map<String, Object> templateFieldValues = cmaRequirementsTemplate.mapFieldValues(caseDetails);
-        assertEquals(30, templateFieldValues.size());
+        assertEquals(29, templateFieldValues.size());
     }
 }
