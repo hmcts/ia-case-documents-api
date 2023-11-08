@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import java.util.List;
-
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+
+import java.util.List;
 
 
 public final class InterpreterLanguagesUtils {
@@ -22,19 +22,6 @@ public final class InterpreterLanguagesUtils {
         WITNESS_8,
         WITNESS_9,
         WITNESS_10);
-
-    public static final List<AsylumCaseDefinition> WITNESS_LIST_ELEMENT_N_FIELD = List.of(
-        WITNESS_LIST_ELEMENT_1,
-        WITNESS_LIST_ELEMENT_2,
-        WITNESS_LIST_ELEMENT_3,
-        WITNESS_LIST_ELEMENT_4,
-        WITNESS_LIST_ELEMENT_5,
-        WITNESS_LIST_ELEMENT_6,
-        WITNESS_LIST_ELEMENT_7,
-        WITNESS_LIST_ELEMENT_8,
-        WITNESS_LIST_ELEMENT_9,
-        WITNESS_LIST_ELEMENT_10
-    );
 
     public static final List<AsylumCaseDefinition> WITNESS_N_INTERPRETER_CATEGORY_FIELD = List.of(
         WITNESS_1_INTERPRETER_LANGUAGE_CATEGORY,

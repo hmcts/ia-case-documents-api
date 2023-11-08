@@ -11,6 +11,8 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
@@ -22,6 +24,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 @SuppressWarnings("unchecked")
 class HearingRequirementsTemplateTest {
 
+    private static InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE = new InterpreterLanguageRefData();
+    private static InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL = new InterpreterLanguageRefData();
     private final String templateName = "HEARING_REQUIREMENTS_TEMPLATE.docx";
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -44,10 +48,7 @@ class HearingRequirementsTemplateTest {
     private InterpreterLanguage interpreter2 = new InterpreterLanguage();
 
     private YesOrNo isAnyWitnessInterpreterRequired = YesOrNo.YES;
-    private InterpreterLanguageRefData appellantSpokenInterpreterLanguage = new InterpreterLanguageRefData();
     private InterpreterLanguageRefData appellantSignInterpreterLanguage = new InterpreterLanguageRefData();
-    private DynamicMultiSelectList witnessListElement1 = new DynamicMultiSelectList();
-    private DynamicMultiSelectList witnessListElement2 = new DynamicMultiSelectList();
     private InterpreterLanguageRefData witness1SpokenInterpreterLanguage = new InterpreterLanguageRefData();
     private InterpreterLanguageRefData witness1SignInterpreterLanguage = new InterpreterLanguageRefData();
     private InterpreterLanguageRefData witness2SpokenInterpreterLanguage = new InterpreterLanguageRefData();
@@ -118,19 +119,19 @@ class HearingRequirementsTemplateTest {
                 new IdValue<>("222", interpreter2)
             );
 
-        appellantSpokenInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
+        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE.setLanguageRefData(new DynamicList("lang"));
+        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL.setLanguageManualEntry(List.of("Yes"));
+        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL.setLanguageManualEntryDescription("lang");
         appellantSignInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
-        witnessListElement1.setValue(List.of(new Value("witness 1", "witness 1")));
-        witnessListElement2.setValue(List.of(new Value("witness 2", "witness 2")));
         witness1SpokenInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
         witness1SignInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
         witness2SpokenInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
         witness2SignInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
         witnessInterpreterLanguageInformationList.add(
-                new WitnessInterpreterLanguageInformation("witness 1",
+                new WitnessInterpreterLanguageInformation(witness1.buildWitnessFullName(),
                         "Spoken language Interpreter: lang\nSign language Interpreter: lang\n"));
         witnessInterpreterLanguageInformationList.add(
-                new WitnessInterpreterLanguageInformation("witness 2",
+                new WitnessInterpreterLanguageInformation(witness2.buildWitnessFullName(),
                         "Spoken language Interpreter: lang\nSign language Interpreter: lang\n"));
 
         datesToAvoid1.setDateToAvoid(LocalDate.parse("2019-12-25"));
@@ -151,8 +152,13 @@ class HearingRequirementsTemplateTest {
         assertEquals(templateName, hearingRequirementsTemplate.getName());
     }
 
-    @Test
-    void should_map_case_data_to_template_field_values_for_in_country_appeal() {
+    static List<InterpreterLanguageRefData> refDataOrManualSpokenInterpreterLanguageField() {
+        return List.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE, APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL);
+    }
+
+    @ParameterizedTest
+    @MethodSource("refDataOrManualSpokenInterpreterLanguageField")
+    void should_map_case_data_to_template_field_values_for_in_country_appeal(InterpreterLanguageRefData appellantSpokenInterpreterLanguage) {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -176,9 +182,6 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
         when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSpokenInterpreterLanguage));
         when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
-        when(asylumCase.read(WITNESS_DETAILS, List.class)).thenReturn(Optional.of(witnessDetails));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_1, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement1));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_2, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement2));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
@@ -299,11 +302,8 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
 
         when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
-        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSpokenInterpreterLanguage));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
         when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
-        when(asylumCase.read(WITNESS_DETAILS, List.class)).thenReturn(Optional.of(witnessDetails));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_1, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement1));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_2, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement2));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
@@ -486,11 +486,8 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
 
         when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
-        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSpokenInterpreterLanguage));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
         when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
-        when(asylumCase.read(WITNESS_DETAILS, List.class)).thenReturn(Optional.of(witnessDetails));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_1, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement1));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_2, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement2));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
@@ -562,7 +559,6 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(WITNESS_DETAILS, List.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.empty());
@@ -654,11 +650,8 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
 
         when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
-        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSpokenInterpreterLanguage));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
         when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
-        when(asylumCase.read(WITNESS_DETAILS, List.class)).thenReturn(Optional.of(witnessDetails));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_1, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement1));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_2, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement2));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
@@ -742,11 +735,8 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
 
         when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
-        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSpokenInterpreterLanguage));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
         when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
-        when(asylumCase.read(WITNESS_DETAILS, List.class)).thenReturn(Optional.of(witnessDetails));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_1, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement1));
-        when(asylumCase.read(WITNESS_LIST_ELEMENT_2, DynamicMultiSelectList.class)).thenReturn(Optional.of(witnessListElement2));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));

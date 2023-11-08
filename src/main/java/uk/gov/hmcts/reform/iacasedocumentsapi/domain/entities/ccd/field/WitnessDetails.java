@@ -8,6 +8,7 @@ public class WitnessDetails {
     private String witnessPartyId;
     private String witnessName;
     private String witnessFamilyName;
+    private YesOrNo isWitnessDeleted;
 
     public WitnessDetails() {
         // noop -- for deserializer
@@ -36,5 +37,12 @@ public class WitnessDetails {
 
     public void setWitnessFamilyName(String witnessFamilyName) {
         this.witnessFamilyName = witnessFamilyName;
+    }
+
+    public String buildWitnessFullName() {
+        String givenNames = getWitnessName() == null ? " " : getWitnessName();
+        String familyName = getWitnessFamilyName() == null ? " " : getWitnessFamilyName();
+
+        return !(givenNames.isBlank() || familyName.isBlank()) ? givenNames + " " + familyName : givenNames;
     }
 }

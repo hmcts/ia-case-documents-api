@@ -1,17 +1,28 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.InterpreterLanguagesUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_INTERPRETER_SIGN_LANGUAGE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_INTERPRETER_SPOKEN_LANGUAGE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ANY_WITNESS_INTERPRETER_REQUIRED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_APPELLANT_ATTENDING_THE_HEARING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_APPELLANT_GIVING_ORAL_EVIDENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_EVIDENCE_FROM_OUTSIDE_UK_OOC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_WITNESSES_ATTENDING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.WITNESS_DETAILS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.InterpreterLanguagesUtils.WITNESS_N_INTERPRETER_SIGN_LANGUAGE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.InterpreterLanguagesUtils.WITNESS_N_INTERPRETER_SPOKEN_LANGUAGE;
 
 import com.google.common.collect.ImmutableMap;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicMultiSelectList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.InterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.WitnessInterpreterLanguageInformation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -67,7 +78,7 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
 
         setAppellantInterpreterLanguage(asylumCase, fieldValues);
         fieldValues.put("isAnyWitnessInterpreterRequired", asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class).orElse(YesOrNo.NO));
-        setWinessInterpreterLanguage(asylumCase, fieldValues);
+        setWitnessInterpreterLanguage(asylumCase, fieldValues);
 
         return fieldValues;
     }
@@ -81,34 +92,29 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
                 : String.format("%s %s", givenNames, familyName);
     }
 
-    private void setWinessInterpreterLanguage(AsylumCase asylumCase, Map<String, Object> fieldValues) {
+    private void setWitnessInterpreterLanguage(AsylumCase asylumCase, Map<String, Object> fieldValues) {
         // set witness interpreter language information
-        int numberOfWitnesses = asylumCase.read(WITNESS_DETAILS, List.class).orElse(Collections.emptyList()).size();
+        Optional<List<IdValue<WitnessDetails>>> witnessesOptional = asylumCase.read(WITNESS_DETAILS);
+        List<IdValue<WitnessDetails>> witnesses = witnessesOptional.orElse(Collections.emptyList());
+
         List<WitnessInterpreterLanguageInformation> witnessInterpreterLanguageInformationList = new ArrayList<>();
 
-        for (int i = 0; i < numberOfWitnesses; i++) {
-            DynamicMultiSelectList witnessElement = asylumCase
-                    .read(WITNESS_LIST_ELEMENT_N_FIELD.get(i), DynamicMultiSelectList.class).orElse(null);
+        for (int i = 0; i < witnesses.size(); i++) {
 
-            boolean witnessSelected = witnessElement != null
-                    && !witnessElement.getValue().isEmpty()
-                    && !witnessElement.getValue().get(0).getLabel().isEmpty();
+            Optional<InterpreterLanguageRefData> witnessSpokenInterpreterLanguage = asylumCase.read(WITNESS_N_INTERPRETER_SPOKEN_LANGUAGE.get(i), InterpreterLanguageRefData.class)
+                    .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
+            Optional<InterpreterLanguageRefData> witnessSignInterpreterLanguage = asylumCase.read(WITNESS_N_INTERPRETER_SIGN_LANGUAGE.get(i), InterpreterLanguageRefData.class)
+                    .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
-            if (witnessSelected) {
-
-                Optional<InterpreterLanguageRefData> witnessSpokenInterpreterLanguage = asylumCase.read(WITNESS_N_INTERPRETER_SPOKEN_LANGUAGE.get(i), InterpreterLanguageRefData.class)
-                        .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-                Optional<InterpreterLanguageRefData> witnessSignInterpreterLanguage = asylumCase.read(WITNESS_N_INTERPRETER_SIGN_LANGUAGE.get(i), InterpreterLanguageRefData.class)
-                        .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-
+            if (witnessSpokenInterpreterLanguage.isPresent() || witnessSignInterpreterLanguage.isPresent()) {
                 StringBuilder witnessInterpreterLanguageDisplayString = new StringBuilder();
                 witnessInterpreterLanguageDisplayString.append(constructInterpreterLanguageString(witnessSpokenInterpreterLanguage, SPOKEN_LANGUAGE));
                 witnessInterpreterLanguageDisplayString.append(constructInterpreterLanguageString(witnessSignInterpreterLanguage, SIGN_LANGUAGE));
 
                 witnessInterpreterLanguageInformationList.add(
-                        new WitnessInterpreterLanguageInformation(
-                                witnessElement.getValue().get(0).getLabel(),
-                                witnessInterpreterLanguageDisplayString.toString()));
+                    new WitnessInterpreterLanguageInformation(
+                        witnesses.get(i).getValue().buildWitnessFullName(),
+                        witnessInterpreterLanguageDisplayString.toString()));
             }
         }
 
