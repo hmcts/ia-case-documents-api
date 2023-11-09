@@ -20,7 +20,7 @@ plugins {
     id 'org.sonarqube' version '3.5.0.2730'
     id 'org.springframework.boot' version '2.7.16'
     id 'uk.gov.hmcts.java' version '0.12.45'
-    id 'au.com.dius.pact' version '4.6.3'
+    id 'au.com.dius.pact' version '4.2.14'
     id "io.freefair.lombok" version "6.6.3"
 }
 
@@ -380,7 +380,7 @@ dependencies {
     }
 
     //pact contract testing
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.3"
+    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.2.14"
 
     contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
