@@ -45,7 +45,7 @@ class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    void throws_and_skips_document_conversion_if_cover_letter_null() {
+    void throws_exception_if_cover_letter_null() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenReturn(null);
 
@@ -60,13 +60,28 @@ class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    void throws_and_skips_document_conversion_if_cover_letter_fails_with_exception() {
+    void throws_if_cover_letter_fails_with_exception() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenThrow(
             DocumentServiceResponseException.class);
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
             .isExactlyInstanceOf(DocumentServiceResponseException.class);
+
+        verifyNoInteractions(documentHandler);
+
+        verify(asylumCase, times(1)).clear(DECISION_AND_REASONS_COVER_LETTER);
+        verify(asylumCase, times(1)).clear(FINAL_DECISION_AND_REASONS_PDF);
+    }
+
+    @Test
+    void throws_exception_if_decision_and_reasons_document_null() {
+
+        when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenReturn(null);
+
+        assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
+                .hasMessage("finalDecisionAndReasonsDocument must be present")
+                .isExactlyInstanceOf(NullPointerException.class);
 
         verifyNoInteractions(documentHandler);
 
