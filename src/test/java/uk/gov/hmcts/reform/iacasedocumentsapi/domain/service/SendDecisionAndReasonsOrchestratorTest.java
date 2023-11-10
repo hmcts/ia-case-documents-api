@@ -77,11 +77,14 @@ class SendDecisionAndReasonsOrchestratorTest {
     @Test
     void throws_exception_if_decision_and_reasons_document_null() {
 
-        when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenReturn(null);
+        when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
+                .thenReturn(coverLetter);
+        when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
+                .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
                 .hasMessage("finalDecisionAndReasonsDocument must be present")
-                .isExactlyInstanceOf(NullPointerException.class);
+                .isExactlyInstanceOf(IllegalStateException.class);
 
         verifyNoInteractions(documentHandler);
 
