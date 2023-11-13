@@ -16,13 +16,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 public class SendDecisionAndReasonsOrchestrator {
 
     private final DocumentHandler documentHandler;
+    private final SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
     private final SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService;
 
     public SendDecisionAndReasonsOrchestrator(
         DocumentHandler documentHandler,
+        SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService,
         SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService
     ) {
         this.documentHandler = documentHandler;
+        this.sendDecisionAndReasonsPdfService = sendDecisionAndReasonsPdfService;
         this.sendDecisionAndReasonsCoverLetterService = sendDecisionAndReasonsCoverLetterService;
     }
 
@@ -37,10 +40,9 @@ public class SendDecisionAndReasonsOrchestrator {
                 "Cover letter creation failed");
 
             Document finalDecisionAndReasonsPdf =
-                    asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class)
-                            .orElseThrow(
-                                    () -> new IllegalStateException("finalDecisionAndReasonsDocument must be present"));
-            asylumCase.write(FINAL_DECISION_AND_REASONS_PDF, finalDecisionAndReasonsPdf);
+                sendDecisionAndReasonsPdfService.generatePdf(caseDetails);
+
+            requireNonNull(finalDecisionAndReasonsPdf, "Document to pdf conversion failed");
 
             if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
                  && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
