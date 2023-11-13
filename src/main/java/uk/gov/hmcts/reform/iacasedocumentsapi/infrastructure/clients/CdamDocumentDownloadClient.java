@@ -24,6 +24,7 @@ public class CdamDocumentDownloadClient {
         this.accessTokenProvider = accessTokenProvider;
     }
 
+    //TODO Upgrade ccd-case-document-am-client. Need to get UUID, string cannot be converted.
     public Resource download(String documentBinaryUrl) {
         ResponseEntity<Resource> resourceResponseEntity = caseDocumentClient.getDocumentBinary(
             accessTokenProvider.getAccessToken(),

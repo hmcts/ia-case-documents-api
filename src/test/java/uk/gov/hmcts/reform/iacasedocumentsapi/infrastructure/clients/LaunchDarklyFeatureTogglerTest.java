@@ -49,10 +49,10 @@ public class LaunchDarklyFeatureTogglerTest {
                 .lastName(userDetails.getSurname())
                 .email(userDetails.getEmailAddress())
                 .build(),
-            true)
-        ).thenReturn(true);
+            false)
+        ).thenReturn(false);
 
-        assertTrue(launchDarklyFeatureToggler.getValue(notExistingKey, true));
+        assertFalse(launchDarklyFeatureToggler.getValue(notExistingKey, false));
     }
 
     @Test
