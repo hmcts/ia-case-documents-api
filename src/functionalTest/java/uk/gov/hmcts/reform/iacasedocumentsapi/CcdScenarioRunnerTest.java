@@ -16,7 +16,6 @@ import java.util.stream.StreamSupport;
 import lombok.SneakyThrows;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
@@ -43,25 +43,25 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 public class CcdScenarioRunnerTest {
 
     @Value("${targetInstance}") private String targetInstance;
-
+    @Autowired FeatureToggler featureToggler;
     @Autowired private Environment environment;
     @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
     @Autowired private MapValueExpander mapValueExpander;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private List<Fixture> fixtures;
     @Autowired private List<Verifier> verifiers;
+    @MockBean RequestUserAccessTokenProvider requestUserAccessTokenProvider;
 
-    @MockBean
-    static RequestUserAccessTokenProvider requestUserAccessTokenProvider;
-
-    private static String accessToken = null;
-
-    @BeforeAll
-    @SneakyThrows
-    public static void authenticateMe(@Autowired AuthorizationHeadersProvider authorizationHeadersProvider) {
-        accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
-        Thread.sleep(1000);
+    @BeforeEach
+    void authenticateMe() {
+        String accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertNotNull(accessToken);
+        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
     }
 
     @BeforeEach

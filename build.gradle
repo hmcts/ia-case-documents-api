@@ -175,7 +175,6 @@ task integration(type: Test, description: 'Runs the integration tests.', group: 
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
 
     systemProperty "scenario", System.getProperty('scenario')
-    systemProperty "file.encoding", "UTF-8"
 
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
@@ -228,7 +227,7 @@ pitest {
     ]
     threads = 10
     outputFormats = ['XML', 'HTML']
-    timestampedReports = true
+    timestampedReports = false
     failWhenNoMutations = false
     verbose = true
     mutationThreshold = 90
@@ -273,18 +272,18 @@ dependencyManagement {
         }
 
 
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.2') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.3') {
             entry 'jackson-databind'
             entry 'jackson-core'
             entry 'jackson-annotations'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.15.2') {
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.15.3') {
             entry 'jackson-dataformat-yaml'
             entry 'jackson-dataformat-csv'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.15.2') {
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.15.3') {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
@@ -347,8 +346,6 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.14.0'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-
-    implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
 
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.81'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.81'
