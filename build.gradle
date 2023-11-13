@@ -216,7 +216,7 @@ pitest {
     ]
     threads = 10
     outputFormats = ['XML', 'HTML']
-    timestampedReports = true
+    timestampedReports = false
     failWhenNoMutations = false
     verbose = true
     mutationThreshold = 90
@@ -305,18 +305,18 @@ dependencyManagement {
             entry 'commons-fileupload'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.2') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.3') {
             entry 'jackson-databind'
             entry 'jackson-core'
             entry 'jackson-annotations'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.15.2') {
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.15.3') {
             entry 'jackson-dataformat-yaml'
             entry 'jackson-dataformat-csv'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.15.2') {
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.15.3') {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
@@ -380,7 +380,7 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
     implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
 
-    implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.17.2-RELEASE'
+    implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.19.2-RELEASE'
 
     implementation group: 'com.google.guava', name: 'guava', version: '32.1.2-jre'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
