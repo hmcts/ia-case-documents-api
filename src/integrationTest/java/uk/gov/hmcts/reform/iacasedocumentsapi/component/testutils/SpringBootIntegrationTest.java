@@ -24,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
     "S2S_URL=http://127.0.0.1:8992/serviceAuth",
     "IDAM_URL=http://127.0.0.1:8992/userAuth",
     "OPEN_ID_IDAM_URL=http://127.0.0.1:8992/userAuth",
+    "case_document_am.url=http://127.0.0.1:8992",
     "docmosis.endpoint=http://127.0.0.1:8992",
     "docmosis.render.uri=/docmosis",
     "ccdGatewayUrl=http://127.0.0.1:8992",
