@@ -14,7 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
 @Service
-public class SendDecisionAndReasonsPdfService {
+public class SendDecisionAndReasonsRenameFileService {
 
     private static final String PDF_CONTENT_TYPE = "application/pdf";
 
@@ -22,7 +22,7 @@ public class SendDecisionAndReasonsPdfService {
     private final DocumentUploader documentUploader;
     private final String decisionAndReasonsFinalPdfFilename;
 
-    public SendDecisionAndReasonsPdfService(
+    public SendDecisionAndReasonsRenameFileService(
         DocumentDownloadClient documentDownloadClient,
         DocumentUploader documentUploader,
         @Value("${decisionAndReasonsFinalPdf.fileName}") String decisionAndReasonsFinalPdfFilename
@@ -32,7 +32,7 @@ public class SendDecisionAndReasonsPdfService {
         this.decisionAndReasonsFinalPdfFilename = decisionAndReasonsFinalPdfFilename;
     }
 
-    public Document generatePdf(CaseDetails<AsylumCase> caseDetails) {
+    public Document updateDecisionAndReasonsFileName(CaseDetails<AsylumCase> caseDetails) {
 
         Document finalPdf = createFinalPdf(caseDetails.getCaseData());
 

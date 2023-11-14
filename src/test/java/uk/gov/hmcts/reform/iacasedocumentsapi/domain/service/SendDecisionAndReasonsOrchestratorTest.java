@@ -25,7 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentSer
 class SendDecisionAndReasonsOrchestratorTest {
 
     @Mock private DocumentHandler documentHandler;
-    @Mock private SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
+    @Mock private SendDecisionAndReasonsRenameFileService sendDecisionAndReasonsPdfService;
     @Mock private SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -84,7 +84,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(null);
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
@@ -103,7 +103,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenThrow(RuntimeException.class);
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
@@ -121,7 +121,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
@@ -163,7 +163,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
@@ -206,7 +206,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
