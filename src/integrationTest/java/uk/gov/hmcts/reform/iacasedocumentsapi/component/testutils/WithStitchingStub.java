@@ -36,4 +36,32 @@ public interface WithStitchingStub {
                 )
         );
     }
+
+    default void addNewStitchingBundleStub(WireMockServer server) {
+        server.addStubMapping(
+                new StubMapping(
+                        newRequestPattern(RequestMethod.POST, urlEqualTo("/api/new-bundle"))
+                                .build(),
+                        aResponse()
+                                .withStatus(500)
+                                .withHeader("Content-Type", "application/json")
+                                .withBody("Error from stitching-api")
+                                .build()
+                )
+        );
+    }
+
+    default void addNewStitchingBundleError400Stub(WireMockServer server) {
+        server.addStubMapping(
+                new StubMapping(
+                        newRequestPattern(RequestMethod.POST, urlEqualTo("/api/new-bundle"))
+                                .build(),
+                        aResponse()
+                                .withStatus(400)
+                                .withHeader("Content-Type", "application/json")
+                                .withBody("Error from stitching-api")
+                                .build()
+                )
+        );
+    }
 }
