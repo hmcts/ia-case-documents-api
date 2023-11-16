@@ -4,3 +4,4 @@ java:
   ingressHost: ${SERVICE_FQDN}
   environment:
     IA_AIP_FRONTEND_URL: "https://immigration-appeal.{{ .Values.global.environment }}.platform.hmcts.net/"
+    IA_IDAM_REDIRECT_URI: "https://ia-case-api-pr-1748-documents-api.preview.platform.hmcts.net/oauth2/callback"
