@@ -368,6 +368,8 @@ dependencies {
   implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server'
   implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose'
 
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.0.1'
+
   // CVE-2019-17195
   implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
 

@@ -18,6 +18,14 @@
     {
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "matchPackageNames": ["au.com.dius.pact"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["org.pitest:pitest"],
+      "enabled": false
     }
   ],
   "timezone": "Europe/London",

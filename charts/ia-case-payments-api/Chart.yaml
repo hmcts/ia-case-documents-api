@@ -3,10 +3,10 @@ appVersion: "1.0"
 description: A Helm chart for Case Payments API App
 name: ia-case-payments-api
 home: https://github.com/hmcts/ia-case-payments-api
-version: 0.0.18
+version: 0.0.19
 maintainers:
   - name: Immigration & Asylum Team
 dependencies:
   - name: java
-    version: 4.0.13
+    version: 5.0.0
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
