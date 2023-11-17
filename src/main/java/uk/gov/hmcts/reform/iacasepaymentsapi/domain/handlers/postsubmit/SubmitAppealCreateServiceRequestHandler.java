@@ -86,6 +86,7 @@ public class SubmitAppealCreateServiceRequestHandler implements PostSubmitCallba
             && requestFeeRemissionFlagForServiceRequest != YesOrNo.YES
             && paymentStatus != PaymentStatus.PAID) {
             try {
+                // TODO: save payment service request reference in case data
                 serviceRequestService.createServiceRequest(callback, fee);
 
             } catch (Exception e) {

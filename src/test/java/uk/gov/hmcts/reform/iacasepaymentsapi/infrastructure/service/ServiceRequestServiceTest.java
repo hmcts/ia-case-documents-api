@@ -1,13 +1,18 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+
+import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +28,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestRequest;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.ServiceRequestApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.IdentityManagerResponseException;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.SystemTokenGenerator;
@@ -102,9 +108,13 @@ public class ServiceRequestServiceTest {
 
         when(systemTokenGenerator.generate()).thenReturn(token);
         when(serviceAuthorization.generate()).thenReturn(serviceToken);
+        ServiceRequestResponse expectedResponse = ServiceRequestResponse.builder().serviceRequestReference("1234").build();
+        when(serviceRequestApi.createServiceRequest(eq(token), eq(serviceToken), any(ServiceRequestRequest.class)))
+            .thenReturn(expectedResponse);
 
-        serviceRequestService.createServiceRequest(callback, fee);
+        ServiceRequestResponse actualResponse = serviceRequestService.createServiceRequest(callback, fee);
 
+        assertEquals(expectedResponse, actualResponse);
         verify(serviceRequestApi, times(1)).createServiceRequest(tokenCaptor.capture(),
                                                                  serviceTokenCaptor.capture(),
                                                                  serviceRequestRequestArgumentCaptor.capture());
@@ -122,6 +132,35 @@ public class ServiceRequestServiceTest {
         assertEquals("some-code", actual.getFees()[0].getCode());
         assertEquals(1, actual.getFees()[0].getVolume());
         assertEquals(80, actual.getFees()[0].getCalculatedAmount().intValue());
+    }
+
+    @Test
+    void should_return_null_when_service_request_api_fails() throws Exception {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
+            .thenReturn(Optional.of(APPELLANT_GIVEN_NAMES));
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
+            .thenReturn(Optional.of(APPEAL_REFERENCE_NUMBER));
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+            .thenReturn(Optional.of(APPELLANT_FAMILY_NAMES));
+        when(caseDetails.getId()).thenReturn(CASE_ID);
+
+        when(systemTokenGenerator.generate()).thenReturn(token);
+        when(serviceAuthorization.generate()).thenReturn(serviceToken);
+        when(serviceRequestApi.createServiceRequest(eq(token), eq(serviceToken), any(ServiceRequestRequest.class)))
+            .thenThrow(FeignException.FeignClientException.class);
+
+        ServiceRequestResponse serviceRequestResponse = serviceRequestService.createServiceRequest(callback, fee);
+
+        assertNull(serviceRequestResponse);
+        verify(serviceRequestApi, times(1)).createServiceRequest(tokenCaptor.capture(),
+                                                                 serviceTokenCaptor.capture(),
+                                                                 serviceRequestRequestArgumentCaptor.capture());
+
+        assertEquals("token", tokenCaptor.getValue());
+        assertEquals("Bearer serviceToken", serviceTokenCaptor.getValue());
+
     }
 
 }

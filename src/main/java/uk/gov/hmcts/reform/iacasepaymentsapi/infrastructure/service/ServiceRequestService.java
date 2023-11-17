@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -54,26 +55,45 @@ public class ServiceRequestService {
         String userAuth = systemTokenGenerator.generate();
         String serviceAuth = serviceAuthorization.generate();
 
-        return serviceRequestApi.createServiceRequest(
-            userAuth,
-            serviceAuth,
-            ServiceRequestRequest.builder()
-                .callBackUrl(callBackUrl)
-                .casePaymentRequest(
-                    CasePaymentRequestDto.builder()
-                        .action(PAYMENT_ACTION)
-                        .responsibleParty(responsibleParty)
-                        .build())
-                .caseReference(appealReferenceNumber)
-                .ccdCaseNumber(ccdCaseReferenceNumber)
-                .fees(new FeeDto[]{
-                    FeeDto.builder()
-                        .calculatedAmount(fee.getCalculatedAmount())
-                        .code(fee.getCode())
-                        .version(fee.getVersion())
-                        .volume(VOLUME_1).build()
-                })
-                .build()
-        );
+        log.info("Calling Payment Service Request API for case reference {}", ccdCaseReferenceNumber);
+        ServiceRequestResponse serviceRequestResponse = null;
+
+        try {
+            serviceRequestResponse = serviceRequestApi.createServiceRequest(
+                userAuth,
+                serviceAuth,
+                ServiceRequestRequest.builder()
+                    .callBackUrl(callBackUrl)
+                    .casePaymentRequest(
+                        CasePaymentRequestDto.builder()
+                            .action(PAYMENT_ACTION)
+                            .responsibleParty(responsibleParty)
+                            .build())
+                    .caseReference(appealReferenceNumber)
+                    .ccdCaseNumber(ccdCaseReferenceNumber)
+                    .fees(new FeeDto[]{
+                        FeeDto.builder()
+                            .calculatedAmount(fee.getCalculatedAmount())
+                            .code(fee.getCode())
+                            .version(fee.getVersion())
+                            .volume(VOLUME_1).build()
+                    })
+                    .build()
+            );
+            log.info(
+                "Payment Service Request API response for case reference {} - {}",
+                ccdCaseReferenceNumber,
+                serviceRequestResponse != null ? serviceRequestResponse.getServiceRequestReference() : ""
+            );
+
+        } catch (FeignException fe) {
+            log.error(
+                "Error in calling Payment Service Request API for case reference {} \n {}",
+                ccdCaseReferenceNumber,
+                fe.getMessage()
+            );
+
+        }
+        return serviceRequestResponse;
     }
 }
