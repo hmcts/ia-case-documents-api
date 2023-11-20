@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
@@ -190,7 +192,9 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         fieldValues.put("isLegallyRepresentedForFlag", isLegallyRepresentedCase ? YesOrNo.YES : YesOrNo.NO);
         if (isLegallyRepresentedCase) {
             fieldValues.put("legalRepCompany", bailCase.read(LEGAL_REP_COMPANY, String.class).orElse(""));
-            fieldValues.put("legalRepName", bailCase.read(LEGAL_REP_NAME, String.class).orElse(""));
+            fieldValues.put("legalRepName", formatLegalRepName(
+                bailCase.read(LEGAL_REP_NAME, String.class).orElse(""),
+                bailCase.read(LEGAL_REP_FAMILY_NAME, String.class).orElse("")));
             fieldValues.put("legalRepEmail", bailCase.read(LEGAL_REP_EMAIL, String.class).orElse(""));
             fieldValues.put("legalRepPhone", bailCase.read(LEGAL_REP_PHONE, String.class).orElse(""));
             fieldValues.put("legalRepReference", bailCase.read(LEGAL_REP_REFERENCE, String.class).orElse(""));
@@ -430,5 +434,13 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
             return LocalDate.parse(date).format(DOCUMENT_DATE_FORMAT);
         }
         return "";
+    }
+
+    private String formatLegalRepName(@NonNull String firstName, @NonNull String lastName) {
+        if (!(lastName.isEmpty() || firstName.isEmpty())) {
+            return firstName + " " + lastName;
+        }
+
+        return firstName;
     }
 }
