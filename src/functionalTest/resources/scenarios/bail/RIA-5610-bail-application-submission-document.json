@@ -15,7 +15,7 @@
       }
     }
   },
-  "expectation": {|
+  "expectation": {
     "status": 200,
     "errors": [],
     "caseData": {
