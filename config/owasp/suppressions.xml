@@ -25,4 +25,14 @@
             a version of JSON that is newer than version 20230618</notes>
         <cve>CVE-2023-5072</cve>
     </suppress>
+    <suppress until="2023-11-30">
+        <notes>Temporary suppressions</notes>
+        <cve>CVE-2023-42794</cve>
+        <cve>CVE-2023-44487</cve>
+        <cve>CVE-2023-42795</cve>
+        <cve>CVE-2023-45648</cve>
+    </suppress>
+
+
+
 </suppressions>

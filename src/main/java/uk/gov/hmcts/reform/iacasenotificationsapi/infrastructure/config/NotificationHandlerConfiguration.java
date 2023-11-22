@@ -1851,6 +1851,38 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> forceAppellantCaseToCaseUnderReviewEmailNotificationHandler(
+            @Qualifier("forceAppellantCaseToCaseUnderReviewEmailNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        BiPredicate<PreSubmitCallbackStage, Callback<AsylumCase>> function = (callbackStage, callback) -> {
+            AsylumCase caseData = callback.getCaseDetails().getCaseData();
+
+            return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.FORCE_CASE_TO_CASE_UNDER_REVIEW
+                    && isAipJourney(caseData)
+                    && isEmailPreferred(caseData);
+        };
+        return new NotificationHandler(function, notificationGenerators);
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> forceAppellantCaseToCaseUnderReviewSmsNotificationHandler(
+            @Qualifier("forceAppellantCaseToCaseUnderReviewSmsNotificationGenerator")
+            List<NotificationGenerator> notificationGenerators) {
+
+        BiPredicate<PreSubmitCallbackStage, Callback<AsylumCase>> function = (callbackStage, callback) -> {
+            AsylumCase caseData = callback.getCaseDetails().getCaseData();
+
+            return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.FORCE_CASE_TO_CASE_UNDER_REVIEW
+                    && isAipJourney(caseData)
+                    && isSmsPreferred(caseData));
+        };
+        return new NotificationHandler(function, notificationGenerators);
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> forceCaseToSubmitHearingRequirementsNotificationHandler(
         @Qualifier("forceCaseToSubmitHearingRequirementsNotificationGenerator")
             List<NotificationGenerator> notificationGenerator) {

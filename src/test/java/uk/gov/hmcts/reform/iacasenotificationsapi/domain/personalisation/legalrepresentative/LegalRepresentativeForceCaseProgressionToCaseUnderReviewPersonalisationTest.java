@@ -36,6 +36,7 @@ public class LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisa
     private String legalRepRefNumber = "somelegalRepRefNumber";
     private String appellantGivenNames = "someAppellantGivenNames";
     private String appellantFamilyName = "someAppellantFamilyName";
+    private String linkToOnlineService = "https://immigration-appeal.demo.platform.hmcts.net/start-appeal";
 
     private LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisation
         forceCaseProgressionToCaseUnderReviewPersonalisation;
@@ -51,7 +52,7 @@ public class LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisa
             .thenReturn(Optional.of(legalRepEmailAddress));
 
         forceCaseProgressionToCaseUnderReviewPersonalisation =
-            new LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisation(templateId);
+            new LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisation(templateId, linkToOnlineService);
     }
 
     @Test
