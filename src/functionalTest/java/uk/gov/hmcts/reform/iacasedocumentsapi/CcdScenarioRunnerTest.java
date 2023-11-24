@@ -32,6 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
@@ -43,13 +44,26 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 public class CcdScenarioRunnerTest {
 
     @Value("${targetInstance}") private String targetInstance;
-
+    @Autowired FeatureToggler featureToggler;
     @Autowired private Environment environment;
     @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
     @Autowired private MapValueExpander mapValueExpander;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private List<Fixture> fixtures;
     @Autowired private List<Verifier> verifiers;
+    @MockBean RequestUserAccessTokenProvider requestUserAccessTokenProvider;
+
+    @BeforeEach
+    void authenticateMe() {
+        String accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertNotNull(accessToken);
+        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
+    }
 
     @MockBean
     static RequestUserAccessTokenProvider requestUserAccessTokenProvider;

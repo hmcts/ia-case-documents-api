@@ -42,6 +42,7 @@ public class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegratio
 
         docmosisWillReturnSomeDocument(server);
         theDocoumentsManagementApiIsAvailable(server);
+        theCaseDocumentAmIsAvailable(server);
 
         PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.GENERATE_DECISION_AND_REASONS)
