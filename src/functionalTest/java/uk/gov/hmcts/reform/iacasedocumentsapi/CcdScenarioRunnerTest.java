@@ -65,25 +65,11 @@ public class CcdScenarioRunnerTest {
         when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
     }
 
-    @MockBean
-    static RequestUserAccessTokenProvider requestUserAccessTokenProvider;
-
-    private static String accessToken = null;
-
-    @BeforeAll
-    @SneakyThrows
-    public static void authenticateMe(@Autowired AuthorizationHeadersProvider authorizationHeadersProvider) {
-        accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
-        Thread.sleep(1000);
-        assertNotNull(accessToken);
-    }
-
     @BeforeEach
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
-        RestAssured.useRelaxedHTTPSValidation();
-        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
+        RestAssured.useRelaxedHTTPSValidation();        
     }
 
     @Test
