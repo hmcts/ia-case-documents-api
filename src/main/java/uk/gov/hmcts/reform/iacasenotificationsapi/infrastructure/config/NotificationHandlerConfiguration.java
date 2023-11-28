@@ -1429,6 +1429,19 @@ public class NotificationHandlerConfiguration {
     }
 
     @Bean
+    public PreSubmitCallbackHandler<AsylumCase> uploadAdditionalEvidenceAipHandler(
+            @Qualifier("uploadAdditionalEvidenceAip") List<NotificationGenerator> notificationGenerator) {
+
+        return new NotificationHandler(
+                (callbackStage, callback) ->
+                        callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                && callback.getEvent() == Event.UPLOAD_ADDITIONAL_EVIDENCE
+                                && isAipJourney(callback.getCaseDetails().getCaseData()),
+                notificationGenerator
+        );
+    }
+
+    @Bean
     public PreSubmitCallbackHandler<AsylumCase> uploadAdditionalEvidenceHomeOfficeHandler(
         @Qualifier("uploadAdditionalEvidenceHomeOffice") List<NotificationGenerator> notificationGenerator) {
 
