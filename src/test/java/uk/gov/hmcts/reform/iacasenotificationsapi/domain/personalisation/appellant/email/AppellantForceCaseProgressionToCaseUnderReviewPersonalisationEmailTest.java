@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -20,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -27,6 +30,8 @@ class AppellantForceCaseProgressionToCaseUnderReviewPersonalisationEmailTest {
 
     @Mock
     AsylumCase asylumCase;
+    @Mock
+    RecipientsFinder recipientsFinder;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -42,12 +47,12 @@ class AppellantForceCaseProgressionToCaseUnderReviewPersonalisationEmailTest {
     @BeforeEach
     void setUp() {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.read(APPELLANT_EMAIL_ADDRESS, String.class)).thenReturn(Optional.of(appellantEmailAddress));
+        when(recipientsFinder.findAll(asylumCase, NotificationType.EMAIL)).thenReturn(Collections.singleton(appellantEmailAddress));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
 
         forceCaseProgressionToCaseUnderReviewPersonalisation =
-            new AppellantForceCaseProgressionToCaseUnderReviewPersonalisationEmail(templateId, iaExUiFrontendUrl);
+            new AppellantForceCaseProgressionToCaseUnderReviewPersonalisationEmail(templateId, iaExUiFrontendUrl, recipientsFinder);
     }
 
     @Test
@@ -67,14 +72,6 @@ class AppellantForceCaseProgressionToCaseUnderReviewPersonalisationEmailTest {
         Set<String> recipientsList = forceCaseProgressionToCaseUnderReviewPersonalisation.getRecipientsList(asylumCase);
         assertNotNull(recipientsList);
         assertThat(recipientsList).contains(appellantEmailAddress);
-    }
-
-    @Test
-    public void should_throw_exception_when_appellant_email_is_not_present() {
-        when(asylumCase.read(APPELLANT_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> forceCaseProgressionToCaseUnderReviewPersonalisation.getPersonalisation(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("appellantEmailAddress is not present");
     }
 
 
@@ -98,5 +95,15 @@ class AppellantForceCaseProgressionToCaseUnderReviewPersonalisationEmailTest {
                 forceCaseProgressionToCaseUnderReviewPersonalisation.getPersonalisation(asylumCase);
 
         assertThat(personalisation).isEqualToComparingOnlyGivenFields(asylumCase);
+    }
+
+    @Test
+    public void asylumCase_null_returns_error() {
+        Mockito.when(recipientsFinder.findAll(null, NotificationType.EMAIL))
+                .thenThrow(new NullPointerException("asylumCase must not be null"));
+
+        assertThatThrownBy(() -> forceCaseProgressionToCaseUnderReviewPersonalisation.getRecipientsList(null))
+                .isExactlyInstanceOf(NullPointerException.class)
+                .hasMessage("asylumCase must not be null");
     }
 }
