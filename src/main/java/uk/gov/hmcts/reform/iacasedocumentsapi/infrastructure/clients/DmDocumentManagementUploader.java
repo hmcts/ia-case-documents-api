@@ -66,22 +66,13 @@ public class DmDocumentManagementUploader {
                     );
 
             uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
-                uploadResponse
-                    .getEmbedded()
-                    .getDocuments()
-                    .get(0);
+                uploadResponse.getEmbedded().getDocuments().get(0);
 
             return new Document(
-                uploadedDocument
-                    .links
-                    .self
-                    .href,
-                uploadedDocument
-                    .links
-                    .binary
-                    .href,
-                uploadedDocument
-                    .originalDocumentName
+                    uploadedDocument.links.self.href,
+                    uploadedDocument.links.binary.href,
+                    uploadedDocument.originalDocumentName,
+                    null
             );
 
         } catch (IOException e) {

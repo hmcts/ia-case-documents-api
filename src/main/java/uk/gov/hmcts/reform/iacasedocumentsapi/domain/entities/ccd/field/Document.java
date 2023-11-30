@@ -26,7 +26,6 @@ public class Document {
         requireNonNull(documentUrl);
         requireNonNull(documentBinaryUrl);
         requireNonNull(documentFilename);
-        requireNonNull(documentHash);
 
         this.documentUrl = documentUrl;
         this.documentBinaryUrl = documentBinaryUrl;

@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import com.google.common.io.ByteStreams;
 import org.springframework.core.io.Resource;
@@ -11,6 +10,8 @@ import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
 import uk.gov.hmcts.reform.document.domain.UploadResponse;
 import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Superseded. Will need to be removed as soon as the "use-ccd-document-am" feature flag is permanently on
@@ -60,26 +61,17 @@ public class DmSystemDocumentManagementUploader {
                         accessToken,
                         serviceAuthorizationToken,
                         userId,
-                        Collections.singletonList(file)
+                        singletonList(file)
                     );
 
             uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
-                uploadResponse
-                    .getEmbedded()
-                    .getDocuments()
-                    .get(0);
+                uploadResponse.getEmbedded().getDocuments().get(0);
 
             return new Document(
-                uploadedDocument
-                    .links
-                    .self
-                    .href,
-                uploadedDocument
-                    .links
-                    .binary
-                    .href,
-                uploadedDocument
-                    .originalDocumentName
+                    uploadedDocument.links.self.href,
+                    uploadedDocument.links.binary.href,
+                    uploadedDocument.originalDocumentName,
+                    null
             );
 
         } catch (IOException e) {

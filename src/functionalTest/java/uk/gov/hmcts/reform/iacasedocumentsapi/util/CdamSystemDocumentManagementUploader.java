@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
-import java.util.Collections;
-
 import com.google.common.io.ByteStreams;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +10,8 @@ import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+
+import static java.util.Collections.singletonList;
 
 /**
  * This class supersedes DmDocumentManagementUploader. Its usage is driven by a feature flag.
@@ -31,7 +31,13 @@ public class CdamSystemDocumentManagementUploader {
     }
 
     @SneakyThrows
-    public Document upload(Resource resource, String contentType) {
+    public Document upload(
+            Resource resource,
+            String classification,
+            String caseTypeId,
+            String jurisdictionId,
+            String contentType
+    ) {
         final String serviceAuthorizationToken = authorizationHeadersProvider
                                                      .getLegalRepresentativeAuthorization()
                                                      .getValue("ServiceAuthorization");
@@ -52,15 +58,16 @@ public class CdamSystemDocumentManagementUploader {
             serviceAuthorizationToken,
             "Asylum",
             "IA",
-            Collections.singletonList(file)
+            singletonList(file)
         );
 
         uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = uploadResponse.getDocuments().get(0);
 
         return new Document(
-            uploadedDocument.links.self.href,
-            uploadedDocument.links.binary.href,
-            uploadedDocument.originalDocumentName
+                uploadedDocument.links.self.href,
+                uploadedDocument.links.binary.href,
+                uploadedDocument.originalDocumentName,
+                uploadedDocument.hashToken
         );
     }
 }

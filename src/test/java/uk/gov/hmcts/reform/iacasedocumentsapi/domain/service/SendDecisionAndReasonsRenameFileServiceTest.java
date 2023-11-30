@@ -18,7 +18,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
@@ -69,9 +68,9 @@ class SendDecisionAndReasonsRenameFileServiceTest {
 
         when(documentUploader.upload(
                 any(ByteArrayResource.class),
-                anyString(),
-                anyString(),
-                anyString(),
+                any(),
+                any(),
+                any(),
                 eq("application/pdf")
         ))
                 .thenReturn(uploadedDocument);
@@ -89,9 +88,9 @@ class SendDecisionAndReasonsRenameFileServiceTest {
         verify(documentUploader, times(1))
             .upload(
                     any(ByteArrayResource.class),
-                    anyString(),
-                    anyString(),
-                    anyString(),
+                    any(),
+                    any(),
+                    any(),
                     eq("application/pdf")
             );
         verify(caseDetails.getCaseData(),times(1)).write(FINAL_DECISION_AND_REASONS_PDF,uploadedDecisionAndReasonsPdf);

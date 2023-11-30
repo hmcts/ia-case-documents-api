@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -71,7 +72,13 @@ public class UploadSignedDecisionPdfServiceTest {
             .thenReturn(mockSignedDecisionNoticePdf);
         when(bailCase.read(APPLICANT_FAMILY_NAME, String.class))
             .thenReturn(Optional.of("Smith"));
-        when(documentUploader.upload(any(ByteArrayResource.class), eq("application/pdf")))
+        when(documentUploader.upload(
+                any(ByteArrayResource.class),
+                any(),
+                any(),
+                any(),
+                eq("application/pdf")
+        ))
             .thenReturn(mockSignedGeneratedPdfDocument);
     }
 
