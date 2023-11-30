@@ -1,111 +1,65 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.io.IOException;
 
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.CdamDocumentDownloadClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DmDocumentDownloadClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
+
+
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class DocumentDownloadClientTest {
-
-    private final String someAccessToken = "some-access-token";
-    private final String someServiceAuthToken = "some-service-auth-token";
-
+@SuppressWarnings("unchecked")
+public class DocumentDownloadClientTest {
     @Mock
-    private CaseDocumentClientApi caseDocumentClientApi;
-    @Mock private AccessTokenProvider accessTokenProvider;
-    @Mock private AuthTokenGenerator serviceAuthTokenGenerator;
-    @Mock private ResponseEntity<Resource> responseEntity;
-    @Mock private Resource downloadedResource;
+    private FeatureToggler featureToggler;
+    @Mock
+    private DmDocumentDownloadClient dmDocumentDownloadClient;
+    @Mock
+    private CdamDocumentDownloadClient cdamDocumentDownloadClient;
 
+    @InjectMocks
     private DocumentDownloadClient documentDownloadClient;
-    private final UUID someUuid = UUID.randomUUID();
-    private final String someWellFormattedDocumentBinaryDownloadUrl = String.format("http://host:8080/document/%s/binary", someUuid);
 
     @BeforeEach
     public void setUp() {
-        documentDownloadClient = new DocumentDownloadClient(
-            caseDocumentClientApi,
-            serviceAuthTokenGenerator,
-            accessTokenProvider);
+
     }
 
     @Test
-    void downloads_resource() {
+    void should_use_cdam_when_feature_flag_true() throws IOException {
+        // Given
+        given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
 
-        when(caseDocumentClientApi.getDocumentBinary(
-                someAccessToken,
-                someServiceAuthToken,
-            someUuid)).thenReturn(responseEntity);
+        // When
+        documentDownloadClient.download(null);
 
-        when(responseEntity.getBody())
-                .thenReturn(downloadedResource);
-
-        when(accessTokenProvider.getAccessToken())
-                .thenReturn(someAccessToken);
-
-        when(serviceAuthTokenGenerator.generate())
-                .thenReturn(someServiceAuthToken);
-
-        Resource resource = documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl);
-
-        verify(caseDocumentClientApi, times(1))
-            .getDocumentBinary(
-                eq(someAccessToken),
-                eq(someServiceAuthToken),
-                eq(someUuid)
-            );
-
-        assertEquals(resource, downloadedResource);
+        // Then
+        verify(cdamDocumentDownloadClient, times(1)).download(null);
     }
 
     @Test
-    void throws_if_document_binary_url_bad() {
+    void should_use_dm_when_feature_flag_false() throws IOException {
+        // Given
+        given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(false);
 
-        assertThatThrownBy(() -> documentDownloadClient.download("bad-url"))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Invalid url for DocumentDownloadClientApi");
+        // When
+        documentDownloadClient.download(null);
 
-        verifyNoInteractions(caseDocumentClientApi);
-        verifyNoInteractions(serviceAuthTokenGenerator);
-        verifyNoInteractions(accessTokenProvider);
-    }
-
-    @Test
-    void throws_if_document_api_returns_empty_body() {
-
-        when(caseDocumentClientApi.getDocumentBinary(
-                someAccessToken,
-                someServiceAuthToken,
-            someUuid)).thenReturn(responseEntity);
-
-        when(responseEntity.getBody())
-                .thenReturn(downloadedResource);
-
-        when(accessTokenProvider.getAccessToken())
-                .thenReturn(someAccessToken);
-
-        when(serviceAuthTokenGenerator.generate())
-                .thenReturn(someServiceAuthToken);
-
-        when(responseEntity.getBody())
-            .thenReturn(null);
-
-        assertThatThrownBy(() -> documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("Document could not be downloaded");
+        // Then
+        verify(dmDocumentDownloadClient, times(1)).download(null);
     }
 
 }

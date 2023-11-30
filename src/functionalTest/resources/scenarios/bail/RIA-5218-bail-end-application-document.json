@@ -1,0 +1,47 @@
+{
+  "description": "RIA-5218 Create bail end application notice PDF",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "eventId": "endApplication",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted.json",
+        "replacements": {
+          "legalRepresentativeDocuments": [],
+          "endApplicationOutcome": "Bail dismissed without a hearing",
+          "endApplicationReasons": "This is the reason for the bail being dismissed without a hearing resulting in the end of the application",
+          "endApplicationDate": "2022-05-17",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
+          "govCallChargesLink": "{$govCallChargesUrl}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted.json",
+      "replacements": {
+        "applicationSubmissionDocument": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "Smith-ended-application-notice.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "bailEndApplication"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

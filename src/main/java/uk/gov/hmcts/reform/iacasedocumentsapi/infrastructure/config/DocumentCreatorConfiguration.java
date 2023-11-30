@@ -79,22 +79,22 @@ public class DocumentCreatorConfiguration {
 
     @Bean("remoteHearingNotice")
     public DocumentCreator<AsylumCase> getRemoteHearingNoticeDocumentCreator(
-            @Value("${remoteHearingNoticeDocument.contentType}") String contentType,
-            @Value("${remoteHearingNoticeDocument.fileExtension}") String fileExtension,
-            @Value("${remoteHearingNoticeDocument.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            @Qualifier("remoteHearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
+        @Value("${remoteHearingNoticeDocument.contentType}") String contentType,
+        @Value("${remoteHearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${remoteHearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("remoteHearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
     ) {
         return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 
@@ -205,22 +205,43 @@ public class DocumentCreatorConfiguration {
 
     @Bean("decisionAndReasons")
     public DocumentCreator<AsylumCase> getAndDecisionAndReasonsDocumentCreator(
-            @Value("${decisionAndReasons.contentType}") String contentType,
-            @Value("${decisionAndReasons.fileExtension}") String fileExtension,
-            @Value("${decisionAndReasons.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            DecisionAndReasonsTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
+        @Value("${decisionAndReasons.contentType}") String contentType,
+        @Value("${decisionAndReasons.fileExtension}") String fileExtension,
+        @Value("${decisionAndReasons.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        DecisionAndReasonsTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
     ) {
         return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("aipDecisionAndReasonsCoverLetter")
+    public DocumentCreator<AsylumCase> getAipDecisionAndReasonsCoverLetterDocumentCreator(
+        @Value("${aipDecisionAndReasonsCoverLetter.contentType}") String contentType,
+        @Value("${aipDecisionAndReasonsCoverLetter.fileExtension}") String fileExtension,
+        @Value("${aipDecisionAndReasonsCoverLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        AppellantDecisionAndReasonsCoverLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 
@@ -287,6 +308,26 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("endAppealAutomaticallyNotice")
+    public DocumentCreator<AsylumCase> getEndAppealAutomaticallyDocumentCreator(
+        @Value("${endAppealAutomatically.contentType}") String contentType,
+        @Value("${endAppealAutomatically.fileExtension}") String fileExtension,
+        @Value("${endAppealAutomatically.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        EndAppealAutomaticallyTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 
     @Bean("cmaRequirements")
     public DocumentCreator<AsylumCase> getCmaRequirementsDocumentCreator(
@@ -316,6 +357,48 @@ public class DocumentCreatorConfiguration {
         @Value("${cmaAppointmentNotice.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         CmaAppointmentNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("appealReasons")
+    public DocumentCreator<AsylumCase> getAppealReasonsDocumentCreator(
+        @Value("${appealReasons.contentType}") String contentType,
+        @Value("${appealReasons.fileExtension}") String fileExtension,
+        @Value("${appealReasons.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        AppealReasonsTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("clarifyingQuestionsAnswers")
+    public DocumentCreator<AsylumCase> getAppealReasonsDocumentCreator(
+        @Value("${clarifyingQuestionsAnswers.contentType}") String contentType,
+        @Value("${clarifyingQuestionsAnswers.fileExtension}") String fileExtension,
+        @Value("${clarifyingQuestionsAnswers.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        ClarifyingQuestionsAnswersTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.utilities;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.time.LocalDateTime;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.util.Lists;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -107,6 +107,38 @@ public class AsylumCaseFixtures {
                "    ]\n"
                +
                "  }\n";
+    }
+
+    public static String someAmUploadResponse() {
+        return "{\n"
+                +
+                "    \"documents\": [\n"
+                +
+                "      {\n"
+                +
+                "        \"originalDocumentName\": \"some-appeal-reference-number-some-fname-decision-and-reasons-draft.docx\",\n"
+                +
+                "        \"links\": {\n"
+                +
+                "          \"self\": {\n"
+                +
+                "            \"href\": \"\"\n"
+                +
+                "          },\n"
+                +
+                "          \"binary\": {\n"
+                +
+                "            \"href\": \"\"\n"
+                +
+                "          }\n"
+                +
+                "      }\n"
+                +
+                "    }\n"
+                +
+                "    ]\n"
+                +
+                "}\n";
     }
 
     public static String someUserDetails() {

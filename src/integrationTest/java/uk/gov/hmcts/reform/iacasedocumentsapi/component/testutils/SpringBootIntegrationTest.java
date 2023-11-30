@@ -1,12 +1,14 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.StaticPortWiremockFactory.WIREMOCK_PORT;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.microsoft.applicationinsights.web.internal.WebRequestTrackingFilter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,24 +17,21 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import ru.lanwen.wiremock.ext.WiremockResolver;
 import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 
 @ActiveProfiles("integration")
-@ExtendWith({
-    WiremockResolver.class
-})
 @TestPropertySource(properties = {
-    "S2S_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/serviceAuth",
-    "IDAM_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/userAuth",
-    "OPEN_ID_IDAM_URL=http://127.0.0.1:" + WIREMOCK_PORT + "/userAuth",
-    "docmosis.endpoint=http://127.0.0.1:" + WIREMOCK_PORT,
+    "S2S_URL=http://127.0.0.1:8992/serviceAuth",
+    "IDAM_URL=http://127.0.0.1:8992/userAuth",
+    "OPEN_ID_IDAM_URL=http://127.0.0.1:8992/userAuth",
+    "case_document_am.url=http://127.0.0.1:8992",
+    "docmosis.endpoint=http://127.0.0.1:8992",
     "docmosis.render.uri=/docmosis",
-    "ccdGatewayUrl=http://127.0.0.1:" + WIREMOCK_PORT,
-    "case_document_am.url=http://127.0.0.1:" + WIREMOCK_PORT,
-    "emBundler.url=http://127.0.0.1:" + WIREMOCK_PORT})
+    "ccdGatewayUrl=http://127.0.0.1:8992",
+    "emBundler.url=http://127.0.0.1:8992"})
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(classes = {TestConfiguration.class, Application.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class SpringBootIntegrationTest {
 
     protected GivensBuilder given;
@@ -48,6 +47,16 @@ public abstract class SpringBootIntegrationTest {
     @Autowired
     private WebApplicationContext wac;
 
+    protected static WireMockServer server;
+
+    @BeforeAll
+    public void spinUp() {
+        server = new WireMockServer(WireMockConfiguration.options()
+            .notifier(new Slf4jNotifier(true))
+            .port(8992));
+        server.start();
+    }
+
     @BeforeEach
     void setUp() {
         WebRequestTrackingFilter filter;
@@ -59,5 +68,30 @@ public abstract class SpringBootIntegrationTest {
     @BeforeEach
     public void setUpApiClient() {
         iaCaseDocumentsApiClient = new IaCaseDocumentsApiClient(objectMapper, mockMvc);
+    }
+
+    @AfterEach
+    public void reset() {
+        server.resetMappings();
+        server.resetRequests();
+        server.resetScenarios();
+        server.resetAll();
+    }
+
+    @AfterAll
+    @SneakyThrows
+    @SuppressWarnings("java:S2925")
+    public void shutDown() {
+        server.stop();
+        /*
+            We are not using Wiremock the way it's intended to be used. It should be used by
+            starting a webserver at the beginning of all tests and taking it down at the end, but
+            what we do is spinning up and down the server all the time and change its mappings
+            all the time.
+            The result is that its behaviour is somewhat flaky.
+            The following pause is meant to allow Wiremock time to conclude some operations that
+            we invoke.
+        */
+        Thread.sleep(1000);
     }
 }

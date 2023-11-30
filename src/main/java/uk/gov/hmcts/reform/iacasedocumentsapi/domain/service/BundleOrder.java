@@ -59,30 +59,37 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case END_APPEAL:
                 log.warn("END_APPEAL tag should not be checked for hearing ordering, document desc: {}", document.getDescription());
                 return 16;
+            case END_APPEAL_AUTOMATICALLY:
+                log.warn("END_APPEAL_AUTOMATICALLY tag should not be checked for hearing ordering, document desc: {}", document.getDescription());
+                return 17;
             case HEARING_REQUIREMENTS:
                 log.warn("HEARING_REQUIREMENTS tag should not be checked for hearing ordering, document desc: {}", document.getDescription());
-                return 17;
+                return 18;
             case CMA_REQUIREMENTS:
                 log.warn("CMA_REQUIREMENTS tag should not be checked for cma ordering, document desc: {}", document.getDescription());
-                return 18;
+                return 19;
             case CMA_NOTICE:
                 log.warn("CMA_NOTICE tag should not be checked for cma ordering, document desc: {}", document.getDescription());
-                return 19;
-            case HO_DECISION_LETTER:
                 return 20;
-            case FTPA_APPELLANT:
+            case HO_DECISION_LETTER:
                 return 21;
-            case FTPA_RESPONDENT:
+            case FTPA_APPELLANT:
                 return 22;
-            case FTPA_DECISION_AND_REASONS:
+            case FTPA_RESPONDENT:
                 return 23;
-            case RECORD_OUT_OF_TIME_DECISION_DOCUMENT:
+            case FTPA_DECISION_AND_REASONS:
                 return 24;
+            case RECORD_OUT_OF_TIME_DECISION_DOCUMENT:
+                return 25;
             case UPPER_TRIBUNAL_BUNDLE:
                 log.warn("UPPER_TRIBUNAL_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                return 25;
-            case NONE:
                 return 26;
+            case APPEAL_REASONS:
+                return 27;
+            case CLARIFYING_QUESTIONS:
+                return 28;
+            case NONE:
+                return 29;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

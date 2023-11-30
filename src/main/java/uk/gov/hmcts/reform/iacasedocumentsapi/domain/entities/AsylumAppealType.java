@@ -11,7 +11,8 @@ public enum AsylumAppealType {
     PA("protection"),
     EA("refusalOfEu"),
     HU("refusalOfHumanRights"),
-    DC("deprivation");
+    DC("deprivation"),
+    EU("euSettlementScheme");
 
     @JsonValue
     private String value;

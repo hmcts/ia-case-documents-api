@@ -105,7 +105,12 @@ decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-E
 decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
-decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00239.docx}
+decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
+
+aipDecisionAndReasonsCoverLetter.contentType:  application/pdf
+aipDecisionAndReasonsCoverLetter.fileExtension: PDF
+aipDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
+aipDecisionAndReasonsCoverLetter.templateName: ${IA_AIP_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00807.docx}
 
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
@@ -121,6 +126,11 @@ endAppeal.fileName: "NoticeOfEndedAppeal"
 endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
 endAppeal.appellant.templateName: ${IA_END_APPEAL_APPELLANT_TEMPLATE:TB-IAC-GNO-ENG-00721.docx}
 
+endAppealAutomatically.contentType: application/pdf
+endAppealAutomatically.fileExtension: PDF
+endAppealAutomatically.fileName: "NoticeOfEndedAppeal"
+endAppealAutomatically.templateName: ${IA_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-GNO-ENG-00239.docx}
+
 cmaRequirements.contentType:  application/pdf
 cmaRequirements.fileExtension: PDF
 cmaRequirements.fileName: "Case-management-appointment-requirements"
@@ -130,6 +140,36 @@ cmaAppointmentNotice.contentType:  application/pdf
 cmaAppointmentNotice.fileExtension: PDF
 cmaAppointmentNotice.fileName: "Case-management-appointment-notice"
 cmaAppointmentNotice.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00504.docx}
+
+appealReasons.contentType:  application/pdf
+appealReasons.fileExtension: PDF
+appealReasons.fileName: "Appeal-reasons"
+appealReasons.templateName: ${IA_APPEAL_REASONS_TEMPLATE:TB-IAC-GNO-ENG-00802.docx}
+
+clarifyingQuestionsAnswers.contentType:  application/pdf
+clarifyingQuestionsAnswers.fileExtension: PDF
+clarifyingQuestionsAnswers.fileName: "Tribunal-questions-and-answers"
+clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-IAC-GNO-ENG-00803.docx }
+
+bailSubmissionDocument.contentType: application/pdf
+bailSubmissionDocument.fileExtension: PDF
+bailSubmissionDocument.fileName: "bail-application-details"
+bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-SUM-ENG-01134.docx}
+
+decisionUnsignedDocument.contentType: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+decisionUnsignedDocument.fileExtension: docx
+decisionUnsignedDocument.fileName: "decision-notice-UNSIGNED"
+decisionUnsignedDocument.grant.templateName: ${IA_BAIL_DECISION_GRANT_TEMPLATE:TB-IAC-DEC-ENG-01138.docx}
+decisionUnsignedDocument.judgeMinded.templateName: ${IA_BAIL_DECISION_JUDGE_MINDED_TEMPLATE:TB-IAC-DEC-ENG-01136.docx}
+decisionUnsignedDocument.refusal.templateName: ${IA_BAIL_DECISION_REFUSAL_TEMPLATE:TB-IAC-DEC-ENG-01137.docx}
+
+decisionSignedDocumentFinalPdf.fileName: "decision-notice"
+
+
+bailEndApplication.contentType:  application/pdf
+bailEndApplication.fileExtension: PDF
+bailEndApplication.fileName: "ended-application-notice"
+bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
 
 case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://localhost:4455}
 
@@ -162,9 +202,8 @@ security:
     - "/health/readiness"
     - "/loggers/**"
     - "/swagger-ui.html"
-    - "/swagger-resources/**"
-    - "/v2/api-docs"
-    - "/webjars/springfox-swagger-ui/**"
+    - "/swagger-ui/**"
+    - "/v3/api-docs/**"
     - "/favicon.ico"
   authorisedRoles:
     - "caseworker-ia"
@@ -179,6 +218,8 @@ security:
       - "uploadAdditionalEvidence"
       - "draftHearingRequirements"
       - "payAndSubmitAppeal"
+      - "submitApplication"
+      - "makeNewApplication"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -207,11 +248,21 @@ security:
       - "listCma"
       - "endAppeal"
       - "generateUpperTribunalBundle"
+      - "submitApplication"
+      - "recordTheDecision"
+      - "endApplication"
+      - "makeNewApplication"
+      - "editBailApplicationAfterSubmit"
+      - "uploadSignedDecisionNotice"
     citizen:
       - "startAppeal"
       - "editAppeal"
+      - "uploadAdditionalEvidence"
       - "submitAppeal"
       - "submitCmaRequirements"
+      - "submitReasonsForAppeal"
+      - "submitClarifyingQuestionAnswers"
+      - "draftHearingRequirements"
     caseworker-ia-iacjudge:
       - "generateDecisionAndReasons"
       - "endAppeal"
@@ -219,11 +270,19 @@ security:
       - "updateHearingRequirements"
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
-
+      - "recordTheDecision"
+      - "endApplication"
+      - "uploadSignedDecisionNotice"
+    caseworker-ia-homeofficebail:
+      - "submitApplication"
+      - "makeNewApplication"
+    caseworker-ia-system:
+      - "endAppealAutomatically"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
+### case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
 
 idam:
   baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}
@@ -243,6 +302,8 @@ customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
 
+govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
+
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
 ### Email addresses
@@ -257,3 +318,8 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+
+ia:
+  config:
+    validator:
+      secret: ${IA_CONFIG_VALIDATOR_SECRET:}

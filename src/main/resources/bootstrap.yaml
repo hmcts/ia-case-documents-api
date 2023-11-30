@@ -16,6 +16,7 @@ spring:
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
         customer-services-telephone: IA_CUSTOMER_SERVICES_TELEPHONE
         customer-services-email: IA_CUSTOMER_SERVICES_EMAIL
+        gov-call-charges-url: IA_BAIL_GOV_CALL_CHARGES_URL
         hearing-centre-bradford-email: IA_HEARING_CENTRE_BRADFORD_EMAIL
         hearing-centre-manchester-email: IA_HEARING_CENTRE_MANCHESTER_EMAIL
         hearing-centre-newport-email: IA_HEARING_CENTRE_NEWPORT_EMAIL
@@ -24,4 +25,4 @@ spring:
         hearing-centre-birmingham-email: IA_HEARING_CENTRE_BIRMINGHAM_EMAIL
         hearing-centre-hatton-cross-email: IA_HEARING_CENTRE_HATTON_CROSS_EMAIL
         hearing-centre-glasgow-email: IA_HEARING_CENTRE_GLASGOW_EMAIL
-
+        ia-config-validator-secret: IA_CONFIG_VALIDATOR_SECRET
