@@ -362,7 +362,7 @@ dependencies {
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
     testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
-    testImplementation "info.solidsoft.gradle.pitest:gradle-pitest-plugin:${versions.pitest}"
+    testImplementation "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0"
     testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
 
     testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
