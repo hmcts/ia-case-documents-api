@@ -31,7 +31,6 @@ public class AppealDecisionTest {
 
     @Test
     public void correct_string_values_mapped_to_enum() {
-
         assertEquals(AppealDecision.ALLOWED.toString(), "allowed");
         assertEquals(AppealDecision.DISMISSED.toString(), "dismissed");
     }
