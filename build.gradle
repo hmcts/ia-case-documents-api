@@ -10,13 +10,13 @@ plugins {
   id 'checkstyle'
   id 'pmd'
   id 'jacoco'
-  id "info.solidsoft.pitest" version '1.9.0'
-  id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '2.7.14'
-  id 'uk.gov.hmcts.java' version '0.12.43'
-  id 'org.owasp.dependencycheck' version '8.2.1'
-  id 'com.github.ben-manes.versions' version '0.42.0'
-  id 'org.sonarqube' version '3.0'
+  id "info.solidsoft.pitest" version '1.15.0'
+  id 'io.spring.dependency-management' version '1.1.4'
+  id 'org.springframework.boot' version '2.7.18'
+  id 'uk.gov.hmcts.java' version '0.12.48'
+  id 'org.owasp.dependencycheck' version '8.4.3'
+  id 'com.github.ben-manes.versions' version '0.50.0'
+  id 'org.sonarqube' version '3.5.0.2730'
   id 'au.com.dius.pact' version '4.2.14'
   id 'com.adarshr.test-logger' version '3.2.0'
 }
@@ -140,7 +140,7 @@ checkstyle {
 }
 
 pmd {
-  toolVersion = "6.41.0"
+  toolVersion = "6.55.0"
   ignoreFailures = true
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
@@ -195,7 +195,7 @@ sonarqube {
 project.ext {
   pacticipant = 'ia_casePaymentsApi'
   pacticipantVersion = getCheckedOutGitCommitHash()
-  set('springCloudVersion', "2021.0.3")
+  set('springCloudVersion', "2021.0.8")
 }
 
 def getCheckedOutGitCommitHash() {
@@ -249,15 +249,15 @@ dependencyCheck {
 
 
 def versions = [
-  pitest          : '1.9.0',
-  junit           : '5.8.2',
-  junitPlatform   : '1.8.0',
+  pitest          : '1.15.0',
+  junit           : '5.10.1',
+  junitPlatform   : '1.10.1',
   reformLogging   : '5.1.7',
-  springDoc       : '1.6.8',
+  springDoc       : '1.7.0',
   pact_version    : '4.1.38',
-  serenity        : '3.2.3',
+  serenity        : '3.9.8',
   sonarPitest     : '0.5',
-  restAssured     : '5.3.1'
+  restAssured     : '5.3.2'
 ]
 
 
@@ -275,27 +275,27 @@ dependencyManagement {
       entry 'commons-fileupload'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.3') {
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.16.0') {
       entry 'jackson-databind'
       entry 'jackson-core'
       entry 'jackson-annotations'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.15.3') {
+    dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.16.0') {
       entry 'jackson-dataformat-yaml'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.15.3') {
+    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.16.0') {
       entry 'jackson-datatype-jsr310'
       entry 'jackson-datatype-jdk8'
     }
 
-    dependencySet(group: 'com.fasterxml.jackson.module', version: '2.15.3') {
+    dependencySet(group: 'com.fasterxml.jackson.module', version: '2.16.0') {
       entry 'jackson-module-parameter-names'
       entry 'jackson-module-afterburner'
     }
 
-    dependency group: 'org.yaml', name: 'snakeyaml', version: '2.0'
+    dependency group: 'org.yaml', name: 'snakeyaml', version: '2.2'
   }
 }
 
@@ -361,8 +361,8 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.1'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: '2021.0.3'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.7'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: '2021.0.8'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
   implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
@@ -372,14 +372,14 @@ dependencies {
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.0.1'
 
   // CVE-2019-17195
-  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.22'
+  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.37.1'
 
   // CVE-2021-27568
-  implementation group: 'net.minidev', name: 'json-smart', version: '2.4.10'
+  implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
 
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
 
-  implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+  implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
 
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
@@ -391,23 +391,23 @@ dependencies {
 
   implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'
 
-  implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
+  implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.4'
 
   implementation group:  'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
 
   implementation group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
 
 
-  implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+  implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.81'
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.81'
+  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.83'
+  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.83'
 
-  implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+  implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
 
 
-  annotationProcessor 'org.projectlombok:lombok:1.18.28'
-  implementation 'org.projectlombok:lombok:1.18.28'
+  annotationProcessor 'org.projectlombok:lombok:1.18.30'
+  implementation 'org.projectlombok:lombok:1.18.30'
 
   testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
@@ -415,14 +415,14 @@ dependencies {
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 
-  testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.6.28'
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.12.4'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
   testImplementation(group: 'org.springframework.boot', name: 'spring-boot-starter-test') {
     exclude group: "com.vaadin.external.google", module: "android-json"
   }
   testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
-  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
   testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
@@ -438,7 +438,7 @@ dependencies {
 
   testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.7.2'
 
-  testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.6') {
+  testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.8') {
     exclude group: "com.github.tomakehurst", module: "wiremock-standalone"
   }
 
@@ -464,9 +464,9 @@ dependencies {
   contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
 
-  contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.8.1'
+  contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.10.1'
 
-  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.1'
+  contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.8'
   contractTestImplementation group: 'org.springframework.cloud', name: 'spring-cloud-netflix-ribbon', version: '2.2.10.RELEASE'
 }
 
