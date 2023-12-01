@@ -1,24 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.UserDetailsForTest.UserDetailsForTestBuilder.userWith;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.DECISION_AND_REASONS_DRAFT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.DECISION;
 
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.*;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
 
 @Ignore
