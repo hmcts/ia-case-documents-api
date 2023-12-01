@@ -171,6 +171,8 @@ bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
 bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
 
+case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://localhost:4455}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -269,7 +271,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
       - "recordTheDecision"
-      - "endApplication"    
+      - "endApplication"
       - "uploadSignedDecisionNotice"
     caseworker-ia-homeofficebail:
       - "submitApplication"
@@ -280,7 +282,7 @@ security:
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
-case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
+### case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
 
 idam:
   baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}

@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.EmBundleRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -99,13 +100,15 @@ public class BundleRequestExecutorTest {
         final String actualAcceptHeader = actualRequestEntity.getHeaders().getFirst(HttpHeaders.ACCEPT);
         final String actualServiceAuthorizationHeader = actualRequestEntity.getHeaders().getFirst(SERVICE_AUTHORIZATION);
         final String actualAuthorizationHeader = actualRequestEntity.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        final Callback<AsylumCase> actualPostBody = (Callback<AsylumCase>) actualRequestEntity.getBody();
+        final EmBundleRequest<AsylumCase> actualPostBody = (EmBundleRequest<AsylumCase>) actualRequestEntity.getBody();
 
         assertEquals(actualContentTypeHeader, MediaType.APPLICATION_JSON_VALUE);
         assertEquals(actualAcceptHeader, MediaType.APPLICATION_JSON_VALUE);
         assertEquals(actualServiceAuthorizationHeader, SERVICE_TOKEN);
         assertEquals(actualAuthorizationHeader, ACCESS_TOKEN);
-        assertEquals(actualPostBody, callback);
+        assertEquals(actualPostBody.getCallback(), callback);
+        assertEquals("Asylum",actualPostBody.getCaseTypeId());
+        assertEquals("IA",actualPostBody.getJurisdictionId());
 
     }
 

@@ -16,12 +16,23 @@ public class SystemDocumentManagementUploader {
 
     private final DmSystemDocumentManagementUploader dmSystemDocumentManagementUploader;
 
-    public Document upload(Resource resource, String contentType) {
+    public Document upload(
+            Resource resource,
+            String classification,
+            String caseTypeId,
+            String jurisdictionId,
+            String contentType
+    ) {
         if (featureToggler.getValue("use-ccd-document-am", false)) {
-            return cdamSystemDocumentManagementUploader.upload(resource, contentType);
+            return cdamSystemDocumentManagementUploader.upload(
+                    resource,
+                    classification,
+                    caseTypeId,
+                    jurisdictionId,
+                    contentType
+            );
         } else {
             return dmSystemDocumentManagementUploader.upload(resource, contentType);
         }
-
     }
 }

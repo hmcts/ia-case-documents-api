@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
 import static org.junit.Assert.assertEquals;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_DETAINED_LOC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_FAMILY_NAME;
@@ -10,6 +11,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -60,9 +62,11 @@ public class BailCaseTest {
                 new Document(
                     "some-doc-url",
                     "some-doc-binary-url",
-                    "some-doc-filename"),
+                    "some-doc-filename",
+                        "some-hash"
+                ),
                 "some-description"));
-        bailCase.write(UPLOAD_THE_BAIL_EVIDENCE_DOCS, asList(idValue));
+        bailCase.write(UPLOAD_THE_BAIL_EVIDENCE_DOCS, singletonList(idValue));
         Optional<List<IdValue<DocumentWithDescription>>> maybeEvidence = bailCase.read(UPLOAD_THE_BAIL_EVIDENCE_DOCS);
         IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeEvidence.get().get(0);
 

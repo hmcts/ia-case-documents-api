@@ -13,6 +13,7 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.EmBundleRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -52,7 +53,9 @@ public class BundleRequestExecutor {
         headers.set(HttpHeaders.AUTHORIZATION, accessToken);
         headers.set(SERVICE_AUTHORIZATION, serviceAuthorizationToken);
 
-        HttpEntity<Callback<BundleCaseData>> requestEntity = new HttpEntity<>(payload, headers);
+        EmBundleRequest<BundleCaseData> emBundleRequest = new EmBundleRequest<>(payload);
+        HttpEntity<EmBundleRequest<BundleCaseData>> requestEntity = new HttpEntity<>(emBundleRequest, headers);
+
 
         PreSubmitCallbackResponse<BundleCaseData> response;
 

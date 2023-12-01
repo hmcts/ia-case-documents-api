@@ -71,7 +71,13 @@ public class UploadSignedDecisionPdfServiceTest {
             .thenReturn(mockSignedDecisionNoticePdf);
         when(bailCase.read(APPLICANT_FAMILY_NAME, String.class))
             .thenReturn(Optional.of("Smith"));
-        when(documentUploader.upload(any(ByteArrayResource.class), eq("application/pdf")))
+        when(documentUploader.upload(
+                any(ByteArrayResource.class),
+                any(),
+                any(),
+                any(),
+                eq("application/pdf")
+        ))
             .thenReturn(mockSignedGeneratedPdfDocument);
     }
 

@@ -119,8 +119,10 @@ class AppealReasonsTemplateTest {
 
     private Document createDocument() {
         return
-            new Document("some-url",
-                "some-binary-url",
-                "some-filename");
+            new Document(
+                    "some-url",
+                    "some-binary-url",
+                    "some-filename",
+                    "some-hash");
     }
 }

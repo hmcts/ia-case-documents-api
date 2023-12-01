@@ -22,7 +22,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -33,7 +34,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -46,7 +48,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -57,7 +60,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -70,7 +74,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -81,7 +86,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -94,7 +100,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -105,7 +112,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -118,7 +126,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -131,7 +140,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -142,7 +152,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -155,7 +166,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC3_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC3_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC3_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -168,7 +180,8 @@
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                  "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
                 },
                 "description": ""
               }
@@ -191,7 +204,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
               },
               "description": ""
             }
@@ -202,7 +216,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
               },
               "description": ""
             }
@@ -215,7 +230,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
               },
               "description": ""
             }
@@ -226,7 +242,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
               },
               "description": ""
             }
@@ -239,7 +256,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -252,7 +270,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -267,7 +286,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -280,7 +300,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -295,7 +316,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -310,7 +332,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -325,7 +348,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC3_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC3_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC3_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -339,7 +363,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC2_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC2_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
@@ -353,7 +378,8 @@
               "document": {
                 "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}",
+                "document_hash": "{$FIXTURE_DOC1_PDF_HASH}"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",

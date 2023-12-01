@@ -1,122 +1,135 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
+import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
+import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
+import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 @ExtendWith(MockitoExtension.class)
 class CdamDocumentManagementUploaderTest {
 
-    @Mock private CaseDocumentClient caseDocumentClient;
+    @Mock private CaseDocumentClientApi caseDocumentClientApi;
     @Mock private AuthTokenGenerator serviceAuthorizationTokenGenerator;
     @Mock private UserDetailsProvider userDetailsProvider;
 
-    @InjectMocks
+    private final String serviceAuthorizationToken = "SERVICE_TOKEN";
+    private final String accessToken = "ACCESS_TOKEN";
+    private final String userId = "123";
+    @Mock private UploadResponse uploadResponse;
+    private uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument;
+
+
+    private final String contentType = "application/pdf";
+    private final String fileName = "some-file.pdf";
+
+    private final byte[] documentData = "pdf-data".getBytes();
+    @Mock private Resource resource;
+    private final InputStream resourceInputStream = new ByteArrayInputStream(documentData);
+    private final String expectedDocumentUrl = "document-self-href";
+    private final String expectedBinaryUrl = "document-binary-href";
+    private final String classification = Classification.PUBLIC.name();
+    private final String caseTypeId = "Asylum";
+    private final String jurisdictionId = "some-juirsdictionId";
+
+    @Mock private UserDetails userDetails;
+
+    @Captor private ArgumentCaptor<DocumentUploadRequest> documentUploadRequestCaptor;
+
     private CdamDocumentManagementUploader documentManagementUploader;
+
 
     @BeforeEach
     public void setUp() {
-        UserDetails userDetails = mock(UserDetails.class);
 
-        given(serviceAuthorizationTokenGenerator.generate()).willReturn("some token");
-        given(userDetailsProvider.getUserDetails()).willReturn(userDetails);
-        given(userDetails.getAccessToken()).willReturn("some access token");
-    }
+        documentManagementUploader =
+                new CdamDocumentManagementUploader(
+                        caseDocumentClientApi,
+                        serviceAuthorizationTokenGenerator,
+                        userDetailsProvider
+                );
 
-    @Test
-    void should_invoke_client_when_upload_requested() throws IOException {
-        // Given
-        Resource resource = mock(Resource.class);
-        given(resource.getFilename()).willReturn("somefile.txt");
-        given(resource.getInputStream()).willReturn(new ByteArrayInputStream(new byte[] {}));
+        uk.gov.hmcts.reform.ccd.document.am.model.Document.Link selfLink = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Link();
+        selfLink.href = expectedDocumentUrl;
 
-        uk.gov.hmcts.reform.ccd.document.am.model.Document expectedDocument =
-            uk.gov.hmcts.reform.ccd.document.am.model.Document.builder()
+        uk.gov.hmcts.reform.ccd.document.am.model.Document.Link binaryLink = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Link();
+        binaryLink.href = expectedBinaryUrl;
+
+        uk.gov.hmcts.reform.ccd.document.am.model.Document.Links links = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Links();
+        links.binary = binaryLink;
+        links.self = selfLink;
+
+        uploadedDocument =   uk.gov.hmcts.reform.ccd.document.am.model.Document.builder()
+                .originalDocumentName(fileName)
+                .classification(Classification.PUBLIC)
+                .hashToken(UUID.randomUUID().toString())
+                .links(links)
                 .build();
-        expectedDocument.links = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Links();
-        expectedDocument.links.self = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Link();
-        expectedDocument.links.binary = new uk.gov.hmcts.reform.ccd.document.am.model.Document.Link();
-        expectedDocument.links.self.href = "self href";
-        expectedDocument.links.binary.href = "binary href";
-        expectedDocument.originalDocumentName = "somefile.txt";
-
-        List<uk.gov.hmcts.reform.ccd.document.am.model.Document> documents = new ArrayList<>();
-        documents.add(expectedDocument);
-
-        UploadResponse uploadResponse = new UploadResponse(documents);
-
-        given(caseDocumentClient.uploadDocuments(eq("some access token"),
-            eq("some token"),
-            eq("Asylum"),
-            eq("IA"),
-            any())).willReturn(uploadResponse);
-
-        // When
-        Document result = documentManagementUploader.upload(resource, "application/text");
-
-        // Then
-        verify(caseDocumentClient, times(1)).uploadDocuments(eq("some access token"),
-            eq("some token"),
-            eq("Asylum"),
-            eq("IA"),
-            any());
-        assertThat(result.getDocumentBinaryUrl()).isEqualTo(expectedDocument.links.binary.href);
-
     }
 
     @Test
-    void should_throw_exception_when_no_document() throws IOException {
-        // Given
-        Resource resource = mock(Resource.class);
-        given(resource.getFilename()).willReturn("somefile.txt");
-        given(resource.getInputStream()).willReturn(new ByteArrayInputStream(new byte[] {}));
+    void should_upload_document_to_document_management_and_return_links() throws IOException {
 
-        List<uk.gov.hmcts.reform.ccd.document.am.model.Document> documents = new ArrayList<>();
+        when(serviceAuthorizationTokenGenerator.generate()).thenReturn(serviceAuthorizationToken);
+        when(userDetails.getAccessToken()).thenReturn(accessToken);
+        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
 
-        UploadResponse uploadResponse = new UploadResponse(documents);
+        when(resource.getFilename()).thenReturn(fileName);
+        when(resource.getInputStream()).thenReturn(resourceInputStream);
 
-        given(caseDocumentClient.uploadDocuments(eq("some access token"),
-            eq("some token"),
-            eq("Asylum"),
-            eq("IA"),
-            any())).willReturn(uploadResponse);
+        when(uploadResponse.getDocuments()).thenReturn(Collections.singletonList(uploadedDocument));
 
-        // When
-        assertThrows(DocumentServiceResponseException.class, () -> {
-            documentManagementUploader.upload(resource,  "application/text");
-        });
+        when(caseDocumentClientApi.uploadDocuments(
+                eq(accessToken),
+                eq(serviceAuthorizationToken),
+                any()
+        )).thenReturn(uploadResponse);
 
-        // Then
-        verify(caseDocumentClient, times(1)).uploadDocuments(eq("some access token"),
-            eq("some token"),
-            eq("Asylum"),
-            eq("IA"),
-            any());
+        final Document actualDocument = documentManagementUploader.upload(
+                resource,
+                classification,
+                caseTypeId,
+                jurisdictionId,
+                contentType
+        );
 
+        assertEquals(fileName, actualDocument.getDocumentFilename());
+        assertEquals(expectedDocumentUrl, actualDocument.getDocumentUrl());
+        assertEquals(expectedBinaryUrl, actualDocument.getDocumentBinaryUrl());
+
+        verify(caseDocumentClientApi, times(1)).uploadDocuments(
+                eq(accessToken),
+                eq(serviceAuthorizationToken),
+                documentUploadRequestCaptor.capture()
+        );
+
+        DocumentUploadRequest documentUploadRequest = documentUploadRequestCaptor.getAllValues().get(0);
+
+        assertNotNull(documentUploadRequest);
+        assertEquals(1, documentUploadRequest.getFiles().size());
+        assertEquals(documentData.length, documentUploadRequest.getFiles().get(0).getBytes().length);
+        assertEquals(classification,documentUploadRequest.getClassification());
+        assertEquals(caseTypeId,documentUploadRequest.getCaseTypeId());
+        assertEquals(jurisdictionId,documentUploadRequest.getJurisdictionId());
     }
-
 }

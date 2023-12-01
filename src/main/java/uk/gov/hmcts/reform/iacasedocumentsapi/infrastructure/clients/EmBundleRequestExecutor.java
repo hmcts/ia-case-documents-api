@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.EmBundleRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -52,7 +53,8 @@ public class EmBundleRequestExecutor {
         headers.set(HttpHeaders.AUTHORIZATION, accessToken);
         headers.set(SERVICE_AUTHORIZATION, serviceAuthorizationToken);
 
-        HttpEntity<Callback<AsylumCase>> requestEntity = new HttpEntity<>(payload, headers);
+        EmBundleRequest<AsylumCase> emBundleRequest = new EmBundleRequest<>(payload);
+        HttpEntity<EmBundleRequest<AsylumCase>> requestEntity = new HttpEntity<>(emBundleRequest, headers);
 
         PreSubmitCallbackResponse<AsylumCase> response;
 

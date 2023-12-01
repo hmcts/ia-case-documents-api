@@ -71,7 +71,8 @@ public class AsylumCaseTest {
                         new Document(
                                 "some-doc-url",
                                 "some-doc-binary-url",
-                                "some-doc-filename"),
+                                "some-doc-filename",
+                            "some-hash"),
                         "some-description"));
 
         asylumCase.write(CASE_ARGUMENT_EVIDENCE, asList(idValue));

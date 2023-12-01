@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.BinaryResourceLoader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.SystemDocumentManagementUploader;
@@ -53,6 +54,9 @@ public class DocumentManagementFilesFixture implements Fixture {
                 Document docStoreDocumentMetadata =
                     documentManagementUploader.upload(
                         documentResource,
+                        Classification.PUBLIC.name(),
+                        "Asylum",
+                        "IA",
                         contentType
                     );
 
@@ -61,6 +65,7 @@ public class DocumentManagementFilesFixture implements Fixture {
                 metadata.put("FIXTURE_" + placeholder + "_URL", docStoreDocumentMetadata.getDocumentUrl());
                 metadata.put("FIXTURE_" + placeholder + "_URL_BINARY", docStoreDocumentMetadata.getDocumentBinaryUrl());
                 metadata.put("FIXTURE_" + placeholder + "_FILENAME", docStoreDocumentMetadata.getDocumentFilename());
+                metadata.put("FIXTURE_" + placeholder + "_HASH", docStoreDocumentMetadata.getDocumentHash());
             });
     }
 

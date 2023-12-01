@@ -6,3 +6,6 @@ docmosis.endpoint: unused
 idam:
   redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
   scope: "openid profile roles"
+
+case_document_am:
+  url: ${CASE_DOCUMENT_AM_URL:http://localhost:4455}

@@ -41,10 +41,10 @@ class DocumentManagementUploaderTest {
         given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
 
         // When
-        documentManagementUploader.upload(null, null);
+        documentManagementUploader.upload(null, null, null, null, null);
 
         // Then
-        verify(cdamDocumentManagementUploader, times(1)).upload(null, null);
+        verify(cdamDocumentManagementUploader, times(1)).upload(null, null, null, null, null);
     }
 
     @Test
@@ -53,7 +53,7 @@ class DocumentManagementUploaderTest {
         given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(false);
 
         // When
-        documentManagementUploader.upload(null, null);
+        documentManagementUploader.upload(null, null, null, null, null);
 
         // Then
         verify(dmDocumentManagementUploader, times(1)).upload(null, null);

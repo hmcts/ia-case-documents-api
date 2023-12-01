@@ -63,7 +63,7 @@ public class UploadSignedDecisionPdfService {
             signedDecisionNoticePdf,
             getSignedDecisionNoticeFilename(bailCase));
 
-        return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
+        return documentUploader.upload(byteArrayResource, null, null, null, PDF_CONTENT_TYPE);
     }
 
     private ByteArrayResource getByteArrayResource(File signedDecisionFinalPdf, String filename) {

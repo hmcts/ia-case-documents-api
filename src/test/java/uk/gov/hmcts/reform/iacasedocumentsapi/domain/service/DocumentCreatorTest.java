@@ -10,14 +10,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
+import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
-public class DocumentCreatorTest {
+class DocumentCreatorTest {
 
     private final String documentContentType = "application/pdf";
     private final String documentFileExtension = "PDF";
@@ -30,19 +30,19 @@ public class DocumentCreatorTest {
 
     @Mock private CaseDetails<CaseData> caseDetails;
     @Mock private CaseDetails<CaseData> caseDetailsBefore;
-    private String qualifiedDocumentFileName = "unique-to-appellant-some-document";
-    private String templateName = "template.docx";
+    private final String qualifiedDocumentFileName = "unique-to-appellant-some-document";
+    private final String templateName = "template.docx";
     @Mock private Map<String, Object> templateFieldValues;
     @Mock private Resource documentResource;
     @Mock private Document expectedDocument;
 
-    private DocumentCreator documentCreator;
+    private DocumentCreator<CaseData> documentCreator;
 
     @BeforeEach
     public void setUp() {
 
         documentCreator =
-            new DocumentCreator(
+            new DocumentCreator<>(
                 documentContentType,
                 documentFileExtension,
                 documentFileName,
@@ -54,7 +54,7 @@ public class DocumentCreatorTest {
     }
 
     @Test
-    public void should_orchestrate_document_creation() {
+    void should_orchestrate_document_creation() {
 
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
         when(documentTemplate.getName()).thenReturn(templateName);
@@ -67,18 +67,19 @@ public class DocumentCreatorTest {
             templateFieldValues
         )).thenReturn(documentResource);
 
-        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+        when(documentUploader.upload(documentResource, Classification.PUBLIC.name(),
+            "Asylum",null,documentContentType)).thenReturn(expectedDocument);
 
         Document actualDocument = documentCreator.create(caseDetails);
 
         assertEquals(expectedDocument, actualDocument);
 
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
-        verify(documentUploader, times(1)).upload(any(), any());
+        verify(documentUploader, times(1)).upload(any(), any(),any(),any(),any());
     }
 
     @Test
-    public void should_orchestrate_amended_document_creation() {
+    void should_orchestrate_amended_document_creation() {
 
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
         when(documentTemplate.getName()).thenReturn(templateName);
@@ -91,13 +92,14 @@ public class DocumentCreatorTest {
             templateFieldValues
         )).thenReturn(documentResource);
 
-        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+        when(documentUploader.upload(documentResource, Classification.PUBLIC.name(),
+            "Asylum",null,documentContentType)).thenReturn(expectedDocument);
 
         Document actualDocument = documentCreator.create(caseDetails, caseDetailsBefore);
 
         assertEquals(expectedDocument, actualDocument);
 
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
-        verify(documentUploader, times(1)).upload(any(), any());
+        verify(documentUploader, times(1)).upload(any(), any(),any(),any(),any());
     }
 }
