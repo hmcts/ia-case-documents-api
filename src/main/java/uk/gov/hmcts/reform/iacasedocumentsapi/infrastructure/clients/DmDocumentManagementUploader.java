@@ -72,16 +72,10 @@ public class DmDocumentManagementUploader {
                     .get(0);
 
             return new Document(
-                uploadedDocument
-                    .links
-                    .self
-                    .href,
-                uploadedDocument
-                    .links
-                    .binary
-                    .href,
-                uploadedDocument
-                    .originalDocumentName
+                uploadedDocument.links.self.href,
+                uploadedDocument.links.binary.href,
+                uploadedDocument.originalDocumentName,
+                null
             );
 
         } catch (IOException e) {

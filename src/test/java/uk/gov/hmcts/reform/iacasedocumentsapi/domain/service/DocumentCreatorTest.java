@@ -69,9 +69,9 @@ public class DocumentCreatorTest {
 
         when(documentUploader.upload(
                 eq(documentResource),
-                anyString(),
-                anyString(),
-                anyString(),
+                any(),
+                any(),
+                any(),
                 eq(documentContentType)
         )).thenReturn(expectedDocument);
 
@@ -82,9 +82,9 @@ public class DocumentCreatorTest {
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
         verify(documentUploader, times(1)).upload(
                 any(),
-                anyString(),
-                anyString(),
-                anyString(),
+                any(),
+                any(),
+                any(),
                 any()
         );
     }
@@ -105,9 +105,9 @@ public class DocumentCreatorTest {
 
         when(documentUploader.upload(
                 eq(documentResource),
-                anyString(),
-                anyString(),
-                anyString(),
+                any(),
+                any(),
+                any(),
                 eq(documentContentType)
         )).thenReturn(expectedDocument);
 
@@ -118,9 +118,9 @@ public class DocumentCreatorTest {
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
         verify(documentUploader, times(1)).upload(
                 any(),
-                anyString(),
-                anyString(),
-                anyString(),
+                any(),
+                any(),
+                any(),
                 any()
         );
     }

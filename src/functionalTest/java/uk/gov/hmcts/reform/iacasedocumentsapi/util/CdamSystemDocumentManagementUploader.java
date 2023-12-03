@@ -60,7 +60,8 @@ public class CdamSystemDocumentManagementUploader {
         return new Document(
             uploadedDocument.links.self.href,
             uploadedDocument.links.binary.href,
-            uploadedDocument.originalDocumentName
+            uploadedDocument.originalDocumentName,
+            uploadedDocument.hashToken
         );
     }
 }

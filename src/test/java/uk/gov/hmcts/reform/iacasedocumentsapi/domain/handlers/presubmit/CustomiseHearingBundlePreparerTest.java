@@ -217,7 +217,12 @@ class CustomiseHearingBundlePreparerTest {
             .thenReturn(customCollections);
 
         DocumentWithMetadata legalDocument = new DocumentWithMetadata(
-            new Document("documentUrl", "binaryUrl", "documentFilename"),
+            new Document(
+                "documentUrl",
+                "binaryUrl",
+                "documentFilename",
+                "documentHash"
+            ),
             "description",
             "dateUploaded",
             DocumentTag.CASE_ARGUMENT
@@ -230,7 +235,12 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue<DocumentWithMetadata>(
                 "2",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document(
+                        "documentUrl",
+                        "binaryUrl",
+                        "documentFilename",
+                        "documentHash"
+                    ),
                     "description",
                     "dateUploaded",
                     DocumentTag.APPEAL_SUBMISSION
@@ -239,7 +249,12 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue<DocumentWithMetadata>(
                 "3",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document(
+                        "documentUrl",
+                        "binaryUrl",
+                        "documentFilename",
+                        "documentHash"
+                    ),
                     "description",
                     "dateUploaded",
                     DocumentTag.CASE_SUMMARY
@@ -247,7 +262,12 @@ class CustomiseHearingBundlePreparerTest {
             ), new IdValue<DocumentWithMetadata>(
                 "4",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document(
+                        "documentUrl",
+                        "binaryUrl",
+                        "documentFilename",
+                        "documentHash"
+                    ),
                     "description",
                     "dateUploaded",
                     DocumentTag.APPEAL_RESPONSE
@@ -288,7 +308,12 @@ class CustomiseHearingBundlePreparerTest {
             .thenReturn(customCollections);
 
         DocumentWithMetadata addendumEvidenceDocuments = new DocumentWithMetadata(
-            new Document("documentUrl", "binaryUrl", "documentFilename"),
+            new Document(
+                "documentUrl",
+                "binaryUrl",
+                "documentFilename",
+                "documentHash"
+            ),
             "description",
             "dateUploaded",
             DocumentTag.ADDENDUM_EVIDENCE,
@@ -302,7 +327,12 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue<DocumentWithMetadata>(
                 "2",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document(
+                        "documentUrl",
+                        "binaryUrl",
+                        "documentFilename",
+                        "documentHash"
+                    ),
                     "description",
                     "dateUploaded",
                     DocumentTag.ADDENDUM_EVIDENCE,
@@ -312,7 +342,12 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue<DocumentWithMetadata>(
                 "3",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document(
+                        "documentUrl",
+                        "binaryUrl",
+                        "documentFilename",
+                        "documentHash"
+                    ),
                     "description",
                     "dateUploaded",
                     DocumentTag.ADDENDUM_EVIDENCE,
@@ -322,7 +357,12 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue<DocumentWithMetadata>(
                 "4",
                 new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
+                    new Document(
+                        "documentUrl",
+                        "binaryUrl",
+                        "documentFilename",
+                        "documentHash"
+                    ),
                     "description",
                     "dateUploaded",
                     DocumentTag.ADDENDUM_EVIDENCE,
@@ -443,16 +483,25 @@ class CustomiseHearingBundlePreparerTest {
 
     private DocumentWithDescription createDocumentWithDescription() {
         return
-            new DocumentWithDescription(new Document("some-url",
-                "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20)), "test");
+            new DocumentWithDescription(
+                new Document(
+                    "some-url",
+                    "some-binary-url",
+                    RandomStringUtils.randomAlphabetic(20),
+                    "some-hash"
+                ),
+                "test"
+            );
     }
 
     private Document createDocument() {
         return
-            new Document("some-url",
+            new Document(
+                "some-url",
                 "some-binary-url",
-                "some-filename");
+                "some-filename",
+                "some-hash"
+            );
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag, String suppliedBy) {
