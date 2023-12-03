@@ -341,6 +341,7 @@ dependencies {
     implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
     implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.4'
     implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'
+    implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'

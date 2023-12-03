@@ -16,6 +16,8 @@ public class DocumentCreator<T extends CaseData> {
     private final DocumentTemplate<T> documentTemplate;
     private final DocumentGenerator documentGenerator;
     private final DocumentUploader documentUploader;
+    public static final String CASE_TYPE_ID = "Asylum";
+    public static final String CLASSIFICATION = "PUBLIC";
 
     public DocumentCreator(
         String documentContentType,
@@ -58,6 +60,12 @@ public class DocumentCreator<T extends CaseData> {
                     .orElse(documentTemplate.mapFieldValues(caseDetails))
             );
 
-        return documentUploader.upload(documentResource, documentContentType);
+        return documentUploader.upload(
+                documentResource,
+                CLASSIFICATION,
+                CASE_TYPE_ID,
+                caseDetails.getJurisdiction(),
+                documentContentType
+        );
     }
 }

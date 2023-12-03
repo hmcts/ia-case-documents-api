@@ -6,7 +6,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 public interface DocumentUploader {
 
     Document upload(
-        Resource resource,
-        String contentType
+            Resource resource,
+            String classification,
+            String caseTypeId,
+            String jurisdictionId,
+            String contentType
     );
 }

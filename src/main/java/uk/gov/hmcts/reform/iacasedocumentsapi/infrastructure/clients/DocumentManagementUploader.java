@@ -16,7 +16,13 @@ public class DocumentManagementUploader implements DocumentUploader {
     private final CdamDocumentManagementUploader cdamDocumentManagementUploader;
 
     @Override
-    public Document upload(Resource resource, String contentType) {
+    public Document upload(
+            Resource resource,
+            String classification,
+            String caseTypeId,
+            String jurisdictionId,
+            String contentType
+    ) {
         if (featureToggler.getValue("use-ccd-document-am", false)) {
             return cdamDocumentManagementUploader.upload(resource, contentType);
         } else {

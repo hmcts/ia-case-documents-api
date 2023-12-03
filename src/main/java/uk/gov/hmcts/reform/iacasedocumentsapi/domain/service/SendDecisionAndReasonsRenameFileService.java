@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CLASSIFICATION;
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +56,13 @@ public class SendDecisionAndReasonsRenameFileService {
             finalDecisionAndReasonsPdf,
             getDecisionAndReasonsFilename(asylumCase));
 
-        return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
+        return documentUploader.upload(
+                byteArrayResource,
+                CLASSIFICATION,
+                CASE_TYPE_ID,
+                asylumCase.getJurisdiction(),
+                PDF_CONTENT_TYPE
+        );
     }
 
     private ByteArrayResource getByteArrayResource(Resource finalDecisionAndReasonsPdf, String filename) {
