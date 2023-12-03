@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
@@ -66,7 +67,13 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
         when(documentDownloadClient.download(binaryDocumentUrl))
                 .thenReturn(finalDecisionAndReasonsResource);
 
-        when(documentUploader.upload(any(ByteArrayResource.class), eq("application/pdf")))
+        when(documentUploader.upload(
+                any(ByteArrayResource.class),
+                anyString(),
+                anyString(),
+                anyString(),
+                eq("application/pdf")
+        ))
                 .thenReturn(uploadedDocument);
 
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
@@ -80,7 +87,13 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
         verify(documentDownloadClient, times(1))
             .download(binaryDocumentUrl);
         verify(documentUploader, times(1))
-            .upload(any(ByteArrayResource.class), eq("application/pdf"));
+            .upload(
+                    any(ByteArrayResource.class),
+                    anyString(),
+                    anyString(),
+                    anyString(),
+                    eq("application/pdf")
+            );
         verify(caseDetails.getCaseData(),times(1)).write(FINAL_DECISION_AND_REASONS_PDF,uploadedDecisionAndReasonsPdf);
 
     }

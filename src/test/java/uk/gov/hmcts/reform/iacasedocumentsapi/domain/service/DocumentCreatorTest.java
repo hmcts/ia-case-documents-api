@@ -67,14 +67,26 @@ public class DocumentCreatorTest {
             templateFieldValues
         )).thenReturn(documentResource);
 
-        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+        when(documentUploader.upload(
+                eq(documentResource),
+                anyString(),
+                anyString(),
+                anyString(),
+                eq(documentContentType)
+        )).thenReturn(expectedDocument);
 
         Document actualDocument = documentCreator.create(caseDetails);
 
         assertEquals(expectedDocument, actualDocument);
 
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
-        verify(documentUploader, times(1)).upload(any(), any());
+        verify(documentUploader, times(1)).upload(
+                any(),
+                anyString(),
+                anyString(),
+                anyString(),
+                any()
+        );
     }
 
     @Test
@@ -91,13 +103,25 @@ public class DocumentCreatorTest {
             templateFieldValues
         )).thenReturn(documentResource);
 
-        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+        when(documentUploader.upload(
+                eq(documentResource),
+                anyString(),
+                anyString(),
+                anyString(),
+                eq(documentContentType)
+        )).thenReturn(expectedDocument);
 
         Document actualDocument = documentCreator.create(caseDetails, caseDetailsBefore);
 
         assertEquals(expectedDocument, actualDocument);
 
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
-        verify(documentUploader, times(1)).upload(any(), any());
+        verify(documentUploader, times(1)).upload(
+                any(),
+                anyString(),
+                anyString(),
+                anyString(),
+                any()
+        );
     }
 }

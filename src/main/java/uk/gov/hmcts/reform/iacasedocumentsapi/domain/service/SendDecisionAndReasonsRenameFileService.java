@@ -36,14 +36,15 @@ public class SendDecisionAndReasonsRenameFileService {
 
     public Document updateDecisionAndReasonsFileName(CaseDetails<AsylumCase> caseDetails) {
 
-        Document finalPdf = createFinalPdf(caseDetails.getCaseData());
+        Document finalPdf = createFinalPdf(caseDetails);
 
         caseDetails.getCaseData().write(FINAL_DECISION_AND_REASONS_PDF, finalPdf);
 
         return finalPdf;
     }
 
-    private Document createFinalPdf(AsylumCase asylumCase) {
+    private Document createFinalPdf(CaseDetails<AsylumCase> caseDetails) {
+        AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document finalDecisionAndReasonsDoc = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class)
             .orElseThrow(
@@ -60,7 +61,7 @@ public class SendDecisionAndReasonsRenameFileService {
                 byteArrayResource,
                 CLASSIFICATION,
                 CASE_TYPE_ID,
-                asylumCase.getJurisdiction(),
+                caseDetails.getJurisdiction(),
                 PDF_CONTENT_TYPE
         );
     }

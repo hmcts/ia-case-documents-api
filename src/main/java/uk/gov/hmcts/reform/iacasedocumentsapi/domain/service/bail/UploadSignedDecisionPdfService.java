@@ -15,9 +15,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CASE_TYPE_ID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CLASSIFICATION;
-
 @Service
 public class UploadSignedDecisionPdfService {
 
@@ -68,9 +65,9 @@ public class UploadSignedDecisionPdfService {
 
         return documentUploader.upload(
                 byteArrayResource,
-                CLASSIFICATION,
-                CASE_TYPE_ID,
-                bailCase.getJurisdiction(),
+                null,
+                null,
+                null,
                 PDF_CONTENT_TYPE
         );
     }
