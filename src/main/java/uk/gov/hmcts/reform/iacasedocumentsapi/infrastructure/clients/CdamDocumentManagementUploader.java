@@ -58,9 +58,10 @@ public class CdamDocumentManagementUploader {
             Collections.singletonList(file)
         );
 
-        uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = uploadResponse.getDocuments()
-                                                                                  .stream().findFirst().orElseThrow(() ->
-                                                                                                                        new DocumentServiceResponseException("Document cannot be uploaded, please try again"));
+        uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = 
+                uploadResponse.getDocuments().stream().findFirst().orElseThrow(
+                        () -> new DocumentServiceResponseException("Document cannot be uploaded, please try again")
+                );
 
         return new Document(
             uploadedDocument.links.self.href,
