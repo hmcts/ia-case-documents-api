@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import com.google.common.io.ByteStreams;
 import java.util.Collections;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
  */
 @Component
 @ComponentScan("uk.gov.hmcts.reform.ccd.document.am.feign")
+@Slf4j
 public class CdamDocumentManagementUploader {
 
     private final CaseDocumentClient caseDocumentClient;
@@ -62,6 +64,14 @@ public class CdamDocumentManagementUploader {
                 uploadResponse.getDocuments().stream().findFirst().orElseThrow(
                         () -> new DocumentServiceResponseException("Document cannot be uploaded, please try again")
                 );
+
+        log.info(
+            "Uploaded document: {}, {}, {}, {}",
+            uploadedDocument.links.self.href,
+            uploadedDocument.links.binary.href,
+            uploadedDocument.originalDocumentName,
+            uploadedDocument.hashToken
+        );
 
         return new Document(
             uploadedDocument.links.self.href,

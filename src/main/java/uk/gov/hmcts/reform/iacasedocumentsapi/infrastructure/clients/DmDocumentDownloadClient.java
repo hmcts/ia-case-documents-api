@@ -4,6 +4,8 @@ import static java.lang.String.join;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessToke
  */
 @Component
 @Deprecated
+@Slf4j
 public class DmDocumentDownloadClient {
 
     private final DocumentDownloadClientApi documentDownloadClientApi;
@@ -39,7 +42,6 @@ public class DmDocumentDownloadClient {
     }
 
     public Resource download(String documentBinaryUrl) {
-
         URL url;
 
         try {
@@ -50,12 +52,24 @@ public class DmDocumentDownloadClient {
 
         UserDetails userDetails = userDetailsProvider.getUserDetails();
 
+        String serviceAuth = serviceAuthTokenGenerator.generate();
+
+        log.info(
+            "Downloading document: userAuth {}, serviceAuth {}, userId {}, uri {}, binaryUri {}",
+            accessTokenProvider.getAccessToken(),
+            serviceAuth,
+            userDetails.getId(),
+            url.getPath().substring(1),
+            documentBinaryUrl
+        );
+
         ResponseEntity<Resource> resourceResponseEntity = documentDownloadClientApi.downloadBinary(
             accessTokenProvider.getAccessToken(),
-            serviceAuthTokenGenerator.generate(),
+            serviceAuth,
             join(",", userDetails.getRoles()),
             userDetails.getId(),
-            url.getPath().substring(1));
+            url.getPath().substring(1)
+        );
 
         Resource documentResource = resourceResponseEntity.getBody();
 
