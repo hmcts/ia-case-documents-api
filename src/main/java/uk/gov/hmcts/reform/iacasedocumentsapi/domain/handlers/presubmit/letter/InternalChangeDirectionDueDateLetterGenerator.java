@@ -1,9 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_PARTIES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -50,7 +48,8 @@ public class InternalChangeDirectionDueDateLetterGenerator implements PreSubmitC
                && Event.CHANGE_DIRECTION_DUE_DATE == event
                && isInternalCase(asylumCase)
                && isAppellantInDetention(asylumCase)
-               && isDirectionPartyAppellantOrAppellantRespondent(asylumCase);
+               && (isDirectionPartyValid(asylumCase, Parties.APPELLANT_AND_RESPONDENT)
+                || isDirectionPartyValid(asylumCase, Parties.APPELLANT));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -74,11 +73,5 @@ public class InternalChangeDirectionDueDateLetterGenerator implements PreSubmitC
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
-    }
-
-    private boolean isDirectionPartyAppellantOrAppellantRespondent(AsylumCase asylumCase) {
-        return asylumCase.read(DIRECTION_EDIT_PARTIES, Parties.class)
-                .map(Parties -> Parties.equals(Parties.APPELLANT) || Parties.equals(Parties.APPELLANT_AND_RESPONDENT))
-                .orElse(false);
     }
 }
