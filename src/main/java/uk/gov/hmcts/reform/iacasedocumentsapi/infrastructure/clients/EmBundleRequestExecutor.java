@@ -43,13 +43,14 @@ public class EmBundleRequestExecutor {
         final Callback<AsylumCase> payload,
         final String endpoint
     ) {
-
         requireNonNull(payload, "payload must not be null");
         requireNonNull(endpoint, "endpoint must not be null");
 
         final String serviceAuthorizationToken = serviceAuthTokenGenerator.generate();
         final UserDetails userDetails = userDetailsProvider.getUserDetails();
         final String accessToken = userDetails.getAccessToken();
+
+        log.info("Posting EM Bundle Request: caseID {}", payload.getCaseDetails().getId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -72,17 +73,15 @@ public class EmBundleRequestExecutor {
                         new ParameterizedTypeReference<PreSubmitCallbackResponse<AsylumCase>>() {
                         }
                     ).getBody();
-
         } catch (RestClientResponseException e) {
-
             throw new DocumentServiceResponseException(
                 "Couldn't create bundle using API: " + endpoint,
                 e
             );
         }
 
+        log.info("Posted EM Bundle Request: caseID {}", payload.getCaseDetails().getId());
+
         return response;
-
     }
-
 }
