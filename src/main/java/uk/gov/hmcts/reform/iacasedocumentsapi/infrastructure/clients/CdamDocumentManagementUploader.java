@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
-import com.google.common.io.ByteStreams;
-import java.util.Collections;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +14,10 @@ import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+
+import static java.util.Collections.singletonList;
+
+import static com.google.common.io.ByteStreams.toByteArray;
 
 /**
  * This class supersedes DMDocumentManagementUploader. Its usage is driven by a feature flag.
@@ -49,7 +51,7 @@ public class CdamDocumentManagementUploader {
             resource.getFilename(),
             resource.getFilename(),
             contentType,
-            ByteStreams.toByteArray(resource.getInputStream())
+            toByteArray(resource.getInputStream())
         );
 
         UploadResponse uploadResponse = caseDocumentClient.uploadDocuments(
@@ -57,7 +59,7 @@ public class CdamDocumentManagementUploader {
             serviceAuthorizationToken,
             "Asylum",
             "IA",
-            Collections.singletonList(file)
+            singletonList(file)
         );
 
         uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = 
