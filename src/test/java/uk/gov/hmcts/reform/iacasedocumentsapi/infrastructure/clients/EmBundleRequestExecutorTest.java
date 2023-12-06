@@ -24,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.EmBundleRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 
@@ -40,6 +41,7 @@ class EmBundleRequestExecutorTest {
     @Mock private RestTemplate restTemplate;
     @Mock private UserDetailsProvider userDetailsProvider;
     @Mock private UserDetails userDetails;
+    @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private Callback<AsylumCase> callback;
     @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
     @Mock private ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> responseEntity;
@@ -56,6 +58,7 @@ class EmBundleRequestExecutorTest {
         when(serviceAuthTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
         when(userDetails.getAccessToken()).thenReturn(ACCESS_TOKEN);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
     }
 
     @Test
@@ -69,11 +72,13 @@ class EmBundleRequestExecutorTest {
                 )
         ).thenReturn(responseEntity);
         when(responseEntity.getBody()).thenReturn(callbackResponse);
+
         PreSubmitCallbackResponse<AsylumCase> response =
                 emBundleRequestExecutor.post(
                         callback,
                         ENDPOINT
                 );
+
         assertThat(response).isNotNull().isEqualTo(callbackResponse);
         ArgumentCaptor<HttpEntity> requestEntityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
         verify(restTemplate).exchange(
