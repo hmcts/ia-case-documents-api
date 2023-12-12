@@ -23,7 +23,6 @@ public class AppealDecisionTest {
 
     @Test
     public void throws_when_trying_to_create_from_invalid_value() {
-
         assertThatThrownBy(() -> AppealDecision.from("invalid-value"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("invalid-value not an AppealDecision");
