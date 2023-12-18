@@ -662,8 +662,3 @@ ia:
   config:
     validator:
       secret: ${IA_CONFIG_VALIDATOR_SECRET:}
-
-ia:
-  config:
-    validator:
-      secret: ${IA_CONFIG_VALIDATOR_SECRET:}
