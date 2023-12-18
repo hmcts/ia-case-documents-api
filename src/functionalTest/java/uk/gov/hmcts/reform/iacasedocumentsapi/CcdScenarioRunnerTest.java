@@ -4,16 +4,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.StreamSupport;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.RetryableException;
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.StreamSupport;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +69,6 @@ public class CcdScenarioRunnerTest {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
     }
 
     @Test
@@ -82,8 +81,8 @@ public class CcdScenarioRunnerTest {
         }
 
         assertFalse(
-                "Verifiers are configured",
-                verifiers.isEmpty()
+            "Verifiers are configured",
+            verifiers.isEmpty()
         );
 
         String scenarioPattern = System.getProperty("scenario");
@@ -345,17 +344,6 @@ public class CcdScenarioRunnerTest {
                 .getSystemAuthorization();
         }
 
-        if ("HomeOfficeLart".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                    .getHomeOfficeLartAuthorization();
-        }
-
-        if ("HomeOfficePOU".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                    .getHomeOfficePouAuthorization();
-        }
         return new Headers();
     }
 }
