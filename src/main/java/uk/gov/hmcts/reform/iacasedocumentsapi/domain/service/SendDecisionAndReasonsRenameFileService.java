@@ -2,41 +2,37 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.io.File;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
 @Service
-public class SendDecisionAndReasonsPdfService {
+public class SendDecisionAndReasonsRenameFileService {
 
     private static final String PDF_CONTENT_TYPE = "application/pdf";
 
     private final DocumentDownloadClient documentDownloadClient;
     private final DocumentUploader documentUploader;
-    private final WordDocumentToPdfConverter wordDocumentToPdfConverter;
     private final String decisionAndReasonsFinalPdfFilename;
 
-    public SendDecisionAndReasonsPdfService(
+    public SendDecisionAndReasonsRenameFileService(
         DocumentDownloadClient documentDownloadClient,
         DocumentUploader documentUploader,
-        WordDocumentToPdfConverter wordDocumentToPdfConverter,
         @Value("${decisionAndReasonsFinalPdf.fileName}") String decisionAndReasonsFinalPdfFilename
     ) {
         this.documentDownloadClient = documentDownloadClient;
         this.documentUploader = documentUploader;
-        this.wordDocumentToPdfConverter = wordDocumentToPdfConverter;
         this.decisionAndReasonsFinalPdfFilename = decisionAndReasonsFinalPdfFilename;
     }
 
-    public Document generatePdf(CaseDetails<AsylumCase> caseDetails) {
+    public Document updateDecisionAndReasonsFileName(CaseDetails<AsylumCase> caseDetails) {
 
         Document finalPdf = createFinalPdf(caseDetails.getCaseData());
 
@@ -51,11 +47,8 @@ public class SendDecisionAndReasonsPdfService {
             .orElseThrow(
                 () -> new IllegalStateException("finalDecisionAndReasonsDocument must be present"));
 
-        Resource resource =
+        Resource finalDecisionAndReasonsPdf =
             documentDownloadClient.download(finalDecisionAndReasonsDoc.getDocumentBinaryUrl());
-
-        File finalDecisionAndReasonsPdf =
-            wordDocumentToPdfConverter.convertResourceToPdf(resource);
 
         ByteArrayResource byteArrayResource = getByteArrayResource(
             finalDecisionAndReasonsPdf,
@@ -64,12 +57,12 @@ public class SendDecisionAndReasonsPdfService {
         return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
     }
 
-    private ByteArrayResource getByteArrayResource(File finalDecisionAndReasonsPdf, String filename) {
+    private ByteArrayResource getByteArrayResource(Resource finalDecisionAndReasonsPdf, String filename) {
 
         byte[] byteArray;
 
         try {
-            byteArray = FileUtils.readFileToByteArray(finalDecisionAndReasonsPdf);
+            byteArray = StreamUtils.copyToByteArray(finalDecisionAndReasonsPdf.getInputStream());
 
         } catch (IOException e) {
             throw new IllegalStateException("Error reading converted decision and reasons pdf");
