@@ -28,7 +28,7 @@ public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implem
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
         withDefaults(server);
-        addStitchingBundleStub(server);
+        addNewStitchingBundleStub(server);
 
         someLoggedIn(userWith()
             .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))
@@ -60,7 +60,7 @@ public class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implem
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
         withDefaults(server);
-        addStitchingBundleError400Stub(server);
+        addNewStitchingBundleError400Stub(server);
 
         someLoggedIn(userWith()
             .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))

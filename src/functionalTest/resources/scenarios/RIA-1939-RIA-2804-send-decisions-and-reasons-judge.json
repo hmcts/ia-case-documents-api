@@ -13,9 +13,9 @@
           "legalRepReferenceNumber": "some-legal-rep-reference",
           "isDecisionAllowed": "allowed",
           "finalDecisionAndReasonsDocument": {
-            "document_url": "{$FIXTURE_DOC3_DOC_URL}",
-            "document_binary_url": "{$FIXTURE_DOC3_DOC_URL_BINARY}",
-            "document_filename": "{$FIXTURE_DOC3_DOC_FILENAME}"
+            "document_url": "{$FIXTURE_DOC3_PDF_URL}",
+            "document_binary_url": "{$FIXTURE_DOC3_PDF_URL_BINARY}",
+            "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}"
           },
           "draftDecisionAndReasonsDocuments": [
             {

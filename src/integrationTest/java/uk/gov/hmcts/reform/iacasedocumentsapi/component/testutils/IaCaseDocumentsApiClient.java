@@ -36,9 +36,7 @@ public class IaCaseDocumentsApiClient {
                         .header("ServiceAuthorization", SERVICE_JWT_TOKEN)
                         .content(objectMapper.writeValueAsString(callback.build()))
                         .contentType(APPLICATION_JSON_VALUE)
-                )
-                .andReturn();
-
+                ).andReturn();
             return objectMapper.readValue(
                 response.getResponse().getContentAsString(),
                 PreSubmitCallbackResponseForTest.class

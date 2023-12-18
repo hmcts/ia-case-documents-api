@@ -25,7 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentSer
 class SendDecisionAndReasonsOrchestratorTest {
 
     @Mock private DocumentHandler documentHandler;
-    @Mock private SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
+    @Mock private SendDecisionAndReasonsRenameFileService sendDecisionAndReasonsPdfService;
     @Mock private SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -47,7 +47,7 @@ class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    void throws_and_skips_document_conversion_if_cover_letter_null() {
+    void throws_and_skips_document_update_if_cover_letter_null() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenReturn(null);
 
@@ -63,7 +63,7 @@ class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    void throws_and_skips_document_conversion_if_cover_letter_fails_with_exception() {
+    void throws_and_skips_document_update_if_cover_letter_fails_with_exception() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails)).thenThrow(
             DocumentServiceResponseException.class);
@@ -79,12 +79,12 @@ class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    void throws_and_fails_with_exception_when_pdf_generation_returns_null() {
+    void throws_and_fails_with_exception_when_decision_and_reasons_file_is_null() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(null);
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
@@ -103,7 +103,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenThrow(RuntimeException.class);
 
         assertThatThrownBy(() -> sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails))
@@ -116,12 +116,12 @@ class SendDecisionAndReasonsOrchestratorTest {
     }
 
     @Test
-    void attaches_new_documents_and_when_cover_letter_and_pdf_generated() {
+    void attaches_new_documents_and_when_cover_letter_generated_and_pdf_name_updated() {
 
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
@@ -163,7 +163,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);
@@ -206,7 +206,7 @@ class SendDecisionAndReasonsOrchestratorTest {
         when(sendDecisionAndReasonsCoverLetterService.create(caseDetails))
             .thenReturn(coverLetter);
 
-        when(sendDecisionAndReasonsPdfService.generatePdf(caseDetails))
+        when(sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .thenReturn(pdf);
 
         sendDecisionAndReasonsOrchestrator.sendDecisionAndReasons(caseDetails);

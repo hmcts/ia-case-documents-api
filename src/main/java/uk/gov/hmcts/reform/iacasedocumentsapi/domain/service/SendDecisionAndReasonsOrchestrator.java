@@ -16,12 +16,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 public class SendDecisionAndReasonsOrchestrator {
 
     private final DocumentHandler documentHandler;
-    private final SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService;
+    private final SendDecisionAndReasonsRenameFileService sendDecisionAndReasonsPdfService;
     private final SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService;
 
     public SendDecisionAndReasonsOrchestrator(
         DocumentHandler documentHandler,
-        SendDecisionAndReasonsPdfService sendDecisionAndReasonsPdfService,
+        SendDecisionAndReasonsRenameFileService sendDecisionAndReasonsPdfService,
         SendDecisionAndReasonsCoverLetterService sendDecisionAndReasonsCoverLetterService
     ) {
         this.documentHandler = documentHandler;
@@ -40,7 +40,7 @@ public class SendDecisionAndReasonsOrchestrator {
                 "Cover letter creation failed");
 
             Document finalDecisionAndReasonsPdf =
-                sendDecisionAndReasonsPdfService.generatePdf(caseDetails);
+                sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails);
 
             requireNonNull(finalDecisionAndReasonsPdf, "Document to pdf conversion failed");
 

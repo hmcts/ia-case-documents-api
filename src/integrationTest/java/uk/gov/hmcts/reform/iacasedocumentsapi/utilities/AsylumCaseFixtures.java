@@ -111,6 +111,38 @@ public class AsylumCaseFixtures {
                "}\n";
     }
 
+    public static String someAmUploadResponse() {
+        return "{\n"
+                +
+                "    \"documents\": [\n"
+                +
+                "      {\n"
+                +
+                "        \"originalDocumentName\": \"some-appeal-reference-number-some-fname-decision-and-reasons-draft.docx\",\n"
+                +
+                "        \"links\": {\n"
+                +
+                "          \"self\": {\n"
+                +
+                "            \"href\": \"\"\n"
+                +
+                "          },\n"
+                +
+                "          \"binary\": {\n"
+                +
+                "            \"href\": \"\"\n"
+                +
+                "          }\n"
+                +
+                "      }\n"
+                +
+                "    }\n"
+                +
+                "    ]\n"
+                +
+                "}\n";
+    }
+
     public static String someUserDetails() {
         return "{\n"
                + "  \"sub\": \"ia-caseofficer@fake.hmcts.net\",\n"
