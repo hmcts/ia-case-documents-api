@@ -12,6 +12,7 @@ properties([
 ])
 
 @Library("Infrastructure")
+import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
 def product = "ia"
@@ -31,6 +32,8 @@ def secrets = [
 
         secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
         secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
+        secret('system-username', 'SYSTEM_USERNAME'),
+        secret('system-password', 'SYSTEM_PASSWORD'),
 
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),
@@ -56,6 +59,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+GradleBuilder builder = new GradleBuilder(this, product)
+
 withNightlyPipeline(type, product, component) {
     env.TEST_URL = params.URL_TO_TEST
     env.Rules = params.SecurityRules
@@ -65,6 +70,7 @@ withNightlyPipeline(type, product, component) {
     env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.CASE_DOCUMENT_AM_URL = "http://ccd-case-document-am-api-aat.service.core-compute-aat.internal"
     env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_URL = "http://em-ccd-orchestrator-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
@@ -77,4 +83,74 @@ withNightlyPipeline(type, product, component) {
     enableSlackNotifications('#ia-tech')
     enableFullFunctionalTest()
 
+    afterAlways('DependencyCheckNightly') {
+        publishHTML([
+        allowMissing         : true,
+        alwaysLinkToLastBuild: true,
+        keepAll              : true,
+        reportDir            : "build/reports",
+        reportFiles          : 'dependency-check-report.html',
+        reportName           : 'Dependency Check Report'
+        ])
+    }
+    
+    before('fullFunctionalTest') {
+        try {
+            builder.gradle('smoke')
+            builder.gradle('test')
+            builder.gradle('integration')
+        } finally {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/test",
+                    reportFiles          : "index.html",
+                    reportName           : "Unit Test Report"
+            ]
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/smoke",
+                    reportFiles          : "index.html",
+                    reportName           : "Smoke Test Report"
+            ]
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/integration",
+                    reportFiles          : "index.html",
+                    reportName           : "Integration Test Report"
+            ]
+            junit '**/test-results/**/*.xml'
+        }
+    }
+
+    afterAlways('mutationTest') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/pitest",
+                reportFiles          : 'index.html',
+                reportName           : 'IAC Timed Event Service Mutation Test Report'
+        ])
+    }
+
+    afterAlways('fullFunctionalTest') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/functional",
+                reportFiles          : 'index.html',
+                reportName           : 'Functional Test Report'
+        ])
+
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/**/*'
+    }
 }

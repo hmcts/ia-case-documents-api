@@ -1,9 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.RetryableException;
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import java.io.IOException;
@@ -13,12 +16,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.StreamSupport;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
@@ -27,7 +31,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 
@@ -37,15 +43,28 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 public class CcdScenarioRunnerTest {
 
     @Value("${targetInstance}") private String targetInstance;
-
+    @Autowired FeatureToggler featureToggler;
     @Autowired private Environment environment;
     @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
     @Autowired private MapValueExpander mapValueExpander;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private List<Fixture> fixtures;
     @Autowired private List<Verifier> verifiers;
+    @MockBean RequestUserAccessTokenProvider requestUserAccessTokenProvider;
 
-    @Before
+    @BeforeEach
+    void authenticateMe() {
+        String accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertNotNull(accessToken);
+        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
+    }
+
+    @BeforeEach
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
@@ -83,81 +102,87 @@ public class CcdScenarioRunnerTest {
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
 
         for (String scenarioSource : scenarioSources) {
+            for (int i = 0; i < 3; i++) {
+                try {
+                    Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
 
-            Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                    String description = MapValueExtractor.extract(scenario, "description");
 
-            String description = MapValueExtractor.extract(scenario, "description");
+                    Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
+                    boolean scenarioEnabledFlag = true;
+                    if (scenarioEnabled instanceof String) {
+                        scenarioEnabledFlag = Boolean.parseBoolean((String) scenarioEnabled);
+                    }
 
-            Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
-            boolean scenarioEnabledFlag = true;
-            if (scenarioEnabled instanceof String) {
-                scenarioEnabledFlag = Boolean.parseBoolean((String) scenarioEnabled);
+                    Object scenarioDisabled = MapValueExtractor.extract(scenario, "disabled");
+                    boolean scenarioDisabledFlag = false;
+                    if (scenarioDisabled instanceof String) {
+                        scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
+                    }
+
+                    if (!scenarioEnabledFlag || scenarioDisabledFlag) {
+                        System.out.println((char) 27 + "[31m" + "SCENARIO: " + description + " **disabled**");
+                        continue;
+                    }
+
+                    System.out.println((char) 27 + "[33m" + "SCENARIO: " + description);
+
+                    Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
+
+                    final long testCaseId = MapValueExtractor.extractOrDefault(
+                        scenario,
+                        "request.input.id",
+                        ThreadLocalRandom.current().nextInt(1, 9999999 + 1)
+
+                    );
+
+                    final String requestBody = buildCallbackBody(
+                        testCaseId,
+                        MapValueExtractor.extract(scenario, "request.input"),
+                        templatesByFilename
+                    );
+
+                    final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
+                    final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
+                    final int expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
+
+                    String actualResponseBody =
+                        SerenityRest
+                            .given()
+                            .headers(authorizationHeaders)
+                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                            .body(requestBody)
+                            .when()
+                            .post(requestUri)
+                            .peek()
+                            .then()
+                            .statusCode(expectedStatus)
+                            .and()
+                            .extract()
+                            .body()
+                            .asString();
+
+                    String expectedResponseBody = buildCallbackResponseBody(
+                        MapValueExtractor.extract(scenario, "expectation"),
+                        templatesByFilename
+                    );
+
+                    Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
+                    Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
+
+                    verifiers.forEach(verifier ->
+                        verifier.verify(
+                            testCaseId,
+                            scenario,
+                            expectedResponse,
+                            actualResponse
+                        )
+                    );
+                    break;
+                } catch (Error | RetryableException e) {
+                    System.out.println("Scenario failed with error " + e.getMessage());
+                }
             }
-
-            Object scenarioDisabled = MapValueExtractor.extract(scenario, "disabled");
-            boolean scenarioDisabledFlag = false;
-            if (scenarioDisabled instanceof String) {
-                scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
-            }
-
-            if (!scenarioEnabledFlag || scenarioDisabledFlag) {
-                System.out.println((char) 27 + "[31m" + "SCENARIO: " + description + " **disabled**");
-                continue;
-            }
-
-            System.out.println((char) 27 + "[33m" + "SCENARIO: " + description);
-
-            Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
-
-            final long testCaseId = MapValueExtractor.extractOrDefault(
-                scenario,
-                "request.input.id",
-                ThreadLocalRandom.current().nextInt(1, 9999999 + 1)
-
-            );
-
-            final String requestBody = buildCallbackBody(
-                testCaseId,
-                MapValueExtractor.extract(scenario, "request.input"),
-                templatesByFilename
-            );
-
-            final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
-            final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
-            final int expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
-
-            String actualResponseBody =
-                SerenityRest
-                    .given()
-                    .headers(authorizationHeaders)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                    .body(requestBody)
-                    .when()
-                    .post(requestUri)
-                    .peek()
-                    .then()
-                    .statusCode(expectedStatus)
-                    .and()
-                    .extract()
-                    .body()
-                    .asString();
-
-            String expectedResponseBody = buildCallbackResponseBody(
-                MapValueExtractor.extract(scenario, "expectation"),
-                templatesByFilename
-            );
-
-            Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
-            Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
-
-            verifiers.forEach(verifier ->
-                verifier.verify(
-                    testCaseId,
-                    scenario,
-                    expectedResponse,
-                    actualResponse
-                )
-            );
         }
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
@@ -311,6 +336,12 @@ public class CcdScenarioRunnerTest {
 
             return authorizationHeadersProvider
                 .getJudgeAuthorization();
+        }
+
+        if ("System".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getSystemAuthorization();
         }
 
         return new Headers();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.SystemDocumentManagementUploa
 public class DocumentManagementFilesFixture implements Fixture {
 
     private static Map<String, String> metadata = new HashMap<>();
+
 
     @Autowired private SystemDocumentManagementUploader documentManagementUploader;
 

@@ -38,7 +38,8 @@ def secrets = [
         secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
 
         secret('app-insights-connection-string', 'app-insights-connection-string'),
-
+        secret('system-username', 'SYSTEM_USERNAME'),
+        secret('system-password', 'SYSTEM_PASSWORD'),
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
         secret('gov-call-charges-url', 'IA_BAIL_GOV_CALL_CHARGES_URL')
@@ -62,6 +63,7 @@ withPipeline(type, product, component) {
     env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.CASE_DOCUMENT_AM_URL = "http://ccd-case-document-am-api-aat.service.core-compute-aat.internal"
     env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_URL = "http://em-ccd-orchestrator-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
@@ -77,6 +79,11 @@ withPipeline(type, product, component) {
 
     afterSuccess('functionalTest:aat') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
+
+    afterAlways('test') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/tests/**'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/pmd/**'
     }
 
     enableSlackNotifications('#ia-tech')
