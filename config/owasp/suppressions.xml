@@ -31,6 +31,11 @@
         <cve>CVE-2023-44487</cve>
         <cve>CVE-2023-42795</cve>
         <cve>CVE-2023-45648</cve>
+        <cve>CVE-2023-6481</cve>
+        <cve>CVE-2023-34055</cve>
+        <cve>CVE-2023-33202</cve>
+        <cve>CVE-2023-46589</cve>
+        <cve>CVE-2023-6378</cve>
     </suppress>
     <suppress until="2024-01-31">
         <notes>Suppress until org.springframework.cloud, service-auth-provider-client, document-management-client and cd-case-document-am-cli upgrade their org.bouncycastle dependents</notes>
