@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
-import static java.util.Objects.requireNonNull;
-
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,11 +9,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class HomeOfficeReinstateAppealPersonalisation implements EmailNotificationPersonalisation {
@@ -24,6 +25,7 @@ public class HomeOfficeReinstateAppealPersonalisation implements EmailNotificati
     private final String homeOfficeReinstateAppealAfterListingTemplateId;
     private final String apcHomeOfficeEmailAddress;
     private final String lartHomeOfficeEmailAddress;
+    private final String endAppealEmailAddresses;
     private final CustomerServicesProvider customerServicesProvider;
     private final AppealService appealService;
     private final String iaExUiFrontendUrl;
@@ -37,6 +39,7 @@ public class HomeOfficeReinstateAppealPersonalisation implements EmailNotificati
             @Value("${govnotify.template.reinstateAppeal.homeOffice.afterListing.email}") String homeOfficeReinstateAppealAfterListingTemplateId,
             @Value("${apcHomeOfficeEmailAddress}") String apcHomeOfficeEmailAddress,
             @Value("${lartHomeOfficeEmailAddress}") String lartHomeOfficeEmailAddress,
+            @Value("${endAppealHomeOfficeEmailAddress}") String endAppealEmailAddresses,
             @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
             CustomerServicesProvider customerServicesProvider,
             AppealService appealService,
@@ -46,6 +49,7 @@ public class HomeOfficeReinstateAppealPersonalisation implements EmailNotificati
         this.homeOfficeReinstateAppealAfterListingTemplateId = homeOfficeReinstateAppealAfterListingTemplateId;
         this.apcHomeOfficeEmailAddress = apcHomeOfficeEmailAddress;
         this.lartHomeOfficeEmailAddress = lartHomeOfficeEmailAddress;
+        this.endAppealEmailAddresses = endAppealEmailAddresses;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;
         this.appealService = appealService;
@@ -73,10 +77,15 @@ public class HomeOfficeReinstateAppealPersonalisation implements EmailNotificati
             return Collections.emptySet();
         }
 
-        if (Arrays.asList(
+        if (isAppealListed(asylumCase)) {
+            return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
+        } else if (Arrays.asList(
                 State.APPEAL_SUBMITTED,
                 State.PENDING_PAYMENT,
-                State.AWAITING_RESPONDENT_EVIDENCE).contains(stateBeforeEndAppeal)) {
+                State.REASONS_FOR_APPEAL_SUBMITTED,
+                State.AWAITING_RESPONDENT_EVIDENCE,
+                State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
+                State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED).contains(stateBeforeEndAppeal)) {
             return Collections.singleton(apcHomeOfficeEmailAddress);
         } else if (Arrays.asList(
                     State.CASE_BUILDING,
@@ -85,18 +94,8 @@ public class HomeOfficeReinstateAppealPersonalisation implements EmailNotificati
                     State.SUBMIT_HEARING_REQUIREMENTS,
                     State.LISTING).contains(stateBeforeEndAppeal)) {
             return Collections.singleton(lartHomeOfficeEmailAddress);
-        } else if (
-                Arrays.asList(State.ADJOURNED,
-                        State.PREPARE_FOR_HEARING,
-                        State.FINAL_BUNDLING,
-                        State.PRE_HEARING,
-                        State.DECISION,
-                        State.DECIDED,
-                        State.FTPA_SUBMITTED,
-                        State.FTPA_DECIDED).contains(stateBeforeEndAppeal)) {
-            return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
         } else {
-            throw new IllegalStateException("homeOffice email Address cannot be found");
+            return Collections.singleton(endAppealEmailAddresses);
         }
     }
 
@@ -125,5 +124,12 @@ public class HomeOfficeReinstateAppealPersonalisation implements EmailNotificati
                 .put("reinstatedDecisionMaker", asylumCase.read(AsylumCaseDefinition.REINSTATED_DECISION_MAKER, String.class).orElse(""))
                 .put("linkToOnlineService", iaExUiFrontendUrl)
                 .build();
+    }
+
+    protected boolean isAppealListed(AsylumCase asylumCase) {
+        final Optional<HearingCentre> appealListed = asylumCase
+                .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+
+        return appealListed.isPresent();
     }
 }
