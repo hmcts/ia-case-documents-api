@@ -265,13 +265,13 @@ public class AuthorizationHeadersProvider {
         tokenRequestForm.add("redirect_uri", idamRedirectUrl);
         tokenRequestForm.add("client_id", idamClientId);
         tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("IA_SYSTEM_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("IA_SYSTEM_PASSWORD"));
+        tokenRequestForm.add("username", System.getenv("SYSTEM_USERNAME"));
+        tokenRequestForm.add("password", System.getenv("SYSTEM_PASSWORD"));
         tokenRequestForm.add("scope", userScope);
 
         String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
         String accessToken = tokens.computeIfAbsent(
-                "SystemUser",
+                "System",
                 user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
         );
 
