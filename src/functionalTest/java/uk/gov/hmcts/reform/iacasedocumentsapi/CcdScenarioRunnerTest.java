@@ -69,7 +69,6 @@ public class CcdScenarioRunnerTest {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
     }
 
     @Test
