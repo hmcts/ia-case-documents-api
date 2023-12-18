@@ -2,6 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>hmcts/.github:renovate-config"],
   "labels": ["dependencies"],
+  "ignoreDeps": [
+    "ch.qos.logback:logback-core",
+    "ch.qos.logback:logback-classic",
+    "org.apache.logging.log4j:log4j-to-slf4j",
+    "org.apache.logging.log4j:log4j-api",
+    "checkstyle",
+    "io.rest-assured:rest-assured",
+    "io.rest-assured:rest-assured-all"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": [

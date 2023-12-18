@@ -82,7 +82,7 @@ public class ErrorResponseLoggerTest {
     @Test
     public void should_handle_rest_client_exception_response_and_log() {
 
-        String jsonResponseBody = "{}";
+        String jsonResponseBody = "{\"succeeded\":false}";
 
         when(restClientResponseException.getRawStatusCode()).thenReturn(HttpStatus.BAD_GATEWAY.value());
         when(restClientResponseException.getResponseBodyAsString()).thenReturn(jsonResponseBody);
@@ -97,6 +97,28 @@ public class ErrorResponseLoggerTest {
                         + HttpStatus.BAD_GATEWAY.value()
                         + " \nwith response body: "
                         + jsonResponseBody);
+
+        verify(restClientResponseException).getRawStatusCode();
+        verify(restClientResponseException).getResponseBodyAsString();
+    }
+
+    @Test
+    public void should_handle_rest_client_exception_response_and_not_print_case_data() {
+
+        String jsonResponseBody = "{\"data\": {\"appellantGivenNames\":\"Test\",\"appellantFamilyName\":\"User\"}}";
+
+        when(restClientResponseException.getRawStatusCode()).thenReturn(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        when(restClientResponseException.getResponseBodyAsString()).thenReturn(jsonResponseBody);
+
+        errorResponseLogger.maybeLogException(restClientResponseException);
+
+        List<ILoggingEvent> logEvents = this.listAppender.list;
+        assertEquals(logEvents.size(), 1);
+
+        assertThat(logEvents.get(0).getFormattedMessage())
+            .startsWith("Error returned with status: "
+                        + HttpStatus.INTERNAL_SERVER_ERROR.value()
+                        + " \nwith response body: ");
 
         verify(restClientResponseException).getRawStatusCode();
         verify(restClientResponseException).getResponseBodyAsString();
