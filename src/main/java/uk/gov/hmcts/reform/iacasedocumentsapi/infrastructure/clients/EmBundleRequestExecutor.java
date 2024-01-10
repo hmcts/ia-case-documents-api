@@ -67,6 +67,8 @@ public class EmBundleRequestExecutor {
                         }
                     ).getBody();
 
+             LOG.info("(EmBundleRequestExecutor) Data from response returned: {}", response.getData());
+
         } catch (RestClientResponseException e) {
 
             throw new DocumentServiceResponseException(

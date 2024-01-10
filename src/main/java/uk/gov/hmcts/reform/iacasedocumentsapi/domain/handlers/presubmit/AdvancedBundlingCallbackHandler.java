@@ -106,6 +106,14 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
         //stictchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
         final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
 
+        if("FAILED".equalsIgnoreCase(stitchStatus))
+        {
+            String allStitchSatuses = caseBundles.stream().map(bundle -> bundle.getStitchStatus().orElse("<empty>"))
+                    .collect(Collectors.joining(","));
+            LOG.warn("A stitching failure was reported for case {}. Stitch statuses are: {}", callback.getCaseDetails().getId(), allStitchSatuses);
+        }
+
+
         responseData.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
         return new PreSubmitCallbackResponse<>(responseData);
