@@ -597,7 +597,10 @@ public enum AsylumCaseDefinition {
         "reinstateAppealReason", new TypeReference<String>(){}),
 
     REINSTATED_DECISION_MAKER(
-        "reinstatedDecisionMaker", new TypeReference<String>(){});
+        "reinstatedDecisionMaker", new TypeReference<String>(){}),
+
+    ADJOURN_HEARING_WITHOUT_DATE_REASONS(
+        "adjournHearingWithoutDateReasons", new TypeReference<String>() {});
 
     private final String value;
     private final TypeReference typeReference;
