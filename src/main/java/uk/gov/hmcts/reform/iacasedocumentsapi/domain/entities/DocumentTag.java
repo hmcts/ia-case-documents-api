@@ -75,8 +75,7 @@ public enum DocumentTag {
     INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER("internalNonStandardDirectionToRespondentLetter", CaseType.ASYLUM),
     INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER("internalHoChangeDirectionDueDateLetter", CaseType.ASYLUM),
     INTERNAL_REINSTATE_APPEAL_LETTER("internalReinstateAppealLetter", CaseType.ASYLUM),
-    INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER("internalAdjournHearingWithoutDateLetter", CaseType.ASYLUM),
-
+    INTERNAL_ADJOURN_HEARING_WITHOUT_DATE("internalAdjournHearingWithoutDate", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),

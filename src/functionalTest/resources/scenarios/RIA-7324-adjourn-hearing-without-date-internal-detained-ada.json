@@ -47,7 +47,7 @@
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalAdjournHearingWithoutDateLetter"
+              "tag": "internalAdjournHearingWithoutDate"
             }
           }
         ]

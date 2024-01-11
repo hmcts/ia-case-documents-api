@@ -76,7 +76,7 @@ class InternalDetainedAdjournHearingWithoutDateLetterGeneratorTest {
             asylumCase,
             uploadedDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER
+            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE
         );
     }
 
@@ -102,7 +102,7 @@ class InternalDetainedAdjournHearingWithoutDateLetterGeneratorTest {
                 asylumCase,
                 uploadedDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER
+                DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE
         );
     }
 

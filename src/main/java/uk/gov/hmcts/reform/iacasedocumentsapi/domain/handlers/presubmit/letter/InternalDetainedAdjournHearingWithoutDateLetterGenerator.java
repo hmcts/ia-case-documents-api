@@ -15,7 +15,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
@@ -68,17 +67,10 @@ public class InternalDetainedAdjournHearingWithoutDateLetterGenerator implements
         Document letter = adjournHearingWithoutDateDocumentCreator.create(caseDetails, caseDetailsBefore);
 
         documentHandler.addWithMetadata(
-                asylumCase,
-                letter,
-                LEGAL_REPRESENTATIVE_DOCUMENTS,
-                DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER
-        );
-
-       documentHandler.addWithMetadata(
             asylumCase,
             letter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER
+            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
