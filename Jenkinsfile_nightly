@@ -77,7 +77,7 @@ withNightlyPipeline(type, product, component) {
     env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
 
     loadVaultSecrets(secrets)
-
+    enableFortifyScan()
     enableSecurityScan()
     enableMutationTest()
     enableSlackNotifications('#ia-tech')
@@ -92,6 +92,18 @@ withNightlyPipeline(type, product, component) {
         reportFiles          : 'dependency-check-report.html',
         reportName           : 'Dependency Check Report'
         ])
+    }
+
+    afterAlways('fortify-scan') {
+        publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "Fortify Scan",
+                reportFiles          : "FortifyScanReport.html",
+                reportName           : "Fortify Scan Report"
+        ]
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
     
     before('fullFunctionalTest') {
