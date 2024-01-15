@@ -1,7 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +61,31 @@ public class DocumentCreatorTest {
 
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
         when(documentTemplate.getName()).thenReturn(templateName);
+        when(documentTemplate.mapFieldValues(caseDetails)).thenReturn(templateFieldValues);
+
+        when(documentGenerator.generate(
+            qualifiedDocumentFileName,
+            documentFileExtension,
+            templateName,
+            templateFieldValues
+        )).thenReturn(documentResource);
+
+        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+
+        Document actualDocument = documentCreator.create(caseDetails);
+
+        assertEquals(expectedDocument, actualDocument);
+
+        verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
+        verify(documentUploader, times(1)).upload(any(), any());
+    }
+
+    @Test
+    public void should_orchestrate_document_creation_for_multiple_template_options() {
+
+        when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
+        when(documentTemplate.getName()).thenReturn(null);
+        when(documentTemplate.getName(caseDetails)).thenReturn(templateName);
         when(documentTemplate.mapFieldValues(caseDetails)).thenReturn(templateFieldValues);
 
         when(documentGenerator.generate(

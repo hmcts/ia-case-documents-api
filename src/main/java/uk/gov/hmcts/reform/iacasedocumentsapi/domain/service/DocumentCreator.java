@@ -46,7 +46,10 @@ public class DocumentCreator<T extends CaseData> {
         CaseDetails<T> caseDetailsBefore
     ) {
         final String qualifiedDocumentFileName = fileNameQualifier.get(documentFileName, caseDetails);
-        final String templateName = documentTemplate.getName();
+        String templateName = documentTemplate.getName();
+        if (templateName == null) {
+            templateName = documentTemplate.getName(caseDetails);
+        }
 
         Resource documentResource =
             documentGenerator.generate(

@@ -7,7 +7,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 
 public interface DocumentTemplate<T extends CaseData> {
 
-    String getName();
+    default String getName() {
+        return null;
+    }
+
+    default String getName(CaseDetails<T> caseDetails ) {
+        return getName();
+    }
 
     default Map<String, Object> mapFieldValues(
         CaseDetails<T> caseDetails

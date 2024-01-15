@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseFileNameQualifier;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseFileNameWithCaseIdQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
@@ -104,6 +105,27 @@ public class BailDocumentCreatorConfiguration {
         @Value("${bailEndApplication.fileName}") String fileName,
         BailCaseFileNameQualifier fileNameQualifier,
         BailEndApplicationTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("bailNoticeOfHearing")
+    public DocumentCreator<BailCase> getBailNoticeOfHearingCreator(
+        @Value("${bailNoticeOfHearing.contentType}") String contentType,
+        @Value("${bailNoticeOfHearing.fileExtension}") String fileExtension,
+        @Value("${bailNoticeOfHearing.fileName}") String fileName,
+        BailCaseFileNameWithCaseIdQualifier fileNameQualifier,
+        BailNoticeOfHearingTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
