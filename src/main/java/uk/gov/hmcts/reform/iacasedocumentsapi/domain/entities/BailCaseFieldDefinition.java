@@ -48,9 +48,9 @@ public enum BailCaseFieldDefinition {
     APPEAL_REFERENCE_NUMBER(
         "appealReferenceNumber", new TypeReference<String>(){}),
     HAS_APPEAL_HEARING_PENDING_UT(
-            "hasAppealHearingPendingUT", new TypeReference<String>(){}),
+            "hasAppealHearingPendingUt", new TypeReference<String>(){}),
     UT_APPEAL_REFERENCE_NUMBER(
-            "appealReferenceNumberUT", new TypeReference<String>(){}),
+            "utAppealReferenceNumber", new TypeReference<String>(){}),
     HAS_PREVIOUS_BAIL_APPLICATION(
         "hasPreviousBailApplication", new TypeReference<String>(){}),
     PREVIOUS_BAIL_APPLICATION_NUMBER(
