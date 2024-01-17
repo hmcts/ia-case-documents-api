@@ -125,6 +125,21 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 break;
         }
 
+        fieldValues.put("hasAppealHearingPendingUT", bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class).orElse(""));
+        switch (bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class).orElse("")) {
+            case "YesWithoutAppealNumber":
+                fieldValues.put("hasAppealHearingPendingUT", "Yes Without Appeal Number");
+                break;
+            case "DontKnow":
+                fieldValues.put("hasAppealHearingPendingUT", "Don't Know");
+                break;
+            case "Yes" :
+                fieldValues.put("appealReferenceNumberUT", bailCase.read(UT_APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
+                break;
+            default:
+                break;
+        }
+
         fieldValues.put("applicantHasAddress", bailCase.read(APPLICANT_HAS_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO));
         if (bailCase.read(APPLICANT_HAS_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
             Optional<AddressUk> optionalApplicantAddress = bailCase.read(APPLICANT_ADDRESS, AddressUk.class);

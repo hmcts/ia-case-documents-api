@@ -48,7 +48,10 @@ public class BailSubmissionTemplateTest {
     private String prisonName = "Aylesbury";
     private String applicantArrivalInUkDate = "2001-02-22";
     private String hasAppealHearingPending = "Yes";
+    private String hasAppealHearingPendingUT = "Yes";
     private String appealReferenceNumber = "8989889";
+    private String appealReferenceNumberUT = "8989853";
+
     private String hasPreviousBailApplication = "Yes";
     private String supporterGivenNames = "Supporter1";
     private String supporterFamilyNames = "Family";
@@ -152,6 +155,15 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class)).thenReturn(Optional.of("No"));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
         assertFalse(fieldValuesMap.containsKey("appealReferenceNumber"));
+    }
+
+
+    @Test
+    void should_not_set_previous_appeal_ut_reference_if_not_present() {
+        dataSetUp();
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class)).thenReturn(Optional.of("No"));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        assertFalse(fieldValuesMap.containsKey("appealReferenceNumberUT"));
     }
 
     @Test
@@ -395,6 +407,7 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("applicantDetainedLoc"));
         assertTrue(fieldValuesMap.containsKey("applicantArrivalInUKDate"));
         assertTrue(fieldValuesMap.containsKey("hasAppealHearingPending"));
+        assertTrue(fieldValuesMap.containsKey("hasAppealHearingPendingUT"));
         assertTrue(fieldValuesMap.containsKey("applicantHasAddress"));
         assertTrue(fieldValuesMap.containsKey("applicantAddress"));
         assertTrue(fieldValuesMap.containsKey("hasPreviousBailApplication"));
@@ -501,6 +514,8 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(APPLICANT_ARRIVAL_IN_UK, String.class)).thenReturn(Optional.of(applicantArrivalInUkDate));
         when(bailCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class)).thenReturn(Optional.of(hasAppealHearingPending));
+        when(bailCase.read(UT_APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumberUT));
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class)).thenReturn(Optional.of(hasAppealHearingPendingUT));
         when(bailCase.read(APPLICANT_GENDER, String.class)).thenReturn(Optional.of(applicantGender));
         when(bailCase.read(APPLICANT_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of(hasPreviousBailApplication));
