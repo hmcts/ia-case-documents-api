@@ -11,7 +11,7 @@ public interface DocumentTemplate<T extends CaseData> {
         return null;
     }
 
-    default String getName(CaseDetails<T> caseDetails ) {
+    default String getName(CaseDetails<T> caseDetails) {
         return getName();
     }
 

@@ -55,7 +55,7 @@ public class BailNoticeOfHearingCreator implements PreSubmitCallbackHandler<Bail
 
         Document bailDocument = bailDocumentCreator.create(caseDetails);
 
-        bailDocumentHandler.addWithMetadata(
+        bailDocumentHandler.appendWithMetadata(
             bailCase,
             bailDocument,
             HEARING_DOCUMENTS,

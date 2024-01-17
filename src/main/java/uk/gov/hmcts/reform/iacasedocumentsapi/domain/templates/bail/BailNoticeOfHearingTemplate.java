@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantDetainedLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -46,10 +47,7 @@ public class BailNoticeOfHearingTemplate implements DocumentTemplate<BailCase> {
     }
 
     public String getName(CaseDetails<BailCase> caseDetails) {
-        BailCase bailCase = caseDetails.getCaseData();
-        ListingEvent listingEvent = bailCase.read(LISTING_EVENT, ListingEvent.class).orElse(null);
-
-        return ListingEvent.RELISTING == listingEvent
+        return isRelistingEvent(caseDetails)
             ? relistingTemplateName
             : initialListingTemplateName;
     }
@@ -61,15 +59,14 @@ public class BailNoticeOfHearingTemplate implements DocumentTemplate<BailCase> {
         final BailCase bailCase = caseDetails.getCaseData();
         final Map<String, Object> fieldValues = new HashMap<>();
         final String listingHearingDate = bailCase.read(LISTING_HEARING_DATE, String.class).orElse("");
-        final String legalRepReference = bailCase.read(LEGAL_REP_REFERENCE, String.class).orElse("");
 
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("applicantGivenNames", bailCase.read(APPLICANT_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("applicantFamilyName", bailCase.read(APPLICANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("OnlineCaseReferenceNumber", bailCase.read(BAIL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", bailCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("legalRepReference", legalRepReference);
-        fieldValues.put("applicantDetainedLoc", bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse(""));
+        fieldValues.put("legalRepReference", bailCase.read(LEGAL_REP_REFERENCE, String.class).orElse(""));
+        fieldValues.put("applicantDetainedLoc", getApplicantDetainedLocation(bailCase));
         fieldValues.put("applicantPrisonDetails", bailCase.read(APPLICANT_PRISON_DETAILS, String.class).orElse(""));
         fieldValues.put("hearingCentreAddress", getListinglocationAddress(bailCase));
         fieldValues.put("hearingDate", formatDateForRendering(listingHearingDate));
@@ -108,7 +105,23 @@ public class BailNoticeOfHearingTemplate implements DocumentTemplate<BailCase> {
             .replaceAll(",\\s*", "\n");
     }
 
+    private String getApplicantDetainedLocation(BailCase bailCase) {
+        String location = bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse("");
+        if (isNullOrEmptyString(location)) {
+            return "";
+        }
+
+        return ApplicantDetainedLocation.from(location).map(ApplicantDetainedLocation::getLocation).orElse("");
+    }
+
     private boolean isNullOrEmptyString(String str) {
         return str == null || str.isBlank();
+    }
+
+    private boolean isRelistingEvent(CaseDetails<BailCase> caseDetails) {
+        BailCase bailCase = caseDetails.getCaseData();
+        ListingEvent listingEvent = bailCase.read(LISTING_EVENT, ListingEvent.class).orElse(null);
+
+        return ListingEvent.RELISTING == listingEvent;
     }
 }

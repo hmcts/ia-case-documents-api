@@ -333,7 +333,7 @@ public enum BailCaseFieldDefinition {
     LISTING_LOCATION("listingLocation", new TypeReference<String>(){}),
     LISTING_HEARING_DATE("listingHearingDate", new TypeReference<String>(){}),
     HEARING_DOCUMENTS(
-        "hearingDocuments", new TypeReference<ListingEvent>(){})
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){})
     ;
 
     private final String value;

@@ -44,8 +44,10 @@ class BailNoticeOfHearingTemplateTest {
     private final String applicantFamilyName = "Smith";
     private final String homeOfficeReferenceNumber = "123654";
     private final String bailReferenceNumber = "5555-5555-5555-9999";
-    private final String applicantDetainedLoc = "applicantDetainedLoc";
+    private final String applicantDetainedLoc = "immigrationRemovalCentre";
     private final String applicantPrisonDetails = "applicantPrisonDetails";
+    private final String customerServicesEmail = "customer@services.com";
+    private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
 
     private final String relistingTemplateName = "TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx";
@@ -81,17 +83,16 @@ class BailNoticeOfHearingTemplateTest {
     void should_be_tolerant_of_missing_data() {
         dataSetUp();
 
-        when(caseDetails.getCaseData()).thenReturn(bailCase);
         fieldValuesMap = bailNoticeOfHearingTemplate.mapFieldValues(caseDetails);
 
         checkCommonFields();
     }
 
     @Test
-    void should_correctly_set_available_fields() {
+    void should_correctly_set_fields() {
         final String hearingDate = "12012024";
         final String hearingTime = "1500";
-        final String listingAddress = "nottingham\tNottingham Justice Centre\n"
+        final String listingAddress = "Nottingham Justice Centre\n"
                                       + "Carrington Street\n"
                                       + "Nottingham\n"
                                       + "NG2 1EE";
@@ -104,11 +105,13 @@ class BailNoticeOfHearingTemplateTest {
         assertEquals(bailReferenceNumber, fieldValuesMap.get("OnlineCaseReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReference, fieldValuesMap.get("legalRepReference"));
-        assertEquals(applicantDetainedLoc, fieldValuesMap.get("applicantDetainedLoc"));
+        assertEquals("Immigration removal centre", fieldValuesMap.get("applicantDetainedLoc"));
         assertEquals(applicantPrisonDetails, fieldValuesMap.get("applicantPrisonDetails"));
         assertEquals(listingAddress, fieldValuesMap.get("hearingCentreAddress"));
         assertEquals(hearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(hearingTime, fieldValuesMap.get("hearingTime"));
+        assertEquals(customerServicesEmail, fieldValuesMap.get("customerServicesEmail"));
+        assertEquals(customerServicesPhone, fieldValuesMap.get("customerServicesTelephone"));
     }
 
     private void checkCommonFields() {
@@ -141,8 +144,9 @@ class BailNoticeOfHearingTemplateTest {
         when(bailCase.read(LISTING_LOCATION, String.class)).thenReturn(Optional.of(listingLocation));
         when(bailCase.read(LISTING_HEARING_DATE, String.class)).thenReturn(Optional.of(listingHearingDate));
         when(stringProvider.get("hearingCentreAddress", listingLocation))
-            .thenReturn(Optional.of(
-                "nottingham	Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
+            .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
+        when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
+        when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesPhone);
     }
 
 }

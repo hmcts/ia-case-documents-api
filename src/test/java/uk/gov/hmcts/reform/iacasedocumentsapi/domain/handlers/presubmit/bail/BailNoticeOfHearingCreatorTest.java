@@ -71,7 +71,7 @@ class BailNoticeOfHearingCreatorTest {
         assertNotNull(response);
         assertEquals(bailCase, response.getData());
         verify(bailDocumentHandler, times(1))
-            .addWithMetadata(bailCase, bailNoticeOfHearingDocument,
+            .appendWithMetadata(bailCase, bailNoticeOfHearingDocument,
                 BailCaseFieldDefinition.HEARING_DOCUMENTS, DocumentTag.BAIL_NOTICE_OF_HEARING);
     }
 
