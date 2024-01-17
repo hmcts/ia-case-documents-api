@@ -67,8 +67,6 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
 
-hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
-
 remoteHearingNoticeDocument.contentType: application/pdf
 remoteHearingNoticeDocument.fileExtension: PDF
 remoteHearingNoticeDocument.fileName: "hearing-notice"
@@ -94,37 +92,6 @@ hearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 hearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
 hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641.docx}
 
-adaHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
-adaHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
-adaHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-ADA-0002.docx}
-
-adaSuitabilityDocument.contentType: application/pdf
-adaSuitabilityDocument.fileExtension: PDF
-adaSuitabilityDocument.fileName: "ADA-suitability-decision"
-adaSuitabilityDocument.templateName: ${IA_ADA_SUITABILITY_TEMPLATE:TB-IAC-DEC-ENG-00001.docx}
-
-adaInternalSuitabilityReviewSuitableDocument.contentType: application/pdf
-adaInternalSuitabilityReviewSuitableDocument.fileExtension: PDF
-adaInternalSuitabilityReviewSuitableDocument.fileName: "ADA-Appellant-letter-suitability-decision-suitable"
-adaInternalSuitabilityReviewSuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_SUITABLE_TEMPLATE:TB-IAC-DEC-ENG-00003.docx}
-
-adaInternalSuitabilityReviewUnsuitableDocument.contentType: application/pdf
-adaInternalSuitabilityReviewUnsuitableDocument.fileExtension: PDF
-adaInternalSuitabilityReviewUnsuitableDocument.fileName: "ADA-Appellant-letter-suitability-decision-unsuitable"
-adaInternalSuitabilityReviewUnsuitableDocument.templateName: ${IA_ADA_INTERNAL_SUITABILITY_UNSUITABLE_TEMPLATE:TB-IAC-DEC-ENG-00005.docx}
-
-internalAdaRequestBuildCaseDocument.contentType: application/pdf
-internalAdaRequestBuildCaseDocument.fileExtension: PDF
-internalAdaRequestBuildCaseDocument.fileName: "ADA appellant letter-appeal reasons"
-internalAdaRequestBuildCaseDocument.templateName: ${IA_INTERNAL_ADA_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00002.docx}
-internalAdaRequestBuildCaseDocument.hearingSupportResponseDueInWorkingDays: 15
-
-internalDetainedRequestBuildCaseDocument.contentType: application/pdf
-internalDetainedRequestBuildCaseDocument.fileExtension: PDF
-internalDetainedRequestBuildCaseDocument.fileName: "Appellant letter-detained-appeal reasons"
-internalDetainedRequestBuildCaseDocument.templateName: ${IA_INTERNAL_DETAINED_BUILD_CASE_TEMPLATE:TB-IAC-DEC-ENG-00009.docx}
-
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
@@ -140,35 +107,15 @@ decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
 
-internalDetainedDecisionsAndReasonsAllowedLetter.contentType: application/pdf
-internalDetainedDecisionsAndReasonsAllowedLetter.fileExtension: PDF
-internalDetainedDecisionsAndReasonsAllowedLetter.fileName: "ADA-Appellant-letter-appeal-decided-allowed"
-internalDetainedDecisionsAndReasonsAllowedLetter.templateName: ${IA_ADA_INTERNAL_DECISIONS_AND_REASONS_ALLOWED_TEMPLATE:TB-IAC-DEC-ENG-00006.docx}
-internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueInWorkingDays: 7
-internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueCalendarDays: 14
-
 aipDecisionAndReasonsCoverLetter.contentType:  application/pdf
 aipDecisionAndReasonsCoverLetter.fileExtension: PDF
 aipDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 aipDecisionAndReasonsCoverLetter.templateName: ${IA_AIP_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00807.docx}
 
-internalAdaDecisionsAndReasonsDismissedLetter.contentType: application/pdf
-internalAdaDecisionsAndReasonsDismissedLetter.fileExtension: PDF
-internalAdaDecisionsAndReasonsDismissedLetter.fileName: "ADA-Appellant-letter-appeal-decided-dismissed"
-internalAdaDecisionsAndReasonsDismissedLetter.templateName: ${IA_ADA_INTERNAL_DECISIONS_AND_REASONS_DISMISSED_TEMPLATE:TB-IAC-DEC-ENG-00008.docx}
-internalDetainedDecisionsAndReasonsDismissedLetter.templateName: ${IA_DET_INTERNAL_DECISIONS_AND_REASONS_DISMISSED_TEMPLATE:TB-IAC-DEC-ENG-00011.docx}
-internalAdaDecisionsAndReasonsDismissedLetter.ftpaDueInWorkingDays: 7
-internalDetainedDecisionsAndReasonsDismissedLetter.ftpaDueCalendarDays: 14
-
 decisionAndReasonsFinalPdf.fileName: "Decision-and-reasons-FINAL"
 
 hearingBundle.fileExtension: PDF
 hearingBundle.fileName: "hearing-bundle"
-
-internalAdaHearingBundle.contentType: application/pdf
-internalAdaHearingBundle.fileExtension: PDF
-internalAdaHearingBundle.fileName: "ADA appellant hearing bundle"
-internalAdaHearingBundle.templateName: ${IA_INTERNAL_ADA_HEARING_BUNDLE_TEMPLATE:TB-IAC-DEC-ENG-00007.docx}
 
 appealSkeletonBundle.fileExtension: PDF
 appealSkeletonBundle.fileName: "appeal-skeleton-argument"
@@ -218,230 +165,11 @@ decisionUnsignedDocument.refusal.templateName: ${IA_BAIL_DECISION_REFUSAL_TEMPLA
 
 decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 
-hoReviewEvidenceLetter.contentType: application/pdf
-hoReviewEvidenceLetter.fileExtension: PDF
-hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
-hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
-
-uploadAppealResponseMaintainedLetter.contentType: application/pdf
-uploadAppealResponseMaintainedLetter.fileExtension: PDF
-uploadAppealResponseMaintainedLetter.fileName: "HO-Response-Letter"
-uploadAppealResponseMaintainedLetter.templateName: ${IA_HO_REVIEW_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00004.docx}
-
-internalDetainedReviewHomeOfficeResponseMaintainedLetter.contentType: application/pdf
-internalDetainedReviewHomeOfficeResponseMaintainedLetter.fileExtension: PDF
-internalDetainedReviewHomeOfficeResponseMaintainedLetter.fileName: "Detained appellant letter_HO response when decision maintained"
-internalDetainedReviewHomeOfficeResponseMaintainedLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_MAINTAINED_TEMPLATE:TB-IAC-DEC-ENG-00013.doc}
-internalDetainedReviewHomeOfficeResponseMaintainedLetter.dueCalendarDays: 5
-
-internalDetainedReviewHomeOfficeResponseWithdrawnLetter.contentType: application/pdf
-internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileExtension: PDF
-internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileName: "Detained appellant letter_HO response when decision withdrawn"
-internalDetainedReviewHomeOfficeResponseWithdrawnLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_WITHDRAWN_TEMPLATE:TB-IAC-LET-ENG-00014.docx}
 
 bailEndApplication.contentType:  application/pdf
 bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
 bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
-
-internalAppealSubmissionDocument.contentType: application/pdf
-internalAppealSubmissionDocument.fileExtension: PDF
-internalAppealSubmissionDocument.fileName: "appeal-form"
-internalAppealSubmissionDocument.templateName: ${IA_INTERNAL_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-DEC-ENG-00010.docx}
-
-internalAppealCanProceedDocument.contentType: application/pdf
-internalAppealCanProceedDocument.fileExtension: PDF
-internalAppealCanProceedDocument.fileName: "appeal-form"
-internalAppealCanProceedDocument.templateName: ${IA_INTERNAL_APPEAL_CAN_PROCEED_TEMPLATE:TB-IAC-DEC-ENG-00012.docx}
-
-internalDetainedRequestRespondentEvidence.contentType:  application/pdf
-internalDetainedRequestRespondentEvidence.fileExtension: PDF
-internalDetainedRequestRespondentEvidence.fileName: "detained-appellant-request-respondent-evidence-notice"
-internalDetainedRequestRespondentEvidence.templateName: ${IA_INTERNAL_DETAINED_REQUEST_RESPONDENT_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00010.docx}
-
-internalDetainedEndAppealAutomatically.contentType:  application/pdf
-internalDetainedEndAppealAutomatically.fileExtension: PDF
-internalDetainedEndAppealAutomatically.fileName: "detained-appellant-end-appeal-automaticaly-notice"
-internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003.docx}
-
-internalDetainedAppealFeeDue.contentType:  application/pdf
-internalDetainedAppealFeeDue.fileExtension: PDF
-internalDetainedAppealFeeDue.fileName: "internal-detained-appeal-fee-is-due-letter"
-internalDetainedAppealFeeDue.templateName: ${IA_INTERNAL_DETAINED_APPEAL_FEE_IS_DUE_TEMPLATE:TB-IAC-LET-ENG-00001.docx}
-
-internalDetainedMarkAppealPaid.contentType:  application/pdf
-internalDetainedMarkAppealPaid.fileExtension: PDF
-internalDetainedMarkAppealPaid.fileName: "detained-appellant-mark-appeal-paid-notice"
-internalDetainedMarkAppealPaid.templateName: ${IA_INTERNAL_DETAINED_MARK_APPEAL_PAID_TEMPLATE:TB-IAC-LET-ENG-00004.docx}
-
-internalDetainedListCaseLetter.contentType: application/pdf
-internalDetainedListCaseLetter.fileExtension: PDF
-internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
-internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
-
-internalDetainedRequestHearingRequirements.contentType:  application/pdf
-internalDetainedRequestHearingRequirements.fileExtension: PDF
-internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"
-internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_REQUEST_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-LET-ENG-00006.docx}
-
-internalDetainedEndAppeal.contentType:  application/pdf
-internalDetainedEndAppeal.fileExtension: PDF
-internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
-internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
-
-internalDetainedEditCaseListingLetter.contentType: application/pdf
-internalDetainedEditCaseListingLetter.fileExtension: PDF
-internalDetainedEditCaseListingLetter.fileName: "detained-appellant-edit-case-listing-letter"
-internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
-
-internalMarkAppealAsAda.contentType:  application/pdf
-internalMarkAppealAsAda.fileExtension: PDF
-internalMarkAppealAsAda.fileName: "detained-appellant-mark-as-ada-notice"
-internalMarkAppealAsAda.templateName: ${IA_INTERNAL_MARK_APPEAL_AS_ADA_TEMPLATE:TB-IAC-LET-ENG-00008.docx}
-
-internalDecideAnAppellantApplicationDecisionGrantedLetter.contentType: application/pdf
-internalDecideAnAppellantApplicationDecisionGrantedLetter.fileExtension: PDF
-internalDecideAnAppellantApplicationDecisionGrantedLetter.fileName: "appellant-letter-application-granted"
-internalDecideAnAppellantApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00015.docx}
-
-internalDecideHomeOfficeApplicationDecisionGrantedLetter.contentType: application/pdf
-internalDecideHomeOfficeApplicationDecisionGrantedLetter.fileExtension: PDF
-internalDecideHomeOfficeApplicationDecisionGrantedLetter.fileName: "respondent-letter-application-granted"
-internalDecideHomeOfficeApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00024.docx}
-
-internalDecideAnAppellantApplicationDecisionRefusedLetter.contentType: application/pdf
-internalDecideAnAppellantApplicationDecisionRefusedLetter.fileExtension: PDF
-internalDecideAnAppellantApplicationDecisionRefusedLetter.fileName: "appellant-letter-application-refused"
-internalDecideAnAppellantApplicationDecisionRefusedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPLICATION_DECISION_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00016.docx}
-
-internalDecideHomeOfficeApplicationDecisionRefusedLetter.contentType: application/pdf
-internalDecideHomeOfficeApplicationDecisionRefusedLetter.fileExtension: PDF
-internalDecideHomeOfficeApplicationDecisionRefusedLetter.fileName: "respondent-letter-application-refused"
-internalDecideHomeOfficeApplicationDecisionRefusedLetter.templateName: ${IA_INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_DECISION_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00025.docx}
-
-internalDetainedApplyForFtpaRespondentLetter.contentType: application/pdf
-internalDetainedApplyForFtpaRespondentLetter.fileExtension: PDF
-internalDetainedApplyForFtpaRespondentLetter.fileName: "apply-for-ftpa-respondent-letter"
-internalDetainedApplyForFtpaRespondentLetter.templateName: ${IA_INTERNAL_DETAINED_APPLY_FOR_FTPA_RESPONDENT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00009.docx}
-
-internalDetainedTransferOutOfAdaLetter.contentType: application/pdf
-internalDetainedTransferOutOfAdaLetter.fileExtension: PDF
-internalDetainedTransferOutOfAdaLetter.fileName: "detained-appellant-transferred-out-of-ada"
-internalDetainedTransferOutOfAdaLetter.templateName: ${IA_INTERNAL_DETAINED_TRANSFERRED_OUT_OF_ADA_LETTER_TEMPLATE:TB-IAC-DEC-ENG-00014.docx}
-
-internalApplyForFtpaAppellantLetter.contentType: application/pdf
-internalApplyForFtpaAppellantLetter.fileExtension: PDF
-internalApplyForFtpaAppellantLetter.fileName: "apply-for-ftpa-appellant-letter"
-internalApplyForFtpaAppellantLetter.templateName: ${IA_INTERNAL_APPLY_FOR_FTPA_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00017.docx}
-
-internalAppellantFtpaDecidedGrantedLetter.contentType: application/pdf
-internalAppellantFtpaDecidedGrantedLetter.fileExtension: PDF
-internalAppellantFtpaDecidedGrantedLetter.fileName: "appellant-ftpa-decided-granted-letter"
-internalAppellantFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00018.docx}
-
-internalDetainedHoFtpaDecidedGrantedLetter.contentType: application/pdf
-internalDetainedHoFtpaDecidedGrantedLetter.fileExtension: PDF
-internalDetainedHoFtpaDecidedGrantedLetter.fileName: "ho-ftpa-decided-granted-letter"
-internalDetainedHoFtpaDecidedGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00019.docx}
-
-internalDetainedHoFtpaDecidedPartiallyGrantedLetter.contentType: application/pdf
-internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileExtension: PDF
-internalDetainedHoFtpaDecidedPartiallyGrantedLetter.fileName: "ho-ftpa-decided-partially-granted-letter"
-internalDetainedHoFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_PARTIALLY_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00021.docx}
-
-internalDetainedHoFtpaDecidedRefusedLetter.contentType: application/pdf
-internalDetainedHoFtpaDecidedRefusedLetter.fileExtension: PDF
-internalDetainedHoFtpaDecidedRefusedLetter.fileName: "ho-ftpa-decided-refused-letter"
-internalDetainedHoFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_DETAINED_HO_FTPA_DECIDED_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00022.docx}
-
-internalAppellantFtpaDecidedPartiallyGrantedLetter.contentType: application/pdf
-internalAppellantFtpaDecidedPartiallyGrantedLetter.fileExtension: PDF
-internalAppellantFtpaDecidedPartiallyGrantedLetter.fileName: "appellant-ftpa-decided-partially-granted-letter"
-internalAppellantFtpaDecidedPartiallyGrantedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_PARTIALLY_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00020.docx}
-internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaAdaDueWorkingDays: 7
-internalAppellantFtpaDecidedPartiallyGrantedLetter.ftpaNonAdaDueCalendarDays: 14
-
-internalAppellantFtpaDecidedRefusedLetter.contentType: application/pdf
-internalAppellantFtpaDecidedRefusedLetter.fileExtension: PDF
-internalAppellantFtpaDecidedRefusedLetter.fileName: "appellant-ftpa-decided-refused-letter"
-internalAppellantFtpaDecidedRefusedLetter.templateName: ${IA_INTERNAL_APPELLANT_FTPA_DECIDED_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00023.docx}
-internalAppellantFtpaDecidedRefusedLetter.ftpaAdaDueWorkingDays: 7
-internalAppellantFtpaDecidedRefusedLetter.ftpaNonAdaDueCalendarDays: 14
-
-internalHearingAdjustmentsUpdated.contentType: application/pdf
-internalHearingAdjustmentsUpdated.fileExtension: PDF
-internalHearingAdjustmentsUpdated.fileName: "hearing-adjustments-updated-letter"
-internalHearingAdjustmentsUpdated.templateName: ${IA_INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
-
-internalDetainedMaintainCaseUnlinkAppeal.contentType:  application/pdf
-internalDetainedMaintainCaseUnlinkAppeal.fileExtension: PDF
-internalDetainedMaintainCaseUnlinkAppeal.fileName: "detained-appellant-maintain-case-unlink-appeal-notice"
-internalDetainedMaintainCaseUnlinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_UNLINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00026.docx}
-
-internalUploadAdditionalEvidence.contentType:  application/pdf
-internalUploadAdditionalEvidence.fileExtension: PDF
-internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
-internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
-
-internalChangeHearingCentreLetter.contentType: application/pdf
-internalChangeHearingCentreLetter.fileExtension: PDF
-internalChangeHearingCentreLetter.fileName: "appellant-change-hearing-centre-letter"
-internalChangeHearingCentreLetter.templateName: ${IA_INTERNAL_CHANGE_HEARING_CENTRE_TEMPLATE:TB-IAC-LET-ENG-00032.docx}
-
-internalHomeOfficeUploadAdditionalAddendumEvidence.contentType:  application/pdf
-internalHomeOfficeUploadAdditionalAddendumEvidence.fileExtension: PDF
-internalHomeOfficeUploadAdditionalAddendumEvidence.fileName: "appellant letter_HO-evidence"
-internalHomeOfficeUploadAdditionalAddendumEvidence.templateName: ${IA_INTERNAL_HOME_OFFICE_UPLOAD_ADDITIONAL_ADDENDUM_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00035.docx}
-
-internalLegalOfficerUploadAdditionalEvidence.contentType:  application/pdf
-internalLegalOfficerUploadAdditionalEvidence.fileExtension: PDF
-internalLegalOfficerUploadAdditionalEvidence.fileName: "appellant letter_LO-evidence"
-internalLegalOfficerUploadAdditionalEvidence.templateName: ${IA_INTERNAL_LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00036.docx}
-
-internalDetainedMaintainCaseLinkAppeal.contentType:  application/pdf
-internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
-internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
-internalDetainedMaintainCaseLinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00033.docx}
-
-internalHomeOfficeAmendAppealResponse.contentType:  application/pdf
-internalHomeOfficeAmendAppealResponse.fileExtension: PDF
-internalHomeOfficeAmendAppealResponse.fileName: "home-office-amend-appeal-response"
-internalHomeOfficeAmendAppealResponse.templateName: ${IA_INTERNAL_HOME_OFFICE_AMEND_APPEAL_RESPONSE_TEMPLATE:TB-IAC-LET-ENG-00029.docx}
-
-internalNonStandardDirectionLetter.contentType: application/pdf
-internalNonStandardDirectionLetter.fileExtension: PDF
-internalNonStandardDirectionLetter.fileName: "non-standard-direction-to-appellant-letter"
-internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00028.docx}
-
-internalChangeDueDateLetter.contentType:  application/pdf
-internalChangeDueDateLetter.fileExtension: PDF
-internalChangeDueDateLetter.fileName: "appellant-change-direction-due-date-letter"
-internalChangeDueDateLetter.templateName: ${IA_INTERNAL_CHANGE_DUE_DATE_LETTER_TEMPLATE :TB-IAC-LET-ENG-00034.docx}
-
-internalDetainedEditAppeal.contentType:  application/pdf
-internalDetainedEditAppeal.fileExtension: PDF
-internalDetainedEditAppeal.fileName: "detained-appellant-edit-appeal-notice"
-internalDetainedEditAppeal.templateName: ${INTERNAL_EDIT_APPEAL_NOTICE_TEMPLATE:TB-IAC-LET-ENG-00038.docx}
-
-homeOfficeNonStandardDirectionLetter.contentType: application/pdf
-homeOfficeNonStandardDirectionLetter.fileExtension: PDF
-homeOfficeNonStandardDirectionLetter.fileName: "home-office-non-standard-direction-letter"
-homeOfficeNonStandardDirectionLetter.templateName: ${IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:TB-IAC-LET-ENG-00041.docx}
-
-internalHoChangeDirectionDueDateLetter.contentType:  application/pdf
-internalHoChangeDirectionDueDateLetter.fileExtension: PDF
-internalHoChangeDirectionDueDateLetter.fileName: "internal-ho-change-direction-due-date-letter"
-internalHoChangeDirectionDueDateLetter.templateName: ${IA_INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_TEMPLATE:TB-IAC-LET-ENG-00037.docx}
-
-internalDetainedReinstateAppealLetter.contentType:  application/pdf
-internalDetainedReinstateAppealLetter.fileExtension: PDF
-internalDetainedReinstateAppealLetter.fileName: "internal-detained-reinstate-appeal-letter"
-internalDetainedReinstateAppealLetter.templateName: ${INTERNAL_REINSTATE_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-00050.docx}
-
-internalDetainedAdjournHearingWithoutDateLetter.contentType:  application/pdf
-internalDetainedAdjournHearingWithoutDateLetter.fileExtension: PDF
-internalDetainedAdjournHearingWithoutDateLetter.fileName: "internal-detained-adjourn-hearing-without-date-letter"
-internalDetainedAdjournHearingWithoutDateLetter.templateName: ${INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00040.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -490,8 +218,6 @@ security:
       - "payAndSubmitAppeal"
       - "submitApplication"
       - "makeNewApplication"
-      - "requestHearingRequirementsFeature"
-      - "applyForFTPAAppellant"
     caseworker-ia-caseofficer:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -512,34 +238,8 @@ security:
       - "editAppealAfterSubmit"
       - "generateHearingBundle"
       - "customiseHearingBundle"
-      - "requestCaseBuilding"
-      - "asyncStitchingComplete"
-      - "recordOutOfTimeDecision"
-      - "markAppealPaid"
-      - "requestResponseReview"
-      - "requestHearingRequirementsFeature"
-      - "markAppealAsAda"
-      - "decideAnApplication"
-      - "transferOutOfAda"
-      - "maintainCaseLinks"
-      - "changeHearingCentre"
-      - "createCaseLink"
-      - "requestResponseAmend"
-      - "uploadAddendumEvidence"
-      - "reinstateAppeal"
-      - "UpdateHearingAdjustments"
-      - "buildCase"
-      - "listCase"
-      - "draftHearingRequirements"
     caseworker-ia-admofficer:
       - "listCase"
-      - "submitAppeal"
-      - "editAppeal"
-      - "draftHearingRequirements"
-      - "buildCase"
-      - "submitCase"
-      - "generateHearingBundle"
-      - "uploadAdditionalEvidence"
       - "editCaseListing"
       - "sendDecisionAndReasons"
       - "adjournHearingWithoutDate"
@@ -552,16 +252,6 @@ security:
       - "makeNewApplication"
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
-      - "editAppealAfterSubmit"
-      - "markAppealPaid"
-      - "recordRemissionDecision"
-      - "markAppealAsAda"
-      - "applyForFTPAAppellant"
-      - "maintainCaseLinks"
-      - "uploadAddendumEvidenceAdminOfficer"
-      - "createCaseLink"
-      - "reinstateAppeal"
-      - "buildCase"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -572,7 +262,6 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
     caseworker-ia-iacjudge:
-      - "sendDirection"
       - "generateDecisionAndReasons"
       - "endAppeal"
       - "sendDecisionAndReasons"
@@ -582,37 +271,11 @@ security:
       - "recordTheDecision"
       - "endApplication"    
       - "uploadSignedDecisionNotice"
-      - "adaSuitabilityReview"
-      - "generateHearingBundle"
-      - "decideAnApplication"
-      - "transferOutOfAda"
-      - "residentJudgeFtpaDecision"
-      - "maintainCaseLinks"
-      - "createCaseLink"
-      - "changeDirectionDueDate"
-      - "reinstateAppeal"
-      - "UpdateHearingAdjustments"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
     caseworker-ia-system:
-      - "submitReasonsForAppeal"
       - "endAppealAutomatically"
-    caseworker-ia-homeofficelart:
-      - "uploadHomeOfficeAppealResponse"
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
-    caseworker-ia-homeofficepou:
-      - "applyForFTPARespondent"
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
-    caseworker-ia-respondentofficer:
-      - "applyForFTPARespondent"
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
-    caseworker-ia-homeofficeapc:
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
@@ -636,11 +299,6 @@ launchDarkly:
 customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
-  internal:
-    telephoneNumber:
-      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
-    emailAddress:
-      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_EMAIL:IAC-ADA-HW@justice.gov.uk}
 
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
@@ -658,10 +316,6 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
-  harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
-
-govUkHolidays:
-  url: https://www.gov.uk/
 
 ia:
   config:

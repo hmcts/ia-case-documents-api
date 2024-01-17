@@ -20,23 +20,11 @@
         ]]</notes>
         <cve>CVE-2022-45688</cve>
     </suppress>
-    <suppress until="2023-09-30">
-        <cve>CVE-2023-35116</cve><!-- 2023-08-03 jackson-databind 2.15.2 (the latest version at time of checking) is still vulnerable. Try again when a new version comes out. -->
-        <cve>CVE-2023-41080</cve><!-- 2023-08-03 jackson-databind 2.15.2 (the latest version at time of checking) is still vulnerable. Try again when a new version comes out. -->
+    <suppress until="2023-11-30">
+        <cve>CVE-2023-35116</cve><!-- 2023-09-04 jackson-databind 2.15.2 (the latest version at time of checking) is still vulnerable. Try again when a new version comes out. -->
     </suppress>
-    <suppress>
-        <cve>CVE-2023-41080</cve>
-        <cve>CVE-2023-35116</cve>
-        <cve>CVE-2023-42794</cve>
-        <cve>CVE-2023-42795</cve>
-        <cve>CVE-2023-45648</cve>
-        <cve>CVE-2023-44487</cve>
-    </suppress>
-    <suppress until="2024-02-29">
+    <suppress until="2024-01-31">
+        <notes>Suppress until org.springframework.cloud, service-auth-provider-client, document-management-client and cd-case-document-am-cli upgrade their org.bouncycastle dependents</notes>
         <cve>CVE-2023-33202</cve>
-        <cve>CVE-2023-6378</cve>
-        <cve>CVE-2023-6481</cve>
-        <cve>CVE-2023-34055</cve>
-        <cve>CVE-2023-46589</cve>
     </suppress>
 </suppressions>
