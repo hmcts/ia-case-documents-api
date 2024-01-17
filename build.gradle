@@ -175,6 +175,7 @@ task integration(type: Test, description: 'Runs the integration tests.', group: 
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
 
     systemProperty "scenario", System.getProperty('scenario')
+    systemProperty "file.encoding", "UTF-8"
 
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
@@ -221,7 +222,7 @@ jacocoTestReport {
 }
 
 pitest {
-    print('./gradlew --version'.execute().text.trim())
+    //print('./gradlew --version'.execute().text.trim())
     junit5PluginVersion = '1.1.2'
     targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
     excludedClasses = [
@@ -354,6 +355,7 @@ dependencies {
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
+    implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.85'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.85'
 
