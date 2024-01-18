@@ -38,6 +38,8 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     private static final String NATIONALITY = "nationality";
     private static final String SPOKEN_INTERPRETER_LABEL = "Spoken language interpreter";
     private static final String SIGN_INTERPRETER_LABEL = "Sign language interpreter";
+    private static final String IS_MANUAL_ENTRY = "Yes";
+    private static final String IS_NOT_MANUAL_ENTRY = "No";
 
     private final String templateName;
 
@@ -466,17 +468,17 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             applicantSpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("applicantInterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("applicantInterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
                 }
             });
 
             applicantSignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("applicantInterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("applicantInterpreterSignLanguage", language.getLanguageManualEntryDescription());
                 }
             });
@@ -506,17 +508,17 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs1SpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs1InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs1InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
                 }
             });
 
             fcs1SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs1InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs1InterpreterSignLanguage", language.getLanguageManualEntryDescription());
                 }
             });
@@ -545,17 +547,17 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs2SpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs2InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs2InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
                 }
             });
 
             fcs2SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs2InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs2InterpreterSignLanguage", language.getLanguageManualEntryDescription());
                 }
             });
@@ -584,17 +586,17 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs3SpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs3InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs3InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
                 }
             });
 
             fcs3SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs3InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs3InterpreterSignLanguage", language.getLanguageManualEntryDescription());
                 }
             });
@@ -623,17 +625,17 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs4SpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs4InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs4InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
                 }
             });
 
             fcs4SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs4InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs4InterpreterSignLanguage", language.getLanguageManualEntryDescription());
                 }
             });
