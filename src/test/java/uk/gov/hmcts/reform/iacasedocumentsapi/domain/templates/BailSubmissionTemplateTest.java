@@ -381,12 +381,12 @@ public class BailSubmissionTemplateTest {
         dataSetUp();
         InterpreterLanguageRefData spokenRefData = new InterpreterLanguageRefData(
             new DynamicList(new Value("fre", "French"), Collections.emptyList()),
-            Collections.emptyList(),
+            "No",
             null);
 
         InterpreterLanguageRefData signRefData = new InterpreterLanguageRefData(
             new DynamicList(new Value("bsl", "BSL"), Collections.emptyList()),
-            Collections.emptyList(),
+            "No",
             null);
 
         List<String> languageCategories = Arrays.asList("spokenLanguageInterpreter", "signLanguageInterpreter");
@@ -431,7 +431,7 @@ public class BailSubmissionTemplateTest {
         dataSetUp();
         InterpreterLanguageRefData spokenRefData = new InterpreterLanguageRefData(
             new DynamicList(new Value("", ""), Collections.emptyList()),
-            List.of("Yes"),
+            "Yes",
             "Manual spoken");
 
         List<String> languageCategoriesSpokenOnly = Arrays.asList("spokenLanguageInterpreter");
@@ -467,7 +467,7 @@ public class BailSubmissionTemplateTest {
 
         InterpreterLanguageRefData signRefData = new InterpreterLanguageRefData(
             new DynamicList(new Value("", ""), Collections.emptyList()),
-            List.of("Yes"),
+            "Yes",
             "Manual sign");
 
         List<String> languageCategoriesSignOnly = Arrays.asList("signLanguageInterpreter");
