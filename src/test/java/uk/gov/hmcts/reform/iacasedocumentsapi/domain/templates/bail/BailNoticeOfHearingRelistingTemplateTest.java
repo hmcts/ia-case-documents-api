@@ -10,11 +10,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_EVENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent.INITIAL_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent.RELISTING;
 
 import java.util.Map;
 import java.util.Optional;
@@ -26,14 +23,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
-class BailNoticeOfHearingTemplateTest {
+class BailNoticeOfHearingRelistingTemplateTest {
 
     @Mock private CaseDetails<BailCase> caseDetails;
     @Mock private BailCase bailCase;
@@ -44,46 +40,34 @@ class BailNoticeOfHearingTemplateTest {
     private final String applicantFamilyName = "Smith";
     private final String homeOfficeReferenceNumber = "123654";
     private final String bailReferenceNumber = "5555-5555-5555-9999";
-    private final String applicantDetainedLoc = "immigrationRemovalCentre";
     private final String applicantPrisonDetails = "applicantPrisonDetails";
     private final String customerServicesEmail = "customer@services.com";
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
 
     private final String relistingTemplateName = "TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx";
-    private final String initialListingTemplateName = "TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx";
 
-    private BailNoticeOfHearingTemplate bailNoticeOfHearingTemplate;
+    private BailNoticeOfHearingRelistingTemplate template;
     private Map<String, Object> fieldValuesMap;
 
     @BeforeEach
     public void setUp() {
-        bailNoticeOfHearingTemplate =
-            new BailNoticeOfHearingTemplate(
-                relistingTemplateName, initialListingTemplateName, customerServicesProvider, stringProvider);
-    }
-
-    @Test
-    void should_return_initialListing_template_name() {
-        when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(INITIAL_LISTING));
-
-        assertEquals(initialListingTemplateName, bailNoticeOfHearingTemplate.getName(caseDetails));
+        template =
+            new BailNoticeOfHearingRelistingTemplate(
+                relistingTemplateName, customerServicesProvider, stringProvider);
     }
 
     @Test
     void should_return_relisting_template_name() {
-        when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(RELISTING));
 
-        assertEquals(relistingTemplateName, bailNoticeOfHearingTemplate.getName(caseDetails));
+        assertEquals(relistingTemplateName, template.getName());
     }
 
     @Test
     void should_be_tolerant_of_missing_data() {
         dataSetUp();
 
-        fieldValuesMap = bailNoticeOfHearingTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = template.mapFieldValues(caseDetails);
 
         checkCommonFields();
     }
@@ -92,13 +76,14 @@ class BailNoticeOfHearingTemplateTest {
     void should_correctly_set_fields() {
         final String hearingDate = "12012024";
         final String hearingTime = "1500";
-        final String listingAddress = "Nottingham Justice Centre\n"
-                                      + "Carrington Street\n"
-                                      + "Nottingham\n"
-                                      + "NG2 1EE";
+        final String listingAddress = """
+            Nottingham Justice Centre
+            Carrington Street
+            Nottingham
+            NG2 1EE""";
         dataSetUp();
 
-        fieldValuesMap = bailNoticeOfHearingTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = template.mapFieldValues(caseDetails);
 
         assertEquals(applicantGivenNames, fieldValuesMap.get("applicantGivenNames"));
         assertEquals(applicantFamilyName, fieldValuesMap.get("applicantFamilyName"));
@@ -139,6 +124,7 @@ class BailNoticeOfHearingTemplateTest {
         when(bailCase.read(BAIL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(bailReferenceNumber));
         when(bailCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(bailCase.read(LEGAL_REP_REFERENCE, String.class)).thenReturn(Optional.of(legalRepReference));
+        String applicantDetainedLoc = "immigrationRemovalCentre";
         when(bailCase.read(APPLICANT_DETAINED_LOC, String.class)).thenReturn(Optional.of(applicantDetainedLoc));
         when(bailCase.read(APPLICANT_PRISON_DETAILS, String.class)).thenReturn(Optional.of(applicantPrisonDetails));
         when(bailCase.read(LISTING_LOCATION, String.class)).thenReturn(Optional.of(listingLocation));

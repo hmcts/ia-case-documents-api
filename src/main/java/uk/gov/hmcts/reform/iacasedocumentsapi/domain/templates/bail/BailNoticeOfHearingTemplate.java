@@ -7,7 +7,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_EVENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
 
@@ -15,44 +14,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantDetainedLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
-@Component
-public class BailNoticeOfHearingTemplate implements DocumentTemplate<BailCase> {
+public class BailNoticeOfHearingTemplate {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
-    private final String relistingTemplateName;
-    private final String initialListingTemplateName;
     private final CustomerServicesProvider customerServicesProvider;
     private final StringProvider stringProvider;
 
     public BailNoticeOfHearingTemplate(
-        @Value("${bailNoticeOfHearingRelisting.templateName}") String relistingTemplateName,
-        @Value("${bailNoticeOfHearingInitialListing.templateName}") String initialListingTemplateName,
-        CustomerServicesProvider customerServicesProvider,
-        StringProvider stringProvider) {
-        this.relistingTemplateName = relistingTemplateName;
-        this.initialListingTemplateName = initialListingTemplateName;
+        CustomerServicesProvider customerServicesProvider, StringProvider stringProvider) {
         this.customerServicesProvider = customerServicesProvider;
         this.stringProvider = stringProvider;
     }
 
-    public String getName(CaseDetails<BailCase> caseDetails) {
-        return isRelistingEvent(caseDetails)
-            ? relistingTemplateName
-            : initialListingTemplateName;
-    }
-
-    @Override
     public Map<String, Object> mapFieldValues(
         CaseDetails<BailCase> caseDetails
     ) {
@@ -116,12 +96,5 @@ public class BailNoticeOfHearingTemplate implements DocumentTemplate<BailCase> {
 
     private boolean isNullOrEmptyString(String str) {
         return str == null || str.isBlank();
-    }
-
-    private boolean isRelistingEvent(CaseDetails<BailCase> caseDetails) {
-        BailCase bailCase = caseDetails.getCaseData();
-        ListingEvent listingEvent = bailCase.read(LISTING_EVENT, ListingEvent.class).orElse(null);
-
-        return ListingEvent.RELISTING == listingEvent;
     }
 }

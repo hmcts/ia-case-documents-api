@@ -9,7 +9,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseFileNameWit
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedGrantedTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedMindedRefusalTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedRefusalTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailEndApplicationTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingInitialListingTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingRelistingTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
 
 @Configuration
 public class BailDocumentCreatorConfiguration {
@@ -119,13 +125,34 @@ public class BailDocumentCreatorConfiguration {
         );
     }
 
-    @Bean("bailNoticeOfHearing")
-    public DocumentCreator<BailCase> getBailNoticeOfHearingCreator(
+    @Bean("bailNoticeOfHearingInitialListing")
+    public DocumentCreator<BailCase> getBailNoticeOfHearingInitialListingCreator(
         @Value("${bailNoticeOfHearing.contentType}") String contentType,
         @Value("${bailNoticeOfHearing.fileExtension}") String fileExtension,
         @Value("${bailNoticeOfHearing.fileName}") String fileName,
         BailCaseFileNameWithCaseIdQualifier fileNameQualifier,
-        BailNoticeOfHearingTemplate documentTemplate,
+        BailNoticeOfHearingInitialListingTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("bailNoticeOfHearingRelisting")
+    public DocumentCreator<BailCase> getBailNoticeOfHearingRelistingCreator(
+        @Value("${bailNoticeOfHearing.contentType}") String contentType,
+        @Value("${bailNoticeOfHearing.fileExtension}") String fileExtension,
+        @Value("${bailNoticeOfHearing.fileName}") String fileName,
+        BailCaseFileNameWithCaseIdQualifier fileNameQualifier,
+        BailNoticeOfHearingRelistingTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

@@ -81,31 +81,6 @@ public class DocumentCreatorTest {
     }
 
     @Test
-    public void should_orchestrate_document_creation_for_multiple_template_options() {
-
-        when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
-        when(documentTemplate.getName()).thenReturn(null);
-        when(documentTemplate.getName(caseDetails)).thenReturn(templateName);
-        when(documentTemplate.mapFieldValues(caseDetails)).thenReturn(templateFieldValues);
-
-        when(documentGenerator.generate(
-            qualifiedDocumentFileName,
-            documentFileExtension,
-            templateName,
-            templateFieldValues
-        )).thenReturn(documentResource);
-
-        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
-
-        Document actualDocument = documentCreator.create(caseDetails);
-
-        assertEquals(expectedDocument, actualDocument);
-
-        verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
-        verify(documentUploader, times(1)).upload(any(), any());
-    }
-
-    @Test
     public void should_orchestrate_amended_document_creation() {
 
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);

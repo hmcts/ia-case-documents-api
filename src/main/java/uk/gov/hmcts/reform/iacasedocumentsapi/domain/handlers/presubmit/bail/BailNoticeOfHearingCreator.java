@@ -2,11 +2,14 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_EVENT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent.INITIAL_LISTING;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -20,14 +23,17 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 @Component
 public class BailNoticeOfHearingCreator implements PreSubmitCallbackHandler<BailCase> {
 
-    private final DocumentCreator<BailCase> bailDocumentCreator;
+    private final DocumentCreator<BailCase> bailInitialListingNoticeOfHearingCreator;
+    private final DocumentCreator<BailCase> bailRelistingNoticeOfHearingCreator;
     private final BailDocumentHandler bailDocumentHandler;
 
     public BailNoticeOfHearingCreator(
-        @Qualifier("bailNoticeOfHearing") DocumentCreator<BailCase> bailDocumentCreator,
+        @Qualifier("bailNoticeOfHearingInitialListing") DocumentCreator<BailCase> bailInitialListingNoticeOfHearingCreator,
+        @Qualifier("bailNoticeOfHearingRelisting") DocumentCreator<BailCase> bailRelistingNoticeOfHearingCreator,
         BailDocumentHandler bailDocumentHandler
     ) {
-        this.bailDocumentCreator = bailDocumentCreator;
+        this.bailInitialListingNoticeOfHearingCreator = bailInitialListingNoticeOfHearingCreator;
+        this.bailRelistingNoticeOfHearingCreator = bailRelistingNoticeOfHearingCreator;
         this.bailDocumentHandler = bailDocumentHandler;
     }
 
@@ -52,8 +58,12 @@ public class BailNoticeOfHearingCreator implements PreSubmitCallbackHandler<Bail
 
         final CaseDetails<BailCase> caseDetails = callback.getCaseDetails();
         final BailCase bailCase = caseDetails.getCaseData();
+        boolean isInitialListing = bailCase.read(LISTING_EVENT, ListingEvent.class)
+            .map(listingEvent -> INITIAL_LISTING == listingEvent).orElse(false);
 
-        Document bailDocument = bailDocumentCreator.create(caseDetails);
+        Document bailDocument = isInitialListing
+            ?  bailInitialListingNoticeOfHearingCreator.create(caseDetails)
+            : bailRelistingNoticeOfHearingCreator.create(caseDetails);
 
         bailDocumentHandler.appendWithMetadata(
             bailCase,
