@@ -4,12 +4,15 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder.NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -143,9 +146,9 @@ public class NotificationGeneratorTest {
         verify(notificationSender).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
         verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
 
-        verify(notificationIdAppender).appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
+        verify(notificationIdAppender).appendAll(asylumCase, refId1, singletonList(notificationId1));
         verify(notificationIdAppender).append(notificationsSent, refId1, notificationId1);
-        verify(notificationIdAppender).appendAll(asylumCase, refId2, Collections.singletonList(notificationId2));
+        verify(notificationIdAppender).appendAll(asylumCase, refId2, singletonList(notificationId2));
         verify(notificationIdAppender).append(notificationsSent, refId2, notificationId2);
 
         verify(asylumCase, times(2)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
@@ -165,9 +168,9 @@ public class NotificationGeneratorTest {
         verify(notificationSender).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
         verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
 
-        verify(notificationIdAppender).appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
+        verify(notificationIdAppender).appendAll(asylumCase, refId1, singletonList(notificationId1));
         verify(notificationIdAppender).append(notificationsSent, refId1, notificationId1);
-        verify(notificationIdAppender).appendAll(asylumCase, refId2, Collections.singletonList(notificationId2));
+        verify(notificationIdAppender).appendAll(asylumCase, refId2, singletonList(notificationId2));
         verify(notificationIdAppender).append(notificationsSent, refId2, notificationId2);
 
         verify(asylumCase, times(2)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
@@ -186,9 +189,9 @@ public class NotificationGeneratorTest {
         verify(notificationSender).sendSms(templateId1, phoneNumber1, personalizationMap1, refId1);
         verify(notificationSender).sendSms(templateId2, phoneNumber2, personalizationMap2, refId2);
 
-        verify(notificationIdAppender).appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
+        verify(notificationIdAppender).appendAll(asylumCase, refId1, singletonList(notificationId1));
         verify(notificationIdAppender).append(notificationsSent, refId1, notificationId1);
-        verify(notificationIdAppender).appendAll(asylumCase, refId2, Collections.singletonList(notificationId2));
+        verify(notificationIdAppender).appendAll(asylumCase, refId2, singletonList(notificationId2));
         verify(notificationIdAppender).append(notificationsSent, refId2, notificationId2);
 
         verify(asylumCase, times(2)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
@@ -203,6 +206,29 @@ public class NotificationGeneratorTest {
         verifyNoInteractions(notificationIdAppender);
 
         verify(asylumCase, times(0)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
+    }
+
+
+    @Test
+    public void should_not_send_notification_when_invalid_email_address() {
+        notificationGenerator =
+                new EmailNotificationGenerator(aipEmailNotificationPersonalisationList, notificationSender,
+                        notificationIdAppender);
+
+        when(emailNotificationPersonalisation.getRecipientsList(asylumCase)).thenReturn(singleton(NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING));
+        when(emailNotificationPersonalisation1.getRecipientsList(asylumCase)).thenReturn(singleton(emailAddress2));
+
+        notificationGenerator.generate(callback);
+
+        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
+        verifyNoMoreInteractions(notificationSender);
+
+        verify(notificationIdAppender).appendAll(asylumCase, refId1, emptyList());
+        verify(notificationIdAppender).appendAll(asylumCase, refId2, singletonList(notificationId2));
+        verify(notificationIdAppender).append(notificationsSent, refId2, notificationId2);
+        verifyNoMoreInteractions(notificationIdAppender);
+
+        verify(asylumCase, times(1)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
     }
 
     @Test
