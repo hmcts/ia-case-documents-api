@@ -279,6 +279,5 @@ public class AuthorizationHeadersProvider {
             new Header("ServiceAuthorization", serviceToken),
             new Header("Authorization", accessToken)
         );
-    }
-
+    }    
 }

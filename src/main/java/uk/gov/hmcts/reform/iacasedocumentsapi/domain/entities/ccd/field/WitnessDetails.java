@@ -8,6 +8,7 @@ public class WitnessDetails {
     private String witnessPartyId;
     private String witnessName;
     private String witnessFamilyName;
+    private YesOrNo isWitnessDeleted;
 
     public WitnessDetails() {
         // noop -- for deserializer
