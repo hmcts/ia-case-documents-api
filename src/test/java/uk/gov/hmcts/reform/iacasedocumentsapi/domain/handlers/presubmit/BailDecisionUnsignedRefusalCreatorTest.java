@@ -37,6 +37,7 @@ public class BailDecisionUnsignedRefusalCreatorTest {
     private BailDecisionUnsignedRefusalCreator bailDecisionUnsignedRefusalCreator;
     private String recordDecisionTypeRefusal = "refused";
     private String recordDecisionTypeGranted = "granted";
+    private String recordDecisionTypeRefusedIma = "refusedUnderIma";
     private String tribunalDecisionRefusal = "Refused";
     private String tribunalDecisionMindedToGrant = "mindedToGrant";
 
@@ -93,6 +94,25 @@ public class BailDecisionUnsignedRefusalCreatorTest {
         assertThatThrownBy((() -> bailDecisionUnsignedRefusalCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
                 .isExactlyInstanceOf(IllegalStateException.class)
                 .hasMessage("Cannot handle callback");
+    }
+
+    @Test
+    void should_handle_ima_record_decision_type() {
+        for (Event event : Event.values()) {
+            when(callback.getEvent()).thenReturn(event);
+            for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
+                when(callback.getCaseDetails()).thenReturn(caseDetails);
+                when(caseDetails.getCaseData()).thenReturn(bailCase);
+                when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeRefusedIma));
+                when(bailCase.read(RECORD_THE_DECISION_LIST, String.class)).thenReturn(Optional.of(tribunalDecisionRefusal));
+                boolean canHandle = bailDecisionUnsignedRefusalCreator.canHandle(preSubmitCallbackStage, callback);
+                if (event == Event.RECORD_THE_DECISION && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                    assertTrue(canHandle);
+                } else {
+                    assertFalse(canHandle);
+                }
+            }
+        }
     }
 
     @Test
