@@ -141,7 +141,7 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
             interpreterLanguageString.append(typeOfLanguage).append(": ");
             if (language.getLanguageRefData() != null) {
                 interpreterLanguageString.append(language.getLanguageRefData().getValue().getLabel() + "\n");
-            } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals("Yes")) {
+            } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
                 interpreterLanguageString.append(language.getLanguageManualEntryDescription() + "\n");
             }
         });
