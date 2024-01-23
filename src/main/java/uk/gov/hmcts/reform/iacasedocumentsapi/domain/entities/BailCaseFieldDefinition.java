@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
+
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 public enum BailCaseFieldDefinition {
@@ -298,9 +300,9 @@ public enum BailCaseFieldDefinition {
     SIGNED_DECISION_DOCUMENT_WITH_METADATA(
         "signDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     APPLICANT_INTERPRETER_SPOKEN_LANGUAGE(
-        "applicantInterpreterSpokenLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "applicantInterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     APPLICANT_INTERPRETER_SIGN_LANGUAGE(
-        "applicantInterpreterSignLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "applicantInterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     APPLICANT_INTERPRETER_LANGUAGE_CATEGORY(
         "applicantInterpreterLanguageCategory", new TypeReference<List<String>>() {}),
     FCS_INTERPRETER_YES_NO(
@@ -308,27 +310,27 @@ public enum BailCaseFieldDefinition {
     FCS1_INTERPRETER_LANGUAGE_CATEGORY(
         "fcs1InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
     FCS1_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs1InterpreterSpokenLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs1InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS1_INTERPRETER_SIGN_LANGUAGE(
-        "fcs1InterpreterSignLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs1InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS2_INTERPRETER_LANGUAGE_CATEGORY(
         "fcs2InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
     FCS2_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs2InterpreterSpokenLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs2InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS2_INTERPRETER_SIGN_LANGUAGE(
-        "fcs2InterpreterSignLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs2InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS3_INTERPRETER_LANGUAGE_CATEGORY(
         "fcs3InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
     FCS3_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs3InterpreterSpokenLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs3InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS3_INTERPRETER_SIGN_LANGUAGE(
-        "fcs3InterpreterSignLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs3InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS4_INTERPRETER_LANGUAGE_CATEGORY(
         "fcs4InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
     FCS4_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs4InterpreterSpokenLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs4InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS4_INTERPRETER_SIGN_LANGUAGE(
-        "fcs4InterpreterSignLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+        "fcs4InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     LISTING_EVENT("listingEvent", new TypeReference<ListingEvent>(){}),
     LISTING_LOCATION("listingLocation", new TypeReference<String>(){}),
     LISTING_HEARING_DATE("listingHearingDate", new TypeReference<String>(){}),

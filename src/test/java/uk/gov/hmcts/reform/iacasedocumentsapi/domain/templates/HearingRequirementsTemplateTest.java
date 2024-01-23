@@ -120,7 +120,7 @@ class HearingRequirementsTemplateTest {
             );
 
         APPELLANT_SPOKEN_INTERPRETER_LANGUAGE.setLanguageRefData(new DynamicList("lang"));
-        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL.setLanguageManualEntry("Yes");
+        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL.setLanguageManualEntry(List.of("Yes"));
         APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL.setLanguageManualEntryDescription("lang");
         appellantSignInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
         witness1SpokenInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));

@@ -1,20 +1,19 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterpreterLanguageRefData {
+public class BailInterpreterLanguageRefData {
 
     private DynamicList languageRefData;
-    private List<String> languageManualEntry;
+    private String languageManualEntry;
     private String languageManualEntryDescription;
 
 }

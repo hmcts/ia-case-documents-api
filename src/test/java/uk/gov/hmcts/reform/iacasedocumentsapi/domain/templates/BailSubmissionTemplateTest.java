@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -379,12 +380,12 @@ public class BailSubmissionTemplateTest {
     @Test
     void should_set_interpreter_details_for_applicant_and_fcs_language_ref_data() {
         dataSetUp();
-        InterpreterLanguageRefData spokenRefData = new InterpreterLanguageRefData(
+        BailInterpreterLanguageRefData spokenRefData = new BailInterpreterLanguageRefData(
             new DynamicList(new Value("fre", "French"), Collections.emptyList()),
             "No",
             null);
 
-        InterpreterLanguageRefData signRefData = new InterpreterLanguageRefData(
+        BailInterpreterLanguageRefData signRefData = new BailInterpreterLanguageRefData(
             new DynamicList(new Value("bsl", "BSL"), Collections.emptyList()),
             "No",
             null);
@@ -397,16 +398,16 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(FCS2_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
         when(bailCase.read(FCS3_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
         when(bailCase.read(FCS4_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
-        when(bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Spoken language interpreter\nSign language interpreter", fieldValuesMap.get("applicantInterpreterLanguageCategory"));
@@ -429,7 +430,7 @@ public class BailSubmissionTemplateTest {
     @Test
     void should_set_manual_interpreter_details_for_applicant_and_fcs_with_just_spoken_only() {
         dataSetUp();
-        InterpreterLanguageRefData spokenRefData = new InterpreterLanguageRefData(
+        BailInterpreterLanguageRefData spokenRefData = new BailInterpreterLanguageRefData(
             new DynamicList(new Value("", ""), Collections.emptyList()),
             "Yes",
             "Manual spoken");
@@ -442,11 +443,11 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(FCS2_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
         when(bailCase.read(FCS3_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
         when(bailCase.read(FCS4_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
-        when(bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
+        when(bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Spoken language interpreter", fieldValuesMap.get("applicantInterpreterLanguageCategory"));
@@ -465,7 +466,7 @@ public class BailSubmissionTemplateTest {
     void should_set_manual_interpreter_details_for_applicant_and_fcs_with_just_sign_only() {
         dataSetUp();
 
-        InterpreterLanguageRefData signRefData = new InterpreterLanguageRefData(
+        BailInterpreterLanguageRefData signRefData = new BailInterpreterLanguageRefData(
             new DynamicList(new Value("", ""), Collections.emptyList()),
             "Yes",
             "Manual sign");
@@ -478,11 +479,11 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(FCS2_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
         when(bailCase.read(FCS3_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
         when(bailCase.read(FCS4_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
-        when(bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
+        when(bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Sign language interpreter", fieldValuesMap.get("applicantInterpreterLanguageCategory"));
