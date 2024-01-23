@@ -77,6 +77,11 @@ hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
 hearingNoticeAdjournedWithoutDateDocument.fileName: "hearing-notice"
 hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00376.docx}
 
+noticeOfAdjournedHearingDocument.contentType: application/pdf
+noticeOfAdjournedHearingDocument.fileExtension: PDF
+noticeOfAdjournedHearingDocument.fileName: "notice-of-adjourned-hearing"
+noticeOfAdjournedHearingDocument.templateName: ${NOTICE_OF_ADJOURNED_HEARING_TEMPLATE:TB-IAC-HNO-ENG-00240.docx}
+
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
 hearingNoticeEditedDocument.fileName: "hearing-notice"
@@ -244,6 +249,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateHearingBundle"
       - "customiseHearingBundle"
+      - "recordAdjournmentDetails"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -259,6 +265,7 @@ security:
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
       - "caseListing"
+      - "recordAdjournmentDetails"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -286,6 +293,7 @@ security:
       - "listCase"
       - "editCaseListing"
       - "caseListing"
+      - "recordAdjournmentDetails"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}

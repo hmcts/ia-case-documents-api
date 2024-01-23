@@ -32,4 +32,10 @@ public class HearingNoticeTemplateConfiguration {
             @Value("${remoteHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
         return new HearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
+
+    @Bean("noticeOfAdjournedHearingTemplate")
+    public HearingNoticeTemplate getNoticeOfAdjournedHearingTemplate(
+        @Value("${noticeOfAdjournedHearingDocument.templateName}") String templateName, StringProvider stringProvider) {
+        return new HearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+    }
 }
