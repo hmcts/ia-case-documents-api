@@ -9,7 +9,6 @@ public class AppealDecisionTest {
 
     @Test
     public void correct_values_mapped_to_enum() {
-
         assertEquals(AppealDecision.ALLOWED.getValue(), "allowed");
         assertEquals(AppealDecision.DISMISSED.getValue(), "dismissed");
     }
