@@ -56,6 +56,7 @@ public class BundleOrderTest {
             DocumentTag.DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_COVER_LETTER,
             DocumentTag.FINAL_DECISION_AND_REASONS_PDF,
+            DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT,
             DocumentTag.APPEAL_SKELETON_BUNDLE,
             DocumentTag.END_APPEAL,
             DocumentTag.END_APPEAL_AUTOMATICALLY,
