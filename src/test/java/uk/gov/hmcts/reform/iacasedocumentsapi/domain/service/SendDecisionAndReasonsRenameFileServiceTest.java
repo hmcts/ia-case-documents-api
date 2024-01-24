@@ -34,6 +34,7 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
     @Mock
     private DocumentDownloadClient documentDownloadClient;
     @Mock private DocumentUploader documentUploader;
+    @Mock private DocumentReceiver documentReceiver;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Document finalDecisionAndReasonsDocument;
@@ -48,6 +49,7 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
         sendDecisionAndReasonsPdfService = new SendDecisionAndReasonsRenameFileService(
             documentDownloadClient,
             documentUploader,
+            documentReceiver,
             "some-file-name");
     }
 

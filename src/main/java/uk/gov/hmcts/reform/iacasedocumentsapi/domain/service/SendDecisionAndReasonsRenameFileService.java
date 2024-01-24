@@ -3,16 +3,21 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
+@Slf4j
 @Service
 public class SendDecisionAndReasonsRenameFileService {
 
@@ -21,15 +26,18 @@ public class SendDecisionAndReasonsRenameFileService {
     private final DocumentDownloadClient documentDownloadClient;
     private final DocumentUploader documentUploader;
     private final String decisionAndReasonsFinalPdfFilename;
+    private final DocumentReceiver documentReceiver;
 
     public SendDecisionAndReasonsRenameFileService(
         DocumentDownloadClient documentDownloadClient,
         DocumentUploader documentUploader,
+        DocumentReceiver documentReceiver,
         @Value("${decisionAndReasonsFinalPdf.fileName}") String decisionAndReasonsFinalPdfFilename
     ) {
         this.documentDownloadClient = documentDownloadClient;
         this.documentUploader = documentUploader;
         this.decisionAndReasonsFinalPdfFilename = decisionAndReasonsFinalPdfFilename;
+        this.documentReceiver = documentReceiver;
     }
 
     public Document updateDecisionAndReasonsFileName(CaseDetails<AsylumCase> caseDetails) {
@@ -46,10 +54,18 @@ public class SendDecisionAndReasonsRenameFileService {
         Document finalDecisionAndReasonsDoc = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class)
             .orElseThrow(
                 () -> new IllegalStateException("finalDecisionAndReasonsDocument must be present"));
-
+        log.info("1", finalDecisionAndReasonsDoc.getDocumentFilename());
+        log.info("2", finalDecisionAndReasonsDoc.getDocumentUrl());
+        log.info("3", finalDecisionAndReasonsDoc.getDocumentBinaryUrl());
+        DocumentWithMetadata documentWithMetadata =
+                documentReceiver.receive(
+                        finalDecisionAndReasonsDoc,
+                        "",
+                        DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT
+                );
         Resource finalDecisionAndReasonsPdf =
-            documentDownloadClient.download(finalDecisionAndReasonsDoc.getDocumentBinaryUrl());
-
+            documentDownloadClient.download(documentWithMetadata.getDocument().getDocumentBinaryUrl());
+        log.info("4", finalDecisionAndReasonsPdf.exists());
         ByteArrayResource byteArrayResource = getByteArrayResource(
             finalDecisionAndReasonsPdf,
             getDecisionAndReasonsFilename(asylumCase));
