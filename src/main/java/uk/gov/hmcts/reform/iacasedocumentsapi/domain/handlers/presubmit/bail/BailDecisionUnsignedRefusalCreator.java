@@ -45,12 +45,16 @@ public class BailDecisionUnsignedRefusalCreator implements PreSubmitCallbackHand
                                     .orElse("")
                                     .equalsIgnoreCase("refused");
 
+        boolean isRefusedUnderIma = bailCase.read(RECORD_DECISION_TYPE, String.class)
+                .orElse("")
+                .equalsIgnoreCase("refusedUnderIma");
+
         boolean isMindedToGrant = bailCase.read(RECORD_THE_DECISION_LIST, String.class)
                 .orElse("")
                 .equalsIgnoreCase("mindedToGrant");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && callback.getEvent() == Event.RECORD_THE_DECISION && isRefused && !isMindedToGrant;
+            && callback.getEvent() == Event.RECORD_THE_DECISION && (isRefused || isRefusedUnderIma) && !isMindedToGrant;
     }
 
     public PreSubmitCallbackResponse<BailCase> handle(
