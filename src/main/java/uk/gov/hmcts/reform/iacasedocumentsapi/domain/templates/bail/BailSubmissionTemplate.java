@@ -31,6 +31,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     private static final String SENT_BY_LR = "Legal Representative";
     private static final String SENT_BY_HO = "Home Office";
     private static final String NATIONALITY = "nationality";
+    private static final String DONT_KNOW_SELECTED_VALUE = "Don't Know";
 
     private final String templateName;
 
@@ -116,7 +117,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 fieldValues.put("hasAppealHearingPending", "Yes Without Appeal Number");
                 break;
             case "DontKnow":
-                fieldValues.put("hasAppealHearingPending", "Don't Know");
+                fieldValues.put("hasAppealHearingPending", DONT_KNOW_SELECTED_VALUE);
                 break;
             case "Yes" :
                 fieldValues.put("appealReferenceNumber", bailCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
@@ -131,7 +132,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 fieldValues.put("hasAppealHearingPendingUT", "Yes Without Appeal Number");
                 break;
             case "DontKnow":
-                fieldValues.put("hasAppealHearingPendingUT", "Don't Know");
+                fieldValues.put("hasAppealHearingPendingUT", DONT_KNOW_SELECTED_VALUE);
                 break;
             case "Yes" :
                 fieldValues.put("appealReferenceNumberUT", bailCase.read(UT_APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
@@ -172,7 +173,7 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 fieldValues.put("hasPreviousBailApplication", "Yes Without Application Number");
                 break;
             case "DontKnow":
-                fieldValues.put("hasPreviousBailApplication", "Don't Know");
+                fieldValues.put("hasPreviousBailApplication", DONT_KNOW_SELECTED_VALUE);
                 break;
             default:
                 break;
@@ -181,8 +182,8 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
         fieldValues.put("applicantBeenRefusedBail", bailCase.read(APPLICANT_BEEN_REFUSED_BAIL, YesOrNo.class).orElse(YesOrNo.NO));
         if (bailCase.read(APPLICANT_BEEN_REFUSED_BAIL, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
             fieldValues.put("bailHearingDate", formatDateForRendering(bailCase.read(BAIL_HEARING_DATE, String.class).orElse("")));
-
         }
+
         fieldValues.put("agreesToBoundByFinancialCond", bailCase.read(AGREES_TO_BOUND_BY_FINANCIAL_COND, YesOrNo.class).orElse(YesOrNo.NO));
         if (bailCase.read(AGREES_TO_BOUND_BY_FINANCIAL_COND, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
             fieldValues.put("financialCondAmount1", bailCase.read(FINANCIAL_COND_AMOUNT_1, String.class).orElse(""));

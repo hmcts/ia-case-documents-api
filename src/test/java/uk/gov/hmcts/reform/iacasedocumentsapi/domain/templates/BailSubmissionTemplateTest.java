@@ -14,6 +14,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -31,9 +33,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissi
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
 public class BailSubmissionTemplateTest {
-    @Mock private CaseDetails<BailCase> caseDetails;
-    @Mock private BailCase bailCase;
-    @Mock private PriorApplication priorApplication;
+    @Mock
+    private CaseDetails<BailCase> caseDetails;
+    @Mock
+    private BailCase bailCase;
+    @Mock
+    private PriorApplication priorApplication;
 
     private final String templateName = "BAIL_SUBMISSION_TEMPLATE.docx";
     private String applicantGivenNames = "John";
@@ -84,6 +89,7 @@ public class BailSubmissionTemplateTest {
     private String supporterAddressCounty = "South";
     private String supporterAddressPostCode = "AB1 2CD";
     private String supporterAddressCountry = "UK";
+    private String dontKnowSelectedValue = "Don't Know";
     private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
 
     private AddressUk addressUk = new AddressUk(
@@ -164,6 +170,77 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class)).thenReturn(Optional.of("No"));
         fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
         assertFalse(fieldValuesMap.containsKey("appealReferenceNumberUT"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"YesWithoutAppealNumber", "DontKnow", "Yes"})
+    void should_properly_set_appeal_hearing_pending_selected_value(String pendingValue) {
+        dataSetUp();
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class)).thenReturn(Optional.of(pendingValue));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        if (pendingValue.equals("YesWithoutAppealNumber")) {
+            assertEquals("Yes Without Appeal Number", fieldValuesMap.get("hasAppealHearingPending"));
+        } else if (pendingValue.equals("hasAppealHearingPending")) {
+            assertEquals(dontKnowSelectedValue, fieldValuesMap.get("hasAppealHearingPending"));
+        } else if (pendingValue.equals("Yes")) {
+            assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"YesWithoutAppealNumber", "DontKnow", "Yes"})
+    void should_properly_set_appeal_hearing_pending_ut_selected_value(String pendingValue) {
+        dataSetUp();
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class)).thenReturn(Optional.of(pendingValue));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        if (pendingValue.equals("YesWithoutAppealNumber")) {
+            assertEquals("Yes Without Appeal Number", fieldValuesMap.get("hasAppealHearingPendingUT"));
+        } else if (pendingValue.equals("hasAppealHearingPendingUT")) {
+            assertEquals(dontKnowSelectedValue, fieldValuesMap.get("hasAppealHearingPendingUT"));
+        } else if (pendingValue.equals("Yes")) {
+            assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
+        }
+    }
+
+    @Test
+    void should_set_applicant_mobile_number() {
+        dataSetUp();
+        when(bailCase.read(APPLICANT_HAS_MOBILE, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        assertEquals(applicantMobileNumber1, fieldValuesMap.get("applicantMobileNumber1"));
+    }
+
+    @Test
+    void should_set_bail_hearing_date_if_applicant_been_refused_bail() {
+        dataSetUp();
+        when(bailCase.read(APPLICANT_BEEN_REFUSED_BAIL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(BAIL_HEARING_DATE, String.class)).thenReturn(Optional.of("2022-01-01"));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        assertEquals("01012022", fieldValuesMap.get("bailHearingDate"));
+    }
+
+    @Test
+    void should_set_no_transfer_bail_management_reasons_if_not_selected() {
+        final String reasons = "Test reasons";
+        dataSetUp();
+        when(bailCase.read(TRANSFER_BAIL_MANAGEMENT_YES_OR_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(bailCase.read(NO_TRANSFER_BAIL_MANAGEMENT_REASONS, String.class)).thenReturn(Optional.of(reasons));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        assertEquals(reasons, fieldValuesMap.get("noTransferBailManagementReasons"));
+    }
+
+    @Test
+    void should_set_video_hearing_details_if_present() {
+        final String details = "videoHearingDetails";
+        dataSetUp();
+        when(bailCase.read(VIDEO_HEARING1, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(bailCase.read(VIDEO_HEARING_DETAILS, String.class)).thenReturn(Optional.of(details));
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(details, fieldValuesMap.get("videoHearingDetails"));
+
     }
 
     @Test
