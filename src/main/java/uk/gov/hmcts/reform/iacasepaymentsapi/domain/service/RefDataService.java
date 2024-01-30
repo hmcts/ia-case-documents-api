@@ -15,6 +15,7 @@ public class RefDataService {
 
     private final RefDataApi refDataApi;
     private final IdamApi idamApi;
+    private final IdamService idamService;
     private final RequestUserAccessTokenProvider userAuthorizationProvider;
     private final AuthTokenGenerator serviceAuthorizationProvider;
 
@@ -22,18 +23,20 @@ public class RefDataService {
         RefDataApi refDataApi,
         RequestUserAccessTokenProvider userAuthorizationProvider,
         AuthTokenGenerator serviceAuthorizationProvider,
-        IdamApi idamApi
+        IdamApi idamApi,
+        IdamService idamService
     ) {
         this.refDataApi = refDataApi;
         this.idamApi = idamApi;
         this.userAuthorizationProvider = userAuthorizationProvider;
         this.serviceAuthorizationProvider = serviceAuthorizationProvider;
+        this.idamService = idamService;
     }
 
     public OrganisationResponse getOrganisationResponse() {
 
         String userToken = userAuthorizationProvider.getAccessToken();
-        UserInfo userInfo = idamApi.userInfo(userToken);
+        UserInfo userInfo = idamService.getUserInfo(userToken);
 
         return refDataApi.findOrganisation(
             userToken,

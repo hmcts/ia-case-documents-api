@@ -37,6 +37,8 @@ class RefDataServiceTest {
     @Mock
     private IdamApi idamApi;
     @Mock
+    private IdamService idamService;
+    @Mock
     private UserInfo userInfo;
 
     private String companyName = "LBC";
@@ -56,7 +58,8 @@ class RefDataServiceTest {
                 refDataApi,
                 userAuthorizationProvider,
                 serviceAuthorizationProvider,
-                idamApi);
+                idamApi,
+                idamService);
     }
 
     @Test
@@ -82,7 +85,7 @@ class RefDataServiceTest {
         OrganisationResponse mockResponse = new OrganisationResponse(organisationEntityResponse);
 
         when(userAuthorizationProvider.getAccessToken()).thenReturn("some-user-token");
-        when(idamApi.userInfo(any())).thenReturn(userInfo);
+        when(idamService.getUserInfo(any())).thenReturn(userInfo);
         when(userInfo.getEmail()).thenReturn("jsmith@test.com");
         when(refDataApi.findOrganisation(anyString(), any(), anyString())).thenReturn(
                 mockResponse);

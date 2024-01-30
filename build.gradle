@@ -417,6 +417,10 @@ dependencies {
 
   implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
 
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
+
+  implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine'
+
   annotationProcessor 'org.projectlombok:lombok:1.18.30'
   implementation 'org.projectlombok:lombok:1.18.30'
 
