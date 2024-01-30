@@ -38,8 +38,10 @@ public class SpringBootIntegrationTest {
 
     @Autowired
     protected MockMvc mockMvc;
+
     @Autowired
     protected ObjectMapper objectMapper;
+
     @Autowired
     private WebApplicationContext wac;
 

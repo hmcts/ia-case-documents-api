@@ -39,14 +39,17 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNoti
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.CcdEventAuthorizor;
 
 @Slf4j
-public class MultipleNotificationsTest extends SpringBootIntegrationTest implements WithServiceAuthStub {
+class MultipleNotificationsTest extends SpringBootIntegrationTest implements WithServiceAuthStub {
 
     private static final String ABOUT_TO_START_PATH = "/asylum/ccdAboutToStart";
     private static final String ABOUT_TO_SUBMIT_PATH = "/asylum/ccdAboutToSubmit";
+
     @MockBean
     private CcdEventAuthorizor ccdEventAuthorizor;
+
     @MockBean
     private GovNotifyNotificationSender notificationSender;
+
     private List<Map.Entry<Event, String>> eventAndNotificationSuffixPair =
         Lists.newArrayList(
             new HashMap.SimpleImmutableEntry<>(Event.SUBMIT_APPEAL, "_APPEAL_SUBMITTED_CASE_OFFICER"),
@@ -59,7 +62,7 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
-    public void should_send_multiple_notifications_of_same_type_with_unique_reference_numbers() {
+    void should_send_multiple_notifications_of_same_type_with_unique_reference_numbers() {
 
         addServiceAuthStub(server);
 
@@ -76,7 +79,7 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
         );
     }
 
-    public void runTestScenario(String notificationId, Map.Entry<Event, String> eventWithSuffixPair) throws Exception {
+    private void runTestScenario(String notificationId, Map.Entry<Event, String> eventWithSuffixPair) throws Exception {
 
         log.info("Scenario eventId: {} expecting suffix: {}", eventWithSuffixPair.getKey(),
             eventWithSuffixPair.getValue());
@@ -207,5 +210,4 @@ public class MultipleNotificationsTest extends SpringBootIntegrationTest impleme
             "someDirectionType"
         );
     }
-
 }
