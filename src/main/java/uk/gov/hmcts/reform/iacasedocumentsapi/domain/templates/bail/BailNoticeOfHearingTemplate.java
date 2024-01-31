@@ -25,6 +25,8 @@ public class BailNoticeOfHearingTemplate {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
+    private static final String PRISON = "prison";
+    private static final String IRC = "immigrationRemovalCentre";
     private final CustomerServicesProvider customerServicesProvider;
     private final StringProvider stringProvider;
 
@@ -89,8 +91,8 @@ public class BailNoticeOfHearingTemplate {
     private String getApplicantDetainedLocation(BailCase bailCase) {
         String location = bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse("");
 
-        String detentionLocation = location.equals("prison")
-            ? bailCase.read(PRISON_NAME, String.class).orElse("") : location.equals("immigrationRemovalCentre")
+        String detentionLocation = location.equals(PRISON)
+            ? bailCase.read(PRISON_NAME, String.class).orElse("") : location.equals(IRC)
             ? bailCase.read(IRC_NAME, String.class).orElse("") : "";
 
         return detentionLocation;
