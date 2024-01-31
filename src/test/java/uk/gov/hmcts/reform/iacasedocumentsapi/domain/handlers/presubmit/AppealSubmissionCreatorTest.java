@@ -249,4 +249,28 @@ public class AppealSubmissionCreatorTest {
         verify(internalAppealSubmissionDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadata(eq(asylumCase), any(), eq(NOTIFICATION_ATTACHMENT_DOCUMENTS), eq(DocumentTag.INTERNAL_APPEAL_SUBMISSION));
     }
+
+    @Test
+    public void should_generate_internal_appeal_summary_and_det_letter_when_case_is_internal_non_ada_appellant_in_detention() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PAID));
+        when(asylumCase.read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payOffline"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(appealSubmissionDocumentCreator, times(1)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadata(eq(asylumCase), any(), eq(LEGAL_REPRESENTATIVE_DOCUMENTS), eq(DocumentTag.APPEAL_SUBMISSION));
+
+        verify(internalAppealSubmissionDocumentCreator, times(1)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadata(eq(asylumCase), any(), eq(NOTIFICATION_ATTACHMENT_DOCUMENTS), eq(DocumentTag.INTERNAL_APPEAL_SUBMISSION));
+    }
 }

@@ -87,15 +87,9 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         DocumentTag documentTag;
         AsylumCaseDefinition documentField;
 
-        if (callback.getEvent().equals(Event.SUBMIT_APPEAL) && isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
-            appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
-            documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
-            documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;
-        } else {
-            appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
-            documentTag = DocumentTag.APPEAL_SUBMISSION;
-            documentField = LEGAL_REPRESENTATIVE_DOCUMENTS;
-        }
+        appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+        documentTag = DocumentTag.APPEAL_SUBMISSION;
+        documentField = LEGAL_REPRESENTATIVE_DOCUMENTS;
 
         documentHandler.addWithMetadata(
             asylumCase,
@@ -104,6 +98,18 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
             documentTag
         );
 
+        if (callback.getEvent().equals(Event.SUBMIT_APPEAL) && isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
+            appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
+            documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
+            documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;
+
+            documentHandler.addWithMetadata(
+                asylumCase,
+                appealSubmission,
+                documentField,
+                documentTag
+            );
+        }
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
