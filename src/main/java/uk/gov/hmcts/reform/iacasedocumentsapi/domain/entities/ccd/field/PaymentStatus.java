@@ -6,7 +6,9 @@ public enum PaymentStatus {
 
     PAID("Paid"),
     PAYMENT_PENDING("Payment pending"),
-    FAILED("Failed");
+    FAILED("Failed"),
+    TIMEOUT("Timeout"),
+    NOT_PAID("Not paid");
 
     @JsonValue
     private final String id;
