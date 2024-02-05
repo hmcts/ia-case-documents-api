@@ -30,8 +30,8 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.10.1',
-    junitPlatform      : '1.10.1',
+    junit              : '5.10.2',
+    junitPlatform      : '1.10.2',
     gradlePitest       : '1.5.1',
     pitest             : '1.15.6',
     reformLogging      : '5.1.7',
@@ -393,9 +393,9 @@ dependencies {
     //pact contract testing
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.6"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.10.1')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.10.2')
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
