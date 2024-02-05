@@ -342,8 +342,6 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
@@ -377,8 +375,17 @@ dependencies {
     implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
     implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
     implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'
-    implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.4'
-//    implementation group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: versions.reformHealthStarter
+
+    implementation(group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '4.0.0') {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    }
+    implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.8') {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    }
+    implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap' , version: '3.1.7') {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    }
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.74'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
 
