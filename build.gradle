@@ -33,7 +33,7 @@ def versions = [
     junit              : '5.10.2',
     junitPlatform      : '1.10.2',
     gradlePitest       : '1.5.1',
-    pitest             : '1.15.6',
+    pitest             : '1.15.7',
     reformLogging      : '5.1.7',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.3.2',
@@ -379,7 +379,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.0', classifier: 'all', {
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.1', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
