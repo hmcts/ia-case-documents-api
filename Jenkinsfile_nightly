@@ -77,12 +77,35 @@ withNightlyPipeline(type, product, component) {
     env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
 
     loadVaultSecrets(secrets)
-
+    enableFortifyScan()
     enableSecurityScan()
     enableMutationTest()
     enableSlackNotifications('#ia-tech')
     enableFullFunctionalTest()
 
+    afterAlways('DependencyCheckNightly') {
+        publishHTML([
+        allowMissing         : true,
+        alwaysLinkToLastBuild: true,
+        keepAll              : true,
+        reportDir            : "build/reports",
+        reportFiles          : 'dependency-check-report.html',
+        reportName           : 'Dependency Check Report'
+        ])
+    }
+
+    afterAlways('fortify-scan') {
+        publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "Fortify Scan",
+                reportFiles          : "FortifyScanReport.html",
+                reportName           : "Fortify Scan Report"
+        ]
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+    }
+    
     before('fullFunctionalTest') {
         try {
             builder.gradle('smoke')
@@ -95,7 +118,7 @@ withNightlyPipeline(type, product, component) {
                     keepAll              : true,
                     reportDir            : "build/reports/tests/test",
                     reportFiles          : "index.html",
-                    reportName           : "IAC Case Documents Unit Test Report"
+                    reportName           : "Unit Test Report"
             ]
             publishHTML target: [
                     allowMissing         : true,
@@ -103,7 +126,7 @@ withNightlyPipeline(type, product, component) {
                     keepAll              : true,
                     reportDir            : "build/reports/tests/smoke",
                     reportFiles          : "index.html",
-                    reportName           : "IAC Case Documents Smoke Test Report"
+                    reportName           : "Smoke Test Report"
             ]
             publishHTML target: [
                     allowMissing         : true,
@@ -111,7 +134,7 @@ withNightlyPipeline(type, product, component) {
                     keepAll              : true,
                     reportDir            : "build/reports/tests/integration",
                     reportFiles          : "index.html",
-                    reportName           : "IAC Case Documents Integration Test Report"
+                    reportName           : "Integration Test Report"
             ]
             junit '**/test-results/**/*.xml'
         }
@@ -135,7 +158,7 @@ withNightlyPipeline(type, product, component) {
                 keepAll              : true,
                 reportDir            : "build/reports/tests/functional",
                 reportFiles          : 'index.html',
-                reportName           : 'IAC Case Documents Functional Test Report'
+                reportName           : 'Functional Test Report'
         ])
 
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
