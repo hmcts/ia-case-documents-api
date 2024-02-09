@@ -22,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.InterpreterLanguage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.ImaFeatureTogglerHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 
 @Component
@@ -32,18 +33,23 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     private static final String SENT_BY_HO = "Home Office";
     private static final String NATIONALITY = "nationality";
     private static final String DONT_KNOW_SELECTED_VALUE = "Don't Know";
+    private final ImaFeatureTogglerHandler imaFeatureTogglerHandler;
 
     private final String templateName;
+    private final String templateNameWithoutUt;
 
     public BailSubmissionTemplate(
-        @Value("${bailSubmissionDocument.templateName}") String templateName
+        @Value("${bailSubmissionDocument.templateName}") String templateName,
+        @Value("${bailSubmissionDocumentWithoutUt.templateName}") String templateNameWithoutUt,
+        ImaFeatureTogglerHandler imaFeatureTogglerHandler
     ) {
         this.templateName = templateName;
+        this.templateNameWithoutUt = templateNameWithoutUt;
+        this.imaFeatureTogglerHandler = imaFeatureTogglerHandler;
     }
 
     public String getName() {
-
-        return templateName;
+        return imaFeatureTogglerHandler.isImaEnabled() ? templateName : templateNameWithoutUt;
     }
 
     @Override
@@ -126,19 +132,21 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                 break;
         }
 
-        fieldValues.put("hasAppealHearingPendingUT", bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class).orElse(""));
-        switch (bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class).orElse("")) {
-            case "YesWithoutAppealNumber":
-                fieldValues.put("hasAppealHearingPendingUT", "Yes Without Appeal Number");
-                break;
-            case "DontKnow":
-                fieldValues.put("hasAppealHearingPendingUT", DONT_KNOW_SELECTED_VALUE);
-                break;
-            case "Yes" :
-                fieldValues.put("appealReferenceNumberUT", bailCase.read(UT_APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
-                break;
-            default:
-                break;
+        if (imaFeatureTogglerHandler.isImaEnabled()) {
+            fieldValues.put("hasAppealHearingPendingUT", bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class).orElse(""));
+            switch (bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class).orElse("")) {
+                case "YesWithoutAppealNumber":
+                    fieldValues.put("hasAppealHearingPendingUT", "Yes Without Appeal Number");
+                    break;
+                case "DontKnow":
+                    fieldValues.put("hasAppealHearingPendingUT", DONT_KNOW_SELECTED_VALUE);
+                    break;
+                case "Yes":
+                    fieldValues.put("appealReferenceNumberUT", bailCase.read(UT_APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
+                    break;
+                default:
+                    break;
+            }
         }
 
         fieldValues.put("applicantHasAddress", bailCase.read(APPLICANT_HAS_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO));

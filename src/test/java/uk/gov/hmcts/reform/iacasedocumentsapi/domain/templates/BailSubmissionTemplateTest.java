@@ -11,10 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,6 +31,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.InterpreterLanguage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.ImaFeatureTogglerHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -39,8 +43,11 @@ public class BailSubmissionTemplateTest {
     private BailCase bailCase;
     @Mock
     private PriorApplication priorApplication;
+    @Mock
+    private ImaFeatureTogglerHandler imaFeatureTogglerHandler;
 
     private final String templateName = "BAIL_SUBMISSION_TEMPLATE.docx";
+    private final String templateNameWithoutUt = "IA_BAIL_SUBMISSION_TEMPLATE_WITHOUT_UT.docx";
     private String applicantGivenNames = "John";
     private String applicantFamilyName = "Smith";
     private String applicationSubmittedBy = "Legal Representative";
@@ -132,7 +139,8 @@ public class BailSubmissionTemplateTest {
 
     @BeforeEach
     public void setUp() {
-        bailSubmissionTemplate = new BailSubmissionTemplate(templateName);
+        bailSubmissionTemplate = new BailSubmissionTemplate(templateName, templateNameWithoutUt, imaFeatureTogglerHandler);
+        when(imaFeatureTogglerHandler.isImaEnabled()).thenReturn(true);
     }
 
     @Test
@@ -355,9 +363,33 @@ public class BailSubmissionTemplateTest {
         assertEquals("", fieldValuesMap.get("legalRepReference"));
     }
 
+    @ParameterizedTest
+    @MethodSource("toggleImaSwitchMode")
+    void should_return_template_name(boolean toggleImaSwitchMode) {
+        when(imaFeatureTogglerHandler.isImaEnabled()).thenReturn(toggleImaSwitchMode);
+
+        if (toggleImaSwitchMode) {
+            assertEquals(templateName, bailSubmissionTemplate.getName());
+        } else {
+            assertEquals(templateNameWithoutUt, bailSubmissionTemplate.getName());
+        }
+    }
+
+    private static Stream<Arguments> toggleImaSwitchMode() {
+        return Stream.of(
+            Arguments.of(true),
+            Arguments.of(false)
+        );
+    }
+
     @Test
-    void should_return_template_name() {
-        assertEquals(templateName, bailSubmissionTemplate.getName());
+    void should_not_set_appeal_hearing_pending_ut_selected_values_if_toggle_is_switched_off() {
+        dataSetUp();
+        when(imaFeatureTogglerHandler.isImaEnabled()).thenReturn(false);
+        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertFalse(fieldValuesMap.containsKey("hasAppealHearingPendingUT"));
+        assertFalse(fieldValuesMap.containsKey("appealReferenceNumberUT"));
     }
 
     /*
