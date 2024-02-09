@@ -18,11 +18,7 @@ public class DocumentDownloadClient {
 
 
     public Resource download(String documentBinaryUrl) {
-        if (featureToggler.getValue("use-ccd-document-am", false)) {
-            return cdamDocumentDownLoadClient.download(documentBinaryUrl);
-        } else {
-            return dmDocumentDownloadClient.download(documentBinaryUrl);
-        }
+        return cdamDocumentDownLoadClient.download(documentBinaryUrl);
     }
 
 }

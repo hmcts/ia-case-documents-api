@@ -63,9 +63,9 @@ public class CdamDocumentManagementUploader {
         );
 
         uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = 
-                uploadResponse.getDocuments().stream().findFirst().orElseThrow(
-                        () -> new DocumentServiceResponseException("Document cannot be uploaded, please try again")
-                );
+            uploadResponse.getDocuments().stream().findFirst().orElseThrow(
+                () -> new DocumentServiceResponseException("Document cannot be uploaded, please try again")
+            );
 
         log.info(
             "Uploaded document: {}, {}, {}, {}",

@@ -23,10 +23,6 @@ public class DocumentManagementUploader implements DocumentUploader {
             String jurisdictionId,
             String contentType
     ) {
-        if (featureToggler.getValue("use-ccd-document-am", false)) {
-            return cdamDocumentManagementUploader.upload(resource, contentType);
-        } else {
-            return dmDocumentManagementUploader.upload(resource, contentType);
-        }
+        return cdamDocumentManagementUploader.upload(resource, contentType);
     }
 }
