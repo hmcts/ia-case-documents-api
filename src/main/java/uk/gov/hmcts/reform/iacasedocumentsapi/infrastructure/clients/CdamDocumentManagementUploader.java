@@ -68,6 +68,11 @@ public class CdamDocumentManagementUploader {
             );
 
         log.info(
+            "Uploaded document metadata: {}",
+            uploadedDocument.metadata
+        );
+
+        log.info(
             "Uploaded document: {}, {}, {}, {}",
             uploadedDocument.links.self.href,
             uploadedDocument.links.binary.href,
