@@ -1,14 +1,5 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.controllers;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.CaseMetaData;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.State;
@@ -23,6 +15,18 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.SubmitEventDeta
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentDto;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestUpdateDto;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.CcdDataService;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -39,6 +43,8 @@ public class ServiceRequestUpdateControllerTest {
     private static final String SERVICE_REQUEST_AMOUNT = "80.00";
     private static final String SERVICE_REQUEST_STATUS = "paid";
     private static final String PAYMENT_STATUS = "success";
+    private static final String VALID_S2S_TOKEN = "VALID_S2S_TOKEN";
+    private static final String INVALID_S2S_TOKEN = "INVALID_S2S_TOKEN";
     private static final long CASE_ID = 1234;
 
     private ServiceRequestUpdateController serviceRequestUpdateController;
@@ -50,16 +56,15 @@ public class ServiceRequestUpdateControllerTest {
 
     @Test
     void should_update_the_payment_status_successfully() {
-
         when(serviceRequestUpdateDto.getCcdCaseNumber()).thenReturn(CCD_CASE_NUMBER);
         when(serviceRequestUpdateDto.getPayment()).thenReturn(paymentDto);
         when(serviceRequestUpdateDto.getServiceRequestStatus()).thenReturn(PAYMENT_STATUS);
         when(paymentDto.getReference()).thenReturn(PAYMENT_REFERENCE);
-        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class), eq(true)))
+        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class), eq(true), eq(VALID_S2S_TOKEN)))
             .thenReturn(getSubmitEventResponse());
 
         ResponseEntity<SubmitEventDetails> responseEntity = serviceRequestUpdateController
-            .serviceRequestUpdate(serviceRequestUpdateDto);
+            .serviceRequestUpdate(VALID_S2S_TOKEN, serviceRequestUpdateDto);
 
         SubmitEventDetails response = responseEntity.getBody();
 
@@ -76,16 +81,24 @@ public class ServiceRequestUpdateControllerTest {
     }
 
     @Test
-    void should_error_when_service_is_unavailable() {
+    void should_error_when_the_s2s_token_is_invalid() {
+        when(serviceRequestUpdateDto.getCcdCaseNumber()).thenReturn(CCD_CASE_NUMBER);
+        when(serviceRequestUpdateDto.getPayment()).thenReturn(paymentDto);
+        when(serviceRequestUpdateDto.getServiceRequestStatus()).thenReturn(PAYMENT_STATUS);
+        doThrow(AccessDeniedException.class).when(ccdDataService).updatePaymentStatus(any(CaseMetaData.class), eq(true), eq(INVALID_S2S_TOKEN));
+        assertThrows(AccessDeniedException.class, () -> serviceRequestUpdateController.serviceRequestUpdate(INVALID_S2S_TOKEN, serviceRequestUpdateDto));
+    }
 
+    @Test
+    void should_error_when_service_is_unavailable() {
         when(serviceRequestUpdateDto.getCcdCaseNumber()).thenReturn(CCD_CASE_NUMBER);
         when(serviceRequestUpdateDto.getPayment()).thenReturn(paymentDto);
         when(serviceRequestUpdateDto.getServiceRequestStatus()).thenReturn(PAYMENT_STATUS);
         when(paymentDto.getReference()).thenReturn(PAYMENT_REFERENCE);
-        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class), eq(true)))
+        when(ccdDataService.updatePaymentStatus(any(CaseMetaData.class), eq(true), eq(VALID_S2S_TOKEN)))
             .thenThrow(ResponseStatusException.class);
 
-        assertThatThrownBy(() -> serviceRequestUpdateController.serviceRequestUpdate(serviceRequestUpdateDto))
+        assertThatThrownBy(() -> serviceRequestUpdateController.serviceRequestUpdate(VALID_S2S_TOKEN, serviceRequestUpdateDto))
             .isExactlyInstanceOf(ResponseStatusException.class);
     }
 

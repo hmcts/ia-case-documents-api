@@ -348,6 +348,7 @@ configurations {
 }
 
 dependencies {
+
   modules {
     module("org.codehaus.groovy:groovy") {
       replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")

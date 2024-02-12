@@ -10,12 +10,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.CaseMetaData;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.SubmitEventDetails;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestUpdateDto;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.CcdDataService;
+
+import static uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.S2STokenValidator.SERVICE_AUTHORIZATION_HEADER;
 
 @Tag(name = "Update service request controller")
 @OpenAPIDefinition(tags = {@Tag(name = "ServiceRequestUpdateController", description = "Update service request")})
@@ -42,6 +45,7 @@ public class ServiceRequestUpdateController {
             @ApiResponse(responseCode = "400", description = "Bad Request")
         })
     public ResponseEntity<SubmitEventDetails> serviceRequestUpdate(
+        @RequestHeader(value = SERVICE_AUTHORIZATION_HEADER) String s2sAuthToken,
         @RequestBody ServiceRequestUpdateDto serviceRequestUpdateDto) {
 
         String caseId = serviceRequestUpdateDto.getCcdCaseNumber();
@@ -57,7 +61,7 @@ public class ServiceRequestUpdateController {
                              serviceRequestUpdateDto.getServiceRequestStatus(),
                              serviceRequestUpdateDto.getPayment().getReference());
 
-        SubmitEventDetails response = ccdDataService.updatePaymentStatus(updatePaymentStatusCaseMetaData, true);
+        SubmitEventDetails response = ccdDataService.updatePaymentStatus(updatePaymentStatusCaseMetaData, true, s2sAuthToken);
 
         return ResponseEntity
             .status(response.getCallbackResponseStatusCode())

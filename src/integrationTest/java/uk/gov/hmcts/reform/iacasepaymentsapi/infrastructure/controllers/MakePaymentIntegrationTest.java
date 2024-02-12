@@ -46,7 +46,7 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest
     @WithMockUser(authorities = {"caseworker-ia-legalrep-solicitor"})
     void executionEndpoint() throws Exception {
 
-        addServiceAuthStub(server);
+        addServiceAuthStub(server, "ia");
         addFeesRegisterStub(server);
         addPaymentStub(server);
         addUserInfoStub(server);

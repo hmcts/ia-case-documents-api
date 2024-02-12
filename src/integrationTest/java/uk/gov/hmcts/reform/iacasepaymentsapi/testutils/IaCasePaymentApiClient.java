@@ -1,10 +1,5 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.testutils;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.ServiceTokenGeneratorConfiguration.SERVICE_AUTHORIZATION;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import groovy.util.logging.Slf4j;
@@ -12,14 +7,38 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.SubmitEventDetails;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentDto;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestUpdateDto;
+
+import java.math.BigDecimal;
+
+import javax.servlet.http.HttpServletResponse;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.ServiceTokenGeneratorConfiguration.SERVICE_AUTHORIZATION;
 
 @Slf4j
 public class IaCasePaymentApiClient {
+
+    public static final String ID = "1234";
+    public static final String PAYMENT_CASE_REFERENCE = "RC-1627-5070-9329-7815";
+    public static final String CCD_CASE_NUMBER = "1627506765384547";
+    public static final String JURISDICTION = "IA";
+    public static final BigDecimal PAYMENT_AMOUNT = BigDecimal.valueOf(140);
+    public static final String CALLBACK_COMPLETED = "CALLBACK_COMPLETED";
+    public static final String SUCCESS = "success";
+    public static final String APPEAL_REFERENCE_NUMBER = "HU/50004/2021";
 
     private final MockMvc mockMvc;
     private final String aboutToSubmitUrl;
     private final String aboutToStartUrl;
     private final String ccdSubmittedUrl;
+    private final String updatePaymentStatusUrl;
+    private final String serviceRequestUpdateUrl;
 
     private final HttpHeaders httpHeaders = new HttpHeaders();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -29,6 +48,8 @@ public class IaCasePaymentApiClient {
         this.aboutToSubmitUrl = "/asylum/ccdAboutToSubmit";
         this.aboutToStartUrl = "/asylum/ccdAboutToStart";
         this.ccdSubmittedUrl = "/asylum/ccdSubmitted";
+        this.updatePaymentStatusUrl = "/payment-updates";
+        this.serviceRequestUpdateUrl = "/service-request-update";
 
         objectMapper.registerModule(new JavaTimeModule());
 
@@ -95,6 +116,46 @@ public class IaCasePaymentApiClient {
 
         return translateException(() -> objectMapper
             .readValue(response.getContentAsByteArray(), PreSubmitCallbackResponseForTest.class));
+    }
+
+    public SubmitEventDetails updatePaymentStatus(PaymentDto paymentDto) throws Exception {
+        final MockHttpServletResponse response =
+            mockMvc.perform(put(updatePaymentStatusUrl)
+                                .headers(httpHeaders)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toJson(paymentDto)))
+            .andExpect(status().isOk()).andReturn().getResponse();
+
+        return translateException(() -> objectMapper
+            .readValue(response.getContentAsByteArray(), SubmitEventDetails.class));
+    }
+
+    public HttpServletResponse updatePaymentStatusWithError(PaymentDto paymentDto) throws Exception {
+        return mockMvc.perform(put(updatePaymentStatusUrl)
+                                .headers(httpHeaders)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toJson(paymentDto)))
+                                .andReturn().getResponse();
+    }
+
+    public SubmitEventDetails serviceRequestUpdate(ServiceRequestUpdateDto serviceRequestUpdateDto) throws Exception {
+        final MockHttpServletResponse response =
+            mockMvc.perform(put(serviceRequestUpdateUrl)
+                                .headers(httpHeaders)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toJson(serviceRequestUpdateDto)))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        return translateException(() -> objectMapper
+            .readValue(response.getContentAsByteArray(), SubmitEventDetails.class));
+    }
+
+    public HttpServletResponse serviceRequestUpdateWithError(ServiceRequestUpdateDto serviceRequestUpdateDto) throws Exception {
+        return mockMvc.perform(put(serviceRequestUpdateUrl)
+                                .headers(httpHeaders)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toJson(serviceRequestUpdateDto)))
+                                .andReturn().getResponse();
     }
 
     private String toJson(Object o) {

@@ -1,10 +1,15 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.testutils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.LocalDateTime;
 import lombok.Data;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.State;
+
+import java.time.LocalDateTime;
+
+import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.IaCasePaymentApiClient.CCD_CASE_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.IaCasePaymentApiClient.JURISDICTION;
 
 @Data
 public class CaseDetailsForTest {
@@ -32,7 +37,7 @@ public class CaseDetailsForTest {
         }
 
         private long id = 1;
-        private String jurisdiction = "ia";
+        private String jurisdiction = JURISDICTION;
         private State state;
         private AsylumCase caseData;
         private LocalDateTime createdDate = LocalDateTime.now();
@@ -77,6 +82,15 @@ public class CaseDetailsForTest {
                    + this.caseData + ", createdDate="
                    + this.createdDate + ")";
         }
+    }
+
+    public static CaseDetails<AsylumCase> generateValidCaseDetailWithAsylumCase() {
+        return new CaseDetails<>(
+            Long.parseLong(CCD_CASE_NUMBER),
+            JURISDICTION,
+            State.PENDING_PAYMENT,
+            AsylumCaseForTest.generateValidPaymentStatusAsylumCase()
+        );
     }
 
 }

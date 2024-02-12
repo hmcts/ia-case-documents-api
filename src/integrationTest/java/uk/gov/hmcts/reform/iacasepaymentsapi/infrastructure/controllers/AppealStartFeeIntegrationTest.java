@@ -34,7 +34,7 @@ public class AppealStartFeeIntegrationTest extends SpringBootIntegrationTest
     @WithMockUser(authorities = {"caseworker-ia-legalrep-solicitor"})
     public void executionEndpoint() throws Exception {
 
-        addServiceAuthStub(server);
+        addServiceAuthStub(server, "ia");
         addUserInfoStub(server);
         addFeesRegisterStub(server);
         addRefDataStub(server, resourceFile);

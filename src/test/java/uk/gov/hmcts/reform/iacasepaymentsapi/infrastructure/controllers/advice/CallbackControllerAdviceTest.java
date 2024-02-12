@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
@@ -52,5 +53,15 @@ class CallbackControllerAdviceTest {
         assertEquals(responseEntity.getStatusCode().value(), HttpStatus.BAD_REQUEST.value());
         assertThat(responseEntity.getBody().getErrorMessage())
             .contains("400 BAD_REQUEST \"Error in calling the client method:someMethod\"");
+    }
+
+    @Test
+    void should_handle_required_403_access_denied_exception_exception() {
+        ResponseEntity<ExceptionResponse> responseEntity =
+            callbackControllerAdvice.handleAccessDeniedExceptions(
+                new AccessDeniedException("Invalid S2S Token...")
+            );
+
+        assertEquals(responseEntity.getStatusCode().value(), HttpStatus.FORBIDDEN.value());
     }
 }

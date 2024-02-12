@@ -1,11 +1,5 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service;
 
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,8 +13,16 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.StartEventDetai
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.SubmitEventDetails;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.CcdDataApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.IdentityManagerResponseException;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.S2STokenValidator;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.SystemTokenGenerator;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.SystemUserProvider;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 
 @Service
 @Slf4j
@@ -31,19 +33,22 @@ public class CcdDataService {
     private final SystemUserProvider systemUserProvider;
     private final AuthTokenGenerator serviceAuthorization;
 
+    private final S2STokenValidator s2sTokenValidator;
+
     public CcdDataService(CcdDataApi ccdDataApi,
                           SystemTokenGenerator systemTokenGenerator,
                           SystemUserProvider systemUserProvider,
-                          AuthTokenGenerator serviceAuthorization) {
-
+                          AuthTokenGenerator serviceAuthorization,
+                          S2STokenValidator s2STokenValidator) {
         this.ccdDataApi = ccdDataApi;
         this.systemTokenGenerator = systemTokenGenerator;
         this.systemUserProvider = systemUserProvider;
         this.serviceAuthorization = serviceAuthorization;
+        this.s2sTokenValidator = s2STokenValidator;
     }
 
-
-    public SubmitEventDetails updatePaymentStatus(CaseMetaData caseMetaData, boolean isWaysToPay) {
+    public SubmitEventDetails updatePaymentStatus(CaseMetaData caseMetaData, boolean isWaysToPay, String s2sAuthToken) {
+        s2sTokenValidator.checkIfServiceIsAllowed(s2sAuthToken);
 
         String event = caseMetaData.getEvent().toString();
         String caseId = String.valueOf(caseMetaData.getCaseId());
@@ -106,12 +111,8 @@ public class CcdDataService {
     private SubmitEventDetails submitEvent(
         String userToken, String s2sToken, String caseId, Map<String, Object> data,
         Map<String, Object> eventData, String eventToken, boolean ignoreWarning) {
-
-        CaseDataContent request =
-            new CaseDataContent(caseId, data, eventData, eventToken, ignoreWarning);
-
+        CaseDataContent request = new CaseDataContent(caseId, data, eventData, eventToken, ignoreWarning);
         return ccdDataApi.submitEvent(userToken, s2sToken, caseId, request);
-
     }
 
     private boolean isPaymentReferenceExists(AsylumCase asylumCase, String reference) {

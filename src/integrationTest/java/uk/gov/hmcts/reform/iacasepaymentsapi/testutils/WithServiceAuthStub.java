@@ -13,7 +13,7 @@ public interface WithServiceAuthStub {
     String SERVICE_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyf"
         + "Q.L8i6g3PfcHlioHCCPURC9pmXT7gdJpx3kOoyAfNUwCc";
 
-    default void addServiceAuthStub(WireMockServer server) {
+    default void addServiceAuthStub(WireMockServer server, String serviceName) {
 
         server.addStubMapping(
             new StubMapping(
@@ -22,7 +22,7 @@ public interface WithServiceAuthStub {
                 aResponse()
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json")
-                    .withBody("ia")
+                    .withBody(serviceName)
                     .build()));
 
         server.addStubMapping(

@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.testutils;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.http.RequestMethod.POST;
 import static com.github.tomakehurst.wiremock.matching.RequestPatternBuilder.newRequestPattern;
-
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.http.RequestMethod;
-import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 
 public interface WithPaymentStub {
 
@@ -16,7 +16,7 @@ public interface WithPaymentStub {
 
         server.addStubMapping(
             new StubMapping(
-                newRequestPattern(RequestMethod.POST, urlEqualTo(paymentUrl))
+                newRequestPattern(POST, urlEqualTo(paymentUrl))
                     .build(),
                 aResponse()
                     .withStatus(200)

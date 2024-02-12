@@ -1,8 +1,11 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.testutils;
 
-import java.util.Map;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition;
+
+import java.util.Map;
+
+import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.IaCasePaymentApiClient.PAYMENT_CASE_REFERENCE;
 
 public class AsylumCaseForTest implements Builder<AsylumCase> {
 
@@ -29,5 +32,9 @@ public class AsylumCaseForTest implements Builder<AsylumCase> {
 
     public AsylumCase build() {
         return asylumCase;
+    }
+
+    public static AsylumCase generateValidPaymentStatusAsylumCase() {
+        return anAsylumCase().with(AsylumCaseDefinition.PAYMENT_REFERENCE, PAYMENT_CASE_REFERENCE).build();
     }
 }
