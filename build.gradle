@@ -336,7 +336,6 @@ dependencies {
             replacedBy("org.apache.groovy:groovy-json", "conflicts in current rest-assured version")
         }
     }
-
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
