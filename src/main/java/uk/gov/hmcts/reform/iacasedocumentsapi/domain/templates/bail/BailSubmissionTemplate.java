@@ -36,20 +36,20 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     private final ImaFeatureTogglerHandler imaFeatureTogglerHandler;
 
     private final String templateName;
-    private final String templateNameWithoutUt;
+    private final String templateNameWithUt;
 
     public BailSubmissionTemplate(
         @Value("${bailSubmissionDocument.templateName}") String templateName,
-        @Value("${bailSubmissionDocumentWithoutUt.templateName}") String templateNameWithoutUt,
+        @Value("${bailSubmissionDocumentWithUt.templateName}") String templateNameWithUt,
         ImaFeatureTogglerHandler imaFeatureTogglerHandler
     ) {
         this.templateName = templateName;
-        this.templateNameWithoutUt = templateNameWithoutUt;
+        this.templateNameWithUt = templateNameWithUt;
         this.imaFeatureTogglerHandler = imaFeatureTogglerHandler;
     }
 
     public String getName() {
-        return imaFeatureTogglerHandler.isImaEnabled() ? templateName : templateNameWithoutUt;
+        return imaFeatureTogglerHandler.isImaEnabled() ? templateNameWithUt : templateName;
     }
 
     @Override
