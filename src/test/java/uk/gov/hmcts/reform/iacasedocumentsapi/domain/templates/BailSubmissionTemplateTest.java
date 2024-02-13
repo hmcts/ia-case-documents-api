@@ -47,7 +47,7 @@ public class BailSubmissionTemplateTest {
     private ImaFeatureTogglerHandler imaFeatureTogglerHandler;
 
     private final String templateName = "BAIL_SUBMISSION_TEMPLATE.docx";
-    private final String templateNameWithoutUt = "IA_BAIL_SUBMISSION_TEMPLATE_WITHOUT_UT.docx";
+    private final String templateNameWithUt = "IA_BAIL_SUBMISSION_TEMPLATE_WITH_UT.docx";
     private String applicantGivenNames = "John";
     private String applicantFamilyName = "Smith";
     private String applicationSubmittedBy = "Legal Representative";
@@ -139,7 +139,7 @@ public class BailSubmissionTemplateTest {
 
     @BeforeEach
     public void setUp() {
-        bailSubmissionTemplate = new BailSubmissionTemplate(templateName, templateNameWithoutUt, imaFeatureTogglerHandler);
+        bailSubmissionTemplate = new BailSubmissionTemplate(templateName, templateNameWithUt, imaFeatureTogglerHandler);
         when(imaFeatureTogglerHandler.isImaEnabled()).thenReturn(true);
     }
 
@@ -369,9 +369,9 @@ public class BailSubmissionTemplateTest {
         when(imaFeatureTogglerHandler.isImaEnabled()).thenReturn(toggleImaSwitchMode);
 
         if (toggleImaSwitchMode) {
-            assertEquals(templateName, bailSubmissionTemplate.getName());
+            assertEquals(templateNameWithUt, bailSubmissionTemplate.getName());
         } else {
-            assertEquals(templateNameWithoutUt, bailSubmissionTemplate.getName());
+            assertEquals(templateName, bailSubmissionTemplate.getName());
         }
     }
 
