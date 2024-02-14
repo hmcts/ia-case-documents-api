@@ -8,10 +8,16 @@ properties([
     string(name: 'SecurityRules',
       defaultValue: 'https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
       description: 'The URL you want to run these tests against'),
+    booleanParam(name: 'skipFortifyScan', defaultValue: false, description: 'Tick the checkbox for skip'),
+    booleanParam(name: 'skipSecurityScan', defaultValue: false, description: 'Tick the checkbox for skip'),
+    booleanParam(name: 'skipMutationTests', defaultValue: false, description: 'Tick the checkbox for skip'),
+    booleanParam(name: 'skipNonFunctionalTests', defaultValue: false, description: 'Tick the checkbox for skip'),
+    booleanParam(name: 'skipFullFunctionalTests', defaultValue: false, description: 'Tick the checkbox for skip'),
   ])
 ])
 
 @Library("Infrastructure")
+import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
 def product = "ia"
@@ -54,6 +60,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
+GradleBuilder builder = new GradleBuilder(this, product)
+
 withNightlyPipeline(type, product, component) {
 
   env.TEST_URL = params.URL_TO_TEST
@@ -64,11 +72,11 @@ withNightlyPipeline(type, product, component) {
   env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
 
   loadVaultSecrets(secrets)
-  enableFortifyScan()
-  enableSecurityScan()
-  enableMutationTest()
+  if (!params.skipFortifyScan) { enableFortifyScan() }
+  if (!params.skipSecurityScan) { enableSecurityScan() }
+  if (!params.skipMutationTests) { enableMutationTest() }
   enableSlackNotifications('#ia-tech')
-  enableFullFunctionalTest()
+  if (!params.skipFullFunctionalTests) { enableFullFunctionalTest() }
 
   afterAlways('DependencyCheckNightly') {
     publishHTML([
@@ -79,6 +87,68 @@ withNightlyPipeline(type, product, component) {
       reportFiles          : 'dependency-check-report.html',
       reportName           : 'Dependency Check Report'
     ])
+  }
+
+  afterAlways('mutationTest') {
+    publishHTML([
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/pitest",
+      reportFiles          : 'index.html',
+      reportName           : 'Mutation Test Report'
+    ])
+  }
+
+  before('fullFunctionalTest') {
+    if (!params.skipNonFunctionalTests) {
+      try {
+        builder.gradle('test')
+        builder.gradle('integration')
+        builder.gradle('smoke')
+      } finally {
+        junit '**/test-results/**/*.xml'
+        publishHTML target: [
+          allowMissing         : true,
+          alwaysLinkToLastBuild: true,
+          keepAll              : true,
+          reportDir            : "build/reports/tests/test",
+          reportFiles          : "index.html",
+          reportName           : "Unit Test Report"
+        ]
+        publishHTML target: [
+          allowMissing         : true,
+          alwaysLinkToLastBuild: true,
+          keepAll              : true,
+          reportDir            : "build/reports/tests/smoke",
+          reportFiles          : "index.html",
+          reportName           : "Smoke Test Report"
+        ]
+        publishHTML target: [
+          allowMissing         : true,
+          alwaysLinkToLastBuild: true,
+          keepAll              : true,
+          reportDir            : "build/reports/tests/integration",
+          reportFiles          : "index.html",
+          reportName           : "Integration Test Report"
+        ]
+      }
+    }
+  }
+
+  afterAlways('fullFunctionalTest') {
+    publishHTML([
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/functional",
+      reportFiles          : 'index.html',
+      reportName           : 'Functional Test Report'
+    ])
+
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/**/*'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/**/*'
   }
 
   afterAlways('fortify-scan') {

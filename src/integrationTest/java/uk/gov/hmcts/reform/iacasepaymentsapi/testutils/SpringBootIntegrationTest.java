@@ -27,7 +27,10 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.Application;
     "IA_IDAM_SECRET=something",
     "FEES_REGISTER_API_URL=http://127.0.0.1:8990/fees",
     "PAYMENT_API_URL=http://127.0.0.1:8990/payment",
-    "PROF_REF_DATA_URL=http://127.0.0.1:8990/refdata"
+    "PROF_REF_DATA_URL=http://127.0.0.1:8990/refdata",
+    "IA_IDAM_REDIRECT_URI=http://localhost:3002/oauth2/callback",
+    "IA_SYSTEM_USERNAME=ia-system-user@fake.hmcts.net",
+    "IA_SYSTEM_PASSWORD=something"
 })
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("integration")

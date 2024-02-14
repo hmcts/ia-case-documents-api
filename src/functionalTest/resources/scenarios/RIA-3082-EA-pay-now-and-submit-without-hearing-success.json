@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3082 Success for pay and submit now without a hearing (EA appeal type) - PBA0087535",
+  "description": "RIA-3082 Success for pay and submit now without a hearing (EA appeal type) - PBA0087412",
   "enabled": false,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -14,7 +14,7 @@
           "appealType": "refusalOfEu",
           "decisionHearingFeeOption": "decisionWithoutHearing",
           "homeOfficeDecisionDate": "{$TODAY-14}",
-          "paymentAccountList": "PBA0087535",
+          "paymentAccountList": "PBA0087412",
           "homeOfficeReferenceNumber": "A123456",
           "paymentDescription": "An IA pba test payment",
           "customerReference": "543232",
@@ -31,7 +31,7 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "paymentAccountList":"PBA0087535",
+        "paymentAccountList":"PBA0087412",
         "feeCode":"FEE0372",
         "feeVersion":"2",
         "feeAmountGbp":"8000",

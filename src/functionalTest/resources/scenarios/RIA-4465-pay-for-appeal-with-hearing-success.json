@@ -1,5 +1,5 @@
 {
-  "description": "RIA-4465 Success for event pay for appeal with a hearing - PBA0087535",
+  "description": "RIA-4465 Success for event pay for appeal with a hearing - PBA0087412",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentativeOrgSuccess",
@@ -13,7 +13,7 @@
           "appealType": "protection",
           "decisionHearingFeeOption": "decisionWithHearing",
           "homeOfficeDecisionDate": "{$TODAY-14}",
-          "paymentAccountList": "PBA0087535",
+          "paymentAccountList": "PBA0087412",
           "homeOfficeReferenceNumber": "123456789",
           "paymentDescription": "An IA pba test payment",
           "customerReference": "543232",
@@ -33,7 +33,7 @@
         "homeOfficeDecisionDate": "{$TODAY-14}",
         "homeOfficeReferenceNumber": "123456789",
         "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_SUCCESS_USERNAME}",
-        "paymentAccountList": "PBA0087535",
+        "paymentAccountList": "PBA0087412",
         "feeCode": "FEE0238",
         "feeVersion": "2",
         "feeAmountGbp": "14000",
