@@ -13,6 +13,7 @@ properties([
                 booleanParam(name: 'skipIntegrationTests', defaultValue: false, description: 'Tick the checkbox to skip Integration Tests stage'),
                 booleanParam(name: 'skipFortifyScan', defaultValue: false, description: 'Tick the checkbox to skip Fortify Scan stage'),
                 booleanParam(name: 'skipSecurityScan', defaultValue: false, description: 'Tick the checkbox to skip Security Scan stage'),
+                booleanParam(name: 'skipMutationTests', defaultValue: false, description: 'Tick the checkbox to skip Mutation Tests stage'),
                 booleanParam(name: 'skipFullFunctionalTests', defaultValue: false, description: 'Tick the checkbox to skip Full Functional Tests stage'),
         ])
 ])
