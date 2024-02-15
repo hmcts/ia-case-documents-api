@@ -1,16 +1,22 @@
 #!groovy
 
 properties([
-  // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-  pipelineTriggers([cron('H 08 * * 1-5')]),
-  parameters([
-          string(name: 'URL_TO_TEST', defaultValue: 'http://ia-case-notifications-api-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
-          string(name: 'SecurityRules',
-              defaultValue: 'https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
-              description: 'The URL you want to run these tests against'),
-          string(name: 'IA_EXUI_FRONTEND_URL', defaultValue: 'https://manage-case.platform.hmcts.net/', description: 'The ExUI frontend URL that will be included in personalisation'),
-          string(name: 'IA_AIP_FRONTEND_URL', defaultValue: 'https://www.appeal-immigration-asylum-decision.service.gov.uk/', description: 'The AIP frontend URL that will be included in personalisation')
-  ])
+        // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
+        pipelineTriggers([cron('H 08 * * 1-5')]),
+        parameters([
+                string(name: 'URL_TO_TEST', defaultValue: 'http://ia-case-notifications-api-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
+                string(name: 'SecurityRules',
+                        defaultValue: 'https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
+                        description: 'The URL you want to run these tests against'),
+                string(name: 'IA_EXUI_FRONTEND_URL', defaultValue: 'https://manage-case.platform.hmcts.net/', description: 'The ExUI frontend URL that will be included in personalisation'),
+                string(name: 'IA_AIP_FRONTEND_URL', defaultValue: 'https://www.appeal-immigration-asylum-decision.service.gov.uk/', description: 'The AIP frontend URL that will be included in personalisation'),
+                booleanParam(name: 'skipSmokeTest', defaultValue: false, description: 'Tick the checkbox to skip Smoke Test stage'),
+                booleanParam(name: 'skipUnitTests', defaultValue: false, description: 'Tick the checkbox to skip Unit Tests stage'),
+                booleanParam(name: 'skipIntegrationTests', defaultValue: false, description: 'Tick the checkbox to skip Integration Tests stage'),
+                booleanParam(name: 'skipFortifyScan', defaultValue: false, description: 'Tick the checkbox to skip Fortify Scan stage'),
+                booleanParam(name: 'skipSecurityScan', defaultValue: false, description: 'Tick the checkbox to skip Security Scan stage'),
+                booleanParam(name: 'skipFullFunctionalTests', defaultValue: false, description: 'Tick the checkbox to skip Full Functional Tests stage'),
+        ])
 ])
 
 @Library("Infrastructure")
@@ -21,260 +27,299 @@ def product = "ia"
 def component = "case-notifications-api"
 
 def secrets = [
-    'ia-${env}': [
+        'ia-${env}': [
 
-        secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
-        secret('ia-bail-gov-notify-key', 'IA_BAIL_GOV_NOTIFY_KEY'),
+                secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
+                secret('ia-bail-gov-notify-key', 'IA_BAIL_GOV_NOTIFY_KEY'),
 
-        secret('hearing-centre-bradford-email', 'IA_HEARING_CENTRE_BRADFORD_EMAIL'),
-        secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
-        secret('hearing-centre-newport-email', 'IA_HEARING_CENTRE_NEWPORT_EMAIL'),
-        secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
-        secret('hearing-centre-north-shields-email', 'IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL'),
-        secret('hearing-centre-birmingham-email', 'IA_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
-        secret('hearing-centre-hatton-cross-email', 'IA_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
-        secret('hearing-centre-glasgow-email', 'IA_HEARING_CENTRE_GLASGOW_EMAIL'),
+                secret('hearing-centre-bradford-email', 'IA_HEARING_CENTRE_BRADFORD_EMAIL'),
+                secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
+                secret('hearing-centre-newport-email', 'IA_HEARING_CENTRE_NEWPORT_EMAIL'),
+                secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+                secret('hearing-centre-north-shields-email', 'IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL'),
+                secret('hearing-centre-birmingham-email', 'IA_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
+                secret('hearing-centre-hatton-cross-email', 'IA_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
+                secret('hearing-centre-glasgow-email', 'IA_HEARING_CENTRE_GLASGOW_EMAIL'),
 
-        secret('home-office-bradford-email', 'IA_HOME_OFFICE_BRADFORD_EMAIL'),
-        secret('home-office-manchester-email', 'IA_HOME_OFFICE_MANCHESTER_EMAIL'),
-        secret('home-office-newport-email', 'IA_HOME_OFFICE_NEWPORT_EMAIL'),
-        secret('home-office-taylor-house-email', 'IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
-        secret('home-office-north-shields-email', 'IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL'),
-        secret('home-office-birmingham-email', 'IA_HOME_OFFICE_BIRMINGHAM_EMAIL'),
-        secret('home-office-hatton-cross-email', 'IA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
-        secret('home-office-glasgow-email', 'IA_HOME_OFFICE_GLASGOW_EMAIL'),
-        secret('home-office-apc-email', 'IA_HOME_OFFICE_APC_EMAIL'),
+                secret('home-office-bradford-email', 'IA_HOME_OFFICE_BRADFORD_EMAIL'),
+                secret('home-office-manchester-email', 'IA_HOME_OFFICE_MANCHESTER_EMAIL'),
+                secret('home-office-newport-email', 'IA_HOME_OFFICE_NEWPORT_EMAIL'),
+                secret('home-office-taylor-house-email', 'IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
+                secret('home-office-north-shields-email', 'IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL'),
+                secret('home-office-birmingham-email', 'IA_HOME_OFFICE_BIRMINGHAM_EMAIL'),
+                secret('home-office-hatton-cross-email', 'IA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
+                secret('home-office-glasgow-email', 'IA_HOME_OFFICE_GLASGOW_EMAIL'),
+                secret('home-office-apc-email', 'IA_HOME_OFFICE_APC_EMAIL'),
 
-        secret('ftpa-home-office-bradford-email', 'IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL'),
-        secret('ftpa-home-office-taylor-house-email', 'IA_FTPA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
-        secret('ftpa-home-office-north-shields-email', 'IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL'),
-        secret('ftpa-home-office-hatton-cross-email', 'IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
+                secret('ftpa-home-office-bradford-email', 'IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL'),
+                secret('ftpa-home-office-taylor-house-email', 'IA_FTPA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
+                secret('ftpa-home-office-north-shields-email', 'IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL'),
+                secret('ftpa-home-office-hatton-cross-email', 'IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
 
-        secret('hearing-centre-bradford-telephone', 'IA_HEARING_CENTRE_BRADFORD_TELEPHONE'),
-        secret('hearing-centre-manchester-telephone', 'IA_HEARING_CENTRE_MANCHESTER_TELEPHONE'),
-        secret('hearing-centre-newport-telephone', 'IA_HEARING_CENTRE_NEWPORT_TELEPHONE'),
-        secret('hearing-centre-taylor-house-telephone', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE'),
-        secret('hearing-centre-north-shields-telephone', 'IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE'),
-        secret('hearing-centre-birmingham-telephone', 'IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE'),
-        secret('hearing-centre-hatton-cross-telephone', 'IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE'),
-        secret('hearing-centre-glasgow-telephone', 'IA_HEARING_CENTRE_GLASGOW_TELEPHONE'),
+                secret('hearing-centre-bradford-telephone', 'IA_HEARING_CENTRE_BRADFORD_TELEPHONE'),
+                secret('hearing-centre-manchester-telephone', 'IA_HEARING_CENTRE_MANCHESTER_TELEPHONE'),
+                secret('hearing-centre-newport-telephone', 'IA_HEARING_CENTRE_NEWPORT_TELEPHONE'),
+                secret('hearing-centre-taylor-house-telephone', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE'),
+                secret('hearing-centre-north-shields-telephone', 'IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE'),
+                secret('hearing-centre-birmingham-telephone', 'IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE'),
+                secret('hearing-centre-hatton-cross-telephone', 'IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE'),
+                secret('hearing-centre-glasgow-telephone', 'IA_HEARING_CENTRE_GLASGOW_TELEPHONE'),
 
-        secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
-        secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
-        secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
+                secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
+                secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
+                secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
 
-        secret('ctsc-admin-ftpa-submitted-email', 'IA_CTSC_ADMIN_FTPA_SUBMITTED'),
-        secret('respondent-ftpa-submitted-email', 'IA_RESPONDENT_FTPA_SUBMITTED'),
+                secret('ctsc-admin-ftpa-submitted-email', 'IA_CTSC_ADMIN_FTPA_SUBMITTED'),
+                secret('respondent-ftpa-submitted-email', 'IA_RESPONDENT_FTPA_SUBMITTED'),
 
-        secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
-        secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
-        secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
-        secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
-        secret('test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
-        secret('test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
+                secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
+                secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
+                secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
+                secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
+                secret('test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
+                secret('test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
 
-        secret('test-homeoffice-apc-username', 'TEST_HOMEOFFICE_APC_USERNAME'),
-        secret('test-homeoffice-apc-password', 'TEST_HOMEOFFICE_APC_PASSWORD'),
-        secret('test-homeoffice-lart-username', 'TEST_HOMEOFFICE_LART_USERNAME'),
-        secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD'),
-        secret('test-homeoffice-pou-username', 'TEST_HOMEOFFICE_POU_USERNAME'),
-        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
-        secret('test-homeoffice-generic-username', 'TEST_HOMEOFFICE_GENERIC_USERNAME'),
-        secret('test-homeoffice-generic-password', 'TEST_HOMEOFFICE_GENERIC_PASSWORD'),
-        secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
-        secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
-        secret('test-citizen-username', 'TEST_CITIZEN_USERNAME'),
-        secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
-        secret('test-citizen-mobile', 'TEST_CITIZEN_MOBILE'),
-        secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
-        secret('home-office-allowed-appeal-email', 'IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL'),
-        secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
+                secret('test-homeoffice-apc-username', 'TEST_HOMEOFFICE_APC_USERNAME'),
+                secret('test-homeoffice-apc-password', 'TEST_HOMEOFFICE_APC_PASSWORD'),
+                secret('test-homeoffice-lart-username', 'TEST_HOMEOFFICE_LART_USERNAME'),
+                secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD'),
+                secret('test-homeoffice-pou-username', 'TEST_HOMEOFFICE_POU_USERNAME'),
+                secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
+                secret('test-homeoffice-generic-username', 'TEST_HOMEOFFICE_GENERIC_USERNAME'),
+                secret('test-homeoffice-generic-password', 'TEST_HOMEOFFICE_GENERIC_PASSWORD'),
+                secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
+                secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
+                secret('test-citizen-username', 'TEST_CITIZEN_USERNAME'),
+                secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
+                secret('test-citizen-mobile', 'TEST_CITIZEN_MOBILE'),
+                secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
+                secret('home-office-allowed-appeal-email', 'IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL'),
+                secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
 
-        secret('admin-officer-review-hearing-requirements-email', 'IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL'),
+                secret('admin-officer-review-hearing-requirements-email', 'IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL'),
 
-        secret('admin-office-newport-email', 'IA_ADMIN_NEWPORT_EMAIL'),
-        secret('admin-office-taylor-house-email', 'IA_ADMIN_TAYLOR_HOUSE_EMAIL'),
-        secret('admin-office-hatton-cross-email', 'IA_ADMIN_HATTON_CROSS_EMAIL'),
-        secret('admin-office-manchester-email', 'IA_ADMIN_MANCHESTER_EMAIL'),
-        secret('admin-office-glasgow-email', 'IA_ADMIN_GLASGOW_EMAIL'),
-        secret('admin-office-bradford-email', 'IA_ADMIN_BRADFORD_EMAIL'),
-        secret('admin-office-birmingham-email', 'IA_ADMIN_BIRMINGHAM_EMAIL'),
+                secret('admin-office-newport-email', 'IA_ADMIN_NEWPORT_EMAIL'),
+                secret('admin-office-taylor-house-email', 'IA_ADMIN_TAYLOR_HOUSE_EMAIL'),
+                secret('admin-office-hatton-cross-email', 'IA_ADMIN_HATTON_CROSS_EMAIL'),
+                secret('admin-office-manchester-email', 'IA_ADMIN_MANCHESTER_EMAIL'),
+                secret('admin-office-glasgow-email', 'IA_ADMIN_GLASGOW_EMAIL'),
+                secret('admin-office-bradford-email', 'IA_ADMIN_BRADFORD_EMAIL'),
+                secret('admin-office-birmingham-email', 'IA_ADMIN_BIRMINGHAM_EMAIL'),
 
-        secret('case-officer-list-case-email', 'IA_CASE_OFFICER_LIST_CASE_EMAIL'),
+                secret('case-officer-list-case-email', 'IA_CASE_OFFICER_LIST_CASE_EMAIL'),
 
 
-        secret('ctsc-admin-ftpa-decision-email', 'IA_CTSC_ADMIN_FTPA_DECISION'),
-        secret('ctsc-admin-pending-payment-email', 'IA_CTSC_ADMIN_PENDING_PAYMENT_EMAIL'),
+                secret('ctsc-admin-ftpa-decision-email', 'IA_CTSC_ADMIN_FTPA_DECISION'),
+                secret('ctsc-admin-pending-payment-email', 'IA_CTSC_ADMIN_PENDING_PAYMENT_EMAIL'),
 
-        secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
-        secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
-        secret('fees-admin-officer-email', 'FEES_ADMIN_OFFICER_EMAIL'),
-        secret('payment-exceptions-admin-officer-email', 'PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL'),
+                secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
+                secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
+                secret('fees-admin-officer-email', 'FEES_ADMIN_OFFICER_EMAIL'),
+                secret('payment-exceptions-admin-officer-email', 'PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL'),
 
-        secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
-        secret('idam-secret', 'IA_IDAM_SECRET'),
-        secret('s2s-secret', 'IA_S2S_SECRET'),
-        secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
+                secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
+                secret('idam-secret', 'IA_IDAM_SECRET'),
+                secret('s2s-secret', 'IA_S2S_SECRET'),
+                secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
 
-        secret('home-office-email-apc', 'HOME_OFFICE_EMAIL_APC'),
-        secret('home-office-email-lart', 'HOME_OFFICE_EMAIL_LART'),
-        secret('upper-tribunal-notices-email', 'IA_UPPER_TRIBUNAL_NOTICES_EMAIL'),
-        secret('utiac-permission-applications-email', 'IA_UPPER_TRIBUNAL_PERMISSION_APPLICATIONS_EMAIL'),
-        secret('nbc-email', 'IA_NBC_EMAIL'),
-        secret('ctsc-email', 'IA_CTSC_EMAIL'),
+                secret('home-office-email-apc', 'HOME_OFFICE_EMAIL_APC'),
+                secret('home-office-email-lart', 'HOME_OFFICE_EMAIL_LART'),
+                secret('upper-tribunal-notices-email', 'IA_UPPER_TRIBUNAL_NOTICES_EMAIL'),
+                secret('utiac-permission-applications-email', 'IA_UPPER_TRIBUNAL_PERMISSION_APPLICATIONS_EMAIL'),
+                secret('nbc-email', 'IA_NBC_EMAIL'),
+                secret('ctsc-email', 'IA_CTSC_EMAIL'),
 
-        secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY'),
-        secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
+                secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY'),
+                secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
 
-        secret('app-insights-connection-string', 'app-insights-connection-string'),
+                secret('app-insights-connection-string', 'app-insights-connection-string'),
 
-        secret('bail-hearing-centre-bradford-email', 'IA_BAIL_HEARING_CENTRE_BRADFORD_EMAIL'),
-        secret('bail-hearing-centre-birmingham-email', 'IA_BAIL_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
-        secret('bail-hearing-centre-newport-email', 'IA_BAIL_HEARING_CENTRE_NEWPORT_EMAIL'),
-        secret('bail-hearing-centre-taylor-house-email', 'IA_BAIL_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
-        secret('bail-hearing-centre-hatton-cross-email', 'IA_BAIL_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
-        secret('bail-hearing-centre-manchester-email', 'IA_BAIL_HEARING_CENTRE_MANCHESTER_EMAIL'),
-        secret('bail-hearing-centre-glasgow-email', 'IA_BAIL_HEARING_CENTRE_GLASGOW_EMAIL'),
-        secret('bail-hearing-centre-yarlswood-email', 'IA_BAIL_HEARING_CENTRE_YARLSWOOD_EMAIL'),
+                secret('bail-hearing-centre-bradford-email', 'IA_BAIL_HEARING_CENTRE_BRADFORD_EMAIL'),
+                secret('bail-hearing-centre-birmingham-email', 'IA_BAIL_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
+                secret('bail-hearing-centre-newport-email', 'IA_BAIL_HEARING_CENTRE_NEWPORT_EMAIL'),
+                secret('bail-hearing-centre-taylor-house-email', 'IA_BAIL_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+                secret('bail-hearing-centre-hatton-cross-email', 'IA_BAIL_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
+                secret('bail-hearing-centre-manchester-email', 'IA_BAIL_HEARING_CENTRE_MANCHESTER_EMAIL'),
+                secret('bail-hearing-centre-glasgow-email', 'IA_BAIL_HEARING_CENTRE_GLASGOW_EMAIL'),
+                secret('bail-hearing-centre-yarlswood-email', 'IA_BAIL_HEARING_CENTRE_YARLSWOOD_EMAIL'),
 
-        secret('bail-home-office-email', 'IA_BAIL_HOME_OFFICE_EMAIL'),
-        secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE'),
+                secret('bail-home-office-email', 'IA_BAIL_HOME_OFFICE_EMAIL'),
+                secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE'),
 
-        secret('system-username', 'IA_SYSTEM_USERNAME'),
-        secret('system-password', 'IA_SYSTEM_PASSWORD')
-    ]
+                secret('system-username', 'IA_SYSTEM_USERNAME'),
+                secret('system-password', 'IA_SYSTEM_PASSWORD')
+        ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
-  [$class     : 'AzureKeyVaultSecret',
-   secretType : 'Secret',
-   name       : secretName,
-   version    : '',
-   envVariable: envVar
-  ]
+    [$class     : 'AzureKeyVaultSecret',
+     secretType : 'Secret',
+     name       : secretName,
+     version    : '',
+     envVariable: envVar
+    ]
 }
 
 GradleBuilder builder = new GradleBuilder(this, product)
 
 withNightlyPipeline(type, product, component) {
-  env.TEST_URL = params.URL_TO_TEST
-  env.Rules = params.SecurityRules
+    env.TEST_URL = params.URL_TO_TEST
+    env.Rules = params.SecurityRules
 
-  env.IA_AIP_FRONTEND_URL = params.IA_AIP_FRONTEND_URL
-  env.IA_EXUI_FRONTEND_URL = params.IA_EXUI_FRONTEND_URL
+    env.IA_AIP_FRONTEND_URL = params.IA_AIP_FRONTEND_URL
+    env.IA_EXUI_FRONTEND_URL = params.IA_EXUI_FRONTEND_URL
 
-  env.IA_IDAM_REDIRECT_URI = "https://ia-case-api-aat.service.core-compute-aat.internal/oauth2/callback"
-  env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
-  env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
-  env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
-  env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
-  env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    env.IA_IDAM_REDIRECT_URI = "https://ia-case-api-aat.service.core-compute-aat.internal/oauth2/callback"
+    env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
+    env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
+    env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
+    env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
-  loadVaultSecrets(secrets)
+    loadVaultSecrets(secrets)
 
-  enableSecurityScan()
+    /*
+     When the Fortify tokens expire (they last only 180 days), follow instructions here to generate new ones:
+     https://tools.hmcts.net/confluence/display/RBS/Fortify+Access+Tokens
+     To access fortify, use MyApps (https://myapps.microsoft.com/)
 
-  /*
-   When the tokens expire (they last only 180 days), follow instructions here to generate new ones:
-   https://tools.hmcts.net/confluence/display/RBS/Fortify+Access+Tokens
-   To access fortify, use MyApps (https://myapps.microsoft.com/)
-
-   The tokens must be stored as secrets in Azure (portal.azure.com) in the the ia-aat vault. Be advised that they may
-   appear duplicated if you add them the first time, but they're not. Don't delete them or you'll need somebody else
-   to recover them.
-   */
-
-  enableFortifyScan()
-  enableMutationTest()
-
-  enableSlackNotifications('#ia-tech')
-  enableFullFunctionalTest()
-
-  afterAlways('DependencyCheckNightly') {
-    publishHTML([
-      allowMissing         : true,
-      alwaysLinkToLastBuild: true,
-      keepAll              : true,
-      reportDir            : "build/reports",
-      reportFiles          : 'dependency-check-report.html',
-      reportName           : 'Dependency Check Report'
-    ])
-  }
-
-  afterAlways('fortify-scan') {
-    publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "Fortify Scan",
-            reportFiles          : "FortifyScanReport.html",
-            reportName           : "Fortify Scan Report"
-    ]
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-  }
-  
-  afterAlways('mutationTest') {
-    publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/pitest",
-            reportFiles          : 'index.html',
-            reportName           : 'Mutation Test Report'
-    ])
-  }
-
-  afterAlways('fortify-scan') {
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-  }
-
-  before('fullFunctionalTest') {
-    try {
-      builder.gradle('test')
-      builder.gradle('integration')
-      builder.gradle('smoke')
-    } finally {
-      junit '**/test-results/**/*.xml'
-      publishHTML target: [
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : "build/reports/tests/test",
-              reportFiles          : "index.html",
-              reportName           : "Unit Test Report"
-      ]
-      publishHTML target: [
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : "build/reports/tests/smoke",
-              reportFiles          : "index.html",
-              reportName           : "Smoke Test Report"
-      ]
-      publishHTML target: [
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : "build/reports/tests/integration",
-              reportFiles          : "index.html",
-              reportName           : "Integration Test Report"
-      ]
+     The tokens must be stored as secrets in Azure (portal.azure.com) in the the ia-aat vault. Be advised that they may
+     appear duplicated if you add them the first time, but they're not. Don't delete them or you'll need somebody else
+     to recover them.
+     */
+    if (!params.skipFortifyScan) {
+        enableFortifyScan()
     }
-  }
+    if (!params.skipSecurityScan) {
+        enableSecurityScan()
+    }
+    if (!params.skipMutationTests) {
+        enableMutationTest()
+    }
+    if (!params.skipFullFunctionalTests) {
+        enableFullFunctionalTest()
+    }
+    enableSlackNotifications('#ia-tech')
 
-  afterAlways('fullFunctionalTest') {
-    publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/functional",
-            reportFiles          : 'index.html',
-            reportName           : 'Functional Test Report'
-    ])
+    afterAlways('build') {
+        if (!params.skipSmokeTest) {
+            stage('Smoke Test') {
+                try {
+                    builder.gradle("smoke")
+                } catch (Error) {
+                    unstable(message: "${STAGE_NAME} is unstable")
+                } finally {
+                    publishHTML target: [
+                            allowMissing         : true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll              : true,
+                            reportDir            : "build/reports/tests/smoke",
+                            reportFiles          : "index.html",
+                            reportName           : "Smoke Test Report"
+                    ]
+                }
+            }
+        }
+        if (!params.skipUnitTests) {
+            stage('Unit Tests') {
+                try {
+                    builder.gradle('test')
+                } catch (Error) {
+                    unstable(message: "${STAGE_NAME} is unstable")
+                } finally {
+                    publishHTML target: [
+                            allowMissing         : true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll              : true,
+                            reportDir            : "build/reports/tests/test",
+                            reportFiles          : "index.html",
+                            reportName           : "Unit Test Report"
+                    ]
+                }
+            }
+        }
+        if (!params.skipIntegrationTests) {
+            stage('Integration Tests') {
+                try {
+                    builder.gradle('integration')
+                } catch (Error) {
+                    unstable(message: "${STAGE_NAME} is unstable")
+                } finally {
+                    publishHTML target: [
+                            allowMissing         : true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll              : true,
+                            reportDir            : "build/reports/tests/integration",
+                            reportFiles          : "index.html",
+                            reportName           : "Integration Test Report"
+                    ]
+                }
+            }
+        }
+    }
 
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/**/*'
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/**/*'
-  }
+    afterAlways('DependencyCheckNightly') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports",
+                reportFiles          : 'dependency-check-report.html',
+                reportName           : 'Dependency Check Report'
+        ])
+    }
+
+    afterAlways('securityScan') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "functional-output",
+                reportFiles          : 'api-report.html',
+                reportName           : 'Security Scan Report'
+        ])
+    }
+
+    afterAlways('fortify-scan') {
+        publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "Fortify Scan",
+                reportFiles          : "FortifyScanReport.html",
+                reportName           : "Fortify Scan Report"
+        ]
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+    }
+
+    afterAlways('mutationTest') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/pitest",
+                reportFiles          : 'index.html',
+                reportName           : 'Mutation Test Report'
+        ])
+    }
+
+    afterAlways('fortify-scan') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+    }
+
+    afterAlways('fullFunctionalTest') {
+        publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/functional",
+                reportFiles          : 'index.html',
+                reportName           : 'Functional Test Report'
+        ])
+
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/**/*'
+    }
 
 }
