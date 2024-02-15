@@ -610,6 +610,7 @@ security:
       - "applyForFTPARespondent"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
+      - "uploadHomeOfficeAppealResponse"
     caseworker-ia-homeofficeapc:
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
