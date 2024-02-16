@@ -44,7 +44,6 @@ public class BailSubmissionTemplateTest {
 
         assertTrue(bailSubmissionTemplate.mapFieldValues(caseDetails).isEmpty());
         verify(bailSubmissionTemplateProvider, times(1)).mapFieldValues(caseDetails);
-
     }
 }
 

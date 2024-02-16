@@ -14,7 +14,7 @@ public class BailSubmissionUtTemplate implements DocumentTemplate<BailCase> {
     private final BailSubmissionTemplateProvider bailSubmissionTemplateProvider;
 
     public BailSubmissionUtTemplate(
-        @Value("${bailSubmissionDocument.templateName}") String templateName,
+        @Value("${bailSubmissionDocumentWithUt.templateName}") String templateName,
         BailSubmissionTemplateProvider bailSubmissionTemplateProvider) {
         this.templateName = templateName;
         this.bailSubmissionTemplateProvider = bailSubmissionTemplateProvider;
