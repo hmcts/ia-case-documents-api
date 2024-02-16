@@ -14,35 +14,35 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionUtTemplate;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
-public class BailSubmissionTemplateTest {
+public class BailSubmissionUtTemplateTest {
     @Mock
     private CaseDetails<BailCase> caseDetails;
     @Mock
     private BailSubmissionTemplateProvider bailSubmissionTemplateProvider;
 
     private final String templateName = "BAIL_SUBMISSION_TEMPLATE.docx";
-    private BailSubmissionTemplate bailSubmissionTemplate;
+    private BailSubmissionUtTemplate bailSubmissionUtTemplate;
 
     @BeforeEach
     public void setUp() {
-        bailSubmissionTemplate = new BailSubmissionTemplate(templateName, bailSubmissionTemplateProvider);
+        bailSubmissionUtTemplate = new BailSubmissionUtTemplate(templateName, bailSubmissionTemplateProvider);
     }
 
     @Test
     public void should_return_template_name() {
 
-        assertEquals(templateName, bailSubmissionTemplate.getName());
+        assertEquals(templateName, bailSubmissionUtTemplate.getName());
     }
 
     @Test
     public void should_map_case_data_to_template_field_values() {
 
-        assertTrue(bailSubmissionTemplate.mapFieldValues(caseDetails).isEmpty());
+        assertTrue(bailSubmissionUtTemplate.mapFieldValues(caseDetails).isEmpty());
         verify(bailSubmissionTemplateProvider, times(1)).mapFieldValues(caseDetails);
 
     }

@@ -299,7 +299,9 @@ public enum BailCaseFieldDefinition {
         "uploadSignedDecisionNoticeDocument", new TypeReference<Document>(){}),
     SIGNED_DECISION_DOCUMENT_WITH_METADATA(
         "signDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
-    ;
+
+    IS_IMA_ENABLED(
+        "isImaEnabled", new TypeReference<YesOrNo>() {}),;
 
     private final String value;
     private final TypeReference typeReference;
