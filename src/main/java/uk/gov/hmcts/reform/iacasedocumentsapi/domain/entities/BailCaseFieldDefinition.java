@@ -277,6 +277,9 @@ public enum BailCaseFieldDefinition {
         "recordDecisionType", new TypeReference<String>(){}),
     RECORD_THE_DECISION_LIST(
         "recordTheDecisionList", new TypeReference<String>(){}),
+    //Once we switch the IMA feature on, we will be using this case field instead of the one above
+    RECORD_THE_DECISION_LIST_IMA(
+        "recordTheDecisionListIma", new TypeReference<String>(){}),
     BAIL_TRANSFER_DIRECTIONS(
         "bailTransferDirections", new TypeReference<String>(){}),
     REASON_FOR_REFUSAL_DETAILS(
