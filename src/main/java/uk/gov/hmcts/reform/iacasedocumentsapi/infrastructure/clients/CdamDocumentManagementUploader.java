@@ -42,7 +42,7 @@ public class CdamDocumentManagementUploader {
     }
 
     @SneakyThrows
-    public Document upload(Resource resource, String contentType) {
+    public Document upload(Resource resource, String caseTypeId, String jurisdictionId, String contentType) {
         final String serviceAuthorizationToken = serviceAuthorizationTokenGenerator.generate();
         final UserDetails userDetails = userDetailsProvider.getUserDetails();
         final String accessToken = userDetails.getAccessToken();
@@ -57,8 +57,8 @@ public class CdamDocumentManagementUploader {
         UploadResponse uploadResponse = caseDocumentClient.uploadDocuments(
             accessToken,
             serviceAuthorizationToken,
-            "Asylum",
-            "IA",
+            caseTypeId,
+            jurisdictionId,
             singletonList(file)
         );
 

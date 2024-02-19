@@ -1,8 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import java.io.IOException;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,8 +10,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DmDocumentD
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -29,18 +28,27 @@ public class DocumentDownloadClientTest {
     @InjectMocks
     private DocumentDownloadClient documentDownloadClient;
 
-    @BeforeEach
-    public void setUp() {
+    @Test
+    void should_use_cdam_when_feature_flag_true() {
+        // Given
+        when(featureToggler.getValue(eq("use-ccd-document-am"), eq(false))).thenReturn(true);
 
+        // When
+        documentDownloadClient.download("url");
+
+        // Then
+        verify(cdamDocumentDownloadClient, times(1)).download("url");
     }
 
     @Test
-    void should_use_cdam_when_feature_flag_true() throws IOException {
+    void should_use_cdam_when_feature_flag_false() {
         // Given
+        when(featureToggler.getValue(eq("use-ccd-document-am"), eq(false))).thenReturn(false);
+
         // When
-        documentDownloadClient.download(null);
+        documentDownloadClient.download("url");
 
         // Then
-        verify(cdamDocumentDownloadClient, times(1)).download(null);
+        verify(dmDocumentDownloadClient, times(1)).download("url");
     }
 }

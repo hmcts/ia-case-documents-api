@@ -17,12 +17,15 @@ public class DocumentManagementUploader implements DocumentUploader {
 
     @Override
     public Document upload(
-            Resource resource,
-            String classification,
-            String caseTypeId,
-            String jurisdictionId,
-            String contentType
+        Resource resource,
+        String caseTypeId,
+        String jurisdictionId,
+        String contentType
     ) {
-        return cdamDocumentManagementUploader.upload(resource, contentType);
+        if (featureToggler.getValue("use-ccd-document-am", false)) {
+            return cdamDocumentManagementUploader.upload(resource, caseTypeId, jurisdictionId, contentType);
+        } else {
+            return dmDocumentManagementUploader.upload(resource, contentType);
+        }
     }
 }

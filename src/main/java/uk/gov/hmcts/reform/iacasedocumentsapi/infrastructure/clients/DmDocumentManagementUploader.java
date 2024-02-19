@@ -17,11 +17,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
-
 /**
  * Superseded. Will need to be removed as soon as the "use-ccd-document-am" feature flag is permanently on
  */
-
 @Component
 @Deprecated
 @Slf4j

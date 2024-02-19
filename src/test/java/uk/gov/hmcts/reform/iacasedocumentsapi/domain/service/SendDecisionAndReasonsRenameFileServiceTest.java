@@ -31,8 +31,7 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
 
     private final String binaryDocumentUrl = "binary-document-url";
 
-    @Mock
-    private DocumentDownloadClient documentDownloadClient;
+    @Mock private DocumentDownloadClient documentDownloadClient;
     @Mock private DocumentUploader documentUploader;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -54,56 +53,42 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
     @Test
     public void downloads_and_updates_final_decision_and_reasons_pdf() {
 
-        when(caseDetails.getCaseData())
-                .thenReturn(asylumCase);
-
-        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
-                .thenReturn(binaryDocumentUrl);
-
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl()).thenReturn(binaryDocumentUrl);
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
                 .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
-
-        when(documentDownloadClient.download(binaryDocumentUrl))
-                .thenReturn(finalDecisionAndReasonsResource);
-
+        when(documentDownloadClient.download(binaryDocumentUrl)).thenReturn(finalDecisionAndReasonsResource);
         when(documentUploader.upload(
-                any(ByteArrayResource.class),
-                any(),
-                any(),
-                any(),
-                eq("application/pdf")
+            any(ByteArrayResource.class),
+            eq("Asylum"),
+            eq("IA"),
+            eq("application/pdf")
         ))
-                .thenReturn(uploadedDocument);
-
+            .thenReturn(uploadedDocument);
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
                 .thenReturn(Optional.of("some-appeal-reference-number"));
-
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
                 .thenReturn(Optional.of("some-family-name"));
+        when(caseDetails.getJurisdiction()).thenReturn("IA");
 
         Document uploadedDecisionAndReasonsPdf = sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails);
+
         assertEquals(uploadedDecisionAndReasonsPdf, uploadedDocument);
-        verify(documentDownloadClient, times(1))
-            .download(binaryDocumentUrl);
+        verify(documentDownloadClient, times(1)).download(binaryDocumentUrl);
         verify(documentUploader, times(1))
             .upload(
-                    any(ByteArrayResource.class),
-                    any(),
-                    any(),
-                    any(),
-                    eq("application/pdf")
+                any(ByteArrayResource.class),
+                eq("Asylum"),
+                eq("IA"),
+                eq("application/pdf")
             );
         verify(caseDetails.getCaseData(),times(1)).write(FINAL_DECISION_AND_REASONS_PDF,uploadedDecisionAndReasonsPdf);
-
     }
 
     @Test
     public void throws_when_draft_document_missing() {
 
-
-        when(caseDetails.getCaseData())
-                .thenReturn(asylumCase);
-
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
             .thenReturn(Optional.empty());
 
@@ -118,19 +103,12 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
     @Test
     public void throws_when_draft_appeal_reference_number_missing() {
 
-
-        when(caseDetails.getCaseData())
-            .thenReturn(asylumCase);
-
-        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
-            .thenReturn(binaryDocumentUrl);
-
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl()).thenReturn(binaryDocumentUrl);
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
             .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
-
         when(documentDownloadClient.download(binaryDocumentUrl))
             .thenReturn(finalDecisionAndReasonsResource);
-
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.empty());
 
@@ -142,27 +120,19 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
     @Test
     public void throws_when_draft_appellant_family_name_missing() {
 
-        when(caseDetails.getCaseData())
-            .thenReturn(asylumCase);
-
-        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
-            .thenReturn(binaryDocumentUrl);
-
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl()).thenReturn(binaryDocumentUrl);
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
             .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
-
         when(documentDownloadClient.download(binaryDocumentUrl))
             .thenReturn(finalDecisionAndReasonsResource);
-
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.of("some-appeal-reference-number"));
-
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
             .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> sendDecisionAndReasonsPdfService.updateDecisionAndReasonsFileName(caseDetails))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("appellant family name not present");
-
     }
 }

@@ -2,9 +2,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CASE_TYPE_ID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CLASSIFICATION;
 
 import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -16,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
 @Service
+@Slf4j
 public class SendDecisionAndReasonsRenameFileService {
 
     private static final String PDF_CONTENT_TYPE = "application/pdf";
@@ -57,12 +59,13 @@ public class SendDecisionAndReasonsRenameFileService {
             finalDecisionAndReasonsPdf,
             getDecisionAndReasonsFilename(asylumCase));
 
+        log.info("Uploading final pdf for case: {}", caseDetails.getId());
+
         return documentUploader.upload(
-                byteArrayResource,
-                CLASSIFICATION,
-                CASE_TYPE_ID,
-                caseDetails.getJurisdiction(),
-                PDF_CONTENT_TYPE
+            byteArrayResource,
+            CASE_TYPE_ID,
+            caseDetails.getJurisdiction(),
+            PDF_CONTENT_TYPE
         );
     }
 
@@ -72,7 +75,6 @@ public class SendDecisionAndReasonsRenameFileService {
 
         try {
             byteArray = StreamUtils.copyToByteArray(finalDecisionAndReasonsPdf.getInputStream());
-
         } catch (IOException e) {
             throw new IllegalStateException("Error reading converted decision and reasons pdf");
         }

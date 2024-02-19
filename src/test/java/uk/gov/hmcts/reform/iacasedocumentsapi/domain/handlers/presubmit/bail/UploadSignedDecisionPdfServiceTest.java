@@ -73,9 +73,8 @@ public class UploadSignedDecisionPdfServiceTest {
             .thenReturn(Optional.of("Smith"));
         when(documentUploader.upload(
                 any(ByteArrayResource.class),
-                any(),
-                any(),
-                any(),
+                eq("Asylum"),
+                eq("IA"),
                 eq("application/pdf")
         ))
             .thenReturn(mockSignedGeneratedPdfDocument);

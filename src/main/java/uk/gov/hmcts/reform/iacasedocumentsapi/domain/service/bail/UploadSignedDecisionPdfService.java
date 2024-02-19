@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.bail;
 
 import java.io.File;
 import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -15,7 +17,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator.CASE_TYPE_ID;
+
 @Service
+@Slf4j
 public class UploadSignedDecisionPdfService {
 
     private static final String PDF_CONTENT_TYPE = "application/pdf";
@@ -63,12 +68,13 @@ public class UploadSignedDecisionPdfService {
             signedDecisionNoticePdf,
             getSignedDecisionNoticeFilename(bailCase));
 
+        log.info("Uploading final pdf for bail case");
+
         return documentUploader.upload(
-                byteArrayResource,
-                null,
-                null,
-                null,
-                PDF_CONTENT_TYPE
+            byteArrayResource,
+            CASE_TYPE_ID,
+            "IA",
+            PDF_CONTENT_TYPE
         );
     }
 

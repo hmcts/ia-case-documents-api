@@ -1,13 +1,18 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 
+@Slf4j
 public class DocumentCreator<T extends CaseData> {
+
+    public static final String CASE_TYPE_ID = "Asylum";
 
     private final String documentContentType;
     private final String documentFileExtension;
@@ -16,8 +21,6 @@ public class DocumentCreator<T extends CaseData> {
     private final DocumentTemplate<T> documentTemplate;
     private final DocumentGenerator documentGenerator;
     private final DocumentUploader documentUploader;
-    public static final String CASE_TYPE_ID = "Asylum";
-    public static final String CLASSIFICATION = "PUBLIC";
 
     public DocumentCreator(
         String documentContentType,
@@ -60,12 +63,13 @@ public class DocumentCreator<T extends CaseData> {
                     .orElse(documentTemplate.mapFieldValues(caseDetails))
             );
 
+        log.info("Uploading document: {}", qualifiedDocumentFileName);
+
         return documentUploader.upload(
-                documentResource,
-                CLASSIFICATION,
-                CASE_TYPE_ID,
-                caseDetails.getJurisdiction(),
-                documentContentType
+            documentResource,
+            CASE_TYPE_ID,
+            caseDetails.getJurisdiction(),
+            documentContentType
         );
     }
 }

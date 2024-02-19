@@ -38,10 +38,10 @@ public class UploadSignedDecisionOrchestrator {
             requireNonNull(finalSignedDecisionPdf, "Document to pdf conversion failed");
 
             documentHandler.addWithMetadata(
-                    bailCase,
-                    finalSignedDecisionPdf,
-                    SIGNED_DECISION_DOCUMENT_WITH_METADATA,
-                    DocumentTag.SIGNED_DECISION_NOTICE
+                bailCase,
+                finalSignedDecisionPdf,
+                SIGNED_DECISION_DOCUMENT_WITH_METADATA,
+                DocumentTag.SIGNED_DECISION_NOTICE
             );
             bailCase.clear(DECISION_UNSIGNED_DOCUMENT);
             bailCase.clear(UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA);
