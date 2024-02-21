@@ -1,22 +1,19 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 
-@SpringBootTest(classes = Application.class)
-@ActiveProfiles("integration")
-public class TsvStringProviderTest {
+class TsvStringProviderTest extends SpringBootIntegrationTest {
 
     @Autowired private TsvStringProvider tsvStringProvider;
 
     @Test
-    public void should_load_strings_from_resources_and_return() {
+    void should_load_strings_from_resources_and_return() {
 
         assertEquals(
             Optional.of("Birmingham"),
@@ -298,7 +295,6 @@ public class TsvStringProviderTest {
             tsvStringProvider.get("isoCountries", "ZW")
         );
 
-
         assertEquals(
                 Optional.of("Stateless"),
                 tsvStringProvider.get("isoCountries", "ZZ")
@@ -306,7 +302,7 @@ public class TsvStringProviderTest {
     }
 
     @Test
-    public void should_return_empty_optional_if_string_not_found() {
+    void should_return_empty_optional_if_string_not_found() {
 
         assertEquals(
             Optional.empty(),
