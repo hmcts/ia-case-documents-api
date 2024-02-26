@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.BailEmailNotificationPersonalisation;
@@ -52,7 +54,8 @@ public class BailEmailNotificationGenerator implements BailNotificationGenerator
                     email,
                     emailNotificationPersonalisation,
                     referenceId,
-                    callback)).collect(Collectors.toList());
+                    callback))
+                .filter(StringUtils::isNotBlank).collect(Collectors.toList());
     }
 
     protected String sendEmail(

@@ -1,14 +1,16 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
-import java.util.List;
-import java.util.Set;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.BaseNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNotifyNotificationSender;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder.NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING;
 
@@ -58,7 +60,7 @@ public class EmailNotificationGenerator implements NotificationGenerator {
                 emailNotificationPersonalisation,
                 referenceId,
                 callback)
-            ).toList();
+            ).filter(StringUtils::isNotBlank).collect(Collectors.toList());
     }
 
     protected String sendEmail(

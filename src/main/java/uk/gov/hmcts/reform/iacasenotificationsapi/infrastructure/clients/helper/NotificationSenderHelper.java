@@ -2,15 +2,16 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.helper
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.NotificationServiceResponseException;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.RetryableNotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
 import uk.gov.service.notify.SendSmsResponse;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class NotificationSenderHelper {
@@ -50,8 +51,9 @@ public class NotificationSenderHelper {
                         return notificationId;
 
                     } catch (NotificationClientException e) {
-                        throw new NotificationServiceResponseException("Failed to send email using GovNotify", e);
+                        logger.error("Failed to send sms using GovNotify for case reference {}", reference, e);
                     }
+                    return Strings.EMPTY;
                 }
         );
     }
@@ -89,9 +91,9 @@ public class NotificationSenderHelper {
                         return notificationId;
 
                     } catch (NotificationClientException e) {
-                        logger.error("Failed to send sms using GovNotify");
-                        throw new NotificationServiceResponseException("Failed to send sms using GovNotify", e);
+                        logger.error("Failed to send sms using GovNotify for case reference {}", reference, e);
                     }
+                    return Strings.EMPTY;
                 }
         );
     }

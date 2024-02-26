@@ -1,15 +1,5 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.helper;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import org.awaitility.core.ConditionTimeoutException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,11 +7,25 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.NotificationServiceResponseException;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.RetryableNotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
 import uk.gov.service.notify.SendSmsResponse;
+
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
@@ -157,20 +161,18 @@ public class NotificationSenderHelperTest {
                     reference
             );
 
-        assertThatThrownBy(() ->
-                senderHelper.sendEmail(
-                        templateId,
-                        emailAddress,
-                        personalisation,
-                        reference,
-                        notificationClient,
-                        deduplicateSendsWithinSeconds,
-                        LOG
-                )
-        ).isExactlyInstanceOf(NotificationServiceResponseException.class)
-                .hasMessage("Failed to send email using GovNotify")
-                .hasCause(underlyingException);
+        String actualNotificationId = senderHelper.sendEmail(
+                templateId,
+                emailAddress,
+                personalisation,
+                reference,
+                notificationClient,
+                deduplicateSendsWithinSeconds,
+                LOG
+        );
 
+        assertNotNull(actualNotificationId);
+        assertTrue(actualNotificationId.isEmpty());
     }
 
     @Test
@@ -286,19 +288,18 @@ public class NotificationSenderHelperTest {
                     reference
             );
 
-        assertThatThrownBy(() ->
-                senderHelper.sendSms(
-                        templateId,
-                        phoneNumber,
-                        personalisation,
-                        reference,
-                        notificationClient,
-                        deduplicateSendsWithinSeconds,
-                        LOG
-                )
-        ).isExactlyInstanceOf(NotificationServiceResponseException.class)
-                .hasMessage("Failed to send sms using GovNotify")
-                .hasCause(underlyingException);
+        String actualNotificationId = senderHelper.sendSms(
+            templateId,
+            phoneNumber,
+            personalisation,
+            reference,
+            notificationClient,
+            deduplicateSendsWithinSeconds,
+            LOG
+        );
+
+        assertNotNull(actualNotificationId);
+        assertTrue(actualNotificationId.isEmpty());
 
     }
 }

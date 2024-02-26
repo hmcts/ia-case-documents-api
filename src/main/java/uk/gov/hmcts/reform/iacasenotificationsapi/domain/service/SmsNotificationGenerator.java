@@ -1,14 +1,15 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.BaseNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNotifyNotificationSender;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SmsNotificationGenerator implements NotificationGenerator {
 
@@ -43,24 +44,20 @@ public class SmsNotificationGenerator implements NotificationGenerator {
         final AsylumCase asylumCase,
         final String referenceId,
         final Callback<AsylumCase> callback) {
-        List<String> notificationIds = new ArrayList<>();
 
         SmsNotificationPersonalisation smsNotificationPersonalisation = (SmsNotificationPersonalisation) personalisation;
 
         Set<String> phoneNumbers = smsNotificationPersonalisation.getRecipientsList(asylumCase);
 
-        notificationIds.addAll(
-            phoneNumbers.stream()
-                .map(phoneNumber ->
-                    sendSms(
-                        phoneNumber,
-                        smsNotificationPersonalisation,
-                        referenceId,
-                        callback))
-                .collect(Collectors.toList())
-        );
-
-        return notificationIds;
+        return phoneNumbers.stream()
+            .map(phoneNumber ->
+                sendSms(
+                    phoneNumber,
+                    smsNotificationPersonalisation,
+                    referenceId,
+                    callback)
+            ).filter(StringUtils::isNotBlank)
+            .collect(Collectors.toList());
     }
 
     private String sendSms(
