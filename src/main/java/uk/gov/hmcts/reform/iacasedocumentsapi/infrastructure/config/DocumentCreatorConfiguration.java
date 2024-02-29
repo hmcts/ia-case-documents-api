@@ -413,4 +413,46 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("updatedDecisionAndReasonsCoverLetter")
+    public DocumentCreator<AsylumCase> getUpdatedDecisionAndReasonsCoverLetterDocumentCreator(
+            @Value("${decisionAndReasonsCoverLetter.contentType}") String contentType,
+            @Value("${decisionAndReasonsCoverLetter.fileExtension}") String fileExtension,
+            @Value("${updatedDecisionAndReasonsCoverLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            UpdatedTribunalDecisionAndReasonsCoverLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("aipUpdatedDecisionAndReasonsCoverLetter")
+    public DocumentCreator<AsylumCase> getAipUpdatedDecisionAndReasonsCoverLetterDocumentCreator(
+            @Value("${aipDecisionAndReasonsCoverLetter.contentType}") String contentType,
+            @Value("${aipDecisionAndReasonsCoverLetter.fileExtension}") String fileExtension,
+            @Value("${updatedDecisionAndReasonsCoverLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            UpdatedTribunalAipDecisionAndReasonsCoverLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }

@@ -106,6 +106,7 @@ decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
+updatedDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter-AMENDED"
 
 aipDecisionAndReasonsCoverLetter.contentType:  application/pdf
 aipDecisionAndReasonsCoverLetter.fileExtension: PDF
@@ -271,6 +272,7 @@ security:
       - "recordTheDecision"
       - "endApplication"    
       - "uploadSignedDecisionNotice"
+      - "updateTribunalDecision"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
