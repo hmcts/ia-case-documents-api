@@ -12,6 +12,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.PRISON_NAME;
 
 import java.util.Map;
 import java.util.Optional;
@@ -82,6 +83,7 @@ class BailNoticeOfHearingRelistingTemplateTest {
             Nottingham
             NG2 1EE""";
         dataSetUp();
+        when(bailCase.read(APPLICANT_DETAINED_LOC, String.class)).thenReturn(Optional.of("prison"));
 
         fieldValuesMap = template.mapFieldValues(caseDetails);
 
@@ -90,7 +92,7 @@ class BailNoticeOfHearingRelistingTemplateTest {
         assertEquals(bailReferenceNumber, fieldValuesMap.get("OnlineCaseReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReference, fieldValuesMap.get("legalRepReference"));
-        assertEquals("Immigration removal centre", fieldValuesMap.get("applicantDetainedLoc"));
+        assertEquals("Dungavel", fieldValuesMap.get("applicantDetainedLoc"));
         assertEquals(applicantPrisonDetails, fieldValuesMap.get("applicantPrisonDetails"));
         assertEquals(listingAddress, fieldValuesMap.get("hearingCentreAddress"));
         assertEquals(hearingDate, fieldValuesMap.get("hearingDate"));
@@ -133,6 +135,7 @@ class BailNoticeOfHearingRelistingTemplateTest {
             .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesPhone);
+        when(bailCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of("Dungavel"));
     }
 
 }

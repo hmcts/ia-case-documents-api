@@ -6,9 +6,11 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_PRISON_DETAILS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IRC_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.PRISON_NAME;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -87,11 +89,12 @@ public class BailNoticeOfHearingTemplate {
 
     private String getApplicantDetainedLocation(BailCase bailCase) {
         String location = bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse("");
-        if (isNullOrEmptyString(location)) {
-            return "";
-        }
 
-        return ApplicantDetainedLocation.from(location).map(ApplicantDetainedLocation::getLocation).orElse("");
+        String detentionLocation = location.equals(ApplicantDetainedLocation.PRISON.getCode())
+            ? bailCase.read(PRISON_NAME, String.class).orElse("") : location.equals(ApplicantDetainedLocation.IMIGRATION_REMOVAL_CENTER.getCode())
+            ? bailCase.read(IRC_NAME, String.class).orElse("") : "";
+
+        return detentionLocation;
     }
 
     private boolean isNullOrEmptyString(String str) {
