@@ -935,10 +935,12 @@ govnotify:
       endApplication:
         sms: fbb7895c-891a-4e7a-89c3-bd822e3c0071
         email: e70e45e1-5609-430a-9c29-e0bb539e5efa
+        utEmail: b86b25b3-d51d-4ae7-ac8f-6bb8351e834e
       endApplicationLR:
         email: 52894473-9ded-40f8-9696-e19661fc4f44
       endApplicationWithoutLR:
         email: 93beafd6-7e2e-4e45-a4ea-c424ffa54521
+        utEmail: 6b3c8ee8-f234-4a4e-abd6-8be4386c1e47
       uploadDocument:
         email: 2b975611-7b5b-4c92-a231-406e6e64e4ba
       uploadDocumentWithoutLR:
@@ -984,6 +986,9 @@ govnotify:
         email: 8a745ed0-63f0-4a35-8cf0-f2ed4f962daf
       nocChangedLRForApplicant:
         sms: 8141263c-c1f1-4f86-a164-ab48df561dbe
+      decisionRefusedIma:
+        email: 4a724840-8e62-489b-bc69-43a0be3ff12d
+
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -1141,6 +1146,7 @@ security:
       - "createBailCaseLink"
       - "maintainBailCaseLinks"
       - "decisionWithoutHearing"
+      - "recordTheDecision"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -1189,6 +1195,7 @@ security:
       - "maintainCaseLinks"
       - "createBailCaseLink"
       - "maintainBailCaseLinks"
+      - "recordTheDecision"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
       - "endAppealAutomatically"
@@ -1296,6 +1303,7 @@ paymentExceptionsAdminOfficerEmailAddress: ${PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EM
 apcHomeOfficeEmailAddress: ${HOME_OFFICE_EMAIL_APC}
 lartHomeOfficeEmailAddress: ${HOME_OFFICE_EMAIL_LART}
 upperTribunalNoticesEmailAddress: ${IA_UPPER_TRIBUNAL_NOTICES_EMAIL}
+bailUpperTribunalEmailAddress: ${IA_BAIL_UPPER_TRIBUNAL_EMAIL:upper-tribunal-bail-alar@example.com}
 
 nbcEmailAddress: ${IA_NBC_EMAIL}
 ctscEmailAddress: ${IA_CTSC_EMAIL}

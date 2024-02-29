@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.BailCaseUtils.isBailGranted;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
@@ -43,16 +44,5 @@ public class ApplicantBailSignedDecisionNoticeUploadedPersonalisationSms impleme
             .put("granted", Boolean.TRUE.equals(isBailGranted(bailCase)) ? YES : Boolean.FALSE.equals(isBailGranted(bailCase)) ? NO : "")
             .put("refused", Boolean.FALSE.equals(isBailGranted(bailCase)) ? YES : Boolean.TRUE.equals(isBailGranted(bailCase)) ? NO : "")
             .build();
-    }
-
-    private Boolean isBailGranted(BailCase bailCase) {
-        if (bailCase.read(RECORD_DECISION_TYPE, String.class).orElse("").equals("granted")
-            || bailCase.read(RECORD_DECISION_TYPE, String.class).orElse("").equals("conditionalGrant")) {
-            return true;
-        }
-        if (bailCase.read(RECORD_DECISION_TYPE, String.class).orElse("").equals("refused")) {
-            return false;
-        }
-        return null;
     }
 }

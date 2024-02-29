@@ -1,0 +1,43 @@
+{
+  "description": "RIA-8198 record decision event for a bail application under IMA",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 8198,
+      "eventId": "recordTheDecision",
+      "state": "bailSummaryUploaded",
+      "caseData": {
+        "template": "minimal-bail-application-submitted-not-legally-represented.json",
+        "replacements": {
+          "hoSelectImaStatus": "Yes",
+          "currentCaseStateVisibleToJudge": "bailSummaryUploaded",
+          "currentCaseStateVisibleToHomeOffice": "bailSummaryUploaded",
+          "currentCaseStateVisibleToAdminOfficer": "bailSummaryUploaded",
+          "currentCaseStateVisibleToLegalRepresentative": "bailSummaryUploaded"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted-not-legally-represented.json",
+      "replacements": {
+        "hoSelectImaStatus": "Yes",
+        "currentCaseStateVisibleToJudge": "bailSummaryUploaded",
+        "currentCaseStateVisibleToHomeOffice": "bailSummaryUploaded",
+        "currentCaseStateVisibleToAdminOfficer": "bailSummaryUploaded",
+        "currentCaseStateVisibleToLegalRepresentative": "bailSummaryUploaded",
+        "notificationsSent": [
+          {
+            "id": "8198_BAIL_RECORD_DECISION_IMA_UPPER_TRIBUNAL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -185,3 +185,5 @@ java:
           alias: app-insights-connection-string
         - name: ia-config-validator-secret
           alias: IA_CONFIG_VALIDATOR_SECRET
+        - name: bail-upper-tribunal-email
+          alias: IA_BAIL_UPPER_TRIBUNAL_EMAIL

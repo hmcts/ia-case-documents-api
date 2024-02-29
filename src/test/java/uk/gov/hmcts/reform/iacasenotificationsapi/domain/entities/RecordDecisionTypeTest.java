@@ -1,10 +1,11 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-public class ApplicationDecisionTest {
+
+public class RecordDecisionTypeTest {
 
     @Test
     public void check_all_options() {
