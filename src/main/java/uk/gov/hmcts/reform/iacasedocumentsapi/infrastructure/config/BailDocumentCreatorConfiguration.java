@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailEndAppli
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingInitialListingTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingRelistingTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionUtTemplate;
 
 @Configuration
 public class BailDocumentCreatorConfiguration {
