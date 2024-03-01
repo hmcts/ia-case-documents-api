@@ -213,6 +213,8 @@ public enum BailCaseFieldDefinition {
         "legalRepEmail", new TypeReference<String>(){}),
     LEGAL_REP_NAME(
         "legalRepName", new TypeReference<String>(){}),
+    LEGAL_REP_FAMILY_NAME(
+            "legalRepFamilyName", new TypeReference<String>(){}),
     LEGAL_REP_PHONE(
         "legalRepPhone", new TypeReference<String>(){}),
     LEGAL_REP_REFERENCE(
