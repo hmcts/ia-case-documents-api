@@ -1,40 +1,47 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_COMPANY;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_NAME;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.PriorApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.InterpreterLanguage;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplateProvider;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
-public class BailSubmissionTemplateTest {
+public class BailSubmissionTemplateProviderTest {
     @Mock
     private CaseDetails<BailCase> caseDetails;
     @Mock
-    private BailSubmissionTemplateProvider bailSubmissionTemplateProvider;
+    private BailCase bailCase;
+    @Mock
+    private PriorApplication priorApplication;
 
-    private final String templateName = "BAIL_SUBMISSION_TEMPLATE.docx";
+    @Mock
+    private BailSubmissionTemplateProvider bailSubmissionTemplateProvider;
 
     private String applicantGivenNames = "John";
     private String applicantFamilyName = "Smith";
@@ -48,7 +55,10 @@ public class BailSubmissionTemplateTest {
     private String prisonName = "Aylesbury";
     private String applicantArrivalInUkDate = "2001-02-22";
     private String hasAppealHearingPending = "Yes";
+    private String hasAppealHearingPendingUT = "Yes";
     private String appealReferenceNumber = "8989889";
+    private String appealReferenceNumberUT = "8989853";
+
     private String hasPreviousBailApplication = "Yes";
     private String supporterGivenNames = "Supporter1";
     private String supporterFamilyNames = "Family";
@@ -63,8 +73,7 @@ public class BailSubmissionTemplateTest {
     private String financialAmountSupporterUndertakes1 = "2000";
     private String groundsForBailReasons = "Grounds for bails";
     private String legalRepCompany = "COMPANY NAME";
-    private String legalRepGivenName = "LR Given Name";
-    private String legalRepFamilyName = "LR Family Name";
+    private String legalRepName = "REP NAME";
     private String legalRepEmail = "email@company.com";
     private String legalRepPhone = "07777777777";
     private String legalRepReference = "TREF09";
@@ -82,6 +91,7 @@ public class BailSubmissionTemplateTest {
     private String supporterAddressCounty = "South";
     private String supporterAddressPostCode = "AB1 2CD";
     private String supporterAddressCountry = "UK";
+    private String dontKnowSelectedValue = "Don't Know";
     private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
 
     private AddressUk addressUk = new AddressUk(
@@ -118,24 +128,253 @@ public class BailSubmissionTemplateTest {
         Arrays.asList(
             new IdValue<>("1", new InterpreterLanguage("Arabic", "NA"))
         );
-
-    private BailSubmissionTemplate bailSubmissionTemplate;
+    
+    private Map<String, Object> fieldValuesMap;
 
     @BeforeEach
     public void setUp() {
-        bailSubmissionTemplate = new BailSubmissionTemplate(templateName, bailSubmissionTemplateProvider);
+        bailSubmissionTemplateProvider = new BailSubmissionTemplateProvider();
+        when(bailCase.read(IS_IMA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
     }
 
     @Test
-    public void should_return_template_name() {
-
-        assertEquals(templateName, bailSubmissionTemplate.getName());
+    void should_set_sentBy_properly_for_admin() {
+        dataSetUp();
+        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        List<String> validSubmissionsBy = Arrays.asList("Applicant", "Legal Representative", "Home Office");
+        for (String submittedBy : validSubmissionsBy) {
+            when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of(submittedBy));
+            fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+            assertEquals(Optional.of(submittedBy), fieldValuesMap.get("applicationSubmittedBy"));
+        }
     }
 
+    @Test
+    void should_not_set_previous_application_reference_if_not_present() {
+        dataSetUp();
+        when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("No"));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        assertFalse(fieldValuesMap.containsKey("previousBailApplicationNumber"));
+    }
+
+    @Test
+    void should_not_set_previous_appeal_reference_if_not_present() {
+        dataSetUp();
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class)).thenReturn(Optional.of("No"));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        assertFalse(fieldValuesMap.containsKey("appealReferenceNumber"));
+    }
+
+
+    @Test
+    void should_not_set_previous_appeal_ut_reference_if_not_present() {
+        dataSetUp();
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class)).thenReturn(Optional.of("No"));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        assertFalse(fieldValuesMap.containsKey("appealReferenceNumberUT"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"YesWithoutAppealNumber", "DontKnow", "Yes"})
+    void should_properly_set_appeal_hearing_pending_selected_value(String pendingValue) {
+        dataSetUp();
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class)).thenReturn(Optional.of(pendingValue));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        if (pendingValue.equals("YesWithoutAppealNumber")) {
+            assertEquals("Yes Without Appeal Number", fieldValuesMap.get("hasAppealHearingPending"));
+        } else if (pendingValue.equals("hasAppealHearingPending")) {
+            assertEquals(dontKnowSelectedValue, fieldValuesMap.get("hasAppealHearingPending"));
+        } else if (pendingValue.equals("Yes")) {
+            assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"YesWithoutAppealNumber", "DontKnow", "Yes"})
+    void should_properly_set_appeal_hearing_pending_ut_selected_value(String pendingValue) {
+        dataSetUp();
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class)).thenReturn(Optional.of(pendingValue));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        if (pendingValue.equals("YesWithoutAppealNumber")) {
+            assertEquals("Yes Without Appeal Number", fieldValuesMap.get("hasAppealHearingPendingUT"));
+        } else if (pendingValue.equals("hasAppealHearingPendingUT")) {
+            assertEquals(dontKnowSelectedValue, fieldValuesMap.get("hasAppealHearingPendingUT"));
+        } else if (pendingValue.equals("Yes")) {
+            assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
+        }
+    }
+
+    @Test
+    void should_set_applicant_mobile_number() {
+        dataSetUp();
+        when(bailCase.read(APPLICANT_HAS_MOBILE, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        assertEquals(applicantMobileNumber1, fieldValuesMap.get("applicantMobileNumber1"));
+    }
+
+    @Test
+    void should_set_bail_hearing_date_if_applicant_been_refused_bail() {
+        dataSetUp();
+        when(bailCase.read(APPLICANT_BEEN_REFUSED_BAIL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(BAIL_HEARING_DATE, String.class)).thenReturn(Optional.of("2022-01-01"));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        assertEquals("01012022", fieldValuesMap.get("bailHearingDate"));
+    }
+
+    @Test
+    void should_set_no_transfer_bail_management_reasons_if_not_selected() {
+        final String reasons = "Test reasons";
+        dataSetUp();
+        when(bailCase.read(TRANSFER_BAIL_MANAGEMENT_YES_OR_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(bailCase.read(NO_TRANSFER_BAIL_MANAGEMENT_REASONS, String.class)).thenReturn(Optional.of(reasons));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        assertEquals(reasons, fieldValuesMap.get("noTransferBailManagementReasons"));
+    }
+
+    @Test
+    void should_set_video_hearing_details_if_present() {
+        final String details = "videoHearingDetails";
+        dataSetUp();
+        when(bailCase.read(VIDEO_HEARING1, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(bailCase.read(VIDEO_HEARING_DETAILS, String.class)).thenReturn(Optional.of(details));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        assertEquals(details, fieldValuesMap.get("videoHearingDetails"));
+
+    }
+
+    @Test
+    void should_set_disability_details_if_present() {
+        dataSetUp();
+        when(bailCase.read(APPLICANT_DISABILITY1, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertTrue(fieldValuesMap.containsKey("applicantDisabilityDetails"));
+    }
+
+    @Test
+    void should_set_prison_details_if_detained_in_prison() {
+        dataSetUp();
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertTrue(fieldValuesMap.containsKey("prisonName"));
+        assertTrue(fieldValuesMap.containsKey("applicantPrisonDetails"));
+        assertFalse(fieldValuesMap.containsKey("ircName"));
+    }
+
+    @Test
+    void should_set_prison_details_if_detained_in_irc() {
+        dataSetUp();
+        when(bailCase.read(APPLICANT_DETAINED_LOC, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+        when(bailCase.read(IRC_NAME, String.class)).thenReturn(Optional.of("Derwentside"));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertFalse(fieldValuesMap.containsKey("prisonName"));
+        assertFalse(fieldValuesMap.containsKey("applicantPrisonDetails"));
+        assertTrue(fieldValuesMap.containsKey("ircName"));
+    }
+
+    @Test
+    void should_not_set_supporter_2_data_if_not_present() {
+        dataSetUp();
+        when(bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_2, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        assertFalse(fieldValuesMap.containsKey("supporter2GivenNames"));
+        assertFalse(fieldValuesMap.containsKey("supporter2FamilyNames"));
+        assertFalse(fieldValuesMap.containsKey("supporter2AddressDetails"));
+        assertFalse(fieldValuesMap.containsKey("supporter2TelephoneNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter2MobileNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter2EmailAddress1"));
+        assertFalse(fieldValuesMap.containsKey("supporter2DOB"));
+        assertFalse(fieldValuesMap.containsKey("supporter2Relation"));
+        assertFalse(fieldValuesMap.containsKey("supporter2Occupation"));
+        assertFalse(fieldValuesMap.containsKey("supporter2Immigration"));
+        assertFalse(fieldValuesMap.containsKey("supporter2Nationalities"));
+        assertFalse(fieldValuesMap.containsKey("supporter2HasPassport"));
+        assertFalse(fieldValuesMap.containsKey("supporter2Passport"));
+        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter2Undertakes1"));
+    }
+
+    @Test
+    void should_set_supporter_1_2_3_data_if_present() {
+        dataSetUp();
+        supporter2DataSetUp();
+        supporter3DataSetUp();
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        checkCommonFields();
+        assertSupporter2Fields();
+        assertSupporter3Fields();
+        assertFalse(fieldValuesMap.containsKey("supporter4GivenNames"));
+        assertFalse(fieldValuesMap.containsKey("supporter4FamilyNames"));
+        assertFalse(fieldValuesMap.containsKey("supporter4AddressDetails"));
+        assertFalse(fieldValuesMap.containsKey("supporter4TelephoneNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter4MobileNumber1"));
+        assertFalse(fieldValuesMap.containsKey("supporter4EmailAddress1"));
+        assertFalse(fieldValuesMap.containsKey("supporter4DOB"));
+        assertFalse(fieldValuesMap.containsKey("supporter4Relation"));
+        assertFalse(fieldValuesMap.containsKey("supporter4Occupation"));
+        assertFalse(fieldValuesMap.containsKey("supporter4Immigration"));
+        assertFalse(fieldValuesMap.containsKey("supporter4Nationalities"));
+        assertFalse(fieldValuesMap.containsKey("supporter4HasPassport"));
+        assertFalse(fieldValuesMap.containsKey("supporter4Passport"));
+        assertFalse(fieldValuesMap.containsKey("financialAmountSupporter4Undertakes1"));
+    }
+
+    @Test
+    void should_set_supporter_2_3_4_data_if_present() {
+        dataSetUp();
+        supporter2DataSetUp();
+        supporter3DataSetUp();
+        supporter4DataSetUp();
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+        checkCommonFields();
+        assertSupporter2Fields();
+        assertSupporter3Fields();
+        assertSupporter4Fields();
+    }
+
+    @Test
+    void should_be_tolerant_to_empty_data() {
+        dataSetUp();
+        when(bailCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
+        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
+        when(bailCase.read(LEGAL_REP_EMAIL, String.class)).thenReturn(Optional.empty());
+        when(bailCase.read(LEGAL_REP_PHONE, String.class)).thenReturn(Optional.empty());
+        when(bailCase.read(LEGAL_REP_REFERENCE, String.class)).thenReturn(Optional.empty());
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        checkCommonFields();
+        assertEquals("", fieldValuesMap.get("legalRepCompany"));
+        assertEquals("", fieldValuesMap.get("legalRepName"));
+        assertEquals("", fieldValuesMap.get("legalRepEmail"));
+        assertEquals("", fieldValuesMap.get("legalRepPhone"));
+        assertEquals("", fieldValuesMap.get("legalRepReference"));
+    }
+
+    @Test
+    void should_not_set_appeal_hearing_pending_ut_selected_values_if_toggle_is_switched_off() {
+        dataSetUp();
+        when(bailCase.read(IS_IMA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        assertFalse(fieldValuesMap.containsKey("hasAppealHearingPendingUT"));
+        assertFalse(fieldValuesMap.containsKey("appealReferenceNumberUT"));
+    }
+
+    /*
+    Scenario - Application submitted by LR with one Financial Condition Supporter
+    with interpreter languages
+    */
     @Test
     void should_set_the_fields_for_application_submittedBy_LR() {
         dataSetUp();
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
 
         checkCommonFields();
         assertTrue(fieldValuesMap.containsKey("legalRepCompany"));
@@ -157,7 +396,7 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(bailCase.read(IS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
         checkCommonFields();
         assertEquals("Home Office", fieldValuesMap.get("applicationSubmittedBy"));
         assertFalse(fieldValuesMap.containsKey("legalRepCompany"));
@@ -171,7 +410,7 @@ public class BailSubmissionTemplateTest {
     void should_set_gender_details_if_gender_others() {
         dataSetUp();
         when(bailCase.read(APPLICANT_GENDER, String.class)).thenReturn(Optional.of("Other"));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
 
         checkCommonFields();
         assertTrue(fieldValuesMap.containsKey("applicantOtherGenderDetails"));
@@ -180,7 +419,7 @@ public class BailSubmissionTemplateTest {
     @Test
     void should_not_set_gender_details_if_gender_male() {
         dataSetUp();
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
 
         checkCommonFields();
         assertFalse(fieldValuesMap.containsKey("applicantOtherGenderDetails"));
@@ -190,7 +429,7 @@ public class BailSubmissionTemplateTest {
     void should_set_hasPreviousBailApplication_for_dontknow() {
         dataSetUp();
         when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("DontKnow"));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
 
         checkCommonFields();
         assertEquals("Don't Know", fieldValuesMap.get("hasPreviousBailApplication"));
@@ -200,7 +439,7 @@ public class BailSubmissionTemplateTest {
     void should_set_hasPreviousBailApplication_for_YesWithoutApplicationNumber() {
         dataSetUp();
         when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of("YesWithoutApplicationNumber"));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
 
         checkCommonFields();
         assertEquals("Yes Without Application Number", fieldValuesMap.get("hasPreviousBailApplication"));
@@ -211,7 +450,7 @@ public class BailSubmissionTemplateTest {
         dataSetUp();
         when(bailCase.read(SUPPORTER_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(SUPPORTER_PASSPORT, String.class)).thenReturn(Optional.empty());
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
 
         assertFalse(fieldValuesMap.containsKey("supporterPassport"));
     }
@@ -222,7 +461,7 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("Applicant"));
         when(bailCase.read(HAS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
 
         checkCommonFields();
         assertEquals(YesOrNo.YES, fieldValuesMap.get("isLegallyRepresentedForFlag"));
@@ -232,131 +471,10 @@ public class BailSubmissionTemplateTest {
     }
 
     @Test
-    void should_set_interpreter_details_for_applicant_and_fcs_language_ref_data() {
-        dataSetUp();
-        BailInterpreterLanguageRefData spokenRefData = new BailInterpreterLanguageRefData(
-            new DynamicList(new Value("fre", "French"), Collections.emptyList()),
-            "No",
-            null);
-
-        BailInterpreterLanguageRefData signRefData = new BailInterpreterLanguageRefData(
-            new DynamicList(new Value("bsl", "BSL"), Collections.emptyList()),
-            "No",
-            null);
-
-        List<String> languageCategories = Arrays.asList("spokenLanguageInterpreter", "signLanguageInterpreter");
-
-        when(bailCase.read(FCS_INTERPRETER_YES_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(APPLICANT_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
-        when(bailCase.read(FCS1_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
-        when(bailCase.read(FCS2_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
-        when(bailCase.read(FCS3_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
-        when(bailCase.read(FCS4_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategories));
-        when(bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals("Spoken language interpreter\nSign language interpreter", fieldValuesMap.get("applicantInterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter\nSign language interpreter", fieldValuesMap.get("fcs1InterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter\nSign language interpreter", fieldValuesMap.get("fcs2InterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter\nSign language interpreter", fieldValuesMap.get("fcs3InterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter\nSign language interpreter", fieldValuesMap.get("fcs4InterpreterLanguageCategory"));
-        assertEquals(spokenRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("applicantInterpreterSpokenLanguage"));
-        assertEquals(signRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("applicantInterpreterSignLanguage"));
-        assertEquals(spokenRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs1InterpreterSpokenLanguage"));
-        assertEquals(signRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs1InterpreterSignLanguage"));
-        assertEquals(spokenRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs2InterpreterSpokenLanguage"));
-        assertEquals(signRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs2InterpreterSignLanguage"));
-        assertEquals(spokenRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs3InterpreterSpokenLanguage"));
-        assertEquals(signRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs3InterpreterSignLanguage"));
-        assertEquals(spokenRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs4InterpreterSpokenLanguage"));
-        assertEquals(signRefData.getLanguageRefData().getValue().getLabel(), fieldValuesMap.get("fcs4InterpreterSignLanguage"));
-    }
-
-    @Test
-    void should_set_manual_interpreter_details_for_applicant_and_fcs_with_just_spoken_only() {
-        dataSetUp();
-        BailInterpreterLanguageRefData spokenRefData = new BailInterpreterLanguageRefData(
-            new DynamicList(new Value("", ""), Collections.emptyList()),
-            "Yes",
-            "Manual spoken");
-
-        List<String> languageCategoriesSpokenOnly = Arrays.asList("spokenLanguageInterpreter");
-
-        when(bailCase.read(FCS_INTERPRETER_YES_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(APPLICANT_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
-        when(bailCase.read(FCS1_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
-        when(bailCase.read(FCS2_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
-        when(bailCase.read(FCS3_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
-        when(bailCase.read(FCS4_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSpokenOnly));
-        when(bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(spokenRefData));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals("Spoken language interpreter", fieldValuesMap.get("applicantInterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter", fieldValuesMap.get("fcs1InterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter", fieldValuesMap.get("fcs2InterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter", fieldValuesMap.get("fcs3InterpreterLanguageCategory"));
-        assertEquals("Spoken language interpreter", fieldValuesMap.get("fcs4InterpreterLanguageCategory"));
-        assertEquals(spokenRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("applicantInterpreterSpokenLanguage"));
-        assertEquals(spokenRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs1InterpreterSpokenLanguage"));
-        assertEquals(spokenRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs2InterpreterSpokenLanguage"));
-        assertEquals(spokenRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs3InterpreterSpokenLanguage"));
-        assertEquals(spokenRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs4InterpreterSpokenLanguage"));
-    }
-
-    @Test
-    void should_set_manual_interpreter_details_for_applicant_and_fcs_with_just_sign_only() {
-        dataSetUp();
-
-        BailInterpreterLanguageRefData signRefData = new BailInterpreterLanguageRefData(
-            new DynamicList(new Value("", ""), Collections.emptyList()),
-            "Yes",
-            "Manual sign");
-
-        List<String> languageCategoriesSignOnly = Arrays.asList("signLanguageInterpreter");
-
-        when(bailCase.read(FCS_INTERPRETER_YES_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(APPLICANT_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
-        when(bailCase.read(FCS1_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
-        when(bailCase.read(FCS2_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
-        when(bailCase.read(FCS3_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
-        when(bailCase.read(FCS4_INTERPRETER_LANGUAGE_CATEGORY)).thenReturn(Optional.of(languageCategoriesSignOnly));
-        when(bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        when(bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)).thenReturn(Optional.of(signRefData));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals("Sign language interpreter", fieldValuesMap.get("applicantInterpreterLanguageCategory"));
-        assertEquals("Sign language interpreter", fieldValuesMap.get("fcs1InterpreterLanguageCategory"));
-        assertEquals("Sign language interpreter", fieldValuesMap.get("fcs2InterpreterLanguageCategory"));
-        assertEquals("Sign language interpreter", fieldValuesMap.get("fcs3InterpreterLanguageCategory"));
-        assertEquals("Sign language interpreter", fieldValuesMap.get("fcs4InterpreterLanguageCategory"));
-        assertEquals(signRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("applicantInterpreterSignLanguage"));
-        assertEquals(signRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs1InterpreterSignLanguage"));
-        assertEquals(signRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs2InterpreterSignLanguage"));
-        assertEquals(signRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs3InterpreterSignLanguage"));
-        assertEquals(signRefData.getLanguageManualEntryDescription(), fieldValuesMap.get("fcs4InterpreterSignLanguage"));
-    }
-
-    @Test
     void should_not_show_previous_application_details_if_prior_applications_dont_exist() {
         dataSetUp();
         when(bailCase.read(PRIOR_APPLICATIONS, PriorApplication.class)).thenReturn(Optional.of(priorApplication));
-        fieldValuesMap = bailSubmissionTemplate.mapFieldValues(caseDetails);
+        fieldValuesMap = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
         assertFalse(fieldValuesMap.containsKey("showPreviousApplicationSection"));
     }
 
@@ -373,6 +491,7 @@ public class BailSubmissionTemplateTest {
         assertTrue(fieldValuesMap.containsKey("applicantDetainedLoc"));
         assertTrue(fieldValuesMap.containsKey("applicantArrivalInUKDate"));
         assertTrue(fieldValuesMap.containsKey("hasAppealHearingPending"));
+        assertTrue(fieldValuesMap.containsKey("hasAppealHearingPendingUT"));
         assertTrue(fieldValuesMap.containsKey("applicantHasAddress"));
         assertTrue(fieldValuesMap.containsKey("applicantAddress"));
         assertTrue(fieldValuesMap.containsKey("hasPreviousBailApplication"));
@@ -479,6 +598,8 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(APPLICANT_ARRIVAL_IN_UK, String.class)).thenReturn(Optional.of(applicantArrivalInUkDate));
         when(bailCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(bailCase.read(HAS_APPEAL_HEARING_PENDING, String.class)).thenReturn(Optional.of(hasAppealHearingPending));
+        when(bailCase.read(UT_APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumberUT));
+        when(bailCase.read(HAS_APPEAL_HEARING_PENDING_UT, String.class)).thenReturn(Optional.of(hasAppealHearingPendingUT));
         when(bailCase.read(APPLICANT_GENDER, String.class)).thenReturn(Optional.of(applicantGender));
         when(bailCase.read(APPLICANT_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(HAS_PREVIOUS_BAIL_APPLICATION, String.class)).thenReturn(Optional.of(hasPreviousBailApplication));
@@ -508,11 +629,12 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(TRANSFER_BAIL_MANAGEMENT_YES_OR_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(GROUNDS_FOR_BAIL_PROVIDE_EVIDENCE_OPTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(bailCase.read(INTERPRETER_YES_NO, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(INTERPRETER_LANGUAGES)).thenReturn(Optional.of(interpreterLanguages));
         when(bailCase.read(APPLICANT_DISABILITY1, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(bailCase.read(VIDEO_HEARING1, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         when(bailCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.of(legalRepCompany));
-        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepGivenName));
+        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepName));
         when(bailCase.read(LEGAL_REP_EMAIL, String.class)).thenReturn(Optional.of(legalRepEmail));
         when(bailCase.read(LEGAL_REP_PHONE, String.class)).thenReturn(Optional.of(legalRepPhone));
         when(bailCase.read(LEGAL_REP_REFERENCE, String.class)).thenReturn(Optional.of(legalRepReference));
@@ -554,51 +676,22 @@ public class BailSubmissionTemplateTest {
         when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 
-    public void should_map_case_data_to_template_field_values() {
-
-        assertTrue(bailSubmissionTemplate.mapFieldValues(caseDetails).isEmpty());
-        verify(bailSubmissionTemplateProvider, times(1)).mapFieldValues(caseDetails);
-    }
-
-    @Test
-    void should_correctly_map_legal_rep_name_when_only_first_name_provided() {
-        dataSetUp();
-        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("Applicant"));
-        when(bailCase.read(HAS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepGivenName));
-
-        Map<String, Object> templateFieldValues = bailSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(legalRepGivenName, templateFieldValues.get("legalRepName"));
-    }
-
-    @Test
-    void should_correctly_map_legal_rep_name_when_only_family_name_provided() {
-        dataSetUp();
-        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("Applicant"));
-        when(bailCase.read(HAS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
-        when(bailCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
-
-        Map<String, Object> templateFieldValues = bailSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals("", templateFieldValues.get("legalRepName"));
-    }
-
-    @Test
-    void should_correctly_map_legal_rep_name_when_first_name_and_family_name_provided() {
-        dataSetUp();
-        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("legal representative"));
-        when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
-        when(bailCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
-
-        Map<String, Object> templateFieldValues = bailSubmissionTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(legalRepGivenName + " " + legalRepFamilyName, templateFieldValues.get("legalRepName"));
+    private void supporter4DataSetUp() {
+        when(bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_4, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SUPPORTER_4_GIVEN_NAMES, String.class)).thenReturn(Optional.of(supporterGivenNames));
+        when(bailCase.read(SUPPORTER_4_FAMILY_NAMES, String.class)).thenReturn(Optional.of(supporterFamilyNames));
+        when(bailCase.read(SUPPORTER_4_ADDRESS_DETAILS, AddressUk.class)).thenReturn(Optional.of(supporterAddressUk));
+        when(bailCase.read(SUPPORTER_4_TELEPHONE_NUMBER_1, String.class)).thenReturn(Optional.of(supporterTelephoneNumber1));
+        when(bailCase.read(SUPPORTER_4_MOBILE_NUMBER_1)).thenReturn(Optional.of(supporterMobileNumber1));
+        when(bailCase.read(SUPPORTER_4_EMAIL_ADDRESS_1, String.class)).thenReturn(Optional.of(supporterEmailAddress1));
+        when(bailCase.read(SUPPORTER_4_DOB, String.class)).thenReturn(Optional.of(supporterDob));
+        when(bailCase.read(SUPPORTER_4_RELATION, String.class)).thenReturn(Optional.of(supporterRelation));
+        when(bailCase.read(SUPPORTER_4_OCCUPATION, String.class)).thenReturn(Optional.of(supporterOccupation));
+        when(bailCase.read(SUPPORTER_4_IMMIGRATION, String.class)).thenReturn(Optional.of(supporterImmigration));
+        when(bailCase.read(SUPPORTER_4_NATIONALITY)).thenReturn(Optional.of(supporterNationalities));
+        when(bailCase.read(SUPPORTER_4_HAS_PASSPORT, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SUPPORTER_4_PASSPORT, String.class)).thenReturn(Optional.of(supporterHasPassport));
+        when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 }
 

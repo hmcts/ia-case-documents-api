@@ -49,6 +49,10 @@ public enum BailCaseFieldDefinition {
         "hasAppealHearingPending", new TypeReference<String>(){}),
     APPEAL_REFERENCE_NUMBER(
         "appealReferenceNumber", new TypeReference<String>(){}),
+    HAS_APPEAL_HEARING_PENDING_UT(
+            "hasAppealHearingPendingUt", new TypeReference<String>(){}),
+    UT_APPEAL_REFERENCE_NUMBER(
+            "utAppealReferenceNumber", new TypeReference<String>(){}),
     HAS_PREVIOUS_BAIL_APPLICATION(
         "hasPreviousBailApplication", new TypeReference<String>(){}),
     PREVIOUS_BAIL_APPLICATION_NUMBER(
@@ -277,6 +281,9 @@ public enum BailCaseFieldDefinition {
         "recordDecisionType", new TypeReference<String>(){}),
     RECORD_THE_DECISION_LIST(
         "recordTheDecisionList", new TypeReference<String>(){}),
+    //Once we switch the IMA feature on, we will be using this case field instead of the one above
+    RECORD_THE_DECISION_LIST_IMA(
+        "recordTheDecisionListIma", new TypeReference<String>(){}),
     BAIL_TRANSFER_DIRECTIONS(
         "bailTransferDirections", new TypeReference<String>(){}),
     REASON_FOR_REFUSAL_DETAILS(
@@ -335,8 +342,9 @@ public enum BailCaseFieldDefinition {
     LISTING_LOCATION("listingLocation", new TypeReference<String>(){}),
     LISTING_HEARING_DATE("listingHearingDate", new TypeReference<String>(){}),
     HEARING_DOCUMENTS(
-        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){})
-    ;
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),    
+    IS_IMA_ENABLED(
+        "isImaEnabled", new TypeReference<YesOrNo>() {});
 
     private final String value;
     private final TypeReference typeReference;
