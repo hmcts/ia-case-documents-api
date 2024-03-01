@@ -73,8 +73,8 @@ public class BailSubmissionTemplateProviderTest {
     private String financialAmountSupporterUndertakes1 = "2000";
     private String groundsForBailReasons = "Grounds for bails";
     private String legalRepCompany = "COMPANY NAME";
-    private String legalRepName = "REP NAME";
-    private String legalRepEmail = "email@company.com";
+    private String legalRepGivenName = "LR Given Name";
+    private String legalRepFamilyName = "LR Family Name";    private String legalRepEmail = "email@company.com";
     private String legalRepPhone = "07777777777";
     private String legalRepReference = "TREF09";
     private String applicantAddressLine1 = "123 Some Street";
@@ -478,6 +478,47 @@ public class BailSubmissionTemplateProviderTest {
         assertFalse(fieldValuesMap.containsKey("showPreviousApplicationSection"));
     }
 
+    @Test
+    void should_correctly_map_legal_rep_name_when_only_first_name_provided() {
+        dataSetUp();
+        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("Applicant"));
+        when(bailCase.read(HAS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepGivenName));
+
+        Map<String, Object> templateFieldValues = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepGivenName, templateFieldValues.get("legalRepName"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_only_family_name_provided() {
+        dataSetUp();
+        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("Applicant"));
+        when(bailCase.read(HAS_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
+        when(bailCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
+
+        Map<String, Object> templateFieldValues = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        assertEquals("", templateFieldValues.get("legalRepName"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_first_name_and_family_name_provided() {
+        dataSetUp();
+        when(bailCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(SENT_BY_CHECKLIST, String.class)).thenReturn(Optional.of("legal representative"));
+        when(caseDetails.getCaseData()).thenReturn(bailCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+        when(bailCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
+
+        Map<String, Object> templateFieldValues = bailSubmissionTemplateProvider.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepGivenName + " " + legalRepFamilyName, templateFieldValues.get("legalRepName"));
+    }
+
     //Helper method for common assertions
     private void checkCommonFields() {
         assertTrue(fieldValuesMap.containsKey("applicantGivenNames"));
@@ -634,7 +675,7 @@ public class BailSubmissionTemplateProviderTest {
         when(bailCase.read(VIDEO_HEARING1, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         when(bailCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.of(legalRepCompany));
-        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepName));
+        when(bailCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepGivenName));
         when(bailCase.read(LEGAL_REP_EMAIL, String.class)).thenReturn(Optional.of(legalRepEmail));
         when(bailCase.read(LEGAL_REP_PHONE, String.class)).thenReturn(Optional.of(legalRepPhone));
         when(bailCase.read(LEGAL_REP_REFERENCE, String.class)).thenReturn(Optional.of(legalRepReference));
