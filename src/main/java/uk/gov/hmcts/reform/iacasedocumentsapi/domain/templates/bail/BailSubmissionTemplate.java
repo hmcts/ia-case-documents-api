@@ -19,6 +19,7 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.PriorApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -445,197 +446,67 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     }
 
     private void setApplicantInterpreterLanguageDetails(BailCase bailCase, Map<String, Object> fieldValues) {
+        setInterpreterLanguageDetails(bailCase, fieldValues, APPLICANT_INTERPRETER_LANGUAGE_CATEGORY,
+            APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, APPLICANT_INTERPRETER_SIGN_LANGUAGE);
 
-        Optional<List<String>> languageCategoriesOptional = bailCase
-            .read(APPLICANT_INTERPRETER_LANGUAGE_CATEGORY);
-
-        if (languageCategoriesOptional.isPresent()) {
-            List<String> languageCategories = languageCategoriesOptional.get();
-
-            if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())
-                && languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("applicantInterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL + "\n" + SIGN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("applicantInterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("applicantInterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
-            }
-
-            Optional<BailInterpreterLanguageRefData> applicantSpokenInterpreterLanguage = bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<BailInterpreterLanguageRefData> applicantSignInterpreterLanguage = bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-
-            applicantSpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("applicantInterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("applicantInterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-
-            applicantSignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("applicantInterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("applicantInterpreterSignLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-        }
     }
 
     private void setFcs1InterpreterLanguageDetails(BailCase bailCase, Map<String, Object> fieldValues) {
-
-        Optional<List<String>> languageCategoriesOptional = bailCase
-            .read(FCS1_INTERPRETER_LANGUAGE_CATEGORY);
-
-        if (languageCategoriesOptional.isPresent()) {
-            List<String> languageCategories = languageCategoriesOptional.get();
-
-            if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())
-                && languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs1InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL + "\n" + SIGN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs1InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs1InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
-            }
-
-            Optional<BailInterpreterLanguageRefData> fcs1SpokenInterpreterLanguage = bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<BailInterpreterLanguageRefData> fcs1SignInterpreterLanguage = bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-
-            fcs1SpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs1InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs1InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-
-            fcs1SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs1InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs1InterpreterSignLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-        }
+        setInterpreterLanguageDetails(bailCase, fieldValues, FCS1_INTERPRETER_LANGUAGE_CATEGORY,
+            FCS1_INTERPRETER_SPOKEN_LANGUAGE, FCS1_INTERPRETER_SIGN_LANGUAGE);
     }
 
     private void setFcs2InterpreterLanguageDetails(BailCase bailCase, Map<String, Object> fieldValues) {
-
-        Optional<List<String>> languageCategoriesOptional = bailCase.read(FCS2_INTERPRETER_LANGUAGE_CATEGORY);
-
-        if (languageCategoriesOptional.isPresent()) {
-            List<String> languageCategories = languageCategoriesOptional.get();
-
-            if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())
-                && languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs2InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL + "\n" + SIGN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs2InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs2InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
-            }
-
-            Optional<BailInterpreterLanguageRefData> fcs2SpokenInterpreterLanguage = bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<BailInterpreterLanguageRefData> fcs2SignInterpreterLanguage = bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-
-            fcs2SpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs2InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs2InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-
-            fcs2SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs2InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs2InterpreterSignLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-        }
+        setInterpreterLanguageDetails(bailCase, fieldValues, FCS2_INTERPRETER_LANGUAGE_CATEGORY,
+            FCS2_INTERPRETER_SPOKEN_LANGUAGE, FCS2_INTERPRETER_SIGN_LANGUAGE);
     }
 
     private void setFcs3InterpreterLanguageDetails(BailCase bailCase, Map<String, Object> fieldValues) {
-
-        Optional<List<String>> languageCategoriesOptional = bailCase.read(FCS3_INTERPRETER_LANGUAGE_CATEGORY);
-
-        if (languageCategoriesOptional.isPresent()) {
-            List<String> languageCategories = languageCategoriesOptional.get();
-
-            if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())
-                && languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs3InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL + "\n" + SIGN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs3InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL);
-            } else if (languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs3InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
-            }
-
-            Optional<BailInterpreterLanguageRefData> fcs3SpokenInterpreterLanguage = bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<BailInterpreterLanguageRefData> fcs3SignInterpreterLanguage = bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
-                .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-
-            fcs3SpokenInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs3InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs3InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-
-            fcs3SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs3InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs3InterpreterSignLanguage", language.getLanguageManualEntryDescription());
-                }
-            });
-        }
+        setInterpreterLanguageDetails(bailCase, fieldValues, FCS3_INTERPRETER_LANGUAGE_CATEGORY,
+            FCS3_INTERPRETER_SPOKEN_LANGUAGE, FCS3_INTERPRETER_SIGN_LANGUAGE);
     }
 
     private void setFcs4InterpreterLanguageDetails(BailCase bailCase, Map<String, Object> fieldValues) {
+        setInterpreterLanguageDetails(bailCase, fieldValues, FCS4_INTERPRETER_LANGUAGE_CATEGORY,
+            FCS4_INTERPRETER_SPOKEN_LANGUAGE, FCS4_INTERPRETER_SIGN_LANGUAGE);
+    }
 
-        Optional<List<String>> languageCategoriesOptional = bailCase.read(FCS4_INTERPRETER_LANGUAGE_CATEGORY);
+
+    private void setInterpreterLanguageDetails(BailCase bailCase, Map<String, Object> fieldValues, BailCaseFieldDefinition langCategoryField,
+                                                  BailCaseFieldDefinition spokenLanguageField, BailCaseFieldDefinition signLanguageField) {
+
+        Optional<List<String>> languageCategoriesOptional = bailCase.read(langCategoryField);
 
         if (languageCategoriesOptional.isPresent()) {
             List<String> languageCategories = languageCategoriesOptional.get();
 
             if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())
                 && languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs4InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL + "\n" + SIGN_INTERPRETER_LABEL);
+                fieldValues.put(langCategoryField.value(), SPOKEN_INTERPRETER_LABEL + "\n" + SIGN_INTERPRETER_LABEL);
             } else if (languageCategories.contains(SPOKEN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs4InterpreterLanguageCategory", SPOKEN_INTERPRETER_LABEL);
+                fieldValues.put(langCategoryField.value(), SPOKEN_INTERPRETER_LABEL);
             } else if (languageCategories.contains(SIGN_LANGUAGE_INTERPRETER.getValue())) {
-                fieldValues.put("fcs4InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
+                fieldValues.put(langCategoryField.value(), SIGN_INTERPRETER_LABEL);
             }
 
-            Optional<BailInterpreterLanguageRefData> fcs4SpokenInterpreterLanguage = bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs4SpokenInterpreterLanguage = bailCase.read(spokenLanguageField, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<BailInterpreterLanguageRefData> fcs4SignInterpreterLanguage = bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs4SignInterpreterLanguage = bailCase.read(signLanguageField, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs4SpokenInterpreterLanguage.ifPresent(language -> {
                 if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs4InterpreterSpokenLanguage", language.getLanguageRefData().getValue().getLabel());
+                    fieldValues.put(spokenLanguageField.value(), language.getLanguageRefData().getValue().getLabel());
                 } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs4InterpreterSpokenLanguage", language.getLanguageManualEntryDescription());
+                    fieldValues.put(spokenLanguageField.value(), language.getLanguageManualEntryDescription());
                 }
             });
 
             fcs4SignInterpreterLanguage.ifPresent(language -> {
                 if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs4InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
+                    fieldValues.put(signLanguageField.value(), language.getLanguageRefData().getValue().getLabel());
                 } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
-                    fieldValues.put("fcs4InterpreterSignLanguage", language.getLanguageManualEntryDescription());
+                    fieldValues.put(signLanguageField.value(), language.getLanguageManualEntryDescription());
                 }
             });
         }
