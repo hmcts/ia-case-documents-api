@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.InterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.PriorApplication;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -467,9 +467,9 @@ public class BailSubmissionTemplateProvider {
                 fieldValues.put("applicantInterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
             }
 
-            Optional<InterpreterLanguageRefData> applicantSpokenInterpreterLanguage = bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> applicantSpokenInterpreterLanguage = bailCase.read(APPLICANT_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<InterpreterLanguageRefData> applicantSignInterpreterLanguage = bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> applicantSignInterpreterLanguage = bailCase.read(APPLICANT_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             applicantSpokenInterpreterLanguage.ifPresent(language -> {
@@ -507,9 +507,9 @@ public class BailSubmissionTemplateProvider {
                 fieldValues.put("fcs1InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
             }
 
-            Optional<InterpreterLanguageRefData> fcs1SpokenInterpreterLanguage = bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs1SpokenInterpreterLanguage = bailCase.read(FCS1_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<InterpreterLanguageRefData> fcs1SignInterpreterLanguage = bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs1SignInterpreterLanguage = bailCase.read(FCS1_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs1SpokenInterpreterLanguage.ifPresent(language -> {
@@ -546,9 +546,9 @@ public class BailSubmissionTemplateProvider {
                 fieldValues.put("fcs2InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
             }
 
-            Optional<InterpreterLanguageRefData> fcs2SpokenInterpreterLanguage = bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs2SpokenInterpreterLanguage = bailCase.read(FCS2_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<InterpreterLanguageRefData> fcs2SignInterpreterLanguage = bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs2SignInterpreterLanguage = bailCase.read(FCS2_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs2SpokenInterpreterLanguage.ifPresent(language -> {
@@ -585,9 +585,9 @@ public class BailSubmissionTemplateProvider {
                 fieldValues.put("fcs3InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
             }
 
-            Optional<InterpreterLanguageRefData> fcs3SpokenInterpreterLanguage = bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs3SpokenInterpreterLanguage = bailCase.read(FCS3_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<InterpreterLanguageRefData> fcs3SignInterpreterLanguage = bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs3SignInterpreterLanguage = bailCase.read(FCS3_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs3SpokenInterpreterLanguage.ifPresent(language -> {
@@ -624,9 +624,9 @@ public class BailSubmissionTemplateProvider {
                 fieldValues.put("fcs4InterpreterLanguageCategory", SIGN_INTERPRETER_LABEL);
             }
 
-            Optional<InterpreterLanguageRefData> fcs4SpokenInterpreterLanguage = bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs4SpokenInterpreterLanguage = bailCase.read(FCS4_INTERPRETER_SPOKEN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
-            Optional<InterpreterLanguageRefData> fcs4SignInterpreterLanguage = bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)
+            Optional<BailInterpreterLanguageRefData> fcs4SignInterpreterLanguage = bailCase.read(FCS4_INTERPRETER_SIGN_LANGUAGE, BailInterpreterLanguageRefData.class)
                 .filter(language -> language.getLanguageRefData() != null || language.getLanguageManualEntryDescription() != null);
 
             fcs4SpokenInterpreterLanguage.ifPresent(language -> {
