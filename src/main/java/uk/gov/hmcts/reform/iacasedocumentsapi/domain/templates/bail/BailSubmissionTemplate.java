@@ -42,16 +42,14 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     private static final String IS_NOT_MANUAL_ENTRY = "No";
 
     private final String templateName;
-    private final BailSubmissionTemplateProvider bailSubmissionTemplateProvider;
 
     public BailSubmissionTemplate(
-        @Value("${bailSubmissionDocument.templateName}") String templateName,
-        BailSubmissionTemplateProvider bailSubmissionTemplateProvider) {
+        @Value("${bailSubmissionDocument.templateName}") String templateName) {
         this.templateName = templateName;
-        this.bailSubmissionTemplateProvider = bailSubmissionTemplateProvider;
     }
 
     public String getName() {
+
         return templateName;
     }
 
