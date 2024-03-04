@@ -336,6 +336,14 @@ public enum BailCaseFieldDefinition {
         "fcs4InterpreterSpokenLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
     FCS4_INTERPRETER_SIGN_LANGUAGE(
         "fcs4InterpreterSignLanguage", new TypeReference<InterpreterLanguageRefData>() {}),
+    LISTING_EVENT(
+        "listingEvent", new TypeReference<ListingEvent>(){}),
+    LISTING_LOCATION(
+        "listingLocation", new TypeReference<String>(){}),
+    LISTING_HEARING_DATE(
+        "listingHearingDate", new TypeReference<String>(){}),
+    HEARING_DOCUMENTS(
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     IS_IMA_ENABLED(
         "isImaEnabled", new TypeReference<YesOrNo>() {});
 
