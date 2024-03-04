@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +12,7 @@ import java.util.List;
 public class InterpreterLanguageRefData {
 
     private DynamicList languageRefData;
-    private List<String> languageManualEntry;
+    private String languageManualEntry;
     private String languageManualEntryDescription;
 
 }
