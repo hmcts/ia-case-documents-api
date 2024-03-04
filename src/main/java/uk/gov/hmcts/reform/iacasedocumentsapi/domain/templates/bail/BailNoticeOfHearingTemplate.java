@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantDetainedLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
@@ -88,11 +89,9 @@ public class BailNoticeOfHearingTemplate {
 
     private String getApplicantDetainedLocation(BailCase bailCase) {
         String location = bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse("");
-        String detentionLocation = location.equals("prison")
-            ? bailCase.read(PRISON_NAME, String.class).orElse("") : location.equals("immigrationRemovalCentre")
+        return location.equals(ApplicantDetainedLocation.PRISON.getCode())
+            ? bailCase.read(PRISON_NAME, String.class).orElse("") : location.equals(ApplicantDetainedLocation.IMIGRATION_REMOVAL_CENTER.getCode())
             ? bailCase.read(IRC_NAME, String.class).orElse("") : "";
-
-        return detentionLocation;
     }
 
     private boolean isNullOrEmptyString(String str) {

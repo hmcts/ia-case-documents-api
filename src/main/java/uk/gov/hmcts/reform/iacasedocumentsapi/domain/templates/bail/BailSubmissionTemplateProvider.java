@@ -207,7 +207,9 @@ public class BailSubmissionTemplateProvider {
             fieldValues.put("legalRepCompany", bailCase.read(LEGAL_REP_COMPANY, String.class).orElse(""));
             fieldValues.put("legalRepName", formatLegalRepName(
                 bailCase.read(LEGAL_REP_NAME, String.class).orElse(""),
-                bailCase.read(LEGAL_REP_FAMILY_NAME, String.class).orElse("")));            fieldValues.put("legalRepEmail", bailCase.read(LEGAL_REP_EMAIL, String.class).orElse(""));
+                bailCase.read(LEGAL_REP_FAMILY_NAME, String.class).orElse("")
+            ));
+            fieldValues.put("legalRepEmail", bailCase.read(LEGAL_REP_EMAIL, String.class).orElse(""));
             fieldValues.put("legalRepPhone", bailCase.read(LEGAL_REP_PHONE, String.class).orElse(""));
             fieldValues.put("legalRepReference", bailCase.read(LEGAL_REP_REFERENCE, String.class).orElse(""));
         }
@@ -599,9 +601,9 @@ public class BailSubmissionTemplateProvider {
             });
 
             fcs3SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs3InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs3InterpreterSignLanguage", language.getLanguageManualEntryDescription());
                 }
             });
@@ -638,9 +640,9 @@ public class BailSubmissionTemplateProvider {
             });
 
             fcs4SignInterpreterLanguage.ifPresent(language -> {
-                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().isEmpty()) {
+                if (language.getLanguageRefData() != null && language.getLanguageManualEntry().equals(IS_NOT_MANUAL_ENTRY)) {
                     fieldValues.put("fcs4InterpreterSignLanguage", language.getLanguageRefData().getValue().getLabel());
-                } else if (language.getLanguageManualEntry() != null && !language.getLanguageManualEntry().isEmpty()) {
+                } else if (language.getLanguageManualEntry() != null && language.getLanguageManualEntry().equals(IS_MANUAL_ENTRY)) {
                     fieldValues.put("fcs4InterpreterSignLanguage", language.getLanguageManualEntryDescription());
                 }
             });

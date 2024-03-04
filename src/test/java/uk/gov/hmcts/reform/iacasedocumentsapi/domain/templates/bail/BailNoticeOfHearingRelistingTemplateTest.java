@@ -83,6 +83,7 @@ class BailNoticeOfHearingRelistingTemplateTest {
             Nottingham
             NG2 1EE""";
         dataSetUp();
+        when(bailCase.read(APPLICANT_DETAINED_LOC, String.class)).thenReturn(Optional.of("prison"));
 
         fieldValuesMap = template.mapFieldValues(caseDetails);
 
