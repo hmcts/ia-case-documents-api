@@ -9,6 +9,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_PRISON_DETAILS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IRC_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
@@ -90,7 +91,7 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         assertEquals(bailReferenceNumber, fieldValuesMap.get("OnlineCaseReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReference, fieldValuesMap.get("legalRepReference"));
-        assertEquals("Immigration removal centre", fieldValuesMap.get("applicantDetainedLoc"));
+        assertEquals("Dungavel", fieldValuesMap.get("applicantDetainedLoc"));
         assertEquals(applicantPrisonDetails, fieldValuesMap.get("applicantPrisonDetails"));
         assertEquals(listingAddress, fieldValuesMap.get("hearingCentreAddress"));
         assertEquals(hearingDate, fieldValuesMap.get("hearingDate"));
@@ -133,6 +134,7 @@ class BailNoticeOfHearingInitialListingTemplateTest {
             .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesPhone);
+        when(bailCase.read(IRC_NAME, String.class)).thenReturn(Optional.of("Dungavel"));
     }
 
 }
