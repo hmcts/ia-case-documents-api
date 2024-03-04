@@ -78,7 +78,8 @@ public class BailSubmissionTemplateProviderTest {
     private String groundsForBailReasons = "Grounds for bails";
     private String legalRepCompany = "COMPANY NAME";
     private String legalRepGivenName = "LR Given Name";
-    private String legalRepFamilyName = "LR Family Name";    private String legalRepEmail = "email@company.com";
+    private String legalRepFamilyName = "LR Family Name";
+    private String legalRepEmail = "email@company.com";
     private String legalRepPhone = "07777777777";
     private String legalRepReference = "TREF09";
     private String applicantAddressLine1 = "123 Some Street";
