@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
+
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -144,6 +146,56 @@ class TsvStringProviderTest {
             tsvStringProvider.get("hearingCentreName", "taylorHouse")
         );
 
+        Assert.assertEquals(
+                Optional.of("Harmondsworth"),
+                tsvStringProvider.get("hearingCentreName", "harmondsworth")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Hendon"),
+                tsvStringProvider.get("hearingCentreName", "hendon")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Yarl's Wood"),
+                tsvStringProvider.get("hearingCentreName", "yarlsWood")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Bradford & Keighley"),
+                tsvStringProvider.get("hearingCentreName", "bradfordKeighley")
+        );
+
+        Assert.assertEquals(
+                Optional.of("MCC Minshull st"),
+                tsvStringProvider.get("hearingCentreName", "mccMinshull")
+        );
+
+        Assert.assertEquals(
+                Optional.of("MCC Crown Square"),
+                tsvStringProvider.get("hearingCentreName", "mccCrownSquare")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Manchester Mags"),
+                tsvStringProvider.get("hearingCentreName", "manchesterMags")
+        );
+
+        Assert.assertEquals(
+                Optional.of("NTH Tyne Mags"),
+                tsvStringProvider.get("hearingCentreName", "nthTyneMags")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Leeds Mags"),
+                tsvStringProvider.get("hearingCentreName", "leedsMags")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Alloa Sherrif Court"),
+                tsvStringProvider.get("hearingCentreName", "alloaSherrif")
+        );
+
         assertEquals(
             Optional.of("Remote hearing"),
             tsvStringProvider.get("hearingCentreName", "remoteHearing")
@@ -211,6 +263,57 @@ class TsvStringProviderTest {
             Optional.of("IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU"),
             tsvStringProvider.get("hearingCentreAddress", "taylorHouse")
         );
+
+        Assert.assertEquals(
+                Optional.of("Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"),
+                tsvStringProvider.get("hearingCentreAddress", "harmondsworth")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Hendon Magistrates' Court, The Court House, The Hyde, NW9 7BY"),
+                tsvStringProvider.get("hearingCentreAddress", "hendon")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Yarl's Wood Immigration and Asylum Hearing Centre, Twinwood Road, MK44 1FD"),
+                tsvStringProvider.get("hearingCentreAddress", "yarlsWood")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Bradford and Keighley Magistrates' Court and Family Court, The Tyrls, PO Box 187, BD1 1JL"),
+                tsvStringProvider.get("hearingCentreAddress", "bradfordKeighley")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Manchester Crown Court (Minshull St), The Court House, Minshull Street, M1 3FS"),
+                tsvStringProvider.get("hearingCentreAddress", "mccMinshull")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Manchester Crown Court (Crown Square), Courts of Justice, Crown Square, M3 3FL"),
+                tsvStringProvider.get("hearingCentreAddress", "mccCrownSquare")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Manchester Magistrates' Court, Crown Square, Manchester, Greater Manchester M60 1PR"),
+                tsvStringProvider.get("hearingCentreAddress", "manchesterMags")
+        );
+
+        Assert.assertEquals(
+                Optional.of("North Tyneside Magistrates' Court, Tynemouth Road, The Court House, NE30 1AG"),
+                tsvStringProvider.get("hearingCentreAddress", "nthTyneMags")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Leeds Magistrates' Court and Family Court, Westgate, LS1 3BY"),
+                tsvStringProvider.get("hearingCentreAddress", "leedsMags")
+        );
+
+        Assert.assertEquals(
+                Optional.of("Alloa Sheriff Court, 47 Drysdale Street, Alloa, FK10 1JA"),
+                tsvStringProvider.get("hearingCentreAddress", "alloaSherrif")
+        );
+
         assertEquals(
             Optional.of("Remote hearing"),
             tsvStringProvider.get("hearingCentreAddress", "remoteHearing")

@@ -26,6 +26,16 @@ hearingCentreName	nottingham	Nottingham Justice Centre
 hearingCentreName	taylorHouse	Taylor House
 hearingCentreName	decisionWithoutHearing	Decision Without Hearing
 hearingCentreName	belfast	Belfast
+hearingCentreName	harmondsworth	Harmondsworth
+hearingCentreName	hendon	Hendon
+hearingCentreName	yarlsWood	Yarl's Wood
+hearingCentreName	bradfordKeighley	Bradford & Keighley
+hearingCentreName	mccMinshull	MCC Minshull st
+hearingCentreName	mccCrownSquare	MCC Crown Square
+hearingCentreName	manchesterMags	Manchester Mags
+hearingCentreName	nthTyneMags	NTH Tyne Mags
+hearingCentreName	leedsMags	Leeds Mags
+hearingCentreName	alloaSherrif	Alloa Sherrif Court
 hearingCentreName	remoteHearing	Remote hearing
 hearingCentreAddress	birmingham	IAC Birmingham, Birmingham Justice Centre, 33 Bull Street, Birmingham, B4 6DS
 hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH
@@ -40,5 +50,15 @@ hearingCentreAddress	northShields	IAC North Shields, Kings Court, Royal Quays, E
 hearingCentreAddress	nottingham	Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE
 hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
 hearingCentreAddress	belfast	Belfast Laganside Court, Oxford Street, Belfast, BT1 3LL
+hearingCentreAddress	harmondsworth	Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB
+hearingCentreAddress	hendon	Hendon Magistrates' Court, The Court House, The Hyde, NW9 7BY
+hearingCentreAddress	yarlsWood	Yarl's Wood Immigration and Asylum Hearing Centre, Twinwood Road, MK44 1FD
+hearingCentreAddress	bradfordKeighley	Bradford and Keighley Magistrates' Court and Family Court, The Tyrls, PO Box 187, BD1 1JL
+hearingCentreAddress	mccMinshull	Manchester Crown Court (Minshull St), The Court House, Minshull Street, M1 3FS
+hearingCentreAddress	mccCrownSquare	Manchester Crown Court (Crown Square), Courts of Justice, Crown Square, M3 3FL
+hearingCentreAddress	manchesterMags	Manchester Magistrates' Court, Crown Square, Manchester, Greater Manchester M60 1PR
+hearingCentreAddress	nthTyneMags	North Tyneside Magistrates' Court, Tynemouth Road, The Court House, NE30 1AG
+hearingCentreAddress	leedsMags	Leeds Magistrates' Court and Family Court, Westgate, LS1 3BY
+hearingCentreAddress	alloaSherrif	Alloa Sheriff Court, 47 Drysdale Street, Alloa, FK10 1JA
 hearingCentreAddress	remoteHearing	Remote hearing
 hearingCentreAddress	decisionWithoutHearing	No hearing centre
