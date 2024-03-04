@@ -226,186 +226,100 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
     }
 
     private void setSupporterDetails(BailCase bailCase, Map<String, Object> fieldValues) {
-        fieldValues.put("hasFinancialCondSupporter", bailCase.read(HAS_FINANCIAL_COND_SUPPORTER, YesOrNo.class).orElse(YesOrNo.NO));
-        if (bailCase.read(HAS_FINANCIAL_COND_SUPPORTER, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("supporterGivenNames", bailCase.read(SUPPORTER_GIVEN_NAMES, String.class).orElse(""));
-            fieldValues.put("supporterFamilyNames", bailCase.read(SUPPORTER_FAMILY_NAMES, String.class).orElse(""));
-            Optional<AddressUk> optionalSupporterAddress = bailCase.read(SUPPORTER_ADDRESS_DETAILS, AddressUk.class);
-            if (optionalSupporterAddress.isPresent()) {
-                AddressUk supporterAddress = optionalSupporterAddress.get();
+        setSupporterDetails(bailCase, fieldValues, HAS_FINANCIAL_COND_SUPPORTER, SUPPORTER_GIVEN_NAMES,
+            SUPPORTER_FAMILY_NAMES, SUPPORTER_ADDRESS_DETAILS, "supporterAddressLine1",
+            "supporterAddressLine2", "supporterAddressLine3",
+            "supporterAddressPostTown", "supporterAddressCounty",
+            "supporterAddressPostCode", "supporterAddressCountry",
+            SUPPORTER_TELEPHONE_NUMBER_1, SUPPORTER_MOBILE_NUMBER_1, SUPPORTER_EMAIL_ADDRESS_1,
+            SUPPORTER_DOB, SUPPORTER_RELATION, SUPPORTER_OCCUPATION, SUPPORTER_IMMIGRATION,
+            SUPPORTER_NATIONALITY, "supporterNationalities", SUPPORTER_HAS_PASSPORT,
+            SUPPORTER_PASSPORT, FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1);
 
-                fieldValues.put(
-                    "supporterAddressDetails",
-                    ImmutableMap
-                        .builder()
-                        .put("supporterAddressLine1", supporterAddress.getAddressLine1().orElse(""))
-                        .put("supporterAddressLine2", supporterAddress.getAddressLine2().orElse(""))
-                        .put("supporterAddressLine3", supporterAddress.getAddressLine3().orElse(""))
-                        .put("supporterAddressPostTown", supporterAddress.getPostTown().orElse(""))
-                        .put("supporterAddressCounty", supporterAddress.getCounty().orElse(""))
-                        .put("supporterAddressPostCode", supporterAddress.getPostCode().orElse(""))
-                        .put("supporterAddressCountry", supporterAddress.getCountry().orElse(""))
-                        .build()
-                );
-            }
-            fieldValues.put("supporterTelephoneNumber1", bailCase.read(SUPPORTER_TELEPHONE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporterMobileNumber1", bailCase.read(SUPPORTER_MOBILE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporterEmailAddress1", bailCase.read(SUPPORTER_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporterDOB", formatDateForRendering(bailCase.read(SUPPORTER_DOB, String.class).orElse("")));
-            fieldValues.put("supporterRelation", bailCase.read(SUPPORTER_RELATION, String.class).orElse(""));
-            fieldValues.put("supporterOccupation", bailCase.read(SUPPORTER_OCCUPATION, String.class).orElse(""));
-            fieldValues.put("supporterImmigration", bailCase.read(SUPPORTER_IMMIGRATION, String.class).orElse(""));
-            Optional<List<IdValue<NationalityFieldValue>>> supporterNationalities = bailCase
-                .read(SUPPORTER_NATIONALITY);
-            fieldValues.put(
-                "supporterNationalities",
-                supporterNationalities
-                    .orElse(Collections.emptyList())
-                    .stream()
-                    .map(idValue -> idValue.getValue().getCode())
-                    .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
-                    .collect(Collectors.toList())
-            );
-            fieldValues.put("supporterHasPassport", bailCase.read(SUPPORTER_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            if (!bailCase.read(SUPPORTER_PASSPORT, String.class).orElse("").isEmpty()) {
-                fieldValues.put("supporterPassport", bailCase.read(SUPPORTER_PASSPORT, String.class).orElse(""));
-            }
-            fieldValues.put("financialAmountSupporterUndertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1, String.class).orElse(""));
-        }
     }
 
     private void setSupporter2Details(BailCase bailCase, Map<String, Object> fieldValues) {
-        fieldValues.put("hasFinancialCondSupporter2", bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_2, YesOrNo.class).orElse(YesOrNo.NO));
-        if (bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_2, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("supporter2GivenNames", bailCase.read(SUPPORTER_2_GIVEN_NAMES, String.class).orElse(""));
-            fieldValues.put("supporter2FamilyNames", bailCase.read(SUPPORTER_2_FAMILY_NAMES, String.class).orElse(""));
-            Optional<AddressUk> optionalSupporterAddress = bailCase.read(SUPPORTER_2_ADDRESS_DETAILS, AddressUk.class);
-            if (optionalSupporterAddress.isPresent()) {
-                AddressUk supporterAddress = optionalSupporterAddress.get();
+        setSupporterDetails(bailCase, fieldValues, HAS_FINANCIAL_COND_SUPPORTER_2, SUPPORTER_2_GIVEN_NAMES,
+            SUPPORTER_2_FAMILY_NAMES, SUPPORTER_2_ADDRESS_DETAILS, "supporter2AddressLine1",
+            "supporter2AddressLine2", "supporter2AddressLine3",
+            "supporter2AddressPostTown", "supporter2AddressCounty",
+            "supporter2AddressPostCode", "supporter2AddressCountry",
+            SUPPORTER_2_TELEPHONE_NUMBER_1, SUPPORTER_2_MOBILE_NUMBER_1, SUPPORTER_2_EMAIL_ADDRESS_1,
+            SUPPORTER_2_DOB, SUPPORTER_2_RELATION, SUPPORTER_2_OCCUPATION, SUPPORTER_2_IMMIGRATION,
+            SUPPORTER_2_NATIONALITY, "supporter2Nationalities", SUPPORTER_2_HAS_PASSPORT,
+            SUPPORTER_2_PASSPORT, FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1);
 
-                fieldValues.put(
-                    "supporter2AddressDetails",
-                    ImmutableMap
-                        .builder()
-                        .put("supporter2AddressLine1", supporterAddress.getAddressLine1().orElse(""))
-                        .put("supporter2AddressLine2", supporterAddress.getAddressLine2().orElse(""))
-                        .put("supporter2AddressLine3", supporterAddress.getAddressLine3().orElse(""))
-                        .put("supporter2AddressPostTown", supporterAddress.getPostTown().orElse(""))
-                        .put("supporter2AddressCounty", supporterAddress.getCounty().orElse(""))
-                        .put("supporter2AddressPostCode", supporterAddress.getPostCode().orElse(""))
-                        .put("supporter2AddressCountry", supporterAddress.getCountry().orElse(""))
-                        .build()
-                );
-            }
-
-            fieldValues.put("supporter2TelephoneNumber1", bailCase.read(SUPPORTER_2_TELEPHONE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporter2MobileNumber1", bailCase.read(SUPPORTER_2_MOBILE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporter2EmailAddress1", bailCase.read(SUPPORTER_2_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporter2DOB", formatDateForRendering(bailCase.read(SUPPORTER_2_DOB, String.class).orElse("")));
-            fieldValues.put("supporter2Relation", bailCase.read(SUPPORTER_2_RELATION, String.class).orElse(""));
-            fieldValues.put("supporter2Occupation", bailCase.read(SUPPORTER_2_OCCUPATION, String.class).orElse(""));
-            fieldValues.put("supporter2Immigration", bailCase.read(SUPPORTER_2_IMMIGRATION, String.class).orElse(""));
-            Optional<List<IdValue<NationalityFieldValue>>> supporter2Nationalities = bailCase
-                .read(SUPPORTER_2_NATIONALITY);
-            fieldValues.put(
-                "supporter2Nationalities",
-                supporter2Nationalities
-                    .orElse(Collections.emptyList())
-                    .stream()
-                    .map(idValue -> idValue.getValue().getCode())
-                    .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
-                    .collect(Collectors.toList())
-            );
-            fieldValues.put("supporter2HasPassport", bailCase.read(SUPPORTER_2_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            if (!bailCase.read(SUPPORTER_2_PASSPORT, String.class).orElse("").isEmpty()) {
-                fieldValues.put("supporter2Passport", bailCase.read(SUPPORTER_2_PASSPORT, String.class).orElse(""));
-            }
-            fieldValues.put("financialAmountSupporter2Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1, String.class).orElse(""));
-        }
     }
 
     private void setSupporter3Details(BailCase bailCase, Map<String, Object> fieldValues) {
-        fieldValues.put("hasFinancialCondSupporter3", bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_3, YesOrNo.class).orElse(YesOrNo.NO));
-        if (bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_3, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("supporter3GivenNames", bailCase.read(SUPPORTER_3_GIVEN_NAMES, String.class).orElse(""));
-            fieldValues.put("supporter3FamilyNames", bailCase.read(SUPPORTER_3_FAMILY_NAMES, String.class).orElse(""));
-            Optional<AddressUk> optionalSupporterAddress = bailCase.read(SUPPORTER_3_ADDRESS_DETAILS, AddressUk.class);
-            if (optionalSupporterAddress.isPresent()) {
-                AddressUk supporterAddress = optionalSupporterAddress.get();
+        setSupporterDetails(bailCase, fieldValues, HAS_FINANCIAL_COND_SUPPORTER_3, SUPPORTER_3_GIVEN_NAMES,
+            SUPPORTER_3_FAMILY_NAMES, SUPPORTER_3_ADDRESS_DETAILS, "supporter3AddressLine1",
+            "supporter3AddressLine2", "supporter3AddressLine3",
+            "supporter3AddressPostTown", "supporter3AddressCounty",
+            "supporter3AddressPostCode", "supporter3AddressCountry",
+            SUPPORTER_3_TELEPHONE_NUMBER_1, SUPPORTER_3_MOBILE_NUMBER_1, SUPPORTER_3_EMAIL_ADDRESS_1,
+            SUPPORTER_3_DOB, SUPPORTER_3_RELATION, SUPPORTER_3_OCCUPATION, SUPPORTER_3_IMMIGRATION,
+            SUPPORTER_3_NATIONALITY, "supporter3Nationalities", SUPPORTER_3_HAS_PASSPORT,
+            SUPPORTER_3_PASSPORT, FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1);
 
-                fieldValues.put(
-                    "supporter3AddressDetails",
-                    ImmutableMap
-                        .builder()
-                        .put("supporter3AddressLine1", supporterAddress.getAddressLine1().orElse(""))
-                        .put("supporter3AddressLine2", supporterAddress.getAddressLine2().orElse(""))
-                        .put("supporter3AddressLine3", supporterAddress.getAddressLine3().orElse(""))
-                        .put("supporter3AddressPostTown", supporterAddress.getPostTown().orElse(""))
-                        .put("supporter3AddressCounty", supporterAddress.getCounty().orElse(""))
-                        .put("supporter3AddressPostCode", supporterAddress.getPostCode().orElse(""))
-                        .put("supporter3AddressCountry", supporterAddress.getCountry().orElse(""))
-                        .build()
-                );
-            }
-            fieldValues.put("supporter3TelephoneNumber1", bailCase.read(SUPPORTER_3_TELEPHONE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporter3MobileNumber1", bailCase.read(SUPPORTER_3_MOBILE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporter3EmailAddress1", bailCase.read(SUPPORTER_3_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporter3DOB", formatDateForRendering(bailCase.read(SUPPORTER_3_DOB, String.class).orElse("")));
-            fieldValues.put("supporter3Relation", bailCase.read(SUPPORTER_3_RELATION, String.class).orElse(""));
-            fieldValues.put("supporter3Occupation", bailCase.read(SUPPORTER_3_OCCUPATION, String.class).orElse(""));
-            fieldValues.put("supporter3Immigration", bailCase.read(SUPPORTER_3_IMMIGRATION, String.class).orElse(""));
-            Optional<List<IdValue<NationalityFieldValue>>> supporter3Nationalities = bailCase
-                .read(SUPPORTER_3_NATIONALITY);
-            fieldValues.put(
-                "supporter3Nationalities",
-                supporter3Nationalities
-                    .orElse(Collections.emptyList())
-                    .stream()
-                    .map(idValue -> idValue.getValue().getCode())
-                    .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
-                    .collect(Collectors.toList())
-            );
-            fieldValues.put("supporter3HasPassport", bailCase.read(SUPPORTER_3_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            if (!bailCase.read(SUPPORTER_3_PASSPORT, String.class).orElse("").isEmpty()) {
-                fieldValues.put("supporter3Passport", bailCase.read(SUPPORTER_3_PASSPORT, String.class).orElse(""));
-            }
-            fieldValues.put("financialAmountSupporter3Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1, String.class).orElse(""));
-        }
     }
 
     private void setSupporter4Details(BailCase bailCase, Map<String, Object> fieldValues) {
-        fieldValues.put("hasFinancialCondSupporter4", bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_4, YesOrNo.class).orElse(YesOrNo.NO));
-        if (bailCase.read(HAS_FINANCIAL_COND_SUPPORTER_4, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("supporter4GivenNames", bailCase.read(SUPPORTER_4_GIVEN_NAMES, String.class).orElse(""));
-            fieldValues.put("supporter4FamilyNames", bailCase.read(SUPPORTER_4_FAMILY_NAMES, String.class).orElse(""));
-            Optional<AddressUk> optionalSupporterAddress = bailCase.read(SUPPORTER_4_ADDRESS_DETAILS, AddressUk.class);
+        setSupporterDetails(bailCase, fieldValues, HAS_FINANCIAL_COND_SUPPORTER_4, SUPPORTER_4_GIVEN_NAMES,
+            SUPPORTER_4_FAMILY_NAMES, SUPPORTER_4_ADDRESS_DETAILS, "supporter4AddressLine1",
+            "supporter4AddressLine2", "supporter4AddressLine3",
+            "supporter4AddressPostTown", "supporter4AddressCounty",
+            "supporter4AddressPostCode", "supporter4AddressCountry",
+            SUPPORTER_4_TELEPHONE_NUMBER_1, SUPPORTER_4_MOBILE_NUMBER_1, SUPPORTER_4_EMAIL_ADDRESS_1,
+            SUPPORTER_4_DOB, SUPPORTER_4_RELATION, SUPPORTER_4_OCCUPATION, SUPPORTER_4_IMMIGRATION,
+            SUPPORTER_4_NATIONALITY, "supporter4Nationalities", SUPPORTER_4_HAS_PASSPORT,
+            SUPPORTER_4_PASSPORT, FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1);
+    }
+
+    private void setSupporterDetails(BailCase bailCase, Map<String, Object> fieldValues,
+                                     BailCaseFieldDefinition hasFinancialSupporter, BailCaseFieldDefinition supporterGivenName,
+                                     BailCaseFieldDefinition supporterFamilyName, BailCaseFieldDefinition supporterAddress,
+                                     String supporterAddressLine1, String supporterAddressLine2,
+                                     String supporterAddressLine3, String supporterAddressPostTown,
+                                     String supporterAddressCounty, String supporterAddressPostCode,
+                                     String supporterAddressCountry, BailCaseFieldDefinition supporterTelephoneNumber,
+                                     BailCaseFieldDefinition supporterMobileNumber, BailCaseFieldDefinition supporterEmailAddress,
+                                     BailCaseFieldDefinition supporterDOB, BailCaseFieldDefinition supporterRelation,
+                                     BailCaseFieldDefinition supporterOccupation, BailCaseFieldDefinition supporterImmigration,
+                                     BailCaseFieldDefinition supporterNationality, String supporterNationalities, BailCaseFieldDefinition supporterHasPassport,
+                                     BailCaseFieldDefinition supporterPassport, BailCaseFieldDefinition supporterAmountUndertakes) {
+        fieldValues.put(hasFinancialSupporter.value(), bailCase.read(hasFinancialSupporter, YesOrNo.class).orElse(YesOrNo.NO));
+        if (bailCase.read(hasFinancialSupporter, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
+            fieldValues.put(supporterGivenName.value(), bailCase.read(supporterGivenName, String.class).orElse(""));
+            fieldValues.put(supporterFamilyName.value(), bailCase.read(supporterFamilyName, String.class).orElse(""));
+            Optional<AddressUk> optionalSupporterAddress = bailCase.read(supporterAddress, AddressUk.class);
             if (optionalSupporterAddress.isPresent()) {
-                AddressUk supporterAddress = optionalSupporterAddress.get();
+                AddressUk suppAddress = optionalSupporterAddress.get();
                 fieldValues.put(
-                    "supporter4AddressDetails",
+                    supporterAddress.value(),
                     ImmutableMap
                         .builder()
-                        .put("supporter4AddressLine1", supporterAddress.getAddressLine1().orElse(""))
-                        .put("supporter4AddressLine2", supporterAddress.getAddressLine2().orElse(""))
-                        .put("supporter4AddressLine3", supporterAddress.getAddressLine3().orElse(""))
-                        .put("supporter4AddressPostTown", supporterAddress.getPostTown().orElse(""))
-                        .put("supporter4AddressCounty", supporterAddress.getCounty().orElse(""))
-                        .put("supporter4AddressPostCode", supporterAddress.getPostCode().orElse(""))
-                        .put("supporter4AddressCountry", supporterAddress.getCountry().orElse(""))
+                        .put(supporterAddressLine1, suppAddress.getAddressLine1().orElse(""))
+                        .put(supporterAddressLine2, suppAddress.getAddressLine2().orElse(""))
+                        .put(supporterAddressLine3, suppAddress.getAddressLine3().orElse(""))
+                        .put(supporterAddressPostTown, suppAddress.getPostTown().orElse(""))
+                        .put(supporterAddressCounty, suppAddress.getCounty().orElse(""))
+                        .put(supporterAddressPostCode, suppAddress.getPostCode().orElse(""))
+                        .put(supporterAddressCountry, suppAddress.getCountry().orElse(""))
                         .build()
                 );
             }
-            fieldValues.put("supporter4TelephoneNumber1", bailCase.read(SUPPORTER_4_TELEPHONE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporter4MobileNumber1", bailCase.read(SUPPORTER_4_MOBILE_NUMBER_1, String.class).orElse(""));
-            fieldValues.put("supporter4EmailAddress1", bailCase.read(SUPPORTER_4_EMAIL_ADDRESS_1, String.class).orElse(""));
-            fieldValues.put("supporter4DOB", formatDateForRendering(bailCase.read(SUPPORTER_4_DOB, String.class).orElse("")));
-            fieldValues.put("supporter4Relation", bailCase.read(SUPPORTER_4_RELATION, String.class).orElse(""));
-            fieldValues.put("supporter4Occupation", bailCase.read(SUPPORTER_4_OCCUPATION, String.class).orElse(""));
-            fieldValues.put("supporter4Immigration", bailCase.read(SUPPORTER_4_IMMIGRATION, String.class).orElse(""));
+            fieldValues.put(supporterTelephoneNumber.value(), bailCase.read(supporterTelephoneNumber, String.class).orElse(""));
+            fieldValues.put(supporterMobileNumber.value(), bailCase.read(supporterMobileNumber, String.class).orElse(""));
+            fieldValues.put(supporterEmailAddress.value(), bailCase.read(supporterEmailAddress, String.class).orElse(""));
+            fieldValues.put(supporterDOB.value(), formatDateForRendering(bailCase.read(supporterDOB, String.class).orElse("")));
+            fieldValues.put(supporterRelation.value(), bailCase.read(supporterRelation, String.class).orElse(""));
+            fieldValues.put(supporterOccupation.value(), bailCase.read(supporterOccupation, String.class).orElse(""));
+            fieldValues.put(supporterImmigration.value(), bailCase.read(supporterImmigration, String.class).orElse(""));
             Optional<List<IdValue<NationalityFieldValue>>> supporter4Nationalities = bailCase
-                .read(SUPPORTER_4_NATIONALITY);
+                .read(supporterNationality);
             fieldValues.put(
-                "supporter4Nationalities",
+                supporterNationalities,
                 supporter4Nationalities
                     .orElse(Collections.emptyList())
                     .stream()
@@ -413,11 +327,11 @@ public class BailSubmissionTemplate implements DocumentTemplate<BailCase> {
                     .map(nationality -> ImmutableMap.of(NATIONALITY, nationality))
                     .collect(Collectors.toList())
             );
-            fieldValues.put("supporter4HasPassport", bailCase.read(SUPPORTER_4_HAS_PASSPORT, YesOrNo.class).orElse(YesOrNo.NO));
-            if (!bailCase.read(SUPPORTER_4_PASSPORT, String.class).orElse("").isEmpty()) {
-                fieldValues.put("supporter4Passport", bailCase.read(SUPPORTER_4_PASSPORT, String.class).orElse(""));
+            fieldValues.put(supporterHasPassport.value(), bailCase.read(supporterHasPassport, YesOrNo.class).orElse(YesOrNo.NO));
+            if (!bailCase.read(supporterPassport, String.class).orElse("").isEmpty()) {
+                fieldValues.put(supporterPassport.value(), bailCase.read(supporterPassport, String.class).orElse(""));
             }
-            fieldValues.put("financialAmountSupporter4Undertakes1", bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1, String.class).orElse(""));
+            fieldValues.put(supporterAmountUndertakes.value(), bailCase.read(supporterAmountUndertakes, String.class).orElse(""));
         }
     }
 
