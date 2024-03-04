@@ -62,9 +62,7 @@ public class NotificationHandler implements PreSubmitCallbackHandler<AsylumCase>
             Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT,
             Event.CREATE_BAIL_CASE_LINK,
             Event.MAINTAIN_BAIL_CASE_LINKS,
-            Event.RECORD_THE_DECISION,
-            Event.SEND_UPLOAD_BAIL_SUMMARY_DIRECTION,
-            Event.CASE_LISTING
+            Event.RECORD_THE_DECISION
         );
     }
 
