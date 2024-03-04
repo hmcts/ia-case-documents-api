@@ -26,7 +26,7 @@
     "caseData": {
       "template": "minimal-bail-application-submitted.json",
       "replacements": {
-        "tribunalDocumentsWithMetadata": [
+        "applicationSubmissionDocument": [
           {
             "id": "1",
             "value": {
