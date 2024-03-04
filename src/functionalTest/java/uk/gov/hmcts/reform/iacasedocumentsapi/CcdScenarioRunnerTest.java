@@ -92,19 +92,16 @@ public class CcdScenarioRunnerTest {
             scenarioPattern = "*" + scenarioPattern + "*.json";
         }
 
-        Map<String, String> scenarioSources =
+        Collection<String> scenarioSources =
             StringResourceLoader
-                .load("/scenarios/" + scenarioPattern);
-
-        //Adding Bail functional tests
-        scenarioSources.putAll(StringResourceLoader
-            .load("/scenarios/bail/" + scenarioPattern));
+                .load("/scenarios/" + scenarioPattern)
+                .values();
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
 
-        for (String scenarioSource : scenarioSources.values()) {
+        for (String scenarioSource : scenarioSources) {
             for (int i = 0; i < 3; i++) {
                 try {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
