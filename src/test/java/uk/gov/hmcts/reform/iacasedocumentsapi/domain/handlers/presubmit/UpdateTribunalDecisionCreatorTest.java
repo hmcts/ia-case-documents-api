@@ -97,7 +97,7 @@ public class UpdateTribunalDecisionCreatorTest {
                 .addWithMetadataWithoutReplacingExistingDocuments(asylumCase,
                         uploadedDocument,
                         FINAL_DECISION_AND_REASONS_DOCUMENTS,
-                        DocumentTag.DECISION_AND_REASONS_COVER_LETTER);
+                        DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class UpdateTribunalDecisionCreatorTest {
                 .addWithMetadataWithoutReplacingExistingDocuments(asylumCase,
                         uploadedDocument,
                         FINAL_DECISION_AND_REASONS_DOCUMENTS,
-                        DocumentTag.DECISION_AND_REASONS_COVER_LETTER);
+                        DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER);
     }
 
     @Test
