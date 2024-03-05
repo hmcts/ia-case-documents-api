@@ -31,6 +31,8 @@ public class DocumentTagTest {
         assertEquals("upperTribunalBundle", DocumentTag.UPPER_TRIBUNAL_BUNDLE.toString());
         assertEquals("appealReasons", DocumentTag.APPEAL_REASONS.toString());
         assertEquals("clarifyingQuestions", DocumentTag.CLARIFYING_QUESTIONS.toString());
+        assertEquals("decisionAndReasonsCoverLetter", DocumentTag.DECISION_AND_REASONS_COVER_LETTER.toString());
+        assertEquals("updatedDecisionAndReasonsCoverLetter", DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER.toString());
         assertEquals("bailSubmission", DocumentTag.BAIL_SUBMISSION.toString());
         assertEquals("uploadTheBailEvidenceDocs", DocumentTag.BAIL_EVIDENCE.toString());
         assertEquals("bailDecisionUnsigned", DocumentTag.BAIL_DECISION_UNSIGNED.toString());

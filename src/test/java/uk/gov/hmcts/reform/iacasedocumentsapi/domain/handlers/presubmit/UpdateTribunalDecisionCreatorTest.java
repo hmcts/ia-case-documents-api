@@ -8,6 +8,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CORRECTED_DECISION_AND_REASONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATE_TRIBUNAL_DECISION_LIST;
@@ -15,13 +16,17 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribu
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DecisionAndReasons;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribunalRules;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -30,6 +35,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
@@ -41,13 +47,14 @@ public class UpdateTribunalDecisionCreatorTest {
     @Mock private DocumentCreator<AsylumCase> updatedDecisionAndReasonsCoverLetterDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> aipUpdatedDecisionAndReasonsCoverLetterDocumentCreator;
     @Mock private DocumentHandler documentHandler;
-    
+    @Mock private DateProvider dateProvider;
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
 
     private UpdateTribunalDecisionCreator updateTribunalDecisionCreator;
+    private final LocalDate currentDate = LocalDate.now();
 
     @BeforeEach
     public void setUp() {
@@ -56,7 +63,8 @@ public class UpdateTribunalDecisionCreatorTest {
                 new UpdateTribunalDecisionCreator(
                         updatedDecisionAndReasonsCoverLetterDocumentCreator,
                         aipUpdatedDecisionAndReasonsCoverLetterDocumentCreator,
-                        documentHandler
+                        documentHandler,
+                        dateProvider
                 );
     }
 
@@ -79,6 +87,13 @@ public class UpdateTribunalDecisionCreatorTest {
     @Test
     public void should_handle_aip_update_tribunal_decision() {
 
+        List<IdValue<DecisionAndReasons>> existingDecisionList =
+                List.of(
+                        new IdValue<>("1", DecisionAndReasons.builder()
+                                .updatedDecisionDate(currentDate.toString())
+                                .build())
+                );
+
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -87,6 +102,8 @@ public class UpdateTribunalDecisionCreatorTest {
         JourneyType journeyType = JourneyType.AIP;
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(journeyType));
         when(aipUpdatedDecisionAndReasonsCoverLetterDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(asylumCase.read(CORRECTED_DECISION_AND_REASONS)).thenReturn(Optional.of(existingDecisionList));
+        when(dateProvider.now()).thenReturn(currentDate);
 
         PreSubmitCallbackResponse<AsylumCase> response =
             updateTribunalDecisionCreator.handle(ABOUT_TO_SUBMIT, callback);
@@ -98,10 +115,19 @@ public class UpdateTribunalDecisionCreatorTest {
                         uploadedDocument,
                         FINAL_DECISION_AND_REASONS_DOCUMENTS,
                         DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER);
+        verify(asylumCase, times(1)).write(CORRECTED_DECISION_AND_REASONS, existingDecisionList);
+        assertEquals(uploadedDocument, existingDecisionList.get(0).getValue().getCoverLetterDocument());
+        assertEquals(currentDate.toString(), existingDecisionList.get(0).getValue().getDateCoverLetterDocumentUploaded());
     }
 
     @Test
     public void should_handle_lr_update_tribunal_decision() {
+        List<IdValue<DecisionAndReasons>> existingDecisionList =
+                List.of(
+                        new IdValue<>("1", DecisionAndReasons.builder()
+                                .updatedDecisionDate(currentDate.toString())
+                                .build())
+                );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
@@ -110,6 +136,8 @@ public class UpdateTribunalDecisionCreatorTest {
                 .thenReturn(Optional.of(UNDER_RULE_31));
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.empty());
         when(updatedDecisionAndReasonsCoverLetterDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(asylumCase.read(CORRECTED_DECISION_AND_REASONS)).thenReturn(Optional.of(existingDecisionList));
+        when(dateProvider.now()).thenReturn(currentDate);
 
         PreSubmitCallbackResponse<AsylumCase> response =
                 updateTribunalDecisionCreator.handle(ABOUT_TO_SUBMIT, callback);
@@ -121,6 +149,10 @@ public class UpdateTribunalDecisionCreatorTest {
                         uploadedDocument,
                         FINAL_DECISION_AND_REASONS_DOCUMENTS,
                         DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER);
+
+        verify(asylumCase, times(1)).write(CORRECTED_DECISION_AND_REASONS, existingDecisionList);
+        assertEquals(uploadedDocument, existingDecisionList.get(0).getValue().getCoverLetterDocument());
+        assertEquals(currentDate.toString(), existingDecisionList.get(0).getValue().getDateCoverLetterDocumentUploaded());
     }
 
     @Test
