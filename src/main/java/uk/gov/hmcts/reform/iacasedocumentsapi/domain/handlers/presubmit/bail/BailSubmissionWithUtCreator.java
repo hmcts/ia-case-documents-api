@@ -19,13 +19,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailDocumentHandler
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 
 @Component
-public class BailSubmissionCreator implements PreSubmitCallbackHandler<BailCase> {
+public class BailSubmissionWithUtCreator implements PreSubmitCallbackHandler<BailCase> {
 
     private final DocumentCreator<BailCase> bailSubmissionDocumentCreator;
     private final BailDocumentHandler bailDocumentHandler;
 
-    public BailSubmissionCreator(
-        @Qualifier("bailSubmission") DocumentCreator<BailCase> bailSubmissionDocumentCreator,
+    public BailSubmissionWithUtCreator(
+        @Qualifier("bailSubmissionWithUt") DocumentCreator<BailCase> bailSubmissionDocumentCreator,
         BailDocumentHandler bailDocumentHandler
     ) {
         this.bailSubmissionDocumentCreator = bailSubmissionDocumentCreator;
@@ -43,7 +43,7 @@ public class BailSubmissionCreator implements PreSubmitCallbackHandler<BailCase>
                 && (callback.getEvent() == Event.SUBMIT_APPLICATION
                     || callback.getEvent() == Event.MAKE_NEW_APPLICATION
                     || callback.getEvent() == Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT)
-                && !BailCaseUtils.isImaEnabled(callback.getCaseDetails().getCaseData());
+                && BailCaseUtils.isImaEnabled(callback.getCaseDetails().getCaseData());
     }
 
     public PreSubmitCallbackResponse<BailCase> handle(

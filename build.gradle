@@ -19,8 +19,8 @@ plugins {
     id 'org.owasp.dependencycheck' version '9.0.9'
     id 'org.sonarqube' version '3.5.0.2730'
     id 'org.springframework.boot' version '2.7.18'
-    id 'uk.gov.hmcts.java' version '0.12.56'
-    id 'au.com.dius.pact' version '4.6.5'
+    id 'uk.gov.hmcts.java' version '0.12.57'
+    id 'au.com.dius.pact' version '4.6.7'
     id "io.freefair.lombok" version "6.6.3"
 }
 
@@ -30,10 +30,10 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.10.1',
-    junitPlatform      : '1.10.1',
+    junit              : '5.10.2',
+    junitPlatform      : '1.10.2',
     gradlePitest       : '1.5.1',
-    pitest             : '1.15.6',
+    pitest             : '1.15.8',
     reformLogging      : '5.1.7',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.3.2',
@@ -221,7 +221,7 @@ jacocoTestReport {
 }
 
 pitest {
-    print('./gradlew --version'.execute().text.trim())
+//    print('./gradlew --version'.execute().text.trim())
     junit5PluginVersion = '1.1.2'
     targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
     excludedClasses = [
@@ -321,15 +321,14 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose'
 
-
-
+    implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine'
     // CVE-2019-17195
     implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.37.3'
 
     // CVE-2021-27568
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
 
-
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
@@ -354,8 +353,8 @@ dependencies {
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.85'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.85'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.86'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.86'
 
     implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
@@ -380,23 +379,23 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.0', classifier: 'all', {
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.1', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 
     testImplementation 'pl.pragmatists:JUnitParams:1.1.1'
 
-    testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.9') {
+    testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.10') {
         exclude group: "com.github.tomakehurst", module: "wiremock-standalone"
     }
 
     //pact contract testing
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.5"
+    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.7"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.10.1')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.10.2')
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
