@@ -88,8 +88,10 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 27;
             case CLARIFYING_QUESTIONS:
                 return 28;
-            case NONE:
+            case UPDATED_DECISION_AND_REASONS_COVER_LETTER:
                 return 29;
+            case NONE:
+                return 30;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

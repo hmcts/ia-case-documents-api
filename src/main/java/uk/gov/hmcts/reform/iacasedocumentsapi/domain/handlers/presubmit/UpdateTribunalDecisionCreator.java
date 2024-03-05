@@ -66,7 +66,7 @@ public class UpdateTribunalDecisionCreator implements PreSubmitCallbackHandler<A
                 asylumCase,
                 coverLetter,
                 FINAL_DECISION_AND_REASONS_DOCUMENTS,
-                DocumentTag.DECISION_AND_REASONS_COVER_LETTER
+                DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
