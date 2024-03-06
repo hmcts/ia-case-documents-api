@@ -162,7 +162,7 @@ bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-SUM-EN
 bailSubmissionDocumentWithUt.contentType: application/pdf
 bailSubmissionDocumentWithUt.fileExtension: PDF
 bailSubmissionDocumentWithUt.fileName: "bail-application-details-with-ut"
-bailSubmissionDocumentWithUt.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE_WITH_UT:TB-IAC-SUM-ENG-01135.docx}
+bailSubmissionDocumentWithUt.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE_WITH_UT:TB-IAC-SUM-ENG-01136.docx}
 
 decisionUnsignedDocument.contentType: application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionUnsignedDocument.fileExtension: docx
