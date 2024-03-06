@@ -156,6 +156,24 @@ public class UpdateTribunalDecisionCreatorTest {
     }
 
     @Test
+    void should_throw_when_corrected_decision_is_not_present() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, UpdateTribunalRules.class))
+                .thenReturn(Optional.of(UNDER_RULE_31));
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.empty());
+        when(updatedDecisionAndReasonsCoverLetterDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(asylumCase.read(CORRECTED_DECISION_AND_REASONS)).thenReturn(Optional.empty());
+
+
+        assertThatThrownBy(() -> updateTribunalDecisionCreator.handle(ABOUT_TO_SUBMIT, callback))
+                .hasMessage("updatedDecisionAndReasons is not present in correctedDecisionAndReasons list")
+                .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     public void it_can_handle_callback() {
 
         for (Event event : Event.values()) {
