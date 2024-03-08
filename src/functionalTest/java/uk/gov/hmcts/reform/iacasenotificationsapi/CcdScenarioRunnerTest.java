@@ -10,12 +10,14 @@ import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
@@ -60,7 +62,8 @@ public class CcdScenarioRunnerTest {
     private ObjectMapper objectMapper;
     @Autowired
     private List<Verifier> verifiers;
-
+    private boolean haveAllPassed = true;
+    private final ArrayList<String> failedScenarios = new ArrayList<>();
     @Autowired
     private LaunchDarklyFunctionalTestClient launchDarklyFunctionalTestClient;
 
@@ -95,14 +98,15 @@ public class CcdScenarioRunnerTest {
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
-
+        int maxRetries = 3;
         for (String scenarioSource : scenarioSources) {
-            for (int i = 0; i < 3; i++) {
+            String description = "";
+            for (int i = 0; i < maxRetries; i++) {
                 try {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
                     final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
 
-                    String description = MapValueExtractor.extract(scenario, "description");
+                    description = MapValueExtractor.extract(scenario, "description");
                     Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
 
                     Object scenarioFeature = MapValueExtractor.extract(scenario, "launchDarklyKey");
@@ -199,12 +203,19 @@ public class CcdScenarioRunnerTest {
                     break;
                 } catch (Error | RetryableException e) {
                     System.out.println("Scenario failed with error " + e.getMessage());
+                    if (i == maxRetries - 1) {
+                        this.failedScenarios.add(description);
+                        this.haveAllPassed = false;
+                    }
                 }
             }
         }
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[0m");
+        if (!haveAllPassed) {
+            throw new AssertionError("Not all scenarios passed.\nFailed scenarios are:\n" + failedScenarios.stream().map(Object::toString).collect(Collectors.joining(";\n")));
+        }
     }
 
     private void loadPropertiesIntoMapValueExpander() {

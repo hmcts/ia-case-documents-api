@@ -104,7 +104,7 @@
       },
       {
         "reference": "45592_REINSTATE_APPEAL_HOME_OFFICE",
-        "recipient": "{$apcHomeOfficeEmailAddress}",
+        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
         "subject": "Immigration and Asylum appeal: appeal reinstated",
         "body": [
           "PA/12345/2019",
