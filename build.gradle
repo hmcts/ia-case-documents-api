@@ -276,18 +276,18 @@ dependencyManagement {
         }
 
 
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.16.1') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.16.2') {
             entry 'jackson-databind'
             entry 'jackson-core'
             entry 'jackson-annotations'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.16.1') {
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.16.2') {
             entry 'jackson-dataformat-yaml'
             entry 'jackson-dataformat-csv'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.16.1') {
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.16.2') {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
