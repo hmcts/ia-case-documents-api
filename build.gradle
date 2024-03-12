@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
 
-        classpath("net.serenity-bdd:serenity-gradle-plugin:3.6.22")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:4.1.3")
         classpath("au.com.dius.pact:au.com.dius.pact.gradle.plugin:4.4.0-beta.1")
     }
 }
@@ -40,10 +40,9 @@ def versions = [
         pitest             : '1.15.3',
         reformLogging      : '5.1.7',
         reformHealthStarter: '0.0.5',
-        restAssured        : '5.3.2',
-        serenity           : '3.9.8',
+        restAssured        : '5.4.0',
+        serenity           : '4.1.3',
         sonarPitest        : '0.5',
-        springHystrix      : '2.2.10.RELEASE',
         springDoc          : '1.7.0',
         springCloud        : '3.1.6'
 ]
