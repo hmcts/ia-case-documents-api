@@ -32,7 +32,6 @@ public class UpdatedTribunalDecisionAndReasonsCoverLetterTemplate implements Doc
 
         final Map<String, Object> fieldValues = templateHelper.getCommonMapFieldValues(caseDetails);
 
-        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
                 .orElse(""));
 

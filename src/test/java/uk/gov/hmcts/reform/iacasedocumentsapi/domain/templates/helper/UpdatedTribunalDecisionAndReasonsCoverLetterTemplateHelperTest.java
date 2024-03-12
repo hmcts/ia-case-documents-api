@@ -67,7 +67,8 @@ class UpdatedTribunalDecisionAndReasonsCoverLetterTemplateHelperTest {
 
         Map<String, Object> templateValues = templateHelper.getCommonMapFieldValues(caseDetails);
 
-        assertEquals(7, templateValues.size());
+        assertEquals(8, templateValues.size());
+        assertEquals(templateValues.get("hmcts"), "[userImage:hmcts.png]");
         assertEquals(templateValues.get("appealReferenceNumber"), someAppealReferenceNumber);
         assertEquals(templateValues.get("homeOfficeReferenceNumber"), someHomeOfficeReferenceNumber);
         assertEquals(templateValues.get("appellantGivenNames"), someGivenNames);

@@ -45,7 +45,6 @@ public class UpdatedTribunalDecisionAndReasonsCoverLetterTemplateTest {
         Map<String, Object> templateValues = updatedTribunalDecisionAndReasonsCoverLetterTemplate.mapFieldValues(caseDetails);
 
         verify(templateHelper, times(1)).getCommonMapFieldValues(caseDetails);
-        assertEquals(templateValues.get("hmcts"), "[userImage:hmcts.png]");
         assertEquals(templateValues.get("legalRepReferenceNumber"), someLegalRepReferenceNumber);
     }
 
