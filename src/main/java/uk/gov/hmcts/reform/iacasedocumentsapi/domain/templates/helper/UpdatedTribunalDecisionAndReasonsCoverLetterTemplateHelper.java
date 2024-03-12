@@ -27,6 +27,7 @@ public class UpdatedTribunalDecisionAndReasonsCoverLetterTemplateHelper {
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
+        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
