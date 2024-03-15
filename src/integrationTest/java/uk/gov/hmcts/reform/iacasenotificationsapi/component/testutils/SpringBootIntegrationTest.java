@@ -27,9 +27,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.Application;
     "IDAM_URL=http://127.0.0.1:8990/userAuth",
     "OPEN_ID_IDAM_URL=http://127.0.0.1:8990/userAuth",
     "S2S_URL=http://127.0.0.1:8990/serviceAuth",
-    "IA_CASE_DOCUMENTS_API_URL=http://localhost:8990/ia-case-documents-api",
-    "govnotify.baseUrl=http://localhost:8990",
-    "govnotify.key=test_key-7f72d0fb-2bc4-421b-bceb-1bf5bf350ff9-3df5a74b-f25b-4052-b00f-3f71d33cd0eb"
+    "IA_CASE_DOCUMENTS_API_URL=http://localhost:8990/ia-case-documents-api"
 })
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("integration")
