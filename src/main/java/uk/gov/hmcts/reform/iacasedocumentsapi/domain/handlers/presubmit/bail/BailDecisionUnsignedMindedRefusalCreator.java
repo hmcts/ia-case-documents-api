@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailDocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 
@@ -45,8 +46,9 @@ public class BailDecisionUnsignedMindedRefusalCreator implements PreSubmitCallba
                                     .orElse("")
                                     .equalsIgnoreCase("refused");
 
-        boolean isMindedToGrant = bailCase.read(RECORD_THE_DECISION_LIST, String.class)
-                .orElse("")
+        boolean isMindedToGrant = (BailCaseUtils.isImaEnabled(bailCase)
+            ? bailCase.read(RECORD_THE_DECISION_LIST_IMA, String.class).orElse("")
+            : bailCase.read(RECORD_THE_DECISION_LIST, String.class).orElse(""))
                 .equalsIgnoreCase("mindedToGrant");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT

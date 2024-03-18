@@ -28,26 +28,26 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail.BailSubmissionCreator;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail.BailSubmissionWithUtCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailDocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = org.mockito.quality.Strictness.LENIENT)
-public class BailSubmissionCreatorTest {
-    @Mock private DocumentCreator<BailCase> bailSubmissionDocumentCreator;
+public class BailSubmissionWithUtCreatorTest {
+    @Mock private DocumentCreator<BailCase> bailSubmissionWithUtDocumentCreator;
     @Mock private BailDocumentHandler bailDocumentHandler;
     @Mock private Callback<BailCase> callback;
     @Mock private CaseDetails<BailCase> caseDetails;
     @Mock private BailCase bailCase;
     @Mock private Document bailSubmission;
 
-    private BailSubmissionCreator bailSubmissionCreator;
+    private BailSubmissionWithUtCreator bailSubmissionWithUtCreator;
 
     @BeforeEach
     void setUp() {
-        bailSubmissionCreator = new BailSubmissionCreator(bailSubmissionDocumentCreator, bailDocumentHandler);
-        when(bailCase.read(BailCaseFieldDefinition.IS_IMA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(bailCase.read(BailCaseFieldDefinition.IS_IMA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        bailSubmissionWithUtCreator = new BailSubmissionWithUtCreator(bailSubmissionWithUtDocumentCreator, bailDocumentHandler);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
     }
@@ -59,9 +59,9 @@ public class BailSubmissionCreatorTest {
         for (Event event : Event.values()) {
             when(callback.getEvent()).thenReturn(event);
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = bailSubmissionCreator.canHandle(preSubmitCallbackStage, callback);
+                boolean canHandle = bailSubmissionWithUtCreator.canHandle(preSubmitCallbackStage, callback);
                 if ((event == Event.SUBMIT_APPLICATION || event == Event.MAKE_NEW_APPLICATION || event == Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT)
-                    && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && isImaEnabled == YesOrNo.NO) {
+                        && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && isImaEnabled == YesOrNo.YES) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -72,19 +72,19 @@ public class BailSubmissionCreatorTest {
 
     @Test
     void should_not_allow_null_args() {
-        assertThatThrownBy(() -> bailSubmissionCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> bailSubmissionWithUtCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
 
-        assertThatThrownBy(() -> bailSubmissionCreator.canHandle(null, callback))
+        assertThatThrownBy(() -> bailSubmissionWithUtCreator.canHandle(null, callback))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callbackStage must not be null");
 
-        assertThatThrownBy(() -> bailSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> bailSubmissionWithUtCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
 
-        assertThatThrownBy(() -> bailSubmissionCreator.handle(null, callback))
+        assertThatThrownBy(() -> bailSubmissionWithUtCreator.handle(null, callback))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callbackStage must not be null");
     }
@@ -92,7 +92,7 @@ public class BailSubmissionCreatorTest {
     @Test
     void should_throw_if_cannot_handle() {
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy((() -> bailSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
+        assertThatThrownBy((() -> bailSubmissionWithUtCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Cannot handle callback");
     }
@@ -102,9 +102,9 @@ public class BailSubmissionCreatorTest {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPLICATION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailSubmissionDocumentCreator.create(caseDetails)).thenReturn(bailSubmission);
+        when(bailSubmissionWithUtDocumentCreator.create(caseDetails)).thenReturn(bailSubmission);
 
-        PreSubmitCallbackResponse<BailCase> response = bailSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<BailCase> response = bailSubmissionWithUtCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(bailCase, response.getData());

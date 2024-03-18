@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailEndAppli
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingInitialListingTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingRelistingTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionUtTemplate;
 
 @Configuration
 public class BailDocumentCreatorConfiguration {
@@ -40,6 +41,28 @@ public class BailDocumentCreatorConfiguration {
             documentUploader
         );
     }
+    
+    @Bean("bailSubmissionWithUt")
+    public DocumentCreator<BailCase> getBailSubmissionWithUtDocumentCreator(
+        @Value("${bailSubmissionDocument.contentType}") String contentType,
+        @Value("${bailSubmissionDocument.fileExtension}") String fileExtension,
+        @Value("${bailSubmissionDocument.fileName}") String fileName,
+        BailCaseFileNameQualifier fileNameQualifier,
+        BailSubmissionUtTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 
     @Bean("decisionUnsignedGranted")
     public DocumentCreator<BailCase> getBailDecisionUnsignedGrantedDocumentCreator(
