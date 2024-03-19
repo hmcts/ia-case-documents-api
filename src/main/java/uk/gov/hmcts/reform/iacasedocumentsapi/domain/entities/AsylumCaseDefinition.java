@@ -486,11 +486,7 @@ public enum AsylumCaseDefinition {
             "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),
 
     CORRECTED_DECISION_AND_REASONS(
-            "correctedDecisionAndReasons", new TypeReference<List<IdValue<DecisionAndReasons>>>(){}),
-
-    DECISION_AND_REASON_DOCS_UPLOAD(
-        "decisionAndReasonDocsUpload", new TypeReference<Document>(){}),
-
+        "correctedDecisionAndReasons", new TypeReference<List<IdValue<DecisionAndReasons>>>() {}),
     ;
 
 
