@@ -41,11 +41,12 @@ public class DocumentTagTest {
         assertEquals("uploadDocument", DocumentTag.UPLOAD_DOCUMENT.toString());
         assertEquals("uploadBailSummary", DocumentTag.BAIL_SUMMARY.toString());
         assertEquals("b1Document", DocumentTag.B1_DOCUMENT.toString());
+        assertEquals("updatedFinalDecisionAndReasonsPdf", DocumentTag.UPDATED_FINAL_DECISION_AND_REASONS_PDF.toString());
         assertEquals("", DocumentTag.NONE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(38, DocumentTag.values().length);
+        assertEquals(39, DocumentTag.values().length);
     }
 }
