@@ -51,9 +51,12 @@ public class EmDocumentBundlerTest {
 
         String bundleFilename = "some-bundle-filename";
 
-        returnedDocument = new Document("http://some-url",
+        returnedDocument = new Document(
+            "http://some-url",
             "documentBinaryUrl",
-            bundleFilename);
+            bundleFilename,
+            "some-hash"
+        );
 
         emDocumentBundler = new EmDocumentBundler(
             BUNDLE_URL,

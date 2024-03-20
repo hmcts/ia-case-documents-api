@@ -232,9 +232,12 @@ public class AppealSkeletonBundleGeneratorTest {
 
     private Document createDocumentWithDescription() {
         return
-            new Document("some-url",
+            new Document(
+                "some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                RandomStringUtils.randomAlphabetic(20),
+                "some-hash"
+            );
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {

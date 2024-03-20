@@ -62,9 +62,12 @@ public class AsylumCaseFixtures {
     }
 
     public static Document someDocumentWithDefaults() {
-        return new Document("some-doc-url",
+        return new Document(
+            "some-doc-url",
             "some-doc-bin-url",
-            "some-filename");
+            "some-filename",
+            "some-hash"
+        );
     }
 
     private static String someDate() {

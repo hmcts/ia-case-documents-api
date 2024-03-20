@@ -7,6 +7,8 @@ public interface DocumentUploader {
 
     Document upload(
         Resource resource,
+        String caseTypeId,
+        String jurisdictionId,
         String contentType
     );
 }

@@ -76,7 +76,8 @@ public class EmDocumentBundler implements DocumentBundler {
         return new Document(
             bundle.getDocumentUrl(),
             bundle.getDocumentBinaryUrl(),
-            bundleFilename
+            bundleFilename,
+            bundle.getDocumentHash()
         );
 
     }

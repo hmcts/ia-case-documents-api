@@ -76,7 +76,7 @@ class CdamDocumentManagementUploaderTest {
             any())).willReturn(uploadResponse);
 
         // When
-        Document result = documentManagementUploader.upload(resource, "application/text");
+        Document result = documentManagementUploader.upload(resource, "Asylum", "IA", "application/text");
 
         // Then
         verify(caseDocumentClient, times(1)).uploadDocuments(eq("some access token"),
@@ -107,7 +107,7 @@ class CdamDocumentManagementUploaderTest {
 
         // When
         assertThrows(DocumentServiceResponseException.class, () -> {
-            documentManagementUploader.upload(resource,  "application/text");
+            documentManagementUploader.upload(resource, "Asylum", "IA", "application/text");
         });
 
         // Then
@@ -116,7 +116,5 @@ class CdamDocumentManagementUploaderTest {
             eq("Asylum"),
             eq("IA"),
             any());
-
     }
-
 }

@@ -573,16 +573,25 @@ class CustomiseHearingBundleHandlerTest {
 
     private DocumentWithDescription createDocumentWithDescription() {
         return
-            new DocumentWithDescription(new Document("some-url",
-                "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20)), "test");
+            new DocumentWithDescription(
+                new Document(
+                    "some-url",
+                    "some-binary-url",
+                    RandomStringUtils.randomAlphabetic(20),
+                    "some-hash"
+                ),
+                "test"
+            );
     }
 
     private Document createDocument() {
         return
-            new Document("some-url",
+            new Document(
+                "some-url",
                 "some-binary-url",
-                "some-filename");
+                "some-filename",
+                "some-hash"
+            );
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag, String suppliedBy) {

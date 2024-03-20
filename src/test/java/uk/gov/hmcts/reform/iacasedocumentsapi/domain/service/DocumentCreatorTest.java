@@ -28,10 +28,11 @@ public class DocumentCreatorTest {
     @Mock private DocumentGenerator documentGenerator;
     @Mock private DocumentUploader documentUploader;
 
+    private final String qualifiedDocumentFileName = "unique-to-appellant-some-document";
+    private final String templateName = "template.docx";
+
     @Mock private CaseDetails<CaseData> caseDetails;
     @Mock private CaseDetails<CaseData> caseDetailsBefore;
-    private String qualifiedDocumentFileName = "unique-to-appellant-some-document";
-    private String templateName = "template.docx";
     @Mock private Map<String, Object> templateFieldValues;
     @Mock private Resource documentResource;
     @Mock private Document expectedDocument;
@@ -56,6 +57,7 @@ public class DocumentCreatorTest {
     @Test
     public void should_orchestrate_document_creation() {
 
+        when(caseDetails.getJurisdiction()).thenReturn("IA");
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
         when(documentTemplate.getName()).thenReturn(templateName);
         when(documentTemplate.mapFieldValues(caseDetails)).thenReturn(templateFieldValues);
@@ -67,19 +69,30 @@ public class DocumentCreatorTest {
             templateFieldValues
         )).thenReturn(documentResource);
 
-        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+        when(documentUploader.upload(
+            eq(documentResource),
+            eq("Asylum"),
+            eq("IA"),
+            eq(documentContentType)
+        )).thenReturn(expectedDocument);
 
         Document actualDocument = documentCreator.create(caseDetails);
 
         assertEquals(expectedDocument, actualDocument);
 
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
-        verify(documentUploader, times(1)).upload(any(), any());
+        verify(documentUploader, times(1)).upload(
+            documentResource,
+            "Asylum",
+            "IA",
+            documentContentType
+        );
     }
 
     @Test
     public void should_orchestrate_amended_document_creation() {
 
+        when(caseDetails.getJurisdiction()).thenReturn("IA");
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
         when(documentTemplate.getName()).thenReturn(templateName);
         when(documentTemplate.mapFieldValues(caseDetails, caseDetailsBefore)).thenReturn(templateFieldValues);
@@ -91,13 +104,23 @@ public class DocumentCreatorTest {
             templateFieldValues
         )).thenReturn(documentResource);
 
-        when(documentUploader.upload(documentResource, documentContentType)).thenReturn(expectedDocument);
+        when(documentUploader.upload(
+            eq(documentResource),
+            eq("Asylum"),
+            eq("IA"),
+            eq(documentContentType)
+        )).thenReturn(expectedDocument);
 
         Document actualDocument = documentCreator.create(caseDetails, caseDetailsBefore);
 
         assertEquals(expectedDocument, actualDocument);
 
         verify(documentGenerator, times(1)).generate(any(), any(), any(), any());
-        verify(documentUploader, times(1)).upload(any(), any());
+        verify(documentUploader, times(1)).upload(
+            documentResource,
+            "Asylum",
+            "IA",
+            documentContentType
+        );
     }
 }

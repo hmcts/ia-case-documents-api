@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
-import com.google.common.io.ByteStreams;
-import java.util.Collections;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
@@ -16,11 +15,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
+import static java.util.Collections.singletonList;
+
+import static com.google.common.io.ByteStreams.toByteArray;
+
 /**
  * This class supersedes DMDocumentManagementUploader. Its usage is driven by a feature flag.
  */
 @Component
 @ComponentScan("uk.gov.hmcts.reform.ccd.document.am.feign")
+@Slf4j
 public class CdamDocumentManagementUploader {
 
     private final CaseDocumentClient caseDocumentClient;
@@ -38,7 +42,7 @@ public class CdamDocumentManagementUploader {
     }
 
     @SneakyThrows
-    public Document upload(Resource resource, String contentType) {
+    public Document upload(Resource resource, String caseTypeId, String jurisdictionId, String contentType) {
         final String serviceAuthorizationToken = serviceAuthorizationTokenGenerator.generate();
         final UserDetails userDetails = userDetailsProvider.getUserDetails();
         final String accessToken = userDetails.getAccessToken();
@@ -47,25 +51,40 @@ public class CdamDocumentManagementUploader {
             resource.getFilename(),
             resource.getFilename(),
             contentType,
-            ByteStreams.toByteArray(resource.getInputStream())
+            toByteArray(resource.getInputStream())
         );
 
         UploadResponse uploadResponse = caseDocumentClient.uploadDocuments(
             accessToken,
             serviceAuthorizationToken,
-            "Asylum",
-            "IA",
-            Collections.singletonList(file)
+            caseTypeId,
+            jurisdictionId,
+            singletonList(file)
         );
 
-        uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = uploadResponse.getDocuments()
-                                                                                  .stream().findFirst().orElseThrow(() ->
-                                                                                                                        new DocumentServiceResponseException("Document cannot be uploaded, please try again"));
+        uk.gov.hmcts.reform.ccd.document.am.model.Document uploadedDocument = 
+            uploadResponse.getDocuments().stream().findFirst().orElseThrow(
+                () -> new DocumentServiceResponseException("Document cannot be uploaded, please try again")
+            );
+
+        log.info(
+            "Uploaded document metadata: {}",
+            uploadedDocument.metadata
+        );
+
+        log.info(
+            "Uploaded document: {}, {}, {}, {}",
+            uploadedDocument.links.self.href,
+            uploadedDocument.links.binary.href,
+            uploadedDocument.originalDocumentName,
+            uploadedDocument.hashToken
+        );
 
         return new Document(
             uploadedDocument.links.self.href,
             uploadedDocument.links.binary.href,
-            uploadedDocument.originalDocumentName
+            uploadedDocument.originalDocumentName,
+            uploadedDocument.hashToken
         );
     }
 }

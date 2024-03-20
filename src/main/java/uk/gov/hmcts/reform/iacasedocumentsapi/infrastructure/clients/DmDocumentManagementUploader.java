@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.util.Collections;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -15,13 +17,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
-
 /**
  * Superseded. Will need to be removed as soon as the "use-ccd-document-am" feature flag is permanently on
  */
-
 @Component
 @Deprecated
+@Slf4j
 public class DmDocumentManagementUploader {
 
     private final DocumentUploadClientApi documentUploadClientApi;
@@ -66,22 +67,20 @@ public class DmDocumentManagementUploader {
                     );
 
             uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
-                uploadResponse
-                    .getEmbedded()
-                    .getDocuments()
-                    .get(0);
+                uploadResponse.getEmbedded().getDocuments().get(0);
+
+            log.info(
+                "Uploaded document: {}, {}, {}",
+                uploadedDocument.links.self.href,
+                uploadedDocument.links.binary.href,
+                uploadedDocument.originalDocumentName
+            );
 
             return new Document(
-                uploadedDocument
-                    .links
-                    .self
-                    .href,
-                uploadedDocument
-                    .links
-                    .binary
-                    .href,
-                uploadedDocument
-                    .originalDocumentName
+                uploadedDocument.links.self.href,
+                uploadedDocument.links.binary.href,
+                uploadedDocument.originalDocumentName,
+                null
             );
 
         } catch (IOException e) {
