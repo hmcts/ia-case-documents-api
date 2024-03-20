@@ -33,6 +33,28 @@ public class BailDocumentCreatorConfiguration {
             documentUploader
         );
     }
+    
+    @Bean("bailSubmissionWithUt")
+    public DocumentCreator<BailCase> getBailSubmissionWithUtDocumentCreator(
+        @Value("${bailSubmissionDocument.contentType}") String contentType,
+        @Value("${bailSubmissionDocument.fileExtension}") String fileExtension,
+        @Value("${bailSubmissionDocument.fileName}") String fileName,
+        BailCaseFileNameQualifier fileNameQualifier,
+        BailSubmissionUtTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 
     @Bean("decisionUnsignedGranted")
     public DocumentCreator<BailCase> getBailDecisionUnsignedGrantedDocumentCreator(
