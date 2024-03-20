@@ -3,8 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.io.IOException;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -17,7 +15,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
-@Slf4j
 @Service
 public class SendDecisionAndReasonsRenameFileService {
 
@@ -54,9 +51,6 @@ public class SendDecisionAndReasonsRenameFileService {
         Document finalDecisionAndReasonsDoc = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class)
             .orElseThrow(
                 () -> new IllegalStateException("finalDecisionAndReasonsDocument must be present"));
-        log.info("1" + finalDecisionAndReasonsDoc.getDocumentFilename());
-        log.info("2" + finalDecisionAndReasonsDoc.getDocumentUrl());
-        log.info("3" + finalDecisionAndReasonsDoc.getDocumentBinaryUrl());
         DocumentWithMetadata documentWithMetadata =
                 documentReceiver.receive(
                         finalDecisionAndReasonsDoc,
@@ -65,7 +59,6 @@ public class SendDecisionAndReasonsRenameFileService {
                 );
         Resource finalDecisionAndReasonsPdf =
             documentDownloadClient.download(documentWithMetadata.getDocument().getDocumentBinaryUrl());
-        log.info("4" + finalDecisionAndReasonsPdf.exists());
         ByteArrayResource byteArrayResource = getByteArrayResource(
             finalDecisionAndReasonsPdf,
             getDecisionAndReasonsFilename(asylumCase));
