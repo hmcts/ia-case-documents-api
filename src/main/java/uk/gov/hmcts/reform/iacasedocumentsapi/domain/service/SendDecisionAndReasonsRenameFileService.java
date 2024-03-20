@@ -54,9 +54,9 @@ public class SendDecisionAndReasonsRenameFileService {
         Document finalDecisionAndReasonsDoc = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class)
             .orElseThrow(
                 () -> new IllegalStateException("finalDecisionAndReasonsDocument must be present"));
-        log.info("1", finalDecisionAndReasonsDoc.getDocumentFilename());
-        log.info("2", finalDecisionAndReasonsDoc.getDocumentUrl());
-        log.info("3", finalDecisionAndReasonsDoc.getDocumentBinaryUrl());
+        log.info("1" + finalDecisionAndReasonsDoc.getDocumentFilename());
+        log.info("2" + finalDecisionAndReasonsDoc.getDocumentUrl());
+        log.info("3" + finalDecisionAndReasonsDoc.getDocumentBinaryUrl());
         DocumentWithMetadata documentWithMetadata =
                 documentReceiver.receive(
                         finalDecisionAndReasonsDoc,
@@ -65,7 +65,7 @@ public class SendDecisionAndReasonsRenameFileService {
                 );
         Resource finalDecisionAndReasonsPdf =
             documentDownloadClient.download(documentWithMetadata.getDocument().getDocumentBinaryUrl());
-        log.info("4", finalDecisionAndReasonsPdf.exists());
+        log.info("4" + finalDecisionAndReasonsPdf.exists());
         ByteArrayResource byteArrayResource = getByteArrayResource(
             finalDecisionAndReasonsPdf,
             getDecisionAndReasonsFilename(asylumCase));

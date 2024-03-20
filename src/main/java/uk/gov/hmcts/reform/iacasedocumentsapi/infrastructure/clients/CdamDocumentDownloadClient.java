@@ -29,9 +29,9 @@ public class CdamDocumentDownloadClient {
     public Resource download(String documentBinaryUrl) {
         String accessToken = accessTokenProvider.getAccessToken();
         String serviceAuthToken = serviceAuthTokenGenerator.generate();
-        log.info("5", accessToken);
-        log.info("6", serviceAuthToken);
-        log.info("7", documentBinaryUrl);
+        log.info("5" + accessToken);
+        log.info("6" + serviceAuthToken);
+        log.info("7" + documentBinaryUrl);
         ResponseEntity<Resource> resourceResponseEntity = caseDocumentClient.getDocumentBinary(
             accessToken,
             serviceAuthToken,
