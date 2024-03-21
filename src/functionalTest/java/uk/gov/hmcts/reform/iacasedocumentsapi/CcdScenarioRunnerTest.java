@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,8 +112,10 @@ public class CcdScenarioRunnerTest {
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
 
         for (String scenarioSource : scenarioSources.values()) {
-            for (int i = 0; i < 3; i++) {
+            final int maxRetries = 3;
+            for (int i = 0; i < maxRetries; i++) {
 
+                String description = "";
                 try {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
 
