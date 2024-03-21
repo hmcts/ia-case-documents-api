@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,8 +89,8 @@ public class CcdScenarioRunnerTest {
         }
 
         assertFalse(
-                "Verifiers are configured",
-                verifiers.isEmpty()
+            "Verifiers are configured",
+            verifiers.isEmpty()
         );
 
         String scenarioPattern = System.getProperty("scenario");
@@ -109,7 +110,7 @@ public class CcdScenarioRunnerTest {
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
 
         int maxRetries = 3;
-        for (String scenarioSource : scenarioSources.values()) {
+        for (String scenarioSource : scenarioSources) {
             String description = "";
             for (int i = 0; i < maxRetries; i++) {
                 try {
