@@ -203,7 +203,7 @@ public class CcdScenarioRunnerTest {
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         List<String> scenariosThatHaveRun = runScenarios.stream().distinct().toList();
-        System.out.println(scenariosThatHaveRun.size() + " scenarios have run");
+        System.out.println((char) 27 + "[" + scenariosThatHaveRun.size() + " SCENARIOS HAVE RUN]");
         System.out.println(String.join(";\n", scenariosThatHaveRun));
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         if (!haveAllPassed) {
