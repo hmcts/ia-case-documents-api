@@ -143,7 +143,7 @@ idea {
 configurations {
     integrationTestCompile.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
-    functionalTestCompile.extendsFrom testImplementation
+    functionalTestImplementation.extendsFrom testImplementation
     contractTestImplementation.extendsFrom testImplementation
     functionalTestRuntime.extendsFrom testRuntime
 }
