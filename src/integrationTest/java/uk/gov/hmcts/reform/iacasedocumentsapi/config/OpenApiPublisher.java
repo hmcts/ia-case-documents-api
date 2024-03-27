@@ -12,27 +12,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockFilterConfig;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 
 /**
  * Built-in feature which saves service's swagger specs in temporary directory.
  * Each travis run on master should automatically save and upload (if updated) documentation.
  */
-@SpringJUnitWebConfig
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("integration")
-class OpenApiPublisher {
-
-    @Autowired
-    private MockMvc mvc;
-
+class OpenApiPublisher extends SpringBootIntegrationTest {
     @Autowired
     private WebApplicationContext wac;
 
@@ -41,14 +29,14 @@ class OpenApiPublisher {
         WebRequestTrackingFilter filter;
         filter = new WebRequestTrackingFilter();
         filter.init(new MockFilterConfig());
-        mvc = webAppContextSetup(wac).addFilters(filter).build();
+        mockMvc = webAppContextSetup(wac).addFilters(filter).build();
     }
 
     @DisplayName("Generate swagger documentation")
     @Test
     @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void generateDocs() throws Exception {
-        byte[] specs = mvc.perform(get("/v3/api-docs"))
+        byte[] specs = mockMvc.perform(get("/v3/api-docs"))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()

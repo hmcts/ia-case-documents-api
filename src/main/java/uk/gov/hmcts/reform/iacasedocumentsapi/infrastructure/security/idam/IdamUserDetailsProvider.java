@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 import feign.FeignException;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
@@ -12,14 +13,17 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
 
     private final AccessTokenProvider accessTokenProvider;
     private final IdamApi idamApi;
+    private final IdamService idamService;
 
     public IdamUserDetailsProvider(
         AccessTokenProvider accessTokenProvider,
-        IdamApi idamApi
+        IdamApi idamApi,
+        IdamService idamService
     ) {
 
         this.accessTokenProvider = accessTokenProvider;
         this.idamApi = idamApi;
+        this.idamService = idamService;
     }
 
     public IdamUserDetails getUserDetails() {
@@ -30,7 +34,7 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
 
         try {
 
-            response = idamApi.userInfo(accessToken);
+            response = idamService.getUserInfo(accessToken);
 
         } catch (FeignException ex) {
 
