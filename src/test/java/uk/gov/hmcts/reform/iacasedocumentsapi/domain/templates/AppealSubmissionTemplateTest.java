@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
@@ -28,6 +30,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 public class AppealSubmissionTemplateTest {
 
@@ -42,6 +45,8 @@ public class AppealSubmissionTemplateTest {
     private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
     private String appealReferenceNumber = "RP/11111/2020";
     private String legalRepReferenceNumber = "OUR-REF";
+    private final String legalRepFirstName = "legalRepFirstName";
+    private final String legalRepFamilyName = "legalRepFamilyName";
     private String homeOfficeReferenceNumber = "A1234567/001";
     private String homeOfficeDecisionDate = "2020-12-23";
     private String appellantGivenNames = "Talha";
@@ -198,6 +203,43 @@ public class AppealSubmissionTemplateTest {
 
         assertEquals(wantsEmail, templateFieldValues.get("wantsEmail"));
         assertEquals(email, templateFieldValues.get("email"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_only_first_name_provided() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepFirstName));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepFirstName, templateFieldValues.get("legalRepName"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_only_family_name_provided() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+        when(asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("", templateFieldValues.get("legalRepName"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_first_name_and_family_name_provided() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepFirstName));
+        when(asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepFirstName + " " + legalRepFamilyName, templateFieldValues.get("legalRepName"));
     }
 
     @Test

@@ -1,0 +1,55 @@
+{
+  "description": "RIA-7879 Create hearing notice PDF (IAC Harmondsworth)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "eventId": "listCase",
+      "state": "listing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingDocuments": [],
+          "appealReferenceNumber": "DC/50042/2023",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2023-08-31T12:34:56",
+          "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "DC 50042 2023-Gonzlez-hearing-notice.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "hearingNotice"
+            }
+          }
+        ],
+        "appealReferenceNumber": "DC/50042/2023",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2023-08-31T12:34:56",
+        "ariaListingReference": "AA/12345/1234",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
+      }
+    }
+  }
+}

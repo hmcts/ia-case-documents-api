@@ -34,6 +34,7 @@ public enum DocumentTag {
     UPPER_TRIBUNAL_BUNDLE("upperTribunalBundle", CaseType.ASYLUM),
     APPEAL_REASONS("appealReasons", CaseType.ASYLUM),
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
+    NOTICE_OF_ADJOURNED_HEARING("noticeOfAdjournedHearing", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
@@ -42,6 +43,7 @@ public enum DocumentTag {
     UPLOAD_DOCUMENT("uploadDocument", CaseType.BAIL),
     BAIL_SUMMARY("uploadBailSummary", CaseType.BAIL),
     B1_DOCUMENT("b1Document", CaseType.BAIL),
+    BAIL_NOTICE_OF_HEARING("bailNoticeOfHearing", CaseType.BAIL),
 
     @JsonEnumDefaultValue
     NONE("", CaseType.UNKNOWN);

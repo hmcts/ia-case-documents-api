@@ -80,6 +80,11 @@ hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
 hearingNoticeAdjournedWithoutDateDocument.fileName: "hearing-notice"
 hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00376.docx}
 
+noticeOfAdjournedHearingDocument.contentType: application/pdf
+noticeOfAdjournedHearingDocument.fileExtension: PDF
+noticeOfAdjournedHearingDocument.fileName: "notice-of-adjourned-hearing"
+noticeOfAdjournedHearingDocument.templateName: ${NOTICE_OF_ADJOURNED_HEARING_TEMPLATE:TB-IAC-HNO-ENG-00240.docx}
+
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
 hearingNoticeEditedDocument.fileName: "hearing-notice"
@@ -157,7 +162,7 @@ clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-I
 bailSubmissionDocument.contentType: application/pdf
 bailSubmissionDocument.fileExtension: PDF
 bailSubmissionDocument.fileName: "bail-application-details"
-bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-SUM-ENG-01134.docx}
+bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-SUM-ENG-01144.docx}
 
 bailSubmissionDocumentWithUt.contentType: application/pdf
 bailSubmissionDocumentWithUt.fileExtension: PDF
@@ -178,6 +183,12 @@ bailEndApplication.contentType:  application/pdf
 bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
 bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
+
+bailNoticeOfHearing.contentType: application/pdf
+bailNoticeOfHearing.fileExtension: PDF
+bailNoticeOfHearing.fileName: "hearing-notice"
+bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx}
+bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -246,6 +257,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateHearingBundle"
       - "customiseHearingBundle"
+      - "recordAdjournmentDetails"
     caseworker-ia-admofficer:
       - "listCase"
       - "editCaseListing"
@@ -260,6 +272,8 @@ security:
       - "makeNewApplication"
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
+      - "caseListing"
+      - "recordAdjournmentDetails"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -284,6 +298,10 @@ security:
       - "makeNewApplication"
     caseworker-ia-system:
       - "endAppealAutomatically"
+      - "listCase"
+      - "editCaseListing"
+      - "caseListing"
+      - "recordAdjournmentDetails"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}

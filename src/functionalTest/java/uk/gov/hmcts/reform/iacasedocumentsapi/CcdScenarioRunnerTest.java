@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +75,7 @@ public class CcdScenarioRunnerTest {
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
-        RestAssured.useRelaxedHTTPSValidation();
+        RestAssured.useRelaxedHTTPSValidation();        
     }
 
     @Test
@@ -100,19 +99,23 @@ public class CcdScenarioRunnerTest {
             scenarioPattern = "*" + scenarioPattern + "*.json";
         }
 
-        Collection<String> scenarioSources =
+        Map<String, String> scenarioSources =
             StringResourceLoader
-                .load("/scenarios/" + scenarioPattern)
-                .values();
+                .load("/scenarios/" + scenarioPattern);
+
+        //Adding Bail functional tests
+        scenarioSources.putAll(StringResourceLoader
+                .load("/scenarios/bail/" + scenarioPattern));
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
 
-        int maxRetries = 3;
-        for (String scenarioSource : scenarioSources) {
-            String description = "";
+        for (String scenarioSource : scenarioSources.values()) {
+            final int maxRetries = 3;
             for (int i = 0; i < maxRetries; i++) {
+
+                String description = "";
                 try {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
 
@@ -356,9 +359,20 @@ public class CcdScenarioRunnerTest {
         }
 
         if ("System".equalsIgnoreCase(credentials)) {
-
             return authorizationHeadersProvider
                 .getSystemAuthorization();
+        }
+
+        if ("HomeOfficeLart".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getHomeOfficeLartAuthorization();
+        }
+
+        if ("HomeOfficePOU".equalsIgnoreCase(credentials)) {
+
+            return authorizationHeadersProvider
+                .getHomeOfficePouAuthorization();
         }
 
         return new Headers();

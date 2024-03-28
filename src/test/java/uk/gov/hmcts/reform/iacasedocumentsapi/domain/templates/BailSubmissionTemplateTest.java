@@ -46,4 +46,3 @@ public class BailSubmissionTemplateTest {
         verify(bailSubmissionTemplateProvider, times(1)).mapFieldValues(caseDetails);
     }
 }
-
