@@ -107,7 +107,7 @@ public class BailDocumentHandlerTest {
         when(documentsAppender.append(existingDocuments, Collections.singletonList(newDocumentWithMetadata)))
             .thenReturn(allDocuments);
 
-        bailDocumentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+        bailDocumentHandler.appendWithMetadata(
             bailCase,
             document,
             documentField,

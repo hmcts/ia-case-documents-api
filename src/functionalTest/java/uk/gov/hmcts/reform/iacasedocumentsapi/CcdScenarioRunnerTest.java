@@ -89,8 +89,8 @@ public class CcdScenarioRunnerTest {
         }
 
         assertFalse(
-                "Verifiers are configured",
-                verifiers.isEmpty()
+            "Verifiers are configured",
+            verifiers.isEmpty()
         );
 
         String scenarioPattern = System.getProperty("scenario");

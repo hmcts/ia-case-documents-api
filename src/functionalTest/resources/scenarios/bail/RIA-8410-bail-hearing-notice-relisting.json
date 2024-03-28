@@ -1,22 +1,19 @@
 {
-  "description": "RIA-5496 Create record the refusal decision notice unsigned PDF",
+  "description": "RIA-8410 Bail hearing notice (relisting)",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "eventId": "recordTheDecision",
-      "state": "decisionDecided",
+      "eventId": "caseListing",
+      "state": "applicationSubmitted",
       "caseData": {
         "template": "minimal-bail-application-submitted.json",
         "replacements": {
-          "legalRepresentativeDocuments": [],
-          "recordDecisionType": "refused",
-          "recordTheDecisionList": "refused",
-          "reasonForRefusalDetails": "The Tribunal was minded to grant bail for the reasons given. The Home Office have refused to consent to the grant of bail so in accordance with paragraph 3(4) of Schedule 10 Immigration Act 2016 bail is refused.",
-          "judgeDetailsName": "Judge Mendy",
+          "listingEvent": "relisting",
+          "listingLocation": "harmondsworth",
+          "listingHearingDate": "2024-01-30T10:30:00",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
-          "customerServicesEmail": "{$customerServices.emailAddress}",
-          "govCallChargesLink": "{$govCallChargesUrl}"
+          "customerServicesEmail": "{$customerServices.emailAddress}"
         }
       }
     }
@@ -27,18 +24,23 @@
     "caseData": {
       "template": "minimal-bail-application-submitted.json",
       "replacements": {
-        "unsgnDecisionDocumentWithMetadata": [
+        "listingEvent": "relisting",
+        "listingLocation": "harmondsworth",
+        "listingHearingDate": "2024-01-30T10:30:00",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}",
+        "hearingDocuments": [
           {
             "id": "1",
             "value": {
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "Smith-decision-notice-UNSIGNED.docx"
+                "document_filename": "1650-6221-2061-5101-Smith-hearing-notice.PDF"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "bailDecisionUnsigned"
+              "tag": "bailNoticeOfHearing"
             }
           }
         ]

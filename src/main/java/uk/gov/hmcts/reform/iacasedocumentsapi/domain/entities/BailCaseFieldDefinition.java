@@ -2,7 +2,13 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.InterpreterLanguage;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 public enum BailCaseFieldDefinition {
     SENT_BY_CHECKLIST(
@@ -94,7 +100,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_NATIONALITY(
         "supporterNationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_HAS_PASSPORT(
-        "supporterHasPassport", new TypeReference<String>(){}),
+        "supporterHasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_PASSPORT(
         "supporterPassport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1(
@@ -126,7 +132,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_2_NATIONALITY(
         "supporter2Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_2_HAS_PASSPORT(
-        "supporter2HasPassport", new TypeReference<String>(){}),
+        "supporter2HasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_2_PASSPORT(
         "supporter2Passport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1(
@@ -158,7 +164,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_3_NATIONALITY(
         "supporter3Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_3_HAS_PASSPORT(
-        "supporter3HasPassport", new TypeReference<String>(){}),
+        "supporter3HasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_3_PASSPORT(
         "supporter3Passport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1(
@@ -190,7 +196,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_4_NATIONALITY(
         "supporter4Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_4_HAS_PASSPORT(
-        "supporter4HasPassport", new TypeReference<String>(){}),
+        "supporter4HasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_4_PASSPORT(
         "supporter4Passport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1(
@@ -213,6 +219,8 @@ public enum BailCaseFieldDefinition {
         "legalRepEmail", new TypeReference<String>(){}),
     LEGAL_REP_NAME(
         "legalRepName", new TypeReference<String>(){}),
+    LEGAL_REP_FAMILY_NAME(
+            "legalRepFamilyName", new TypeReference<String>(){}),
     LEGAL_REP_PHONE(
         "legalRepPhone", new TypeReference<String>(){}),
     LEGAL_REP_REFERENCE(
@@ -302,9 +310,48 @@ public enum BailCaseFieldDefinition {
         "uploadSignedDecisionNoticeDocument", new TypeReference<Document>(){}),
     SIGNED_DECISION_DOCUMENT_WITH_METADATA(
         "signDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
-
+    APPLICANT_INTERPRETER_SPOKEN_LANGUAGE(
+        "applicantInterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    APPLICANT_INTERPRETER_SIGN_LANGUAGE(
+        "applicantInterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    APPLICANT_INTERPRETER_LANGUAGE_CATEGORY(
+        "applicantInterpreterLanguageCategory", new TypeReference<List<String>>() {}),
+    FCS_INTERPRETER_YES_NO(
+        "fcsInterpreterYesNo", new TypeReference<YesOrNo>(){}),
+    FCS1_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs1InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
+    FCS1_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs1InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    FCS1_INTERPRETER_SIGN_LANGUAGE(
+        "fcs1InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    FCS2_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs2InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
+    FCS2_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs2InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    FCS2_INTERPRETER_SIGN_LANGUAGE(
+        "fcs2InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    FCS3_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs3InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
+    FCS3_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs3InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    FCS3_INTERPRETER_SIGN_LANGUAGE(
+        "fcs3InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    FCS4_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs4InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
+    FCS4_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs4InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    FCS4_INTERPRETER_SIGN_LANGUAGE(
+        "fcs4InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+    LISTING_EVENT(
+        "listingEvent", new TypeReference<ListingEvent>(){}),
+    LISTING_LOCATION(
+        "listingLocation", new TypeReference<String>(){}),
+    LISTING_HEARING_DATE(
+        "listingHearingDate", new TypeReference<String>(){}),
+    HEARING_DOCUMENTS(
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     IS_IMA_ENABLED(
-        "isImaEnabled", new TypeReference<YesOrNo>() {}),;
+        "isImaEnabled", new TypeReference<YesOrNo>() {});
 
     private final String value;
     private final TypeReference typeReference;
