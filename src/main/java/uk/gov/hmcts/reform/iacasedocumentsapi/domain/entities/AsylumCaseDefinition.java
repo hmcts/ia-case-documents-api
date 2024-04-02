@@ -487,6 +487,9 @@ public enum AsylumCaseDefinition {
 
     CORRECTED_DECISION_AND_REASONS(
         "correctedDecisionAndReasons", new TypeReference<List<IdValue<DecisionAndReasons>>>() {}),
+
+    REHEARD_HEARING_DOCUMENTS_COLLECTION(
+            "reheardHearingDocumentsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
     ;
 
 
