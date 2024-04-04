@@ -1,5 +1,6 @@
 {
   "description": "RIA-7215 Internal detained non-ADA send decision and reasons - allowed - document PDF",
+  "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

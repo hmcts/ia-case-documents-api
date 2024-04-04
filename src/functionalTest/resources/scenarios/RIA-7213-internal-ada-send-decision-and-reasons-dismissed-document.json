@@ -1,5 +1,6 @@
 {
   "description": "RIA-7213 Internal ADA send decision and reasons - dismissed - document PDF",
+  "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
