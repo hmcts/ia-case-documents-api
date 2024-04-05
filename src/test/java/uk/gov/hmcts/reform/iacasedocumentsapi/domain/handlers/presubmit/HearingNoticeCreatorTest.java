@@ -2,13 +2,24 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_FLAG_SET_ASIDE_REHEARD_EXISTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS_COLLECTION;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,16 +27,23 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ReheardHearingDocuments;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -39,6 +57,25 @@ class HearingNoticeCreatorTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
+    @Mock
+    private FeatureToggler featureToggler;
+    @Mock private DocumentReceiver documentReceiver;
+    @Mock private DocumentsAppender documentsAppender;
+    @Mock
+    private Appender<ReheardHearingDocuments> reheardAppender;
+
+    private final Document document = mock(Document.class);
+    private final String description = "Some evidence";
+    private final String dateUploaded = "2018-12-25";
+    private final DocumentTag tag = DocumentTag.CASE_ARGUMENT;
+    private final DocumentWithMetadata documentWithMetadata =
+            new DocumentWithMetadata(
+                    document,
+                    description,
+                    dateUploaded,
+                    tag,
+                    "test"
+            );
 
     private HearingNoticeCreator hearingNoticeCreator;
 
@@ -49,7 +86,11 @@ class HearingNoticeCreatorTest {
             new HearingNoticeCreator(
                 hearingNoticeDocumentCreator,
                 remoteHearingNoticeDocumentCreator,
-                documentHandler
+                documentHandler,
+                featureToggler,
+                documentReceiver,
+                documentsAppender,
+                reheardAppender
             );
     }
 
@@ -136,6 +177,42 @@ class HearingNoticeCreatorTest {
         verify(hearingNoticeDocumentCreator, times(0)).create(caseDetails);
         verify(remoteHearingNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
+    }
+
+    @Test
+    void should_create_hearing_notice_pdf_and_append_to_reheard_hearing_documents_complex_collection() {
+
+        IdValue<DocumentWithMetadata> hearingDocWithMetadata =
+                new IdValue<>("1", documentWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(hearingDocWithMetadata);
+        IdValue<ReheardHearingDocuments> reheardHearingDocuments =
+                new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
+        final List<IdValue<ReheardHearingDocuments>> listOfReheardDocs = Lists.newArrayList(reheardHearingDocuments);
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+        when(documentReceiver.receive(uploadedDocument, "", DocumentTag.REHEARD_HEARING_NOTICE)).thenReturn(documentWithMetadata);
+        when(documentsAppender.append(Collections.emptyList(), Collections.singletonList(documentWithMetadata))).thenReturn(listOfDocumentsWithMetadata);
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(Collections.emptyList()));
+        when(reheardAppender.append(any(ReheardHearingDocuments.class), anyList())).thenReturn(listOfReheardDocs);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
+        verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.REHEARD_HEARING_NOTICE);
+        verify(documentsAppender, times(1)).append(Collections.emptyList(), Collections.singletonList(documentWithMetadata));
+        verify(reheardAppender, times(1)).append(any(ReheardHearingDocuments.class), anyList());
+        verify(asylumCase, times(1)).write(REHEARD_HEARING_DOCUMENTS_COLLECTION, listOfReheardDocs);
     }
 
     @Test
