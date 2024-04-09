@@ -1,6 +1,5 @@
 {
   "description": "RIA-7213 Internal ADA send decision and reasons - dismissed - document PDF",
-  "disabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -42,9 +41,9 @@
           ],
           "isDecisionAllowed": "dismissed",
           "finalDecisionAndReasonsDocument": {
-            "document_url": "{$FIXTURE_DOC3_DOC_URL}",
-            "document_binary_url": "{$FIXTURE_DOC3_DOC_URL_BINARY}",
-            "document_filename": "{$FIXTURE_DOC3_DOC_FILENAME}"
+            "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+            "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+            "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
           },
           "draftDecisionAndReasonsDocuments": [
             {
@@ -52,9 +51,9 @@
               "value": {
                 "tag": "decisionAndReasons",
                 "document": {
-                  "document_url": "{$FIXTURE_DOC3_DOC_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC3_DOC_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC3_DOC_FILENAME}"
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
                 },
                 "description": "",
                 "dateUploaded": "{$TODAY}"
