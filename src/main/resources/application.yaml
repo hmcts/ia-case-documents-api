@@ -119,6 +119,7 @@ security:
       - "generateServiceRequest"
     caseworker-ia-admofficer:
       - "recordRemissionDecision"
+      - "generateServiceRequest"
     caseworker-ia-system:
       - "updatePaymentStatus"
 

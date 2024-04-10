@@ -20,6 +20,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequ
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.ServiceRequestApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.SystemTokenGenerator;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.exceptions.PaymentServiceRequestException;
 
 @Service
 @Slf4j
@@ -45,7 +46,7 @@ public class ServiceRequestService {
     }
 
     @Retryable(retryFor = { FeignException.class }, maxAttempts = 3, backoff = @Backoff(3000))
-    public ServiceRequestResponse createServiceRequest(Callback<AsylumCase> callback, Fee fee) throws Exception {
+    public ServiceRequestResponse createServiceRequest(Callback<AsylumCase> callback, Fee fee) {
 
         CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         AsylumCase asylumCase = caseDetails.getCaseData();
@@ -91,7 +92,7 @@ public class ServiceRequestService {
             );
         } catch (FeignException fe) {
             log.error(
-                "Error in calling Payment Service Request API for case reference {} \n {}",
+                "Error in calling Payment Service Request API for case reference {} \n {}\n Retrying now...",
                 ccdCaseReferenceNumber,
                 fe.getMessage()
             );
@@ -101,8 +102,8 @@ public class ServiceRequestService {
     }
 
     @Recover
-    public ServiceRequestResponse recover(FeignException f, Callback<AsylumCase> callback, Fee fee) {
-        log.error("Error in calling Payment Service Request API for 3 retries \n {}", f.getMessage());
-        return null;
+    public ServiceRequestResponse recover(FeignException fe, Callback<AsylumCase> callback, Fee fee) {
+        log.error("Error in calling Payment Service Request API for 3 retries \n {}", fe.getMessage());
+        throw new PaymentServiceRequestException(fe.getMessage(), fe.getCause());
     }
 }

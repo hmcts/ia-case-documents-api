@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,6 +33,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequ
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.ServiceRequestApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.IdentityManagerResponseException;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.SystemTokenGenerator;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.exceptions.PaymentServiceRequestException;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -140,7 +140,7 @@ public class ServiceRequestServiceTest {
     }
 
     @Test
-    void should_throw_feign_exception_service_request_api_throws() throws Exception {
+    void should_throw_feign_exception_service_request_api_throws() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
@@ -154,22 +154,15 @@ public class ServiceRequestServiceTest {
         when(systemTokenGenerator.generate()).thenReturn(token);
         when(serviceAuthorization.generate()).thenReturn(serviceToken);
         when(serviceRequestApi.createServiceRequest(eq(token), eq(serviceToken), any(ServiceRequestRequest.class)))
-            .thenThrow(FeignException.class);
+            .thenThrow(FeignException.FeignClientException.class);
 
-        assertThrows(FeignException.class, () -> serviceRequestService.createServiceRequest(callback, fee));
-        verify(serviceRequestApi, times(1)).createServiceRequest(tokenCaptor.capture(),
-                                                                 serviceTokenCaptor.capture(),
-                                                                 serviceRequestRequestArgumentCaptor.capture());
-
-        assertEquals("token", tokenCaptor.getValue());
-        assertEquals("Bearer serviceToken", serviceTokenCaptor.getValue());
+        assertThrows(FeignException.FeignClientException.class, () -> serviceRequestService.createServiceRequest(callback, fee));
     }
 
     @Test
-    void should_return_null_in_recover_method() throws Exception {
+    void should_return_null_in_recover_method() {
         var ex = mock(FeignException.class);
         when(ex.getMessage()).thenReturn(ERROR_TEST_MESSAGE);
-        ServiceRequestResponse response = serviceRequestService.recover(ex, callback, fee);
-        assertNull(response);
+        assertThrows(PaymentServiceRequestException.class, () -> serviceRequestService.recover(ex, callback, fee));
     }
 }

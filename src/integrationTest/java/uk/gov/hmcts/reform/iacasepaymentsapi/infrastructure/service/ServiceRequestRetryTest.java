@@ -19,13 +19,13 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestRequest;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.ServiceRequestApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.SystemTokenGenerator;
+import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.exceptions.PaymentServiceRequestException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -68,7 +68,7 @@ public class ServiceRequestRetryTest {
     }
 
     @Test
-    public void shouldRetryThreeTimesOnFeignExceptionThenReturnNull() throws Exception {
+    public void shouldRetryThreeTimesOnFeignExceptionThenReturnNull() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
@@ -82,15 +82,14 @@ public class ServiceRequestRetryTest {
         when(systemTokenGenerator.generate()).thenReturn(token);
         when(serviceAuthorization.generate()).thenReturn(serviceToken);
         when(serviceRequestApi.createServiceRequest(eq(token), eq(serviceToken), any(ServiceRequestRequest.class)))
-                .thenThrow(FeignException.class);
+                .thenThrow(FeignException.FeignClientException.class);
         long start = System.currentTimeMillis();
-        ServiceRequestResponse response = serviceRequestService.createServiceRequest(callback, fee);
+        assertThrows(PaymentServiceRequestException.class, () -> serviceRequestService.createServiceRequest(callback, fee));
         long end = System.currentTimeMillis();
         verify(serviceRequestApi, times(3)).createServiceRequest(tokenCaptor.capture(),
                 serviceTokenCaptor.capture(),
                 serviceRequestRequestArgumentCaptor.capture());
         assertTrue("Response time should be greater than 6s as retries are 3s apart, but is " + (end - start),
                 end - start > 6000);
-        assertNull(response);
     }
 }

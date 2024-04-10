@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.postsubmit;
+package uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.EA;
@@ -6,11 +6,13 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.E
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.HU;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.PA;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_SERVICE_REQUEST_ALREADY;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.REQUEST_FEE_REMISSION_FLAG_FOR_SERVICE_REQUEST;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.SERVICE_REQUEST_REFERENCE;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,48 +25,43 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.PaymentStatus;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PostSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit.ErrorHandler;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.presubmit.FeesHelper;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment.ServiceRequestResponse;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.ServiceRequestService;
 
 @Component
-public class SubmitAppealCreateServiceRequestHandler implements PostSubmitCallbackHandler<AsylumCase> {
+public class CreateServiceRequestHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final ServiceRequestService serviceRequestService;
     private final FeeService feeService;
 
-    private final Optional<ErrorHandler<AsylumCase>> errorHandling;
-
-    public SubmitAppealCreateServiceRequestHandler(
+    public CreateServiceRequestHandler(
         ServiceRequestService serviceRequestService,
-        FeeService feeService,
-        Optional<ErrorHandler<AsylumCase>> errorHandling) {
+        FeeService feeService) {
         this.serviceRequestService = serviceRequestService;
         this.feeService = feeService;
-        this.errorHandling = errorHandling;
     }
 
+    @Override
     public boolean canHandle(
-        PostSubmitCallbackStage callbackStage, Callback<AsylumCase> callback
+        PreSubmitCallbackStage callbackStage, Callback<AsylumCase> callback
     ) {
         requireNonNull(callback, "callback must not be null");
 
         return Arrays.asList(
-            Event.SUBMIT_APPEAL,
-            Event.GENERATE_SERVICE_REQUEST,
-            Event.RECORD_REMISSION_DECISION
+            Event.GENERATE_SERVICE_REQUEST
         ).contains(callback.getEvent());
     }
 
-    public PostSubmitCallbackResponse handle(
-        PostSubmitCallbackStage callbackStage, Callback<AsylumCase> callback
+    @Override
+    public PreSubmitCallbackResponse<AsylumCase> handle(
+        PreSubmitCallbackStage callbackStage, Callback<AsylumCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
@@ -85,15 +82,11 @@ public class SubmitAppealCreateServiceRequestHandler implements PostSubmitCallba
             && hasNoRemission(asylumCase)
             && requestFeeRemissionFlagForServiceRequest != YesOrNo.YES
             && paymentStatus != PaymentStatus.PAID) {
-            try {
-                // TODO: save payment service request reference in case data
-                serviceRequestService.createServiceRequest(callback, fee);
-
-            } catch (Exception e) {
-                errorHandling.ifPresent(asylumCaseErrorHandler -> asylumCaseErrorHandler.accept(callback, e));
-            }
+            ServiceRequestResponse serviceRequestResponse = serviceRequestService.createServiceRequest(callback, fee);
+            asylumCase.write(SERVICE_REQUEST_REFERENCE, serviceRequestResponse.getServiceRequestReference());
+            asylumCase.write(HAS_SERVICE_REQUEST_ALREADY, YesOrNo.YES);
         }
-        return new PostSubmitCallbackResponse();
+        return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
     private boolean isWaysToPay(Callback<AsylumCase> callback,
