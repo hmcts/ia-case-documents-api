@@ -3,15 +3,20 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_IMA_ENABLED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.RECORD_DECISION_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.RECORD_THE_DECISION_LIST;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.RECORD_THE_DECISION_LIST_IMA;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -21,11 +26,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail.BailDecisionUnsignedRefusalCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailDocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = org.mockito.quality.Strictness.LENIENT)
 public class BailDecisionUnsignedRefusalCreatorTest {
     @Mock private DocumentCreator<BailCase> bailDocumentCreator;
     @Mock private BailDocumentHandler bailDocumentHandler;
@@ -37,6 +44,7 @@ public class BailDecisionUnsignedRefusalCreatorTest {
     private BailDecisionUnsignedRefusalCreator bailDecisionUnsignedRefusalCreator;
     private String recordDecisionTypeRefusal = "refused";
     private String recordDecisionTypeGranted = "granted";
+    private String recordDecisionTypeRefusedIma = "refusedUnderIma";
     private String tribunalDecisionRefusal = "Refused";
     private String tribunalDecisionMindedToGrant = "mindedToGrant";
 
@@ -93,6 +101,35 @@ public class BailDecisionUnsignedRefusalCreatorTest {
         assertThatThrownBy((() -> bailDecisionUnsignedRefusalCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
                 .isExactlyInstanceOf(IllegalStateException.class)
                 .hasMessage("Cannot handle callback");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = {"YES", "NO"})
+    void should_handle_ima_record_decision_type(YesOrNo isImaEnabled) {
+        when(bailCase.read(IS_IMA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(isImaEnabled));
+        for (Event event : Event.values()) {
+            when(callback.getEvent()).thenReturn(event);
+            for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
+                when(callback.getCaseDetails()).thenReturn(caseDetails);
+                when(caseDetails.getCaseData()).thenReturn(bailCase);
+                when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeRefusedIma));
+                when(bailCase.read(RECORD_THE_DECISION_LIST, String.class)).thenReturn(Optional.of(tribunalDecisionRefusal));
+                when(bailCase.read(RECORD_THE_DECISION_LIST_IMA, String.class)).thenReturn(Optional.of(tribunalDecisionRefusal));
+                boolean canHandle = bailDecisionUnsignedRefusalCreator.canHandle(preSubmitCallbackStage, callback);
+                if (isImaEnabled.equals(YesOrNo.YES)) {
+                    verify(bailCase, atLeastOnce()).read(RECORD_THE_DECISION_LIST_IMA, String.class);
+                    verify(bailCase, never()).read(RECORD_THE_DECISION_LIST, String.class);
+                } else {
+                    verify(bailCase, atLeastOnce()).read(RECORD_THE_DECISION_LIST, String.class);
+                    verify(bailCase, never()).read(RECORD_THE_DECISION_LIST_IMA, String.class);
+                }
+                if (event == Event.RECORD_THE_DECISION && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                    assertTrue(canHandle);
+                } else {
+                    assertFalse(canHandle);
+                }
+            }
+        }
     }
 
     @Test
