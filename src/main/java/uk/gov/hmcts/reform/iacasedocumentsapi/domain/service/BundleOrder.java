@@ -210,6 +210,12 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_ADJOURN_HEARING_WITHOUT_DATE:
                 log.warn("INTERNAL_ADJOURN_HEARING_WITHOUT_DATE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 70;
+            case UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT:
+                log.warn("UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 71;
+            case IAUT_2_FORM:
+                log.warn("IAUT_2_FORM tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 72;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
 
