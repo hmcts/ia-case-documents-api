@@ -27,6 +27,7 @@ public class DocumentTagTest {
         assertEquals("cmaRequirements", DocumentTag.CMA_REQUIREMENTS.toString());
         assertEquals("cmaNotice", DocumentTag.CMA_NOTICE.toString());
         assertEquals("homeOfficeDecisionLetter", DocumentTag.HO_DECISION_LETTER.toString());
+        assertEquals("finalDecisionAndReasonsDocument", DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT.toString());
         assertEquals("recordOutOfTimeDecisionDocument", DocumentTag.RECORD_OUT_OF_TIME_DECISION_DOCUMENT.toString());
         assertEquals("upperTribunalBundle", DocumentTag.UPPER_TRIBUNAL_BUNDLE.toString());
         assertEquals("appealReasons", DocumentTag.APPEAL_REASONS.toString());
