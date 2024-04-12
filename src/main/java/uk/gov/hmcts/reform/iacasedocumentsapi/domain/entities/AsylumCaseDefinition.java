@@ -490,6 +490,9 @@ public enum AsylumCaseDefinition {
 
     REHEARD_HEARING_DOCUMENTS_COLLECTION(
             "reheardHearingDocumentsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
+
+    REHEARD_DECISION_REASONS_COLLECTION(
+            "reheardDecisionReasonsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
     ;
 
 
