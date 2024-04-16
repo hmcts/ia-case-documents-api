@@ -49,6 +49,7 @@ public class EventTest {
         assertEquals("makeNewApplication",Event.MAKE_NEW_APPLICATION.toString());
         assertEquals("editBailApplicationAfterSubmit",Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT.toString());
         assertEquals("uploadSignedDecisionNotice", Event.UPLOAD_SIGNED_DECISION_NOTICE.toString());
+        assertEquals("caseListing", Event.CASE_LISTING.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
     }
 

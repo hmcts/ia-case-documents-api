@@ -23,6 +23,7 @@ public enum DocumentTag {
     UPDATED_DECISION_AND_REASONS_COVER_LETTER("updatedDecisionAndReasonsCoverLetter", CaseType.ASYLUM),
     FINAL_DECISION_AND_REASONS_PDF("finalDecisionAndReasonsPdf", CaseType.ASYLUM),
     UPDATED_FINAL_DECISION_AND_REASONS_PDF("updatedFinalDecisionAndReasonsPdf", CaseType.ASYLUM),
+    FINAL_DECISION_AND_REASONS_DOCUMENT("finalDecisionAndReasonsDocument", CaseType.ASYLUM),
     APPEAL_SKELETON_BUNDLE("submitCaseBundle", CaseType.ASYLUM),
     END_APPEAL("endAppeal", CaseType.ASYLUM),
     END_APPEAL_AUTOMATICALLY("endAppealAutomatically", CaseType.ASYLUM),
@@ -44,6 +45,7 @@ public enum DocumentTag {
     UPLOAD_DOCUMENT("uploadDocument", CaseType.BAIL),
     BAIL_SUMMARY("uploadBailSummary", CaseType.BAIL),
     B1_DOCUMENT("b1Document", CaseType.BAIL),
+    BAIL_NOTICE_OF_HEARING("bailNoticeOfHearing", CaseType.BAIL),
 
     @JsonEnumDefaultValue
     NONE("", CaseType.UNKNOWN);
