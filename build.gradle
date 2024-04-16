@@ -143,7 +143,7 @@ idea {
 configurations {
     integrationTestCompile.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
-    functionalTestCompile.extendsFrom testImplementation
+    functionalTestImplementation.extendsFrom testImplementation
     contractTestImplementation.extendsFrom testImplementation
     functionalTestRuntime.extendsFrom testRuntime
 }
@@ -180,6 +180,9 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     finalizedBy aggregate
     testLogging {
         showStackTraces = true
+        showStandardStreams = true
+        showCauses = true
+        showExceptions = true
     }
 }
 

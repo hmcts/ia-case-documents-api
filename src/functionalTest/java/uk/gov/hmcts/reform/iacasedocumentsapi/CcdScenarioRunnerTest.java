@@ -89,8 +89,8 @@ public class CcdScenarioRunnerTest {
         }
 
         assertFalse(
-                "Verifiers are configured",
-                verifiers.isEmpty()
+            "Verifiers are configured",
+            verifiers.isEmpty()
         );
 
         String scenarioPattern = System.getProperty("scenario");
@@ -109,6 +109,7 @@ public class CcdScenarioRunnerTest {
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
 
+        List<String> runScenarios = new ArrayList<>();
         int maxRetries = 3;
         for (String scenarioSource : scenarioSources) {
             String description = "";
@@ -188,6 +189,7 @@ public class CcdScenarioRunnerTest {
                             actualResponse
                         )
                     );
+                    runScenarios.add(description);
                     break;
                 } catch (Error | RetryableException e) {
                     System.out.println("Scenario failed with error " + e.getMessage());
@@ -199,6 +201,10 @@ public class CcdScenarioRunnerTest {
             }
         }
 
+        System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
+        List<String> scenariosThatHaveRun = runScenarios.stream().distinct().toList();
+        System.out.println((char) 27 + "[" + scenariosThatHaveRun.size() + " SCENARIOS HAVE RUN]");
+        System.out.println(String.join(";\n", scenariosThatHaveRun));
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         if (!haveAllPassed) {
             throw new AssertionError("Not all scenarios passed.\nFailed scenarios are:\n" + failedScenarios.stream().map(Object::toString).collect(Collectors.joining(";\n")));

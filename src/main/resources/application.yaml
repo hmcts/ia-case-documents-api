@@ -157,12 +157,12 @@ clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-I
 bailSubmissionDocument.contentType: application/pdf
 bailSubmissionDocument.fileExtension: PDF
 bailSubmissionDocument.fileName: "bail-application-details"
-bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-SUM-ENG-01134.docx}
+bailSubmissionDocument.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE:TB-IAC-SUM-ENG-01144.docx}
 
 bailSubmissionDocumentWithUt.contentType: application/pdf
 bailSubmissionDocumentWithUt.fileExtension: PDF
 bailSubmissionDocumentWithUt.fileName: "bail-application-details-with-ut"
-bailSubmissionDocumentWithUt.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE_WITH_UT:TB-IAC-SUM-ENG-01135.docx}
+bailSubmissionDocumentWithUt.templateName: ${IA_BAIL_SUBMISSION_TEMPLATE_WITH_UT:TB-IAC-SUM-ENG-01136.docx}
 
 decisionUnsignedDocument.contentType: application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionUnsignedDocument.fileExtension: docx
@@ -178,6 +178,12 @@ bailEndApplication.contentType:  application/pdf
 bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
 bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
+
+bailNoticeOfHearing.contentType: application/pdf
+bailNoticeOfHearing.fileExtension: PDF
+bailNoticeOfHearing.fileName: "hearing-notice"
+bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx}
+bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -260,6 +266,7 @@ security:
       - "makeNewApplication"
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
+      - "caseListing"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -284,6 +291,7 @@ security:
       - "makeNewApplication"
     caseworker-ia-system:
       - "endAppealAutomatically"
+      - "caseListing"
 
 ### dependency configuration
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
