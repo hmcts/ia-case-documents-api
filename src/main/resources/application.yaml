@@ -988,8 +988,21 @@ govnotify:
         sms: 8141263c-c1f1-4f86-a164-ab48df561dbe
       decisionRefusedIma:
         email: 4a724840-8e62-489b-bc69-43a0be3ff12d
-
-
+      sendUploadBailSummaryDirection:
+        email: 12eec4f2-7261-4640-b18b-93666bde0b54
+      caseListing:
+        initial:
+          withLegalRep:
+            email: 0a6a204d-fcf6-463a-942d-b9d697048552
+          withoutLegalRep:
+            email: 4f724d31-98c4-43f6-9cef-f4bdda1a99fd
+          sms: 5c3d605c-3138-405d-ad47-a27388ff97f2
+        relisting:
+          withLegalRep:
+            email: ad4fd40e-22fc-4c6e-ae95-163f1ab1d4f0
+          withoutLegalRep:
+            email: a0f2751f-7e3f-4529-9714-6acbce5b0904
+          sms: 3e591016-42d8-4083-b81a-30756a1c4ca8
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -1147,6 +1160,7 @@ security:
       - "maintainBailCaseLinks"
       - "decisionWithoutHearing"
       - "recordTheDecision"
+      - "caseListing"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -1200,6 +1214,9 @@ security:
       - "requestHearingRequirementsFeature"
       - "endAppealAutomatically"
       - "updatePaymentStatus"
+      - "listCase"
+      - "editCaseListing"
+      - "caseListing"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "uploadBailSummary"
@@ -1242,6 +1259,16 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
+  harmondsworth: ${IA_HOME_OFFICE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
+  hendon: ${IA_HOME_OFFICE_HENDON_EMAIL:hc-hendon@example.com}
+  yarlsWood: ${IA_HOME_OFFICE_YARLS_WOOD_EMAIL:hc-yarls-wood@example.com}
+  bradfordKeighley: ${IA_HOME_OFFICE_BRADFORD_KEIGHLEY_EMAIL:hc-bradford-keighley@example.com}
+  mccMinshull: ${IA_HOME_OFFICE_MCC_MINSHULL_EMAIL:hc-mcc-minshull@example.com}
+  mccCrownSquare: ${IA_HOME_OFFICE_MCC_CROWN_SQUARE_EMAIL:hc-mcc-crown-square@example.com}
+  manchesterMags: ${IA_HOME_OFFICE_MANCHESTER_MAGS_EMAIL:hc-manchester-mags@example.com}
+  nthTyneMags: ${IA_HOME_OFFICE_NTH_TYNE_MAGS_EMAIL:hc-nth-tyne-mags@example.com}
+  leedsMags: ${IA_HOME_OFFICE_LEEDS_MAGS_EMAIL:hc-leeds-mags@example.com}
+  alloaSherrif: ${IA_HOME_OFFICE_ALLOA_SHERRIF_EMAIL:hc-alloa-sherrif@example.com}
 
 ### Bail Hearing Email addresses
 bailHearingCentreEmailAddresses:
@@ -1266,6 +1293,16 @@ homeOfficeEmailAddresses:
   hattonCross: ${IA_HOME_OFFICE_HATTON_CROSS_EMAIL:ho-hatton-cross@example.com}
   glasgow: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
   belfast: ${IA_HOME_OFFICE_GLASGOW_EMAIL:ho-glasgow@example.com}
+  harmondsworth: ${IA_HOME_OFFICE_HARMONDSWORTH_EMAIL:ho-harmondsworth@example.com}
+  hendon: ${IA_HOME_OFFICE_HENDON_EMAIL:ho-hendon@example.com}
+  yarlsWood: ${IA_HOME_OFFICE_YARLS_WOOD_EMAIL:ho-yarls-wood@example.com}
+  bradfordKeighley: ${IA_HOME_OFFICE_BRADFORD_KEIGHLEY_EMAIL:ho-bradford-keighley@example.com}
+  mccMinshull: ${IA_HOME_OFFICE_MCC_MINSHULL_EMAIL:ho-mcc-minshull@example.com}
+  mccCrownSquare: ${IA_HOME_OFFICE_MCC_CROWN_SQUARE_EMAIL:ho-mcc-crown-square@example.com}
+  manchesterMags: ${IA_HOME_OFFICE_MANCHESTER_MAGS_EMAIL:ho-manchester-mags@example.com}
+  nthTyneMags: ${IA_HOME_OFFICE_NTH_TYNE_MAGS_EMAIL:ho-nth-tyne-mags@example.com}
+  leedsMags: ${IA_HOME_OFFICE_LEEDS_MAGS_EMAIL:ho-leeds-mags@example.com}
+  alloaSherrif: ${IA_HOME_OFFICE_ALLOA_SHERRIF_EMAIL:ho-alloa-sherrif@example.com}
 
 homeOfficeFtpaEmailAddresses:
   bradford: ${IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL:ho-ftpa-bradford@example.com}

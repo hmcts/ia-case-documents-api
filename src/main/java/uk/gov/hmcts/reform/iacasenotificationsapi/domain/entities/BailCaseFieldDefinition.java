@@ -94,7 +94,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_NATIONALITY(
         "supporterNationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_HAS_PASSPORT(
-        "supporterHasPassport", new TypeReference<String>(){}),
+        "supporterHasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_PASSPORT(
         "supporterPassport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1(
@@ -126,7 +126,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_2_NATIONALITY(
         "supporter2Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_2_HAS_PASSPORT(
-        "supporter2HasPassport", new TypeReference<String>(){}),
+        "supporter2HasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_2_PASSPORT(
         "supporter2Passport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1(
@@ -158,7 +158,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_3_NATIONALITY(
         "supporter3Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_3_HAS_PASSPORT(
-        "supporter3HasPassport", new TypeReference<String>(){}),
+        "supporter3HasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_3_PASSPORT(
         "supporter3Passport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1(
@@ -190,7 +190,7 @@ public enum BailCaseFieldDefinition {
     SUPPORTER_4_NATIONALITY(
         "supporter4Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
     SUPPORTER_4_HAS_PASSPORT(
-        "supporter4HasPassport", new TypeReference<String>(){}),
+        "supporter4HasPassport", new TypeReference<YesOrNo>(){}),
     SUPPORTER_4_PASSPORT(
         "supporter4Passport", new TypeReference<String>(){}),
     FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1(
@@ -292,7 +292,13 @@ public enum BailCaseFieldDefinition {
     ADMIN_SELECT_IMA_STATUS(
         "adminSelectImaStatus", new TypeReference<YesOrNo>() {}),
     HO_SELECT_IMA_STATUS(
-        "hoSelectImaStatus", new TypeReference<YesOrNo>() {});
+        "hoSelectImaStatus", new TypeReference<YesOrNo>() {}),
+    LISTING_EVENT(
+        "listingEvent", new TypeReference<ListingEvent>(){}),
+    LISTING_HEARING_DATE(
+        "listingHearingDate", new TypeReference<String>(){}),
+    LISTING_LOCATION(
+        "listingLocation", new TypeReference<BailHearingLocation>(){});
 
     private final String value;
     private final TypeReference typeReference;

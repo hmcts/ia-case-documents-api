@@ -103,6 +103,8 @@ public enum Event {
     CREATE_BAIL_CASE_LINK("createBailCaseLink"),
     MAINTAIN_BAIL_CASE_LINKS("maintainBailCaseLinks"),
     RECORD_THE_DECISION("recordTheDecision"),
+    SEND_UPLOAD_BAIL_SUMMARY_DIRECTION("sendUploadBailSummaryDirection"),
+    CASE_LISTING("caseListing"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

@@ -12,6 +12,8 @@
         "replacements": {
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
+          "appellantGivenNames": "Talha",
+          "appellantFamilyName": "Awan",
           "subscriptions": [
             {
               "id": "1",
@@ -37,6 +39,8 @@
       "listCaseHearingCentre": "taylorHouse",
       "ariaListingReference": "LP/12345/2019",
       "replacements": {
+        "appellantGivenNames": "Talha",
+        "appellantFamilyName": "Awan",
         "subscriptions": [
           {
             "id": "1",
@@ -74,7 +78,7 @@
           "PA/12345/2019",
           "LP/12345/2019",
           "A1234567",
-          "Pablo Jimenez",
+          "Talha Awan",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
         ]
@@ -95,7 +99,7 @@
           "PA/12345/2019",
           "LP/12345/2019",
           "A1234567",
-          "Pablo Jimenez",
+          "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
