@@ -36,6 +36,7 @@ public enum DocumentTag {
     UPPER_TRIBUNAL_BUNDLE("upperTribunalBundle", CaseType.ASYLUM),
     APPEAL_REASONS("appealReasons", CaseType.ASYLUM),
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
+    REMITTAL_DECISION("remittalDecision", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
