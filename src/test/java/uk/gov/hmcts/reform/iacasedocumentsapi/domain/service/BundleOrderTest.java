@@ -70,8 +70,7 @@ public class BundleOrderTest {
             DocumentTag.UPPER_TRIBUNAL_BUNDLE,
             DocumentTag.APPEAL_REASONS,
             DocumentTag.CLARIFYING_QUESTIONS,
-            DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT,
-            DocumentTag.NONE
+            DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT
         );
 
         int index = 0;
