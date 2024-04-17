@@ -27,6 +27,7 @@ class DocumentTagTest {
         assertEquals("cmaRequirements", DocumentTag.CMA_REQUIREMENTS.toString());
         assertEquals("cmaNotice", DocumentTag.CMA_NOTICE.toString());
         assertEquals("homeOfficeDecisionLetter", DocumentTag.HO_DECISION_LETTER.toString());
+        assertEquals("finalDecisionAndReasonsDocument", DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT.toString());
         assertEquals("recordOutOfTimeDecisionDocument", DocumentTag.RECORD_OUT_OF_TIME_DECISION_DOCUMENT.toString());
         assertEquals("upperTribunalBundle", DocumentTag.UPPER_TRIBUNAL_BUNDLE.toString());
         assertEquals("appealReasons", DocumentTag.APPEAL_REASONS.toString());
@@ -41,6 +42,7 @@ class DocumentTagTest {
         assertEquals("uploadDocument", DocumentTag.UPLOAD_DOCUMENT.toString());
         assertEquals("uploadBailSummary", DocumentTag.BAIL_SUMMARY.toString());
         assertEquals("b1Document", DocumentTag.B1_DOCUMENT.toString());
+        assertEquals("bailNoticeOfHearing", DocumentTag.BAIL_NOTICE_OF_HEARING.toString());
         assertEquals("", DocumentTag.NONE.toString());
         assertEquals("requestCaseBuilding", DocumentTag.REQUEST_CASE_BUILDING.toString());
         assertEquals("internalAdaSuitability", DocumentTag.INTERNAL_ADA_SUITABILITY.toString());
@@ -82,7 +84,7 @@ class DocumentTagTest {
     }
 
     @Test
-    void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(80, DocumentTag.values().length);
+    public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
+        assertEquals(82, DocumentTag.values().length);
     }
 }
