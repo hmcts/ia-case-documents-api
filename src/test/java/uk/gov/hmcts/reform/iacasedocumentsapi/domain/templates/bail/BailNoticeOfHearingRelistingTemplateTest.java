@@ -50,9 +50,9 @@ class BailNoticeOfHearingRelistingTemplateTest {
     private final String customerServicesEmail = "customer@services.com";
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
-    private CourtVenue newCastle;
     private final String relistingTemplateName = "TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx";
 
+    private CourtVenue newCastle;
     private BailNoticeOfHearingRelistingTemplate template;
     private Map<String, Object> fieldValuesMap;
 

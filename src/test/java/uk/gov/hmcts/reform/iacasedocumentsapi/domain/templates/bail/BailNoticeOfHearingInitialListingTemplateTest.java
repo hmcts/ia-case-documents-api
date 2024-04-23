@@ -3,7 +3,19 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_DETAINED_LOC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_PRISON_DETAILS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IRC_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_REMOTE_HEARING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.REF_DATA_LISTING_LOCATION_DETAIL;
 
 import java.util.Map;
 import java.util.Optional;
@@ -51,8 +63,7 @@ class BailNoticeOfHearingInitialListingTemplateTest {
 
     @BeforeEach
     public void setUp() {
-        template =
-                new BailNoticeOfHearingInitialListingTemplate(
+        template = new BailNoticeOfHearingInitialListingTemplate(
                         initialListingTemplateName, customerServicesProvider, stringProvider);
         hattonCross = new CourtVenue("Hatton Cross Tribunal Hearing Centre",
                 "Hatton Cross Tribunal Hearing Centre",
@@ -84,10 +95,10 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         final String hearingDate = "12012024";
         final String hearingTime = "1500";
         final String listingAddress = """
-                Nottingham Justice Centre
-                Carrington Street
-                Nottingham
-                NG2 1EE""";
+            Nottingham Justice Centre
+            Carrington Street
+            Nottingham
+            NG2 1EE""";
         dataSetUp();
 
         fieldValuesMap = template.mapFieldValues(caseDetails);
@@ -137,7 +148,7 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         when(bailCase.read(LISTING_LOCATION, String.class)).thenReturn(Optional.of(listingLocation));
         when(bailCase.read(LISTING_HEARING_DATE, String.class)).thenReturn(Optional.of(listingHearingDate));
         when(stringProvider.get("hearingCentreAddress", listingLocation))
-                .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
+            .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesPhone);
         when(bailCase.read(IRC_NAME, String.class)).thenReturn(Optional.of("Dungavel"));
