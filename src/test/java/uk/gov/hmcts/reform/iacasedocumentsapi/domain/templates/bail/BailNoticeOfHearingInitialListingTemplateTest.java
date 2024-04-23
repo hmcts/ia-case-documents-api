@@ -3,16 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_DETAINED_LOC;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_PRISON_DETAILS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IRC_NAME;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,17 +16,23 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
 class BailNoticeOfHearingInitialListingTemplateTest {
 
-    @Mock private CaseDetails<BailCase> caseDetails;
-    @Mock private BailCase bailCase;
-    @Mock private CustomerServicesProvider customerServicesProvider;
-    @Mock private StringProvider stringProvider;
+    @Mock
+    private CaseDetails<BailCase> caseDetails;
+    @Mock
+    private BailCase bailCase;
+    @Mock
+    private CustomerServicesProvider customerServicesProvider;
+    @Mock
+    private StringProvider stringProvider;
 
     private final String applicantGivenNames = "John";
     private final String applicantFamilyName = "Smith";
@@ -45,6 +42,7 @@ class BailNoticeOfHearingInitialListingTemplateTest {
     private final String customerServicesEmail = "customer@services.com";
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
+    private CourtVenue hattonCross;
 
     private final String initialListingTemplateName = "TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx";
 
@@ -54,8 +52,16 @@ class BailNoticeOfHearingInitialListingTemplateTest {
     @BeforeEach
     public void setUp() {
         template =
-            new BailNoticeOfHearingInitialListingTemplate(
-                initialListingTemplateName, customerServicesProvider, stringProvider);
+                new BailNoticeOfHearingInitialListingTemplate(
+                        initialListingTemplateName, customerServicesProvider, stringProvider);
+        hattonCross = new CourtVenue("Hatton Cross Tribunal Hearing Centre",
+                "Hatton Cross Tribunal Hearing Centre",
+                "386417",
+                "Open",
+                "Y",
+                "Y",
+                "York House And Wellington House, 2-3 Dukes Green, Feltham, Middlesex",
+                "TW14 0LS");
     }
 
     @Test
@@ -78,10 +84,10 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         final String hearingDate = "12012024";
         final String hearingTime = "1500";
         final String listingAddress = """
-            Nottingham Justice Centre
-            Carrington Street
-            Nottingham
-            NG2 1EE""";
+                Nottingham Justice Centre
+                Carrington Street
+                Nottingham
+                NG2 1EE""";
         dataSetUp();
 
         fieldValuesMap = template.mapFieldValues(caseDetails);
@@ -131,10 +137,48 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         when(bailCase.read(LISTING_LOCATION, String.class)).thenReturn(Optional.of(listingLocation));
         when(bailCase.read(LISTING_HEARING_DATE, String.class)).thenReturn(Optional.of(listingHearingDate));
         when(stringProvider.get("hearingCentreAddress", listingLocation))
-            .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
+                .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesPhone);
         when(bailCase.read(IRC_NAME, String.class)).thenReturn(Optional.of("Dungavel"));
+    }
+
+    @Test
+    void should_get_listing_location_address_from_ref_data_with_enabled_ref_data_feature() {
+        dataSetUp();
+        when(bailCase.read(IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(bailCase.read(REF_DATA_LISTING_LOCATION_DETAIL, CourtVenue.class))
+                .thenReturn(Optional.of(hattonCross));
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Hatton Cross Tribunal Hearing Centre, " +
+                "York House And Wellington House, 2-3 Dukes Green, Feltham, Middlesex, " +
+                "TW14 0LS", fieldValuesMap.get("hearingCentreAddress"));
+    }
+
+    @Test
+    void should_get_remote_hearing_address_with_enabled_ref_data_feature() {
+        dataSetUp();
+        when(bailCase.read(IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Cloud Video Platform (CVP)",
+                fieldValuesMap.get("hearingCentreAddress"));
+    }
+
+    @Test
+    void should_get_listing_location_address_from_ccd_with_disabled_ref_data_feature() {
+        dataSetUp();
+        when(bailCase.read(IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Nottingham Justice Centre\nCarrington Street\nNottingham\nNG2 1EE",
+                fieldValuesMap.get("hearingCentreAddress"));
     }
 
 }
