@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -13,6 +14,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ReheardHearingDocuments;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemittalDocument;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -20,6 +23,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
@@ -33,15 +38,20 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
     private final EmBundleRequestExecutor emBundleRequestExecutor;
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
+    private final DocumentsAppender documentsAppender;
+    private final FeatureToggler featureToggler;
 
     public AdvancedBundlingCallbackHandler(
-        @Value("${emBundler.url}") String emBundlerUrl,
-        @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
-        EmBundleRequestExecutor emBundleRequestExecutor) {
+            @Value("${emBundler.url}") String emBundlerUrl,
+            @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
+            EmBundleRequestExecutor emBundleRequestExecutor,
+            DocumentsAppender documentsAppender,
+            FeatureToggler featureToggler) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
         this.emBundleRequestExecutor = emBundleRequestExecutor;
-
+        this.documentsAppender = documentsAppender;
+        this.featureToggler = featureToggler;
     }
 
     public boolean canHandle(
@@ -73,16 +83,23 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
 
         Optional<YesOrNo> maybeCaseFlagSetAsideReheardExists = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS,YesOrNo.class);
 
+        boolean isRemittedFeature = featureToggler.getValue("dlrm-remitted-feature-flag", false);
+
         if (maybeCaseFlagSetAsideReheardExists.isPresent()
             && maybeCaseFlagSetAsideReheardExists.get() == YesOrNo.YES) {
-
             asylumCase.write(APPELLANT_ADDENDUM_EVIDENCE_DOCS,getIdValues(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT, DocumentTag.ADDENDUM_EVIDENCE));
             asylumCase.write(RESPONDENT_ADDENDUM_EVIDENCE_DOCS,getIdValues(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, SUPPLIED_BY_RESPONDENT,DocumentTag.ADDENDUM_EVIDENCE));
 
             asylumCase.write(APP_ADDITIONAL_EVIDENCE_DOCS,getIdValues(asylumCase, ADDITIONAL_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT,DocumentTag.ADDITIONAL_EVIDENCE));
             asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS,getIdValues(asylumCase, RESPONDENT_DOCUMENTS, SUPPLIED_BY_RESPONDENT,DocumentTag.ADDITIONAL_EVIDENCE));
 
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
+            if (isRemittedFeature) {
+                mapRemittedData(asylumCase);
+                asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-remitted-reheard-hearing-bundle-config.yaml");
+            } else {
+                asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
+            }
+
         } else {
             asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
         }
@@ -108,6 +125,12 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
 
         responseData.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
+        if (isRemittedFeature) {
+            //Clearing temporary fields
+            responseData.clear(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+            responseData.clear(LATEST_REMITTAL_DOCUMENTS);
+            responseData.clear(LATEST_REHEARD_HEARING_DOCUMENTS);
+        }
         return new PreSubmitCallbackResponse<>(responseData);
     }
 
@@ -147,5 +170,57 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
                 .filter(document -> document.getValue().getTag() == tag)
                 .collect(Collectors.toList());
         }
+    }
+
+    private void mapRemittedData(AsylumCase asylumCase) {
+        asylumCase.write(LATEST_DECISION_AND_REASONS_DOCUMENTS, fetchLatestDecisionDocuments(asylumCase));
+        asylumCase.write(LATEST_REMITTAL_DOCUMENTS, fetchLatestRemittalDocuments(asylumCase));
+        asylumCase.write(LATEST_REHEARD_HEARING_DOCUMENTS, fetchLatestReheardDocuments(asylumCase));
+    }
+
+    private List<IdValue<DocumentWithMetadata>> fetchLatestDecisionDocuments(AsylumCase asylumCase) {
+        Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
+                asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION);
+        List<IdValue<ReheardHearingDocuments>> allReheardDecisionDocuments = maybeExistingReheardDocuments
+                .orElse(emptyList());
+
+        if (allReheardDecisionDocuments.isEmpty()) {
+            Optional<List<IdValue<DocumentWithMetadata>>> maybeFinalDecisionAndReasonsDocuments =
+                    asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
+            return maybeFinalDecisionAndReasonsDocuments.orElse(emptyList());
+        } else {
+            return allReheardDecisionDocuments.get(0).getValue().getReheardHearingDocs();
+        }
+    }
+
+    private List<IdValue<DocumentWithMetadata>> fetchLatestRemittalDocuments(AsylumCase asylumCase) {
+        Optional<List<IdValue<RemittalDocument>>> maybeExistingRemittalDocuments =
+                asylumCase.read(REMITTAL_DOCUMENTS);
+        List<IdValue<RemittalDocument>> allRemittalDocuments = maybeExistingRemittalDocuments
+                .orElse(emptyList());
+
+        if (!allRemittalDocuments.isEmpty()) {
+            RemittalDocument remittalDocument = allRemittalDocuments.get(0).getValue();
+
+            List<IdValue<DocumentWithMetadata>> allDocuments =
+                    documentsAppender.append(
+                            remittalDocument.getOtherRemittalDocs(),
+                            Collections.singletonList(remittalDocument.getDecisionDocument())
+                    );
+            return allDocuments;
+        }
+        return emptyList();
+    }
+
+    private List<IdValue<DocumentWithMetadata>> fetchLatestReheardDocuments(AsylumCase asylumCase) {
+        Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
+                asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        List<IdValue<ReheardHearingDocuments>> allReheardHearingDocuments = maybeExistingReheardDocuments
+                .orElse(emptyList());
+
+        if (!allReheardHearingDocuments.isEmpty()) {
+            return allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs();
+        }
+        return emptyList();
     }
 }
