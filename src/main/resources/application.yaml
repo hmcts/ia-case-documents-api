@@ -577,6 +577,7 @@ security:
       - "reinstateAppeal"
       - "buildCase"
       - "caseListing"
+      - "asyncStitchingComplete"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -607,6 +608,7 @@ security:
       - "changeDirectionDueDate"
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
+      - "asyncStitchingComplete"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
