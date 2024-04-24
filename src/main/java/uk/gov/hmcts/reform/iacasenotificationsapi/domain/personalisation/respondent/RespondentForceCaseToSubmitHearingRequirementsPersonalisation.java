@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respon
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -18,6 +19,12 @@ public class RespondentForceCaseToSubmitHearingRequirementsPersonalisation imple
 
     private final String respondentForceCaseToSubmitHearingRequirementsTemplateId;
     private final String respondentEmailAddressAtRespondentReview;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public RespondentForceCaseToSubmitHearingRequirementsPersonalisation(
         @NotNull(message = "respondentForceCaseToSubmitHearingRequirementsTemplateId cannot be null")
@@ -51,6 +58,7 @@ public class RespondentForceCaseToSubmitHearingRequirementsPersonalisation imple
 
         return ImmutableMap
             .<String, String>builder()
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))

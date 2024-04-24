@@ -1,0 +1,54 @@
+{
+  "description": "RIA-6434 Send appeal submitted ADA DC appeal type notification",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 64341,
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "legalRepReferenceNumber": "REF54321",
+          "appealType": "deprivation",
+          "isAcceleratedDetainedAppeal": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "legalRepReferenceNumber": "REF54321",
+        "appealType": "deprivation",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "notificationsSent": [
+          {
+            "id": "64341_APPEAL_SUBMITTED_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "64341_APPEAL_SUBMITTED_LEGAL_REP",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Accelerated detained appeal: Your appeal has been submitted",
+        "body": [
+          "PA/12345/2019",
+          "REF54321",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

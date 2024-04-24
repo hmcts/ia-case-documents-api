@@ -42,7 +42,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNoti
 
 @Slf4j
 @SuppressWarnings("unchecked")
-class SendsDirectionTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
+public class SendsDirectionTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
     WithNotificationEmailStub {
 
     private static final String someNotificationId = UUID.randomUUID().toString();
@@ -53,7 +53,7 @@ class SendsDirectionTest extends SpringBootIntegrationTest implements WithServic
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
-    void sends_notification() {
+    public void sends_notification() {
 
         addServiceAuthStub(server);
         addNotificationEmailStub(server);

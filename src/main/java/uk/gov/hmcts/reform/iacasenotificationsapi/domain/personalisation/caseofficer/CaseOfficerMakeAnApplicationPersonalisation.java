@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseof
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -32,6 +33,11 @@ public class CaseOfficerMakeAnApplicationPersonalisation implements EmailNotific
     private final AppealService appealService;
     private final MakeAnApplicationService makeAnApplicationService;
     private final FeatureToggler featureToggler;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public CaseOfficerMakeAnApplicationPersonalisation(
             @Value("${govnotify.template.makeAnApplication.beforeListing.caseOfficer.other.email}") String makeAnApplicationCaseOfficerBeforeListingTemplateId,
@@ -89,6 +95,7 @@ public class CaseOfficerMakeAnApplicationPersonalisation implements EmailNotific
         return
             ImmutableMap
                 .<String, String>builder()
+                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
                 .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))

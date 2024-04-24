@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appell
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -25,6 +26,11 @@ public class AppellantHomeOfficeUploadAddendumEvidencePersonalisationEmail imple
     private FeatureToggler featureToggler;
     private final RecipientsFinder recipientsFinder;
     private final CustomerServicesProvider customerServicesProvider;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public AppellantHomeOfficeUploadAddendumEvidencePersonalisationEmail(
             @Value("${govnotify.template.hoOrTcwUploadedAddendumEvidence.appellant.email}") String templateId,
@@ -67,6 +73,7 @@ public class AppellantHomeOfficeUploadAddendumEvidencePersonalisationEmail imple
                 ImmutableMap
                         .<String, String>builder()
                         .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                        .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
                         .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                         .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                         .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))

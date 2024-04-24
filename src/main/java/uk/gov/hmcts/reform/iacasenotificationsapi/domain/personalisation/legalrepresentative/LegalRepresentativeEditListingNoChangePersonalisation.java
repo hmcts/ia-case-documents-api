@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -21,6 +22,11 @@ public class LegalRepresentativeEditListingNoChangePersonalisation implements Le
     private final String legalRepresentativeCaseEditedRemoteHearingTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private final CustomerServicesProvider customerServicesProvider;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public LegalRepresentativeEditListingNoChangePersonalisation(
         @Value("${govnotify.template.caseEditedNoChange.legalRep.email}") String legalRepresentativeCaseEditedNoChangeTemplateId,
@@ -53,7 +59,8 @@ public class LegalRepresentativeEditListingNoChangePersonalisation implements Le
         final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-            .putAll(personalisationProvider.getPersonalisation(callback));
+            .putAll(personalisationProvider.getPersonalisation(callback))
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData()) ? adaPrefix : nonAdaPrefix);
 
         return listCaseFields.build();
     }

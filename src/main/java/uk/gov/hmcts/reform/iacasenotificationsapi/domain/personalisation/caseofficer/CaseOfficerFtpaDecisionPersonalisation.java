@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +25,11 @@ public class CaseOfficerFtpaDecisionPersonalisation implements EmailNotification
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
     private final FeatureToggler featureToggler;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public CaseOfficerFtpaDecisionPersonalisation(
             @Value("${govnotify.template.applicationReheard.caseOfficer.email}") String applicationReheardTemplateId,
@@ -56,6 +64,9 @@ public class CaseOfficerFtpaDecisionPersonalisation implements EmailNotification
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        return this.personalisationProvider.getTribunalHeaderPersonalisation(asylumCase);
+        return ImmutableMap.<String, String>builder()
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+            .putAll(personalisationProvider.getTribunalHeaderPersonalisation(asylumCase))
+            .build();
     }
 }

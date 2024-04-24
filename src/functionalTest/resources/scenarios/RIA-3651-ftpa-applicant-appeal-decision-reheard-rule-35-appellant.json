@@ -15,6 +15,7 @@
           "isReheardAppealEnabled": "Yes",
           "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaAppellantDecisionOutcomeType": "reheardRule35",
+          "ftpaAppellantRjDecisionOutcomeType": "reheardRule35",
           "ftpaApplicantType": "appellant",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "987654321",

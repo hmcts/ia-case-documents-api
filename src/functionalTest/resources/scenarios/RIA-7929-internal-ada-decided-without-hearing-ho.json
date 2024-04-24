@@ -1,0 +1,42 @@
+{
+  "description": "RIA-7929 Notification to Home Office when appeal is decided without hearing ADA",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 7929,
+      "eventId": "decisionWithoutHearing",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "ircName": "Brookhouse",
+          "detentionFacility": "immigrationRemovalCentre",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "appellantInDetention": "Yes",
+          "ariaListingReference": "LP/12345/2019"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "ircName": "Brookhouse",
+        "detentionFacility": "immigrationRemovalCentre",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "appellantInDetention": "Yes",
+        "ariaListingReference": "LP/12345/2019",
+        "notificationsSent": [
+          {
+            "id": "7929_DECISION_WITHOUT_HEARING_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

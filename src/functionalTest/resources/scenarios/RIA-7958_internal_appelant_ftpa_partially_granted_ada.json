@@ -1,0 +1,94 @@
+{
+  "description": "RIA-7958 Internal appellant's FTPA partially granted by RJ as granted for ADA case",
+  "launchDarklyKey": "tcw-application-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 7958,
+      "eventId": "residentJudgeFtpaDecision",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "ariaListingReference": "AA/12345/1234",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "ftpaApplicantType": "appellant",
+          "ftpaAppellantRjDecisionOutcomeType": "partiallyGranted",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalAppellantFtpaDecidedLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2018-12-31T12:34:56",
+        "ariaListingReference": "AA/12345/1234",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "ftpaApplicantType": "appellant",
+        "ftpaAppellantRjDecisionOutcomeType": "partiallyGranted",
+        "notificationsSent": [
+          {
+            "id": "7958_INTERNAL_APPELLANT_FTPA_DECIDED_BY_RESIDENT_JUDGE_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7958_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7958_INTERNAL_APPELLANT_FTPA_DECIDED_BY_RESIDENT_JUDGE_DET",
+        "recipient": "det-irc-brookhouse@example.com",
+        "subject": "ADA – SERVE IN PERSON: FTPA decided",
+        "body": [
+          "Home Office reference: A1234567",
+          "HMCTS reference: PA/12345/2019",
+          "Appellant name: Talha Awan"
+        ]
+      },
+      {
+        "reference": "7958_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
+        "recipient": "{$upperTribunalPermissionApplicationsEmailAddress}",
+        "subject": "Accelerated detained appeal: application to appeal to Upper Tribunal partially granted",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Listing reference: ",
+          "Appellant name: Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

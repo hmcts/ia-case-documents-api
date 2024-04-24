@@ -4,7 +4,9 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CHANGE_ORGANISATION_REQUEST_FIELD;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_EJP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_EMAIL_EJP;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -19,6 +21,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
@@ -27,6 +30,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 class LegalRepresentativeEmailNotificationPersonalisationTest {
 
     private final String legalRepEmailAddress = "legalrep@example.com";
+    private final String ejpLegalRepEmailAddress = "ejplegalrep@example.com";
     private String iaExUiFrontendUrl = "http://localhost";
     private String afterListingTemplateId = "afterListingTemplateId";
     private String beforeListingTemplateId = "beforeListingTemplateId";
@@ -52,11 +56,23 @@ class LegalRepresentativeEmailNotificationPersonalisationTest {
 
     @Test
     public void should_return_given_email_address_from_asylum_case() {
-
+        when(asylumCase.read(IS_EJP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class)).thenReturn(Optional.empty());
 
         assertTrue(personalisation.getRecipientsList(asylumCase)
             .contains(legalRepEmailAddress));
+    }
+
+    @Test
+    public void should_return_given_ejp_lr_email_address_from_asylum_case_if_it_is_ejp() {
+        when(asylumCase.read(IS_EJP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(LEGAL_REP_EMAIL_EJP, String.class))
+            .thenReturn(Optional.of(ejpLegalRepEmailAddress));
+
+        when(asylumCase.read(CHANGE_ORGANISATION_REQUEST_FIELD, ChangeOrganisationRequest.class)).thenReturn(Optional.empty());
+
+        assertTrue(personalisation.getRecipientsList(asylumCase)
+            .contains(ejpLegalRepEmailAddress));
     }
 
     @Test

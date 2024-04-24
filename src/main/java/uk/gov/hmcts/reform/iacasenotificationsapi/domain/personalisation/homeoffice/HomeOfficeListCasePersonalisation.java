@@ -2,9 +2,12 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeof
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -12,28 +15,38 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.*;
 
 @Service
 public class HomeOfficeListCasePersonalisation implements EmailNotificationPersonalisation {
 
-    private final String homeOfficeCaseListedTemplateId;
+    private final String homeOfficeCaseListedNonAdaTemplateId;
+    private final String homeOfficeCaseListedAdaTemplateId;
     private final String iaExUiFrontendUrl;
+    private final int appellantProvidingAppealArgumentDeadlineDelay;
+    private final int respondentResponseToAppealArgumentDeadlineDelay;
     private final DateTimeExtractor dateTimeExtractor;
     private final EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
     private final HearingDetailsFinder hearingDetailsFinder;
 
     public HomeOfficeListCasePersonalisation(
-        @Value("${govnotify.template.caseListed.homeOffice.email}") String homeOfficeCaseListedTemplateId,
+        @Value("${govnotify.template.caseListed.homeOffice.email.nonAda}") String homeOfficeCaseListedNonAdaTemplateId,
+        @Value("${govnotify.template.caseListed.homeOffice.email.ada}") String homeOfficeCaseListedAdaTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
+        @Value("${adaCaseListed.deadlines.appellantProvidingAppealArgumentDelay}") int appellantProvidingAppealArgumentDeadlineDelay,
+        @Value("${adaCaseListed.deadlines.respondentResponseToAppealArgumentDelay}") int respondentResponseToAppealArgumentDeadlineDelay,
         DateTimeExtractor dateTimeExtractor,
         EmailAddressFinder emailAddressFinder,
         CustomerServicesProvider customerServicesProvider,
         HearingDetailsFinder hearingDetailsFinder
     ) {
-        this.homeOfficeCaseListedTemplateId = homeOfficeCaseListedTemplateId;
+        this.homeOfficeCaseListedNonAdaTemplateId = homeOfficeCaseListedNonAdaTemplateId;
+        this.homeOfficeCaseListedAdaTemplateId = homeOfficeCaseListedAdaTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
+        this.appellantProvidingAppealArgumentDeadlineDelay = appellantProvidingAppealArgumentDeadlineDelay;
+        this.respondentResponseToAppealArgumentDeadlineDelay = respondentResponseToAppealArgumentDeadlineDelay;
         this.dateTimeExtractor = dateTimeExtractor;
         this.emailAddressFinder = emailAddressFinder;
         this.customerServicesProvider = customerServicesProvider;
@@ -41,8 +54,10 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
     }
 
     @Override
-    public String getTemplateId() {
-        return homeOfficeCaseListedTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return AsylumCaseUtils.isAcceleratedDetainedAppeal(asylumCase)
+            ? homeOfficeCaseListedAdaTemplateId
+            : homeOfficeCaseListedNonAdaTemplateId;
     }
 
     @Override
@@ -71,6 +86,16 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDetailsFinder.getHearingDateTime(asylumCase)))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDetailsFinder.getHearingDateTime(asylumCase)))
             .put("hearingCentreAddress", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
+
+        if (isAcceleratedDetainedAppeal(asylumCase)) {
+            listCaseFields
+                .put("appellantProvidingAppealArgumentDeadline",
+                    LocalDate.now().plusDays(appellantProvidingAppealArgumentDeadlineDelay)
+                        .format(DateTimeFormatter.ofPattern("dd MMMM yyyy")))
+                .put("respondentResponseToAppealArgumentDeadline",
+                    LocalDate.now().plusDays(respondentResponseToAppealArgumentDeadlineDelay)
+                        .format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
+        }
 
         PersonalisationProvider.buildHearingRequirementsFields(asylumCase, listCaseFields);
 

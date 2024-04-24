@@ -1,6 +1,6 @@
 {
   "description": "RIA-3631 Notification of respondent ftpa application submitted - Home Office notifications disabled",
-  "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "disabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficePOU",

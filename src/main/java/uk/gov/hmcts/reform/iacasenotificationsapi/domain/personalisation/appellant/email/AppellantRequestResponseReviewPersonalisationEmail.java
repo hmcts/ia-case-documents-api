@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -27,6 +28,11 @@ public class AppellantRequestResponseReviewPersonalisationEmail implements Email
     private final RecipientsFinder recipientsFinder;
     private final CustomerServicesProvider customerServicesProvider;
     private final DirectionFinder directionFinder;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public AppellantRequestResponseReviewPersonalisationEmail(
             @Value("${govnotify.template.responseReviewDirection.appellant.withdrawn.email}") String withdrawnResponseReviewDirectionTemplateId,
@@ -87,6 +93,7 @@ public class AppellantRequestResponseReviewPersonalisationEmail implements Email
                 ImmutableMap
                         .<String, String>builder()
                         .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                        .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
                         .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                         .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                         .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))

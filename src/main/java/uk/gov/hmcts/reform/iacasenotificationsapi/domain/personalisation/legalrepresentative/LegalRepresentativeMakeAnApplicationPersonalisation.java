@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.*;
@@ -29,6 +31,11 @@ public class LegalRepresentativeMakeAnApplicationPersonalisation implements Lega
     private final MakeAnApplicationService makeAnApplicationService;
     private final UserDetailsProvider userDetailsProvider;
 
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
+
     public LegalRepresentativeMakeAnApplicationPersonalisation(
             @Value("${govnotify.template.makeAnApplication.beforeListing.legalRep.email}") String legalRepresentativeMakeApplicationBeforeListingTemplateId,
             @Value("${govnotify.template.makeAnApplication.afterListing.legalRep.email}") String legalRepresentativeMakeApplicationAfterListingTemplateId,
@@ -50,6 +57,13 @@ public class LegalRepresentativeMakeAnApplicationPersonalisation implements Lega
         this.appealService = appealService;
         this.userDetailsProvider = userDetailsProvider;
         this.makeAnApplicationService = makeAnApplicationService;
+    }
+
+    @Override
+    public Set<String> getRecipientsList(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase)
+            ? Collections.emptySet()
+            : LegalRepresentativeEmailNotificationPersonalisation.super.getRecipientsList(asylumCase);
     }
 
     @Override
@@ -77,6 +91,7 @@ public class LegalRepresentativeMakeAnApplicationPersonalisation implements Lega
             ImmutableMap
                 .<String, String>builder()
                 .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
                 .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
                 .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))

@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeof
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
@@ -34,6 +35,7 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
     private static final String HOME_OFFICE_LART = "caseworker-ia-homeofficelart";
     private static final String HOME_OFFICE_APC = "caseworker-ia-homeofficeapc";
     private static final String HOME_OFFICE_POU = "caseworker-ia-homeofficepou";
+    private static final String ADMIN_OFFICER = "caseworker-ia-admofficer";
     private static final String CITIZEN = "citizen";
 
 
@@ -49,6 +51,11 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
     private final MakeAnApplicationService makeAnApplicationService;
     private final UserDetailsProvider userDetailsProvider;
     private final EmailAddressFinder emailAddressFinder;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public HomeOfficeMakeAnApplicationPersonalisation(
             @Value("${govnotify.template.makeAnApplication.beforeListing.homeOffice.email}") String homeOfficeMakeAnApplicationBeforeListingTemplateId,
@@ -103,7 +110,11 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
             return Collections.emptySet();
         }
 
-        boolean hasValidRoles = hasRoles(Arrays.asList(ROLE_LEGAL_REP, CITIZEN, HOME_OFFICE_RESPONDENT_OFFICER));
+        boolean hasValidRoles = hasRoles(Arrays.asList(
+            ROLE_LEGAL_REP,
+            CITIZEN,
+            HOME_OFFICE_RESPONDENT_OFFICER,
+            ADMIN_OFFICER));
 
         if (hasRoles(Arrays.asList(HOME_OFFICE_APC))
                 || (hasValidRoles && isValidStateForHomeOfficeApc(currentState))) {
@@ -135,6 +146,7 @@ public class HomeOfficeMakeAnApplicationPersonalisation implements EmailNotifica
         return ImmutableMap
                 .<String, String>builder()
                 .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
                 .put("appealReferenceNumber", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
                 .put("homeOfficeReferenceNumber", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))

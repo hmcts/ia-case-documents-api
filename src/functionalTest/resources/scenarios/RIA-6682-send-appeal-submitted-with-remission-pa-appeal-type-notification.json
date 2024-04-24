@@ -72,7 +72,7 @@
       },
       {
         "reference": "6682_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",
-        "recipient": "payment-exceptions-ao-aat-test@example.com",
+        "recipient": "{$PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL}",
         "subject": "Immigration and Asylum appeal: appeal submitted with remission application",
         "body": [
           "PA/12345/2019",

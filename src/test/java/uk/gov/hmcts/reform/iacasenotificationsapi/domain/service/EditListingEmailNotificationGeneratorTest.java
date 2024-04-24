@@ -4,6 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singleton;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,14 +17,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.context.ApplicationContext;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.ApplicationContextProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
@@ -33,6 +38,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdVa
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeEditListingNoChangePersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeEditListingPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNotifyNotificationSender;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,6 +64,11 @@ public class EditListingEmailNotificationGeneratorTest {
     AsylumCase asylumCase;
     @Mock
     AsylumCase asylumCaseBefore;
+    MockedStatic<ApplicationContextProvider> mocked;
+    @Mock
+    static ApplicationContext applicationContext;
+    @Mock
+    static CustomerServicesProvider customerServicesProvider;
 
     private List<EmailNotificationPersonalisation> repEmailNotificationPersonalisationList;
 
@@ -84,6 +95,10 @@ public class EditListingEmailNotificationGeneratorTest {
 
     @BeforeEach
     public void setup() {
+        mocked = mockStatic(ApplicationContextProvider.class);
+        mocked.when(ApplicationContextProvider::getApplicationContext).thenReturn(applicationContext);
+        when(applicationContext.getBean(CustomerServicesProvider.class)).thenReturn(customerServicesProvider);
+
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
 
@@ -115,6 +130,11 @@ public class EditListingEmailNotificationGeneratorTest {
         repEmailNotificationPersonalisationList = newArrayList(editListingNoChangeEmailNotificationPersonalisation,
             editListingChangeEmailNotificationPersonalisation1);
 
+    }
+
+    @AfterEach
+    public void cleanup() {
+        mocked.close();
     }
 
     @Test

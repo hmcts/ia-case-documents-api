@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respon
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -30,6 +31,11 @@ public class RespondentNonStandardDirectionOfAppellantPersonalization implements
     private final CustomerServicesProvider customerServicesProvider;
     private final AppealService appealService;
     private final EmailAddressFinder emailAddressFinder;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public RespondentNonStandardDirectionOfAppellantPersonalization(
         @Value("${govnotify.template.nonStandardDirectionOfAppellant.respondent.email}") String templateId,
@@ -62,34 +68,34 @@ public class RespondentNonStandardDirectionOfAppellantPersonalization implements
         return asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class)
             .map(currentState -> {
                 if (Arrays.asList(
-                        State.APPEAL_SUBMITTED,
-                        State.PENDING_PAYMENT,
-                        State.AWAITING_RESPONDENT_EVIDENCE,
-                        State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
-                        State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED
+                    State.APPEAL_SUBMITTED,
+                    State.PENDING_PAYMENT,
+                    State.AWAITING_RESPONDENT_EVIDENCE,
+                    State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
+                    State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED
                 ).contains(currentState)) {
                     return Collections.singleton(apcHomeOfficeEmailAddress);
                 } else if (Arrays.asList(
-                        State.CASE_UNDER_REVIEW,
-                        State.RESPONDENT_REVIEW,
-                        State.AWAITING_REASONS_FOR_APPEAL,
-                        State.REASONS_FOR_APPEAL_SUBMITTED
+                    State.CASE_UNDER_REVIEW,
+                    State.RESPONDENT_REVIEW,
+                    State.AWAITING_REASONS_FOR_APPEAL,
+                    State.REASONS_FOR_APPEAL_SUBMITTED
                 ).contains(currentState)) {
                     return Collections.singleton(lartHomeOfficeEmailAddress);
                 } else if (Arrays.asList(
-                        State.LISTING,
-                        State.SUBMIT_HEARING_REQUIREMENTS).contains(currentState)
-                        && !appealService.isAppealListed(asylumCase)) {
+                    State.LISTING,
+                    State.SUBMIT_HEARING_REQUIREMENTS).contains(currentState)
+                           && !appealService.isAppealListed(asylumCase)) {
                     return  Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
                 } else if (Arrays.asList(
-                        State.PREPARE_FOR_HEARING,
-                        State.FINAL_BUNDLING,
-                        State.PRE_HEARING,
-                        State.DECISION,
-                        State.ADJOURNED
+                    State.PREPARE_FOR_HEARING,
+                    State.FINAL_BUNDLING,
+                    State.PRE_HEARING,
+                    State.DECISION,
+                    State.ADJOURNED
                 ).contains(currentState) && appealService.isAppealListed(asylumCase)) {
                     final Optional<HearingCentre> maybeCaseIsListed = asylumCase
-                            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+                        .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
 
                     if (maybeCaseIsListed.isPresent()) {
                         return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
@@ -112,8 +118,8 @@ public class RespondentNonStandardDirectionOfAppellantPersonalization implements
         requireNonNull(asylumCase, "asylumCase must not be null");
 
         String listingReferenceLine = asylumCase.read(ARIA_LISTING_REFERENCE, String.class)
-                .map(ref -> "\nListing reference: " + ref)
-                .orElse("");
+            .map(ref -> "\nListing reference: " + ref)
+            .orElse("");
 
         final Direction direction =
                 directionFinder
@@ -126,16 +132,17 @@ public class RespondentNonStandardDirectionOfAppellantPersonalization implements
                         .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         return ImmutableMap
-                .<String, String>builder()
-                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-                .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("listingReferenceLine", listingReferenceLine)
-                .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("linkToOnlineService", iaExUiFrontendUrl)
-                .put("explanation", direction.getExplanation())
-                .put("dueDate", directionDueDate)
-                .build();
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("listingReferenceLine", listingReferenceLine)
+            .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("explanation", direction.getExplanation())
+            .put("dueDate", directionDueDate)
+            .build();
     }
 }

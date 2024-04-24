@@ -8,6 +8,7 @@ import java.util.Map;
 public enum State {
 
     APPEAL_STARTED("appealStarted"),
+    APPEAL_STARTED_BY_ADMIN("appealStartedByAdmin"),
     APPEAL_SUBMITTED("appealSubmitted"),
     APPEAL_SUBMITTED_OUT_OF_TIME("appealSubmittedOutOfTime"),
     PENDING_PAYMENT("pendingPayment"),

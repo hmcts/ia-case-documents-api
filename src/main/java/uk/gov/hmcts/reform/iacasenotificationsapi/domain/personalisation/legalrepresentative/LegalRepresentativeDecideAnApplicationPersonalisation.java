@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicationService;
 
@@ -33,6 +33,11 @@ public class LegalRepresentativeDecideAnApplicationPersonalisation implements Le
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
     private final MakeAnApplicationService makeAnApplicationService;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public LegalRepresentativeDecideAnApplicationPersonalisation(
             @Value("${govnotify.template.decideAnApplication.granted.applicant.legalRep.beforeListing.email}") String legalRepDecideAnApplicationGrantedBeforeListingTemplateId,
@@ -72,11 +77,10 @@ public class LegalRepresentativeDecideAnApplicationPersonalisation implements Le
             String decision = makeAnApplication.getDecision();
             String applicantRole = makeAnApplication.getApplicantRole();
 
-            boolean isApplicationListed = makeAnApplicationService.isApplicationListed(State.get(makeAnApplication.getState()));
-
+            String listingRef = asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(null);
             boolean isLegalRepUser = applicantRole.equals(ROLE_LEGAL_REP);
 
-            if (isApplicationListed) {
+            if (listingRef != null) {
                 if ("Granted".equals(decision)) {
                     return isLegalRepUser ?  legalRepresentativeDecideAnApplicationGrantedAfterListingTemplateId : legalRepresentativeDecideAnApplicationGrantedOtherPartyAfterListingTemplateId;
                 } else {
@@ -107,6 +111,7 @@ public class LegalRepresentativeDecideAnApplicationPersonalisation implements Le
             ImmutableMap
                 .<String, String>builder()
                 .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
                 .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))
                 .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))

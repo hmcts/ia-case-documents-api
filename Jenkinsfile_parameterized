@@ -42,6 +42,7 @@ def secrets = [
     secret('ftpa-home-office-taylor-house-email', 'IA_FTPA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
     secret('ftpa-home-office-north-shields-email', 'IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL'),
     secret('ftpa-home-office-hatton-cross-email', 'IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
+    secret('ftpa-home-office-yarlswood-email', 'IA_FTPA_HOME_OFFICE_YARLSWOOD_EMAIL'),
 
     secret('hearing-centre-bradford-telephone', 'IA_HEARING_CENTRE_BRADFORD_TELEPHONE'),
     secret('hearing-centre-manchester-telephone', 'IA_HEARING_CENTRE_MANCHESTER_TELEPHONE'),
@@ -82,6 +83,7 @@ def secrets = [
     secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
     secret('home-office-allowed-appeal-email', 'IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL'),
     secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
+    secret('home-office-apply-for-costs-email', 'HO_APPLY_FOR_COSTS_EMAIL'),
 
     secret('admin-officer-review-hearing-requirements-email', 'IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL'),
 
@@ -92,6 +94,8 @@ def secrets = [
     secret('admin-office-glasgow-email', 'IA_ADMIN_GLASGOW_EMAIL'),
     secret('admin-office-bradford-email', 'IA_ADMIN_BRADFORD_EMAIL'),
     secret('admin-office-birmingham-email', 'IA_ADMIN_BIRMINGHAM_EMAIL'),
+    secret('admin-office-harmondsworth-email', 'IA_ADMIN_HARMONDSWORTH_EMAIL'),
+    secret('admin-office-yarlswood-email', 'IA_ADMIN_YARLSWOOD_EMAIL'),
 
     secret('case-officer-list-case-email', 'IA_CASE_OFFICER_LIST_CASE_EMAIL'),
 
@@ -131,6 +135,7 @@ def secrets = [
     secret('bail-hearing-centre-yarlswood-email', 'IA_BAIL_HEARING_CENTRE_YARLSWOOD_EMAIL'),
 
     secret('bail-home-office-email', 'IA_BAIL_HOME_OFFICE_EMAIL'),
+    secret('unrepresented-ada-det-email', 'IA_UNREPRESENTED_ADA_DET_EMAIL'),
     secret('bail-upper-tribunal-email', 'IA_BAIL_UPPER_TRIBUNAL_EMAIL'),
     secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE')
     ]
@@ -148,6 +153,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
 
     env.IA_IDAM_REDIRECT_URI = "https://ia-case-api-aat.service.core-compute-aat.internal/oauth2/callback"
+    env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
     env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"

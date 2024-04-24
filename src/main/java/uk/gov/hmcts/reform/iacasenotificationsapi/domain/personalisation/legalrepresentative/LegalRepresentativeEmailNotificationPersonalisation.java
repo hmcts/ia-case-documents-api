@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CHANGE_ORGANISATION_REQUEST_FIELD;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_EMAIL_EJP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isEjpCase;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -29,6 +31,12 @@ public interface LegalRepresentativeEmailNotificationPersonalisation extends Ema
             .orElse(false)) {
 
             return Collections.emptySet();
+        }
+
+        if (isEjpCase(asylumCase)) {
+            return Collections.singleton(asylumCase
+                .read(LEGAL_REP_EMAIL_EJP, String.class)
+                .orElseThrow(() -> new IllegalStateException("legalRepEmailEjp is not present")));
         }
 
         return Collections.singleton(asylumCase

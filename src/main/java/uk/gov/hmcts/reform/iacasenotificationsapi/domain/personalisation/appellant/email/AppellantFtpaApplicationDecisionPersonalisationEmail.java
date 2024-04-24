@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicantType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
@@ -70,8 +71,10 @@ public class AppellantFtpaApplicationDecisionPersonalisationEmail implements Ema
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
 
-        String applicantType = asylumCase.read(FTPA_APPLICANT_TYPE, String.class)
-            .orElseThrow(() -> new IllegalStateException("ftpaApplicantType is not present"));
+        String applicantType = asylumCase
+            .read(FTPA_APPLICANT_TYPE, ApplicantType.class)
+            .map(ApplicantType::getValue)
+            .orElseThrow(() -> new IllegalStateException("ftpaApplicantType is not present"));;
 
         switch (getDecisionOutcomeType(asylumCase)) {
             case FTPA_GRANTED:

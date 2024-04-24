@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
@@ -19,6 +20,12 @@ public class LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisa
 
     private final String forceCaseProgressionToCaseUnderReviewLegalRepresentativeTemplateId;
     private final String iaExUiFrontendUrl;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisation(
         @NotNull(message = "forceCaseProgressionToCaseUnderReviewLegalRepresentativeTemplateId cannot be null")
@@ -47,6 +54,7 @@ public class LegalRepresentativeForceCaseProgressionToCaseUnderReviewPersonalisa
 
         return ImmutableMap
             .<String, String>builder()
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
             .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
             .put("linkToOnlineService", iaExUiFrontendUrl)
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))

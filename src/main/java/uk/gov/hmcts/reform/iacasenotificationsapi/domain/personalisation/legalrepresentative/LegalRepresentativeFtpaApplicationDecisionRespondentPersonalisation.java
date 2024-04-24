@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,11 @@ public class LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation
     private final String applicationReheardOtherPartyLegalRepTemplateId;
     private final String applicationAllowedLegalRepTemplateId;
     private final String applicationDismissedLegalRepTemplateId;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation(
         @Value("${govnotify.template.applicationGranted.otherParty.legalRep.email}") String applicationGrantedOtherPartyLegalRepTemplateId,
@@ -81,6 +88,9 @@ public class LegalRepresentativeFtpaApplicationDecisionRespondentPersonalisation
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        return this.personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase);
+        return ImmutableMap.<String, String>builder()
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+            .putAll(personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase))
+            .build();
     }
 }

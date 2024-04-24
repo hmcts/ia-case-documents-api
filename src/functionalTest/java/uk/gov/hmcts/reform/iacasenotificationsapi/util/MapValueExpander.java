@@ -8,7 +8,9 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasenotificationsapi.fixtures.DocumentManagementFilesFixture;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -18,11 +20,15 @@ public final class MapValueExpander {
     private static final Pattern ENVIRONMENT_PROPERTY_PATTERN = Pattern.compile("\\{\\$([a-zA-Z0-9].+?)}");
     public static final Properties ENVIRONMENT_PROPERTIES = new Properties(System.getProperties());
 
+    @Autowired
+    private DocumentManagementFilesFixture documentManagementFilesFixture;
+
+
     private MapValueExpander() {
         // noop
     }
 
-    public static void expandValues(Map<String, Object> map) {
+    public void expandValues(Map<String, Object> map) {
 
         for (Map.Entry<String, Object> entry : map.entrySet()) {
 
@@ -33,7 +39,7 @@ public final class MapValueExpander {
                 untypedValue =
                     ((List) untypedValue)
                         .stream()
-                        .map(MapValueExpander::expandValue)
+                        .map(element -> this.expandValue(element))
                         .collect(Collectors.toList());
 
             } else {
@@ -44,7 +50,7 @@ public final class MapValueExpander {
         }
     }
 
-    private static Object expandValue(Object untypedValue) {
+    private Object expandValue(Object untypedValue) {
 
         if (untypedValue instanceof Map) {
 
@@ -62,13 +68,14 @@ public final class MapValueExpander {
                 value = expandEnvironmentProperty(value);
             }
 
+
             return value;
         }
 
         return untypedValue;
     }
 
-    private static String expandToday(String value) {
+    private String expandToday(String value) {
 
         Matcher matcher = TODAY_PATTERN.matcher(value);
 
@@ -112,7 +119,7 @@ public final class MapValueExpander {
         return expandedValue;
     }
 
-    private static String expandEnvironmentProperty(String value) {
+    private String expandEnvironmentProperty(String value) {
 
         Matcher matcher = ENVIRONMENT_PROPERTY_PATTERN.matcher(value);
 
@@ -123,10 +130,23 @@ public final class MapValueExpander {
             if (matcher.groupCount() == 1
                 && !matcher.group(1).isEmpty()) {
 
-                String variableName = matcher.group(1);
                 String token = matcher.group(0);
+                String propertyName = matcher.group(1);
 
-                expandedValue = expandedValue.replace(token, ENVIRONMENT_PROPERTIES.getProperty(variableName));
+                if (documentManagementFilesFixture.getProperties().containsKey(propertyName)) {
+
+                    expandedValue = documentManagementFilesFixture.getProperties().get(propertyName);
+
+                } else {
+
+                    String property = ENVIRONMENT_PROPERTIES.getProperty(propertyName);
+
+                    if (property == null) {
+                        expandedValue = expandedValue.replace(token, "");
+                    } else {
+                        expandedValue = expandedValue.replace(token, property);
+                    }
+                }
             }
         }
 

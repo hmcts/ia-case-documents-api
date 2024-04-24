@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum DirectionTag {
 
+    ADA_LIST_CASE("adaListCase"),
     BUILD_CASE("buildCase"),
     CASE_EDIT("caseEdit"),
     LEGAL_REPRESENTATIVE_REVIEW("legalRepresentativeReview"),

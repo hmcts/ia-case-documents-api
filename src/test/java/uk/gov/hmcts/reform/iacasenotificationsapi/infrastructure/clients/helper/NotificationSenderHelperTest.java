@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.NotificationServiceResponseException;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.RetryableNotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 import uk.gov.service.notify.SendEmailResponse;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -44,6 +46,7 @@ public class NotificationSenderHelperTest {
     private String emailAddress = "recipient@example.com";
     private String phoneNumber = "07123456789";
     private Map<String, String> personalisation = mock(Map.class);
+    private Map<String, Object> personalisationWithLink = mock(Map.class);
     private String reference = "our-reference";
 
     @Test
@@ -302,4 +305,135 @@ public class NotificationSenderHelperTest {
         assertTrue(actualNotificationId.isEmpty());
 
     }
+
+    @Test
+    public void should_not_send_duplicate_emails_in_short_space_of_time_with_links() throws NotificationClientException {
+
+        final String otherEmailAddress = "foo@bar.com";
+        final String otherReference = "1111_SOME_OTHER_NOTIFICATION";
+
+        final UUID expectedNotificationId = UUID.randomUUID();
+        final UUID expectedNotificationIdForOther = UUID.randomUUID();
+
+        SendEmailResponse sendEmailResponse = mock(SendEmailResponse.class);
+        SendEmailResponse sendEmailResponseForOther = mock(SendEmailResponse.class);
+
+        when(notificationClient.sendEmail(
+                templateId,
+                emailAddress,
+                personalisationWithLink,
+                reference
+        )).thenReturn(sendEmailResponse);
+
+        when(notificationClient.sendEmail(
+                templateId,
+                otherEmailAddress,
+                personalisationWithLink,
+                otherReference
+        )).thenReturn(sendEmailResponseForOther);
+
+        when(sendEmailResponse.getNotificationId()).thenReturn(expectedNotificationId);
+        when(sendEmailResponseForOther.getNotificationId()).thenReturn(expectedNotificationIdForOther);
+
+        final String actualNotificationId1 =
+                senderHelper.sendEmailWithLink(
+                        templateId,
+                        emailAddress,
+                        personalisationWithLink,
+                        reference,
+                        notificationClient,
+                        deduplicateSendsWithinSeconds,
+                        LOG
+                );
+
+        final String actualNotificationId2 =
+                senderHelper.sendEmailWithLink(
+                        templateId,
+                        emailAddress,
+                        personalisationWithLink,
+                        reference,
+                        notificationClient,
+                        deduplicateSendsWithinSeconds,
+                        LOG
+                );
+
+        final String actualNotificationIdForOther =
+                senderHelper.sendEmailWithLink(
+                        templateId,
+                        otherEmailAddress,
+                        personalisationWithLink,
+                        otherReference,
+                        notificationClient,
+                        deduplicateSendsWithinSeconds,
+                        LOG
+                );
+
+
+        assertEquals(expectedNotificationId.toString(), actualNotificationId1);
+        assertEquals(expectedNotificationId.toString(), actualNotificationId2);
+        assertEquals(expectedNotificationIdForOther.toString(), actualNotificationIdForOther);
+
+        try {
+            await().atMost(2, TimeUnit.SECONDS).until(() -> false);
+        } catch (ConditionTimeoutException e) {
+            assertTrue(true, "We expect this to timeout");
+        }
+
+        final String actualNotificationId3 =
+                senderHelper.sendEmailWithLink(
+                        templateId,
+                        emailAddress,
+                        personalisationWithLink,
+                        reference,
+                        notificationClient,
+                        deduplicateSendsWithinSeconds,
+                        LOG
+                );
+
+        assertEquals(expectedNotificationId.toString(), actualNotificationId3);
+
+        verify(notificationClient, times(2)).sendEmail(
+                templateId,
+                emailAddress,
+                personalisationWithLink,
+                reference
+        );
+
+        verify(notificationClient, times(1)).sendEmail(
+                templateId,
+                otherEmailAddress,
+                personalisationWithLink,
+                otherReference
+        );
+    }
+
+    @Test
+    public void when_personalisation_with_links_wrap_gov_notify_email_exceptions() throws NotificationClientException {
+
+        NotificationClientException underlyingException = mock(NotificationClientException.class);
+
+        doThrow(underlyingException)
+                .when(notificationClient)
+                .sendEmail(
+                        templateId,
+                        emailAddress,
+                        personalisationWithLink,
+                        reference);
+
+        assertThatThrownBy(() ->
+                senderHelper.sendEmailWithLink(
+                        templateId,
+                        emailAddress,
+                        personalisationWithLink,
+                        reference,
+                        notificationClient,
+                        deduplicateSendsWithinSeconds,
+                        LOG
+                )
+        ).isExactlyInstanceOf(NotificationServiceResponseException.class)
+                .hasMessage("Failed to send email using GovNotify")
+                .hasCause(underlyingException);
+
+    }
+
 }

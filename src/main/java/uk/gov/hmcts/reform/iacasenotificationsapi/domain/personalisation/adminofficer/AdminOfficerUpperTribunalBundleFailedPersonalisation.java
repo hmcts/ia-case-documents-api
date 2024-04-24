@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +18,11 @@ public class AdminOfficerUpperTribunalBundleFailedPersonalisation implements Ema
     private final String upperTribunalBundleFailedAdminOfficerTemplateId;
     private final String ctscAdminFtpaDecisionEmailAddress;
     private final PersonalisationProvider personalisationProvider;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public AdminOfficerUpperTribunalBundleFailedPersonalisation(
         @Value("${govnotify.template.upperTribunalBundleFailed.adminOfficer.email}") String upperTribunalBundleFailedAdminOfficerTemplateId,
@@ -43,6 +51,11 @@ public class AdminOfficerUpperTribunalBundleFailedPersonalisation implements Ema
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        return this.personalisationProvider.getTribunalHeaderPersonalisation(asylumCase);
+        return
+            ImmutableMap
+                .<String, String>builder()
+                .putAll(personalisationProvider.getTribunalHeaderPersonalisation(asylumCase))
+                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+                .build();
     }
 }

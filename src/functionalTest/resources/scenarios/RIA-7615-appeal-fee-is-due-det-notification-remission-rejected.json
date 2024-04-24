@@ -1,0 +1,69 @@
+{
+  "description": "RIA-7615 Appeal fee due DET notification (internal non-ADA) with remission rejected",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7615,
+      "eventId": "recordRemissionDecision",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "appealType": "refusalOfHumanRights",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isRemissionsEnabled": "Yes",
+          "remissionType":"hoWaiverRemission",
+          "remissionDecision": "rejected",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalAppealFeeDueLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "refusalOfHumanRights",
+        "notificationsSent": [
+          {
+            "id": "7615_INTERNAL_DETAINED_APPEAL_FEE_DUE_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7615_INTERNAL_DETAINED_APPEAL_FEE_DUE_DET",
+        "recipient": "det-irc-brookhouse@example.com",
+        "subject": "IAFT – SERVE IN PERSON: Appeal fee is due",
+        "body": [
+          "Home Office reference: A1234567",
+          "HMCTS reference: HU/12345/2019",
+          "Appellant name: Talha Awan"
+        ]
+      }
+    ]
+  }
+}

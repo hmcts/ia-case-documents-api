@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.caseofficer;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -23,6 +24,11 @@ public class CaseOfficerUploadAddendumEvidencePersonalisation implements EmailNo
     private final PersonalisationProvider personalisationProvider;
     private final EmailAddressFinder emailAddressFinder;
     private final FeatureToggler featureToggler;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public CaseOfficerUploadAddendumEvidencePersonalisation(
             @Value("${govnotify.template.uploadedAddendumEvidence.caseOfficer.email}") String caseOfficerUploadedAddendumEvidenceTemplateId,
@@ -61,6 +67,9 @@ public class CaseOfficerUploadAddendumEvidencePersonalisation implements EmailNo
         final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
             .<String, String>builder()
             .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData())
+                ? adaPrefix
+                : nonAdaPrefix)
             .putAll(personalisationProvider.getPersonalisation(callback));
 
         return listCaseFields.build();

@@ -1,0 +1,47 @@
+{
+  "description": "RIA-6940: Remove detention status appellant notification unrep journey (Email) -- Before Listing",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 6940,
+      "eventId": "removeDetainedStatus",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "email": "example@email.com",
+          "ariaListingReference": "LR/12345/2023",
+          "contactPreferenceUnRep": [
+            "wantsEmail"
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+        "email": "example@email.com",
+        "contactPreferenceUnRep": [
+          "wantsEmail"
+        ],
+        "notificationsSent":[
+          {
+            "id":"6940_REMOVE_DETENTION_STATUS_APPELLANT_EMAIL",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id":"6940_REMOVE_DETENTION_STATUS_HOME_OFFICE",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

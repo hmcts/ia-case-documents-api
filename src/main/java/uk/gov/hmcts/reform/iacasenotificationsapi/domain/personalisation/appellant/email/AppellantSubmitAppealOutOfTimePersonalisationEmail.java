@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -22,6 +23,11 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmail implements Email
     private final SystemDateProvider systemDateProvider;
     private final int daysToWaitAfterSubmission;
     private final RecipientsFinder recipientsFinder;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public AppellantSubmitAppealOutOfTimePersonalisationEmail(
         @Value("${govnotify.template.appealSubmittedOutOfTime.appellant.email}") String appealSubmittedOutOfTimeAppellantEmailTemplateId,
@@ -57,6 +63,7 @@ public class AppellantSubmitAppealOutOfTimePersonalisationEmail implements Email
         return
             ImmutableMap
                 .<String, String>builder()
+                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
                 .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("HO Ref Number", asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("Given names", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))

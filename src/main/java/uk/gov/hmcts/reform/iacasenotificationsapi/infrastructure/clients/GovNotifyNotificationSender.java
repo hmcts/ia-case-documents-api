@@ -44,6 +44,23 @@ public class GovNotifyNotificationSender implements NotificationSender {
         );
     }
 
+    public synchronized String sendEmailWithLink(
+            String templateId,
+            String emailAddress,
+            Map<String, Object> personalisation,
+            String reference
+    ) {
+        return senderHelper.sendEmailWithLink(
+                templateId,
+                emailAddress,
+                personalisation,
+                reference,
+                notificationClient,
+                deduplicateSendsWithinSeconds,
+                LOG
+        );
+    }
+
     @Override
     public synchronized String sendSms(
         final String templateId,

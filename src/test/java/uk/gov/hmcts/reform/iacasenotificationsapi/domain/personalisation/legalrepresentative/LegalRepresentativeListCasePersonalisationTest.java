@@ -2,15 +2,21 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -39,7 +45,8 @@ public class LegalRepresentativeListCasePersonalisationTest {
     HearingDetailsFinder hearingDetailsFinder;
 
     private Long caseId = 12345L;
-    private String templateId = "someTemplateId";
+    private String nonAdaTemplateId = "nonAdaTemplateId";
+    private String adaTemplateId = "adaTemplateId";
     private String outOfCountryTemplateId = "someOocTemplateId";
     private String iaExUiFrontendUrl = "http://somefrontendurl";
     private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
@@ -74,6 +81,9 @@ public class LegalRepresentativeListCasePersonalisationTest {
 
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
+
+    private int appellantProvidingAppealArgumentDeadline = 13;
+    private int respondentResponseToAppealArgumentDeadline = 15;
 
     private LegalRepresentativeListCasePersonalisation legalRepresentativeListCasePersonalisation;
 
@@ -126,9 +136,12 @@ public class LegalRepresentativeListCasePersonalisationTest {
         when(hearingDetailsFinder.getHearingCentreLocation(asylumCase)).thenReturn(hearingCentreAddress);
 
         legalRepresentativeListCasePersonalisation = new LegalRepresentativeListCasePersonalisation(
-            templateId,
+            nonAdaTemplateId,
+            adaTemplateId,
             outOfCountryTemplateId,
             iaExUiFrontendUrl,
+            appellantProvidingAppealArgumentDeadline,
+            respondentResponseToAppealArgumentDeadline,
             dateTimeExtractor,
             customerServicesProvider,
             hearingDetailsFinder
@@ -137,7 +150,11 @@ public class LegalRepresentativeListCasePersonalisationTest {
 
     @Test
     void should_return_given_template_id() {
-        assertEquals(templateId, legalRepresentativeListCasePersonalisation.getTemplateId(asylumCase));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        assertEquals(adaTemplateId, legalRepresentativeListCasePersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        assertEquals(nonAdaTemplateId, legalRepresentativeListCasePersonalisation.getTemplateId(asylumCase));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
         assertEquals(outOfCountryTemplateId, legalRepresentativeListCasePersonalisation.getTemplateId(asylumCase));
     }
@@ -171,11 +188,17 @@ public class LegalRepresentativeListCasePersonalisationTest {
             .hasMessage("asylumCase must not be null");
     }
 
-    @Test
-    void should_return_personalisation_when_all_information_given() {
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    void should_return_personalisation_when_all_information_given(YesOrNo isAda) {
 
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        initializePrefixes(legalRepresentativeListCasePersonalisation);
         Map<String, String> personalisation = legalRepresentativeListCasePersonalisation.getPersonalisation(asylumCase);
 
+        assertEquals(isAda.equals(YesOrNo.YES)
+            ? "Accelerated detained appeal"
+            : "Immigration and Asylum appeal", personalisation.get("subjectPrefix"));
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
         assertEquals(legalRepRefNumber, personalisation.get("legalRepReferenceNumber"));
@@ -194,8 +217,11 @@ public class LegalRepresentativeListCasePersonalisationTest {
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
-    @Test
-    void should_return_personalisation_when_all_information_given_in_remote_hearing_case() {
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    void should_return_personalisation_when_all_information_given_in_remote_hearing_case(YesOrNo isAda) {
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        initializePrefixes(legalRepresentativeListCasePersonalisation);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(remoteHearingCentre));
         when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
         when(hearingDetailsFinder.getHearingCentreAddress(asylumCase))
@@ -203,15 +229,24 @@ public class LegalRepresentativeListCasePersonalisationTest {
 
         Map<String, String> personalisation = legalRepresentativeListCasePersonalisation.getPersonalisation(asylumCase);
 
+        assertEquals(isAda.equals(YesOrNo.YES)
+            ? "Accelerated detained appeal"
+            : "Immigration and Asylum appeal", personalisation.get("subjectPrefix"));
         assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
     }
 
-    @Test
-    void should_return_personalisation_when_co_records_hearing_response() {
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    void should_return_personalisation_when_co_records_hearing_response(YesOrNo isAda) {
 
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        initializePrefixes(legalRepresentativeListCasePersonalisation);
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
         Map<String, String> personalisation = legalRepresentativeListCasePersonalisation.getPersonalisation(asylumCase);
 
+        assertEquals(isAda.equals(YesOrNo.YES)
+            ? "Accelerated detained appeal"
+            : "Immigration and Asylum appeal", personalisation.get("subjectPrefix"));
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(ariaListingReference, personalisation.get("ariaListingReference"));
         assertEquals(legalRepRefNumber, personalisation.get("legalRepReferenceNumber"));
@@ -228,11 +263,27 @@ public class LegalRepresentativeListCasePersonalisationTest {
         assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+
+        if (isAda.equals(YesOrNo.YES)) {
+            String appealArgumentDeadlineDate = LocalDate.now().plusDays(appellantProvidingAppealArgumentDeadline)
+                .format(DateTimeFormatter.ofPattern("dd MMMM yyyy"));
+            assertEquals(appealArgumentDeadlineDate, personalisation.get("appellantProvidingAppealArgumentDeadline"));
+
+            String respondentResponseDeadlineDate = LocalDate.now().plusDays(respondentResponseToAppealArgumentDeadline)
+                .format(DateTimeFormatter.ofPattern("dd MMMM yyyy"));
+            assertEquals(respondentResponseDeadlineDate, personalisation.get("respondentResponseToAppealArgumentDeadline"));
+        } else {
+            assertFalse(personalisation.containsKey("appellantProvidingAppealArgumentDeadline"));
+            assertFalse(personalisation.containsKey("respondentResponseToAppealArgumentDeadline"));
+        }
     }
 
-    @Test
-    void should_return_personalisation_when_all_mandatory_information_given() {
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    void should_return_personalisation_when_all_mandatory_information_given(YesOrNo isAda) {
 
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        initializePrefixes(legalRepresentativeListCasePersonalisation);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -265,5 +316,8 @@ public class LegalRepresentativeListCasePersonalisationTest {
         assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+        assertEquals(isAda.equals(YesOrNo.YES)
+            ? "Accelerated detained appeal"
+            : "Immigration and Asylum appeal", personalisation.get("subjectPrefix"));
     }
 }

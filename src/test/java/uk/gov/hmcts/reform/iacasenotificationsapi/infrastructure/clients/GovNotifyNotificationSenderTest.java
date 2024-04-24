@@ -33,6 +33,7 @@ public class GovNotifyNotificationSenderTest {
     private String emailAddress = "recipient@example.com";
     private String phoneNumber = "07123456789";
     private Map<String, String> personalisation = mock(Map.class);
+    private Map<String, Object> personalisationWithLink = mock(Map.class);
     private String reference = "our-reference";
 
     private GovNotifyNotificationSender govNotifyNotificationSender;
@@ -110,6 +111,42 @@ public class GovNotifyNotificationSenderTest {
                 templateId,
                 phoneNumber,
                 personalisation,
+                reference,
+                notificationClient,
+                deduplicateSendsWithinSeconds,
+                LOG
+        );
+
+        assertEquals(expectedNotificationId.toString(), actualNotificationId);
+    }
+
+    @Test
+    public void should_send_email_using_appeal_gov_notify_with_link() throws NotificationClientException {
+
+        final UUID expectedNotificationId = UUID.randomUUID();
+
+        when(senderHelper.sendEmailWithLink(
+                templateId,
+                emailAddress,
+                personalisationWithLink,
+                reference,
+                notificationClient,
+                deduplicateSendsWithinSeconds,
+                LOG
+        )).thenReturn(String.valueOf(expectedNotificationId));
+
+        String actualNotificationId =
+                govNotifyNotificationSender.sendEmailWithLink(
+                        templateId,
+                        emailAddress,
+                        personalisationWithLink,
+                        reference
+                );
+
+        verify(senderHelper, times(1)).sendEmailWithLink(
+                templateId,
+                emailAddress,
+                personalisationWithLink,
                 reference,
                 notificationClient,
                 deduplicateSendsWithinSeconds,

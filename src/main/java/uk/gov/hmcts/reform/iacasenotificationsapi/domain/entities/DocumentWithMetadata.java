@@ -15,6 +15,7 @@ public class DocumentWithMetadata implements HasDocument {
     private String dateUploaded;
     private DocumentTag tag;
     private String suppliedBy;
+    private String uploadedBy;
 
     private DocumentWithMetadata() {
         // noop -- for deserializer
@@ -43,6 +44,22 @@ public class DocumentWithMetadata implements HasDocument {
         this.suppliedBy = suppliedBy;
     }
 
+    public DocumentWithMetadata(
+            Document document,
+            String description,
+            String dateUploaded,
+            DocumentTag tag,
+            String suppliedBy,
+            String uploadedBy
+    ) {
+        this.document = document;
+        this.description = description;
+        this.dateUploaded = dateUploaded;
+        this.tag = tag;
+        this.suppliedBy = suppliedBy;
+        this.uploadedBy = uploadedBy;
+    }
+
     @Override
     public Document getDocument() {
         requireNonNull(document);
@@ -66,5 +83,9 @@ public class DocumentWithMetadata implements HasDocument {
 
     public String getSuppliedBy() {
         return suppliedBy;
+    }
+
+    public String getUploadedBy() {
+        return uploadedBy;
     }
 }

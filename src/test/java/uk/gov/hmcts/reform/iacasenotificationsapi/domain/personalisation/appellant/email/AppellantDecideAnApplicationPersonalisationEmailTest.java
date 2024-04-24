@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,6 +28,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicat
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AppealService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicationService;
@@ -195,10 +198,13 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
             .hasMessage("asylumCase must not be null");
     }
 
-    @Test
-    public void should_return_personalisation_when_only_mandatory_information_given() {
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    public void should_return_personalisation_when_only_mandatory_information_given(YesOrNo isAda) {
 
         when(userDetails.getRoles()).thenReturn(List.of(citizenUser));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        initializePrefixes(appellantDecideAnApplicationPersonalisationEmail);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
@@ -219,6 +225,9 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
         assertEquals("", personalisation.get("applicationType"));
         assertEquals("", personalisation.get("decision maker role"));
         assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(isAda.equals(YesOrNo.YES)
+            ? "Accelerated detained appeal"
+            : "Immigration and Asylum appeal", personalisation.get("subjectPrefix"));
 
         verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
     }
@@ -226,6 +235,8 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
     @ParameterizedTest
     @ValueSource(strings = { citizenUser, homeOfficeUser })
     public void should_return_personalisation_when_all_information_given_and_decision_granted(String user) {
+
+        initializePrefixes(appellantDecideAnApplicationPersonalisationEmail);
         when(userDetails.getRoles()).thenReturn(List.of(user));
 
         String decision = "Granted";
@@ -250,6 +261,8 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
     @ParameterizedTest
     @ValueSource(strings = { citizenUser, homeOfficeUser })
     public void should_return_personalisation_when_all_information_given_and_decision_refused(String user) {
+
+        initializePrefixes(appellantDecideAnApplicationPersonalisationEmail);
         when(userDetails.getRoles()).thenReturn(List.of(user));
 
         String decision = "Refused";
@@ -268,6 +281,59 @@ public class AppellantDecideAnApplicationPersonalisationEmailTest {
         assertEquals(decisionMaker, personalisation.get("decision maker role"));
         assertEquals(user.equals(citizenUser) ? applicationType : applicationTypePhrase,
             personalisation.get("applicationType"));
+
+        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    public void should_return_personalisation_when_all_information_given_and_decision_granted_ada(YesOrNo isAda) {
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        initializePrefixes(appellantDecideAnApplicationPersonalisationEmail);
+
+        String decision = "Granted";
+        when(makeAnApplication.getDecision()).thenReturn(decision);
+
+        Map<String, String> personalisation =
+            appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
+
+        assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
+        assertEquals(mockedListingReferenceNumber, personalisation.get("ariaListingReference"));
+        assertEquals(mockedAppealHomeOfficeReferenceNumber, personalisation.get("HO Ref Number"));
+        assertEquals(mockedAppellantGivenNames, personalisation.get("Given names"));
+        assertEquals(mockedAppellantFamilyName, personalisation.get("Family name"));
+        assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(decision, personalisation.get("decision"));
+        assertEquals(isAda.equals(YesOrNo.YES)
+            ? "Accelerated detained appeal"
+            : "Immigration and Asylum appeal", personalisation.get("subjectPrefix"));
+
+        verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    public void should_return_personalisation_when_all_information_given_and_decision_refused_ada(YesOrNo isAda) {
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        initializePrefixes(appellantDecideAnApplicationPersonalisationEmail);
+
+        String decision = "Refused";
+        when(makeAnApplication.getDecision()).thenReturn(decision);
+
+        Map<String, String> personalisation =
+            appellantDecideAnApplicationPersonalisationEmail.getPersonalisation(asylumCase);
+
+        assertEquals(mockedAppealReferenceNumber, personalisation.get("Appeal Ref Number"));
+        assertEquals(mockedListingReferenceNumber, personalisation.get("ariaListingReference"));
+        assertEquals(mockedAppealHomeOfficeReferenceNumber, personalisation.get("HO Ref Number"));
+        assertEquals(mockedAppellantGivenNames, personalisation.get("Given names"));
+        assertEquals(mockedAppellantFamilyName, personalisation.get("Family name"));
+        assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(decision, personalisation.get("decision"));
+        assertEquals(decisionMaker, personalisation.get("decision maker role"));
+        assertEquals(isAda.equals(YesOrNo.YES)
+            ? "Accelerated detained appeal"
+            : "Immigration and Asylum appeal", personalisation.get("subjectPrefix"));
 
         verify(makeAnApplicationService).getMakeAnApplication(asylumCase, true);
     }

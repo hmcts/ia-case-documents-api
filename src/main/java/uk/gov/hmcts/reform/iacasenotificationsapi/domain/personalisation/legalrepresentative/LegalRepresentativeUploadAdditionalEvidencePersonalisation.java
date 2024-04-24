@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CHANGE_ORGANISATION_REQUEST_FIELD;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -33,6 +32,11 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implemen
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final CustomerServicesProvider customerServicesProvider;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public LegalRepresentativeUploadAdditionalEvidencePersonalisation(
         @Value("${govnotify.template.uploadedAdditionalEvidenceBeforeListing.legalRep.email}") String legalRepUploadedAdditionalEvidenceBeforeListingTemplateId,
@@ -78,10 +82,13 @@ public class LegalRepresentativeUploadAdditionalEvidencePersonalisation implemen
         requireNonNull(callback, "callback must not be null");
 
         final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
-            .<String, String>builder()
-            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-            .put("linkToOnlineService", iaExUiFrontendUrl)
-            .putAll(personalisationProvider.getPersonalisation(callback));
+            .<String, String>builder();
+        listCaseFields.putAll(customerServicesProvider.getCustomerServicesPersonalisation());
+        listCaseFields.put("subjectPrefix", isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData())
+            ? adaPrefix
+            : nonAdaPrefix);
+        listCaseFields.put("linkToOnlineService", iaExUiFrontendUrl);
+        listCaseFields.putAll(personalisationProvider.getPersonalisation(callback));
 
         return listCaseFields.build();
     }

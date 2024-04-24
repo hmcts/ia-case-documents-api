@@ -14,6 +14,7 @@
           "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "listCaseHearingCentre": "bradford",
           "ftpaAppellantDecisionOutcomeType": "notAdmitted",
+          "ftpaAppellantRjDecisionOutcomeType": "notAdmitted",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
           "notificationsSent": []

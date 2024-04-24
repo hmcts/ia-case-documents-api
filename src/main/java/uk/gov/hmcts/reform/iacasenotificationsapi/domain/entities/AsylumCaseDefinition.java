@@ -177,6 +177,9 @@ public enum AsylumCaseDefinition {
     ADDITIONAL_TRIBUNAL_RESPONSE(
         "additionalTribunalResponse", new TypeReference<String>(){}),
 
+    PAST_EXPERIENCES_TRIBUNAL_RESPONSE(
+            "pastExperiencesTribunalResponse", new TypeReference<String>(){}),
+
     CASE_BUNDLES(
         "caseBundles", new TypeReference<List<IdValue<Bundle>>>(){}),
 
@@ -239,13 +242,17 @@ public enum AsylumCaseDefinition {
         "ftpaRespondentSubmitted", new TypeReference<YesOrNo>(){}),
 
     FTPA_APPLICANT_TYPE(
-        "ftpaApplicantType", new TypeReference<String>(){}),
+        "ftpaApplicantType", new TypeReference<ApplicantType>(){}),
 
     IS_FTPA_APPELLANT_DECIDED(
         "isFtpaAppellantDecided", new TypeReference<YesOrNo>(){}),
 
     IS_FTPA_RESPONDENT_DECIDED(
         "isFtpaRespondentDecided", new TypeReference<YesOrNo>(){}),
+    FTPA_RESPONDENT_DECISION_DOCUMENT(
+        "ftpaRespondentDecisionDocument", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+    FTPA_RESPONDENT_GROUNDS_DOCUMENTS(
+        "ftpaRespondentGroundsDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
 
     HOME_OFFICE_FTPA_APPELLANT_INSTRUCT_STATUS(
         "homeOfficeFtpaAppellantInstructStatus", new TypeReference<String>() {}),
@@ -345,6 +352,9 @@ public enum AsylumCaseDefinition {
     CONTACT_PREFERENCE(
         "contactPreference", new TypeReference<ContactPreference>(){}),
 
+    CONTACT_PREFERENCE_UN_REP(
+            "contactPreferenceUnRep", new TypeReference<List<String>>(){}),
+
     FEE_UPDATE_RECORDED(
         "feeUpdateRecorded", new TypeReference<CheckValues<String>>(){}),
 
@@ -365,8 +375,86 @@ public enum AsylumCaseDefinition {
     APPELLANT_HAS_FIXED_ADDRESS("appellantHasFixedAddress", new TypeReference<YesOrNo>(){}),
 
     CASE_LINKS(
-            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){})
+            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){}),
+
+    IS_ACCELERATED_DETAINED_APPEAL(
+        "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
+
+    SUITABILITY_REVIEW_DECISION(
+        "suitabilityReviewDecision", new TypeReference<AdaSuitabilityReviewDecision>(){}),
+    TRANSFER_OUT_OF_ADA_REASON(
+            "transferOutOfAdaReason", new TypeReference<String>(){}),
+    IS_ADMIN(
+        "isAdmin", new TypeReference<YesOrNo>() {}),
+    UT_APPEAL_REFERENCE_NUMBER(
+        "utAppealReferenceNumber", new TypeReference<String>() {}),
+    NOTIFICATION_ATTACHMENT_DOCUMENTS(
+            "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>() {}),
+    IRC_NAME(
+        "ircName", new TypeReference<String>(){}),
+    DETENTION_FACILITY(
+        "detentionFacility", new TypeReference<String>(){}),
+
+    PREVIOUS_DETENTION_LOCATION(
+
+            "previousDetentionLocation", new TypeReference<String>() {}),
+
+
+    PRISON_NAME(
+            "prisonName", new TypeReference<String>(){}),
+
+    OTHER_DETENTION_FACILITY_NAME(
+            "otherDetentionFacilityName", new TypeReference<OtherDetentionFacilityName>(){}),
+
+    APPELLANT_IN_DETENTION(
+            "appellantInDetention", new TypeReference<YesOrNo>(){}),
+
+    IS_APPELLANT_RESPONDENT(
+            "isAppellantRespondent", new TypeReference<String>(){}),
+    IS_EJP(
+            "isEjp", new TypeReference<YesOrNo>() {}),
+
+    LEGAL_REP_COMPANY_EJP(
+            "legalRepCompanyEjp", new TypeReference<String>() {}),
+
+    LEGAL_REP_NAME_EJP(
+            "legalRepNameEjp", new TypeReference<String>() {}),
+    LEGAL_REP_GIVEN_NAME_EJP(
+            "legalRepGivenNameEjp", new TypeReference<String>() {}),
+
+    LEGAL_REP_FAMILY_NAME_EJP(
+            "legalRepFamilyNameEjp", new TypeReference<String>() {}),
+
+    LEGAL_REP_EMAIL_EJP(
+            "legalRepEmailEjp", new TypeReference<String>() {}),
+
+    LEGAL_REP_REFERENCE_EJP(
+            "legalRepReferenceEjp", new TypeReference<String>() {}),
+
+    IS_LEGALLY_REPRESENTED_EJP(
+            "isLegallyRepresentedEjp", new TypeReference<YesOrNo>() {}),
+
+    APPLIES_FOR_COSTS(
+            "appliesForCosts", new TypeReference<List<IdValue<ApplyForCosts>>>(){}),
+
+    UPPER_TRIBUNAL_REFERENCE_NUMBER(
+            "upperTribunalReferenceNumber", new TypeReference<String>() {}),
+
+    CCD_REFERENCE_NUMBER_FOR_DISPLAY(
+        "ccdReferenceNumberForDisplay", new TypeReference<String>() {}),
+
+    RESPOND_TO_COSTS_LIST(
+        "respondToCostsList", new TypeReference<DynamicList>(){}),
+
+    ADD_EVIDENCE_FOR_COSTS_LIST(
+        "addEvidenceForCostsList", new TypeReference<DynamicList>() {}),
+
+    DECIDE_COSTS_APPLICATION_LIST(
+        "decideCostsApplicationList", new TypeReference<DynamicList>(){}
+    )
+
     ;
+
 
     private final String value;
     private final TypeReference typeReference;

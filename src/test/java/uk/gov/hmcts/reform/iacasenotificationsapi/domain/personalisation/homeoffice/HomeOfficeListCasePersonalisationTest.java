@@ -1,15 +1,20 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,7 +43,8 @@ public class HomeOfficeListCasePersonalisationTest {
     HearingDetailsFinder hearingDetailsFinder;
 
     private Long caseId = 12345L;
-    private String templateId = "someTemplateId";
+    private String adaTemplateId = "adaTemplateId";
+    private String nonAdaTemplateId = "nonAdaTemplateId";
     private String iaExUiFrontendUrl = "http://somefrontendurl";
     private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private String homeOfficeEmailAddress = "homeoffice@example.com";
@@ -72,6 +78,9 @@ public class HomeOfficeListCasePersonalisationTest {
 
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
+
+    private final int appellantProvidingAppealArgumentDeadline = 13;
+    private final int respondentResponseToAppealArgumentDeadline = 15;
 
     private HomeOfficeListCasePersonalisation homeOfficeListCasePersonalisation;
 
@@ -122,8 +131,11 @@ public class HomeOfficeListCasePersonalisationTest {
         when(hearingDetailsFinder.getHearingCentreLocation(asylumCase)).thenReturn(hearingCentreAddress);
 
         homeOfficeListCasePersonalisation = new HomeOfficeListCasePersonalisation(
-            templateId,
+            nonAdaTemplateId,
+            adaTemplateId,
             iaExUiFrontendUrl,
+            appellantProvidingAppealArgumentDeadline,
+            respondentResponseToAppealArgumentDeadline,
             dateTimeExtractor,
             emailAddressFinder,
             customerServicesProvider,
@@ -133,7 +145,11 @@ public class HomeOfficeListCasePersonalisationTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(templateId, homeOfficeListCasePersonalisation.getTemplateId());
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        assertEquals(adaTemplateId, homeOfficeListCasePersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        assertEquals(nonAdaTemplateId, homeOfficeListCasePersonalisation.getTemplateId(asylumCase));
     }
 
     @Test
@@ -146,8 +162,11 @@ public class HomeOfficeListCasePersonalisationTest {
         assertTrue(homeOfficeListCasePersonalisation.getRecipientsList(asylumCase).contains(homeOfficeEmailAddress));
     }
 
-    @Test
-    public void should_return_personalisation_when_all_information_given() {
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+        public void should_return_personalisation_when_all_information_given(YesOrNo isAda) {
+
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
 
         Map<String, String> personalisation = homeOfficeListCasePersonalisation.getPersonalisation(asylumCase);
 
@@ -167,6 +186,19 @@ public class HomeOfficeListCasePersonalisationTest {
         assertEquals(hearingCentreAddress, personalisation.get("hearingCentreAddress"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+
+        if (isAda.equals(YesOrNo.YES)) {
+            String appealArgumentDeadlineDate = LocalDate.now().plusDays(appellantProvidingAppealArgumentDeadline)
+                .format(DateTimeFormatter.ofPattern("dd MMMM yyyy"));
+            assertEquals(appealArgumentDeadlineDate, personalisation.get("appellantProvidingAppealArgumentDeadline"));
+
+            String respondentResponseDeadlineDate = LocalDate.now().plusDays(respondentResponseToAppealArgumentDeadline)
+                .format(DateTimeFormatter.ofPattern("dd MMMM yyyy"));
+            assertEquals(respondentResponseDeadlineDate, personalisation.get("respondentResponseToAppealArgumentDeadline"));
+        } else {
+            assertFalse(personalisation.containsKey("appellantProvidingAppealArgumentDeadline"));
+            assertFalse(personalisation.containsKey("respondentResponseToAppealArgumentDeadline"));
+        }
     }
 
     @Test

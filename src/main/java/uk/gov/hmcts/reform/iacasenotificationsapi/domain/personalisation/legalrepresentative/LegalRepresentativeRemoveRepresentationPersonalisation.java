@@ -4,6 +4,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalr
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -27,6 +28,11 @@ public class LegalRepresentativeRemoveRepresentationPersonalisation implements E
     private final AppealService appealService;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public LegalRepresentativeRemoveRepresentationPersonalisation(
         @NotNull(message = "removeRepresentationLegalRepresentativeBeforeListingTemplateId cannot be null") @Value("${govnotify.template.removeRepresentation.legalRep.beforeListing.email}") String removeRepresentationLegalRepresentativeBeforeListingTemplateId,
@@ -70,6 +76,7 @@ public class LegalRepresentativeRemoveRepresentationPersonalisation implements E
         return ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
             .put("ccdCaseId", String.valueOf(callback.getCaseDetails().getId()))
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""))

@@ -13,6 +13,7 @@
         "replacements": {
           "currentCaseStateVisibleToJudge": "ftpaDecided",
           "ftpaAppellantDecisionOutcomeType": "granted",
+          "ftpaAppellantRjDecisionOutcomeType": "granted",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
           "notificationsSent": []

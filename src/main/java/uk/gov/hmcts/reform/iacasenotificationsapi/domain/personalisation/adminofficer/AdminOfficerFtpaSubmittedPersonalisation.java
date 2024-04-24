@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.adminofficer;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -20,6 +21,11 @@ public class AdminOfficerFtpaSubmittedPersonalisation implements EmailNotificati
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final String adminOfficerEmailAddress;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public AdminOfficerFtpaSubmittedPersonalisation(
         @Value("${govnotify.template.applyForFtpa.adminOfficer.email}") String applyForFtpaTemplateId,
@@ -56,6 +62,9 @@ public class AdminOfficerFtpaSubmittedPersonalisation implements EmailNotificati
         final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
             .<String, String>builder()
             .put("linkToOnlineService", iaExUiFrontendUrl)
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData())
+                ? adaPrefix
+                : nonAdaPrefix)
             .putAll(personalisationProvider.getPersonalisation(callback));
 
         return listCaseFields.build();

@@ -13,6 +13,7 @@
         "replacements": {
           "currentCaseStateVisibleToJudge": "ftpaSubmitted",
           "ftpaAppellantDecisionOutcomeType": "refused",
+          "ftpaAppellantRjDecisionOutcomeType": "refused",
           "ftpaApplicantType": "appellant",
           "ariaListingReference": "987654321",
           "notificationsSent": []

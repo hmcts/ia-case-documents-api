@@ -4,7 +4,9 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_REMADE_RULE_32;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -30,6 +32,11 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implement
     private final String applicationReheardOtherPartyHomeHomeOfficeTemplateId;
     private final String applicationAllowedHomeOfficeTemplateId;
     private final String applicationDismissedHomeOfficeTemplateId;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
     public HomeOfficeFtpaApplicationDecisionAppellantPersonalisation(
         @Value("${govnotify.template.applicationGranted.otherParty.homeOffice.email}") String applicationGrantedOtherPartyHomeOfficeTemplateId,
@@ -110,7 +117,10 @@ public class HomeOfficeFtpaApplicationDecisionAppellantPersonalisation implement
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        return this.personalisationProvider.getHomeOfficeHeaderPersonalisation(asylumCase);
+        return ImmutableMap.<String, String>builder()
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+            .putAll(personalisationProvider.getHomeOfficeHeaderPersonalisation(asylumCase))
+            .build();
     }
 
 }

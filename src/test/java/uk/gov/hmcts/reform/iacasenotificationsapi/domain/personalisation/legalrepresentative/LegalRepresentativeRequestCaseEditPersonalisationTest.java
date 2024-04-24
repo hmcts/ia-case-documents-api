@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
@@ -94,16 +97,8 @@ public class LegalRepresentativeRequestCaseEditPersonalisationTest {
     @MethodSource("generateScenarios")
     public void getPersonalisation(Scenario scenario) {
 
-        ImmutableMap<String, String> expectedPersonalisation = ImmutableMap
-            .<String, String>builder()
-            .put("appealReferenceNumber", scenario.appealReferenceNumber)
-            .put("appellantGivenNames", scenario.appellantGivenNames)
-            .put("appellantFamilyName", scenario.appellantFamilyName)
-            .put("directionExplanation", DIRECTION_EXPLANATION)
-            .put("expectedDirectionDueDate", DIRECTION_DUE_DATE)
-            .put("iaExUiFrontendUrl", IA_EX_UI_FRONTEND_URL)
-            .put("legalRepRefNumber", scenario.legalRepRefNumber)
-            .build();
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        initializePrefixes(personalisation);
 
         when((direction.getDateDue())).thenReturn(DIRECTION_DUE_DATE);
         when((direction.getExplanation())).thenReturn(DIRECTION_EXPLANATION);
@@ -127,6 +122,17 @@ public class LegalRepresentativeRequestCaseEditPersonalisationTest {
 
         Map<String, String> actualPersonalisation = personalisation.getPersonalisation(asylumCase);
 
+        ImmutableMap<String, String> expectedPersonalisation = ImmutableMap
+            .<String, String>builder()
+            .put("appealReferenceNumber", scenario.appealReferenceNumber)
+            .put("appellantGivenNames", scenario.appellantGivenNames)
+            .put("appellantFamilyName", scenario.appellantFamilyName)
+            .put("directionExplanation", DIRECTION_EXPLANATION)
+            .put("expectedDirectionDueDate", DIRECTION_DUE_DATE)
+            .put("iaExUiFrontendUrl", IA_EX_UI_FRONTEND_URL)
+            .put("legalRepRefNumber", scenario.legalRepRefNumber)
+            .put("subjectPrefix", "Immigration and Asylum appeal")
+            .build();
 
         assertThat(actualPersonalisation).isEqualToComparingOnlyGivenFields(expectedPersonalisation);
         assertEquals(CUSTOMER_SERVICES_PROVIDER_PHONE, customerServicesProvider.getCustomerServicesTelephone());

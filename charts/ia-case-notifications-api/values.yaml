@@ -9,6 +9,7 @@ java:
     IA_IDAM_REDIRECT_URI: "https://ia-case-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2/callback"
     DM_URL: "http://dm-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     CCD_URL: "http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+    CCD_GW_URL: "http://dm-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     IDAM_URL: "https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net"
     OPEN_ID_IDAM_URL: "https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net"
     S2S_URL: "http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
@@ -35,6 +36,10 @@ java:
           alias: IA_ADMIN_BRADFORD_EMAIL
         - name: admin-office-birmingham-email
           alias: IA_ADMIN_BIRMINGHAM_EMAIL
+        - name: admin-office-harmondsworth-email
+          alias: IA_ADMIN_HARMONDSWORTH_EMAIL
+        - name: admin-office-yarlswood-email
+          alias: IA_ADMIN_YARLSWOOD_EMAIL
         - name: hearing-centre-bradford-email
           alias: IA_HEARING_CENTRE_BRADFORD_EMAIL
         - name: hearing-centre-manchester-email
@@ -77,6 +82,8 @@ java:
           alias: IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL
         - name: ftpa-home-office-hatton-cross-email
           alias: IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL
+        - name: ftpa-home-office-yarlswood-email
+          alias: IA_FTPA_HOME_OFFICE_YARLSWOOD_EMAIL
         - name: hearing-centre-bradford-telephone
           alias: IA_HEARING_CENTRE_BRADFORD_TELEPHONE
         - name: hearing-centre-manchester-telephone
@@ -187,3 +194,5 @@ java:
           alias: IA_CONFIG_VALIDATOR_SECRET
         - name: bail-upper-tribunal-email
           alias: IA_BAIL_UPPER_TRIBUNAL_EMAIL
+        - name: home-office-apply-for-costs-email
+          alias: HO_APPLY_FOR_COSTS_EMAIL

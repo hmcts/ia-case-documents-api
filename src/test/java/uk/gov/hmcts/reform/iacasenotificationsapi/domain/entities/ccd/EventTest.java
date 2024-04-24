@@ -106,14 +106,25 @@ public class EventTest {
         assertEquals("maintainCaseLinks", Event.MAINTAIN_CASE_LINKS.toString());
         assertEquals("createBailCaseLink", CREATE_BAIL_CASE_LINK.toString());
         assertEquals("maintainBailCaseLinks", Event.MAINTAIN_BAIL_CASE_LINKS.toString());
+        assertEquals("adaSuitabilityReview", ADA_SUITABILITY_REVIEW.toString());
+        assertEquals("transferOutOfAda", TRANSFER_OUT_OF_ADA.toString());
+        assertEquals("markAppealAsAda", MARK_APPEAL_AS_ADA.toString());
+        assertEquals("markAsReadyForUtTransfer", MARK_AS_READY_FOR_UT_TRANSFER.toString());
+        assertEquals("updateDetentionLocation", UPDATE_DETENTION_LOCATION.toString());
+        assertEquals("updateHearingAdjustments", UPDATE_HEARING_ADJUSTMENTS.toString());
+        assertEquals("applyForCosts", APPLY_FOR_COSTS.toString());
+        assertEquals("turnOnNotifications", TURN_ON_NOTIFICATIONS.toString());
+        assertEquals("respondToCosts", RESPOND_TO_COSTS.toString());
         assertEquals("caseListing", CASE_LISTING.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
+        assertEquals("addEvidenceForCosts", ADD_EVIDENCE_FOR_COSTS.toString());
+        assertEquals("considerMakingCostsOrder", CONSIDER_MAKING_COSTS_ORDER.toString());
+        assertEquals("decideCostsApplication", DECIDE_COSTS_APPLICATION.toString());
         assertEquals("recordTheDecision", RECORD_THE_DECISION.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-
-        assertEquals(102, Event.values().length);
+        assertEquals(115, Event.values().length);
     }
 }

@@ -37,7 +37,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.RestTemp
 @PactTestFor(providerName = "idamApi_oidc", port = "5000")
 @ContextConfiguration(classes = {IdamApiConsumerApplication.class})
 @TestPropertySource(
-        properties = {"idam.baseUrl=localhost:5000"}
+        properties = {
+            "idam.baseUrl=localhost:5000",
+            "document_management.url=${DM_URL:http://127.0.0.1:4506}"}
 )
 @Import(RestTemplateConfiguration.class)
 public class IdamApiConsumerTest {

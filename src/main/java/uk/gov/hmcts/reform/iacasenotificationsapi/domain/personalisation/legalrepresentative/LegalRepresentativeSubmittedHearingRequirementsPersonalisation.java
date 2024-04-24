@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -15,24 +16,35 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
     private final String submittedHearingRequirementsLegalRepTemplateId;
+    private final String submittedHearingRequirementsAdaLegalRepTemplateId;
     private final String iaExUiFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final CustomerServicesProvider customerServicesProvider;
 
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
+
     public LegalRepresentativeSubmittedHearingRequirementsPersonalisation(
         @Value("${govnotify.template.submittedHearingRequirements.legalRep.email}") String submittedHearingRequirementsLegalRepTemplateId,
+        @Value("${govnotify.template.submittedHearingRequirements.legalRep.ada.email}") String submittedHearingRequirementsAdaLegalRepTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         PersonalisationProvider personalisationProvider,
         CustomerServicesProvider customerServicesProvider
     ) {
         this.submittedHearingRequirementsLegalRepTemplateId = submittedHearingRequirementsLegalRepTemplateId;
+        this.submittedHearingRequirementsAdaLegalRepTemplateId = submittedHearingRequirementsAdaLegalRepTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
-    public String getTemplateId() {
+    public String getTemplateId(AsylumCase asylumCase) {
+        if (isAcceleratedDetainedAppeal(asylumCase)) {
+            return submittedHearingRequirementsAdaLegalRepTemplateId;
+        }
         return submittedHearingRequirementsLegalRepTemplateId;
     }
 
@@ -48,6 +60,7 @@ public class LegalRepresentativeSubmittedHearingRequirementsPersonalisation impl
         final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData()) ? adaPrefix : nonAdaPrefix)
             .put("linkToOnlineService", iaExUiFrontendUrl)
             .putAll(personalisationProvider.getPersonalisation(callback));
 

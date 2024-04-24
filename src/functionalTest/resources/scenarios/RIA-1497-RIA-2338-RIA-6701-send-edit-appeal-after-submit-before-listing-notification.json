@@ -1,0 +1,52 @@
+{
+  "description": "RIA-1497 RIA-2338 RIA-6701 AdminOfficer Edited the appeal (internal case) after it was submitted before listing",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1234,
+      "eventId": "editAppealAfterSubmit",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appellantInDetention": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "notificationsSent": [
+          {
+            "id": "1234_EDIT_APPEAL_AFTER_SUBMIT_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1234_EDIT_APPEAL_AFTER_SUBMIT_RESPONDENT",
+        "recipient": "{$respondentEmailAddresses.nonStandardDirectionUntilListing}",
+        "subject": "Immigration and Asylum appeal: application amended",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}"
+        ]
+      }
+    ]
+  }
+}

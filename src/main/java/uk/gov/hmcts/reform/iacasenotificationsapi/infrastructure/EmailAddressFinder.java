@@ -1,12 +1,8 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
@@ -23,6 +19,7 @@ public class EmailAddressFinder {
     public static final String NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING = "No email address for decisions made without hearing";
 
     private final String listCaseHearingCentreIsNotPresent = "listCaseHearingCentre is not present";
+    private final String noEmailAddressDecisionWithoutHearing = "No email address for decisions made without hearing";
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
     private final Map<HearingCentre, String> homeOfficeEmailAddresses;
     private final Map<HearingCentre, String> homeOfficeFtpaEmailAddresses;
@@ -131,7 +128,7 @@ public class EmailAddressFinder {
             case COVENTRY:
                 return emailAddressesMap.get(HearingCentre.BIRMINGHAM);
             case DECISION_WITHOUT_HEARING:
-                return NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING;
+                return noEmailAddressDecisionWithoutHearing;
             default:
                 return emailAddressesMap.get(hearingCentre);
         }

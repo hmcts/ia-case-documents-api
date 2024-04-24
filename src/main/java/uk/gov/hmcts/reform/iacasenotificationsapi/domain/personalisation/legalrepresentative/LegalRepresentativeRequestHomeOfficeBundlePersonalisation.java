@@ -16,24 +16,30 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DirectionFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils;
 
 @Service
 public class LegalRepresentativeRequestHomeOfficeBundlePersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
-    private final String legalRepEvidenceDirectionTemplateId;
+    private final String legalRepEvidenceDirectionNonAdaTemplateId;
+    private final String legalRepEvidenceDirectionAdaTemplateId;
     private final DirectionFinder directionFinder;
 
     public LegalRepresentativeRequestHomeOfficeBundlePersonalisation(
-        @Value("${govnotify.template.requestRespondentEvidenceDirection.legalRep.email}") String legalRepEvidenceDirectionTemplateId,
+        @Value("${govnotify.template.requestRespondentEvidenceDirection.legalRep.email.nonAda}") String legalRepEvidenceDirectionNonAdaTemplateId,
+        @Value("${govnotify.template.requestRespondentEvidenceDirection.legalRep.email.ada}") String legalRepEvidenceDirectionAdaTemplateId,
         DirectionFinder directionFinder) {
 
-        this.legalRepEvidenceDirectionTemplateId = legalRepEvidenceDirectionTemplateId;
+        this.legalRepEvidenceDirectionNonAdaTemplateId = legalRepEvidenceDirectionNonAdaTemplateId;
+        this.legalRepEvidenceDirectionAdaTemplateId = legalRepEvidenceDirectionAdaTemplateId;
         this.directionFinder = directionFinder;
     }
 
     @Override
-    public String getTemplateId() {
-        return legalRepEvidenceDirectionTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return AsylumCaseUtils.isAcceleratedDetainedAppeal(asylumCase)
+            ? legalRepEvidenceDirectionAdaTemplateId
+            : legalRepEvidenceDirectionNonAdaTemplateId;
     }
 
     @Override

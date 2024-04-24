@@ -9,6 +9,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicantType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
 
@@ -49,7 +50,9 @@ public interface FtpaNotificationPersonalisationUtil {
     }
 
     default FtpaDecisionOutcomeType getDecisionOutcomeType(AsylumCase asylumCase) {
-        String applicantType = asylumCase.read(FTPA_APPLICANT_TYPE, String.class)
+        String applicantType = asylumCase
+            .read(FTPA_APPLICANT_TYPE, ApplicantType.class)
+            .map(ApplicantType::getValue)
             .orElseThrow(() -> new IllegalStateException("ftpaApplicantType is not present"));
 
         FtpaDecisionOutcomeType decisionOutcomeType;

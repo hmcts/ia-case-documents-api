@@ -1,0 +1,76 @@
+{
+  "description": "RIA-7516 Send request respondent evidence notification (Home Office directed to upload bundle) Internal EJP Non-ADA",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "caseOfficer",
+    "input": {
+      "id": 7516,
+      "eventId": "requestRespondentEvidence",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-ejp-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll":"awaitingRespondentEvidence",
+          "currentCaseStateVisibleToLegalRepresentative": "awaitingRespondentEvidence",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "legalRepEmailEjp": "ia-law-firm-org-sc@fake.hmcts.net",
+          "legalRepCompanyEjp": "Legal company",
+          "legalRepGivenNameEjp": "John",
+          "legalRepFamilyNameEjp": "Smith",
+          "legalRepReferenceEjp": "TEST7516",
+          "isLegallyRepresentedEjp": "Yes",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Send your evidence",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+3}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentEvidence"
+              }
+            }
+          ],
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalRequestRespondentEvidenceLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-ejp-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "7516_RESPONDENT_EVIDENCE_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7516_INTERNAL_DET_REQUEST_RESPONDENT_EVIDENCE_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

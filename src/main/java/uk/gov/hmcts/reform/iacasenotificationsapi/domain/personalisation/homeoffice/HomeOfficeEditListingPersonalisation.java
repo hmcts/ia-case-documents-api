@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
@@ -21,26 +22,31 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 @Service
 public class HomeOfficeEditListingPersonalisation implements EmailNotificationPersonalisation {
 
-    private final String homeOfficeCaseEditedTemplateId;
+    private final String homeOfficeCaseEditedNonAdaTemplateId;
+    private final String homeOfficeCaseEditedAdaTemplateId;
     private final PersonalisationProvider personalisationProvider;
     private EmailAddressFinder emailAddressFinder;
     private final CustomerServicesProvider customerServicesProvider;
 
     public HomeOfficeEditListingPersonalisation(
-        @Value("${govnotify.template.caseEdited.homeOffice.email}") String homeOfficeCaseEditedTemplateId,
+        @Value("${govnotify.template.caseEdited.homeOffice.email.nonAda}") String homeOfficeCaseEditedNonAdaTemplateId,
+        @Value("${govnotify.template.caseEdited.homeOffice.email.ada}") String homeOfficeCaseEditedAdaTemplateId,
         EmailAddressFinder emailAddressFinder,
         PersonalisationProvider personalisationProvider,
         CustomerServicesProvider customerServicesProvider
     ) {
-        this.homeOfficeCaseEditedTemplateId = homeOfficeCaseEditedTemplateId;
+        this.homeOfficeCaseEditedNonAdaTemplateId = homeOfficeCaseEditedNonAdaTemplateId;
+        this.homeOfficeCaseEditedAdaTemplateId = homeOfficeCaseEditedAdaTemplateId;
         this.emailAddressFinder = emailAddressFinder;
         this.personalisationProvider = personalisationProvider;
         this.customerServicesProvider = customerServicesProvider;
     }
 
     @Override
-    public String getTemplateId() {
-        return homeOfficeCaseEditedTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return AsylumCaseUtils.isAcceleratedDetainedAppeal(asylumCase)
+            ? homeOfficeCaseEditedAdaTemplateId
+            : homeOfficeCaseEditedNonAdaTemplateId;
     }
 
     @Override

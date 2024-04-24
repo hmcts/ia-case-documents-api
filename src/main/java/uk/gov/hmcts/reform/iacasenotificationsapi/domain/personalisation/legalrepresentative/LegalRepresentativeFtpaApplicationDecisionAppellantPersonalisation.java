@@ -1,18 +1,29 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_UK;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DECISION_REMADE_RULE_32;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
+import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DueDateService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
 public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation implements LegalRepresentativeEmailNotificationPersonalisation {
 
+    private final DueDateService dueDateService;
     private final PersonalisationProvider personalisationProvider;
     private final String applicationGrantedApplicantLegalRepTemplateId;
     private final String applicationPartiallyGrantedApplicantLegalRepTemplateId;
@@ -21,6 +32,14 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation 
     private final String applicationReheardApplicantLegalRepTemplateId;
     private final String applicationAllowedLegalRepTemplateId;
     private final String applicationDismissedLegalRepTemplateId;
+    private final int calendarDaysToWaitInCountry;
+    private final int calendarDaysToWaitOutOfCountry;
+    private final int workingDaysaysToWaitAda;
+
+    @Value("${govnotify.emailPrefix.ada}")
+    private String adaPrefix;
+    @Value("${govnotify.emailPrefix.nonAda}")
+    private String nonAdaPrefix;
 
 
     public LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation(
@@ -31,6 +50,10 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation 
         @Value("${govnotify.template.applicationReheard.applicant.legalRep.email}") String applicationReheardApplicantLegalRepTemplateId,
         @Value("${govnotify.template.applicationAllowed.legalRep.email}") String applicationAllowedLegalRepTemplateId,
         @Value("${govnotify.template.applicationDismissed.legalRep.email}") String applicationDismissedLegalRepTemplateId,
+        @Value("${ftpaApplicationDecidedDaysToWait.inCountry}") int calendarDaysToWaitInCountry,
+        @Value("${ftpaApplicationDecidedDaysToWait.outOfCountry}") int calendarDaysToWaitOutOfCountry,
+        @Value("${ftpaApplicationDecidedDaysToWait.ada}") int workingDaysaysToWaitAda,
+        DueDateService dueDateService,
         PersonalisationProvider personalisationProvider) {
         this.applicationGrantedApplicantLegalRepTemplateId = applicationGrantedApplicantLegalRepTemplateId;
         this.applicationPartiallyGrantedApplicantLegalRepTemplateId = applicationPartiallyGrantedApplicantLegalRepTemplateId;
@@ -38,7 +61,11 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation 
         this.applicationRefusedGrantedApplicantLegalRepTemplateId = applicationRefusedGrantedApplicantLegalRepTemplateId;
         this.applicationReheardApplicantLegalRepTemplateId = applicationReheardApplicantLegalRepTemplateId;
         this.applicationAllowedLegalRepTemplateId = applicationAllowedLegalRepTemplateId;
-        this.applicationDismissedLegalRepTemplateId = applicationDismissedLegalRepTemplateId;;
+        this.applicationDismissedLegalRepTemplateId = applicationDismissedLegalRepTemplateId;
+        this.calendarDaysToWaitInCountry = calendarDaysToWaitInCountry;
+        this.calendarDaysToWaitOutOfCountry = calendarDaysToWaitOutOfCountry;
+        this.workingDaysaysToWaitAda = workingDaysaysToWaitAda;
+        this.dueDateService = dueDateService;
         this.personalisationProvider = personalisationProvider;
     }
 
@@ -83,6 +110,30 @@ public class LegalRepresentativeFtpaApplicationDecisionAppellantPersonalisation 
 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
-        return this.personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase);
+        ImmutableMap.Builder<String, String> personalisationBuilder = ImmutableMap
+            .<String, String>builder()
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+            .putAll(personalisationProvider.getLegalRepHeaderPersonalisation(asylumCase));
+
+        boolean setDynamicDate = Arrays.asList(
+            applicationPartiallyGrantedApplicantLegalRepTemplateId,
+            applicationNotAdmittedApplicantLegalRepTemplateId,
+            applicationRefusedGrantedApplicantLegalRepTemplateId).contains(getTemplateId(asylumCase));
+
+        if (setDynamicDate) {
+            boolean inCountryAppeal = asylumCase.read(APPELLANT_IN_UK, YesOrNo.class).map(value -> value.equals(YesOrNo.YES)).orElse(true);
+            if (isAcceleratedDetainedAppeal(asylumCase)) {
+                return personalisationBuilder.put("due date", dueDateService.calculateWorkingDaysDueDate(ZonedDateTime.now(), workingDaysaysToWaitAda)
+                    .format(DateTimeFormatter.ofPattern("d MMMM yyyy"))).build();
+            } else if (inCountryAppeal) {
+                return personalisationBuilder.put("due date", dueDateService.calculateCalendarDaysDueDate(ZonedDateTime.now(), calendarDaysToWaitInCountry)
+                    .format(DateTimeFormatter.ofPattern("d MMMM yyyy"))).build();
+            } else {
+                return personalisationBuilder.put("due date", dueDateService.calculateCalendarDaysDueDate(ZonedDateTime.now(), calendarDaysToWaitOutOfCountry)
+                    .format(DateTimeFormatter.ofPattern("d MMMM yyyy"))).build();
+            }
+        }
+
+        return personalisationBuilder.build();
     }
 }

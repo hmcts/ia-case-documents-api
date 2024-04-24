@@ -4,6 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singleton;
+import static org.mockito.Mockito.mockStatic;
 import static java.util.Collections.singletonList;
 
 import static org.mockito.Mockito.times;
@@ -16,14 +17,18 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAdd
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.context.ApplicationContext;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.ApplicationContextProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
@@ -31,6 +36,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNotifyNotificationSender;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,6 +61,11 @@ public class NotificationGeneratorTest {
     CaseDetails<AsylumCase> caseDetails;
     @Mock
     AsylumCase asylumCase;
+    MockedStatic<ApplicationContextProvider> mocked;
+    @Mock
+    static ApplicationContext applicationContext;
+    @Mock
+    static CustomerServicesProvider customerServicesProvider;
 
     private List<EmailNotificationPersonalisation> repEmailNotificationPersonalisationList;
     private List<EmailNotificationPersonalisation> aipEmailNotificationPersonalisationList;
@@ -86,6 +97,10 @@ public class NotificationGeneratorTest {
 
     @BeforeEach
     public void setup() {
+        mocked = mockStatic(ApplicationContextProvider.class);
+        mocked.when(ApplicationContextProvider::getApplicationContext).thenReturn(applicationContext);
+        when(applicationContext.getBean(CustomerServicesProvider.class)).thenReturn(customerServicesProvider);
+
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(caseId);
@@ -132,6 +147,11 @@ public class NotificationGeneratorTest {
 
     }
 
+    @AfterEach
+    public void cleanup() {
+        mocked.close();
+    }
+
     @Test
     public void should_send_notification_for_each_email_personalisation() {
         notificationGenerator =
@@ -162,7 +182,6 @@ public class NotificationGeneratorTest {
 
         when(emailNotificationPersonalisation.getRecipientsList(asylumCase)).thenReturn(singleton(emailAddress1));
         when(emailNotificationPersonalisation1.getRecipientsList(asylumCase)).thenReturn(singleton(emailAddress2));
-
         notificationGenerator.generate(callback);
 
         verify(notificationSender).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
@@ -178,6 +197,7 @@ public class NotificationGeneratorTest {
 
     @Test
     public void should_send_Aip_notification_Sms_for_each_personalisation_using_the_subscriber_mode() {
+
         notificationGenerator = new SmsNotificationGenerator(aipSmsNotificationPersonalisationList, notificationSender,
             notificationIdAppender);
 

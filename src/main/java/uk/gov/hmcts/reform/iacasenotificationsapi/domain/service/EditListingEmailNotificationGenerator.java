@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.ApplicationContextProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
@@ -10,6 +11,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.HomeOfficeEditListingNoChangePersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeEditListingNoChangePersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNotifyNotificationSender;
 
 /*
@@ -31,6 +33,9 @@ public class EditListingEmailNotificationGenerator extends EmailNotificationGene
 
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         final CaseDetails<AsylumCase> asylumCaseCaseDetailsBefore = callback.getCaseDetailsBefore().orElse(null);
+
+        ApplicationContextProvider.getApplicationContext().getBean(CustomerServicesProvider.class)
+            .setCorrectEmail(asylumCase);
 
         AsylumCase asylumCaseBefore = null;
         if (asylumCaseCaseDetailsBefore != null) {

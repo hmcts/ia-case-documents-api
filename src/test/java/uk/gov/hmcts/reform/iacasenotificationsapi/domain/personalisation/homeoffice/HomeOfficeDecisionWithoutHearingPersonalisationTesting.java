@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
 import java.util.Map;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
 
@@ -42,6 +45,7 @@ public class HomeOfficeDecisionWithoutHearingPersonalisationTesting {
     private String iaServicesPhone = "0300 123 1711";
     private String iaServicesEmail = "contactia@justice.gov.uk";
     private String iaExUiFrontendUrl = "http://localhost";
+    private String subjectPrefix = "Immigration and Asylum appeal";
     private Map<String, String> customerServices = Map.of("customerServicesTelephone", iaServicesPhone,
             "customerServicesEmail", iaServicesEmail);
 
@@ -54,6 +58,7 @@ public class HomeOfficeDecisionWithoutHearingPersonalisationTesting {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(mockedAppellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(mockedAppellantFamilyName));
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(mockedAriaListingReference));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         homeOfficeDecisionWithoutHearingPersonalisation = new HomeOfficeDecisionWithoutHearingPersonalisation(
                 homeOfficeDecisionWithoutHearingTemplateId,
@@ -93,7 +98,11 @@ public class HomeOfficeDecisionWithoutHearingPersonalisationTesting {
 
     @Test
     public void should_return_personalisation_when_all_information_given() {
+
+        initializePrefixes(homeOfficeDecisionWithoutHearingPersonalisation);
         when(customerServicesProvider.getCustomerServicesPersonalisation()).thenReturn(customerServices);
+
+
         Map<String, String> personalisation =
                 homeOfficeDecisionWithoutHearingPersonalisation.getPersonalisation(asylumCase);
 
@@ -105,5 +114,6 @@ public class HomeOfficeDecisionWithoutHearingPersonalisationTesting {
         assertEquals(iaServicesPhone, personalisation.get("customerServicesTelephone"));
         assertEquals(iaServicesEmail, personalisation.get("customerServicesEmail"));
         assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
+        assertEquals(subjectPrefix, personalisation.get("subjectPrefix"));
     }
 }
