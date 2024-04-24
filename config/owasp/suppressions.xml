@@ -6,7 +6,7 @@
       using HttpInvokerServiceExport and org.springframework.remoting.
       As we don't use those constructs, we are not affected by it.
       The suppression will be a long-term one. An expiry to the suppression is kept to allow re-evaluating whether
-      we're still unaffected by it.
+      we are still unaffected by it.
       ]]></notes>
     <cve>CVE-2016-1000027</cve>
   </suppress>
@@ -19,5 +19,10 @@
       If it still happens, check that we don't use hutool-json and json-java. If we don't, extend the suppression date by another year.
       ]]</notes>
     <cve>CVE-2022-45688</cve>
+  </suppress>
+  <suppress until="2024-05-31">
+    <notes>Suppress until org.springframework.cloud and uk.gov.hmcts.reform/service-auth-provider-client upgrade their org.bouncycastle dependents</notes>
+    <cve>CVE-2023-33202</cve>
+    <cve>CVE-2023-34053</cve>
   </suppress>
 </suppressions>

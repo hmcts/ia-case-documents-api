@@ -17,6 +17,7 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_PBA_ACCOUNTS;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.HAS_SERVICE_REQUEST_ALREADY;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.IS_SERVICE_REQUEST_TAB_VISIBLE_CONSIDERING_REMISSIONS;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_ACCOUNT_LIST;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
@@ -103,6 +104,8 @@ class PaymentAppealPreparerTest {
         lenient().when(caseDetails.getCaseData()).thenReturn(asylumCase);
         lenient().when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         lenient().when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.REP));
+        lenient().when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.NO));
     }
 
     @Test
@@ -621,5 +624,12 @@ class PaymentAppealPreparerTest {
             || callback.getEvent() == Event.GENERATE_SERVICE_REQUEST
             || callback.getEvent() == Event.RECORD_REMISSION_DECISION)
             && isLegalRepJourney;
+    }
+
+    @Test
+    void should_not_handle_ada_without_error() {
+        lenient().when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.YES));
+        assertFalse(paymentAppealPreparer.canHandle(PreSubmitCallbackStage.ABOUT_TO_START, callback));
     }
 }

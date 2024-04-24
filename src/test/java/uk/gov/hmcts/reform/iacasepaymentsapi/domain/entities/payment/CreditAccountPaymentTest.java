@@ -29,7 +29,6 @@ class CreditAccountPaymentTest {
 
     @BeforeEach
     public void setUp() {
-
         creditAccountPayment = new CreditAccountPayment(
             accountNumber, amount, caseReference, ccdCaseNumber,
             currency, customerReference, description, "ia-legal-rep-org",

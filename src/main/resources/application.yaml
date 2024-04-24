@@ -118,6 +118,10 @@ security:
       - "payForAppeal"
       - "generateServiceRequest"
     caseworker-ia-admofficer:
+      - "startAppeal"
+      - "submitAppeal"
+      - "editAppeal"
+      - "generateServiceRequest"
       - "recordRemissionDecision"
       - "generateServiceRequest"
     caseworker-ia-system:

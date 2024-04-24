@@ -30,7 +30,6 @@ public class FeeServiceTest {
 
     @BeforeEach
     void setUp() {
-
         feeService = new FeeService(feesConfiguration, feesRegisterApi);
     }
 
