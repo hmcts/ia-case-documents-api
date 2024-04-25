@@ -1,11 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 
 
 @Service
@@ -13,6 +17,11 @@ public class CustomerServicesProvider {
 
     private final String customerServicesTelephone;
     private final String customerServicesEmail;
+    @Value("${customerServices.internal.telephoneNumber.ada}")
+    private String internalAdaCustomerServicesTelephone;
+    @Value("${customerServices.internal.emailAddress.ada}")
+    private String internalAdaCustomerServicesEmail;
+
 
     public CustomerServicesProvider(
         @Value("${customerServices.telephoneNumber}") String customerServicesTelephone,
@@ -43,5 +52,17 @@ public class CustomerServicesProvider {
     public String getCustomerServicesEmail() {
         requireNonNull(customerServicesEmail);
         return customerServicesEmail;
+    }
+
+    public String getInternalCustomerServicesTelephone(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && isAppellantInDetention(asylumCase)
+                ? internalAdaCustomerServicesTelephone
+                : customerServicesTelephone;
+    }
+
+    public String getInternalCustomerServicesEmail(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && isAcceleratedDetainedAppeal(asylumCase)
+                ? internalAdaCustomerServicesEmail
+                : customerServicesEmail;
     }
 }

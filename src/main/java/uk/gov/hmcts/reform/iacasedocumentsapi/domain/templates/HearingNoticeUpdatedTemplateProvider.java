@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 @Component
 public class HearingNoticeUpdatedTemplateProvider {
-
+    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private final StringProvider stringProvider;
     private final CustomerServicesProvider customerServicesProvider;
 
@@ -53,7 +55,7 @@ public class HearingNoticeUpdatedTemplateProvider {
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
 
         fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
-        fieldValues.put("oldHearingDate", fieldMapper.formatDateForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
+        fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
 
         if (asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING))) {
 

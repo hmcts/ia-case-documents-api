@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
 
-import com.google.common.base.Strings;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,8 +56,8 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         );
 
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("hearingDate", formatDateForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
-        fieldValues.put("hearingTime", formatTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
+        fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
+        fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("anonymityOrder", asylumCase.read(ANONYMITY_ORDER, YesOrNo.class)
@@ -86,23 +85,4 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         return fieldValues;
     }
 
-    private String formatDateForRendering(
-        String date
-    ) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDateTime.parse(date).format(DOCUMENT_DATE_FORMAT);
-        }
-
-        return "";
-    }
-
-    private String formatTimeForRendering(
-        String date
-    ) {
-        if (!Strings.isNullOrEmpty(date)) {
-            return LocalDateTime.parse(date).format(DOCUMENT_TIME_FORMAT);
-        }
-
-        return "";
-    }
 }
