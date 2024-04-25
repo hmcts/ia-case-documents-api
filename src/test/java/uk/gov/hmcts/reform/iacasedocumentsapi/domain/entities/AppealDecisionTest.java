@@ -23,7 +23,6 @@ public class AppealDecisionTest {
 
     @Test
     public void throws_when_trying_to_create_from_invalid_value() {
-
         assertThatThrownBy(() -> AppealDecision.from("invalid-value"))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("invalid-value not an AppealDecision");
@@ -31,7 +30,6 @@ public class AppealDecisionTest {
 
     @Test
     public void correct_string_values_mapped_to_enum() {
-
         assertEquals(AppealDecision.ALLOWED.toString(), "allowed");
         assertEquals(AppealDecision.DISMISSED.toString(), "dismissed");
     }
