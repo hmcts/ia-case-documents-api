@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -64,6 +65,7 @@ class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest i
                     .with(APPELLANT_REPRESENTATIVE, "ted")
                     .with(RESPONDENT_REPRESENTATIVE, "bill")
                     .with(LIST_CASE_HEARING_CENTRE, "taylorHouse")
+                    .with(APPEAL_TYPE, AppealType.HU.getValue())
 
                 )));
 

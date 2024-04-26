@@ -37,7 +37,7 @@ public class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .collect(Collectors.toList());
 
-        assertEquals(34, sortedTags.size());
+        assertEquals(77, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -70,9 +70,52 @@ public class BundleOrderTest {
             DocumentTag.UPPER_TRIBUNAL_BUNDLE,
             DocumentTag.APPEAL_REASONS,
             DocumentTag.CLARIFYING_QUESTIONS,
+            DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT,
+            DocumentTag.ADA_SUITABILITY,
+            DocumentTag.APPEAL_FORM,
+            DocumentTag.NOTICE_OF_DECISION_UT_TRANSFER,
+            DocumentTag.REQUEST_CASE_BUILDING,
+            DocumentTag.INTERNAL_ADA_SUITABILITY,
+            DocumentTag.REQUEST_RESPONDENT_REVIEW,
+            DocumentTag.INTERNAL_DET_DECISION_AND_REASONS_LETTER,
+            DocumentTag.UPLOAD_THE_APPEAL_RESPONSE,
+            DocumentTag.HEARING_BUNDLE_READY_LETTER,
+            DocumentTag.INTERNAL_APPEAL_SUBMISSION,
+            DocumentTag.INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER,
+            DocumentTag.INTERNAL_END_APPEAL_AUTOMATICALLY,
+            DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER,
+            DocumentTag.INTERNAL_DET_MARK_AS_PAID_LETTER,
+            DocumentTag.INTERNAL_LIST_CASE_LETTER,
+            DocumentTag.INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER,
+            DocumentTag.INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW,
+            DocumentTag.INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER,
+            DocumentTag.INTERNAL_DET_MARK_AS_ADA_LETTER,
+            DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER,
+            DocumentTag.INTERNAL_APPLY_FOR_FTPA_RESPONDENT,
+            DocumentTag.INTERNAL_DETAINED_TRANSFER_OUT_OF_ADA_LETTER,
+            DocumentTag.INTERNAL_FTPA_SUBMITTED_APPELLANT_LETTER,
+            DocumentTag.INTERNAL_APPELLANT_FTPA_DECIDED_LETTER,
+            DocumentTag.INTERNAL_HO_FTPA_DECIDED_LETTER,
+            DocumentTag.INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER,
+            DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER,
+            DocumentTag.MAINTAIN_CASE_UNLINK_APPEAL_LETTER,
+            DocumentTag.INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_LETTER,
+            DocumentTag.INTERNAL_CHANGE_HEARING_CENTRE_LETTER,
+            DocumentTag.MAINTAIN_CASE_LINK_APPEAL_LETTER,
+            DocumentTag.AMEND_HOME_OFFICE_APPEAL_RESPONSE,
+            DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER,
+            DocumentTag.INTERNAL_CHANGE_DIRECTION_DUE_DATE_LETTER,
+            DocumentTag.INTERNAL_EDIT_APPEAL_LETTER,
+            DocumentTag.HOME_OFFICE_UPLOAD_ADDITIONAL_ADDENDUM_EVIDENCE_LETTER,
+            DocumentTag.LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER,
+            DocumentTag.INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER,
+            DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER,
+            DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER,
+            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE,
+            DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT,
+            DocumentTag.IAUT_2_FORM,
             DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER,
             DocumentTag.UPDATED_FINAL_DECISION_AND_REASONS_PDF,
-            DocumentTag.FINAL_DECISION_AND_REASONS_DOCUMENT,
             DocumentTag.NONE
         );
 
@@ -83,3 +126,4 @@ public class BundleOrderTest {
         }
     }
 }
+

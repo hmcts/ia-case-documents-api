@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum State {
 
     APPEAL_STARTED("appealStarted"),
+    APPEAL_STARTED_BY_ADMIN("appealStartedByAdmin"),
     APPEAL_SUBMITTED("appealSubmitted"),
     APPEAL_SUBMITTED_OUT_OF_TIME("appealSubmittedOutOfTime"),
     AWAITING_RESPONDENT_EVIDENCE("awaitingRespondentEvidence"),
@@ -23,6 +24,13 @@ public enum State {
     ENDED("ended"),
     AWAITING_CMA_REQUIREMENTS("awaitingCmaRequirements"),
     CMA_ADJUSTMENTS_AGREED("cmaAdjustmentsAgreed"),
+    FTPA_DECIDED("ftpaDecided"),
+    PENDING_PAYMENT("pendingPayment"),
+    ADJOURNED("adjourned"),
+    FTPA_SUBMITTED("ftpaSubmitted"),
+
+
+
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

@@ -72,6 +72,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
         asylumCase.clear(AsylumCaseDefinition.CASE_BUNDLES);
 
         Optional<YesOrNo> maybeCaseFlagSetAsideReheardExists = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS,YesOrNo.class);
+        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
 
         if (maybeCaseFlagSetAsideReheardExists.isPresent()
             && maybeCaseFlagSetAsideReheardExists.get() == YesOrNo.YES) {
@@ -84,7 +85,9 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
 
             asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
         } else {
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
+            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
+                    isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
+
         }
         asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase));
 
