@@ -68,10 +68,63 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             populateCustomCollections(asylumCase, sourceField, targetField)
         );
 
+        boolean isRemittedFeature = featureToggler.getValue("dlrm-remitted-feature-flag", false);
+
         // Map does not accept duplicate keys, so need to process this separately
         if (isCaseReheard) {
             populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
+            if (isRemittedFeature) {
+                asylumCase.write(CUSTOM_LATEST_REMITTAL_DOCS, fetchLatestRemittalDocuments(asylumCase));
+                asylumCase.write(CUSTOM_REHEARD_HEARING_DOCS, fetchLatestReheardDocuments(asylumCase));
+            }
         }
+    }
+
+    private List<IdValue<DocumentWithDescription>> fetchLatestRemittalDocuments(AsylumCase asylumCase) {
+        Optional<List<IdValue<RemittalDocument>>> maybeExistingRemittalDocuments =
+            asylumCase.read(REMITTAL_DOCUMENTS);
+        List<IdValue<RemittalDocument>> allRemittalDocuments = maybeExistingRemittalDocuments
+            .orElse(emptyList());
+
+        if (!allRemittalDocuments.isEmpty()) {
+            RemittalDocument remittalDocument = allRemittalDocuments.get(0).getValue();
+            DocumentWithDescription remittalDocWithDesc = getDocumentWithDescFromMetaData(remittalDocument.getDecisionDocument());
+
+            List<IdValue<DocumentWithDescription>> remittalOtherDocsWithDesc = getDocumentWithDescListFromMetaData(remittalDocument.getOtherRemittalDocs());
+
+            List<IdValue<DocumentWithDescription>> allDocuments =
+                documentWithDescriptionAppender.append(remittalDocWithDesc,
+                    remittalOtherDocsWithDesc
+                );
+            return allDocuments;
+        }
+        return emptyList();
+    }
+
+    private DocumentWithDescription getDocumentWithDescFromMetaData(DocumentWithMetadata documentWithMetadata) {
+        return new DocumentWithDescription(documentWithMetadata.getDocument(),
+            documentWithMetadata.getDescription());
+    }
+
+    private List<IdValue<DocumentWithDescription>> getDocumentWithDescListFromMetaData(List<IdValue<DocumentWithMetadata>> listDocumentWithMetaData) {
+        List<IdValue<DocumentWithDescription>> listDocumentWithDesc = new ArrayList<>();
+        for (IdValue<DocumentWithMetadata> documentWithMetadataIdValue : listDocumentWithMetaData) {
+            listDocumentWithDesc.add(new IdValue<>(documentWithMetadataIdValue.getId(),
+                getDocumentWithDescFromMetaData(documentWithMetadataIdValue.getValue())));
+        }
+        return listDocumentWithDesc;
+    }
+
+    private List<IdValue<DocumentWithDescription>> fetchLatestReheardDocuments(AsylumCase asylumCase) {
+        Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
+            asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        List<IdValue<ReheardHearingDocuments>> allReheardHearingDocuments = maybeExistingReheardDocuments
+            .orElse(emptyList());
+
+        if (!allReheardHearingDocuments.isEmpty()) {
+            return getDocumentWithDescListFromMetaData(allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs());
+        }
+        return emptyList();
     }
 
     void populateCustomCollections(AsylumCase asylumCase, AsylumCaseDefinition sourceField, AsylumCaseDefinition targetField) {
