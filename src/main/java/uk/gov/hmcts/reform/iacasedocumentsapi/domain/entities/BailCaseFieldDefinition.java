@@ -5,6 +5,7 @@ import java.util.List;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
 
 public enum BailCaseFieldDefinition {
     SENT_BY_CHECKLIST(
@@ -344,7 +345,13 @@ public enum BailCaseFieldDefinition {
     HEARING_DOCUMENTS(
         "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),    
     IS_IMA_ENABLED(
-        "isImaEnabled", new TypeReference<YesOrNo>() {});
+        "isImaEnabled", new TypeReference<YesOrNo>() {}),
+    IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED(
+            "isBailsLocationReferenceDataEnabled", new TypeReference<YesOrNo>() {}),
+    REF_DATA_LISTING_LOCATION_DETAIL(
+            "refDataListingLocationDetail", new TypeReference<CourtVenue>() {}),
+    IS_REMOTE_HEARING(
+            "isRemoteHearing", new TypeReference<YesOrNo>() {});
 
     private final String value;
     private final TypeReference typeReference;
