@@ -588,6 +588,7 @@ security:
       - "submitReasonsForAppeal"
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
+      - "applyForFTPAAppellant"
     caseworker-ia-iacjudge:
       - "sendDirection"
       - "generateDecisionAndReasons"
