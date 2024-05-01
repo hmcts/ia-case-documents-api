@@ -7,25 +7,34 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IRC_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.PRISON_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.REF_DATA_LISTING_LOCATION_DETAIL;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantDetainedLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
 
 public class BailNoticeOfHearingTemplate {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
+    private static final String REMOTE_HEARING_LOCATION = "Cloud Video Platform (CVP)";
     private final CustomerServicesProvider customerServicesProvider;
     private final StringProvider stringProvider;
 
@@ -50,13 +59,35 @@ public class BailNoticeOfHearingTemplate {
         fieldValues.put("legalRepReference", bailCase.read(LEGAL_REP_REFERENCE, String.class).orElse(""));
         fieldValues.put("applicantDetainedLoc", getApplicantDetainedLocation(bailCase));
         fieldValues.put("applicantPrisonDetails", bailCase.read(APPLICANT_PRISON_DETAILS, String.class).orElse(""));
-        fieldValues.put("hearingCentreAddress", getListinglocationAddress(bailCase));
+        fieldValues.put("hearingCentreAddress", getListingLocationAddressFromRefDataOrCcd(bailCase));
         fieldValues.put("hearingDate", formatDateForRendering(listingHearingDate));
         fieldValues.put("hearingTime", formatTimeForRendering(listingHearingDate));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
         fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
 
         return fieldValues;
+    }
+
+    public String getListingLocationAddressFromRefDataOrCcd(BailCase bailCase) {
+        String hearingLocationAddress = getListinglocationAddress(bailCase);
+        YesOrNo isBailsLocationRefDataEnabled = bailCase.read(IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED, YesOrNo.class)
+                .orElse(NO);
+
+        if (isBailsLocationRefDataEnabled == YES) {
+            if (bailCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(NO) == YES) {
+                return REMOTE_HEARING_LOCATION;
+            } else {
+                Optional<CourtVenue> refDataListingLocationDetail = bailCase.read(REF_DATA_LISTING_LOCATION_DETAIL, CourtVenue.class);
+
+                if (refDataListingLocationDetail.isPresent()) {
+                    hearingLocationAddress = (refDataListingLocationDetail.get().getCourtName() + ", " +
+                            refDataListingLocationDetail.get().getCourtAddress() + ", " +
+                            refDataListingLocationDetail.get().getPostcode());
+
+                }
+            }
+        }
+        return hearingLocationAddress;
     }
 
     private String formatDateForRendering(
