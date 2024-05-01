@@ -26,5 +26,6 @@
   "appealReferenceNumber": "PA/12345/2019",
   "sendDirectionActionAvailable": "Yes",
   "hearingCentre": "taylorHouse",
-  "appellantInDetention": "Yes"
+  "appellantInDetention": "Yes",
+  "appellantInUk": "Yes"
 }
