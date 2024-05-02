@@ -5,7 +5,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 7329,
+      "id": 73291,
       "eventId": "residentJudgeFtpaDecision",
       "state": "ftpaSubmitted",
       "caseData": {
@@ -47,7 +47,7 @@
         "ftpaAppellantRjDecisionOutcomeType": "granted",
         "notificationsSent": [
           {
-            "id": "7329_INTERNAL_APPELLANT_FTPA_DECIDED_BY_RESIDENT_JUDGE_DET",
+            "id": "73291_INTERNAL_APPELLANT_FTPA_DECIDED_BY_RESIDENT_JUDGE_DET",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -55,9 +55,9 @@
     },
     "notifications": [
       {
-        "reference": "7329_INTERNAL_APPELLANT_FTPA_DECIDED_BY_RESIDENT_JUDGE_DET",
+        "reference": "73291_INTERNAL_APPELLANT_FTPA_DECIDED_BY_RESIDENT_JUDGE_DET",
         "recipient": "det-irc-brookhouse@example.com",
-        "subject": "ADA – SERVE IN PERSON: FTPA decided",
+        "subject": "IAFT – SERVE IN PERSON: FTPA decided",
         "body": [
           "Home Office reference: A1234567",
           "HMCTS reference: PA/12345/2019",
