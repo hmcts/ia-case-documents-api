@@ -151,13 +151,6 @@ internalDetainedDecisionsAndReasonsAllowedLetter.templateName: ${IA_ADA_INTERNAL
 internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueInWorkingDays: 7
 internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueCalendarDays: 14
 
-internalDetainedDecisionsAndReasonsAllowedLetter.contentType: application/pdf
-internalDetainedDecisionsAndReasonsAllowedLetter.fileExtension: PDF
-internalDetainedDecisionsAndReasonsAllowedLetter.fileName: "ADA-Appellant-letter-appeal-decided-allowed"
-internalDetainedDecisionsAndReasonsAllowedLetter.templateName: ${IA_ADA_INTERNAL_DECISIONS_AND_REASONS_ALLOWED_TEMPLATE:TB-IAC-DEC-ENG-00006.docx}
-internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueInWorkingDays: 7
-internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueCalendarDays: 14
-
 aipDecisionAndReasonsCoverLetter.contentType:  application/pdf
 aipDecisionAndReasonsCoverLetter.fileExtension: PDF
 aipDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
