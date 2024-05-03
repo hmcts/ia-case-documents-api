@@ -1,6 +1,7 @@
 {
   "description": "RIA-3130 finalBundling to prehearing",
   "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "launchDarklyKey": "dlrm-remitted-feature-flag:false",
   "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
