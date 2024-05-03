@@ -204,6 +204,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("adaHearingNoticeUpdatedDetails")
+    public DocumentCreator<AsylumCase> getAdaHearingNoticeUpdatedDetailsDocumentCreator(
+            @Value("${adaHearingNoticeUpdatedDetailsDocument.contentType}") String contentType,
+            @Value("${adaHearingNoticeUpdatedDetailsDocument.fileExtension}") String fileExtension,
+            @Value("${adaHearingNoticeUpdatedDetailsDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            AdaHearingNoticeUpdatedDetailsTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("remoteHearingNoticeUpdatedDetails")
     public DocumentCreator<AsylumCase> getRemoteHearingNoticeUpdatedDetailsDocumentCreator(
         @Value("${remoteHearingNoticeUpdatedDetailsDocument.contentType}") String contentType,
@@ -211,6 +232,90 @@ public class DocumentCreatorConfiguration {
         @Value("${remoteHearingNoticeUpdatedDetailsDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         HearingNoticeUpdatedDetailsRemoteTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("adaHearingNotice")
+    public DocumentCreator<AsylumCase> getAdaHearingNoticeDocumentCreator(
+        @Value("${hearingNoticeDocument.contentType}") String contentType,
+        @Value("${hearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("adaHearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("adaSuitability")
+    public DocumentCreator<AsylumCase> getAdaSuitabilityDocumentCreator(
+            @Value("${adaSuitabilityDocument.contentType}") String contentType,
+            @Value("${adaSuitabilityDocument.fileExtension}") String fileExtension,
+            @Value("${adaSuitabilityDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            AdaSuitabilityTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalAdaSuitabilitySuitable")
+    public DocumentCreator<AsylumCase> getInternalAdaSuitabilityLetterSuitableDocumentCreator(
+        @Value("${adaInternalSuitabilityReviewSuitableDocument.contentType}") String contentType,
+        @Value("${adaInternalSuitabilityReviewSuitableDocument.fileExtension}") String fileExtension,
+        @Value("${adaInternalSuitabilityReviewSuitableDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAdaSuitabilityReviewSuitableLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalAdaSuitabilityUnsuitable")
+    public DocumentCreator<AsylumCase> getInternalAdaSuitabilityLetterUnsuitableDocumentCreator(
+        @Value("${adaInternalSuitabilityReviewUnsuitableDocument.contentType}") String contentType,
+        @Value("${adaInternalSuitabilityReviewUnsuitableDocument.fileExtension}") String fileExtension,
+        @Value("${adaInternalSuitabilityReviewUnsuitableDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAdaSuitabilityReviewUnsuitableLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
