@@ -93,12 +93,14 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
              && featureToggler.getValue("reheard-feature", false);
+        boolean isRemittedFeature = featureToggler.getValue("dlrm-remitted-feature-flag", false);
+
 
         if (isReheardCase) {
             //populate these collections to avoid error on the Stitching api
             initializeNewCollections(asylumCase);
 
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
+            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, isRemittedFeature ? "iac-remitted-reheard-hearing-bundle-config.yaml" : "iac-reheard-hearing-bundle-config.yaml");
         } else {
             asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
         }
@@ -114,7 +116,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             throw new IllegalStateException("Cannot make a deep copy of the case");
         }
 
-        prepareDocuments(getMappingFields(isReheardCase),asylumCaseCopy);
+        prepareDocuments(getMappingFields(isReheardCase, isRemittedFeature),asylumCaseCopy);
         if (isReheardCase) {
             prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(),asylumCaseCopy);
         }
@@ -175,6 +177,18 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         if (!asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS).isPresent()) {
             asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
+        }
+
+        if (!asylumCase.read(LATEST_REMITTAL_DOCUMENTS).isPresent()) {
+            asylumCase.write(LATEST_REMITTAL_DOCUMENTS, emptyList());
+        }
+
+        if (!asylumCase.read(LATEST_REHEARD_HEARING_DOCUMENTS).isPresent()) {
+            asylumCase.write(LATEST_REHEARD_HEARING_DOCUMENTS, emptyList());
+        }
+
+        if (!asylumCase.read(LATEST_DECISION_AND_REASONS_DOCUMENTS).isPresent()) {
+            asylumCase.write(LATEST_DECISION_AND_REASONS_DOCUMENTS, emptyList());
         }
     }
 
@@ -321,9 +335,21 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
     }
 
-    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase) {
+    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isRemittedFeature) {
 
         if (isReheardCase) {
+            if (isRemittedFeature) {
+                return  Map.of(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, APP_ADDITIONAL_EVIDENCE_DOCS,
+                    CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS, RESP_ADDITIONAL_EVIDENCE_DOCS,
+                    CUSTOM_FTPA_APPELLANT_DOCS, FTPA_APPELLANT_DOCUMENTS,
+                    CUSTOM_FTPA_RESPONDENT_DOCS, FTPA_RESPONDENT_DOCUMENTS,
+                    CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, LATEST_DECISION_AND_REASONS_DOCUMENTS,
+                    CUSTOM_REHEARD_HEARING_DOCS, LATEST_REHEARD_HEARING_DOCUMENTS,
+                    CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, APPELLANT_ADDENDUM_EVIDENCE_DOCS,
+                    CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, RESPONDENT_ADDENDUM_EVIDENCE_DOCS,
+                    CUSTOM_LATEST_REMITTAL_DOCS, LATEST_REMITTAL_DOCUMENTS
+                    );
+            }
             return  Map.of(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, APP_ADDITIONAL_EVIDENCE_DOCS,
                 CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS, RESP_ADDITIONAL_EVIDENCE_DOCS,
              CUSTOM_FTPA_APPELLANT_DOCS, FTPA_APPELLANT_DOCUMENTS,
@@ -381,6 +407,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private void prepareDocuments(Map<AsylumCaseDefinition,AsylumCaseDefinition> mappingFields,AsylumCase asylumCase) {
 
         mappingFields.forEach((sourceField,targetField) -> {
+            System.out.println(sourceField.value());
+            System.out.println(targetField.value());
 
             if (!asylumCase.read(sourceField).isPresent()) {
                 return;
@@ -497,6 +525,13 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                     dateProvider.now().toString(),
                                     DocumentTag.ADDENDUM_EVIDENCE,
                                     SUPPLIED_BY_RESPONDENT);
+                                break;
+                            case CUSTOM_LATEST_REMITTAL_DOCS:
+                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                    documentWithDescription.getValue().getDescription().orElse(""),
+                                    dateProvider.now().toString(),
+                                    DocumentTag.REMITTAL_DECISION,
+                                    "");
                                 break;
                             default:break;
                         }

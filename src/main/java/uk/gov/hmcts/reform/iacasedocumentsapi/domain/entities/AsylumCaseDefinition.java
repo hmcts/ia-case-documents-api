@@ -507,7 +507,7 @@ public enum AsylumCaseDefinition {
             "latestReheardHearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     CUSTOM_LATEST_REMITTAL_DOCS(
-        "customLatestRemittalDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+        "customLatestRemittalDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
     ;
 
 

@@ -76,6 +76,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             if (isRemittedFeature) {
                 asylumCase.write(CUSTOM_LATEST_REMITTAL_DOCS, fetchLatestRemittalDocuments(asylumCase));
                 asylumCase.write(CUSTOM_REHEARD_HEARING_DOCS, fetchLatestReheardDocuments(asylumCase));
+                asylumCase.write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, fetchLatestDecisionDocuments(asylumCase));
             }
         }
     }
@@ -101,12 +102,37 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         return emptyList();
     }
 
+    private List<IdValue<DocumentWithDescription>> fetchLatestDecisionDocuments(AsylumCase asylumCase) {
+        //Checking if we have some documents in Collection(Object) field, else get the updated/overwritten document from the FINAL field.
+        Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
+            asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION);
+        List<IdValue<ReheardHearingDocuments>> allReheardDecisionDocuments = maybeExistingReheardDocuments
+            .orElse(emptyList());
+
+        if (allReheardDecisionDocuments.isEmpty()) {
+            Optional<List<IdValue<DocumentWithMetadata>>> finalDEcisionAndResonDocs = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
+            List<IdValue<DocumentWithDescription>> maybeFinalDecisionAndReasonsDocuments =
+                getDocumentWithDescListFromMetaData(finalDEcisionAndResonDocs.orElse(emptyList()));
+            return maybeFinalDecisionAndReasonsDocuments;
+        } else {
+            return getDocumentWithDescListFromMetaData(allReheardDecisionDocuments.get(0).getValue().getReheardHearingDocs());
+        }
+    }
+
     private DocumentWithDescription getDocumentWithDescFromMetaData(DocumentWithMetadata documentWithMetadata) {
         return new DocumentWithDescription(documentWithMetadata.getDocument(),
             documentWithMetadata.getDescription());
     }
 
+    /**
+     * Helper method to get a list of DocumentWithDescription from list of DocumentWithMetadata.
+     * @param listDocumentWithMetaData list of "DocumentWithMetadata"
+     * @return list of DocumentWithDescription
+     */
     private List<IdValue<DocumentWithDescription>> getDocumentWithDescListFromMetaData(List<IdValue<DocumentWithMetadata>> listDocumentWithMetaData) {
+        if (listDocumentWithMetaData.isEmpty()) {
+            return emptyList();
+        }
         List<IdValue<DocumentWithDescription>> listDocumentWithDesc = new ArrayList<>();
         for (IdValue<DocumentWithMetadata> documentWithMetadataIdValue : listDocumentWithMetaData) {
             listDocumentWithDesc.add(new IdValue<>(documentWithMetadataIdValue.getId(),
@@ -116,6 +142,8 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     }
 
     private List<IdValue<DocumentWithDescription>> fetchLatestReheardDocuments(AsylumCase asylumCase) {
+        // When the remitted feature is on, all the reheard hearing documents will be stored in the Collection(Object).
+        //Check HaringNoticeCreator
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
             asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
         List<IdValue<ReheardHearingDocuments>> allReheardHearingDocuments = maybeExistingReheardDocuments
