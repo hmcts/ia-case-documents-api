@@ -1,5 +1,5 @@
 {
-  "description": "RIA-8846-customise-reheard-hearing-ready-bundle-remitted",
+  "description": "RIA-8846-customise-reheard-hearing-ready-bundle-remitted-preparer",
   "launchDarklyKey": "reheard-feature:true",
   "launchDarklyKey": "dlrm-remitted-feature-flag:true",
   "request": {
@@ -382,22 +382,22 @@
             "id": "2",
             "value": {
               "document": {
-                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
               },
-              "description": "Case summary"
+              "description": ""
             }
           },
           {
             "id": "1",
             "value": {
               "document": {
-                "document_url": "{$FIXTURE_DOC2_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
               },
-              "description": ""
+              "description": "Case summary"
             }
           }
         ],
