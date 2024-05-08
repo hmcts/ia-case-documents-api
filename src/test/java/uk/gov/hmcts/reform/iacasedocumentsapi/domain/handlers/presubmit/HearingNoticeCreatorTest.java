@@ -9,12 +9,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_FLAG_SET_ASIDE_REHEARD_EXISTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS_COLLECTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -46,11 +43,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 class HearingNoticeCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -86,12 +85,14 @@ class HearingNoticeCreatorTest {
             new HearingNoticeCreator(
                 hearingNoticeDocumentCreator,
                 remoteHearingNoticeDocumentCreator,
+                adaHearingNoticeDocumentCreator,
                 documentHandler,
                 featureToggler,
                 documentReceiver,
                 documentsAppender,
                 reheardAppender
             );
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
     }
 
     @Test
@@ -177,6 +178,27 @@ class HearingNoticeCreatorTest {
         verify(hearingNoticeDocumentCreator, times(0)).create(caseDetails);
         verify(remoteHearingNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
+    }
+
+    @Test
+    void should_create_hearing_notice_pdf_and_append_to_hearing_documents_for_ada_case() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(adaHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.HARMONDSWORTH));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(adaHearingNoticeDocumentCreator, times(1)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test

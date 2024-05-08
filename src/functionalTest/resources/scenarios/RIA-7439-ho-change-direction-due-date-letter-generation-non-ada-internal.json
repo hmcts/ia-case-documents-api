@@ -1,0 +1,111 @@
+{
+  "description": "RIA-7439 - letter generation on change ho direction due date - internal non-Ada",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "eventId": "changeDirectionDueDate",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "isAcceleratedDetainedAppeal": "No",
+          "appellantInDetention": "Yes",
+          "directions": [
+            {
+              "id": "2",
+              "value": {
+                "explanation": "Do the second thing",
+                "parties": "respondent",
+                "dateDue": "2023-10-15",
+                "dateSent": "2023-09-25",
+                "tag": "",
+                "previousDates": [
+                  {
+                    "id": "1",
+                    "value": {
+                      "dateDue": "2023-01-05",
+                      "dateSent": "2023-01-01"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Do the first thing",
+                "parties": "respondent",
+                "dateDue": "2018-12-31",
+                "dateSent": "2018-12-25",
+                "tag": ""
+              }
+            }
+          ],
+          "directionList": "Direction 2",
+          "directionEditDateDue": "2023-12-31",
+          "directionEditParties" : "respondent",
+          "directionEditExplanation": "Do the second thing"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "isAcceleratedDetainedAppeal": "No",
+        "appellantInDetention": "Yes",
+        "directions": [
+          {
+            "id": "2",
+            "value": {
+              "explanation": "Do the second thing",
+              "parties": "respondent",
+              "dateDue": "2023-10-15",
+              "dateSent": "2023-09-25",
+              "tag": "",
+              "previousDates": [
+                {
+                  "id": "1",
+                  "value": {
+                    "dateDue": "2023-01-05",
+                    "dateSent": "2023-01-01"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Do the first thing",
+              "parties": "respondent",
+              "dateDue": "2018-12-31",
+              "dateSent": "2018-12-25",
+              "tag": ""
+            }
+          }
+        ],
+        "editableDirections": null,
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 12345 2019-Awan-internal-ho-change-direction-due-date-letter.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "internalHoChangeDirectionDueDateLetter"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

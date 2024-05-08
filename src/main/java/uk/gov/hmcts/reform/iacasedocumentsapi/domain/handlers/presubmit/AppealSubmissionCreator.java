@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,13 +26,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
+    private final DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public AppealSubmissionCreator(
         @Qualifier("appealSubmission") DocumentCreator<AsylumCase> appealSubmissionDocumentCreator,
+        @Qualifier("internalAppealSubmission") DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.appealSubmissionDocumentCreator = appealSubmissionDocumentCreator;
+        this.internalAppealSubmissionDocumentCreator = internalAppealSubmissionDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -80,16 +83,35 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+        Document appealSubmission;
+        DocumentTag documentTag;
+        AsylumCaseDefinition documentField;
+
+        appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+        documentTag = DocumentTag.APPEAL_SUBMISSION;
+        documentField = LEGAL_REPRESENTATIVE_DOCUMENTS;
 
         documentHandler.addWithMetadata(
             asylumCase,
             appealSubmission,
-            LEGAL_REPRESENTATIVE_DOCUMENTS,
-            DocumentTag.APPEAL_SUBMISSION
+            documentField,
+            documentTag
         );
 
+        if (callback.getEvent().equals(Event.SUBMIT_APPEAL) && isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
+            appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
+            documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
+            documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;
+
+            documentHandler.addWithMetadata(
+                asylumCase,
+                appealSubmission,
+                documentField,
+                documentTag
+            );
+        }
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
+
 }
 

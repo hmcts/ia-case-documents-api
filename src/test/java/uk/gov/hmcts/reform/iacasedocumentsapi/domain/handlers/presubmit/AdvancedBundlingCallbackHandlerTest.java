@@ -18,16 +18,13 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ReheardHearingDocuments;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemittalDocument;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -44,7 +41,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-@MockitoSettings(strictness = Strictness.WARN)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class AdvancedBundlingCallbackHandlerTest {
 
     @Mock private EmBundleRequestExecutor emBundleRequestExecutor;
@@ -91,9 +88,11 @@ class AdvancedBundlingCallbackHandlerTest {
         caseBundles.add(new IdValue<>("1", bundle));
     }
 
-    @Test
-    void should_successfully_handle_the_callback() {
-
+    @ParameterizedTest
+    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
+    void should_successfully_handle_the_callback(String maybeDecision) {
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
+                ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -107,7 +106,8 @@ class AdvancedBundlingCallbackHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase).write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
+                maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
 
     }
@@ -149,9 +149,9 @@ class AdvancedBundlingCallbackHandlerTest {
 
         verify(asylumCase, times(1)).read(ADDITIONAL_EVIDENCE_DOCUMENTS);
         verify(asylumCase, times(1)).read(RESPONDENT_DOCUMENTS);
+        verify(asylumCase, never()).read(TRIBUNAL_DOCUMENTS);
         verify(asylumCase).write(AsylumCaseDefinition.APP_ADDITIONAL_EVIDENCE_DOCS, Collections.emptyList());
         verify(asylumCase).write(AsylumCaseDefinition.RESP_ADDITIONAL_EVIDENCE_DOCS, Collections.emptyList());
-
     }
 
     @Test
