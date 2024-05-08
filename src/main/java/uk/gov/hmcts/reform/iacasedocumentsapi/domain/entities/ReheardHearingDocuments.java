@@ -14,7 +14,7 @@ public class ReheardHearingDocuments {
 
     private List<IdValue<DocumentWithMetadata>> reheardHearingDocs;
 
-    private ReheardHearingDocuments() {
+    public  ReheardHearingDocuments() {
         // noop -- for deserializer
     }
 

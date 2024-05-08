@@ -1,5 +1,6 @@
 {
   "description": "RIA-3130-customise-reheard-hearing-ready-bundle",
+  "enabled": "false",
   "launchDarklyKey": "reheard-feature:true",
   "launchDarklyKey": "dlrm-remitted-feature-flag:false",
   "request": {

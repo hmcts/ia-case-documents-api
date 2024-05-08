@@ -45,6 +45,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LATEST_REMITTAL_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMITTAL_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESPONDENT_ADDENDUM_EVIDENCE_DOCS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESPONDENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESP_ADDITIONAL_EVIDENCE_DOCS;
@@ -73,6 +74,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefiniti
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithDescription;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemittalDocument;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -111,7 +113,7 @@ class CustomiseHearingBundleHandlerTest {
     private AsylumCase asylumCase;
     @Mock
     private AsylumCase asylumCaseCopy;
-
+    @Mock private Document document;
     @Mock
     private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
 
@@ -401,7 +403,7 @@ class CustomiseHearingBundleHandlerTest {
             new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> remittalDocs =
             new IdValue<>("1", createDocumentWithDescription());
-
+        final List<IdValue<RemittalDocument>> remittalDocuments = buildRemittalDocuments();
 
         when(asylumCaseCopy.read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(appellantAdditionalEvidenceDocuments)));
@@ -425,6 +427,8 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceDoc)));
         when(asylumCaseCopy.read(CUSTOM_LATEST_REMITTAL_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(remittalDocs)));
+        when(asylumCaseCopy.read(REMITTAL_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(remittalDocuments)));
 
         IdValue<DocumentWithMetadata> appellantAdditionalEvidenceDoc =
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "The appellant"));
@@ -532,6 +536,25 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
+    }
+
+    private List<IdValue<RemittalDocument>> buildRemittalDocuments() {
+
+        final DocumentWithMetadata remittalDec = new DocumentWithMetadata(
+            document, "test","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+        final DocumentWithMetadata remittalOtherDoc1 = new DocumentWithMetadata(
+            document, "other-test-1","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+        final DocumentWithMetadata remittalOtherDoc2 = new DocumentWithMetadata(
+            document, "other-test-1","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+        IdValue<DocumentWithMetadata> decisionDocWithMetadata =
+            new IdValue<>("11", remittalOtherDoc1);
+        IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
+            new IdValue<>("12", remittalOtherDoc2);
+
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        IdValue<RemittalDocument> remittalDocuments =
+            new IdValue<>("1", new RemittalDocument(remittalDec, listOfDocumentsWithMetadata));
+        return Lists.newArrayList(remittalDocuments);
     }
 
     @Test

@@ -140,7 +140,11 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         restoreCollections(asylumCase, asylumCaseCopy,isReheardCase);
 
         restoreAddendumEvidence(asylumCase, asylumCaseCopy,isReheardCase);
-        
+        restoreRemittalDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedFeature);
+        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedFeature,
+            LATEST_REHEARD_HEARING_DOCUMENTS, REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedFeature,
+            LATEST_DECISION_AND_REASONS_DOCUMENTS, REHEARD_DECISION_REASONS_COLLECTION);
         Optional<List<IdValue<Bundle>>> maybeCaseBundles = responseData.read(AsylumCaseDefinition.CASE_BUNDLES);
         asylumCase.write(AsylumCaseDefinition.CASE_BUNDLES, maybeCaseBundles);
 
@@ -160,6 +164,71 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         asylumCase.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
+    }
+
+    private void restoreReheardDocumentsInCollections(AsylumCase asylumCase, AsylumCase asylumCaseBefore, boolean isRemittedFeature, AsylumCaseDefinition latestField, AsylumCaseDefinition existingField) {
+        if (!isRemittedFeature) {
+            return;
+        }
+        // Retrieve the current reheard hearing documents from the latest field in the current asylum case
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeCurrentReheardHearingDocs = asylumCaseBefore.read(latestField);
+        List<IdValue<DocumentWithMetadata>> currentReheardHearingDocs = maybeCurrentReheardHearingDocs.orElse(emptyList());
+
+        //Retrieve the existing reheard hearing documents from the existing field in the asylum case before changes
+        Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardHearingDocs = asylumCaseBefore.read(existingField);
+        List<IdValue<ReheardHearingDocuments>> existingReheardDocs = maybeExistingReheardHearingDocs.orElse(emptyList());
+        // Initialize variables to store documents from the asylum case before changes
+        List<IdValue<DocumentWithMetadata>> beforeDocuments = new ArrayList<>();
+        ReheardHearingDocuments beforeReheardDocs = new ReheardHearingDocuments();
+        // If existing reheard hearing documents exist, extract the list of documents
+        if (!existingReheardDocs.isEmpty()) {
+            beforeReheardDocs = existingReheardDocs.get(0).getValue();
+            beforeDocuments = beforeReheardDocs.getReheardHearingDocs();
+        }
+        currentReheardHearingDocs = restoreDocumentsInCollection(currentReheardHearingDocs, beforeDocuments);
+        //Changed the documents in the first Reheard object
+        beforeReheardDocs.setReheardHearingDocs(currentReheardHearingDocs);
+        asylumCase.write(existingField, existingReheardDocs);
+    }
+
+    private void restoreRemittalDocumentsInCollections(AsylumCase asylumCase, AsylumCase asylumCaseBefore, boolean isRemittedFeature) {
+
+        if (!isRemittedFeature) {
+            return;
+        }
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeCurrentRemittalDocs = asylumCaseBefore.read(LATEST_REMITTAL_DOCUMENTS);
+        List<IdValue<DocumentWithMetadata>> currentRemittalDocuments = maybeCurrentRemittalDocs.orElse(emptyList());
+
+        Optional<List<IdValue<RemittalDocument>>> maybeRemittalDocs = asylumCaseBefore.read(REMITTAL_DOCUMENTS);
+        List<IdValue<RemittalDocument>> existingRemittalDocs = maybeRemittalDocs.orElse(emptyList());
+        List<IdValue<DocumentWithMetadata>> beforeDocuments = new ArrayList<>();
+        RemittalDocument beforeRemittalDocuments = new RemittalDocument();
+        String idValue = "1";
+
+        if (!existingRemittalDocs.isEmpty()) {
+            idValue = existingRemittalDocs.get(0).getId();
+            beforeRemittalDocuments = existingRemittalDocs.get(0).getValue();
+            beforeDocuments = beforeRemittalDocuments.getOtherRemittalDocs();
+        }
+        currentRemittalDocuments = restoreDocumentsInCollection(currentRemittalDocuments, beforeDocuments);
+
+        //Changed the documents in the latest RemittalDocs object
+        beforeRemittalDocuments.setOtherRemittalDocs(currentRemittalDocuments);
+        existingRemittalDocs.set(0, new IdValue<>(idValue, beforeRemittalDocuments));
+        asylumCase.write(REMITTAL_DOCUMENTS, existingRemittalDocs);
+    }
+
+    private List<IdValue<DocumentWithMetadata>> restoreDocumentsInCollection(List<IdValue<DocumentWithMetadata>> currentList, List<IdValue<DocumentWithMetadata>> existingList) {
+        List<IdValue<DocumentWithMetadata>> finalCurrentList = currentList;
+        List<IdValue<DocumentWithMetadata>> missingDocuments = existingList
+            .stream()
+            .filter(document -> !contains(finalCurrentList, document))
+            .collect(Collectors.toList());
+
+        for (IdValue<DocumentWithMetadata> documentWithMetadata : missingDocuments) {
+            currentList = documentWithMetadataAppender.append(documentWithMetadata.getValue(), currentList);
+        }
+        return currentList;
     }
 
     void initializeNewCollections(AsylumCase asylumCase) {
@@ -407,8 +476,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private void prepareDocuments(Map<AsylumCaseDefinition,AsylumCaseDefinition> mappingFields,AsylumCase asylumCase) {
 
         mappingFields.forEach((sourceField,targetField) -> {
-            System.out.println(sourceField.value());
-            System.out.println(targetField.value());
 
             if (!asylumCase.read(sourceField).isPresent()) {
                 return;

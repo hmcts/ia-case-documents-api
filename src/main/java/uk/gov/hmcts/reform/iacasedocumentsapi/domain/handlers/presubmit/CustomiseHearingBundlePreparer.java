@@ -135,8 +135,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         }
         List<IdValue<DocumentWithDescription>> listDocumentWithDesc = new ArrayList<>();
         for (IdValue<DocumentWithMetadata> documentWithMetadataIdValue : listDocumentWithMetaData) {
-            listDocumentWithDesc.add(new IdValue<>(documentWithMetadataIdValue.getId(),
-                getDocumentWithDescFromMetaData(documentWithMetadataIdValue.getValue())));
+            listDocumentWithDesc = documentWithDescriptionAppender.append(getDocumentWithDescFromMetaData(documentWithMetadataIdValue.getValue()), listDocumentWithDesc);
         }
         return listDocumentWithDesc;
     }

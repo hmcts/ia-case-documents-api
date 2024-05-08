@@ -268,11 +268,12 @@ class CustomiseHearingBundlePreparerTest {
         when(asylumCase.read(AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS))
             .thenReturn(Optional.of(ftpaRespondentDocumentList));
 
+        // These reheard documents will be stored in collection of objects format after Remittal feature is released.
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS))
-            .thenReturn(Optional.of(finalDecisionAndReasonsDocumentList));
+            .thenReturn(Optional.empty());
 
         when(asylumCase.read(AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS))
-            .thenReturn(Optional.of(hearingDocumentList));
+            .thenReturn(Optional.empty());
 
         when(asylumCase.read(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS))
             .thenReturn(Optional.of(addendumEvidenceDocumentList));
