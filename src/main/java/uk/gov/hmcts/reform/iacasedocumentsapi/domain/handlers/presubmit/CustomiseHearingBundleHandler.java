@@ -211,6 +211,10 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             beforeDocuments = beforeRemittalDocuments.getOtherRemittalDocs();
         }
         currentRemittalDocuments = restoreDocumentsInCollection(currentRemittalDocuments, beforeDocuments);
+        if (currentRemittalDocuments.isEmpty()) {
+            // if no remittal documents in the custom/latest fields - return.
+            return;
+        }
 
         //Changed the documents in the latest RemittalDocs object
         beforeRemittalDocuments.setOtherRemittalDocs(currentRemittalDocuments);
