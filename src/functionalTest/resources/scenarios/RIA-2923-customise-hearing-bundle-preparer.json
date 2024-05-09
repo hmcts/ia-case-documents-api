@@ -1,6 +1,7 @@
 {
-  "description": "RIA-2923-customise-hearing-ready-bundle-preparer",
+  "description": "RIA-2923-customise-hearing-ready-bundle-preparer; Disabled as a part of RIA-8846",
   "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "enabled": "false",
   "request": {
     "uri": "/asylum/ccdAboutToStart",
     "credentials": "CaseOfficer",
