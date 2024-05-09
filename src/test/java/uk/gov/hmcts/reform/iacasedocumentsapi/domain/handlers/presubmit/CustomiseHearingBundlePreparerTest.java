@@ -32,6 +32,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS_COLLECTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMITTAL_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESP_ADDITIONAL_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SUITABILITY_REVIEW_DECISION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +43,15 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -97,9 +102,12 @@ class CustomiseHearingBundlePreparerTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
     }
 
-    @Test
-    void should_create_custom_collections() {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
+    void should_create_custom_collections(String maybeDecision) {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
+                ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
 
         List<IdValue<DocumentWithDescription>> customCollections =
             asList(new IdValue("1", createDocumentWithDescription()));
@@ -110,6 +118,9 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue("1", createDocumentWithMetadata(DocumentTag.CASE_ARGUMENT, "test")),
             new IdValue("2", createDocumentWithMetadata(DocumentTag.APPEAL_SUBMISSION, "tes")),
             new IdValue("3", createDocumentWithMetadata(DocumentTag.CASE_SUMMARY, "test")));
+
+        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = asList(
+                new IdValue("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
 
         List<IdValue<DocumentWithMetadata>> additionalEvidenceList =
             asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test")));
@@ -131,6 +142,9 @@ class CustomiseHearingBundlePreparerTest {
         when(asylumCase.read(AsylumCaseDefinition.RESPONDENT_DOCUMENTS))
             .thenReturn(Optional.of(respondentList));
 
+        when(asylumCase.read(TRIBUNAL_DOCUMENTS))
+                .thenReturn(Optional.of(tribunalDocumentList));
+
         customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
         verify(asylumCase).write(AsylumCaseDefinition.CUSTOM_HEARING_DOCUMENTS, customCollections);
@@ -139,7 +153,8 @@ class CustomiseHearingBundlePreparerTest {
         verify(asylumCase).write(AsylumCaseDefinition.CUSTOM_RESPONDENT_DOCUMENTS, customCollections);
         verify(asylumCase,times(0)).write(AsylumCaseDefinition.CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS,customCollections);
         verify(asylumCase,times(0)).read(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
-
+        verify(asylumCase,times(maybeDecision.isEmpty() ? 0 : 1))
+                .write(AsylumCaseDefinition.CUSTOM_TRIBUNAL_DOCUMENTS,customCollections);
     }
 
     @Test
@@ -210,7 +225,7 @@ class CustomiseHearingBundlePreparerTest {
         verify(asylumCase).write(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, customDocumentList);
         verify(asylumCase,times(1)).write(AsylumCaseDefinition.CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS,customDocumentList);
         verify(asylumCase,times(4)).read(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
-
+        verify(asylumCase, never()).read(TRIBUNAL_DOCUMENTS);
     }
 
 

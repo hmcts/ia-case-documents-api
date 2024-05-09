@@ -256,12 +256,12 @@ public class AsylumPreSubmitCallbackDispatcherTest {
     @Test
     public void should_sort_handlers_by_name() {
         PreSubmitCallbackHandler<AsylumCase> h1 = new AppealSubmissionCreator(
-            mock(DocumentCreator.class), mock(DocumentHandler.class)
+            mock(DocumentCreator.class), mock(DocumentCreator.class), mock(DocumentHandler.class)
         );
 
 
         PreSubmitCallbackHandler<AsylumCase> h3 = new HearingNoticeCreator(
-            mock(DocumentCreator.class), mock(DocumentCreator.class), mock(DocumentHandler.class),
+                mock(DocumentCreator.class), mock(DocumentCreator.class), mock(DocumentCreator.class), mock(DocumentHandler.class),
                 mock(FeatureToggler.class), mock(DocumentReceiver.class),
                 mock(DocumentsAppender.class), mock(Appender.class)
         );

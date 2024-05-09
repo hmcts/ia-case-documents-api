@@ -12,6 +12,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,6 +36,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_RESPONDENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_TRIBUNAL_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS;
@@ -50,6 +52,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESPONDENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESP_ADDITIONAL_EVIDENCE_DOCS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STITCHING_STATUS;
+
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SUITABILITY_REVIEW_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
@@ -64,11 +68,14 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -166,14 +173,18 @@ class CustomiseHearingBundleHandlerTest {
         when(dateProvider.now()).thenReturn(LocalDate.now());
     }
 
-    @Test
-    void should_successfully_handle_the_callback() throws JsonProcessingException {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
+    void should_successfully_handle_the_callback(String maybeDecision) throws JsonProcessingException {
 
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
+                ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
         IdValue<DocumentWithDescription> legalRepDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> respondentDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> additionalEvidenceDoc = new IdValue<>("1", createDocumentWithDescription());
-
+        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = asList(
+                new IdValue("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
 
         when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(hearingDoc)));
         when(asylumCaseCopy.read(CUSTOM_LEGAL_REP_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc)));
@@ -181,6 +192,8 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(respondentDoc)));
         when(asylumCaseCopy.read(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS))
             .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDoc)));
+        when(asylumCase.read(CUSTOM_TRIBUNAL_DOCUMENTS))
+                .thenReturn(Optional.of(tribunalDocumentList));
 
         IdValue<DocumentWithMetadata> legalRepDocWithMetadata =
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
@@ -216,6 +229,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCaseCopy, times(2)).read(CUSTOM_LEGAL_REP_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESPONDENT_DOCUMENTS);
+        verify(asylumCaseCopy, maybeDecision.isEmpty() ? never() : times(1))
+                .read(CUSTOM_TRIBUNAL_DOCUMENTS);
 
         verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
         verify(asylumCase, times(1)).write(LEGAL_REPRESENTATIVE_DOCUMENTS, legalRepresentativeDocuments);
@@ -227,7 +242,8 @@ class CustomiseHearingBundleHandlerTest {
 
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
+                maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));

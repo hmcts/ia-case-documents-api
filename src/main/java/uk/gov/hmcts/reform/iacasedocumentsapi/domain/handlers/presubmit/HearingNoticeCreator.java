@@ -3,11 +3,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_FLAG_SET_ASIDE_REHEARD_EXISTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS_COLLECTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +34,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
     private final FeatureToggler featureToggler;
     private final DocumentReceiver documentReceiver;
@@ -45,14 +44,16 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     public HearingNoticeCreator(
             @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
             @Qualifier("remoteHearingNotice") DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator,
-            DocumentHandler documentHandler,
-            FeatureToggler featureToggler,
-            DocumentReceiver documentReceiver,
-            DocumentsAppender documentsAppender, 
-            Appender<ReheardHearingDocuments> reheardHearingAppender
+        @Qualifier("adaHearingNotice") DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator,
+        DocumentHandler documentHandler,
+        FeatureToggler featureToggler,
+        DocumentReceiver documentReceiver,
+        DocumentsAppender documentsAppender,
+        Appender<ReheardHearingDocuments> reheardHearingAppender
     ) {
         this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
         this.remoteHearingNoticeDocumentCreator = remoteHearingNoticeDocumentCreator;
+        this.adaHearingNoticeDocumentCreator = adaHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
         this.featureToggler = featureToggler;
         this.documentReceiver = documentReceiver;
@@ -89,11 +90,12 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         if (listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
-            hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
+            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
+            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
         }
 
-        if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
-             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
+        if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YES))
+             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YES)).orElse(false)))) {
 
             if (featureToggler.getValue("dlrm-remitted-feature-flag", false)) {
                 appendReheardHearingDocuments(asylumCase, hearingNotice);
