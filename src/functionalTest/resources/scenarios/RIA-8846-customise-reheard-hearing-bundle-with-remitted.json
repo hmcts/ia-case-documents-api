@@ -1,7 +1,7 @@
 {
-  "description": "RIA-3130 finalBundling to prehearing",
-  "enabled": "false",
+  "description": "RIA-8846-customise-reheard-hearing-ready-bundle-remitted",
   "launchDarklyKey": "reheard-feature:true",
+  "launchDarklyKey": "dlrm-remitted-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -11,10 +11,42 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "caseFlagSetAsideReheardExists": "Yes",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "legalRepReferenceNumber": "REF54321",
-          "caseFlagSetAsideReheardExists": "Yes",
+          "remittalDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "decisionDocument": {
+                  "tag": "remittalDecision",
+                  "document": {
+                    "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                    "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                    "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                  },
+                  "description": "",
+                  "dateUploaded": "{$TODAY}"
+                },
+                "otherRemittalDocs": [
+                  {
+                    "id": "11",
+                    "value": {
+                      "tag": "remittalDecision",
+                      "document": {
+                        "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                        "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                        "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                      },
+                      "description": "",
+                      "dateUploaded": "{$TODAY}"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "customAppAdditionalEvidenceDocs": [
             {
               "id": "2",
@@ -163,12 +195,47 @@
           ],
           "customReheardHearingDocs": [
             {
-              "id": "1",
+              "id": "2",
               "value": {
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
                   "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "Case summary"
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                },
+                "description": ""
+              }
+            }
+          ],
+          "customLatestRemittalDocs": [
+            {
+              "id": "2",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": ""
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
                 },
                 "description": ""
               }
@@ -288,36 +355,6 @@
             }
           }
         ],
-        "finalDecisionAndReasonsDocuments": [
-          {
-            "id": "1",
-            "value": {
-              "document": {
-                "document_url": "{$FIXTURE_DOC2_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
-              },
-              "description": "",
-              "dateUploaded": "{$TODAY}",
-              "tag": "ftpaDecisionAndReasons"
-            }
-          }
-        ],
-        "reheardHearingDocuments": [
-          {
-            "id": "1",
-            "value": {
-              "document": {
-                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-              },
-              "description": "",
-              "dateUploaded": "{$TODAY}",
-              "tag": "reheardHearingNotice"
-            }
-          }
-        ],
         "addendumEvidenceDocuments": [
           {
             "id": "3",
@@ -359,6 +396,51 @@
               "dateUploaded": "{$TODAY}",
               "tag": "addendumEvidence",
               "suppliedBy": "The appellant"
+            }
+          }
+        ],
+        "remittalDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "decisionDocument": {
+                "tag": "remittalDecision",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              },
+              "otherRemittalDocs": [
+                {
+                  "id": "2",
+                  "value": {
+                    "tag": "remittalDecision",
+                    "document": {
+                      "document_url": "{$FIXTURE_DOC2_PDF_URL}",
+                      "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
+                      "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
+                    },
+                    "description": "",
+                    "dateUploaded": "{$TODAY}"
+                  }
+                },
+                {
+                  "id": "1",
+                  "value": {
+                    "tag": "remittalDecision",
+                    "document": {
+                      "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                      "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                      "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                    },
+                    "description": "",
+                    "dateUploaded": "{$TODAY}"
+                  }
+                }
+              ]
             }
           }
         ]

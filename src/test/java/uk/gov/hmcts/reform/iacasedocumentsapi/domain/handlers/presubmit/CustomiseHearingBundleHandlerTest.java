@@ -8,8 +8,52 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDITIONAL_EVIDENCE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_ADDENDUM_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APP_ADDITIONAL_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_BUNDLES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_FLAG_SET_ASIDE_REHEARD_EXISTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_FINAL_DECISION_AND_REASONS_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_FTPA_APPELLANT_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_FTPA_RESPONDENT_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_LATEST_REMITTAL_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_LEGAL_REP_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_REHEARD_HEARING_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_RESPONDENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CUSTOM_TRIBUNAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FTPA_APPELLANT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HMCTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LATEST_DECISION_AND_REASONS_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LATEST_REHEARD_HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LATEST_REMITTAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMITTAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESPONDENT_ADDENDUM_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESPONDENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.RESP_ADDITIONAL_EVIDENCE_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STITCHING_STATUS;
+
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SUITABILITY_REVIEW_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
@@ -31,7 +75,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AdaSuitabilityReviewDecision;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithDescription;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemittalDocument;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -70,7 +120,7 @@ class CustomiseHearingBundleHandlerTest {
     private AsylumCase asylumCase;
     @Mock
     private AsylumCase asylumCaseCopy;
-
+    @Mock private Document document;
     @Mock
     private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
 
@@ -347,6 +397,183 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @Test
+    void should_successfully_handle_Reheard_the_callback_with_Remitted() throws JsonProcessingException {
+
+        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
+        when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        IdValue<DocumentWithDescription> appellantAdditionalEvidenceDocuments =
+            new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> respondentAdditionalEvidenceDocuments =
+            new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> ftpaAppellantDocuments = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> ftpaRespondentDocuments = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> finalDecisionAndReasonsDocuments =
+            new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> hearingDocuments = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> appellantAddendumEvidenceDoc =
+            new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> respondentAddendumEvidenceDoc =
+            new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> remittalDocs =
+            new IdValue<>("1", createDocumentWithDescription());
+        final List<IdValue<RemittalDocument>> remittalDocuments = buildRemittalDocuments();
+
+        when(asylumCaseCopy.read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(appellantAdditionalEvidenceDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(respondentAdditionalEvidenceDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(appellantAdditionalEvidenceDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(respondentAdditionalEvidenceDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_FTPA_APPELLANT_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(ftpaAppellantDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_FTPA_RESPONDENT_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(ftpaRespondentDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(finalDecisionAndReasonsDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_REHEARD_HEARING_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(hearingDocuments)));
+        when(asylumCaseCopy.read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS)).thenReturn(Optional
+            .of(Lists.newArrayList(new IdValue<>("2", createDocumentWithDescription()), appellantAddendumEvidenceDoc)));
+        when(asylumCaseCopy.read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceDoc)));
+        when(asylumCaseCopy.read(CUSTOM_LATEST_REMITTAL_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(remittalDocs)));
+        when(asylumCaseCopy.read(REMITTAL_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(remittalDocuments)));
+
+        IdValue<DocumentWithMetadata> appellantAdditionalEvidenceDoc =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "The appellant"));
+        IdValue<DocumentWithMetadata> respondentAdditionalEvidenceDoc =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "The respondent"));
+        IdValue<DocumentWithMetadata> ftpaAppellantDoc =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_APPELLANT, "test"));
+        IdValue<DocumentWithMetadata> ftpaRespondentDoc =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_RESPONDENT, "test"));
+        IdValue<DocumentWithMetadata> finalDecisionsAndReasonsDoc =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_DECISION_AND_REASONS, "test"));
+        IdValue<DocumentWithMetadata> reheardHearingDoc =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.REHEARD_HEARING_NOTICE, "test"));
+        IdValue<DocumentWithMetadata> appellantAddendumEvidenceDocs =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant"));
+        IdValue<DocumentWithMetadata> respondentAddendumEvidenceDocs =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent"));
+
+
+        final List<IdValue<DocumentWithMetadata>> appellantAdditionalEvidenceDocs =
+            Lists.newArrayList(appellantAdditionalEvidenceDoc);
+        final List<IdValue<DocumentWithMetadata>> respondentAdditionalEvidenceDocs =
+            Lists.newArrayList(respondentAdditionalEvidenceDoc);
+        final List<IdValue<DocumentWithMetadata>> ftpaAppellantDocs = Lists.newArrayList(ftpaAppellantDoc);
+        final List<IdValue<DocumentWithMetadata>> ftpaRespondentDocs = Lists.newArrayList(ftpaRespondentDoc);
+        final List<IdValue<DocumentWithMetadata>> finalDecisionsAndReasonsDocs =
+            Lists.newArrayList(finalDecisionsAndReasonsDoc);
+        final List<IdValue<DocumentWithMetadata>> reheardHearingDocs = Lists.newArrayList(reheardHearingDoc);
+        final List<IdValue<DocumentWithMetadata>> appellantAddendumEvidenceList =
+            Lists.newArrayList(appellantAddendumEvidenceDocs);
+        final List<IdValue<DocumentWithMetadata>> respondentAddendumEvidenceList =
+            Lists.newArrayList(respondentAddendumEvidenceDocs);
+        final List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentList = asList(
+            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+
+        when(appender.append(any(DocumentWithMetadata.class), anyList()))
+            .thenReturn(addendumEvidenceDocumentList);
+
+        when(asylumCase.read(RESPONDENT_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(respondentAdditionalEvidenceDocs)));
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(appellantAdditionalEvidenceDocs)));
+        when(asylumCase.read(FTPA_APPELLANT_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(ftpaAppellantDocs)));
+        when(asylumCase.read(FTPA_RESPONDENT_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(ftpaRespondentDocs)));
+        when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(finalDecisionsAndReasonsDocs)));
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
+        when(asylumCase.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
+        when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(appellantAddendumEvidenceList)));
+        when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+        assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
+        assertEquals(featureToggler.getValue("reheard-feature", false), true);
+        assertEquals(featureToggler.getValue("dlrm-remitted-feature-flag", false), true);
+
+        verify(asylumCaseCopy, times(4)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(4)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_APPELLANT_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_RESPONDENT_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_REHEARD_HEARING_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_LATEST_REMITTAL_DOCS);
+
+
+        verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(APP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).write(APP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
+
+        verify(asylumCase, times(1)).write(ADDITIONAL_EVIDENCE_DOCUMENTS, appellantAdditionalEvidenceDocs);
+        verify(asylumCase, times(1)).write(RESPONDENT_DOCUMENTS, respondentAdditionalEvidenceDocs);
+        verify(asylumCase, times(1)).write(FTPA_APPELLANT_DOCUMENTS, ftpaAppellantDocs);
+        verify(asylumCase, times(1)).write(FTPA_RESPONDENT_DOCUMENTS, ftpaRespondentDocs);
+        verify(asylumCase, times(1)).write(FINAL_DECISION_AND_REASONS_DOCUMENTS, finalDecisionsAndReasonsDocs);
+        verify(asylumCase, times(1)).write(REHEARD_HEARING_DOCUMENTS, reheardHearingDocs);
+        verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumEvidenceDocumentList);
+
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDITIONAL_EVIDENCE_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.RESPONDENT_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_APPELLANT_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
+
+        verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
+        verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
+        verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-remitted-reheard-hearing-bundle-config.yaml");
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
+        verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
+    }
+
+    private List<IdValue<RemittalDocument>> buildRemittalDocuments() {
+
+        final DocumentWithMetadata remittalDec = new DocumentWithMetadata(
+            document, "test","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+        final DocumentWithMetadata remittalOtherDoc1 = new DocumentWithMetadata(
+            document, "other-test-1","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+        final DocumentWithMetadata remittalOtherDoc2 = new DocumentWithMetadata(
+            document, "other-test-1","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+        IdValue<DocumentWithMetadata> decisionDocWithMetadata =
+            new IdValue<>("11", remittalOtherDoc1);
+        IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
+            new IdValue<>("12", remittalOtherDoc2);
+
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        IdValue<RemittalDocument> remittalDocuments =
+            new IdValue<>("1", new RemittalDocument(remittalDec, listOfDocumentsWithMetadata));
+        return Lists.newArrayList(remittalDocuments);
+    }
+
+    @Test
     void should_return_values_for_document_with_description_present() {
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -413,17 +640,27 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.empty());
         when(asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS))
             .thenReturn(Optional.empty());
-
+        when(asylumCase.read(LATEST_REMITTAL_DOCUMENTS)).thenReturn(Optional.empty());
+        when(asylumCase.read(LATEST_REHEARD_HEARING_DOCUMENTS)).thenReturn(Optional.empty());
+        when(asylumCase.read(LATEST_DECISION_AND_REASONS_DOCUMENTS)).thenReturn(Optional.empty());
         customiseHearingBundleHandler.initializeNewCollections(asylumCase);
 
         verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(LATEST_REMITTAL_DOCUMENTS);
+        verify(asylumCase, times(1)).read(LATEST_REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCase, times(1)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+
         verify(asylumCase, times(1)).write(APPELLANT_ADDENDUM_EVIDENCE_DOCS, emptyList());
         verify(asylumCase, times(1)).write(RESPONDENT_ADDENDUM_EVIDENCE_DOCS, emptyList());
         verify(asylumCase, times(1)).write(APP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
         verify(asylumCase, times(1)).write(RESP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
+        verify(asylumCase, times(1)).write(LATEST_REMITTAL_DOCUMENTS, emptyList());
+        verify(asylumCase, times(1)).write(LATEST_REHEARD_HEARING_DOCUMENTS, emptyList());
+        verify(asylumCase, times(1)).write(LATEST_DECISION_AND_REASONS_DOCUMENTS, emptyList());
+
     }
 
 

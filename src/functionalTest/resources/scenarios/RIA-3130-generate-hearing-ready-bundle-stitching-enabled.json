@@ -1,6 +1,6 @@
 {
   "description": "RIA-3130-generate-hearing-generic-bundle",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "enabled": "false",
   "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
