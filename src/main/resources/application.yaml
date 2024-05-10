@@ -257,8 +257,6 @@ bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
 bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
 
-<<<<<<< HEAD
-=======
 internalAppealSubmissionDocument.contentType: application/pdf
 internalAppealSubmissionDocument.fileExtension: PDF
 internalAppealSubmissionDocument.fileName: "appeal-form"
