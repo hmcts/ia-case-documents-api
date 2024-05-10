@@ -247,6 +247,7 @@ security:
       - "generateHearingBundle"
       - "customiseHearingBundle"
     caseworker-ia-admofficer:
+      - "submitAppeal"
       - "listCase"
       - "editCaseListing"
       - "sendDecisionAndReasons"
