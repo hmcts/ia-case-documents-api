@@ -1,0 +1,64 @@
+{
+  "description": "RIA-8053 Appeal submitted with revocation of protection with no remission and dlrm fee remission feature flag enabled - AiP notification",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 3689,
+      "eventId": "submitAppeal",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isDlrmFeeRemissionEnabled": "Yes",
+          "isRemissionsEnabled": "Yes",
+          "journeyType": "aip",
+          "remissionType":"hoWaiverRemission",
+          "remissionOption": "noneOfTheseStatements",
+          "appealType":"revocationOfProtection",
+          "eaHuAppealTypePaymentOption": "payLater",
+          "submissionOutOfTime": "No",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "taylorHouse",
+        "isRemissionsEnabled": "Yes",
+        "remissionType":"hoWaiverRemission",
+        "remissionOption": "noneOfTheseStatements",
+        "appealType":"revocationOfProtection",
+        "eaHuAppealTypePaymentOption": "payLater",
+        "submissionOutOfTime": "No",
+        "notificationsSent": [
+          {
+            "id": "3689_APPEAL_SUBMITTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "3689_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

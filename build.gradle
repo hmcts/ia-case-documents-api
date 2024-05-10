@@ -501,4 +501,3 @@ applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8", "-Dhttps.protocols=TLSv1.2
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
-

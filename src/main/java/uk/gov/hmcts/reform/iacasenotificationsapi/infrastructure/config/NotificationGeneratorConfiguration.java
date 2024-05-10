@@ -4971,5 +4971,246 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("aipDisposeUnderRule31Or32AppelantNotificationGenerator")
+    public List<NotificationGenerator> aipDisposeUnderRule31Or32AppelantNotificationGenerator(
+        HomeOfficeFtpaApplicationDecidedRule31Rule32Personalisation homeOfficeFtpaApplicationDecidedRule31Rule32Personalisation,
+        AipAppellantDisposeUnderRule31Or32PersonalisationEmail aipAppellantDisposeUnderRule31Or32PersonalisationEmail,
+        AipAppellantDisposeUnderRule31Or32PersonalisationSms aipAppellantDisposeUnderRule31Or32PersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    homeOfficeFtpaApplicationDecidedRule31Rule32Personalisation,
+                    aipAppellantDisposeUnderRule31Or32PersonalisationEmail
+                ),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipAppellantDisposeUnderRule31Or32PersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("decideFtpaApplicationLrHoRule31OrRule32NotificationGenerator")
+    public List<NotificationGenerator> decideFtpaApplicationLrHoRule31OrRule32NotificationGenerator(
+        LegalRepresentativeFtpaApplicationDecidedRule31Rule32Personalisation legalRepresentativeFtpaApplicationDecidedRule31Rule32Personalisation,
+        HomeOfficeFtpaApplicationDecidedRule31Rule32Personalisation homeOfficeFtpaApplicationDecidedRule31Rule32Personalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeFtpaApplicationDecidedRule31Rule32Personalisation,
+                    homeOfficeFtpaApplicationDecidedRule31Rule32Personalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("aipReheardUnderRule35AppelantNotificationGenerator")
+    public List<NotificationGenerator> aipReheardUnderRule35AppelantNotificationGenerator(
+        RespondentReheardUnderRule35PersonalisationEmail respondentReheardUnderRule35PersonalisationEmail,
+        AipAppellantReheardUnderRule35PersonalisationEmail aipAppellantReheardUnderRule35PersonalisationEmail,
+        AipAppellantReheardUnderRule35PersonalisationSms aipAppellantReheardUnderRule35PersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(respondentReheardUnderRule35PersonalisationEmail,
+                    aipAppellantReheardUnderRule35PersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipAppellantReheardUnderRule35PersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+
+    @Bean("decideFtpaApplicationReheardUnderRule35NotificationGenerator")
+    public List<NotificationGenerator> decideFtpaApplicationReheardUnderRule35NotificationGenerator(
+        RespondentReheardUnderRule35PersonalisationEmail respondentReheardUnderRule35PersonalisationEmail,
+        LegalRepresentativeReheardUnderRule35Personalisation legalRepresentativeReheardUnderRule35Personalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(respondentReheardUnderRule35PersonalisationEmail,
+                    legalRepresentativeReheardUnderRule35Personalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("updateTribunalDecisionRule31NotificationGenerator")
+    public List<NotificationGenerator> updateTribunalDecisionRule31NotificationGenerator(
+        RespondentUpdateTribunalDecisionRule31PersonalisationEmail respondentUpdateTribunalDecisionRule31PersonalisationEmail,
+        LegalRepresentativeUpdateTribunalDecisionRule31PersonalisationEmail legalRepresentativeUpdateTribunalDecisionRule31PersonalisationEmail,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    respondentUpdateTribunalDecisionRule31PersonalisationEmail,
+                    legalRepresentativeUpdateTribunalDecisionRule31PersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("updateTribunalDecisionRule32NotificationGenerator")
+    public List<NotificationGenerator> updateTribunalDecisionRule32NotificationGenerator(
+        RespondentUpdateTribunalDecisionRule32PersonalisationEmail respondentUpdateTribunalDecisionRule32PersonalisationEmail,
+        LegalRepresentativeUpdateTribunalDecisionRule32PersonalisationEmail legalRepresentativeUpdateTribunalDecisionRule32PersonalisationEmail,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    respondentUpdateTribunalDecisionRule32PersonalisationEmail,
+                    legalRepresentativeUpdateTribunalDecisionRule32PersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("updateTribunalDecisionRule32AipNotificationGenerator")
+    public List<NotificationGenerator> updateTribunalDecisionRule32AipNotificationGenerator(
+        RespondentUpdateTribunalDecisionRule32PersonalisationEmail respondentUpdateTribunalDecisionRule32PersonalisationEmail,
+        AppellantUpdateTribunalDecisionRule32PersonalisationEmail appellantUpdateTribunalDecisionRule32PersonalisationEmail,
+        AppellantUpdateTribunalDecisionRule32PersonalisationSms appellantUpdateTribunalDecisionRule32PersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    respondentUpdateTribunalDecisionRule32PersonalisationEmail,
+                    appellantUpdateTribunalDecisionRule32PersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantUpdateTribunalDecisionRule32PersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("appellantSubmittedWithRemissionRequestNotificationGenerator")
+    public List<NotificationGenerator> appellantSubmittedWithRemissionRequestNotificationGenerator(
+        AppellantSubmittedWithRemissionRequestPersonalisationEmail appellantSubmittedWithRemissionRequestPersonalisationEmail,
+        AppellantSubmittedWithRemissionRequestPersonalisationSms appellantSubmittedWithRemissionRequestPersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantSubmittedWithRemissionRequestPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantSubmittedWithRemissionRequestPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("aipAppellantRecordRemissionDecisionNotificationGenerator")
+    public List<NotificationGenerator> aipAppellantRecordRemissionDecisionNotificationGenerator(
+        AipAppellantRecordRemissionDecisionPersonalisationEmail aipAppellantRecordRemissionDecisionPersonalisationEmail,
+        AipAppellantRecordRemissionDecisionPersonalisationSms aipAppellantRecordRemissionDecisionPersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(aipAppellantRecordRemissionDecisionPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipAppellantRecordRemissionDecisionPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("updateTribunalDecisionRule31AipNotificationGenerator")
+    public List<NotificationGenerator> updateTribunalDecisionRule31AipNotificationGenerator(
+        RespondentUpdateTribunalDecisionRule31PersonalisationEmail respondentUpdateTribunalDecisionRule31PersonalisationEmail,
+        AppellantUpdateTribunalDecisionRule31PersonalisationEmail appellantUpdateTribunalDecisionRule31PersonalisationEmail,
+        AppellantUpdateTribunalDecisionRule31PersonalisationSms appellantUpdateTribunalDecisionRule31PersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return List.of(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    respondentUpdateTribunalDecisionRule31PersonalisationEmail,
+                    appellantUpdateTribunalDecisionRule31PersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantUpdateTribunalDecisionRule31PersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("appellantSubmittedWithRemissionMarkAppealAsPaidNotificationGenerator")
+    public List<NotificationGenerator> appellantSubmittedWithRemissionMarkAppealAsPaidNotificationGenerator(
+        AppellantSubmittedWithRemissionMarkAppealAsPaidPersonalisationEmail appellantSubmittedWithRemissionMarkAppealAsPaidPersonalisationEmail,
+        AppellantSubmittedWithRemissionMarkAppealAsPaidPersonalisationSms appellantSubmittedWithRemissionMarkAppealAsPaidPersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantSubmittedWithRemissionMarkAppealAsPaidPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantSubmittedWithRemissionMarkAppealAsPaidPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 }
 

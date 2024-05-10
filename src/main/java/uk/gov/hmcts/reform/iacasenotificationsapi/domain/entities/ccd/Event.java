@@ -118,6 +118,8 @@ public enum Event {
     RECORD_THE_DECISION("recordTheDecision"),
     SEND_UPLOAD_BAIL_SUMMARY_DIRECTION("sendUploadBailSummaryDirection"),
     CASE_LISTING("caseListing"),
+    DECIDE_FTPA_APPLICATION("decideFtpaApplication"),
+    UPDATE_TRIBUNAL_DECISION("updateTribunalDecision"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

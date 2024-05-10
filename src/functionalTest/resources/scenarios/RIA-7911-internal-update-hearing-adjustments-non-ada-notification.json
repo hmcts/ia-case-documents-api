@@ -4,7 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
     "input": {
-      "id": 79111,
+      "id": 7911,
       "eventId": "updateHearingAdjustments",
       "state": "preHearing",
       "caseData": {
@@ -54,11 +54,11 @@
         "isAcceleratedDetainedAppeal": "No",
         "notificationsSent": [
           {
-            "id": "79111_CHANGE_TO_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+            "id": "7911_CHANGE_TO_HEARING_REQUIREMENTS_ADMIN_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "79111_INTERNAL_HEARING_ADJUSTMENTS_CHANGED_DET",
+            "id": "7911_INTERNAL_HEARING_ADJUSTMENTS_CHANGED_DET",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -66,9 +66,9 @@
     },
     "notifications": [
       {
-        "reference": "79111_CHANGE_TO_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+        "reference": "7911_CHANGE_TO_HEARING_REQUIREMENTS_ADMIN_OFFICER",
         "recipient": "IACReformlisting@gmail.com",
-        "subject": "Immigration and Asylum appeal: change to hearing requirements",
+        "subject": "Accelerated detained appeal: change to hearing requirements",
         "body": [
           "HMCTS reference: PA/12345/2019",
           "Listing reference: AA/12345/1234",
@@ -77,9 +77,9 @@
         ]
       },
       {
-        "reference": "79111_INTERNAL_HEARING_ADJUSTMENTS_CHANGED_DET",
+        "reference": "7911_INTERNAL_HEARING_ADJUSTMENTS_CHANGED_DET",
         "recipient": "det-irc-brookhouse@example.com",
-        "subject": "IAFT – SERVE IN PERSON: Hearing requirements changed",
+        "subject": "ADA – SERVE IN PERSON: Hearing requirements changed",
         "body": [
           "HMCTS reference: PA/12345/2019",
           "Home Office reference: A1234567",

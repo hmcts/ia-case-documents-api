@@ -76,7 +76,8 @@ public class NotificationHandler implements PreSubmitCallbackHandler<AsylumCase>
         }
 
         try {
-            notificationGenerators.forEach(notificationGenerator -> notificationGenerator.generate(callback));
+            notificationGenerators.forEach(
+                notificationGenerator -> notificationGenerator.generate(callback));
         } catch (Exception e) {
             if (errorHandling.isPresent()) {
                 errorHandling.get().accept(callback, e);
