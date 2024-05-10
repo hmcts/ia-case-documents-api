@@ -34,6 +34,8 @@ class DocumentTagTest {
         assertEquals("clarifyingQuestions", DocumentTag.CLARIFYING_QUESTIONS.toString());
         assertEquals("appealForm", DocumentTag.APPEAL_FORM.toString());
         assertEquals("noticeOfDecisionUtTransfer", DocumentTag.NOTICE_OF_DECISION_UT_TRANSFER.toString());
+        assertEquals("decisionAndReasonsCoverLetter", DocumentTag.DECISION_AND_REASONS_COVER_LETTER.toString());
+        assertEquals("updatedDecisionAndReasonsCoverLetter", DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER.toString());
         assertEquals("bailSubmission", DocumentTag.BAIL_SUBMISSION.toString());
         assertEquals("uploadTheBailEvidenceDocs", DocumentTag.BAIL_EVIDENCE.toString());
         assertEquals("bailDecisionUnsigned", DocumentTag.BAIL_DECISION_UNSIGNED.toString());
@@ -42,8 +44,8 @@ class DocumentTagTest {
         assertEquals("uploadDocument", DocumentTag.UPLOAD_DOCUMENT.toString());
         assertEquals("uploadBailSummary", DocumentTag.BAIL_SUMMARY.toString());
         assertEquals("b1Document", DocumentTag.B1_DOCUMENT.toString());
+        assertEquals("updatedFinalDecisionAndReasonsPdf", DocumentTag.UPDATED_FINAL_DECISION_AND_REASONS_PDF.toString());
         assertEquals("bailNoticeOfHearing", DocumentTag.BAIL_NOTICE_OF_HEARING.toString());
-        assertEquals("", DocumentTag.NONE.toString());
         assertEquals("requestCaseBuilding", DocumentTag.REQUEST_CASE_BUILDING.toString());
         assertEquals("internalAdaSuitability", DocumentTag.INTERNAL_ADA_SUITABILITY.toString());
         assertEquals("requestRespondentReview", DocumentTag.REQUEST_RESPONDENT_REVIEW.toString());
@@ -81,10 +83,11 @@ class DocumentTagTest {
         assertEquals("internalAdjournHearingWithoutDate", DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE.toString());
         assertEquals("upperTribunalTransferOrderDocument", DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT.toString());
         assertEquals("iAUT2Form", DocumentTag.IAUT_2_FORM.toString());
+        assertEquals("", DocumentTag.NONE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(82, DocumentTag.values().length);
+        assertEquals(84, DocumentTag.values().length);
     }
 }

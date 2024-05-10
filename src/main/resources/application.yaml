@@ -142,6 +142,7 @@ decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
+updatedDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter-AMENDED"
 
 internalDetainedDecisionsAndReasonsAllowedLetter.contentType: application/pdf
 internalDetainedDecisionsAndReasonsAllowedLetter.fileExtension: PDF
@@ -599,6 +600,7 @@ security:
       - "recordTheDecision"
       - "endApplication"    
       - "uploadSignedDecisionNotice"
+      - "updateTribunalDecision"
       - "adaSuitabilityReview"
       - "generateHearingBundle"
       - "decideAnApplication"
@@ -617,7 +619,7 @@ security:
       - "submitReasonsForAppeal"
       - "endAppealAutomatically"
       - "caseListing"
-      - "requestHearingRequirementsFeature"      
+      - "requestHearingRequirementsFeature"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"

@@ -486,6 +486,9 @@ public enum AsylumCaseDefinition {
     CLARIFYING_QUESTIONS_ANSWERS("clarifyingQuestionsAnswers",
         new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {}),
 
+    UPDATED_APPEAL_DECISION(
+            "updatedAppealDecision", new TypeReference<String>(){}),
+
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
     ),
@@ -543,6 +546,12 @@ public enum AsylumCaseDefinition {
 
     FEE_AMOUNT_GBP(
             "feeAmountGbp", new TypeReference<String>(){}),
+
+    UPDATE_TRIBUNAL_DECISION_LIST(
+            "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),
+
+    CORRECTED_DECISION_AND_REASONS(
+        "correctedDecisionAndReasons", new TypeReference<List<IdValue<DecisionAndReasons>>>() {}),
 
     AMOUNT_REMITTED(
             "amountRemitted", new TypeReference<String>(){}),
