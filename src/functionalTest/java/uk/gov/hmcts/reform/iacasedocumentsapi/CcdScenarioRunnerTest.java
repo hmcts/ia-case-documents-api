@@ -95,13 +95,9 @@ public class CcdScenarioRunnerTest {
             scenarioPattern = "*" + scenarioPattern + "*.json";
         }
 
-        Collection<String> scenarioSources =
-            StringResourceLoader
-                .load("/scenarios/" + scenarioPattern)
-                .values();
-        scenarioSources.addAll(StringResourceLoader
-            .load("/scenarios/bail/" + scenarioPattern)
-            .values());
+        Collection<String> scenarioSources = new ArrayList<>();
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/" + scenarioPattern).values());
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern).values());
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
