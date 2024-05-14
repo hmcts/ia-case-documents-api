@@ -574,9 +574,6 @@ public enum AsylumCaseDefinition {
     LATEST_REHEARD_HEARING_DOCUMENTS(
             "latestReheardHearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
-    CUSTOM_LATEST_REMITTAL_DOCS(
-        "customLatestRemittalDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
-
     PAID_AMOUNT(
             "paidAmount", new TypeReference<String>(){}),
 
