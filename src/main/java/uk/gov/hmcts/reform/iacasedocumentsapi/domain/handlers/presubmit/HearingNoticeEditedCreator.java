@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +31,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
     private final DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator;
     private final DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator;
+    private final DocumentCreator<AsylumCase> adaHearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentHandler documentHandler;
     private final HearingDetailsFinder hearingDetailsFinder;
 
@@ -36,12 +39,14 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         @Qualifier("hearingNoticeUpdatedRequirements") DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator,
         @Qualifier("hearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator,
         @Qualifier("remoteHearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator,
+        @Qualifier("adaHearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> adaHearingNoticeUpdatedDetailsDocumentCreator,
         DocumentHandler documentHandler,
         HearingDetailsFinder hearingDetailsFinder
     ) {
         this.hearingNoticeUpdatedRequirementsDocumentCreator = hearingNoticeUpdatedRequirementsDocumentCreator;
         this.hearingNoticeUpdatedDetailsDocumentCreator = hearingNoticeUpdatedDetailsDocumentCreator;
         this.remoteHearingNoticeUpdatedDetailsDocumentCreator = remoteHearingNoticeUpdatedDetailsDocumentCreator;
+        this.adaHearingNoticeUpdatedDetailsDocumentCreator = adaHearingNoticeUpdatedDetailsDocumentCreator;
         this.documentHandler = documentHandler;
         this.hearingDetailsFinder = hearingDetailsFinder;
     }
@@ -80,12 +85,22 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             final String oldHearingDate =
                 hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.get().getCaseData());
 
+            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
+
             if (asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING))) {
                 generateDocument(caseDetails, asylumCase, caseDetailsBefore, remoteHearingNoticeUpdatedDetailsDocumentCreator);
             } else if (hearingCentreNameBefore.equals(listCaseHearingCentre) && oldHearingDate.equals(hearingDate)) {
-                generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedRequirementsDocumentCreator);
+                if (isAda) {
+                    generateDocument(caseDetails, asylumCase, caseDetailsBefore, adaHearingNoticeUpdatedDetailsDocumentCreator);
+                } else {
+                    generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedRequirementsDocumentCreator);
+                }
             } else {
-                generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedDetailsDocumentCreator);
+                if (isAda) {
+                    generateDocument(caseDetails, asylumCase, caseDetailsBefore, adaHearingNoticeUpdatedDetailsDocumentCreator);
+                } else {
+                    generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedDetailsDocumentCreator);
+                }
             }
         } else {
             throw new IllegalStateException("previous case data is not present");

@@ -47,7 +47,7 @@ public class BailDocumentHandler {
         bailCase.write(documentField, allDocuments);
     }
 
-    public void addWithMetadataWithoutReplacingExistingDocuments(
+    public void appendWithMetadata(
         BailCase bailCase,
         Document document,
         BailCaseFieldDefinition documentField,

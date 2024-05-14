@@ -1,12 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static java.util.Collections.emptyList;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REASONS_FOR_APPEAL_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REASONS_FOR_APPEAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisationWithoutUserImage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,10 +46,7 @@ public class AppealReasonsTemplate implements DocumentTemplate<AsylumCase> {
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
-        fieldValues.put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""));
-        fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.putAll(getAppellantPersonalisationWithoutUserImage(asylumCase));
         fieldValues.put("appealReasons", asylumCase.read(REASONS_FOR_APPEAL_DECISION, String.class).orElse(""));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
         fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
