@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
-public class DocumentWithMetadataTest {
+class DocumentWithMetadataTest {
 
     private final Document document = mock(Document.class);
     private final String description = "Some evidence";
@@ -14,19 +14,20 @@ public class DocumentWithMetadataTest {
     private final DocumentTag tag = DocumentTag.CASE_ARGUMENT;
 
     private DocumentWithMetadata documentWithMetadata =
-        new DocumentWithMetadata(
-            document,
-            description,
-            dateUploaded,
-            tag,"test"
-        );
+            new DocumentWithMetadata(
+                    document,
+                    description,
+                    dateUploaded,
+                    tag
+            );
 
     @Test
-    public void should_hold_onto_values() {
+    void should_hold_onto_values() {
 
         assertEquals(document, documentWithMetadata.getDocument());
         assertEquals(description, documentWithMetadata.getDescription());
         assertEquals(dateUploaded, documentWithMetadata.getDateUploaded());
         assertEquals(tag, documentWithMetadata.getTag());
     }
+
 }

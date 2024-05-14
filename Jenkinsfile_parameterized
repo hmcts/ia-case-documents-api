@@ -42,6 +42,12 @@ def secrets = [
         secret('gov-call-charges-url', 'IA_BAIL_GOV_CALL_CHARGES_URL'),
 
         secret('generic-docker-pact-broker-password', 'GENERIC_DOCKER_PACT_BROKER_YAML_PASS')
+
+        secret('test-homeoffice-lart-username', 'TEST_HOMEOFFICE_LART_USERNAME'),
+        secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD'),
+
+        secret('test-homeoffice-pou-username', 'TEST_HOMEOFFICE_POU_USERNAME'),
+        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD')
     ]
 ]
 
