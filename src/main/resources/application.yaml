@@ -1543,6 +1543,10 @@ security:
       - "applyForCosts"
       - "respondToCosts"
       - "addEvidenceForCosts"
+      - "submitApplication"
+      - "uploadBailSummary"
+      - "uploadDocuments"
+      - "makeNewApplication"
     caseworker-ia-respondentofficer:
       - "uploadHomeOfficeBundle"
       - "addAppealResponse"
