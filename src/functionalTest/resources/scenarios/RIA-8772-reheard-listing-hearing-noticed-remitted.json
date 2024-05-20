@@ -1,6 +1,6 @@
 {
   "description": "RIA-8772 Create reheard hearing notice PDF (IAC Birmingham) - Remitted reheard hearing documents complex collection",
-  "launchDarklyKey": "dlrm-remitted-feature-flag:true",
+  "disabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
