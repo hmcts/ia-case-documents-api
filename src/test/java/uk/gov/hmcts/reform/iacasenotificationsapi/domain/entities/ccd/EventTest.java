@@ -118,6 +118,7 @@ public class EventTest {
         assertEquals("decideFtpaApplication", Event.DECIDE_FTPA_APPLICATION.toString());
         assertEquals("updateTribunalDecision", Event.UPDATE_TRIBUNAL_DECISION.toString());
         assertEquals("caseListing", CASE_LISTING.toString());
+        assertEquals("markAppealAsRemitted", Event.MARK_APPEAL_AS_REMITTED.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
         assertEquals("addEvidenceForCosts", ADD_EVIDENCE_FOR_COSTS.toString());
         assertEquals("considerMakingCostsOrder", CONSIDER_MAKING_COSTS_ORDER.toString());
@@ -127,6 +128,6 @@ public class EventTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(117, Event.values().length);
+        assertEquals(118, Event.values().length);
     }
 }

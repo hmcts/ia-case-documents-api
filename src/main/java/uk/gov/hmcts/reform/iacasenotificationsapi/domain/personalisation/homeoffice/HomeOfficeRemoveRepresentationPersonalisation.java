@@ -92,7 +92,8 @@ public class HomeOfficeRemoveRepresentationPersonalisation implements EmailNotif
             State.DECISION,
             State.DECIDED,
             State.FTPA_SUBMITTED,
-            State.FTPA_DECIDED).contains(currentState)) {
+            State.FTPA_DECIDED,
+            State.REMITTED).contains(currentState)) {
             if (appealService.isAppealListed(asylumCase)) {
                 return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
             } else {

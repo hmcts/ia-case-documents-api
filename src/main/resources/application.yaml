@@ -1240,6 +1240,15 @@ govnotify:
         appellant:
           email: 7baedad6-6aeb-45b5-ae00-420ff2b80bba
           sms: 5ad1fc01-101a-4dbc-84d1-191cc6b715f5
+    markAppealAsRemitted:
+      legalRep:
+        email: 0e8e1bc7-feea-4b7d-9cd8-09606ca0bcf9
+      homeOffice:
+        email: 0d55ec2a-b33c-478e-b467-4291b0f66563
+      appellant:
+        email: ad550328-3529-443a-be7e-b9109e1926ab
+        sms: a898d622-e399-4dfd-b86d-cc92be0c777d
+
   bail:
     key: ${IA_BAIL_GOV_NOTIFY_KEY}
     timeout: 5000
@@ -1519,6 +1528,7 @@ security:
       - "recordOutOfTimeDecision"
       - "turnOnNotifications"
       - "caseListing"
+      - "markAppealAsRemitted"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

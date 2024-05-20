@@ -37,7 +37,7 @@ public enum State {
     DECISION("decision"),
     ENDED("ended"),
     APPEAL_TAKEN_OFFLINE("appealTakenOffline"),
-
+    REMITTED("remitted"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

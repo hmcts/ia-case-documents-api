@@ -161,7 +161,8 @@ class HomeOfficeRemoveRepresentationPersonalisationTest {
             State.DECISION,
             State.DECIDED,
             State.FTPA_SUBMITTED,
-            State.FTPA_DECIDED
+            State.FTPA_DECIDED,
+            State.REMITTED
         );
 
         for (State state : pouStates) {
