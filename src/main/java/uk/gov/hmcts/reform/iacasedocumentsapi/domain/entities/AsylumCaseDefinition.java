@@ -556,6 +556,24 @@ public enum AsylumCaseDefinition {
     AMOUNT_REMITTED(
             "amountRemitted", new TypeReference<String>(){}),
 
+    REHEARD_HEARING_DOCUMENTS_COLLECTION(
+            "reheardHearingDocumentsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
+
+    REHEARD_DECISION_REASONS_COLLECTION(
+            "reheardDecisionReasonsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
+
+    REMITTAL_DOCUMENTS(
+            "remittalDocuments", new TypeReference<List<IdValue<RemittalDocument>>>(){}),
+
+    LATEST_DECISION_AND_REASONS_DOCUMENTS(
+            "latestDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LATEST_REMITTAL_DOCUMENTS(
+            "latestRemittalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LATEST_REHEARD_HEARING_DOCUMENTS(
+            "latestReheardHearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     PAID_AMOUNT(
             "paidAmount", new TypeReference<String>(){}),
 
