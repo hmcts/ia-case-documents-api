@@ -43,6 +43,7 @@ public class EventTest {
         assertEquals("submitReasonsForAppeal", Event.SUBMIT_REASONS_FOR_APPEAL.toString());
         assertEquals("submitClarifyingQuestionAnswers",Event.SUBMIT_CLARIFYING_QUESTION_ANSWERS.toString());
         assertEquals("recordAdjournmentDetails", Event.RECORD_ADJOURNMENT_DETAILS.toString());
+        assertEquals("updateTribunalDecision",Event.UPDATE_TRIBUNAL_DECISION.toString());
         assertEquals("submitApplication",Event.SUBMIT_APPLICATION.toString());
         assertEquals("recordTheDecision",Event.RECORD_THE_DECISION.toString());
         assertEquals("endApplication",Event.END_APPLICATION.toString());
@@ -77,6 +78,6 @@ public class EventTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(68, Event.values().length);
+        assertEquals(69, Event.values().length);
     }
 }

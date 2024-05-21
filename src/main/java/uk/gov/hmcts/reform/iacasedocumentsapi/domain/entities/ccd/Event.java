@@ -44,6 +44,7 @@ public enum Event {
 
     RECORD_ADJOURNMENT_DETAILS("recordAdjournmentDetails", CaseType.ASYLUM),
 
+    UPDATE_TRIBUNAL_DECISION("updateTribunalDecision", CaseType.ASYLUM),
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     UPLOAD_HOME_OFFICE_APPEAL_RESPONSE("uploadHomeOfficeAppealResponse", CaseType.ASYLUM),
     RECORD_OUT_OF_TIME_DECISION("recordOutOfTimeDecision", CaseType.ASYLUM),

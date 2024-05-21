@@ -23,8 +23,10 @@ public enum DocumentTag {
     DECISION_AND_REASONS_DRAFT("decisionAndReasons", CaseType.ASYLUM),
     REHEARD_DECISION_AND_REASONS_DRAFT("reheardDecisionAndReasons", CaseType.ASYLUM),
     DECISION_AND_REASONS_COVER_LETTER("decisionAndReasonsCoverLetter", CaseType.ASYLUM),
+    UPDATED_DECISION_AND_REASONS_COVER_LETTER("updatedDecisionAndReasonsCoverLetter", CaseType.ASYLUM),
     INTERNAL_DET_DECISION_AND_REASONS_LETTER("internalDetDecisionAndReasonsLetter", CaseType.ASYLUM),
     FINAL_DECISION_AND_REASONS_PDF("finalDecisionAndReasonsPdf", CaseType.ASYLUM),
+    UPDATED_FINAL_DECISION_AND_REASONS_PDF("updatedFinalDecisionAndReasonsPdf", CaseType.ASYLUM),
     FINAL_DECISION_AND_REASONS_DOCUMENT("finalDecisionAndReasonsDocument", CaseType.ASYLUM),
     APPEAL_SKELETON_BUNDLE("submitCaseBundle", CaseType.ASYLUM),
     END_APPEAL("endAppeal", CaseType.ASYLUM),
@@ -42,7 +44,6 @@ public enum DocumentTag {
     NOTICE_OF_ADJOURNED_HEARING("noticeOfAdjournedHearing", CaseType.ASYLUM),
     APPEAL_FORM("appealForm", CaseType.ASYLUM),
     NOTICE_OF_DECISION_UT_TRANSFER("noticeOfDecisionUtTransfer", CaseType.ASYLUM),
-
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     REQUEST_RESPONDENT_REVIEW("requestRespondentReview", CaseType.ASYLUM),
     UPLOAD_THE_APPEAL_RESPONSE("uploadTheAppealResponse", CaseType.ASYLUM),
@@ -80,7 +81,7 @@ public enum DocumentTag {
     INTERNAL_ADJOURN_HEARING_WITHOUT_DATE("internalAdjournHearingWithoutDate", CaseType.ASYLUM),
     UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT("upperTribunalTransferOrderDocument", CaseType.ASYLUM),
     IAUT_2_FORM("iAUT2Form", CaseType.ASYLUM),
-
+    REMITTAL_DECISION("remittalDecision", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),

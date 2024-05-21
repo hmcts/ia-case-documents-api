@@ -624,6 +624,9 @@ public enum AsylumCaseDefinition {
     CLARIFYING_QUESTIONS_ANSWERS("clarifyingQuestionsAnswers",
         new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {}),
 
+    UPDATED_APPEAL_DECISION(
+            "updatedAppealDecision", new TypeReference<String>(){}),
+
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
     ),
@@ -682,8 +685,32 @@ public enum AsylumCaseDefinition {
     FEE_AMOUNT_GBP(
             "feeAmountGbp", new TypeReference<String>(){}),
 
+    UPDATE_TRIBUNAL_DECISION_LIST(
+            "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),
+
+    CORRECTED_DECISION_AND_REASONS(
+        "correctedDecisionAndReasons", new TypeReference<List<IdValue<DecisionAndReasons>>>() {}),
+
     AMOUNT_REMITTED(
             "amountRemitted", new TypeReference<String>(){}),
+
+    REHEARD_HEARING_DOCUMENTS_COLLECTION(
+            "reheardHearingDocumentsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
+
+    REHEARD_DECISION_REASONS_COLLECTION(
+            "reheardDecisionReasonsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
+
+    REMITTAL_DOCUMENTS(
+            "remittalDocuments", new TypeReference<List<IdValue<RemittalDocument>>>(){}),
+
+    LATEST_DECISION_AND_REASONS_DOCUMENTS(
+            "latestDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LATEST_REMITTAL_DOCUMENTS(
+            "latestRemittalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LATEST_REHEARD_HEARING_DOCUMENTS(
+            "latestReheardHearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
     PAID_AMOUNT(
             "paidAmount", new TypeReference<String>(){}),

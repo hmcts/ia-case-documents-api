@@ -217,13 +217,19 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case IAUT_2_FORM:
                 log.warn("IAUT_2_FORM tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 72;
-            case NOTICE_OF_ADJOURNED_HEARING:
+            case UPDATED_DECISION_AND_REASONS_COVER_LETTER:
                 return 73;
-            case NONE:
+            case UPDATED_FINAL_DECISION_AND_REASONS_PDF:
+                log.warn("UPDATED_FINAL_DECISION_AND_REASONS_PDF tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 74;
+            case REMITTAL_DECISION:
+                return 75;
+            case NOTICE_OF_ADJOURNED_HEARING:
+                return 76;
+            case NONE:
+                return 77;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
     }
 }
-
