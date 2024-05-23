@@ -2,6 +2,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.bail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -11,9 +14,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PreviousDecisionDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
+
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.PREVIOUS_DECISION_DETAILS;
 
 @Service
 public class UploadSignedDecisionPdfService {
@@ -89,9 +96,13 @@ public class UploadSignedDecisionPdfService {
 
         String applicantFamilyName = bailCase.read(BailCaseFieldDefinition.APPLICANT_FAMILY_NAME, String.class)
             .orElseThrow(() -> new IllegalStateException("Applicant family name not present"));
-
-        return applicantFamilyName
-            + "-"
-            + signedDecisionFinalPdfFilename + ".pdf";
+        Optional<List<IdValue<PreviousDecisionDetails>>> maybeExistingPreviousDecisionDetails =
+            bailCase.read(PREVIOUS_DECISION_DETAILS);
+        return maybeExistingPreviousDecisionDetails.map(idValues -> applicantFamilyName
+                + "-"
+                + signedDecisionFinalPdfFilename + "-" + idValues.size() + ".pdf")
+            .orElseGet(() -> applicantFamilyName
+                + "-"
+                + signedDecisionFinalPdfFilename + ".pdf");
     }
 }

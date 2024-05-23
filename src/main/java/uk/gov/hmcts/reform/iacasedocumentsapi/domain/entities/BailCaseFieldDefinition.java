@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.InterpreterLanguage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PreviousDecisionDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 public enum BailCaseFieldDefinition {
@@ -308,6 +309,8 @@ public enum BailCaseFieldDefinition {
         "unsgnDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT(
         "uploadSignedDecisionNoticeDocument", new TypeReference<Document>(){}),
+    PREVIOUS_DECISION_DETAILS(
+        "previousDecisionDetails", new TypeReference<List<IdValue<PreviousDecisionDetails>>>() {}),
     SIGNED_DECISION_DOCUMENT_WITH_METADATA(
         "signDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
     APPLICANT_INTERPRETER_SPOKEN_LANGUAGE(
