@@ -8,8 +8,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
-
 import lombok.NonNull;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Value;

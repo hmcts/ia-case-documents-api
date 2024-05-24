@@ -52,7 +52,6 @@ class BailNoticeOfHearingInitialListingTemplateTest {
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
     private CourtVenue hattonCross;
-
     private final String initialListingTemplateName = "TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx";
 
     private BailNoticeOfHearingInitialListingTemplate template;
@@ -63,6 +62,7 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         template =
             new BailNoticeOfHearingInitialListingTemplate(
                 initialListingTemplateName, customerServicesProvider, stringProvider);
+
         hattonCross = new CourtVenue("Hatton Cross Tribunal Hearing Centre",
                 "Hatton Cross Tribunal Hearing Centre",
                 "386417",
@@ -71,6 +71,7 @@ class BailNoticeOfHearingInitialListingTemplateTest {
                 "Y",
                 "York House And Wellington House, 2-3 Dukes Green, Feltham, Middlesex",
                 "TW14 0LS");
+
     }
 
     @Test

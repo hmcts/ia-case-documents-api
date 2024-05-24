@@ -35,5 +35,5 @@ public class BailNoticeOfHearingInitialListingTemplate
 
         return super.mapFieldValues(caseDetails);
     }
-
 }
+

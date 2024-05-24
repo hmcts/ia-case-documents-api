@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-
 import java.util.Optional;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantDetainedLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
@@ -36,7 +35,6 @@ public class BailNoticeOfHearingTemplate {
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
     private static final String REMOTE_HEARING_LOCATION = "Cloud Video Platform (CVP)";
-
     private final CustomerServicesProvider customerServicesProvider;
     private final StringProvider stringProvider;
 
@@ -122,7 +120,6 @@ public class BailNoticeOfHearingTemplate {
 
     private String getApplicantDetainedLocation(BailCase bailCase) {
         String location = bailCase.read(APPLICANT_DETAINED_LOC, String.class).orElse("");
-
 
         String detentionLocation = location.equals(ApplicantDetainedLocation.PRISON.getCode())
             ? bailCase.read(PRISON_NAME, String.class).orElse("") : location.equals(ApplicantDetainedLocation.IMIGRATION_REMOVAL_CENTER.getCode())

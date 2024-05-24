@@ -36,3 +36,4 @@ public class BailNoticeOfHearingRelistingTemplate
         return super.mapFieldValues(caseDetails);
     }
 }
+
