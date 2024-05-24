@@ -6,6 +6,13 @@ import java.util.List;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.InterpreterLanguage;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 public enum BailCaseFieldDefinition {
     SENT_BY_CHECKLIST(
@@ -339,6 +346,7 @@ public enum BailCaseFieldDefinition {
         "fcs4InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS4_INTERPRETER_SIGN_LANGUAGE(
         "fcs4InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+
     LISTING_EVENT("listingEvent", new TypeReference<ListingEvent>(){}),
     LISTING_LOCATION("listingLocation", new TypeReference<String>(){}),
     LISTING_HEARING_DATE("listingHearingDate", new TypeReference<String>(){}),

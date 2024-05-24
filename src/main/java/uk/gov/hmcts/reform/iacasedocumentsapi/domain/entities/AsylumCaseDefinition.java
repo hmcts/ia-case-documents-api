@@ -1,10 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 public enum AsylumCaseDefinition {
@@ -97,7 +98,7 @@ public enum AsylumCaseDefinition {
         "appellantAddress", new TypeReference<AddressUk>(){}),
 
     APPEAL_TYPE(
-        "appealType", new TypeReference<String>(){}),
+        "appealType", new TypeReference<AsylumAppealType>(){}),
 
     REASONS_FOR_APPEAL_DECISION(
         "reasonsForAppealDecision", new TypeReference<String>(){}),
@@ -114,6 +115,11 @@ public enum AsylumCaseDefinition {
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
+    REMOVAL_ORDER_OPTIONS(
+            "removalOrderOptions", new TypeReference<YesOrNo>(){}),
+
+    REMOVAL_ORDER_DATE(
+            "removalOrderDate", new TypeReference<String>(){}),
     NEW_MATTERS(
         "newMatters", new TypeReference<String>(){}),
 
@@ -486,8 +492,6 @@ public enum AsylumCaseDefinition {
     DATES_TO_AVOID_YES_NO(
         "datesToAvoidYesNo", new TypeReference<YesOrNo>(){}),
 
-    IS_OUT_OF_COUNTRY_ENABLED(
-            "isOutOfCountryEnabled", new TypeReference<YesOrNo>(){}),
     REMOTE_VIDEO_CALL(
             "remoteVideoCall", new TypeReference<YesOrNo>(){}),
 
@@ -590,6 +594,9 @@ public enum AsylumCaseDefinition {
     APP_ADDITIONAL_EVIDENCE_DOCS(
         "appAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    CUSTOM_TRIBUNAL_DOCUMENTS(
+            "customTribunalDocuments", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
     RESP_ADDITIONAL_EVIDENCE_DOCS(
         "respAdditionalEvidenceDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
@@ -615,10 +622,150 @@ public enum AsylumCaseDefinition {
             "isIntegrated", new TypeReference<YesOrNo>(){}),
 
     CLARIFYING_QUESTIONS_ANSWERS("clarifyingQuestionsAnswers",
-        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {})
+        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {}),
 
-    ;
+    UPDATED_APPEAL_DECISION(
+            "updatedAppealDecision", new TypeReference<String>(){}),
 
+    APPELLANT_IN_DETENTION(
+            "appellantInDetention", new TypeReference<YesOrNo>() {}
+    ),
+    DETENTION_FACILITY(
+            "detentionFacility", new TypeReference<String>(){}),
+
+    IRC_NAME(
+            "ircName", new TypeReference<String>(){}),
+
+    PRISON_NAME(
+            "prisonName", new TypeReference<String>(){}),
+
+    HAS_PENDING_BAIL_APPLICATIONS(
+            "hasPendingBailApplications", new TypeReference<BailApplicationStatus>() {}),
+
+    BAIL_APPLICATION_NUMBER(
+            "bailApplicationNumber", new TypeReference<String>(){}),
+
+    IS_ACCELERATED_DETAINED_APPEAL(
+            "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
+
+    SUITABILITY_REVIEW_DECISION(
+            "suitabilityReviewDecision", new TypeReference<AdaSuitabilityReviewDecision>(){}),
+
+    SUITABILITY_REVIEW_REASON(
+            "suitabilityReviewReason", new TypeReference<String>(){}),
+
+    SUITABILITY_REVIEW_JUDGE(
+            "suitabilityReviewJudge", new TypeReference<String>(){}),
+
+    IS_ADMIN(
+            "isAdmin", new TypeReference<YesOrNo>() {}),
+
+    HAS_OTHER_APPEALS(
+            "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {}),
+
+    // Case data section to hold generated documents,so they can be attached to email notifications
+    NOTIFICATION_ATTACHMENT_DOCUMENTS(
+            "notificationAttachmentDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    RECORDED_OUT_OF_TIME_DECISION(
+            "recordedOutOfTimeDecision", new TypeReference<YesOrNo>(){}),
+
+    APPEAL_REVIEW_OUTCOME(
+        "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){}),
+
+    REMISSION_TYPE(
+        "remissionType", new TypeReference<RemissionType>(){}),
+
+    REMISSION_REJECTED_DATE_PLUS_14DAYS(
+            "remissionRejectedDatePlus14days", new TypeReference<String>(){}),
+
+    CCD_REFERENCE_NUMBER_FOR_DISPLAY(
+            "ccdReferenceNumberForDisplay", new TypeReference<String>(){}),
+
+    FEE_AMOUNT_GBP(
+            "feeAmountGbp", new TypeReference<String>(){}),
+
+    UPDATE_TRIBUNAL_DECISION_LIST(
+            "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),
+
+    CORRECTED_DECISION_AND_REASONS(
+        "correctedDecisionAndReasons", new TypeReference<List<IdValue<DecisionAndReasons>>>() {}),
+
+    AMOUNT_REMITTED(
+            "amountRemitted", new TypeReference<String>(){}),
+
+    REHEARD_HEARING_DOCUMENTS_COLLECTION(
+            "reheardHearingDocumentsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
+
+    REHEARD_DECISION_REASONS_COLLECTION(
+            "reheardDecisionReasonsCollection", new TypeReference<List<IdValue<ReheardHearingDocuments>>>(){}),
+
+    REMITTAL_DOCUMENTS(
+            "remittalDocuments", new TypeReference<List<IdValue<RemittalDocument>>>(){}),
+
+    LATEST_DECISION_AND_REASONS_DOCUMENTS(
+            "latestDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LATEST_REMITTAL_DOCUMENTS(
+            "latestRemittalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    LATEST_REHEARD_HEARING_DOCUMENTS(
+            "latestReheardHearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    PAID_AMOUNT(
+            "paidAmount", new TypeReference<String>(){}),
+
+    REMISSION_DECISION(
+            "remissionDecision", new TypeReference<RemissionDecision>(){}),
+
+    REASON_APPEAL_MARKED_AS_ADA(
+            "reasonAppealMarkedAsAda", new TypeReference<String>(){}),
+
+    MAKE_AN_APPLICATIONS(
+            "makeAnApplications", new TypeReference<List<IdValue<MakeAnApplication>>>(){}),
+
+    DECIDE_AN_APPLICATION_ID(
+            "decideAnApplicationId", new TypeReference<String>(){}),
+
+    TRANSFER_OUT_OF_ADA_REASON(
+            "transferOutOfAdaReason", new TypeReference<String>(){}),
+
+    TRANSFER_OUT_OF_ADA_MORE_DETAILS(
+            "transferOutOfAdaMoreDetails", new TypeReference<String>(){}),
+
+    FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE(
+            "ftpaAppellantRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
+    FTPA_APPLICANT_TYPE(
+            "ftpaApplicantType", new TypeReference<String>(){}),
+    DIRECTION_EDIT_DATE_DUE(
+            "directionEditDateDue", new TypeReference<String>(){}),
+
+    DIRECTION_EDIT_EXPLANATION(
+            "directionEditExplanation", new TypeReference<String>(){}),
+    DIRECTION_EDIT_PARTIES(
+            "directionEditParties", new TypeReference<Parties>(){}),
+
+    SEND_DIRECTION_PARTIES(
+        "sendDirectionParties", new TypeReference<Parties>(){}),
+
+    FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE(
+            "ftpaRespondentRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
+
+    CASE_LINKS(
+            "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){}),
+
+    REINSTATE_APPEAL_DATE(
+        "reinstateAppealDate", new TypeReference<String>(){}),
+
+    REINSTATE_APPEAL_REASON(
+        "reinstateAppealReason", new TypeReference<String>(){}),
+
+    REINSTATED_DECISION_MAKER(
+        "reinstatedDecisionMaker", new TypeReference<String>(){}),
+
+    ADJOURN_HEARING_WITHOUT_DATE_REASONS(
+        "adjournHearingWithoutDateReasons", new TypeReference<String>() {});
 
     private final String value;
     private final TypeReference typeReference;
