@@ -615,9 +615,16 @@ public enum AsylumCaseDefinition {
             "isIntegrated", new TypeReference<YesOrNo>(){}),
 
     CLARIFYING_QUESTIONS_ANSWERS("clarifyingQuestionsAnswers",
-        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {})
+        new TypeReference<List<IdValue<ClarifyingQuestionAnswer>>>() {}),
 
-    ;
+    IS_CASE_USING_LOCATION_REF_DATA(
+        "isCaseUsingLocationRefData", new TypeReference<YesOrNo>(){}),
+
+    IS_REMOTE_HEARING(
+        "isRemoteHearing", new TypeReference<YesOrNo>() {}),
+
+    LIST_CASE_HEARING_CENTRE_ADDRESS(
+            "listCaseHearingCentreAddress",  new TypeReference<String>(){});
 
 
     private final String value;

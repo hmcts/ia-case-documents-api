@@ -49,15 +49,21 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("hearingDate", formatDateForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
         fieldValues.put("hearingTime", formatTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse("")));
 
-        if (listedHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
+
+        boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
+                .orElse(YesOrNo.NO).equals(YesOrNo.YES);
+
+        //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
+        //IS_REMOTE_HEARING is used for the case ref data
+        if ((!isCaseUsingLocationRefData && listedHearingCentre.equals(HearingCentre.REMOTE_HEARING))
+                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
             fieldValues.put("remoteHearing", "Remote hearing");
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 
-        fieldValues.put(
-            "hearingCentreAddress",
-            stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("")
-                .replaceAll(",\\s*", "\n")
+        fieldValues.put("hearingCentreAddress", isCaseUsingLocationRefData ?
+                asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class).orElse("")
+                : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n")
         );
 
         if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
