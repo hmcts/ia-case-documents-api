@@ -26,4 +26,6 @@ public class Value {
     public String getLabel() {
         return label;
     }
+
 }
+
