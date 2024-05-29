@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,5 +17,5 @@ public class InterpreterLanguageRefData {
     private List<String> languageManualEntry;
     private String languageManualEntryDescription;
 
-}
 
+}

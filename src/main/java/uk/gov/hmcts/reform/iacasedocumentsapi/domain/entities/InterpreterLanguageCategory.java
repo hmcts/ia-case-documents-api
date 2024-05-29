@@ -20,6 +20,4 @@ public enum InterpreterLanguageCategory {
     public String toString() {
         return getValue();
     }
-
 }
-

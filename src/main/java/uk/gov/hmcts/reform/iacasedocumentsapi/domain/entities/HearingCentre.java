@@ -22,6 +22,7 @@ public enum HearingCentre {
     TAYLOR_HOUSE("taylorHouse"),
     BELFAST("belfast"),
     HARMONDSWORTH("harmondsworth"),
+
     HENDON("hendon"),
     YARLS_WOOD("yarlsWood"),
     BRADFORD_KEIGHLEY("bradfordKeighley"),
