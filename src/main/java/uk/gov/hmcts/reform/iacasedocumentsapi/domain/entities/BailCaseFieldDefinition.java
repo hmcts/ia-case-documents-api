@@ -3,10 +3,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 
+
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -360,6 +359,7 @@ public enum BailCaseFieldDefinition {
             "refDataListingLocationDetail", new TypeReference<CourtVenue>() {}),
     IS_REMOTE_HEARING(
             "isRemoteHearing", new TypeReference<YesOrNo>() {});
+
 
     private final String value;
     private final TypeReference typeReference;
