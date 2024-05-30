@@ -9,6 +9,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
@@ -34,9 +36,11 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
     @Mock
     private DocumentDownloadClient documentDownloadClient;
     @Mock private DocumentUploader documentUploader;
+    @Mock private DocumentReceiver documentReceiver;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Document finalDecisionAndReasonsDocument;
+    @Mock private DocumentWithMetadata finalDecisionAndReasonsDocumentWithTag;
     @Mock private Document uploadedDocument;
     @Mock private Resource finalDecisionAndReasonsResource;
 
@@ -48,6 +52,7 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
         sendDecisionAndReasonsPdfService = new SendDecisionAndReasonsRenameFileService(
             documentDownloadClient,
             documentUploader,
+            documentReceiver,
             "some-file-name");
     }
 
@@ -59,6 +64,12 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
 
         when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
                 .thenReturn(binaryDocumentUrl);
+
+        when(documentReceiver.receive(any(Document.class), any(String.class), any(DocumentTag.class)))
+                .thenReturn(finalDecisionAndReasonsDocumentWithTag);
+
+        when(finalDecisionAndReasonsDocumentWithTag.getDocument())
+                .thenReturn(finalDecisionAndReasonsDocument);
 
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
                 .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
@@ -113,6 +124,12 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
         when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
             .thenReturn(binaryDocumentUrl);
 
+        when(documentReceiver.receive(any(Document.class), any(String.class), any(DocumentTag.class)))
+                .thenReturn(finalDecisionAndReasonsDocumentWithTag);
+
+        when(finalDecisionAndReasonsDocumentWithTag.getDocument())
+                .thenReturn(finalDecisionAndReasonsDocument);
+
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
             .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
 
@@ -135,6 +152,12 @@ public class SendDecisionAndReasonsRenameFileServiceTest {
 
         when(finalDecisionAndReasonsDocument.getDocumentBinaryUrl())
             .thenReturn(binaryDocumentUrl);
+
+        when(documentReceiver.receive(any(Document.class), any(String.class), any(DocumentTag.class)))
+                .thenReturn(finalDecisionAndReasonsDocumentWithTag);
+
+        when(finalDecisionAndReasonsDocumentWithTag.getDocument())
+                .thenReturn(finalDecisionAndReasonsDocument);
 
         when(asylumCase.read(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENT, Document.class))
             .thenReturn(Optional.of(finalDecisionAndReasonsDocument));
