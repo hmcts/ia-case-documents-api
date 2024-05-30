@@ -1,12 +1,12 @@
 apiVersion: v2
 name: ia-case-documents-api
 home: https://github.com/hmcts/ia-case-documents-api
-version: 0.0.39
+version: 0.0.40
 description: Immigration & Asylum Case Documents Service
 maintainers:
   - name: HMCTS Immigration & Asylum Team
     email: ImmigrationandAsylum@HMCTS.NET
 dependencies:
   - name: java
-    version: 5.2.0
+    version: 5.2.1
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
