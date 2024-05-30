@@ -17,7 +17,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.REF_DATA_LISTING_LOCATION_DETAIL;
 
-
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +51,6 @@ class BailNoticeOfHearingInitialListingTemplateTest {
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
     private CourtVenue hattonCross;
-
     private final String initialListingTemplateName = "TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx";
 
     private BailNoticeOfHearingInitialListingTemplate template;
@@ -189,5 +187,4 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         assertEquals("Nottingham Justice Centre\nCarrington Street\nNottingham\nNG2 1EE",
                 fieldValuesMap.get("hearingCentreAddress"));
     }
-
 }
