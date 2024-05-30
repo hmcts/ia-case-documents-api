@@ -8,5 +8,5 @@ maintainers:
     email: ImmigrationandAsylum@HMCTS.NET
 dependencies:
   - name: java
-    version: 5.2.0
+    version: 5.2.1
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
