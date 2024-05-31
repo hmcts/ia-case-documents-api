@@ -774,7 +774,9 @@ public enum AsylumCaseDefinition {
             "isRemoteHearing", new TypeReference<YesOrNo>() {}),
 
     LIST_CASE_HEARING_CENTRE_ADDRESS(
-            "listCaseHearingCentreAddress",  new TypeReference<String>(){});
+            "listCaseHearingCentreAddress",  new TypeReference<String>(){}),
+
+    IS_DECISION_WITHOUT_HEARING("isDecisionWithoutHearing", new TypeReference<YesOrNo>(){});
 
     private final String value;
     private final TypeReference typeReference;
