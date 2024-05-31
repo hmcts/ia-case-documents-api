@@ -765,7 +765,16 @@ public enum AsylumCaseDefinition {
         "reinstatedDecisionMaker", new TypeReference<String>(){}),
 
     ADJOURN_HEARING_WITHOUT_DATE_REASONS(
-        "adjournHearingWithoutDateReasons", new TypeReference<String>() {});
+        "adjournHearingWithoutDateReasons", new TypeReference<String>() {}),
+
+    IS_CASE_USING_LOCATION_REF_DATA(
+            "isCaseUsingLocationRefData", new TypeReference<YesOrNo>(){}),
+
+    IS_REMOTE_HEARING(
+            "isRemoteHearing", new TypeReference<YesOrNo>() {}),
+
+    LIST_CASE_HEARING_CENTRE_ADDRESS(
+            "listCaseHearingCentreAddress",  new TypeReference<String>(){});
 
     private final String value;
     private final TypeReference typeReference;
