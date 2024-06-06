@@ -17,9 +17,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 
-
-
-
 @Component
 public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<AsylumCase> {
 
