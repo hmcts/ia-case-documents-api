@@ -517,7 +517,7 @@ security:
       - "requestRespondentReview"
       - "addAppealResponse"
       - "createCaseSummary"
-      - "generateHearingBundle"
+      - "generateAmendedHearingBundle"
       - "generateDecisionAndReasons"
       - "sendDecisionAndReasons"
       - "editCaseListing"
