@@ -79,12 +79,12 @@ class GenerateAmendedHearingBundleHandlerTest {
     private String coverPageLogo = "[userImage:hmcts.png]";
     private List<IdValue<Bundle>> caseBundles = new ArrayList<>();
 
-    private CustomiseHearingBundleHandler customiseHearingBundleHandler;
+    private GenerateAmendedHearingBundleHandler generateAmendedHearingBundleHandler;
 
     @BeforeEach
     public void setUp() throws JsonProcessingException {
-        customiseHearingBundleHandler =
-            new CustomiseHearingBundleHandler(
+        generateAmendedHearingBundleHandler =
+            new GenerateAmendedHearingBundleHandler(
                 emBundlerUrl,
                 emBundlerStitchUri,
                 bundleRequestExecutor,
@@ -168,7 +168,7 @@ class GenerateAmendedHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDocWithMetadata)));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+            generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -297,7 +297,7 @@ class GenerateAmendedHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+            generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -357,7 +357,7 @@ class GenerateAmendedHearingBundleHandlerTest {
             new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
             new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
-        Optional<IdValue<DocumentWithMetadata>> result = customiseHearingBundleHandler.isDocumentWithDescriptionPresent(
+        Optional<IdValue<DocumentWithMetadata>> result = generateAmendedHearingBundleHandler.isDocumentWithDescriptionPresent(
             documentMetadataList, documentWithDescriptionIdValue);
         assertTrue(result.isPresent());
         assertEquals(
@@ -378,7 +378,7 @@ class GenerateAmendedHearingBundleHandlerTest {
             new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
             new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.isDocumentWithDescriptionPresent(
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.isDocumentWithDescriptionPresent(
             documentMetadataList, documentWithDescriptionIdValue))
             .hasMessage("Document cannot be null")
             .isExactlyInstanceOf(IllegalStateException.class);
@@ -400,7 +400,7 @@ class GenerateAmendedHearingBundleHandlerTest {
             new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
             new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
-        assertTrue(customiseHearingBundleHandler.contains(
+        assertTrue(generateAmendedHearingBundleHandler.contains(
             documentMetadataList, documentWithMetadataIdValue));
     }
 
@@ -412,7 +412,7 @@ class GenerateAmendedHearingBundleHandlerTest {
         when(asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS))
             .thenReturn(Optional.empty());
 
-        customiseHearingBundleHandler.initializeNewCollections(asylumCase);
+        generateAmendedHearingBundleHandler.initializeNewCollections(asylumCase);
 
         verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
@@ -430,7 +430,7 @@ class GenerateAmendedHearingBundleHandlerTest {
 
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("appealReferenceNumber is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -441,7 +441,7 @@ class GenerateAmendedHearingBundleHandlerTest {
         when(objectMapper.readValue("Test", AsylumCase.class))
             .thenThrow(new IllegalStateException("Cannot make a deep copy of the case"));
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot make a deep copy of the case")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -451,7 +451,7 @@ class GenerateAmendedHearingBundleHandlerTest {
 
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("appellantFamilyName is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -461,7 +461,7 @@ class GenerateAmendedHearingBundleHandlerTest {
 
         when(asylumCase.read(CASE_BUNDLES)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("caseBundle is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -471,7 +471,7 @@ class GenerateAmendedHearingBundleHandlerTest {
 
         caseBundles.clear();
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("case bundles size is not 1 and is : 0")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -479,12 +479,12 @@ class GenerateAmendedHearingBundleHandlerTest {
     @Test
     void handling_should_throw_if_cannot_actually_handle() {
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.SEND_DIRECTION);
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -498,7 +498,7 @@ class GenerateAmendedHearingBundleHandlerTest {
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-                boolean canHandle = customiseHearingBundleHandler.canHandle(callbackStage, callback);
+                boolean canHandle = generateAmendedHearingBundleHandler.canHandle(callbackStage, callback);
 
                 if (event == Event.CUSTOMISE_HEARING_BUNDLE
                     && callbackStage == ABOUT_TO_SUBMIT) {
@@ -516,19 +516,19 @@ class GenerateAmendedHearingBundleHandlerTest {
     @Test
     void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.canHandle(null, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(null, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> customiseHearingBundleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> generateAmendedHearingBundleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
@@ -537,7 +537,7 @@ class GenerateAmendedHearingBundleHandlerTest {
     void test_contains_not_null() {
         IdValue<DocumentWithMetadata> legalRepDocWithMetadata =
                 new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
-        Boolean bool = customiseHearingBundleHandler.contains(List.of(), legalRepDocWithMetadata);
+        Boolean bool = generateAmendedHearingBundleHandler.contains(List.of(), legalRepDocWithMetadata);
         assertThat(bool).isNotNull();
     }
 

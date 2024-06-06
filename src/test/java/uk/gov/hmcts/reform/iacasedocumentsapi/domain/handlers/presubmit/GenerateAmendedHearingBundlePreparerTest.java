@@ -55,12 +55,12 @@ class GenerateAmendedHearingBundlePreparerTest {
     @Captor
     private ArgumentCaptor<DocumentWithDescription> documentsCaptor;
 
-    private CustomiseHearingBundlePreparer customiseHearingBundlePreparer;
+    private GenerateAmendedHearingBundlePreparer generateAmendedHearingBundlePreparer;
 
     @BeforeEach
     void setUp() {
-        customiseHearingBundlePreparer =
-            new CustomiseHearingBundlePreparer(appender, featureToggler);
+        generateAmendedHearingBundlePreparer =
+            new GenerateAmendedHearingBundlePreparer(appender, featureToggler);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -109,7 +109,7 @@ class GenerateAmendedHearingBundlePreparerTest {
         when(asylumCase.read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS))
                 .thenReturn(Optional.of(tribunalDocumentList));
 
-        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
         verify(asylumCase).write(AsylumCaseDefinition.CUSTOM_HEARING_DOCUMENTS, customCollections);
         verify(asylumCase).write(CUSTOM_LEGAL_REP_DOCUMENTS, customCollections);
@@ -178,7 +178,7 @@ class GenerateAmendedHearingBundlePreparerTest {
             .thenReturn(Optional.of(addendumEvidenceDocumentList));
 
 
-        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
         verify(asylumCase).write(CUSTOM_REHEARD_HEARING_DOCS, customDocumentList);
         verify(asylumCase).write(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, customDocumentList);
@@ -245,7 +245,7 @@ class GenerateAmendedHearingBundlePreparerTest {
             .thenReturn(Optional.of(legalDocumentList));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+            generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
         assertNotNull(callbackResponse);
 
@@ -320,13 +320,13 @@ class GenerateAmendedHearingBundlePreparerTest {
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS))
             .thenReturn(Optional.of(addendumEvidenceDocumentsList));
 
-        customiseHearingBundlePreparer.populateCustomCollections(
+        generateAmendedHearingBundlePreparer.populateCustomCollections(
             asylumCase, ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
 
         verify(asylumCase, times(1)).clear(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).write(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, customCollections);
 
-        customiseHearingBundlePreparer.populateCustomCollections(
+        generateAmendedHearingBundlePreparer.populateCustomCollections(
             asylumCase, ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
 
         verify(asylumCase, times(1)).clear(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
@@ -355,7 +355,7 @@ class GenerateAmendedHearingBundlePreparerTest {
         when(asylumCase.read(AsylumCaseDefinition.RESPONDENT_DOCUMENTS))
             .thenReturn(Optional.empty());
 
-        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
         verify(asylumCase, never()).write(any(), any());
     }
@@ -368,7 +368,7 @@ class GenerateAmendedHearingBundlePreparerTest {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
         verify(asylumCase, never()).write(any(), any());
     }
@@ -378,7 +378,7 @@ class GenerateAmendedHearingBundlePreparerTest {
     void handling_should_throw_if_cannot_actually_handle() {
 
         assertThatThrownBy(
-            () -> customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            () -> generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -392,7 +392,7 @@ class GenerateAmendedHearingBundlePreparerTest {
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
-                boolean canHandle = customiseHearingBundlePreparer.canHandle(callbackStage, callback);
+                boolean canHandle = generateAmendedHearingBundlePreparer.canHandle(callbackStage, callback);
 
                 if (event == Event.CUSTOMISE_HEARING_BUNDLE
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_START) {
@@ -410,19 +410,19 @@ class GenerateAmendedHearingBundlePreparerTest {
     @Test
     void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> customiseHearingBundlePreparer.canHandle(null, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundlePreparer.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> customiseHearingBundlePreparer.canHandle(PreSubmitCallbackStage.ABOUT_TO_START, null))
+        assertThatThrownBy(() -> generateAmendedHearingBundlePreparer.canHandle(PreSubmitCallbackStage.ABOUT_TO_START, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> customiseHearingBundlePreparer.handle(null, callback))
+        assertThatThrownBy(() -> generateAmendedHearingBundlePreparer.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, null))
+        assertThatThrownBy(() -> generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
