@@ -36,11 +36,10 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     public boolean canHandle(PreSubmitCallbackStage callbackStage, Callback<AsylumCase> callback) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
-        requireNonNull(callbackStage, "callbackStage must not be null");
-        requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_START
-                && callback.getEvent() == Event.CUSTOMISE_HEARING_BUNDLE;
+                && (callback.getEvent() == Event.CUSTOMISE_HEARING_BUNDLE
+            || callback.getEvent() == Event.GENERATE_AMENDED_HEARING_BUNDLE);
     }
 
     @Override
