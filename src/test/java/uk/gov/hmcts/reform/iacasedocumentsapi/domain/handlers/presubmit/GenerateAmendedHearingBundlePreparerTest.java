@@ -69,7 +69,7 @@ class GenerateAmendedHearingBundlePreparerTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
     void should_create_custom_collections(String maybeDecision) {
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
                 ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
 
@@ -130,7 +130,7 @@ class GenerateAmendedHearingBundlePreparerTest {
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class),
             Optional.of(YesOrNo.YES));
 
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
 
         final List<IdValue<DocumentWithDescription>> customDocumentList =
             asList(new IdValue("1", createDocumentWithDescription()));
@@ -195,7 +195,7 @@ class GenerateAmendedHearingBundlePreparerTest {
     @Test
     void should_filter_legal_rep_document_with_correct_tags() {
 
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
 
         List<IdValue<DocumentWithDescription>> customCollections = new ArrayList<>();
 
@@ -267,7 +267,7 @@ class GenerateAmendedHearingBundlePreparerTest {
     @Test
     void should_filter_addendum_evidence_document_with_correct_appellant_respondent_tags() {
 
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
         List<IdValue<DocumentWithDescription>> customCollections = new ArrayList<>();
 
         when(appender.append(any(DocumentWithDescription.class), anyList()))
@@ -342,7 +342,7 @@ class GenerateAmendedHearingBundlePreparerTest {
     @Test
     void should_not_create_custom_collections_if_source_collections_are_empty() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
 
@@ -365,7 +365,7 @@ class GenerateAmendedHearingBundlePreparerTest {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         generateAmendedHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
@@ -394,7 +394,7 @@ class GenerateAmendedHearingBundlePreparerTest {
 
                 boolean canHandle = generateAmendedHearingBundlePreparer.canHandle(callbackStage, callback);
 
-                if (event == Event.CUSTOMISE_HEARING_BUNDLE
+                if (event == Event.GENERATE_AMENDED_HEARING_BUNDLE
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_START) {
 
                     assertTrue(canHandle);

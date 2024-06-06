@@ -94,7 +94,7 @@ class GenerateAmendedHearingBundleHandlerTest {
                 featureToggler
             );
 
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
@@ -500,7 +500,7 @@ class GenerateAmendedHearingBundleHandlerTest {
 
                 boolean canHandle = generateAmendedHearingBundleHandler.canHandle(callbackStage, callback);
 
-                if (event == Event.CUSTOMISE_HEARING_BUNDLE
+                if (event == Event.GENERATE_AMENDED_HEARING_BUNDLE
                     && callbackStage == ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);
