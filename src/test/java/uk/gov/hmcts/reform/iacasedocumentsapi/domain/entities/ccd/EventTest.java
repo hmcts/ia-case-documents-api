@@ -30,6 +30,7 @@ public class EventTest {
         assertEquals("revertStateToAwaitingRespondentEvidence", Event.REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE.toString());
         assertEquals("generateHearingBundle", Event.GENERATE_HEARING_BUNDLE.toString());
         assertEquals("customiseHearingBundle", Event.CUSTOMISE_HEARING_BUNDLE.toString());
+        assertEquals("generateAmendedHearingBundle", Event.GENERATE_AMENDED_HEARING_BUNDLE.toString());
         assertEquals("generateDecisionAndReasons", Event.GENERATE_DECISION_AND_REASONS.toString());
         assertEquals("sendDecisionAndReasons", Event.SEND_DECISION_AND_REASONS.toString());
         assertEquals("editCaseListing", Event.EDIT_CASE_LISTING.toString());
@@ -77,6 +78,6 @@ public class EventTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(68, Event.values().length);
+        assertEquals(69, Event.values().length);
     }
 }
