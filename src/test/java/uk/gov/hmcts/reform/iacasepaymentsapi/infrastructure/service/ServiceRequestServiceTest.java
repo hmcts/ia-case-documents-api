@@ -38,7 +38,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service.exceptions.P
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
-public class ServiceRequestServiceTest {
+class ServiceRequestServiceTest {
 
     private static final String CODE = "some-code";
     private static final String DESCRIPTION = "some-description";
@@ -100,7 +100,7 @@ public class ServiceRequestServiceTest {
     }
 
     @Test
-    void should_create_request_for_service_request_and_get_response_for_service_request() throws Exception {
+    void should_create_request_for_service_request_and_get_response_for_service_request() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))

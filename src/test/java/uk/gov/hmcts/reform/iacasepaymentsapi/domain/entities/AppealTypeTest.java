@@ -1,32 +1,35 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-public class AppealTypeTest {
+class AppealTypeTest {
 
-    @Test
-    public void has_correct_asylum_appeal_types() {
-        assertThat(AppealType.from("revocationOfProtection").get(), is(AppealType.RP));
-        assertThat(AppealType.from("protection").get(), is(AppealType.PA));
-        assertThat(AppealType.from("refusalOfEu").get(), is(AppealType.EA));
-        assertThat(AppealType.from("refusalOfHumanRights").get(), is(AppealType.HU));
-        assertThat(AppealType.from("deprivation").get(), is(AppealType.DC));
-        assertThat(AppealType.from("euSettlementScheme").get(), is(AppealType.EU));
-        assertThat(AppealType.from("ageAssessment").get(), is(AppealType.AG));
+    @ParameterizedTest
+    @CsvSource({
+        "revocationOfProtection, RP",
+        "protection, PA",
+        "refusalOfEu, EA",
+        "refusalOfHumanRights, HU",
+        "deprivation, DC",
+        "euSettlementScheme, EU",
+        "ageAssessment, AG"
+    })
+    void has_correct_asylum_appeal_types(String input, AppealType expected) {
+        assertThat(AppealType.from(input).orElseThrow(() -> new AssertionError("Expected value not found"))).isEqualTo(expected);
     }
 
     @Test
-    public void returns_optional_for_unknown_appeal_type() {
-        assertThat(AppealType.from("some_unknown_type"), is(Optional.empty()));
+    void returns_optional_for_unknown_appeal_type() {
+        assertThat(AppealType.from("some_unknown_type")).isNotPresent();
     }
 
     @Test
-    public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
+    void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
         assertEquals(7, AppealType.values().length);
     }
 }

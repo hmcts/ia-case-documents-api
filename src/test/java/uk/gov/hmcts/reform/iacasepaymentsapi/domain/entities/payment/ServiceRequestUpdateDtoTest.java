@@ -5,7 +5,7 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
 
-public class ServiceRequestUpdateDtoTest {
+class ServiceRequestUpdateDtoTest {
 
     @Test
     void should_hold_onto_values() {

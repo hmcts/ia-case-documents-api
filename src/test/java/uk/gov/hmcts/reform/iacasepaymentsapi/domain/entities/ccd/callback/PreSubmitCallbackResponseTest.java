@@ -13,8 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseData;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
-public class PreSubmitCallbackResponseTest {
+class PreSubmitCallbackResponseTest {
 
     @Mock private CaseData caseData;
 
@@ -27,13 +26,13 @@ public class PreSubmitCallbackResponseTest {
     }
 
     @Test
-    public void should_hold_onto_values() {
+    void should_hold_onto_values() {
 
         assertEquals(caseData, preSubmitCallbackResponse.getData());
     }
 
     @Test
-    public void should_store_distinct_errors() {
+    void should_store_distinct_errors() {
 
         List<String> someErrors = Arrays.asList("error3", "error4");
         List<String> someMoreErrors = Arrays.asList("error4", "error1");

@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,24 +35,20 @@ public class SecurityConfiguration  {
 
     private final List<String> anonymousPaths = new ArrayList<>();
     private final Map<String, List<Event>> roleEventAccess = new HashMap<>();
-
-    private final AuthenticationManager authenticationManager;
     private final Converter<Jwt, Collection<GrantedAuthority>> idamAuthoritiesConverter;
     private final ServiceAuthFilter serviceAuthFilter;
 
     public SecurityConfiguration(
-        AuthenticationManager authenticationManager,
         Converter<Jwt, Collection<GrantedAuthority>> idamAuthoritiesConverter,
         ServiceAuthFilter serviceAuthFilter
     ) {
-        this.authenticationManager = authenticationManager;
         this.idamAuthoritiesConverter = idamAuthoritiesConverter;
         this.serviceAuthFilter = serviceAuthFilter;
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().mvcMatchers(
+        return web -> web.ignoring().mvcMatchers(
             anonymousPaths
                 .stream()
                 .toArray(String[]::new)

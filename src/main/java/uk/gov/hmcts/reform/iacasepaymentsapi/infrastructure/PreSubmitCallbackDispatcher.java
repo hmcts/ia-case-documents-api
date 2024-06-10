@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.callback.Callback;
@@ -53,7 +52,7 @@ public class PreSubmitCallbackDispatcher<T extends CaseData> {
             callbackHandlers
                 .stream()
                 .filter(callbackHandler -> callbackHandler.getDispatchPriority() == DispatchPriority.EARLY)
-                .collect(Collectors.toList()),
+                .toList(),
             callbackResponse
         );
 
@@ -63,7 +62,7 @@ public class PreSubmitCallbackDispatcher<T extends CaseData> {
             callbackHandlers
                 .stream()
                 .filter(callbackHandler -> callbackHandler.getDispatchPriority() == DispatchPriority.LATE)
-                .collect(Collectors.toList()),
+                .toList(),
             callbackResponse
         );
 

@@ -37,13 +37,6 @@ class S2STokenValidatorTest {
     }
 
     @Test
-    void givenServiceNameIsValidButWithNoBearerDefinition() {
-        when(authTokenValidator.getServiceName("Bearer payment_app")).thenReturn("payment_app");
-        s2STokenValidator.checkIfServiceIsAllowed("payment_app");
-        verify(authTokenValidator).getServiceName("Bearer payment_app");
-    }
-
-    @Test
     void givenServiceNameIsNullFromToken() {
         when(authTokenValidator.getServiceName("Bearer TestService")).thenReturn(null);
         assertThrows(AccessDeniedException.class, () -> s2STokenValidator.checkIfServiceIsAllowed("TestService"));
@@ -58,5 +51,13 @@ class S2STokenValidatorTest {
     @Test
     void givenServiceNameIsEmptyFromToken() {
         assertThrows(AccessDeniedException.class, () -> s2STokenValidator.checkIfServiceIsAllowed(""));
+    }
+
+    @Test
+    void givenTokenDoesNotStartWithBearer() {
+        String tokenWithoutBearer = "payment_app";
+        when(authTokenValidator.getServiceName("Bearer " + tokenWithoutBearer)).thenReturn(tokenWithoutBearer);
+        s2STokenValidator.checkIfServiceIsAllowed(tokenWithoutBearer);
+        verify(authTokenValidator).getServiceName("Bearer " + tokenWithoutBearer);
     }
 }

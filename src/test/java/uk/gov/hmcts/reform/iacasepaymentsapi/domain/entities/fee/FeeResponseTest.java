@@ -1,18 +1,19 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FeeResponseTest {
+class FeeResponseTest {
 
-    private BigDecimal amount = new BigDecimal("140.00");
-    private String description = "Appeal determined with a hearing";
-    private String version = "2";
-    private String code = "FEE0123";
+    private static final BigDecimal amount = new BigDecimal("140.00");
+    private static final String description = "Appeal determined with a hearing";
+    private static final String version = "2";
+    private static final String code = "FEE0123";
 
     private FeeResponse feeResponse;
 
@@ -23,16 +24,16 @@ public class FeeResponseTest {
     }
 
     @Test
-    public void should_hold_onto_values() {
+    void should_hold_onto_values() {
 
-        assertEquals(feeResponse.getCode(), code);
-        assertEquals(feeResponse.getDescription(), description);
-        assertEquals(feeResponse.getVersion(), version);
-        assertEquals(feeResponse.getAmount(), amount);
+        Assertions.assertEquals(code, feeResponse.getCode());
+        Assertions.assertEquals(description, feeResponse.getDescription());
+        Assertions.assertEquals(version, feeResponse.getVersion());
+        Assertions.assertEquals(amount, feeResponse.getAmount());
     }
 
     @Test
-    public void should_throw_required_field_exception() {
+    void should_throw_required_field_exception() {
 
         feeResponse = new FeeResponse(null, null, null, null);
 
@@ -50,11 +51,11 @@ public class FeeResponseTest {
     }
 
     @Test
-    public void should_test_to_string_and_hash_code() {
+    void should_test_to_string_and_hash_code() {
 
         FeeResponse expectedFeeResponse = new FeeResponse(code, description, version, amount);
-        assertEquals(feeResponse, expectedFeeResponse);
-        assertEquals(feeResponse.hashCode(), expectedFeeResponse.hashCode());
+        Assertions.assertEquals(feeResponse, expectedFeeResponse);
+        Assertions.assertEquals(feeResponse.hashCode(), expectedFeeResponse.hashCode());
     }
 
 }

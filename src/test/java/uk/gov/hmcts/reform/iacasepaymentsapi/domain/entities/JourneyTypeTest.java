@@ -8,9 +8,8 @@ class JourneyTypeTest {
 
     @Test
     void has_correct_journey_types() {
-
-        assertSame(JourneyType.from("aip").get(), JourneyType.AIP);
-        assertSame(JourneyType.from("rep").get(), JourneyType.REP);
+        assertSame(JourneyType.AIP, JourneyType.from("aip").get());
+        assertSame(JourneyType.REP, JourneyType.from("rep").get());
     }
 
     @Test

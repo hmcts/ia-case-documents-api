@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class CasePaymentRequestDtoTest {
+class CasePaymentRequestDtoTest {
 
     private static final String ACTION = "some-action";
     private static final String RESPONSIBLE_PARTY = "some-responsible-party";

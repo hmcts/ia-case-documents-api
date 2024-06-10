@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeDto;
 
-public class ServiceRequestRequestTest {
+class ServiceRequestRequestTest {
 
     private static final String CALLBACK_URL = "some-callback-url";
     private CasePaymentRequestDto casePaymentRequestDto;
@@ -72,8 +72,8 @@ public class ServiceRequestRequestTest {
         assertEquals(1, feeDto.getVolume());
         assertEquals("some-version", feeDto.getVersion());
 
-        CasePaymentRequestDto casePaymentRequestDto = serviceRequestRequest.getCasePaymentRequest();
-        assertEquals(ACTION, casePaymentRequestDto.getAction());
-        assertEquals(RESPONSIBLE_PARTY, casePaymentRequestDto.getResponsibleParty());
+        CasePaymentRequestDto paymentRequestDto = serviceRequestRequest.getCasePaymentRequest();
+        assertEquals(ACTION, paymentRequestDto.getAction());
+        assertEquals(RESPONSIBLE_PARTY, paymentRequestDto.getResponsibleParty());
     }
 }

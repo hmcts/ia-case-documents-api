@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.payment;
 
 import static java.util.Objects.requireNonNull;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,7 +12,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
 
 @Builder
 @ToString
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreditAccountPayment {
 
     private String accountNumber;

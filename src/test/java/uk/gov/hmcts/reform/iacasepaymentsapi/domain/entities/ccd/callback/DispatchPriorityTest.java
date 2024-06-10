@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class DispatchPriorityTest {
+class DispatchPriorityTest {
 
     @Test
-    public void has_correct_values() {
+    void has_correct_values() {
 
         assertEquals("early", DispatchPriority.EARLY.toString());
         assertEquals("late", DispatchPriority.LATE.toString());
@@ -16,7 +16,7 @@ public class DispatchPriorityTest {
     }
 
     @Test
-    public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
+    void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
 
         assertEquals(4, DispatchPriority.values().length);
     }

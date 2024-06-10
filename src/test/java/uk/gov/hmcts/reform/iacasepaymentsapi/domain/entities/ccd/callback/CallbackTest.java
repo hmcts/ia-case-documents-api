@@ -13,8 +13,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
-public class CallbackTest {
+class CallbackTest {
 
     @Mock
     private CaseDetails<CaseData> caseDetails;
@@ -26,14 +25,12 @@ public class CallbackTest {
 
     @BeforeEach
     public void setUp() {
-
         callback = new Callback<>(caseDetails, caseDetailsBefore, event);
     }
 
     @Test
-    public void should_hold_onto_values() {
-
-        assertThat(caseDetails).isEqualToComparingOnlyGivenFields(callback.getCaseDetails());
+    void should_hold_onto_values() {
+        assertThat(caseDetails).isEqualTo(callback.getCaseDetails());
         assertThat(caseDetailsBefore).isEqualTo(callback.getCaseDetailsBefore());
         assertThat(event).isEqualTo(callback.getEvent());
     }

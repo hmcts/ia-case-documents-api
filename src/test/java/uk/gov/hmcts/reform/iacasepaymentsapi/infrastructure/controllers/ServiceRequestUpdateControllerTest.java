@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class ServiceRequestUpdateControllerTest {
+class ServiceRequestUpdateControllerTest {
 
     @Mock private CcdDataService ccdDataService;
     @Mock private PaymentDto paymentDto;

@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -9,6 +7,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,13 +20,11 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.field.AddressUk
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationEntityResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationResponse;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.SuperUser;
-import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.RefDataApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
 class RefDataServiceTest {
     @Mock
     private RefDataApi refDataApi;
@@ -35,13 +33,10 @@ class RefDataServiceTest {
     @Mock
     private AuthTokenGenerator serviceAuthorizationProvider;
     @Mock
-    private IdamApi idamApi;
-    @Mock
     private IdamService idamService;
     @Mock
     private UserInfo userInfo;
 
-    private String companyName = "LBC";
     private final String addressLine1 = "A";
     private final String addressLine2 = "B";
     private final String addressLine3 = "C";
@@ -58,7 +53,6 @@ class RefDataServiceTest {
                 refDataApi,
                 userAuthorizationProvider,
                 serviceAuthorizationProvider,
-                idamApi,
                 idamService);
     }
 
@@ -92,18 +86,18 @@ class RefDataServiceTest {
 
         OrganisationResponse orgResponse = refDataService.getOrganisationResponse();
 
-        assertNotNull(orgResponse);
-        assertEquals(mockResponse, orgResponse);
+        Assertions.assertNotNull(orgResponse);
+        Assertions.assertEquals(mockResponse, orgResponse);
 
-        assertEquals("orgId", mockResponse.getOrganisationEntityResponse().getOrganisationIdentifier());
-        assertEquals("orgName", mockResponse.getOrganisationEntityResponse().getName());
-        assertEquals("active", mockResponse.getOrganisationEntityResponse().getStatus());
-        assertEquals("sraId", mockResponse.getOrganisationEntityResponse().getSraId());
-        assertEquals("sraReg", mockResponse.getOrganisationEntityResponse().getSraRegulated());
-        assertEquals("CO123", mockResponse.getOrganisationEntityResponse().getCompanyNumber());
-        assertEquals("some-url", mockResponse.getOrganisationEntityResponse().getCompanyUrl());
-        assertEquals("PBA123456", mockResponse.getOrganisationEntityResponse().getPaymentAccount().get(0));
-        assertEquals("PBA765432", mockResponse.getOrganisationEntityResponse().getPaymentAccount().get(1));
+        Assertions.assertEquals("orgId", mockResponse.getOrganisationEntityResponse().getOrganisationIdentifier());
+        Assertions.assertEquals("orgName", mockResponse.getOrganisationEntityResponse().getName());
+        Assertions.assertEquals("active", mockResponse.getOrganisationEntityResponse().getStatus());
+        Assertions.assertEquals("sraId", mockResponse.getOrganisationEntityResponse().getSraId());
+        Assertions.assertEquals("sraReg", mockResponse.getOrganisationEntityResponse().getSraRegulated());
+        Assertions.assertEquals("CO123", mockResponse.getOrganisationEntityResponse().getCompanyNumber());
+        Assertions.assertEquals("some-url", mockResponse.getOrganisationEntityResponse().getCompanyUrl());
+        Assertions.assertEquals("PBA123456", mockResponse.getOrganisationEntityResponse().getPaymentAccount().get(0));
+        Assertions.assertEquals("PBA765432", mockResponse.getOrganisationEntityResponse().getPaymentAccount().get(1));
 
         AddressUk addressUk =  new AddressUk(
             addressLine1,
@@ -114,12 +108,12 @@ class RefDataServiceTest {
             postCode,
             country
         );
-        assertEquals(addressLine1, addressUk.getAddressLine1().get());
-        assertEquals(addressLine2, addressUk.getAddressLine2().get());
-        assertEquals(addressLine3, addressUk.getAddressLine3().get());
-        assertEquals(postCode, addressUk.getPostCode().get());
-        assertEquals(townCity, addressUk.getPostTown().get());
-        assertEquals(county, addressUk.getCounty().get());
-        assertEquals(country, addressUk.getCountry().get());
+        Assertions.assertEquals(addressLine1, addressUk.getAddressLine1().get());
+        Assertions.assertEquals(addressLine2, addressUk.getAddressLine2().get());
+        Assertions.assertEquals(addressLine3, addressUk.getAddressLine3().get());
+        Assertions.assertEquals(postCode, addressUk.getPostCode().get());
+        Assertions.assertEquals(townCity, addressUk.getPostTown().get());
+        Assertions.assertEquals(county, addressUk.getCounty().get());
+        Assertions.assertEquals(country, addressUk.getCountry().get());
     }
 }

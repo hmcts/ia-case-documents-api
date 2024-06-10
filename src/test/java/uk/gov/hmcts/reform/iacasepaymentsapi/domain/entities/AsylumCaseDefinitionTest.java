@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
-public class AsylumCaseDefinitionTest {
+class AsylumCaseDefinitionTest {
 
     @Test
     void mapped_to_equivalent_field_name() {

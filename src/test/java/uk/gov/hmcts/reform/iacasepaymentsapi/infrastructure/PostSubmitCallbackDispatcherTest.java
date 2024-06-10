@@ -117,9 +117,7 @@ class PostSubmitCallbackDispatcherTest {
                 postSubmitCallbackDispatcher.handle(callbackStage, callback);
 
             assertNotNull(callbackResponse);
-            //assertEquals(caseData, callbackResponse.getData());
             assertEquals(Optional.of(body3), callbackResponse.getConfirmationBody());
-            //assertTrue(callbackResponse.getErrors().isEmpty());
 
             verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.SUBMIT_APPEAL);
 
@@ -166,7 +164,7 @@ class PostSubmitCallbackDispatcherTest {
     @Test
     void should_not_error_if_no_handlers_are_provided() {
 
-        PostSubmitCallbackDispatcher<CaseData> postSubmitCallbackDispatcher =
+        PostSubmitCallbackDispatcher<CaseData> callbackDispatcher =
             new PostSubmitCallbackDispatcher<>(ccdEventAuthorizor, Collections.emptyList());
 
         for (PostSubmitCallbackStage callbackStage : PostSubmitCallbackStage.values()) {
@@ -178,7 +176,7 @@ class PostSubmitCallbackDispatcherTest {
                 when(caseDetails.getCaseData()).thenReturn(caseData);
 
                 PostSubmitCallbackResponse callbackResponse =
-                    postSubmitCallbackDispatcher
+                    callbackDispatcher
                         .handle(callbackStage, callback);
 
                 assertNotNull(callbackResponse);

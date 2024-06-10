@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.OrganisationResponse;
-import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.RefDataApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.RequestUserAccessTokenProvider;
@@ -14,7 +13,6 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.RequestUser
 public class RefDataService {
 
     private final RefDataApi refDataApi;
-    private final IdamApi idamApi;
     private final IdamService idamService;
     private final RequestUserAccessTokenProvider userAuthorizationProvider;
     private final AuthTokenGenerator serviceAuthorizationProvider;
@@ -23,11 +21,9 @@ public class RefDataService {
         RefDataApi refDataApi,
         RequestUserAccessTokenProvider userAuthorizationProvider,
         AuthTokenGenerator serviceAuthorizationProvider,
-        IdamApi idamApi,
         IdamService idamService
     ) {
         this.refDataApi = refDataApi;
-        this.idamApi = idamApi;
         this.userAuthorizationProvider = userAuthorizationProvider;
         this.serviceAuthorizationProvider = serviceAuthorizationProvider;
         this.idamService = idamService;

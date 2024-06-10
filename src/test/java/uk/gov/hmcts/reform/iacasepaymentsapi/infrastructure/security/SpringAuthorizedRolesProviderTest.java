@@ -19,7 +19,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
-public class SpringAuthorizedRolesProviderTest {
+class SpringAuthorizedRolesProviderTest {
 
     @Mock
     private SecurityContext securityContext;
@@ -29,18 +29,18 @@ public class SpringAuthorizedRolesProviderTest {
     private final AuthorizedRolesProvider authorizedRolesProvider = new SpringAuthorizedRolesProvider();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
-    public void should_return_empty_list_when_authentication_is_null() {
+    void should_return_empty_list_when_authentication_is_null() {
 
         assertEquals(Collections.emptySet(), authorizedRolesProvider.getRoles());
     }
 
     @Test
-    public void should_return_empty_list_when_authorities_are_empty_null() {
+    void should_return_empty_list_when_authorities_are_empty_null() {
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         assertEquals(Collections.emptySet(), authorizedRolesProvider.getRoles());

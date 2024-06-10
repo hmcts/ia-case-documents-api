@@ -24,7 +24,7 @@ class IdamSystemUserProviderTest {
     @Mock
     private UserInfo userInfo;
 
-    private String token = "Bearer someHash";
+    private final String token = "Bearer someHash";
 
     @Test
     void should_return_correct_user_id() {
@@ -33,7 +33,7 @@ class IdamSystemUserProviderTest {
         when(userInfo.getUid()).thenReturn(expectedUserId);
         when(idamService.getUserInfo(token)).thenReturn(userInfo);
 
-        IdamSystemUserProvider idamSystemUserProvider = new IdamSystemUserProvider(idamApi,idamService);
+        IdamSystemUserProvider idamSystemUserProvider = new IdamSystemUserProvider(idamService);
 
         String userId = idamSystemUserProvider.getSystemUserId(token);
 
@@ -47,7 +47,7 @@ class IdamSystemUserProviderTest {
 
         when(idamService.getUserInfo(token)).thenThrow(FeignException.class);
 
-        IdamSystemUserProvider idamSystemUserProvider = new IdamSystemUserProvider(idamApi,idamService);
+        IdamSystemUserProvider idamSystemUserProvider = new IdamSystemUserProvider(idamService);
 
         IdentityManagerResponseException thrown = assertThrows(
             IdentityManagerResponseException.class,

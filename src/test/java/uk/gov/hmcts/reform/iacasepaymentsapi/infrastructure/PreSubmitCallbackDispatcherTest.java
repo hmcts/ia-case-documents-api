@@ -1,8 +1,6 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.reset;
@@ -14,7 +12,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
-import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +30,7 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.handlers.PreSubmitCallbackHa
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.CcdEventAuthorizor;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
-public class PreSubmitCallbackDispatcherTest {
+class PreSubmitCallbackDispatcherTest {
 
     @Mock private CcdEventAuthorizor ccdEventAuthorizor;
     @Mock private PreSubmitCallbackHandler<CaseData> handler1;
@@ -60,7 +57,7 @@ public class PreSubmitCallbackDispatcherTest {
     }
 
     @Test
-    public void should_dispatch_callback_to_handlers_according_to_priority_collecting_errors() {
+    void should_dispatch_callback_to_handlers_according_to_priority_collecting_errors() {
 
         Set<String> expectedErrors =
             ImmutableSet.of("error1", "error2", "error3", "error4");
@@ -90,9 +87,9 @@ public class PreSubmitCallbackDispatcherTest {
             PreSubmitCallbackResponse<CaseData> callbackResponse =
                 preSubmitCallbackDispatcher.handle(callbackStage, callback);
 
-            assertThat(callbackResponse).isNotNull();
-            assertThat(caseData).isEqualTo(callbackResponse.getData());
-            assertThat(callbackResponse.getErrors(), Matchers.is(expectedErrors));
+            Assertions.assertNotNull(callbackResponse);
+            Assertions.assertEquals(caseData, callbackResponse.getData());
+            Assertions.assertEquals(callbackResponse.getErrors(), expectedErrors);
 
             verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.PAYMENT_APPEAL);
 
@@ -112,7 +109,7 @@ public class PreSubmitCallbackDispatcherTest {
     }
 
     @Test
-    public void should_only_dispatch_callback_to_handlers_that_can_handle_it() {
+    void should_only_dispatch_callback_to_handlers_that_can_handle_it() {
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
             when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
@@ -134,9 +131,9 @@ public class PreSubmitCallbackDispatcherTest {
             PreSubmitCallbackResponse<CaseData> callbackResponse =
                 preSubmitCallbackDispatcher.handle(callbackStage, callback);
 
-            assertThat(callbackResponse).isNotNull();
-            assertThat(caseData).isEqualTo(callbackResponse.getData());
-            assertThat(callbackResponse.getErrors().isEmpty());
+            Assertions.assertNotNull(callbackResponse);
+            Assertions.assertEquals(caseData, callbackResponse.getData());
+            Assertions.assertEquals(callbackResponse.getErrors(), Set.of());
 
             verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.PAYMENT_APPEAL);
 
@@ -154,7 +151,7 @@ public class PreSubmitCallbackDispatcherTest {
     }
 
     @Test
-    public void should_not_error_if_no_handler_is_provided() {
+    void should_not_error_if_no_handler_is_provided() {
 
         PreSubmitCallbackDispatcher<CaseData> preSubmitCallbackDispatcher =
             new PreSubmitCallbackDispatcher<>(ccdEventAuthorizor, Collections.emptyList());
@@ -169,9 +166,9 @@ public class PreSubmitCallbackDispatcherTest {
                 PreSubmitCallbackResponse<CaseData> callbackResponse =
                     preSubmitCallbackDispatcher.handle(callbackStage, callback);
 
-                assertThat(callbackResponse).isNotNull();
-                assertThat(caseData).isEqualTo(callbackResponse.getData());
-                assertThat(callbackResponse.getErrors()).isEmpty();
+                Assertions.assertNotNull(callbackResponse);
+                Assertions.assertEquals(caseData, callbackResponse.getData());
+                Assertions.assertEquals(callbackResponse.getErrors(), Set.of());
 
                 verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.PAYMENT_APPEAL);
 
@@ -183,7 +180,7 @@ public class PreSubmitCallbackDispatcherTest {
     }
 
     @Test
-    public void should_not_allow_null_handlers() {
+    void should_not_allow_null_handlers() {
 
         assertThatThrownBy(() -> new PreSubmitCallbackDispatcher<>(ccdEventAuthorizor, null))
             .isExactlyInstanceOf(NullPointerException.class)
@@ -191,7 +188,7 @@ public class PreSubmitCallbackDispatcherTest {
     }
 
     @Test
-    public void should_not_allow_null_ccd_event_authorizor() {
+    void should_not_allow_null_ccd_event_authorizor() {
 
         assertThatThrownBy(() -> new PreSubmitCallbackDispatcher<>(null, Collections.emptyList()))
             .hasMessage("ccdEventAuthorizor must not be null")
@@ -199,7 +196,7 @@ public class PreSubmitCallbackDispatcherTest {
     }
 
     @Test
-    public void should_not_allow_null_values() {
+    void should_not_allow_null_values() {
 
         assertThatThrownBy(() -> preSubmitCallbackDispatcher.handle(null, callback))
             .isExactlyInstanceOf(NullPointerException.class)

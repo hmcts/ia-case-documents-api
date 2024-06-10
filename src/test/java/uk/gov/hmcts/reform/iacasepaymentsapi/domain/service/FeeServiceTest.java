@@ -1,16 +1,17 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.FeesConfiguration.LookupReferenceData;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.Fee;
@@ -19,9 +20,20 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee.FeeType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.FeesRegisterApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.config.FeesConfiguration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
-public class FeeServiceTest {
+class FeeServiceTest {
+
+    private static final String FEE_WITH_HEARING_CODE = "FEE0123";
+    private static final String FEE_WITH_HEARING_DESC = "Appeal determined with a hearing";
+    private static final String FEE_WITHOUT_HEARING_CODE = "FEE0456";
+    private static final String FEE_WITHOUT_HEARING_DESC = "Appeal determined without a hearing";
+    private static final String VERSION = "1";
+    private static final BigDecimal FEE_WITH_HEARING_AMOUNT = new BigDecimal("140.00");
+    private static final BigDecimal FEE_WITHOUT_HEARING_AMOUNT = new BigDecimal("80.00");
 
     @Mock private FeesConfiguration feesConfiguration;
     @Mock private FeesRegisterApi feesRegisterApi;
@@ -31,16 +43,16 @@ public class FeeServiceTest {
     @BeforeEach
     void setUp() {
         feeService = new FeeService(feesConfiguration, feesRegisterApi);
+        when(feesConfiguration.getFees()).thenReturn(getFeeTypes());
     }
 
-    @Test
-    void should_return_fee_with_hearing() {
+    @ParameterizedTest
+    @MethodSource("provideFeeTypes")
+    void should_return_correct_fee(FeeType feeType, String expectedCode, String expectedDescription, BigDecimal expectedAmount) {
 
-        when(feesConfiguration.getFees()).thenReturn(getFeeTypes());
-
-        LookupReferenceData lookupReferenceData = feesConfiguration
+        FeesConfiguration.LookupReferenceData lookupReferenceData = feesConfiguration
             .getFees()
-            .get(FeeType.FEE_WITH_HEARING.getValue());
+            .get(feeType.getValue());
 
         when(feesRegisterApi.findFee(
             lookupReferenceData.getChannel(),
@@ -49,92 +61,52 @@ public class FeeServiceTest {
             lookupReferenceData.getJurisdiction2(),
             lookupReferenceData.getKeyword(),
             lookupReferenceData.getService()
-        )).thenReturn(getFeeHearingResponse());
+        )).thenReturn(new FeeResponse(expectedCode, expectedDescription, VERSION, expectedAmount));
 
-        Fee fee = feeService.getFee(FeeType.FEE_WITH_HEARING);
+        Fee fee = feeService.getFee(feeType);
 
-        assertThat(fee.getCode()).isEqualTo("FEE0123");
-        assertThat(fee.getDescription()).isEqualTo("Appeal determined with a hearing");
-        assertThat(fee.getVersion()).isEqualTo("1");
-        assertThat(fee.getCalculatedAmount()).isEqualTo(new BigDecimal("140.00"));
-    }
-
-    @Test
-    void should_return_fee_without_hearing() {
-
-        when(feesConfiguration.getFees()).thenReturn(getFeeTypes());
-
-        LookupReferenceData lookupReferenceData = feesConfiguration
-            .getFees()
-            .get(FeeType.FEE_WITHOUT_HEARING.getValue());
-
-        when(feesRegisterApi.findFee(
-            lookupReferenceData.getChannel(),
-            lookupReferenceData.getEvent(),
-            lookupReferenceData.getJurisdiction1(),
-            lookupReferenceData.getJurisdiction2(),
-            lookupReferenceData.getKeyword(),
-            lookupReferenceData.getService()
-        )).thenReturn(getFeeWithoutHearingResponse());
-
-        Fee fee = feeService.getFee(FeeType.FEE_WITHOUT_HEARING);
-
-        assertThat(fee.getCode()).isEqualTo("FEE0456");
-        assertThat(fee.getDescription()).isEqualTo("Appeal determined without a hearing");
-        assertThat(fee.getVersion()).isEqualTo("1");
-        assertThat(fee.getCalculatedAmount()).isEqualTo(new BigDecimal("80.00"));
+        assertThat(fee.getCode()).isEqualTo(expectedCode);
+        assertThat(fee.getDescription()).isEqualTo(expectedDescription);
+        assertThat(fee.getVersion()).isEqualTo(VERSION);
+        assertThat(fee.getCalculatedAmount()).isEqualTo(expectedAmount);
     }
 
     @Test
     void should_throw_for_null_fee_type() {
 
-        assertThatThrownBy(() -> feeService.getFee(FeeType.FEE_WITH_HEARING))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> feeService.getFee(FeeType.FEE_WITHOUT_HEARING))
+        assertThatThrownBy(() -> feeService.getFee(null))
             .isExactlyInstanceOf(NullPointerException.class);
     }
 
-    private Map<String, LookupReferenceData> getFeeTypes() {
+    private static Stream<Arguments> provideFeeTypes() {
+        return Stream.of(
+            Arguments.of(FeeType.FEE_WITH_HEARING, FEE_WITH_HEARING_CODE, FEE_WITH_HEARING_DESC, FEE_WITH_HEARING_AMOUNT),
+            Arguments.of(FeeType.FEE_WITHOUT_HEARING, FEE_WITHOUT_HEARING_CODE, FEE_WITHOUT_HEARING_DESC, FEE_WITHOUT_HEARING_AMOUNT)
+        );
+    }
 
-        final Map<String, LookupReferenceData> feeTypeMap = new HashMap<>();
+    private Map<String, FeesConfiguration.LookupReferenceData> getFeeTypes() {
 
-        LookupReferenceData lookupReferenceData = new LookupReferenceData();
-        lookupReferenceData.setChannel("default");
-        lookupReferenceData.setEvent("issue");
-        lookupReferenceData.setJurisdiction1("tribunal");
-        lookupReferenceData.setJurisdiction2("immigration and asylum chamber");
-        lookupReferenceData.setKeyword("ABC");
-        lookupReferenceData.setService("other");
+        final Map<String, FeesConfiguration.LookupReferenceData> feeTypeMap = new HashMap<>();
+
+        FeesConfiguration.LookupReferenceData lookupReferenceData = getLookupReferenceData("ABC");
         feeTypeMap.put("feeWithHearing", lookupReferenceData);
 
-        LookupReferenceData lookupReferenceWithoutFeeData = new LookupReferenceData();
-        lookupReferenceWithoutFeeData.setChannel("default");
-        lookupReferenceWithoutFeeData.setEvent("issue");
-        lookupReferenceWithoutFeeData.setJurisdiction1("tribunal");
-        lookupReferenceWithoutFeeData.setJurisdiction2("immigration and asylum chamber");
-        lookupReferenceWithoutFeeData.setKeyword("DEF");
-        lookupReferenceWithoutFeeData.setService("other");
+        FeesConfiguration.LookupReferenceData lookupReferenceWithoutFeeData = getLookupReferenceData("DEF");
         feeTypeMap.put("feeWithoutHearing", lookupReferenceWithoutFeeData);
 
         return feeTypeMap;
     }
 
-    private FeeResponse getFeeHearingResponse() {
-
-        return new FeeResponse(
-            "FEE0123",
-            "Appeal determined with a hearing",
-            "1",
-            new BigDecimal("140.00"));
-    }
-
-    private FeeResponse getFeeWithoutHearingResponse() {
-
-        return new FeeResponse(
-            "FEE0456",
-            "Appeal determined without a hearing",
-            "1",
-            new BigDecimal("80.00"));
+    @NotNull
+    private static FeesConfiguration.LookupReferenceData getLookupReferenceData(String definition) {
+        FeesConfiguration.LookupReferenceData lookupReferenceWithoutFeeData = new FeesConfiguration.LookupReferenceData();
+        lookupReferenceWithoutFeeData.setChannel("default");
+        lookupReferenceWithoutFeeData.setEvent("issue");
+        lookupReferenceWithoutFeeData.setJurisdiction1("tribunal");
+        lookupReferenceWithoutFeeData.setJurisdiction2("immigration and asylum chamber");
+        lookupReferenceWithoutFeeData.setKeyword(definition);
+        lookupReferenceWithoutFeeData.setService("other");
+        return lookupReferenceWithoutFeeData;
     }
 }

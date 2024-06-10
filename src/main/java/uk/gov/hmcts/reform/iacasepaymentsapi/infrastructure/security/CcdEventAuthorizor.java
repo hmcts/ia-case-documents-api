@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.security.access.AccessDeniedException;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.Event;
 
@@ -41,6 +40,6 @@ public class CcdEventAuthorizor {
             .stream()
             .filter(entry -> entry.getValue().contains(event))
             .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
+            .toList();
     }
 }

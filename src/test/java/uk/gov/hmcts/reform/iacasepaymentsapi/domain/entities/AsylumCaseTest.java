@@ -6,52 +6,44 @@ import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDe
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class AsylumCaseTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private AsylumCase asylumCase;
+    private final String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
 
-    @Test
-    void read_string() throws IOException {
-
-        String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
-        AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
-
-        Optional<String> maybeAppealReferenceNumber = asylumCase.read(APPEAL_REFERENCE_NUMBER);
-
-        assertThat(maybeAppealReferenceNumber.get()).isEqualTo("PA/50222/2019");
+    @BeforeEach
+    void setUp() throws IOException {
+        asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
     }
 
     @Test
-    void read_using_parameters_type_generics() throws IOException {
+    void read_appeal_reference_number() {
+        Optional<String> maybeAppealReferenceNumberWithoutType = asylumCase.read(APPEAL_REFERENCE_NUMBER);
+        Optional<String> maybeAppealReferenceNumberWithType = asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class);
 
-        String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
-        AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
+        String appealReferenceNumberWithoutType = maybeAppealReferenceNumberWithoutType.orElseThrow(() ->
+            new AssertionError("Expected value not found"));
+        String appealReferenceNumberWithType = maybeAppealReferenceNumberWithType.orElseThrow(() ->
+            new AssertionError("Expected value not found"));
 
-        Optional<String> maybeAppealReferenceNumber = asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class);
-
-        assertThat(maybeAppealReferenceNumber.get()).isEqualTo("PA/50222/2019");
+        assertThat(appealReferenceNumberWithoutType).isEqualTo("PA/50222/2019")
+            .isEqualTo(appealReferenceNumberWithType);
     }
 
     @Test
     void writes_simple_types() {
-
-        AsylumCase asylumCase = new AsylumCase();
         asylumCase.write(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number");
-
         assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get())
             .isEqualTo("some-appeal-reference-number");
     }
 
     @Test
-    void clears_value() throws IOException {
-
-        String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
-        AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
-
+    void clears_value() {
         asylumCase.clear(APPEAL_REFERENCE_NUMBER);
-
         assertThat(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).isEmpty();
     }
 }

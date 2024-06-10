@@ -27,12 +27,12 @@ class IdamSystemTokenGeneratorTest {
     @Mock
     private Token token;
 
-    private String systemUserName = "systemUserName";
-    private String systemUserPass = "systemUserPass";
-    private String idamRedirectUrl = "http://idamRedirectUrl";
-    private String systemUserScope = "systemUserScope";
-    private String idamClientId = "idamClientId";
-    private String idamClientSecret = "idamClientSecret";
+    private final String systemUserName = "systemUserName";
+    private final String systemUserPass = "systemUserPass";
+    private final String idamRedirectUrl = "http://idamRedirectUrl";
+    private final String systemUserScope = "systemUserScope";
+    private final String idamClientId = "idamClientId";
+    private final String idamClientSecret = "idamClientSecret";
 
     @Test
     void should_return_correct_token_from_idam() {
@@ -52,9 +52,9 @@ class IdamSystemTokenGeneratorTest {
             idamApi
         );
 
-        String token = idamSystemTokenGenerator.generate();
+        String idamToken = idamSystemTokenGenerator.generate();
 
-        assertEquals(expectedToken, token);
+        assertEquals(expectedToken, idamToken);
 
         ArgumentCaptor<Map<String, ?>> requestFormCaptor = ArgumentCaptor.forClass(Map.class);
         verify(idamApi).token(requestFormCaptor.capture());
