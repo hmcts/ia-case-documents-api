@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
@@ -642,6 +643,58 @@ class CustomiseHearingBundleHandlerTest {
                 new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
         Boolean bool = customiseHearingBundleHandler.contains(List.of(), legalRepDocWithMetadata);
         assertThat(bool).isNotNull();
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "CUSTOMISE_HEARING_BUNDLE, true",
+        "GENERATE_AMENDED_HEARING_BUNDLE, true",
+        "CUSTOMISE_HEARING_BUNDLE, false",
+        "GENERATE_AMENDED_HEARING_BUNDLE, false"
+    })
+    void should_ignore_existing_hearing_bundles_in_new_bundles(Event event, boolean hasExistingHearingBundle) {
+        when(callback.getEvent()).thenReturn(event);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
+
+        final List<IdValue<DocumentWithDescription>> hearingDescriptionDocuments = Lists.newArrayList(hearingDoc);
+
+        IdValue<DocumentWithMetadata> hearingDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(hasExistingHearingBundle ?
+                DocumentTag.HEARING_BUNDLE : DocumentTag.HEARING_NOTICE, "test"));
+
+        final List<IdValue<DocumentWithMetadata>> hearingDocuments = Lists.newArrayList(hearingDocWithMetadata);
+        when(asylumCaseCopy.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(hearingDocuments));
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS)).thenReturn(Optional.of(hearingDescriptionDocuments));
+        when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(hearingDocuments));
+
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
+        verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.CASE_BUNDLES);
+
+        verify(appender, times(hasExistingHearingBundle ? 0 : 1))
+            .append(any(DocumentWithMetadata.class), anyList());
+        verify(appender, times(hasExistingHearingBundle ? 1 : 0))
+            .append(eq(null), anyList());
+
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_HEARING_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(CUSTOM_LEGAL_REP_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(CUSTOM_RESPONDENT_DOCUMENTS);
+
+        verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
+
+        verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
     private DocumentWithDescription createDocumentWithDescription() {

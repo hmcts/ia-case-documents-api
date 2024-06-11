@@ -407,7 +407,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
             List<IdValue<DocumentWithMetadata>> customDocuments = new ArrayList<>();
 
-            if (documents != null && !documents.isEmpty()) {
+            if (!documents.isEmpty()) {
 
                 for (IdValue<DocumentWithDescription> documentWithDescription : documents) {
                     //if the 'any document' is missing the tag, add the appropriate tag to it.
@@ -417,11 +417,14 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                     DocumentWithMetadata newDocumentWithMetadata = null;
 
                     if (maybeDocument.isPresent()) {
-                        newDocumentWithMetadata = new DocumentWithMetadata(document,
-                            documentWithDescription.getValue().getDescription().orElse(""),
-                            dateProvider.now().toString(),
-                            maybeDocument.get().getValue().getTag(),
-                            "");
+                        DocumentTag maybeDocumentTag = maybeDocument.get().getValue().getTag();
+                        if (maybeDocumentTag != DocumentTag.HEARING_BUNDLE) {
+                            newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                documentWithDescription.getValue().getDescription().orElse(""),
+                                dateProvider.now().toString(),
+                                maybeDocumentTag,
+                                "");
+                        }
                     } else {
                         switch (sourceField) {
                             case CUSTOM_HEARING_DOCUMENTS:
@@ -509,7 +512,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                     DocumentTag.ADDENDUM_EVIDENCE,
                                     SUPPLIED_BY_RESPONDENT);
                                 break;
-                            default:break;
+                            default:
+                                break;
                         }
                     }
                     customDocuments = documentWithMetadataAppender.append(newDocumentWithMetadata, customDocuments);

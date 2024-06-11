@@ -497,6 +497,31 @@ class CustomiseHearingBundlePreparerTest {
             .isExactlyInstanceOf(NullPointerException.class);
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    void should_ignore_existing_hearing_bundles_in_new_bundles(Event event) {
+        when(callback.getEvent()).thenReturn(event);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        List<IdValue<DocumentWithMetadata>> hearingDocumentList = List.of(
+            new IdValue("1", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE, "test")));
+        when(asylumCase.read(AsylumCaseDefinition.HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocumentList));
+
+        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        verify(appender, times(0)).append(any(DocumentWithDescription.class), anyList());
+
+        hearingDocumentList = asList(
+                new IdValue("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test")),
+                new IdValue("2", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE, "test")));
+
+        when(asylumCase.read(AsylumCaseDefinition.HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocumentList));
+
+        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+        verify(appender, times(1)).append(any(DocumentWithDescription.class), anyList());
+    }
+
     private DocumentWithDescription createDocumentWithDescription() {
         return
             new DocumentWithDescription(new Document("some-url",
