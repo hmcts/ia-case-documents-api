@@ -68,7 +68,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     }
 
     void populateCustomCollections(AsylumCase asylumCase, AsylumCaseDefinition sourceField, AsylumCaseDefinition targetField) {
-        if (!asylumCase.read(sourceField).isPresent()) {
+        if (asylumCase.read(sourceField).isEmpty()) {
             return;
         }
 
@@ -82,7 +82,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         for (IdValue<DocumentWithMetadata> documentWithMetadata : documents) {
             if (documentWithMetadata.getValue().getTag() == DocumentTag.HEARING_BUNDLE) {
-                break;
+                continue;
             }
             DocumentWithDescription newDocumentWithDescription =
                 new DocumentWithDescription(documentWithMetadata.getValue().getDocument(),
