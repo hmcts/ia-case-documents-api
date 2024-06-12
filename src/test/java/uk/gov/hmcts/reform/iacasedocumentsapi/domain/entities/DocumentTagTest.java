@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseType;
 
 class DocumentTagTest {
 
