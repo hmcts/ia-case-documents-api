@@ -81,6 +81,7 @@ public enum DocumentTag {
     UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT("upperTribunalTransferOrderDocument", CaseType.ASYLUM),
     IAUT_2_FORM("iAUT2Form", CaseType.ASYLUM),
     REMITTAL_DECISION("remittalDecision", CaseType.ASYLUM),
+    APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
