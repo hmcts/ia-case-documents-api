@@ -41,14 +41,14 @@ public class InternalEndAppealLetterTemplate implements DocumentTemplate<AsylumC
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        List<String> appellantAddress = getAppellantAddressAsList(asylumCase);
-
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("decisionMaker", asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class).orElse(""));
         fieldValues.put("endAppealDate", formatDateForRendering(asylumCase.read(END_APPEAL_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
+
+        List<String> appellantAddress = getAppellantAddressAsList(asylumCase);
 
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
