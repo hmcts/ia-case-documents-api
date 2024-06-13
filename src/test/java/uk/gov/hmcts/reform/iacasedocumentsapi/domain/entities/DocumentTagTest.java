@@ -85,10 +85,11 @@ class DocumentTagTest {
         assertEquals("upperTribunalTransferOrderDocument", DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT.toString());
         assertEquals("iAUT2Form", DocumentTag.IAUT_2_FORM.toString());
         assertEquals("", DocumentTag.NONE.toString());
+        assertEquals("appealWasNotSubmittedSupportingDocument", DocumentTag.APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(85, DocumentTag.values().length);
+        assertEquals(86, DocumentTag.values().length);
     }
 }

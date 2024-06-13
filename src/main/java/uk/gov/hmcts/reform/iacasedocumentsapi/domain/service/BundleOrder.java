@@ -226,6 +226,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 75;
             case NONE:
                 return 76;
+            case APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT:
+                return 77;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
