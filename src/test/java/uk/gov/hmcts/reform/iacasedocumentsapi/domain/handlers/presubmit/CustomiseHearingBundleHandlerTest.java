@@ -271,7 +271,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
             maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
+            "PA 50002 2020-" + appellantFamilyName + "-amended");
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
@@ -419,7 +420,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
+            + appellantFamilyName + ((event == Event.GENERATE_AMENDED_HEARING_BUNDLE) ? "-amended" : ""));
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
@@ -693,7 +695,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
 
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
+            + appellantFamilyName + ((event == Event.GENERATE_AMENDED_HEARING_BUNDLE) ? "-amended" : ""));
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 

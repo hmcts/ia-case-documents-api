@@ -104,7 +104,9 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                     isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
         }
 
-        asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase));
+        boolean isAmendedEvent = callback.getEvent() == Event.GENERATE_AMENDED_HEARING_BUNDLE;
+
+        asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase, isAmendedEvent));
 
         //deep copy the case
         AsylumCase asylumCaseCopy;
@@ -372,7 +374,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return Collections.emptyList();
     }
 
-    private String getBundlePrefix(AsylumCase asylumCase) {
+    private String getBundlePrefix(AsylumCase asylumCase, boolean isAmendedEvent) {
 
         final String appealReferenceNumber =
                 asylumCase
@@ -385,7 +387,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                         .orElseThrow(() -> new IllegalStateException("appellantFamilyName is not present"));
 
         return appealReferenceNumber.replace("/", " ")
-                + "-" + appellantFamilyName;
+                + "-" + appellantFamilyName + (isAmendedEvent ? "-amended" : "");
     }
 
 
