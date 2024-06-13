@@ -80,6 +80,8 @@ public enum DocumentTag {
     INTERNAL_ADJOURN_HEARING_WITHOUT_DATE("internalAdjournHearingWithoutDate", CaseType.ASYLUM),
     UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT("upperTribunalTransferOrderDocument", CaseType.ASYLUM),
     IAUT_2_FORM("iAUT2Form", CaseType.ASYLUM),
+    INTERNAL_END_APPEAL_LETTER("internalEndAppealLetter", CaseType.ASYLUM),
+    INTERNAL_END_APPEAL_LETTER_BUNDLE("internalEndAppealLetterBundle", CaseType.ASYLUM),
     REMITTAL_DECISION("remittalDecision", CaseType.ASYLUM),
     APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),

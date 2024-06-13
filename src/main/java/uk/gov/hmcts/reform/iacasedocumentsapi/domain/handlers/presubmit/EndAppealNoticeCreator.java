@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -78,6 +78,15 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
             TRIBUNAL_DOCUMENTS,
             DocumentTag.END_APPEAL
         );
+
+        if (isInternalNonDetainedCase(asylumCase)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                endAppealNotice,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_END_APPEAL_LETTER
+            );
+        }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
