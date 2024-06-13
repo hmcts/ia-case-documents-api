@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
@@ -50,6 +51,45 @@ public class EmDocumentBundler implements DocumentBundler {
 
         Callback<BundleCaseData> payload =
             createBundlePayload(
+                documents,
+                bundleTitle,
+                bundleFilename
+            );
+
+        PreSubmitCallbackResponse<BundleCaseData> response =
+            bundleRequestExecutor.post(
+                payload,
+                emBundlerUrl + emBundlerStitchUri
+            );
+
+        Document bundle =
+            response
+                .getData()
+                .getCaseBundles()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Bundle was not created", response))
+                .getValue()
+                .getStitchedDocument()
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Stitched document was not created", response));
+
+        // rename the bundle file name
+        return new Document(
+            bundle.getDocumentUrl(),
+            bundle.getDocumentBinaryUrl(),
+            bundleFilename
+        );
+
+    }
+
+    public Document bundleWithoutContentsOrCoverSheets(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename
+    ) {
+
+        Callback<BundleCaseData> payload =
+            createBundlePayloadWithoutContentsOrCoverSheets(
                 documents,
                 bundleTitle,
                 bundleFilename
@@ -123,6 +163,61 @@ public class EmDocumentBundler implements DocumentBundler {
                                     "",
                                     "yes",
                                     bundleDocuments,
+                                    bundleFilename
+                                )
+                            )
+                        )
+                    ),
+                    dateProvider.nowWithTime()
+                ),
+                Optional.empty(),
+                Event.GENERATE_HEARING_BUNDLE
+            );
+    }
+
+    private Callback<BundleCaseData> createBundlePayloadWithoutContentsOrCoverSheets(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename
+    ) {
+
+        List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
+
+        for (int i = 0; i < documents.size(); i++) {
+
+            DocumentWithMetadata caseDocument = documents.get(i);
+
+            bundleDocuments.add(
+                new IdValue<>(
+                    String.valueOf(i),
+                    new BundleDocument(
+                        caseDocument.getDocument().getDocumentFilename(),
+                        caseDocument.getDescription(),
+                        i,
+                        caseDocument.getDocument()
+                    )
+                )
+            );
+        }
+
+        return
+            new Callback<>(
+                new CaseDetails<>(
+                    1L,
+                    "IA",
+                    State.UNKNOWN,
+                    new BundleCaseData(
+                        Collections.singletonList(
+                            new IdValue<>(
+                                "1",
+                                new Bundle(
+                                    "1",
+                                    bundleTitle,
+                                    "",
+                                    "yes",
+                                    bundleDocuments,
+                                    YesOrNo.NO,
+                                    YesOrNo.NO,
                                     bundleFilename
                                 )
                             )

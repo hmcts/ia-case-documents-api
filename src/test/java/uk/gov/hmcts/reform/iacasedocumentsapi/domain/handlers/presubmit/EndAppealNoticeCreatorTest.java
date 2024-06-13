@@ -3,8 +3,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
@@ -39,10 +41,6 @@ public class EndAppealNoticeCreatorTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
-    @Mock private DocumentWithMetadata documentWithMetadata;
-    @Mock private List<IdValue<DocumentWithMetadata>> existingHearingDocuments;
-    @Mock private List<IdValue<DocumentWithMetadata>> allHearingDocuments;
-
     private EndAppealNoticeCreator endAppealNoticeCreator;
 
     @BeforeEach
@@ -98,6 +96,31 @@ public class EndAppealNoticeCreatorTest {
         verify(endAppealNoticeDocumentCreator, times(0)).create(caseDetails);
         verify(endAppealAppellantNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, TRIBUNAL_DOCUMENTS, DocumentTag.END_APPEAL);
+    }
+
+    @Test
+    public void should_create_end_appeal_notice_pdf_and_append_to_letter_notifications_documents_for_internal_non_detained() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.END_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        JourneyType journeyType = JourneyType.REP;
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
+            .thenReturn(Optional.of(journeyType));
+
+        when(endAppealNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(endAppealAppellantNoticeDocumentCreator, times(0)).create(caseDetails);
+        verify(endAppealNoticeDocumentCreator, times(1)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_END_APPEAL_LETTER);
     }
 
     @Test

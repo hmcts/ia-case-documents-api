@@ -1592,4 +1592,25 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("internalEndAppealLetter")
+    public DocumentCreator<AsylumCase> getinternalEndAppealLetterDocumentCreator(
+        @Value("${internalEndAppealLetter.contentType}") String contentType,
+        @Value("${internalEndAppealLetter.fileExtension}") String fileExtension,
+        @Value("${internalEndAppealLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalEndAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 }

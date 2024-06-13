@@ -609,7 +609,15 @@ public enum AsylumCaseDefinition {
         "reinstatedDecisionMaker", new TypeReference<String>(){}),
 
     ADJOURN_HEARING_WITHOUT_DATE_REASONS(
-        "adjournHearingWithoutDateReasons", new TypeReference<String>() {});
+        "adjournHearingWithoutDateReasons", new TypeReference<String>() {}),
+
+    // Used to store generated letter notification docs which will be stitched together
+    LETTER_NOTIFICATION_DOCUMENTS(
+        "letterNotificationDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    // Used to store bundled documents (letter + attachment) to be sent to GovNotify
+    LETTER_BUNDLE_DOCUMENTS(
+        "letterBundleDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){});
 
     private final String value;
     private final TypeReference typeReference;
