@@ -636,6 +636,8 @@ security:
       - "applyForFTPARespondent"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
+      - "submitApplication"
+      - "makeNewApplication"      
     caseworker-ia-respondentofficer:
       - "applyForFTPARespondent"
       - "uploadAdditionalEvidenceHomeOffice"

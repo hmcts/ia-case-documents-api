@@ -43,7 +43,6 @@ public enum DocumentTag {
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
     APPEAL_FORM("appealForm", CaseType.ASYLUM),
     NOTICE_OF_DECISION_UT_TRANSFER("noticeOfDecisionUtTransfer", CaseType.ASYLUM),
-
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     REQUEST_RESPONDENT_REVIEW("requestRespondentReview", CaseType.ASYLUM),
     UPLOAD_THE_APPEAL_RESPONSE("uploadTheAppealResponse", CaseType.ASYLUM),
@@ -83,6 +82,8 @@ public enum DocumentTag {
     IAUT_2_FORM("iAUT2Form", CaseType.ASYLUM),
     INTERNAL_END_APPEAL_LETTER("internalEndAppealLetter", CaseType.ASYLUM),
     INTERNAL_END_APPEAL_LETTER_BUNDLE("internalEndAppealLetterBundle", CaseType.ASYLUM),
+    REMITTAL_DECISION("remittalDecision", CaseType.ASYLUM),
+    APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),

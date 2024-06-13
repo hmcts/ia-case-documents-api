@@ -34,6 +34,7 @@ class DocumentTagTest {
         assertEquals("clarifyingQuestions", DocumentTag.CLARIFYING_QUESTIONS.toString());
         assertEquals("appealForm", DocumentTag.APPEAL_FORM.toString());
         assertEquals("noticeOfDecisionUtTransfer", DocumentTag.NOTICE_OF_DECISION_UT_TRANSFER.toString());
+        assertEquals("remittalDecision", DocumentTag.REMITTAL_DECISION.toString());
         assertEquals("decisionAndReasonsCoverLetter", DocumentTag.DECISION_AND_REASONS_COVER_LETTER.toString());
         assertEquals("updatedDecisionAndReasonsCoverLetter", DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER.toString());
         assertEquals("bailSubmission", DocumentTag.BAIL_SUBMISSION.toString());
@@ -86,6 +87,7 @@ class DocumentTagTest {
         assertEquals("internalEndAppealLetterBundle", DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE.toString());
         assertEquals("iAUT2Form", DocumentTag.IAUT_2_FORM.toString());
         assertEquals("", DocumentTag.NONE.toString());
+        assertEquals("appealWasNotSubmittedSupportingDocument", DocumentTag.APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT.toString());
     }
 
     @Test
