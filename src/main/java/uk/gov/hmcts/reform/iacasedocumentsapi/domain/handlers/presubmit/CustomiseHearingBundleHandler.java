@@ -106,7 +106,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         boolean isAmendedEvent = callback.getEvent() == Event.GENERATE_AMENDED_HEARING_BUNDLE;
 
-        asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase, isAmendedEvent));
+        asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase, isAmendedEvent, isReheardCase));
 
         //deep copy the case
         AsylumCase asylumCaseCopy;
@@ -374,7 +374,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return Collections.emptyList();
     }
 
-    private String getBundlePrefix(AsylumCase asylumCase, boolean isAmendedEvent) {
+    private String getBundlePrefix(AsylumCase asylumCase, boolean isAmendedEvent, boolean isReheardCase) {
 
         final String appealReferenceNumber =
                 asylumCase
@@ -386,10 +386,18 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                         .read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class)
                         .orElseThrow(() -> new IllegalStateException("appellantFamilyName is not present"));
 
-        return appealReferenceNumber.replace("/", " ")
-                + "-" + appellantFamilyName + (isAmendedEvent ? "-amended" : "");
+        if (isAmendedEvent) {
+            Integer amendedCount = isReheardCase ?
+                asylumCase.read(AMENDED_REHEARD_BUNDLE_COUNT, Integer.class).orElse(0) :
+                asylumCase.read(AMENDED_BUNDLE_COUNT, Integer.class).orElse(0);
+            amendedCount++;
+            return appealReferenceNumber.replace("/", " ")
+                + "-" + appellantFamilyName + "-amended-" + amendedCount;
+        } else {
+            return appealReferenceNumber.replace("/", " ")
+                + "-" + appellantFamilyName;
+        }
     }
-
 
     private void prepareDocuments(Map<AsylumCaseDefinition,AsylumCaseDefinition> mappingFields,AsylumCase asylumCase) {
 
