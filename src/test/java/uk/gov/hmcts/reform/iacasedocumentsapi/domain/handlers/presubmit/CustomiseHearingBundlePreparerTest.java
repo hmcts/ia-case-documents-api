@@ -190,12 +190,14 @@ class CustomiseHearingBundlePreparerTest {
 
         customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
-        verify(asylumCase).write(CUSTOM_REHEARD_HEARING_DOCS, customDocumentList);
+        verify(asylumCase, times(1)).read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        verify(asylumCase, times(3)).read(REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCase, times(2)).write(CUSTOM_REHEARD_HEARING_DOCS, customDocumentList);
         verify(asylumCase).write(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, customDocumentList);
         verify(asylumCase).write(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS, customDocumentList);
         verify(asylumCase).write(CUSTOM_FTPA_APPELLANT_DOCS, customDocumentList);
         verify(asylumCase).write(CUSTOM_FTPA_RESPONDENT_DOCS, customDocumentList);
-        verify(asylumCase).write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, customDocumentList);
+        verify(asylumCase, times(2)).write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, customDocumentList);
         verify(asylumCase).write(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, customDocumentList);
         verify(asylumCase,times(1)).write(AsylumCaseDefinition.CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS,customDocumentList);
         verify(asylumCase,times(4)).read(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);

@@ -49,7 +49,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-@MockitoSettings(strictness = Strictness.WARN)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class CustomiseHearingBundleHandlerTest {
 
     @Mock
@@ -327,7 +327,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(FTPA_APPELLANT_DOCUMENTS, ftpaAppellantDocs);
         verify(asylumCase, times(1)).write(FTPA_RESPONDENT_DOCUMENTS, ftpaRespondentDocs);
         verify(asylumCase, times(1)).write(FINAL_DECISION_AND_REASONS_DOCUMENTS, finalDecisionsAndReasonsDocs);
-        verify(asylumCase, times(1)).write(REHEARD_HEARING_DOCUMENTS, reheardHearingDocs);
+        verify(asylumCase, times(0)).write(REHEARD_HEARING_DOCUMENTS, reheardHearingDocs);
         verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumEvidenceDocumentList);
 
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDITIONAL_EVIDENCE_DOCUMENTS);
@@ -335,7 +335,6 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_APPELLANT_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS);
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
 
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
@@ -487,7 +486,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(FTPA_APPELLANT_DOCUMENTS, ftpaAppellantDocs);
         verify(asylumCase, times(1)).write(FTPA_RESPONDENT_DOCUMENTS, ftpaRespondentDocs);
         verify(asylumCase, times(1)).write(FINAL_DECISION_AND_REASONS_DOCUMENTS, finalDecisionsAndReasonsDocs);
-        verify(asylumCase, times(1)).write(REHEARD_HEARING_DOCUMENTS, reheardHearingDocs);
+        verify(asylumCase, times(0)).write(REHEARD_HEARING_DOCUMENTS, reheardHearingDocs);
         verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumEvidenceDocumentList);
 
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDITIONAL_EVIDENCE_DOCUMENTS);
@@ -495,7 +494,6 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_APPELLANT_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS);
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS);
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
 
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
@@ -704,6 +702,62 @@ class CustomiseHearingBundleHandlerTest {
         assertThat(bool).isNotNull();
     }
 
+    //When the reheard case is not through remitted path, check the reheardHearingDocuments and add the updated document list in the
+    // reheardHearingDocumentsCollection.
+    @Test
+    void test_reheard_documents_saved_in_collection_field() {
+        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
+        when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        IdValue<DocumentWithDescription> reheardHearingDocs =
+            new IdValue<>("1", createDocumentWithDescription());
+        List<IdValue<ReheardHearingDocuments>> reheardHearingDocuments = buildReheardDocuments();
+        List<IdValue<DocumentWithMetadata>> documentsListAfterAppend = reheardHearingDocuments.get(0).getValue().getReheardHearingDocs();
+
+        when(asylumCaseCopy.read(CUSTOM_REHEARD_HEARING_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
+        when(asylumCaseCopy.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardHearingDocuments));
+
+
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION))
+            .thenReturn(Optional.of(reheardHearingDocuments));
+        when(appender.append(any(DocumentWithMetadata.class), anyList()))
+            .thenReturn(documentsListAfterAppend);
+        reheardHearingDocuments.get(0).getValue().setReheardHearingDocs(documentsListAfterAppend);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+        assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
+        assertEquals(featureToggler.getValue("reheard-feature", false), true);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(1)).read(CUSTOM_FTPA_APPELLANT_DOCS);
+        verify(asylumCaseCopy, times(1)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_REHEARD_HEARING_DOCS);
+        verify(asylumCaseCopy, times(1)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(1)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(REHEARD_HEARING_DOCUMENTS);
+
+        verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(APP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESP_ADDITIONAL_EVIDENCE_DOCS);
+
+        verify(asylumCaseCopy, times(1)).read(REHEARD_DECISION_REASONS_COLLECTION);
+        verify(asylumCase, times(1)).write(REHEARD_HEARING_DOCUMENTS_COLLECTION, reheardHearingDocuments);
+        verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
+        verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
+        verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
+    }
+
     private DocumentWithDescription createDocumentWithDescription() {
         return
             new DocumentWithDescription(new Document("some-url",
@@ -743,5 +797,23 @@ class CustomiseHearingBundleHandlerTest {
         IdValue<RemittalDocument> remittalDocuments =
             new IdValue<>("1", new RemittalDocument(remittalDec, listOfDocumentsWithMetadata));
         return Lists.newArrayList(remittalDocuments);
+    }
+
+    private List<IdValue<ReheardHearingDocuments>> buildReheardDocuments() {
+        String description = "Some evidence";
+        String dateUploaded = "2018-12-25";
+        final DocumentWithMetadata coverLetterDocumentWithMetadata = new DocumentWithMetadata(
+            document, description, dateUploaded, DocumentTag.DECISION_AND_REASONS_COVER_LETTER, "");
+        final DocumentWithMetadata decisionDocumentWithMetadata = new DocumentWithMetadata(
+            document, description, dateUploaded, DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "");
+
+        IdValue<DocumentWithMetadata> decisionDocWithMetadata =
+            new IdValue<>("2", decisionDocumentWithMetadata);
+        IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
+            new IdValue<>("1", coverLetterDocumentWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        IdValue<ReheardHearingDocuments> reheardHearingDocuments =
+            new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
+        return Lists.newArrayList(reheardHearingDocuments);
     }
 }
