@@ -184,6 +184,28 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "reheardHearingDocumentsCollection": [
+          {
+            "id": "1",
+            "value": {
+              "reheardHearingDocs": [
+                {
+                  "id": "1",
+                  "value": {
+                    "tag": "reheardHearingNotice",
+                    "document": {
+                      "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                      "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                      "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                    },
+                    "description": "",
+                    "dateUploaded": "{$TODAY}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
         "additionalEvidenceDocuments": [
           {
             "id": "2",
@@ -300,21 +322,6 @@
               "description": "",
               "dateUploaded": "{$TODAY}",
               "tag": "ftpaDecisionAndReasons"
-            }
-          }
-        ],
-        "reheardHearingDocuments": [
-          {
-            "id": "1",
-            "value": {
-              "document": {
-                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-              },
-              "description": "",
-              "dateUploaded": "{$TODAY}",
-              "tag": "reheardHearingNotice"
             }
           }
         ],
