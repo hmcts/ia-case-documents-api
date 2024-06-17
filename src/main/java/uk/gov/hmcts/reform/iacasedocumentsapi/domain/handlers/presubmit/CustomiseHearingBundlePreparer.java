@@ -70,9 +70,9 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
             if (isRemittedPath) {
                 asylumCase.write(CUSTOM_LATEST_REMITTAL_DOCS, fetchLatestRemittalDocuments(asylumCase));
-                asylumCase.write(CUSTOM_REHEARD_HEARING_DOCS, fetchLatestReheardDocuments(asylumCase));
-                asylumCase.write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, fetchLatestDecisionDocuments(asylumCase));
             }
+            asylumCase.write(CUSTOM_REHEARD_HEARING_DOCS, fetchLatestReheardDocuments(asylumCase));
+            asylumCase.write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, fetchLatestDecisionDocuments(asylumCase));
         }
     }
 
@@ -134,10 +134,21 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         List<IdValue<ReheardHearingDocuments>> allReheardHearingDocuments = maybeExistingReheardDocuments
             .orElse(emptyList());
 
+        List<IdValue<DocumentWithDescription>> reheardHearingDocsInCollection = emptyList();
         if (!allReheardHearingDocuments.isEmpty()) {
-            return getDocumentWithDescListFromMetaData(allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs());
+            reheardHearingDocsInCollection = getDocumentWithDescListFromMetaData(allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs());
         }
-        return emptyList();
+        // Also if there were any documents prior to set-aside release in REHEARD_HEARING_DOCUMENTS take them into account as well.
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingReheardDocumentsPreSetAside =
+            asylumCase.read(REHEARD_HEARING_DOCUMENTS);
+        if (maybeExistingReheardDocumentsPreSetAside.isPresent()) {
+            List<IdValue<DocumentWithDescription>> existingReheardDocumentsPreSetAside = getDocumentWithDescListFromMetaData(maybeExistingReheardDocumentsPreSetAside.get());
+            for (IdValue<DocumentWithDescription> document : reheardHearingDocsInCollection) {
+                existingReheardDocumentsPreSetAside = documentWithDescriptionAppender.append(document.getValue(), existingReheardDocumentsPreSetAside);
+            }
+            return existingReheardDocumentsPreSetAside;
+        }
+        return reheardHearingDocsInCollection;
     }
 
     void populateCustomCollections(AsylumCase asylumCase, AsylumCaseDefinition sourceField, AsylumCaseDefinition targetField) {

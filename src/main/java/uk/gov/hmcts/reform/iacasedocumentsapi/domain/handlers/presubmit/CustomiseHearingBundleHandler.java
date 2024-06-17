@@ -143,9 +143,11 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         restoreAddendumEvidence(asylumCase, asylumCaseCopy,isReheardCase);
 
         restoreRemittalDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath);
-        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath,
-            LATEST_REHEARD_HEARING_DOCUMENTS, REHEARD_HEARING_DOCUMENTS_COLLECTION);
-        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath,
+        //for cases which progressed to finalBundling pre set-aside release,
+        // we want that all the documents should be restored in the collection field
+        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath
+            ? LATEST_REHEARD_HEARING_DOCUMENTS : REHEARD_HEARING_DOCUMENTS, REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy,
             LATEST_DECISION_AND_REASONS_DOCUMENTS, REHEARD_DECISION_REASONS_COLLECTION);
         
         Optional<List<IdValue<Bundle>>> maybeCaseBundles = responseData.read(AsylumCaseDefinition.CASE_BUNDLES);
@@ -305,10 +307,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         });
     }
 
-    private void restoreReheardDocumentsInCollections(AsylumCase asylumCase, AsylumCase asylumCaseBefore, boolean isRemittedFeature, AsylumCaseDefinition latestField, AsylumCaseDefinition existingField) {
-        if (!isRemittedFeature) {
-            return;
-        }
+    private void restoreReheardDocumentsInCollections(AsylumCase asylumCase, AsylumCase asylumCaseBefore, AsylumCaseDefinition latestField, AsylumCaseDefinition existingField) {
         // Retrieve the current reheard hearing documents from the latest field in the current asylum case
         Optional<List<IdValue<DocumentWithMetadata>>> maybeCurrentReheardHearingDocs = asylumCaseBefore.read(latestField);
         List<IdValue<DocumentWithMetadata>> currentReheardHearingDocs = maybeCurrentReheardHearingDocs.orElse(emptyList());
@@ -327,6 +326,10 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         currentReheardHearingDocs = restoreDocumentsInCollection(currentReheardHearingDocs, beforeDocuments);
         //Changed the documents in the first Reheard object
         beforeReheardDocs.setReheardHearingDocs(currentReheardHearingDocs);
+        //Scenario : If there was no collection field to begin with, and now the documents should ultimately be restored in the collection field.
+        if (existingReheardDocs.isEmpty() && !currentReheardHearingDocs.isEmpty()) {
+            existingReheardDocs = List.of(new IdValue<>("1", beforeReheardDocs));
+        }
         asylumCase.write(existingField, existingReheardDocs);
     }
 
@@ -397,7 +400,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         List<AsylumCaseDefinition> fieldDefnList;
         if (isReheardCase) {
             fieldDefnList = new ArrayList<>(Arrays.asList(
-                    REHEARD_HEARING_DOCUMENTS,
                     ADDITIONAL_EVIDENCE_DOCUMENTS,
                     RESPONDENT_DOCUMENTS,
                     FTPA_APPELLANT_DOCUMENTS,
