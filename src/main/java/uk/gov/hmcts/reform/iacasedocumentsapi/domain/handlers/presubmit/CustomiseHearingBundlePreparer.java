@@ -49,25 +49,26 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-                               && featureToggler.getValue("reheard-feature", false);
-        boolean isAipJourney = asylumCase
-            .read(JOURNEY_TYPE, JourneyType.class)
-            .map(type -> type == AIP).orElse(false);
+        boolean isAmendedBundle = callback.getEvent() == Event.GENERATE_AMENDED_HEARING_BUNDLE;
 
-        prepareCustomDocuments(asylumCase, isReheardCase, isAipJourney);
+        prepareCustomDocuments(asylumCase, isAmendedBundle);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    public void prepareCustomDocuments(AsylumCase asylumCase, boolean isCaseReheard, boolean isAipJourney) {
+    public void prepareCustomDocuments(AsylumCase asylumCase, boolean isAmendedBundle) {
+        boolean isCaseReheard = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
+            && featureToggler.getValue("reheard-feature", false);
+        boolean isAipJourney = asylumCase
+            .read(JOURNEY_TYPE, JourneyType.class)
+            .map(type -> type == AIP).orElse(false);
         boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
-        getMappingFields(isCaseReheard, isOrWasAda).forEach((sourceField,targetField)  ->
+        getMappingFields(isCaseReheard, isOrWasAda, isAmendedBundle).forEach((sourceField,targetField)  ->
             populateCustomCollections(asylumCase, sourceField, targetField, isAipJourney)
         );
 
         // Map does not accept duplicate keys, so need to process this separately
-        if (isCaseReheard) {
+        if (isCaseReheard || isAmendedBundle) {
             populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
         }
     }
@@ -121,7 +122,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
     }
 
-    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isOrWasAda) {
+    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isOrWasAda, boolean isAmendedBundle) {
         Map<AsylumCaseDefinition, AsylumCaseDefinition> fieldMapping;
         if (isReheardCase) {
             fieldMapping = new HashMap<>(Map.of(
@@ -139,6 +140,9 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
                 LEGAL_REPRESENTATIVE_DOCUMENTS, CUSTOM_LEGAL_REP_DOCUMENTS,
                 ADDITIONAL_EVIDENCE_DOCUMENTS, CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS,
                 RESPONDENT_DOCUMENTS, CUSTOM_RESPONDENT_DOCUMENTS));
+            if (isAmendedBundle) {
+                fieldMapping.put(ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
+            }
             if (isOrWasAda) {
                 //With Tribunal Documents
                 fieldMapping.put(TRIBUNAL_DOCUMENTS, CUSTOM_TRIBUNAL_DOCUMENTS);
