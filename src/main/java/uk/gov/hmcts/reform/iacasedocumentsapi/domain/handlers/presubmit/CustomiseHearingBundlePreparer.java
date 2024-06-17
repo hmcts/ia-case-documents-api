@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 
 import java.util.*;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
@@ -49,25 +51,28 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
                                && featureToggler.getValue("reheard-feature", false);
+        boolean isAipJourney = asylumCase
+            .read(JOURNEY_TYPE, JourneyType.class)
+            .map(type -> type == AIP).orElse(false);
 
-        prepareCustomDocuments(asylumCase, isReheardCase);
+        prepareCustomDocuments(asylumCase, isReheardCase, isAipJourney);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    public void prepareCustomDocuments(AsylumCase asylumCase, boolean isCaseReheard) {
+    public void prepareCustomDocuments(AsylumCase asylumCase, boolean isCaseReheard, boolean isAipJourney) {
         boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         getMappingFields(isCaseReheard, isOrWasAda).forEach((sourceField,targetField)  ->
-            populateCustomCollections(asylumCase, sourceField, targetField)
+            populateCustomCollections(asylumCase, sourceField, targetField, isAipJourney)
         );
 
         // Map does not accept duplicate keys, so need to process this separately
         if (isCaseReheard) {
-            populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
+            populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
         }
     }
 
-    void populateCustomCollections(AsylumCase asylumCase, AsylumCaseDefinition sourceField, AsylumCaseDefinition targetField) {
+    void populateCustomCollections(AsylumCase asylumCase, AsylumCaseDefinition sourceField, AsylumCaseDefinition targetField, boolean isAipJourney) {
         if (asylumCase.read(sourceField).isEmpty()) {
             return;
         }
@@ -90,8 +95,8 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
                     documentWithMetadata.getValue().getDescription());
 
             if (sourceField == LEGAL_REPRESENTATIVE_DOCUMENTS) {
-                if (documentWithMetadata.getValue().getTag() == DocumentTag.APPEAL_SUBMISSION
-                    || documentWithMetadata.getValue().getTag() == DocumentTag.CASE_ARGUMENT) {
+                if (isAipJourney || (documentWithMetadata.getValue().getTag() == DocumentTag.APPEAL_SUBMISSION
+                    || documentWithMetadata.getValue().getTag() == DocumentTag.CASE_ARGUMENT)) {
                     customDocuments = documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
                 }
             } else if (targetField == CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS) {
