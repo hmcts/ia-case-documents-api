@@ -215,7 +215,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             if (sourceField == LEGAL_REPRESENTATIVE_DOCUMENTS) {
                 customDocuments = handleLegalRepSourceField(documentWithMetadata, newDocumentWithDescription, customDocuments, isAipJourney);
             } else {
-                customDocuments = switch(targetField) {
+                customDocuments = switch (targetField) {
                     case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS:
                         yield handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The appellant");
                     case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS:
