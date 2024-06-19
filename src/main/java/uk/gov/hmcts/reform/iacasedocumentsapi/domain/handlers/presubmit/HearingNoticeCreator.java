@@ -6,6 +6,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
 
 import java.util.Collections;
 import java.util.List;
@@ -114,6 +115,15 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 HEARING_DOCUMENTS,
                 DocumentTag.HEARING_NOTICE
             );
+
+            if (isInternalNonDetainedCase(asylumCase)) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    hearingNotice,
+                    LETTER_NOTIFICATION_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LETTER
+                );
+            }
         }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
