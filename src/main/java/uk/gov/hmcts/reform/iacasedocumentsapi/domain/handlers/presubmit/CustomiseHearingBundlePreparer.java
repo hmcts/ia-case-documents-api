@@ -68,16 +68,15 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             populateCustomCollections(asylumCase, sourceField, targetField, isAipJourney)
         );
         // Map does not accept duplicate keys, so need to process this separately
-        if (isAmendedBundle) {
+        if (isCaseReheard || isAmendedBundle) {
             populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
-        }
-        if (isCaseReheard) {
-            populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
-            if (isRemittedPath) {
-                asylumCase.write(CUSTOM_LATEST_REMITTAL_DOCS, fetchLatestRemittalDocuments(asylumCase));
+            if (isCaseReheard) {
+                if (isRemittedPath) {
+                    asylumCase.write(CUSTOM_LATEST_REMITTAL_DOCS, fetchLatestRemittalDocuments(asylumCase));
+                }
+                asylumCase.write(CUSTOM_REHEARD_HEARING_DOCS, fetchLatestReheardDocuments(asylumCase));
+                asylumCase.write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, fetchLatestDecisionDocuments(asylumCase));
             }
-            asylumCase.write(CUSTOM_REHEARD_HEARING_DOCS, fetchLatestReheardDocuments(asylumCase));
-            asylumCase.write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, fetchLatestDecisionDocuments(asylumCase));
         }
     }
 
@@ -90,9 +89,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         if (allReheardDecisionDocuments.isEmpty()) {
             Optional<List<IdValue<DocumentWithMetadata>>> finalDEcisionAndResonDocs = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
-            List<IdValue<DocumentWithDescription>> maybeFinalDecisionAndReasonsDocuments =
-                getDocumentWithDescListFromMetaData(finalDEcisionAndResonDocs.orElse(emptyList()));
-            return maybeFinalDecisionAndReasonsDocuments;
+            return getDocumentWithDescListFromMetaData(finalDEcisionAndResonDocs.orElse(emptyList()));
         } else {
             return getDocumentWithDescListFromMetaData(allReheardDecisionDocuments.get(0).getValue().getReheardHearingDocs());
         }
@@ -110,11 +107,8 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
             List<IdValue<DocumentWithDescription>> remittalOtherDocsWithDesc = getDocumentWithDescListFromMetaData(remittalDocument.getOtherRemittalDocs());
 
-            List<IdValue<DocumentWithDescription>> allDocuments =
-                documentWithDescriptionAppender.append(remittalDocWithDesc,
-                    remittalOtherDocsWithDesc
-                );
-            return allDocuments;
+            return documentWithDescriptionAppender
+                .append(remittalDocWithDesc, remittalOtherDocsWithDesc);
         }
         return emptyList();
     }

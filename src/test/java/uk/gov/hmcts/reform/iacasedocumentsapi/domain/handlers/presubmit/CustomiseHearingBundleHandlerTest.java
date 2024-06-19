@@ -77,17 +77,16 @@ class CustomiseHearingBundleHandlerTest {
     @Mock
     private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
 
-    private String emBundlerUrl = "bundleurl";
-    private String emBundlerStitchUri = "stitchingUri";
-    private String appealReference = "PA/50002/2020";
-    private String appellantFamilyName = "bond";
-    private String coverPageLogo = "[userImage:hmcts.png]";
-    private List<IdValue<Bundle>> caseBundles = new ArrayList<>();
+    private final String appellantFamilyName = "bond";
+    private final String coverPageLogo = "[userImage:hmcts.png]";
+    private final List<IdValue<Bundle>> caseBundles = new ArrayList<>();
 
     private CustomiseHearingBundleHandler customiseHearingBundleHandler;
 
     @BeforeEach
     public void setUp() throws JsonProcessingException {
+        String emBundlerStitchUri = "stitchingUri";
+        String emBundlerUrl = "bundleurl";
         customiseHearingBundleHandler =
             new CustomiseHearingBundleHandler(
                 emBundlerUrl,
@@ -108,6 +107,7 @@ class CustomiseHearingBundleHandlerTest {
         when(objectMapper.writeValueAsString(any(AsylumCase.class))).thenReturn("Test");
         when(objectMapper.readValue("Test", AsylumCase.class)).thenReturn(asylumCaseCopy);
 
+        String appealReference = "PA/50002/2020";
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.of(appealReference));
 
@@ -135,8 +135,8 @@ class CustomiseHearingBundleHandlerTest {
         IdValue<DocumentWithDescription> respondentDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> additionalEvidenceDoc = new IdValue<>("1", createDocumentWithDescription());
-        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = asList(
-                new IdValue("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
+        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = List.of(
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
 
         when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(hearingDoc)));
         when(asylumCaseCopy.read(CUSTOM_LEGAL_REP_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc)));
@@ -211,8 +211,8 @@ class CustomiseHearingBundleHandlerTest {
         IdValue<DocumentWithDescription> respondentDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> additionalEvidenceDoc = new IdValue<>("1", createDocumentWithDescription());
-        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = asList(
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
+        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = List.of(
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
 
         when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(hearingDoc)));
         when(asylumCaseCopy.read(CUSTOM_LEGAL_REP_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc)));
@@ -353,9 +353,9 @@ class CustomiseHearingBundleHandlerTest {
         final List<IdValue<DocumentWithMetadata>> respondentAddendumEvidenceList =
             Lists.newArrayList(respondentAddendumEvidenceDocs);
         final List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentList = asList(
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
         when(appender.append(any(DocumentWithMetadata.class), anyList()))
             .thenReturn(addendumEvidenceDocumentList);
@@ -384,7 +384,7 @@ class CustomiseHearingBundleHandlerTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
-        assertEquals(featureToggler.getValue("reheard-feature", false), true);
+        assertTrue(featureToggler.getValue("reheard-feature", false));
 
         verify(asylumCaseCopy, times(4)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(4)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
@@ -437,9 +437,9 @@ class CustomiseHearingBundleHandlerTest {
             new IdValue<>("1", createDocumentWithDescription());
 
         final List<IdValue<DocumentWithMetadata>> documentMetadataList = asList(
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
         Optional<IdValue<DocumentWithMetadata>> result = customiseHearingBundleHandler.isDocumentWithDescriptionPresent(
             documentMetadataList, documentWithDescriptionIdValue);
@@ -535,9 +535,9 @@ class CustomiseHearingBundleHandlerTest {
         final List<IdValue<DocumentWithMetadata>> respondentAddendumEvidenceList =
             Lists.newArrayList(respondentAddendumEvidenceDocs);
         final List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentList = asList(
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
         when(appender.append(any(DocumentWithMetadata.class), anyList()))
             .thenReturn(addendumEvidenceDocumentList);
@@ -566,7 +566,7 @@ class CustomiseHearingBundleHandlerTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
-        assertEquals(featureToggler.getValue("reheard-feature", false), true);
+        assertTrue(featureToggler.getValue("reheard-feature", false));
 
         verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
@@ -618,18 +618,17 @@ class CustomiseHearingBundleHandlerTest {
 
         IdValue<DocumentWithDescription> documentWithDescriptionIdValue =
             new IdValue<>("1", new DocumentWithDescription(null, "test"));
-        ;
         final List<IdValue<DocumentWithMetadata>> documentMetadataList = asList(
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
         assertThatThrownBy(() -> customiseHearingBundleHandler.isDocumentWithDescriptionPresent(
             documentMetadataList, documentWithDescriptionIdValue))
             .hasMessage("Document cannot be null")
             .isExactlyInstanceOf(IllegalStateException.class);
 
-        assertEquals(featureToggler.getValue("reheard-feature", false), false);
+        assertFalse(featureToggler.getValue("reheard-feature", false));
 
     }
 
@@ -644,9 +643,9 @@ class CustomiseHearingBundleHandlerTest {
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "test"));
 
         final List<IdValue<DocumentWithMetadata>> documentMetadataList = asList(
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
         assertTrue(customiseHearingBundleHandler.contains(
             documentMetadataList, documentWithMetadataIdValue));
@@ -895,7 +894,7 @@ class CustomiseHearingBundleHandlerTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
-        assertEquals(featureToggler.getValue("reheard-feature", false), true);
+        assertTrue(featureToggler.getValue("reheard-feature", false));
         verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_FTPA_APPELLANT_DOCS);
