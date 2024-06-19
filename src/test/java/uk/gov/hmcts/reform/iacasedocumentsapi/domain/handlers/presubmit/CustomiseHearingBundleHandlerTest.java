@@ -247,11 +247,11 @@ class CustomiseHearingBundleHandlerTest {
         when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
             .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDocWithMetadata)));
 
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+        PreSubmitCallbackResponse<AsylumCase> response =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
 
         verify(asylumCaseCopy, times(2)).read(CUSTOM_HEARING_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_LEGAL_REP_DOCUMENTS);
@@ -276,6 +276,33 @@ class CustomiseHearingBundleHandlerTest {
             "PA 50002 2020-" + appellantFamilyName + "-amended-1");
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
+    }
+
+    private void verifyAsylumCaseReadsFor_should_successfully_handle_Reheard_the_callback() throws JsonProcessingException {
+        verify(asylumCaseCopy, times(4)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(4)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_APPELLANT_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_RESPONDENT_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_REHEARD_HEARING_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(APP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(asylumCase, times(1)).read(RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
+    }
+
+    private void verifyAsylumCaseClearsFor_should_successfully_handle_Reheard_the_callback() {
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDITIONAL_EVIDENCE_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.RESPONDENT_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_APPELLANT_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
+        verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
     }
 
     @ParameterizedTest
@@ -385,22 +412,9 @@ class CustomiseHearingBundleHandlerTest {
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
         assertTrue(featureToggler.getValue("reheard-feature", false));
-
-        verify(asylumCaseCopy, times(4)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
-        verify(asylumCaseCopy, times(4)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
-        verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_APPELLANT_DOCS);
-        verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_RESPONDENT_DOCS);
-        verify(asylumCaseCopy, times(2)).read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS);
-        verify(asylumCaseCopy, times(2)).read(CUSTOM_REHEARD_HEARING_DOCS);
-        verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
-        verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
-
-        verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
-        verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
-        verify(asylumCase, times(1)).read(APP_ADDITIONAL_EVIDENCE_DOCS);
-        verify(asylumCase, times(1)).read(RESP_ADDITIONAL_EVIDENCE_DOCS);
+        verifyAsylumCaseReadsFor_should_successfully_handle_Reheard_the_callback();
+        verifyAsylumCaseClearsFor_should_successfully_handle_Reheard_the_callback();
         verify(asylumCase, times(1)).write(APP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
-
         verify(asylumCase, times(1)).write(ADDITIONAL_EVIDENCE_DOCUMENTS, appellantAdditionalEvidenceDocs);
         verify(asylumCase, times(1)).write(RESPONDENT_DOCUMENTS, respondentAdditionalEvidenceDocs);
         verify(asylumCase, times(1)).write(FTPA_APPELLANT_DOCUMENTS, ftpaAppellantDocs);
@@ -408,22 +422,11 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(FINAL_DECISION_AND_REASONS_DOCUMENTS, finalDecisionsAndReasonsDocs);
         verify(asylumCase, times(0)).write(REHEARD_HEARING_DOCUMENTS, reheardHearingDocs);
         verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumEvidenceDocumentList);
-
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDITIONAL_EVIDENCE_DOCUMENTS);
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.RESPONDENT_DOCUMENTS);
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_APPELLANT_DOCUMENTS);
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FTPA_RESPONDENT_DOCUMENTS);
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.FINAL_DECISION_AND_REASONS_DOCUMENTS);
-        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS);
-
-        verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
-        verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
             + appellantFamilyName + ((event == Event.GENERATE_AMENDED_HEARING_BUNDLE) ? "-amended-1" : ""));
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
-        verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
 
     @ParameterizedTest
@@ -831,11 +834,11 @@ class CustomiseHearingBundleHandlerTest {
         when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(hearingDocuments));
 
 
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+        PreSubmitCallbackResponse<AsylumCase> response =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
 
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
