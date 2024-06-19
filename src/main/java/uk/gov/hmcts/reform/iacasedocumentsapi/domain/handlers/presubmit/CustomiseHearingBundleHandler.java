@@ -7,6 +7,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
@@ -371,7 +373,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         List<IdValue<DocumentWithMetadata>> missingDocuments = existingList
             .stream()
             .filter(document -> !contains(finalCurrentList, document))
-            .collect(Collectors.toList());
+            .toList();
 
         for (IdValue<DocumentWithMetadata> documentWithMetadata : missingDocuments) {
             currentList = documentWithMetadataAppender.append(documentWithMetadata.getValue(), currentList);

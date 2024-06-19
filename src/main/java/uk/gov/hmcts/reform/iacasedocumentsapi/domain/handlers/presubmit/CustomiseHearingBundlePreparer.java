@@ -68,7 +68,10 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             populateCustomCollections(asylumCase, sourceField, targetField, isAipJourney)
         );
         // Map does not accept duplicate keys, so need to process this separately
-        if (isCaseReheard || isAmendedBundle) {
+        if (isAmendedBundle) {
+            populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
+        }
+        if (isCaseReheard) {
             populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
             if (isRemittedPath) {
                 asylumCase.write(CUSTOM_LATEST_REMITTAL_DOCS, fetchLatestRemittalDocuments(asylumCase));

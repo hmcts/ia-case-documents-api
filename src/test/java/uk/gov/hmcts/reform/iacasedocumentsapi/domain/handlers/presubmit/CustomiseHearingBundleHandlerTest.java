@@ -450,8 +450,8 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @Test
-    void should_successfully_handle_Reheard_the_callback_with_Remitted() throws JsonProcessingException {
-
+        void should_successfully_handle_Reheard_the_callback_with_Remitted() throws JsonProcessingException {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
 
@@ -862,8 +862,10 @@ class CustomiseHearingBundleHandlerTest {
 
     //When the reheard case is not through remitted path, check the reheardHearingDocuments and add the updated document list in the
     // reheardHearingDocumentsCollection.
-    @Test
-    void test_reheard_documents_saved_in_collection_field() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    void test_reheard_documents_saved_in_collection_field(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
 
