@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
@@ -1600,6 +1601,27 @@ public class DocumentCreatorConfiguration {
         @Value("${internalEndAppealLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalEndAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalCaseListedLetter")
+    public DocumentCreator<AsylumCase> getinternalCaseListedlLetterDocumentCreator(
+        @Value("${internalCaseListedLetter.contentType}") String contentType,
+        @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
+        @Value("${internalCaseListedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCaseListedLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

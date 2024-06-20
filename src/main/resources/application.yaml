@@ -460,6 +460,14 @@ internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-I
 internalEndAppealLetterWithAttachment.fileExtension: PDF
 internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
 
+internalCaseListedLetter.contentType:  application/pdf
+internalCaseListedLetter.fileExtension: PDF
+internalCaseListedLetter.fileName: "internal-case-listed-letter"
+internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+
+internalCaseListedLetterWithAttachment.fileExtension: PDF
+internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
+
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
 bailNoticeOfHearing.fileName: "hearing-notice"

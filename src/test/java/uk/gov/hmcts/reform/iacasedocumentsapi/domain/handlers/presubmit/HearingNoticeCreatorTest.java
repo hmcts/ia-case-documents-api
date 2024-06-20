@@ -10,6 +10,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +36,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
@@ -48,6 +51,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 class HearingNoticeCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> endAppealAppellantNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
     @Mock private DocumentHandler documentHandler;
@@ -92,7 +96,7 @@ class HearingNoticeCreatorTest {
                 documentsAppender,
                 reheardAppender
             );
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(NO));
     }
 
     @Test
@@ -103,8 +107,8 @@ class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -117,6 +121,30 @@ class HearingNoticeCreatorTest {
     }
 
     @Test
+    public void should_create_end_appeal_notice_pdf_and_append_to_letter_notifications_documents_for_internal_non_detained() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        JourneyType journeyType = JourneyType.REP;
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
+            .thenReturn(Optional.of(journeyType));
+
+        when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+    }
+
+    @Test
     void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_when_reheard_featue_flag_disabled() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -124,7 +152,7 @@ class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -144,8 +172,8 @@ class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YES));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -164,8 +192,8 @@ class HearingNoticeCreatorTest {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(remoteHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YES));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
 
@@ -188,8 +216,8 @@ class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(adaHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.HARMONDSWORTH));
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YES));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -216,8 +244,8 @@ class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
         when(documentReceiver.receive(uploadedDocument, "", DocumentTag.REHEARD_HEARING_NOTICE)).thenReturn(documentWithMetadata);
         when(documentsAppender.append(Collections.emptyList(), Collections.singletonList(documentWithMetadata))).thenReturn(listOfDocumentsWithMetadata);

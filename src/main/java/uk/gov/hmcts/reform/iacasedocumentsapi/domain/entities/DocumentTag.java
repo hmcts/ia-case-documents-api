@@ -83,6 +83,8 @@ public enum DocumentTag {
     INTERNAL_END_APPEAL_LETTER("internalEndAppealLetter", CaseType.ASYLUM),
     INTERNAL_END_APPEAL_LETTER_BUNDLE("internalEndAppealLetterBundle", CaseType.ASYLUM),
     REMITTAL_DECISION("remittalDecision", CaseType.ASYLUM),
+    INTERNAL_CASE_LISTED_LETTER("internalCaseListedLetter", CaseType.ASYLUM),
+    INTERNAL_CASE_LISTED_LETTER_BUNDLE("internalCaseListedLetterBundle", CaseType.ASYLUM),
     APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
