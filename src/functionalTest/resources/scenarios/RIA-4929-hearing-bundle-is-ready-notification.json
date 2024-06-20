@@ -80,7 +80,7 @@
       {
         "reference": "4929_HEARING_BUNDLE_IS_READY_APPELLANT_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
-        "subject": "Immigration and Asylum appeal: The hearing bundle for your appeal is ready",
+        "subject": "Immigration and Asylum appeal: A hearing bundle for your appeal is ready",
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
