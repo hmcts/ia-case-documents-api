@@ -18,6 +18,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -60,26 +61,9 @@ class InternalEndAppealLetterTemplateTest {
         assertEquals(templateName, internalEndAppealLetterTemplate.getName());
     }
 
-    void dataSetup() {
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(appealEndDate));
-        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(approverType));
-        when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
-        when(address.getAddressLine1()).thenReturn(Optional.of(addressLine1));
-        when(address.getAddressLine2()).thenReturn(Optional.of(addressLine2));
-        when(address.getAddressLine3()).thenReturn(Optional.of(addressLine3));
-        when(address.getPostCode()).thenReturn(Optional.of(postCode));
-        when(address.getPostTown()).thenReturn(Optional.of(postTown));
-    }
-
     @Test
     void should_populate_template_correctly() {
-        dataSetup();
+        dataSetup(true);
         fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
@@ -95,5 +79,50 @@ class InternalEndAppealLetterTemplateTest {
         assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
         assertEquals(postTown, fieldValuesMap.get("address_line_4"));
         assertEquals(postCode, fieldValuesMap.get("address_line_5"));
+    }
+
+    @Test
+    void should_populate_template_correctly_appellant_ooc() {
+        dataSetup(false);
+        fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
+        assertEquals(logo, fieldValuesMap.get("hmcts"));
+        assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
+        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
+        assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
+        assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
+        assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
+        assertEquals("22 July 2023", fieldValuesMap.get("endAppealDate"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
+        assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
+        assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
+        assertEquals(postTown, fieldValuesMap.get("address_line_4"));
+        assertEquals(postCode, fieldValuesMap.get("address_line_5"));
+    }
+
+    void dataSetup(boolean appellantInUk) {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(appealEndDate));
+        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(approverType));
+        if(appellantInUk) {
+            when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
+            when(address.getAddressLine1()).thenReturn(Optional.of(addressLine1));
+            when(address.getAddressLine2()).thenReturn(Optional.of(addressLine2));
+            when(address.getAddressLine3()).thenReturn(Optional.of(addressLine3));
+            when(address.getPostCode()).thenReturn(Optional.of(postCode));
+            when(address.getPostTown()).thenReturn(Optional.of(postTown));
+        } else {
+            when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+            when(asylumCase.read(ADDRESS_LINE_1_ADMIN_J, String.class)).thenReturn(Optional.of(addressLine1));
+            when(asylumCase.read(ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of(addressLine2));
+            when(asylumCase.read(ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of(addressLine3));
+            when(asylumCase.read(ADDRESS_LINE_4_ADMIN_J, String.class)).thenReturn(Optional.of(postTown));
+            when(asylumCase.read(COUNTRY_ADMIN_J, String.class)).thenReturn(Optional.of(postCode));
+        }
     }
 }
