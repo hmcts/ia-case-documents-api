@@ -96,7 +96,7 @@ public class InternalCaseAdjournedWithoutTimeHandler implements PreSubmitCallbac
             .filter(document -> document.getTag() == DocumentTag.INTERNAL_ADJOURN_WITHOUT_DATE_LETTER)
             .collect(Collectors.toList());
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
+        Document internalCaseAdjournedWithoutDateLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,
             "Letter bundle documents",
             qualifiedDocumentFileName
@@ -104,7 +104,7 @@ public class InternalCaseAdjournedWithoutTimeHandler implements PreSubmitCallbac
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalCaseListedLetterBundle,
+            internalCaseAdjournedWithoutDateLetterBundle,
             LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_ADJOURN_WITHOUT_DATE_LETTER_BUNDLE
         );
