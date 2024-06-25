@@ -1,5 +1,5 @@
 {
-  "description": "RIA-8337 Internal non-detained end appeal letter + attachment bundle",
+  "description": "RIA-9172 Internal non-detained end appeal letter + attachment bundle for out of country scenario",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -9,18 +9,14 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "appellantInUk": "Yes",
-          "appellantHasFixedAddress": "Yes",
+          "appellantInUk": "No",
+          "appellantHasFixedAddressAdminJ": "Yes",
           "appellantInDetention": "No",
           "isAdmin": "Yes",
-          "appellantAddress": {
-            "County": "",
-            "Country": "United Kingdom",
-            "PostCode": "NE21JX",
-            "PostTown": "Example Town",
-            "AddressLine1": "5",
-            "AddressLine2": "Example Street"
-          },
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryAdminJ": "Spain",
           "letterBundleDocuments": []
         }
       }
@@ -32,18 +28,14 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
-        "appellantInUk": "Yes",
-        "appellantHasFixedAddress": "Yes",
+        "appellantInUk": "No",
+        "appellantHasFixedAddressAdminJ": "Yes",
         "appellantInDetention": "No",
         "isAdmin": "Yes",
-        "appellantAddress": {
-          "County": "",
-          "Country": "United Kingdom",
-          "PostCode": "NE21JX",
-          "PostTown": "Example Town",
-          "AddressLine1": "5",
-          "AddressLine2": "Example Street"
-        },
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryAdminJ": "Spain",
         "letterBundleDocuments": [
           {
             "id": "1",

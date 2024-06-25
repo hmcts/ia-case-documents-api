@@ -52,6 +52,13 @@ public class AsylumCaseUtils {
         return isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase);
     }
 
+    public static boolean hasAppellantAddressInCountryOrOoc(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
+               || asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
+    }
+
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
         final Optional<List<IdValue<Direction>>> maybeDirections = asylumCase.read(DIRECTIONS);
         final List<IdValue<Direction>> existingDirections = maybeDirections
@@ -227,6 +234,44 @@ public class AsylumCaseUtils {
         }
         appellantAddressAsList.add(address.getPostTown().orElseThrow(() -> new IllegalStateException("appellantAddress postTown is not present")));
         appellantAddressAsList.add(address.getPostCode().orElseThrow(() -> new IllegalStateException("appellantAddress postCode is not present")));
+
+        return appellantAddressAsList;
+    }
+
+    public static List<String> getAppellantAddressAsListOoc(final AsylumCase asylumCase) {
+
+        String oocAddressLine1 = asylumCase
+            .read(ADDRESS_LINE_1_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address line 1 is not present"));
+
+        String oocAddressLine2 = asylumCase
+            .read(ADDRESS_LINE_2_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address line 2 is not present"));
+
+        List<String> appellantAddressAsList = new ArrayList<>();
+
+        appellantAddressAsList.add(oocAddressLine1);
+        appellantAddressAsList.add(oocAddressLine2);
+
+        String oocAddressLine3 = asylumCase
+            .read(ADDRESS_LINE_3_ADMIN_J, String.class)
+            .orElse(null);
+
+        String oocAddressLine4 = asylumCase
+            .read(ADDRESS_LINE_4_ADMIN_J, String.class)
+            .orElse(null);
+
+        String oocAddressCountry = asylumCase
+            .read(COUNTRY_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address country is not present"));
+
+        if (oocAddressLine3 != null) {
+            appellantAddressAsList.add(oocAddressLine3);
+        }
+        if (oocAddressLine4 != null) {
+            appellantAddressAsList.add(oocAddressLine4);
+        }
+        appellantAddressAsList.add(oocAddressCountry);
 
         return appellantAddressAsList;
     }
