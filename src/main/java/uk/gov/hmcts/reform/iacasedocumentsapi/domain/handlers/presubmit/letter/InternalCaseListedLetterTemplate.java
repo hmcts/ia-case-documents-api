@@ -16,19 +16,15 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @Component
 public class InternalCaseListedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
-    private final DateTimeExtractor dateTimeExtractor;
-    private final HearingDetailsFinder hearingDetailsFinder;
     private final StringProvider stringProvider;
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
@@ -36,13 +32,9 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
     public InternalCaseListedLetterTemplate(
         @Value("${internalCaseListedLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
-        DateTimeExtractor dateTimeExtractor,
-        HearingDetailsFinder hearingDetailsFinder,
         StringProvider stringProvider) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
-        this.dateTimeExtractor = dateTimeExtractor;
-        this.hearingDetailsFinder = hearingDetailsFinder;
         this.stringProvider = stringProvider;
     }
 

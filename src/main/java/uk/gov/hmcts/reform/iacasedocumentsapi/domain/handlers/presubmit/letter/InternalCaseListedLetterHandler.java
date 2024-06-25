@@ -4,13 +4,10 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -89,12 +86,7 @@ public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS);
-        List<DocumentWithMetadata> bundleDocuments = maybeLetterNotificationDocuments
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(IdValue::getValue)
-            .filter(document -> document.getTag() == DocumentTag.INTERNAL_CASE_LISTED_LETTER)
-            .collect(Collectors.toList());
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(maybeLetterNotificationDocuments, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,

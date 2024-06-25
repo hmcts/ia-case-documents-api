@@ -19,10 +19,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
@@ -37,10 +35,6 @@ class InternalCaseListedLetterTemplateTest {
     private CustomerServicesProvider customerServicesProvider;
     @Mock
     AddressUk address;
-    @Mock
-    private DateTimeExtractor dateTimeExtractor;
-    @Mock
-    private HearingDetailsFinder hearingDetailsFinder;
     @Mock
     private StringProvider stringProvider;
     private final String telephoneNumber = "0300 123 1711";
@@ -66,7 +60,7 @@ class InternalCaseListedLetterTemplateTest {
     @BeforeEach
     public void setUp() {
         internalCaseListedLetterTemplate =
-            new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, dateTimeExtractor, hearingDetailsFinder, stringProvider);
+            new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, stringProvider);
     }
 
     @Test

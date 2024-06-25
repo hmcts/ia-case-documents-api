@@ -5,10 +5,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.END_APPEAL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -86,12 +84,7 @@ public class InternalEndAppealLetterWithAttachmentBundleHandler implements PreSu
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS);
-        List<DocumentWithMetadata> bundleDocuments = maybeLetterNotificationDocuments
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(IdValue::getValue)
-            .filter(document -> document.getTag() == DocumentTag.INTERNAL_END_APPEAL_LETTER)
-            .collect(Collectors.toList());
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(maybeLetterNotificationDocuments, DocumentTag.INTERNAL_END_APPEAL_LETTER);
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 

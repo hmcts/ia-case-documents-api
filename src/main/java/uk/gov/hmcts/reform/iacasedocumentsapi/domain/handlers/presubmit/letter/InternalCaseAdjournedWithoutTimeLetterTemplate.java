@@ -48,20 +48,19 @@ public class InternalCaseAdjournedWithoutTimeLetterTemplate implements DocumentT
         CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
+        final Map<String, Object> fieldValues = new HashMap<>();
         final HearingCentre listedHearingCentre =
             asylumCase
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
-        final Map<String, Object> fieldValues = new HashMap<>();
-
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
+        fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("hearingLocation", stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
-        fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
-        fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
         fieldValues.put("adjournedHearingReason", asylumCase.read(ADJOURN_HEARING_WITHOUT_DATE_REASONS, String.class).orElse(""));
+        fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
 
         List<String> appellantAddress = getAppellantAddressAsList(asylumCase);
 
