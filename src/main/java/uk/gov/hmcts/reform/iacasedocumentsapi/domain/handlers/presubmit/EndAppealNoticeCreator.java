@@ -79,7 +79,8 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
             DocumentTag.END_APPEAL
         );
 
-        if (isInternalNonDetainedCase(asylumCase)) {
+        if (isInternalNonDetainedCase(asylumCase)
+            && hasAppellantAddressInCountryOrOoc(asylumCase)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 endAppealNotice,

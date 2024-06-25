@@ -353,4 +353,18 @@ public class AsylumCaseUtilsTest {
         }, "appellantAddress is not present");
     }
 
+    @Test
+    void hasAppellantAddressInCountryOrOoc_should_return_true_for_in_country() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOoc(asylumCase));
+    }
+
+    @Test
+    void hasAppellantAddressInCountryOrOoc_should_return_true_for_out_of_country() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOoc(asylumCase));
+    }
+
 }

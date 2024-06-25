@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
@@ -48,7 +49,8 @@ public class InternalEndAppealLetterTemplate implements DocumentTemplate<AsylumC
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
 
-        List<String> appellantAddress = getAppellantAddressAsList(asylumCase);
+        YesOrNo isAppellantInUK = asylumCase.read(APPELLANT_IN_UK, YesOrNo.class).orElse(YesOrNo.NO);
+        List<String> appellantAddress = isAppellantInUK.equals(YesOrNo.YES) ? getAppellantAddressAsList(asylumCase) : getAppellantAddressAsListOoc(asylumCase);
 
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
