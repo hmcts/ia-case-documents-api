@@ -3,8 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.END_APPEAL;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,6 +65,7 @@ public class InternalEndAppealLetterWithAttachmentBundleHandler implements PreSu
                && callback.getEvent() == END_APPEAL
                && isInternalCase(asylumCase)
                && !isAppellantInDetention(asylumCase)
+               && hasAppellantAddressInCountryOrOoc(asylumCase)
                && isEmStitchingEnabled;
     }
 

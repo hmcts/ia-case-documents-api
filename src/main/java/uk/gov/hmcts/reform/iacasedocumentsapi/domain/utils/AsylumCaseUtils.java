@@ -52,6 +52,13 @@ public class AsylumCaseUtils {
         return isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase);
     }
 
+    public static boolean hasAppellantAddressInCountryOrOoc(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
+               || asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
+    }
+
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
         final Optional<List<IdValue<Direction>>> maybeDirections = asylumCase.read(DIRECTIONS);
         final List<IdValue<Direction>> existingDirections = maybeDirections
@@ -231,7 +238,7 @@ public class AsylumCaseUtils {
         return appellantAddressAsList;
     }
 
-    public static List<String> getAppellantOocAddressAsList(final AsylumCase asylumCase) {
+    public static List<String> getAppellantAddressAsListOoc(final AsylumCase asylumCase) {
 
         String oocAddressLine1 = asylumCase
             .read(ADDRESS_LINE_1_ADMIN_J, String.class)
@@ -273,5 +280,4 @@ public class AsylumCaseUtils {
         return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)
             .map(inUk -> YesOrNo.YES == inUk).orElse(true);
     }
-
 }

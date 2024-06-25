@@ -73,7 +73,7 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
 
         List<String> appellantAddress = isAppellantInUk(asylumCase) ?
             getAppellantAddressAsList(asylumCase) :
-            getAppellantOocAddressAsList(asylumCase);
+            getAppellantAddressAsListOoc(asylumCase);
 
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));

@@ -2,9 +2,19 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
@@ -43,9 +53,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
+class InternalCaseAdjournedWithoutTimeHandlerTest {
 
-    private InternalEndAppealLetterWithAttachmentBundleHandler internalEndAppealLetterWithAttachmentBundleHandler;
     @Mock
     private Callback<AsylumCase> callback;
     @Mock
@@ -60,14 +69,17 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
     private DocumentHandler documentHandler;
     @Mock
     private Document bundleDocument;
+
+    private InternalCaseAdjournedWithoutTimeHandler internalCaseAdjournedWithoutTimeHandler;
     private String fileExtension = "PDF";
     private String fileName = "some-file-name";
+
 
     @BeforeEach
     public void setUp() {
 
-        internalEndAppealLetterWithAttachmentBundleHandler =
-            new InternalEndAppealLetterWithAttachmentBundleHandler(
+        internalCaseAdjournedWithoutTimeHandler =
+            new InternalCaseAdjournedWithoutTimeHandler(
                 fileExtension,
                 fileName,
                 true,
@@ -78,21 +90,20 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
 
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario scenario) {
+    public void it_can_handle_callback(TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        boolean canHandle = internalEndAppealLetterWithAttachmentBundleHandler.canHandle(scenario.callbackStage, callback);
+        boolean canHandle = internalCaseAdjournedWithoutTimeHandler.canHandle(scenario.callbackStage, callback);
 
         assertEquals(canHandle, scenario.isExpected());
     }
 
-    private static List<InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario> generateDifferentEventScenarios() {
-        return InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario.builder();
+    private static List<TestScenario> generateDifferentEventScenarios() {
+        return TestScenario.builder();
     }
 
     @Value
@@ -101,17 +112,17 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
         PreSubmitCallbackStage callbackStage;
         boolean expected;
 
-        public static List<InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario> builder() {
-            List<InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario> testScenarios = new ArrayList<>();
+        public static List<TestScenario> builder() {
+            List<TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
-                if (e.equals(Event.END_APPEAL)) {
-                    testScenarios.add(new InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
+                if (e.equals(Event.ADJOURN_HEARING_WITHOUT_DATE)) {
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, true));
                 } else {
-                    testScenarios.add(new InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalEndAppealLetterWithAttachmentBundleHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, false));
                 }
             }
             return testScenarios;
@@ -120,14 +131,14 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
 
     @Test
     public void it_should_not_handle_callback_when_stitching_flag_is_false() {
-        when(callback.getEvent()).thenReturn(Event.END_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.ADJOURN_HEARING_WITHOUT_DATE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        internalEndAppealLetterWithAttachmentBundleHandler =
-            new InternalEndAppealLetterWithAttachmentBundleHandler(
+        internalCaseAdjournedWithoutTimeHandler =
+            new InternalCaseAdjournedWithoutTimeHandler(
                 fileExtension,
                 fileName,
                 false,
@@ -135,19 +146,18 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
                 documentBundler,
                 documentHandler);
 
-        boolean canHandle = internalEndAppealLetterWithAttachmentBundleHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalCaseAdjournedWithoutTimeHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
     }
 
     @Test
     void should_read_and_bundle_letter_notification_documents() {
-        when(callback.getEvent()).thenReturn(Event.END_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.ADJOURN_HEARING_WITHOUT_DATE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
@@ -160,19 +170,19 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = internalEndAppealLetterWithAttachmentBundleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = internalCaseAdjournedWithoutTimeHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_ADJOURN_WITHOUT_DATE_LETTER_BUNDLE
         );
         verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
     }
 
     @Test
     void set_to_late_dispatch() {
-        assertThat(internalEndAppealLetterWithAttachmentBundleHandler.getDispatchPriority()).isEqualTo(LATE);
+        assertThat(internalCaseAdjournedWithoutTimeHandler.getDispatchPriority()).isEqualTo(LATE);
     }
 
     @Test
@@ -182,13 +192,13 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        assertThatThrownBy(() -> internalEndAppealLetterWithAttachmentBundleHandler.handle(ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalCaseAdjournedWithoutTimeHandler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
 
-        assertThatThrownBy(() -> internalEndAppealLetterWithAttachmentBundleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalCaseAdjournedWithoutTimeHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -205,7 +215,7 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
                 RandomStringUtils.randomAlphabetic(20),
-                new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_END_APPEAL_LETTER,"test");
+                new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_ADJOURN_WITHOUT_DATE_LETTER,"test");
 
     }
 }

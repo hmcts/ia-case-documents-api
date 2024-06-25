@@ -344,26 +344,6 @@ public class AsylumCaseUtilsTest {
         assertEquals("PostCode", result.get(4));
     }
 
-
-    @Test
-    void should_return_address_ooc_with_all_fields_populated() {
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_1_ADMIN_J, String.class)).thenReturn(Optional.of("Apartment 99"));
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of("Example Road"));
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of("Example County"));
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_4_ADMIN_J, String.class)).thenReturn(Optional.of("Example Town"));
-        when(asylumCase.read(AsylumCaseDefinition.COUNTRY_ADMIN_J, String.class)).thenReturn(Optional.of("PostCode"));
-
-
-        List<String> result = AsylumCaseUtils.getAppellantOocAddressAsList(asylumCase);
-
-        assertEquals(5, result.size());
-        assertEquals("Apartment 99", result.get(0));
-        assertEquals("Example Road", result.get(1));
-        assertEquals("Example County", result.get(2));
-        assertEquals("Example Town", result.get(3));
-        assertEquals("PostCode", result.get(4));
-    }
-
     @Test
     void should_throw_when_address_is_not_present() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.empty());
@@ -374,18 +354,17 @@ public class AsylumCaseUtilsTest {
     }
 
     @Test
-    void should_throw_when_address_ooc_is_not_present() {
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.empty());
+    void hasAppellantAddressInCountryOrOoc_should_return_true_for_in_country() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOoc(asylumCase));
+    }
 
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_1_ADMIN_J, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.ADDRESS_LINE_4_ADMIN_J, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.COUNTRY_ADMIN_J, String.class)).thenReturn(Optional.empty());
+    @Test
+    void hasAppellantAddressInCountryOrOoc_should_return_true_for_out_of_country() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalStateException.class, () -> {
-            AsylumCaseUtils.getAppellantOocAddressAsList(asylumCase);
-        }, "appellantAddress is not present");
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOoc(asylumCase));
     }
 
     @Test

@@ -656,8 +656,7 @@ public enum AsylumCaseDefinition {
         "countryAdminJ", new TypeReference<String>(){}),
 
     APPELLANT_IN_UK(
-        "appellantInUk", new TypeReference<YesOrNo>(){})
-
+        "appellantInUk", new TypeReference<YesOrNo>() {}),
     ;
 
     private final String value;
