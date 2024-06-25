@@ -86,12 +86,7 @@ public class InternalEndAppealLetterWithAttachmentBundleHandler implements PreSu
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS);
-        List<DocumentWithMetadata> bundleDocuments = maybeLetterNotificationDocuments
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(IdValue::getValue)
-            .filter(document -> document.getTag() == DocumentTag.INTERNAL_END_APPEAL_LETTER)
-            .collect(Collectors.toList());
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(maybeLetterNotificationDocuments, DocumentTag.INTERNAL_END_APPEAL_LETTER);
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 

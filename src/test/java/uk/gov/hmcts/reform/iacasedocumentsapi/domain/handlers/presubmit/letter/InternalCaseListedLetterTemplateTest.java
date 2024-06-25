@@ -38,10 +38,6 @@ class InternalCaseListedLetterTemplateTest {
     @Mock
     AddressUk address;
     @Mock
-    private DateTimeExtractor dateTimeExtractor;
-    @Mock
-    private HearingDetailsFinder hearingDetailsFinder;
-    @Mock
     private StringProvider stringProvider;
     private final String telephoneNumber = "0300 123 1711";
     private String appellantGivenNames = "John";
@@ -66,7 +62,7 @@ class InternalCaseListedLetterTemplateTest {
     @BeforeEach
     public void setUp() {
         internalCaseListedLetterTemplate =
-            new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, dateTimeExtractor, hearingDetailsFinder, stringProvider);
+            new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, stringProvider);
     }
 
     @Test
