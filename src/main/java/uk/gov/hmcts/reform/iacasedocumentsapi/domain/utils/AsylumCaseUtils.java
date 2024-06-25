@@ -17,11 +17,9 @@ import java.util.stream.Collectors;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
-
 
 public class AsylumCaseUtils {
 
