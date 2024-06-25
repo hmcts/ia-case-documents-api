@@ -109,7 +109,7 @@ class InternalEndAppealLetterTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(appealEndDate));
         when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(approverType));
-        if(appellantInUk) {
+        if (appellantInUk) {
             when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
             when(address.getAddressLine1()).thenReturn(Optional.of(addressLine1));
             when(address.getAddressLine2()).thenReturn(Optional.of(addressLine2));

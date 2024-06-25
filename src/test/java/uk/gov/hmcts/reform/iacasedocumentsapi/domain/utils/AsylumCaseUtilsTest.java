@@ -372,6 +372,7 @@ public class AsylumCaseUtilsTest {
             AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
         }, "appellantAddress is not present");
     }
+
     @Test
     void should_throw_when_address_ooc_is_not_present() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.empty());
