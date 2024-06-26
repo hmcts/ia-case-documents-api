@@ -367,4 +367,12 @@ public class AsylumCaseUtilsTest {
         assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOoc(asylumCase));
     }
 
+    @Test
+    void should_return_appellant_in_uk() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        boolean result = AsylumCaseUtils.isAppellantInUk(asylumCase);
+
+        assertEquals(true, result);
+    }
 }

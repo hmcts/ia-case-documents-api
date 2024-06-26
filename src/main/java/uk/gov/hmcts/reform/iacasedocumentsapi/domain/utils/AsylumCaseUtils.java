@@ -285,4 +285,9 @@ public class AsylumCaseUtils {
             .filter(document -> document.getTag() == documentTag)
             .collect(Collectors.toList());
     }
+
+    public static boolean isAppellantInUk(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)
+            .map(inUk -> YesOrNo.YES == inUk).orElse(true);
+    }
 }
