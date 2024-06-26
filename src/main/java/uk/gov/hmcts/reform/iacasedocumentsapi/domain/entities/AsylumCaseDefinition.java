@@ -776,7 +776,13 @@ public enum AsylumCaseDefinition {
     LIST_CASE_HEARING_CENTRE_ADDRESS(
             "listCaseHearingCentreAddress",  new TypeReference<String>(){}),
 
-    IS_DECISION_WITHOUT_HEARING("isDecisionWithoutHearing", new TypeReference<YesOrNo>(){});
+    IS_DECISION_WITHOUT_HEARING("isDecisionWithoutHearing", new TypeReference<YesOrNo>(){}),
+
+    CUSTOM_LATEST_REMITTAL_DOCS(
+        "customLatestRemittalDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
+    SOURCE_OF_REMITTAL(
+        "sourceOfRemittal", new TypeReference<String>(){}),;
 
     private final String value;
     private final TypeReference typeReference;
