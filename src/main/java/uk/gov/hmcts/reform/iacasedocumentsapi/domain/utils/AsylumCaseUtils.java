@@ -275,7 +275,9 @@ public class AsylumCaseUtils {
         return appellantAddressAsList;
     }
 
-    public static List<DocumentWithMetadata> getMaybeLetterNotificationDocuments(Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments, DocumentTag documentTag) {
+    public static List<DocumentWithMetadata> getMaybeLetterNotificationDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS);
+
         return maybeLetterNotificationDocuments
             .orElse(Collections.emptyList())
             .stream()
