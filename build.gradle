@@ -15,12 +15,12 @@ plugins {
     id 'pmd'
     id 'com.github.ben-manes.versions' version '0.51.0'
     id "info.solidsoft.pitest" version '1.15.0'
-    id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.owasp.dependencycheck' version '9.0.10'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.owasp.dependencycheck' version '9.2.0'
     id 'org.sonarqube' version '3.5.0.2730'
     id 'org.springframework.boot' version '2.7.18'
-    id 'uk.gov.hmcts.java' version '0.12.59'
-    id 'au.com.dius.pact' version '4.6.8'
+    id 'uk.gov.hmcts.java' version '0.12.63'
+    id 'au.com.dius.pact' version '4.6.10'
     id "io.freefair.lombok" version "6.6.3"
 }
 
@@ -30,14 +30,14 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.10.2',
-    junitPlatform      : '1.10.2',
+    junit              : '5.10.3',
+    junitPlatform      : '1.10.3',
     gradlePitest       : '1.5.1',
-    pitest             : '1.15.8',
+    pitest             : '1.16.1',
     reformLogging      : '5.1.7',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
-    serenity           : '4.1.4',
+    serenity           : '4.1.20',
     sonarPitest        : '0.5',
     pact_version       : '4.1.38',
     springDoc          : '1.8.0',
@@ -211,7 +211,7 @@ project.ext {
 }
 
 jacoco {
-    toolVersion = "0.8.11"
+    toolVersion = "0.8.12"
 }
 
 jacocoTestReport {
@@ -279,18 +279,18 @@ dependencyManagement {
         }
 
 
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.17.0') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.17.1') {
             entry 'jackson-databind'
             entry 'jackson-core'
             entry 'jackson-annotations'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.17.0') {
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.17.1') {
             entry 'jackson-dataformat-yaml'
             entry 'jackson-dataformat-csv'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.17.0') {
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.17.1') {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
@@ -326,7 +326,7 @@ dependencies {
 
     implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine'
     // CVE-2019-17195
-    implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.37.3'
+    implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.40'
 
     // CVE-2021-27568
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.1'
@@ -352,13 +352,13 @@ dependencies {
     implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.16.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.16.1'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.87'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.87'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.90'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.90'
 
     implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
@@ -383,7 +383,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.1', classifier: 'all', {
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.3', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
@@ -395,11 +395,11 @@ dependencies {
     }
 
     //pact contract testing
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.8"
+    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.10"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.10.2')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.3")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.3")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.10.3')
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
