@@ -91,10 +91,12 @@ class DocumentTagTest {
         assertEquals("", DocumentTag.NONE.toString());
         assertEquals("internalAdjournWithoutDateLetter", DocumentTag.INTERNAL_ADJOURN_WITHOUT_DATE_LETTER.toString());
         assertEquals("internalAdjournWithoutDateLetterBundle", DocumentTag.INTERNAL_ADJOURN_WITHOUT_DATE_LETTER_BUNDLE.toString());
+        assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER.toString());
+        assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(92, DocumentTag.values().length);
+        assertEquals(94, DocumentTag.values().length);
     }
 }
