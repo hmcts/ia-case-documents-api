@@ -93,14 +93,17 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
              && featureToggler.getValue("reheard-feature", false);
+        boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
 
+        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         if (isReheardCase) {
             //populate these collections to avoid error on the Stitching api
             initializeNewCollections(asylumCase);
 
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
+            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, isRemittedPath ? "iac-remitted-reheard-hearing-bundle-config.yaml" : "iac-reheard-hearing-bundle-config.yaml");
         } else {
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-hearing-bundle-config.yaml");
+            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
+                    isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
         }
 
         asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase));
@@ -114,7 +117,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             throw new IllegalStateException("Cannot make a deep copy of the case");
         }
 
-        prepareDocuments(getMappingFields(isReheardCase),asylumCaseCopy);
+        prepareDocuments(getMappingFields(isReheardCase, isRemittedPath, isOrWasAda),asylumCaseCopy);
         if (isReheardCase) {
             prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(),asylumCaseCopy);
         }
@@ -138,6 +141,14 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         restoreCollections(asylumCase, asylumCaseCopy,isReheardCase);
 
         restoreAddendumEvidence(asylumCase, asylumCaseCopy,isReheardCase);
+
+        restoreRemittalDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath);
+        //for cases which progressed to finalBundling pre set-aside release,
+        // we want that all the documents should be restored in the collection field
+        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath
+            ? LATEST_REHEARD_HEARING_DOCUMENTS : REHEARD_HEARING_DOCUMENTS, REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy,
+            LATEST_DECISION_AND_REASONS_DOCUMENTS, REHEARD_DECISION_REASONS_COLLECTION);
         
         Optional<List<IdValue<Bundle>>> maybeCaseBundles = responseData.read(AsylumCaseDefinition.CASE_BUNDLES);
         asylumCase.write(AsylumCaseDefinition.CASE_BUNDLES, maybeCaseBundles);
@@ -175,6 +186,18 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         if (!asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS).isPresent()) {
             asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
+        }
+
+        if (!asylumCase.read(LATEST_REMITTAL_DOCUMENTS).isPresent()) {
+            asylumCase.write(LATEST_REMITTAL_DOCUMENTS, emptyList());
+        }
+
+        if (!asylumCase.read(LATEST_REHEARD_HEARING_DOCUMENTS).isPresent()) {
+            asylumCase.write(LATEST_REHEARD_HEARING_DOCUMENTS, emptyList());
+        }
+
+        if (!asylumCase.read(LATEST_DECISION_AND_REASONS_DOCUMENTS).isPresent()) {
+            asylumCase.write(LATEST_DECISION_AND_REASONS_DOCUMENTS, emptyList());
         }
     }
 
@@ -257,7 +280,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             AsylumCase asylumCaseBefore,
             boolean isReheardCase
     ) {
-        getFieldDefinitions(isReheardCase).forEach(field -> {
+        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
+        getFieldDefinitions(isReheardCase, isOrWasAda).forEach(field -> {
             Optional<List<IdValue<DocumentWithMetadata>>> currentIdValues = asylumCase.read(field);
             Optional<List<IdValue<DocumentWithMetadata>>> beforeIdValues = asylumCaseBefore.read(field);
 
@@ -283,6 +307,77 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         });
     }
 
+    private void restoreReheardDocumentsInCollections(AsylumCase asylumCase, AsylumCase asylumCaseBefore, AsylumCaseDefinition latestField, AsylumCaseDefinition existingField) {
+        // Retrieve the current reheard hearing documents from the latest field in the current asylum case
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeCurrentReheardHearingDocs = asylumCaseBefore.read(latestField);
+        List<IdValue<DocumentWithMetadata>> currentReheardHearingDocs = maybeCurrentReheardHearingDocs.orElse(emptyList());
+
+        //Retrieve the existing reheard hearing documents from the existing field in the asylum case before changes
+        Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardHearingDocs = asylumCaseBefore.read(existingField);
+        List<IdValue<ReheardHearingDocuments>> existingReheardDocs = maybeExistingReheardHearingDocs.orElse(emptyList());
+        // Initialize variables to store documents from the asylum case before changes
+        List<IdValue<DocumentWithMetadata>> beforeDocuments = new ArrayList<>();
+        ReheardHearingDocuments beforeReheardDocs = new ReheardHearingDocuments();
+        // If existing reheard hearing documents exist, extract the list of documents
+        if (!existingReheardDocs.isEmpty()) {
+            beforeReheardDocs = existingReheardDocs.get(0).getValue();
+            beforeDocuments = beforeReheardDocs.getReheardHearingDocs();
+        }
+        currentReheardHearingDocs = restoreDocumentsInCollection(currentReheardHearingDocs, beforeDocuments);
+        //Changed the documents in the first Reheard object
+        beforeReheardDocs.setReheardHearingDocs(currentReheardHearingDocs);
+        //Scenario : If there was no collection field to begin with, and now the documents should ultimately be restored in the collection field.
+        if (existingReheardDocs.isEmpty() && !currentReheardHearingDocs.isEmpty()) {
+            existingReheardDocs = List.of(new IdValue<>("1", beforeReheardDocs));
+        }
+        asylumCase.write(existingField, existingReheardDocs);
+    }
+
+    private void restoreRemittalDocumentsInCollections(AsylumCase asylumCase, AsylumCase asylumCaseBefore, boolean isRemittedFeature) {
+
+        if (!isRemittedFeature) {
+            return;
+        }
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeCurrentRemittalDocs = asylumCaseBefore.read(LATEST_REMITTAL_DOCUMENTS);
+        List<IdValue<DocumentWithMetadata>> currentRemittalDocuments = maybeCurrentRemittalDocs.orElse(emptyList());
+
+        Optional<List<IdValue<RemittalDocument>>> maybeRemittalDocs = asylumCaseBefore.read(REMITTAL_DOCUMENTS);
+        List<IdValue<RemittalDocument>> existingRemittalDocs = maybeRemittalDocs.orElse(emptyList());
+        List<IdValue<DocumentWithMetadata>> beforeDocuments = new ArrayList<>();
+        RemittalDocument beforeRemittalDocuments = new RemittalDocument();
+        String idValue = "1";
+
+        if (!existingRemittalDocs.isEmpty()) {
+            idValue = existingRemittalDocs.get(0).getId();
+            beforeRemittalDocuments = existingRemittalDocs.get(0).getValue();
+            beforeDocuments = beforeRemittalDocuments.getOtherRemittalDocs();
+        }
+        currentRemittalDocuments = restoreDocumentsInCollection(currentRemittalDocuments, beforeDocuments);
+
+        //Remove the remittal decision document (Identifying as the decision document is renamed while storing with certain keywords)
+        List<IdValue<DocumentWithMetadata>> filteredList = currentRemittalDocuments.stream()
+            .filter(document -> !document.getValue().getDocument().getDocumentFilename().contains("-Decision-to-remit.pdf"))
+                .collect(Collectors.toList());
+
+        //Changed the documents in the latest RemittalDocs object
+        beforeRemittalDocuments.setOtherRemittalDocs(filteredList);
+        existingRemittalDocs.set(0, new IdValue<>(idValue, beforeRemittalDocuments));
+        asylumCase.write(REMITTAL_DOCUMENTS, existingRemittalDocs);
+    }
+
+    private List<IdValue<DocumentWithMetadata>> restoreDocumentsInCollection(List<IdValue<DocumentWithMetadata>> currentList, List<IdValue<DocumentWithMetadata>> existingList) {
+        List<IdValue<DocumentWithMetadata>> finalCurrentList = currentList;
+        List<IdValue<DocumentWithMetadata>> missingDocuments = existingList
+            .stream()
+            .filter(document -> !contains(finalCurrentList, document))
+            .collect(Collectors.toList());
+
+        for (IdValue<DocumentWithMetadata> documentWithMetadata : missingDocuments) {
+            currentList = documentWithMetadataAppender.append(documentWithMetadata.getValue(), currentList);
+        }
+        return currentList;
+    }
+
     boolean contains(
             List<IdValue<DocumentWithMetadata>> existingDocuments,
             IdValue<DocumentWithMetadata> documentWithMetadata
@@ -301,43 +396,60 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return found;
     }
 
-    private List<AsylumCaseDefinition> getFieldDefinitions(boolean isReheardCase) {
+    private List<AsylumCaseDefinition> getFieldDefinitions(boolean isReheardCase, boolean isOrWasAda) {
+        List<AsylumCaseDefinition> fieldDefnList;
         if (isReheardCase) {
-            return Arrays.asList(
-                    REHEARD_HEARING_DOCUMENTS,
+            fieldDefnList = new ArrayList<>(Arrays.asList(
                     ADDITIONAL_EVIDENCE_DOCUMENTS,
                     RESPONDENT_DOCUMENTS,
                     FTPA_APPELLANT_DOCUMENTS,
                     FTPA_RESPONDENT_DOCUMENTS,
                     FINAL_DECISION_AND_REASONS_DOCUMENTS
-                    );
+            ));
         } else {
-            return Arrays.asList(
-                HEARING_DOCUMENTS,
-                LEGAL_REPRESENTATIVE_DOCUMENTS,
-                ADDITIONAL_EVIDENCE_DOCUMENTS,
-                RESPONDENT_DOCUMENTS);
+            fieldDefnList = new ArrayList<>(Arrays.asList(
+                    HEARING_DOCUMENTS,
+                    LEGAL_REPRESENTATIVE_DOCUMENTS,
+                    ADDITIONAL_EVIDENCE_DOCUMENTS,
+                    RESPONDENT_DOCUMENTS
+            ));
+            if (isOrWasAda) {
+                fieldDefnList.add(TRIBUNAL_DOCUMENTS);
+            }
         }
-
+        return fieldDefnList;
     }
 
-    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase) {
-
+    private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isRemittedFeature, boolean isOrWasAda) {
+        Map<AsylumCaseDefinition, AsylumCaseDefinition> fieldMap;
         if (isReheardCase) {
-            return  Map.of(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, APP_ADDITIONAL_EVIDENCE_DOCS,
+            if (isRemittedFeature) {
+                return  Map.of(CUSTOM_FTPA_APPELLANT_DOCS, FTPA_APPELLANT_DOCUMENTS,
+                    CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, LATEST_DECISION_AND_REASONS_DOCUMENTS,
+                    CUSTOM_REHEARD_HEARING_DOCS, LATEST_REHEARD_HEARING_DOCUMENTS,
+                    CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, APPELLANT_ADDENDUM_EVIDENCE_DOCS,
+                    CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, RESPONDENT_ADDENDUM_EVIDENCE_DOCS,
+                    CUSTOM_LATEST_REMITTAL_DOCS, LATEST_REMITTAL_DOCUMENTS
+                );
+            }
+            fieldMap =  new HashMap<>(Map.of(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, APP_ADDITIONAL_EVIDENCE_DOCS,
                 CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS, RESP_ADDITIONAL_EVIDENCE_DOCS,
              CUSTOM_FTPA_APPELLANT_DOCS, FTPA_APPELLANT_DOCUMENTS,
              CUSTOM_FTPA_RESPONDENT_DOCS, FTPA_RESPONDENT_DOCUMENTS,
              CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, FINAL_DECISION_AND_REASONS_DOCUMENTS,
              CUSTOM_REHEARD_HEARING_DOCS, REHEARD_HEARING_DOCUMENTS,
              CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, APPELLANT_ADDENDUM_EVIDENCE_DOCS,
-             CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
+             CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, RESPONDENT_ADDENDUM_EVIDENCE_DOCS));
         } else {
-            return  Map.of(CUSTOM_HEARING_DOCUMENTS, HEARING_DOCUMENTS,
+            fieldMap = new HashMap<>(Map.of(CUSTOM_HEARING_DOCUMENTS, HEARING_DOCUMENTS,
              CUSTOM_LEGAL_REP_DOCUMENTS, LEGAL_REPRESENTATIVE_DOCUMENTS,
              CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS, ADDITIONAL_EVIDENCE_DOCUMENTS,
-             CUSTOM_RESPONDENT_DOCUMENTS, RESPONDENT_DOCUMENTS);
+             CUSTOM_RESPONDENT_DOCUMENTS, RESPONDENT_DOCUMENTS));
+            if (isOrWasAda) {
+                fieldMap.put(CUSTOM_TRIBUNAL_DOCUMENTS, TRIBUNAL_DOCUMENTS);
+            }
         }
+        return fieldMap;
     }
 
     private Map<AsylumCaseDefinition,AsylumCaseDefinition> getMappingFieldsForAdditionalEvidenceDocuments() {
@@ -497,6 +609,13 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                     dateProvider.now().toString(),
                                     DocumentTag.ADDENDUM_EVIDENCE,
                                     SUPPLIED_BY_RESPONDENT);
+                                break;
+                            case CUSTOM_LATEST_REMITTAL_DOCS:
+                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                    documentWithDescription.getValue().getDescription().orElse(""),
+                                    dateProvider.now().toString(),
+                                    DocumentTag.REMITTAL_DECISION,
+                                    "");
                                 break;
                             default:break;
                         }
