@@ -9,10 +9,13 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_PRISON_DETAILS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.BAIL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LEGAL_REP_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_LOCATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.PRISON_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.REF_DATA_LISTING_LOCATION_DETAIL;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,8 +28,10 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
@@ -45,9 +50,9 @@ class BailNoticeOfHearingRelistingTemplateTest {
     private final String customerServicesEmail = "customer@services.com";
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
-
     private final String relistingTemplateName = "TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx";
 
+    private CourtVenue newCastle;
     private BailNoticeOfHearingRelistingTemplate template;
     private Map<String, Object> fieldValuesMap;
 
@@ -56,6 +61,15 @@ class BailNoticeOfHearingRelistingTemplateTest {
         template =
             new BailNoticeOfHearingRelistingTemplate(
                 relistingTemplateName, customerServicesProvider, stringProvider);
+
+        newCastle = new CourtVenue("Newcastle Civil & Family Courts and Tribunals Centre",
+                "Newcastle Civil And Family Courts And Tribunals Centre",
+                "366796",
+                "Open",
+                "Y",
+                "Y",
+                "Barras Bridge, Newcastle-Upon-Tyne",
+                "NE1 8QF");
     }
 
     @Test
@@ -136,6 +150,44 @@ class BailNoticeOfHearingRelistingTemplateTest {
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesPhone);
         when(bailCase.read(PRISON_NAME, String.class)).thenReturn(Optional.of("Dungavel"));
+    }
+
+    @Test
+    void should_get_listing_location_address_from_ccd_with_disabled_ref_data_feature() {
+        dataSetUp();
+        when(bailCase.read(IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Nottingham Justice Centre\nCarrington Street\nNottingham\nNG2 1EE",
+                fieldValuesMap.get("hearingCentreAddress"));
+    }
+
+    @Test
+    void should_get_remote_hearing_address_with_enabled_ref_data_feature() {
+        dataSetUp();
+        when(bailCase.read(IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Cloud Video Platform (CVP)",
+                fieldValuesMap.get("hearingCentreAddress"));
+    }
+
+    @Test
+    void should_get_listing_location_address_from_ref_data_with_enabled_ref_data_feature() {
+        dataSetUp();
+        when(bailCase.read(IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(bailCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(bailCase.read(REF_DATA_LISTING_LOCATION_DETAIL, CourtVenue.class))
+                .thenReturn(Optional.of(newCastle));
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Newcastle Civil And Family Courts And Tribunals Centre, " +
+                "Barras Bridge, Newcastle-Upon-Tyne, " +
+                "NE1 8QF", fieldValuesMap.get("hearingCentreAddress"));
     }
 
 }
