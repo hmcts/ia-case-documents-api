@@ -1,10 +1,10 @@
 {
-  "description": "RIA-8331 Internal non-detained case adjourned without date letter + attachment bundle",
+  "description": "RIA-8331 Internal non-detained case adjourned without date letter + attachment bundle OOT",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "id": 8331,
+      "id": 83311,
       "eventId": "adjournHearingWithoutDate",
       "state": "*",
       "caseData": {
@@ -21,14 +21,12 @@
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
           "appellantHasFixedAddress": "Yes",
-          "appellantAddress": {
-            "County": "",
-            "Country": "United Kingdom",
-            "PostCode": "NE21JX",
-            "PostTown": "Example Town",
-            "AddressLine1": "5",
-            "AddressLine2": "Example Street"
-          },
+          "appellantInUk": "No",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryAdminJ": "Spain",
           "letterBundleDocuments": []
         }
       }
@@ -51,14 +49,12 @@
         "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
         "listCaseRequirementsOther": "something around Other",
         "appellantHasFixedAddress": "Yes",
-        "appellantAddress": {
-          "County": "",
-          "Country": "United Kingdom",
-          "PostCode": "NE21JX",
-          "PostTown": "Example Town",
-          "AddressLine1": "5",
-          "AddressLine2": "Example Street"
-        },
+        "appellantInUk": "No",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryAdminJ": "Spain",
         "letterBundleDocuments": [
           {
             "id": "1",
