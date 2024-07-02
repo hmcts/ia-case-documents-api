@@ -232,11 +232,7 @@ project.tasks['pitest'].group = "Verification"
 
 project.ext {
     pacticipant = 'ia_caseNotificationsApi'
-    pacticipantVersion = getCheckedOutGitCommitHash()
-}
-
-def getCheckedOutGitCommitHash() {
-    'git rev-parse --verify --short HEAD'.execute().text.trim()
+    pacticipantVersion = System.env.GIT_COMMIT.substring(0,9)
 }
 
 task runContractTests(type: Test, description: 'Runs contract tests.', group: 'Verification') {
