@@ -460,6 +460,14 @@ internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-I
 internalEndAppealLetterWithAttachment.fileExtension: PDF
 internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
 
+internalOutOfTimeDecisionLetter.contentType:  application/pdf
+internalOutOfTimeDecisionLetter.fileExtension: PDF
+internalOutOfTimeDecisionLetter.fileName: "internal-out-of-time-decision-letter"
+internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Out_of_time_decision.docx}
+
+internalOutOfTimeDecisionLetterWithAttachment.fileExtension: PDF
+internalOutOfTimeDecisionLetterWithAttachment.fileName: "internal-out-of-time-decision-letter-with-attachment"
+
 internalCaseListedLetter.contentType:  application/pdf
 internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
@@ -694,6 +702,11 @@ customerServices:
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
+
+appellantDaysToWait:
+  letter:
+    afterSubmission: 28
+
 
 ### Email addresses
 hearingCentreEmailAddresses:
