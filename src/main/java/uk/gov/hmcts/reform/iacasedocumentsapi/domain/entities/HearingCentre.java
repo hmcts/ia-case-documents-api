@@ -22,7 +22,17 @@ public enum HearingCentre {
     TAYLOR_HOUSE("taylorHouse"),
     BELFAST("belfast"),
     HARMONDSWORTH("harmondsworth"),
-    YARLSWOOD("yarlswood"),
+
+    HENDON("hendon"),
+    YARLS_WOOD("yarlsWood"),
+    BRADFORD_KEIGHLEY("bradfordKeighley"),
+    MCC_MINSHULL("mccMinshull"),
+    MCC_CROWN_SQUARE("mccCrownSquare"),
+    MANCHESTER_MAGS("manchesterMags"),
+    NTH_TYNE_MAGS("nthTyneMags"),
+    LEEDS_MAGS("leedsMags"),
+    ALLOA_SHERRIF("alloaSherrif"),
+
     REMOTE_HEARING("remoteHearing"),
     DECISION_WITHOUT_HEARING("decisionWithoutHearing");
 

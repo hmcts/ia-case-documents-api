@@ -11,9 +11,11 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
@@ -22,6 +24,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 @SuppressWarnings("unchecked")
 class HearingRequirementsTemplateTest {
 
+    private static InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE = new InterpreterLanguageRefData();
+    private static InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL = new InterpreterLanguageRefData();
     private final String templateName = "HEARING_REQUIREMENTS_TEMPLATE.docx";
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -42,6 +46,14 @@ class HearingRequirementsTemplateTest {
     private YesOrNo isInterpreterServicesNeeded = YesOrNo.YES;
     private InterpreterLanguage interpreter1 = new InterpreterLanguage();
     private InterpreterLanguage interpreter2 = new InterpreterLanguage();
+
+    private YesOrNo isAnyWitnessInterpreterRequired = YesOrNo.YES;
+    private InterpreterLanguageRefData appellantSignInterpreterLanguage = new InterpreterLanguageRefData();
+    private InterpreterLanguageRefData witness1SpokenInterpreterLanguage = new InterpreterLanguageRefData();
+    private InterpreterLanguageRefData witness1SignInterpreterLanguage = new InterpreterLanguageRefData();
+    private InterpreterLanguageRefData witness2SpokenInterpreterLanguage = new InterpreterLanguageRefData();
+    private InterpreterLanguageRefData witness2SignInterpreterLanguage = new InterpreterLanguageRefData();
+    private List<WitnessInterpreterLanguageInformation> witnessInterpreterLanguageInformationList = new ArrayList<WitnessInterpreterLanguageInformation>();
 
     private YesOrNo isHearingRoomNeeded = YesOrNo.YES;
     private YesOrNo isHearingLoopNeeded = YesOrNo.YES;
@@ -87,6 +99,7 @@ class HearingRequirementsTemplateTest {
             );
 
         witness1.setWitnessName("Some Witness");
+        witness1.setWitnessFamilyName("Some Witness Family");
         witness2.setWitnessName("Another Witness");
 
         witnessDetails =
@@ -104,6 +117,21 @@ class HearingRequirementsTemplateTest {
                 new IdValue<>("111", interpreter1),
                 new IdValue<>("222", interpreter2)
             );
+
+        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE.setLanguageRefData(new DynamicList("lang"));
+        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL.setLanguageManualEntry(List.of("Yes"));
+        APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL.setLanguageManualEntryDescription("lang");
+        appellantSignInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
+        witness1SpokenInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
+        witness1SignInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
+        witness2SpokenInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
+        witness2SignInterpreterLanguage.setLanguageRefData(new DynamicList("lang"));
+        witnessInterpreterLanguageInformationList.add(
+                new WitnessInterpreterLanguageInformation(witness1.buildWitnessFullName(),
+                        "Spoken language Interpreter: lang\nSign language Interpreter: lang\n"));
+        witnessInterpreterLanguageInformationList.add(
+                new WitnessInterpreterLanguageInformation(witness2.buildWitnessFullName(),
+                        "Spoken language Interpreter: lang\nSign language Interpreter: lang\n"));
 
         datesToAvoid1.setDateToAvoid(LocalDate.parse("2019-12-25"));
         datesToAvoid2.setDateToAvoid(LocalDate.parse("2020-01-01"));
@@ -123,8 +151,13 @@ class HearingRequirementsTemplateTest {
         assertEquals(templateName, hearingRequirementsTemplate.getName());
     }
 
-    @Test
-    void should_map_case_data_to_template_field_values_for_in_country_appeal() {
+    static List<InterpreterLanguageRefData> refDataOrManualSpokenInterpreterLanguageField() {
+        return List.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE, APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL);
+    }
+
+    @ParameterizedTest
+    @MethodSource("refDataOrManualSpokenInterpreterLanguageField")
+    void should_map_case_data_to_template_field_values_for_in_country_appeal(InterpreterLanguageRefData appellantSpokenInterpreterLanguage) {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -144,6 +177,14 @@ class HearingRequirementsTemplateTest {
 
         when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSpokenInterpreterLanguage));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
@@ -176,7 +217,8 @@ class HearingRequirementsTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
+
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
@@ -190,7 +232,7 @@ class HearingRequirementsTemplateTest {
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
@@ -199,6 +241,17 @@ class HearingRequirementsTemplateTest {
         assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
         assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
         assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
+        assertEquals(isAnyWitnessInterpreterRequired, templateFieldValues.get("isAnyWitnessInterpreterRequired"));
+        assertEquals("Spoken language Interpreter: lang\nSign language Interpreter: lang\n", templateFieldValues.get("appellantInterpreterLanguage"));
+        assertEquals(2, ((List) templateFieldValues.get("witnessInterpreterInformationList")).size());
+        assertEquals(witnessInterpreterLanguageInformationList.get(0).getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.get(0).getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getInterpreterLanguage());
+        assertEquals(witnessInterpreterLanguageInformationList.get(1).getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.get(1).getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getInterpreterLanguage());
         assertEquals(isHearingRoomNeeded, templateFieldValues.get("isHearingRoomNeeded"));
         assertEquals(isHearingLoopNeeded, templateFieldValues.get("isHearingLoopNeeded"));
         assertEquals(remoteVideoCall, templateFieldValues.get("remoteVideoCall"));
@@ -247,6 +300,14 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
 
+        when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
+
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
 
@@ -278,7 +339,8 @@ class HearingRequirementsTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
+
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
@@ -291,7 +353,7 @@ class HearingRequirementsTemplateTest {
         assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
@@ -301,6 +363,17 @@ class HearingRequirementsTemplateTest {
         assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
         assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
         assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
+        assertEquals(isAnyWitnessInterpreterRequired, templateFieldValues.get("isAnyWitnessInterpreterRequired"));
+        assertEquals("Spoken language Interpreter: lang\nSign language Interpreter: lang\n", templateFieldValues.get("appellantInterpreterLanguage"));
+        assertEquals(2, ((List) templateFieldValues.get("witnessInterpreterInformationList")).size());
+        assertEquals(witnessInterpreterLanguageInformationList.get(0).getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.get(0).getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getInterpreterLanguage());
+        assertEquals(witnessInterpreterLanguageInformationList.get(1).getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.get(1).getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getInterpreterLanguage());
         assertEquals(isHearingRoomNeeded, templateFieldValues.get("isHearingRoomNeeded"));
         assertEquals(isHearingLoopNeeded, templateFieldValues.get("isHearingLoopNeeded"));
         assertEquals(remoteVideoCall, templateFieldValues.get("remoteVideoCall"));
@@ -330,7 +403,8 @@ class HearingRequirementsTemplateTest {
 
         templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
+
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
@@ -341,7 +415,7 @@ class HearingRequirementsTemplateTest {
         assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
@@ -350,6 +424,17 @@ class HearingRequirementsTemplateTest {
         assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
         assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
         assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
+        assertEquals(isAnyWitnessInterpreterRequired, templateFieldValues.get("isAnyWitnessInterpreterRequired"));
+        assertEquals("Spoken language Interpreter: lang\nSign language Interpreter: lang\n", templateFieldValues.get("appellantInterpreterLanguage"));
+        assertEquals(2, ((List) templateFieldValues.get("witnessInterpreterInformationList")).size());
+        assertEquals(witnessInterpreterLanguageInformationList.get(0).getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.get(0).getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getInterpreterLanguage());
+        assertEquals(witnessInterpreterLanguageInformationList.get(1).getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.get(1).getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getInterpreterLanguage());
         assertEquals(isHearingRoomNeeded, templateFieldValues.get("isHearingRoomNeeded"));
         assertEquals(isHearingLoopNeeded, templateFieldValues.get("isHearingLoopNeeded"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("remoteVideoCall"));
@@ -397,6 +482,14 @@ class HearingRequirementsTemplateTest {
 
         when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
@@ -460,6 +553,9 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(WITNESS_DETAILS)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.empty());
+        when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.empty());
@@ -482,7 +578,7 @@ class HearingRequirementsTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
 
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
@@ -503,6 +599,8 @@ class HearingRequirementsTemplateTest {
         assertEquals(YesOrNo.NO, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(0, ((List) templateFieldValues.get("language")).size());
         assertEquals(0, ((List) templateFieldValues.get("languageDialect")).size());
+        assertEquals("", templateFieldValues.get("appellantInterpreterLanguage"));
+        assertEquals(0, ((List) templateFieldValues.get("witnessInterpreterInformationList")).size());
         assertEquals(YesOrNo.NO, templateFieldValues.get("isHearingRoomNeeded"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isHearingLoopNeeded"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("physicalOrMentalHealthIssues"));
@@ -545,6 +643,14 @@ class HearingRequirementsTemplateTest {
 
         when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
@@ -621,6 +727,14 @@ class HearingRequirementsTemplateTest {
 
         when(asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isInterpreterServicesNeeded));
         when(asylumCase.read(INTERPRETER_LANGUAGE)).thenReturn(Optional.of(interpreterLanguage));
+
+        when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.of(isAnyWitnessInterpreterRequired));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(APPELLANT_SPOKEN_INTERPRETER_LANGUAGE));
+        when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(appellantSignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_1_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness1SignInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
+        when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));

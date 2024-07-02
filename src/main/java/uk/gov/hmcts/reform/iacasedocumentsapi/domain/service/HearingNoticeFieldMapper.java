@@ -45,15 +45,21 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
 
-        if (listedHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
+
+        boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
+                .orElse(YesOrNo.NO).equals(YesOrNo.YES);
+
+        //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
+        //IS_REMOTE_HEARING is used for the case ref data
+        if ((!isCaseUsingLocationRefData && listedHearingCentre.equals(HearingCentre.REMOTE_HEARING))
+                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
             fieldValues.put("remoteHearing", "Remote hearing");
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 
-        fieldValues.put(
-            "hearingCentreAddress",
-            stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("")
-                .replaceAll(",\\s*", "\n")
+        fieldValues.put("hearingCentreAddress", isCaseUsingLocationRefData ?
+                asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class).orElse("")
+                : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n")
         );
 
         if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
@@ -72,6 +78,7 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
         fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
+        fieldValues.put("isIntegrated", asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO));
 
         return fieldValues;
     }

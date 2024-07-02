@@ -16,7 +16,8 @@
             {
               "id": "1",
               "value": {
-                "witnessName": "WitnessName"
+                "witnessName": "WitnessName",
+                "witnessFamilyName": "WitnessFamilyName"
               }
             }
           ],
@@ -79,7 +80,8 @@
           {
             "id": "1",
             "value": {
-              "witnessName": "WitnessName"
+              "witnessName": "WitnessName",
+              "witnessFamilyName": "WitnessFamilyName"
             }
           }
         ],

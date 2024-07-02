@@ -133,7 +133,7 @@ public class BailSubmissionTemplateProviderTest {
         Arrays.asList(
             new IdValue<>("1", new InterpreterLanguage("Arabic", "NA"))
         );
-    
+
     private Map<String, Object> fieldValuesMap;
 
     @BeforeEach
@@ -860,4 +860,3 @@ public class BailSubmissionTemplateProviderTest {
         when(bailCase.read(FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1, String.class)).thenReturn(Optional.of(financialAmountSupporterUndertakes1));
     }
 }
-

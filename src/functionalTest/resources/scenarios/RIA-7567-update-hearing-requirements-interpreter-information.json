@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3825 Update hearing requirements, create PDF (out of country appeal) - FTPA Reheard",
+  "description": "RIA-7567 update hearing requirements with interpreter information request PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -9,39 +9,67 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "isReheardAppealEnabled": "Yes",
-          "caseFlagSetAsideReheardExists": "Yes",
-          "appealOutOfCountry": "Yes",
-          "isEvidenceFromOutsideUkOoc": "Yes",
+          "isAppellantAttendTheHearing": "Yes",
+          "isAppellantGivingOralEvidence": "Yes",
           "isWitnessesAttending": "Yes",
           "witnessDetails": [
             {
               "id": "1",
               "value": {
-                "witnessName": "WitnessName",
-                "witnessFamilyName": "WitnessFamilyName"
+                "witnessName": "Witness",
+                "witnessFamilyName": "1"
               }
             }
           ],
-          "isEvidenceFromOutsideUkInCountry": "Yes",
           "isInterpreterServicesNeeded": "Yes",
-          "interpreterLanguage": [
-            {
-              "id": "1",
+          "appellantInterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+          "appellantInterpreterSignLanguage": {
+            "languageRefData": {
               "value": {
-                "language": "zulu",
-                "languageDialect": "opt"
-              }
+                "code": "sign-dfr",
+                "label": "Deaf Relay"
+              },
+              "list_items": [{
+                "code": "sign-dfr",
+                "label": "Deaf Relay"
+              }]
             }
-          ],
+          },
+          "appellantInterpreterSpokenLanguage": {
+            "languageRefData": {
+              "value": {
+                "code": "ara-mag",
+                "label": "Maghreb"
+              },
+              "list_items": [{
+                "code": "ara-mag",
+                "label": "Maghreb"
+              }]
+            }
+          },
+          "isAnyWitnessInterpreterRequired": "Yes",
+          "witness1": {
+            "witnessName": "Witness",
+            "witnessFamilyName": "1"
+          },
+          "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+          "witness1InterpreterSpokenLanguage": {
+            "languageManualEntry": ["Yes"],
+            "languageManualEntryDescription": "Witness 1 spoken language"
+          },
+          "witness1InterpreterSignLanguage": {
+            "languageManualEntry": ["Yes"],
+            "languageManualEntryDescription": "Witness 1 sign language"
+          },
           "isHearingRoomNeeded": "Yes",
           "isHearingLoopNeeded": "Yes",
-          "remoteVideoCall": "Yes",
-          "remoteVideoCallDescription": "Remote video call description",
           "physicalOrMentalHealthIssues": "Yes",
           "physicalOrMentalHealthIssuesDescription": "Physical or mental health issues description",
           "pastExperiences": "Yes",
           "pastExperiencesDescription": "Past experiences",
+          "isOutOfCountryEnabled": "Yes",
+          "remoteVideoCall": "Yes",
+          "remoteVideoCallDescription": "Remote video call description",
           "multimediaEvidence": "Yes",
           "multimediaEvidenceDescription": "Multimedia evidence",
           "singleSexCourt": "Yes",
@@ -75,38 +103,67 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "isReheardAppealEnabled": "Yes",
-        "caseFlagSetAsideReheardExists": "Yes",
-        "appealOutOfCountry": "Yes",
-        "isEvidenceFromOutsideUkOoc": "Yes",
+        "isAppellantAttendTheHearing": "Yes",
+        "isAppellantGivingOralEvidence": "Yes",
         "isWitnessesAttending": "Yes",
         "witnessDetails": [
           {
             "id": "1",
             "value": {
-              "witnessName": "WitnessName",
-              "witnessFamilyName": "WitnessFamilyName"
+              "witnessName": "Witness",
+              "witnessFamilyName": "1"
             }
           }
         ],
         "isInterpreterServicesNeeded": "Yes",
-        "interpreterLanguage": [
-          {
-            "id": "1",
+        "appellantInterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+        "appellantInterpreterSignLanguage": {
+          "languageRefData": {
             "value": {
-              "language": "zulu",
-              "languageDialect": "opt"
-            }
+              "code": "sign-dfr",
+              "label": "Deaf Relay"
+            },
+            "list_items": [{
+              "code": "sign-dfr",
+              "label": "Deaf Relay"
+            }]
           }
-        ],
+        },
+        "appellantInterpreterSpokenLanguage": {
+          "languageRefData": {
+            "value": {
+              "code": "ara-mag",
+              "label": "Maghreb"
+            },
+            "list_items": [{
+              "code": "ara-mag",
+              "label": "Maghreb"
+            }]
+          }
+        },
+        "isAnyWitnessInterpreterRequired": "Yes",
+        "witness1": {
+          "witnessName": "Witness",
+          "witnessFamilyName": "1"
+        },
+        "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+        "witness1InterpreterSpokenLanguage": {
+          "languageManualEntry": ["Yes"],
+          "languageManualEntryDescription": "Witness 1 spoken language"
+        },
+        "witness1InterpreterSignLanguage": {
+          "languageManualEntry": ["Yes"],
+          "languageManualEntryDescription": "Witness 1 sign language"
+        },
         "isHearingRoomNeeded": "Yes",
         "isHearingLoopNeeded": "Yes",
-        "remoteVideoCall": "Yes",
-        "remoteVideoCallDescription": "Remote video call description",
         "physicalOrMentalHealthIssues": "Yes",
         "physicalOrMentalHealthIssuesDescription": "Physical or mental health issues description",
         "pastExperiences": "Yes",
         "pastExperiencesDescription": "Past experiences",
+        "isOutOfCountryEnabled": "Yes",
+        "remoteVideoCall": "Yes",
+        "remoteVideoCallDescription": "Remote video call description",
         "multimediaEvidence": "Yes",
         "multimediaEvidenceDescription": "Multimedia evidence",
         "singleSexCourt": "Yes",
