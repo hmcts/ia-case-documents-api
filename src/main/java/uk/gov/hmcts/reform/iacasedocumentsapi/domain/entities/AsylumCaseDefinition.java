@@ -633,7 +633,37 @@ public enum AsylumCaseDefinition {
         "customLatestRemittalDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
 
     SOURCE_OF_REMITTAL(
-        "sourceOfRemittal", new TypeReference<String>(){}),;
+        "sourceOfRemittal", new TypeReference<String>(){}),
+
+    // Used to store generated letter notification docs which will be stitched together
+    LETTER_NOTIFICATION_DOCUMENTS(
+        "letterNotificationDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    // Used to store bundled documents (letter + attachment) to be sent to GovNotify
+    LETTER_BUNDLE_DOCUMENTS(
+        "letterBundleDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J(
+        "appellantHasFixedAddressAdminJ", new TypeReference<YesOrNo>(){}),
+
+    ADDRESS_LINE_1_ADMIN_J(
+        "addressLine1AdminJ", new TypeReference<String>(){}),
+
+    ADDRESS_LINE_2_ADMIN_J(
+        "addressLine2AdminJ", new TypeReference<String>(){}),
+
+    ADDRESS_LINE_3_ADMIN_J(
+        "addressLine3AdminJ", new TypeReference<String>(){}),
+
+    ADDRESS_LINE_4_ADMIN_J(
+        "addressLine4AdminJ", new TypeReference<String>(){}),
+
+    COUNTRY_ADMIN_J(
+        "countryAdminJ", new TypeReference<String>(){}),
+
+    APPELLANT_IN_UK(
+        "appellantInUk", new TypeReference<YesOrNo>() {}),
+    ;
 
     private final String value;
     private final TypeReference typeReference;
