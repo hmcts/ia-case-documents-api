@@ -51,6 +51,7 @@ class InternalRecordOutOfTimeDecisionLetterTemplateTest {
     private InternalRecordOutOfTimeDecisionLetterTemplate internalRecordOutOfTimeDecisionLetterTemplate;
     private Map<String, Object> fieldValuesMap;
     private int daysAfterSubmitAppeal = 28;
+
     @BeforeEach
     public void setUp() {
         internalRecordOutOfTimeDecisionLetterTemplate =
