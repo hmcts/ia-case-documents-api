@@ -88,6 +88,9 @@ public enum DocumentTag {
     APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
     INTERNAL_ADJOURN_WITHOUT_DATE_LETTER("internalAdjournWithoutDateLetter", CaseType.ASYLUM),
     INTERNAL_ADJOURN_WITHOUT_DATE_LETTER_BUNDLE("internalAdjournWithoutDateLetterBundle", CaseType.ASYLUM),
+    INTERNAL_OUT_OF_TIME_DECISION_LETTER("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
+    INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
+
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
