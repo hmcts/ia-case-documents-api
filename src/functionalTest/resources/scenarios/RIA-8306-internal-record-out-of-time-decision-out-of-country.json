@@ -14,6 +14,7 @@
           "isAdmin": "Yes",
           "appellantInDetention": "No",
           "outOfTimeDecisionType": "rejected",
+          "appealReferenceNumber": "PA/11111/2019",
           "appellantInUk": "No",
           "appellantHasFixedAddressAdminJ": "Yes",
           "addressLine1AdminJ": "Calle Toledo 32",
@@ -35,6 +36,17 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
+          "appealSubmissionDate": "{$TODAY-2}",
+          "isAdmin": "Yes",
+          "appellantInDetention": "No",
+          "outOfTimeDecisionType": "rejected",
+          "appealReferenceNumber": "PA/11111/2019",
+          "appellantInUk": "No",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryAdminJ": "Spain",
           "notificationAttachmentDocuments": [
             {
               "id": "1",

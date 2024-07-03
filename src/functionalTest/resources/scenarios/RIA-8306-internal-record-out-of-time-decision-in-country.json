@@ -12,6 +12,7 @@
         "replacements": {
           "appealType": "protection",
           "outOfTimeDecisionType": "rejected",
+          "appealReferenceNumber": "PA/11111/2019",
           "isAdmin": "Yes",
           "appellantInDetention": "No",
           "appellantHasFixedAddress": "Yes",
@@ -52,6 +53,7 @@
       "replacements": {
         "appealType": "protection",
         "outOfTimeDecisionType": "rejected",
+        "appealReferenceNumber": "PA/11111/2019",
         "isAdmin": "Yes",
         "appellantInDetention": "No",
         "appellantHasFixedAddress": "Yes",
