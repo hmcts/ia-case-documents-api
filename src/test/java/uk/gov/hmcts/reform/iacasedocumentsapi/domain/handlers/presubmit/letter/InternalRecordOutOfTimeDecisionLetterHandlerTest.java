@@ -103,7 +103,7 @@ class InternalRecordOutOfTimeDecisionLetterHandlerTest {
         public static List<InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario> builder() {
             List<InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
-                if (e.equals(Event.LIST_CASE)) {
+                if (e.equals(Event.RECORD_OUT_OF_TIME_DECISION)) {
                     testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
                     testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
                 } else {

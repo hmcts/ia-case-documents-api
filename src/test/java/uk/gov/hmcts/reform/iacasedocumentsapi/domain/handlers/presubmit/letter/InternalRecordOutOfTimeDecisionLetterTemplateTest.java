@@ -88,7 +88,7 @@ class InternalRecordOutOfTimeDecisionLetterTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
-        assertEquals(daysAfterSubmitAppeal, fieldValuesMap.get("fourWeeksAfterSubmitDate"));
+        assertEquals(systemDateProvider.dueDate(28), fieldValuesMap.get("fourWeeksAfterSubmitDate"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
