@@ -463,7 +463,7 @@ internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with
 internalOutOfTimeDecisionLetter.contentType:  application/pdf
 internalOutOfTimeDecisionLetter.fileExtension: PDF
 internalOutOfTimeDecisionLetter.fileName: "internal-out-of-time-decision-letter"
-internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Out_of_time_decision.docx}
+internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-record-out-time-decision-final.docx}
 
 internalOutOfTimeDecisionLetterWithAttachment.fileExtension: PDF
 internalOutOfTimeDecisionLetterWithAttachment.fileName: "internal-out-of-time-decision-letter-with-attachment"
