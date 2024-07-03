@@ -1,5 +1,5 @@
 {
-  "description": "RIA-8306 Internal detained record out of time decision - letter notification - in country",
+  "description": "RIA-8306 Internal detained record out of time decision - letter notification - out of country",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -15,16 +15,13 @@
           "appealReferenceNumber": "PA/11111/2019",
           "isAdmin": "Yes",
           "appellantInDetention": "No",
-          "appellantHasFixedAddress": "Yes",
-          "appellantInUk": "Yes",
-          "appellantAddress": {
-            "County": "",
-            "Country": "United Kingdom",
-            "PostCode": "NE21JX",
-            "PostTown": "Example Town",
-            "AddressLine1": "5",
-            "AddressLine2": "Example Street"
-          },
+          "appellantInUk": "No",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryAdminJ": "Spain"
+        },
           "notificationAttachmentDocuments": [
             {
               "id": "1",
@@ -43,8 +40,7 @@
           ]
         }
       }
-    }
-  },
+    },
   "expectation": {
     "status": 200,
     "errors": [],
@@ -56,16 +52,13 @@
         "appealReferenceNumber": "PA/11111/2019",
         "isAdmin": "Yes",
         "appellantInDetention": "No",
-        "appellantHasFixedAddress": "Yes",
-        "appellantInUk": "Yes",
-        "appellantAddress": {
-          "County": "",
-          "Country": "United Kingdom",
-          "PostCode": "NE21JX",
-          "PostTown": "Example Town",
-          "AddressLine1": "5",
-          "AddressLine2": "Example Street"
-        },
+        "appellantInUk": "No",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryAdminJ": "Spain"
+      },
         "notificationAttachmentDocuments": [
           {
             "id": "1",
@@ -85,4 +78,3 @@
       }
     }
   }
-}
