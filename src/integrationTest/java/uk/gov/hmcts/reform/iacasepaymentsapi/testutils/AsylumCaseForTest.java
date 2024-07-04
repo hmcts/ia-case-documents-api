@@ -5,7 +5,6 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinitio
 
 import java.util.Map;
 
-import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType.HU;
 import static uk.gov.hmcts.reform.iacasepaymentsapi.testutils.IaCasePaymentApiClient.PAYMENT_CASE_REFERENCE;
 
 public class AsylumCaseForTest implements Builder<AsylumCase> {
@@ -36,7 +35,6 @@ public class AsylumCaseForTest implements Builder<AsylumCase> {
     }
 
     public static AsylumCase generateValidPaymentStatusAsylumCase() {
-        return anAsylumCase().with(AsylumCaseDefinition.PAYMENT_REFERENCE, PAYMENT_CASE_REFERENCE)
-            .with(AsylumCaseDefinition.APPEAL_TYPE, HU).build();
+        return anAsylumCase().with(AsylumCaseDefinition.PAYMENT_REFERENCE, PAYMENT_CASE_REFERENCE).build();
     }
 }

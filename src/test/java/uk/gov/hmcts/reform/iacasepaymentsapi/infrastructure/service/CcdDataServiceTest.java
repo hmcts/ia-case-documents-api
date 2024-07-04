@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -14,9 +13,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.CaseMetaData;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDataContent;
 import uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.ccd.CaseDetails;
@@ -43,9 +40,13 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
+import static uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("unchecked")
 class CcdDataServiceTest {
     @Mock
     private CcdDataApi ccdDataApi;
@@ -63,6 +64,8 @@ class CcdDataServiceTest {
     private S2STokenValidator s2STokenValidator;
 
     private static final String TOKEN = "token";
+    private static final String BAD_REQUEST_ERROR_MESSAGE =
+        "400 BAD_REQUEST \"Payment reference not found for the caseId: 1234\"";
     private static final String BEARER_TOKEN = "Bearer token";
     private static final String SERVICE_TOKEN = "Bearer serviceToken";
     private static final String USER_ID = "userId";
@@ -73,8 +76,6 @@ class CcdDataServiceTest {
     private static final String EVENT_ID = "updatePaymentStatus";
     private static final String VALID_S2S_TOKEN = "VALID_S2S_TOKEN";
     private static final String INVALID_S2S_TOKEN = "INVALID_S2S_TOKEN";
-    private static final String BAD_REQUEST_ERROR_MESSAGE =
-        "400 BAD_REQUEST \"Payment reference not found for the caseId: 1234\"";
     private static final String APPEAL_REFERENCE_NUMBER_VALUE = "HU/50004/2021";
     private static final String PAYMENT_REFERENCE_KEY = "paymentReference";
     private static final String PAYMENT_REFERENCE_VALUE = "RC-1627-5070-9329-7815";
@@ -83,8 +84,7 @@ class CcdDataServiceTest {
     private static final String PAYMENT_STATUS_PAID_VALUE = "Paid";
     private static final String PAYMENT_STATUS_FAILED_VALUE = "Failed";
     private static final String CALLBACK_COMPLETED = "CALLBACK_COMPLETED";
-    private final CaseMetaData caseMetaDataSuccess = getCaseMetaData(PAYMENT_STATUS_SUCCESS_VALUE, PAYMENT_REFERENCE_VALUE);
-    private final CaseMetaData caseMetaDataPaid = getCaseMetaData(PAYMENT_STATUS_PAID_VALUE, PAYMENT_REFERENCE_VALUE);
+
     private CcdDataService ccdDataService;
 
     @BeforeEach
@@ -103,49 +103,26 @@ class CcdDataServiceTest {
     @Test
     void service_should_throw_on_unable_to_generate_system_user_token() {
         when(systemTokenGenerator.generate()).thenThrow(IdentityManagerResponseException.class);
-        assertThrows(IdentityManagerResponseException.class, () -> ccdDataService.updatePaymentStatus(
-            caseMetaDataSuccess, false, VALID_S2S_TOKEN)
-        );
+        assertThrows(IdentityManagerResponseException.class, () -> systemTokenGenerator.generate());
     }
 
     @Test
     void service_should_throw_on_unable_to_generate_s2s_token() {
         when(serviceAuthorization.generate()).thenThrow(IdentityManagerResponseException.class);
-        assertThrows(IdentityManagerResponseException.class, () -> ccdDataService.updatePaymentStatus(
-            caseMetaDataSuccess, false, VALID_S2S_TOKEN)
-        );
+        assertThrows(IdentityManagerResponseException.class, () -> serviceAuthorization.generate());
     }
-
 
     @Test
     void service_should_throw_on_unable_to_fetch_system_user_id() {
         when(systemUserProvider.getSystemUserId(BEARER_TOKEN)).thenThrow(IdentityManagerResponseException.class);
+        CaseMetaData caseMetaData = getCaseMetaData(PAYMENT_STATUS_SUCCESS_VALUE, PAYMENT_REFERENCE_VALUE);
         assertThrows(IdentityManagerResponseException.class, () -> ccdDataService.updatePaymentStatus(
-            caseMetaDataSuccess, false, VALID_S2S_TOKEN)
-        );
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-        "PAYMENT_STATUS_SUCCESS_VALUE, PAYMENT_REFERENCE_VALUE, false",
-        "PAYMENT_STATUS_PAID_VALUE, PAYMENT_REFERENCE_VALUE, true"
-    })
-    void service_should_update_the_payment_status_for_the_case_id(String paymentStatus, String paymentReference, boolean isWaysToPay) {
-        CaseDataContent caseDataContent = getCaseDataContent(paymentStatus);
-        setupEventAndSubmitMocks(paymentReference, caseDataContent);
-        CaseMetaData caseMetaData = getCaseMetaData(paymentStatus, paymentReference);
-        SubmitEventDetails submitEventDetails =
-            assertDoesNotThrow(() -> ccdDataService.updatePaymentStatus(
-                caseMetaData, isWaysToPay, VALID_S2S_TOKEN));
-        assertPaymentDetails(submitEventDetails);
-        verifyInteractionsWithMocks(caseDataContent);
+            caseMetaData, false, VALID_S2S_TOKEN));
     }
 
     @Test
     void service_should_error_on_incorrect_payment_reference() {
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_REFERENCE, String.class))
-            .thenReturn(Optional.of(PAYMENT_REFERENCE_VALUE));
-
+        when(asylumCase.read(PAYMENT_REFERENCE, String.class)).thenReturn(Optional.of(PAYMENT_REFERENCE_VALUE));
         CaseDataContent caseDataContent = getCaseDataContent(PAYMENT_STATUS_SUCCESS_VALUE);
         CaseMetaData caseMetaData = getCaseMetaData(PAYMENT_STATUS_SUCCESS_VALUE, INCORRECT_PAYMENT_REFERENCE_VALUE);
         setupEventAndSubmitMocks(PAYMENT_REFERENCE_VALUE, caseDataContent);
@@ -166,20 +143,23 @@ class CcdDataServiceTest {
                 BEARER_TOKEN, SERVICE_TOKEN, USER_ID,
                 JURISDICTION, CASE_TYPE, String.valueOf(CASE_ID), EVENT_ID
             )).thenThrow(FeignException.class);
+        CaseMetaData caseMetaData = getCaseMetaData(PAYMENT_STATUS_SUCCESS_VALUE, PAYMENT_REFERENCE_VALUE);
         assertThrows(FeignException.class, () -> ccdDataService.updatePaymentStatus(
-            caseMetaDataSuccess, false, VALID_S2S_TOKEN));
+            caseMetaData, false, VALID_S2S_TOKEN));
         verify(s2STokenValidator).checkIfServiceIsAllowed(VALID_S2S_TOKEN);
     }
 
-    @Test
-    void service_should_update_payment_if_is_waysToPay() {
-        CaseDataContent caseDataContent = getCaseDataContent(PAYMENT_STATUS_PAID_VALUE);
-        setupEventAndSubmitMocks(PAYMENT_REFERENCE_VALUE, caseDataContent);
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_REFERENCE, String.class)).thenReturn(Optional.empty());
-
+    @ParameterizedTest
+    @CsvSource({
+        "PAYMENT_STATUS_SUCCESS_VALUE, PAYMENT_REFERENCE_VALUE, false",
+        "PAYMENT_STATUS_PAID_VALUE, PAYMENT_REFERENCE_VALUE, true"
+    })
+    void service_should_update_the_payment_status_for_the_case_id(String paymentStatus, String paymentReference, boolean isWaysToPay) {
+        CaseDataContent caseDataContent = getCaseDataContent(paymentStatus);
+        setupEventAndSubmitMocks(paymentReference, caseDataContent);
         SubmitEventDetails submitEventDetails =
             assertDoesNotThrow(() -> ccdDataService.updatePaymentStatus(
-                caseMetaDataPaid, true, VALID_S2S_TOKEN));
+                getCaseMetaData(paymentStatus, paymentReference), isWaysToPay, VALID_S2S_TOKEN));
         assertPaymentDetails(submitEventDetails);
         verifyInteractionsWithMocks(caseDataContent);
     }
@@ -187,108 +167,10 @@ class CcdDataServiceTest {
     @Test
     void service_should_throw_exception_from_invalid_s2s_token() {
         doThrow(AccessDeniedException.class).when(s2STokenValidator).checkIfServiceIsAllowed(INVALID_S2S_TOKEN);
+        CaseMetaData caseMetaData = getCaseMetaData(PAYMENT_STATUS_SUCCESS_VALUE, PAYMENT_REFERENCE_VALUE);
         assertThrows(AccessDeniedException.class, () -> ccdDataService.updatePaymentStatus(
-            caseMetaDataSuccess, false, INVALID_S2S_TOKEN));
+            caseMetaData, false, INVALID_S2S_TOKEN));
         verify(s2STokenValidator).checkIfServiceIsAllowed(INVALID_S2S_TOKEN);
-    }
-
-    @Test
-    void service_should_throw_exception_if_no_appeal_type() {
-        CaseDataContent caseDataContent = getCaseDataContent(PAYMENT_STATUS_PAID_VALUE);
-        setupEventAndSubmitMocks(PAYMENT_REFERENCE_VALUE, caseDataContent);
-        when(asylumCase.read(AsylumCaseDefinition.APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_REFERENCE, String.class)).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () -> ccdDataService.updatePaymentStatus(
-            caseMetaDataSuccess, true, VALID_S2S_TOKEN),
-                     "No appeal type in case data for case: " + CASE_ID
-        );
-    }
-
-    @ParameterizedTest
-    @EnumSource(State.class)
-    void service_should_not_throw_exception_if_validation_passes_PA_pay_later(State state) {
-        CaseDataContent caseDataContent = getCaseDataContent(PAYMENT_STATUS_PAID_VALUE);
-        setupEventAndSubmitMocks(PAYMENT_REFERENCE_VALUE, caseDataContent);
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_REFERENCE, String.class)).thenReturn(Optional.empty());
-        when(caseDetails.getState()).thenReturn(state);
-        when(asylumCase.read(
-            AsylumCaseDefinition.APPEAL_TYPE,
-            AppealType.class
-        )).thenReturn(Optional.of(AppealType.PA));
-        when(asylumCase.read(AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of(
-            "payLater"));
-        when(asylumCase.read(
-            AsylumCaseDefinition.PA_APPEAL_TYPE_AIP_PAYMENT_OPTION,
-            String.class
-        )).thenReturn(Optional.of("none"));
-        assertDoesNotThrow(() -> ccdDataService.updatePaymentStatus(
-            caseMetaDataPaid, true, VALID_S2S_TOKEN));
-
-        when(asylumCase.read(AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of(
-            "none"));
-        when(asylumCase.read(
-            AsylumCaseDefinition.PA_APPEAL_TYPE_AIP_PAYMENT_OPTION,
-            String.class
-        )).thenReturn(Optional.of("payLater"));
-        assertDoesNotThrow(() -> ccdDataService.updatePaymentStatus(
-            caseMetaDataPaid, true, VALID_S2S_TOKEN));
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = State.class, names = {
-        "APPEAL_STARTED",
-        "APPEAL_SUBMITTED",
-        "APPEAL_STARTED_BY_ADMIN",
-        "PENDING_PAYMENT"
-    })
-    void service_should_not_throw_exception_if_validation_passes_non_PA_pay_later(State state) {
-        CaseDataContent caseDataContent = getCaseDataContent(PAYMENT_STATUS_PAID_VALUE);
-        setupEventAndSubmitMocks(PAYMENT_REFERENCE_VALUE, caseDataContent);
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_REFERENCE, String.class)).thenReturn(Optional.empty());
-        for (AppealType appealType : AppealType.values()) {
-            when(caseDetails.getState()).thenReturn(state);
-            when(asylumCase.read(
-                AsylumCaseDefinition.APPEAL_TYPE,
-                AppealType.class
-            )).thenReturn(Optional.of(appealType));
-            when(asylumCase.read(
-                AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION,
-                String.class
-            )).thenReturn(Optional.of("none"));
-            when(asylumCase.read(AsylumCaseDefinition.PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class)).thenReturn(
-                Optional.of("none"));
-            assertDoesNotThrow(() -> ccdDataService.updatePaymentStatus(
-                caseMetaDataPaid, true, VALID_S2S_TOKEN));
-        }
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = State.class, names = {
-        "APPEAL_STARTED",
-        "APPEAL_SUBMITTED",
-        "APPEAL_STARTED_BY_ADMIN",
-        "PENDING_PAYMENT"
-    }, mode = EnumSource.Mode.EXCLUDE)
-    void service_should_throw_exception_if_validation_fails(State state) {
-        CaseDataContent caseDataContent = getCaseDataContent(PAYMENT_STATUS_PAID_VALUE);
-        setupEventAndSubmitMocks(PAYMENT_REFERENCE_VALUE, caseDataContent);
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_REFERENCE, String.class)).thenReturn(Optional.empty());
-        for (AppealType appealType : AppealType.values()) {
-            when(caseDetails.getState()).thenReturn(state);
-            when(asylumCase.read(
-                AsylumCaseDefinition.APPEAL_TYPE,
-                AppealType.class
-            )).thenReturn(Optional.of(appealType));
-            when(asylumCase.read(AsylumCaseDefinition.PA_APPEAL_TYPE_PAYMENT_OPTION, String.class))
-                .thenReturn(Optional.of("none"));
-            when(asylumCase.read(AsylumCaseDefinition.PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class))
-                .thenReturn(Optional.of("none"));
-            assertThrows(IllegalStateException.class, () -> ccdDataService.updatePaymentStatus(
-                caseMetaDataPaid, true, VALID_S2S_TOKEN),
-                         appealType.getValue() + " appeal payment should not be made at "
-                             + state.toString() + " state for case: " + CASE_ID
-            );
-        }
     }
 
     private StartEventDetails getStartEventResponse(String paymentReference) {
@@ -296,14 +178,10 @@ class CcdDataServiceTest {
         when(caseDetails.getState()).thenReturn(State.APPEAL_SUBMITTED);
         when(caseDetails.getJurisdiction()).thenReturn(JURISDICTION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class))
-            .thenReturn(Optional.of(APPEAL_REFERENCE_NUMBER_VALUE));
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_REFERENCE, String.class))
-            .thenReturn(Optional.of(paymentReference));
-        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, String.class))
-            .thenReturn(Optional.of(PAYMENT_STATUS_FAILED_VALUE));
-        when(asylumCase.read(AsylumCaseDefinition.APPEAL_TYPE, AppealType.class))
-            .thenReturn(Optional.of(AppealType.HU));
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(
+            APPEAL_REFERENCE_NUMBER_VALUE));
+        when(asylumCase.read(PAYMENT_REFERENCE, String.class)).thenReturn(Optional.of(paymentReference));
+        when(asylumCase.read(PAYMENT_STATUS, String.class)).thenReturn(Optional.of(PAYMENT_STATUS_FAILED_VALUE));
         return new StartEventDetails(Event.UPDATE_PAYMENT_STATUS, EVENT_TOKEN, caseDetails);
     }
 
@@ -311,7 +189,7 @@ class CcdDataServiceTest {
         Map<String, Object> data = new HashMap<>();
         data.put("appealReferenceNumber", APPEAL_REFERENCE_NUMBER_VALUE);
         data.put(PAYMENT_REFERENCE_KEY, PAYMENT_REFERENCE_VALUE);
-        data.put(AsylumCaseDefinition.PAYMENT_STATUS.value(), PAYMENT_STATUS_SUCCESS_VALUE);
+        data.put(PAYMENT_STATUS.value(), PAYMENT_STATUS_SUCCESS_VALUE);
         return new SubmitEventDetails(CASE_ID, JURISDICTION, State.APPEAL_SUBMITTED, data,
                                       200, CALLBACK_COMPLETED
         );
@@ -319,7 +197,7 @@ class CcdDataServiceTest {
 
     private CaseDataContent getCaseDataContent(String paymentStatus) {
         Map<String, Object> data = new HashMap<>();
-        data.put(AsylumCaseDefinition.PAYMENT_STATUS.value(), paymentStatus);
+        data.put(PAYMENT_STATUS.value(), paymentStatus);
         Map<String, Object> eventData = new HashMap<>();
         eventData.put("id", Event.UPDATE_PAYMENT_STATUS.toString());
         return new CaseDataContent(String.valueOf(CASE_ID), data, eventData, EVENT_TOKEN, true);
@@ -329,12 +207,6 @@ class CcdDataServiceTest {
         return new CaseMetaData(Event.UPDATE_PAYMENT_STATUS, JURISDICTION, CASE_TYPE, CASE_ID,
                                 paymentStatus, paymentReference
         );
-    }
-
-    private void setupCommonMocks() {
-        when(systemTokenGenerator.generate()).thenReturn(TOKEN);
-        when(serviceAuthorization.generate()).thenReturn(SERVICE_TOKEN);
-        when(systemUserProvider.getSystemUserId(BEARER_TOKEN)).thenReturn(USER_ID);
     }
 
     private void verifyInteractionsWithMocks(CaseDataContent caseDataContent) {
@@ -356,6 +228,12 @@ class CcdDataServiceTest {
         when(ccdDataApi.submitEvent(BEARER_TOKEN, SERVICE_TOKEN, String.valueOf(CASE_ID),
                                     caseDataContent
         )).thenReturn(getSubmitEventResponse());
+    }
+
+    private void setupCommonMocks() {
+        when(systemTokenGenerator.generate()).thenReturn(TOKEN);
+        when(serviceAuthorization.generate()).thenReturn(SERVICE_TOKEN);
+        when(systemUserProvider.getSystemUserId(BEARER_TOKEN)).thenReturn(USER_ID);
     }
 
     private static void assertPaymentDetails(SubmitEventDetails submitEventDetails) {
