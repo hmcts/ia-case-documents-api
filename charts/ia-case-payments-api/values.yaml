@@ -11,6 +11,7 @@ java:
     PAY_CALLBACK_URL: "http://ia-case-payments-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/service-request-update"
     PROF_REF_DATA_URL: "http://rd-professional-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     CCD_URL: "http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+    ENABLE_DEBUG_PAYMENT_LOGS: false
   keyVaults:
     ia:
       resourceGroup: ia

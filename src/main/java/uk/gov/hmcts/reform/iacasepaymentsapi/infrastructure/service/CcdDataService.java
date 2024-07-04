@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,17 +35,20 @@ public class CcdDataService {
     private final AuthTokenGenerator serviceAuthorization;
 
     private final S2STokenValidator s2sTokenValidator;
+    private final boolean debugLoggingEnabled;
 
     public CcdDataService(CcdDataApi ccdDataApi,
                           SystemTokenGenerator systemTokenGenerator,
                           SystemUserProvider systemUserProvider,
                           AuthTokenGenerator serviceAuthorization,
-                          S2STokenValidator s2STokenValidator) {
+                          S2STokenValidator s2STokenValidator,
+                          @Value("${ia.payment.debug.logs.enabled}") boolean debugLoggingEnabled) {
         this.ccdDataApi = ccdDataApi;
         this.systemTokenGenerator = systemTokenGenerator;
         this.systemUserProvider = systemUserProvider;
         this.serviceAuthorization = serviceAuthorization;
         this.s2sTokenValidator = s2STokenValidator;
+        this.debugLoggingEnabled = debugLoggingEnabled;
     }
 
     public SubmitEventDetails updatePaymentStatus(CaseMetaData caseMetaData, boolean isWaysToPay, String s2sAuthToken) {
@@ -77,6 +81,11 @@ public class CcdDataService {
         // Get case details by Id
         final StartEventDetails startEventDetails = getCase(userToken, s2sToken, uid, jurisdiction, caseType, caseId);
         log.info("Case details found for the caseId: {}", caseId);
+
+        if (debugLoggingEnabled) {
+            log.info("Case details found for the caseId: {}, StartEventResponse: {}",
+                     caseId, startEventDetails.getCaseDetails().getCaseData());
+        }
 
         if (!isPaymentReferenceExists(startEventDetails.getCaseDetails().getCaseData(),
                                       caseMetaData.getPaymentReference()) && !isWaysToPay) {

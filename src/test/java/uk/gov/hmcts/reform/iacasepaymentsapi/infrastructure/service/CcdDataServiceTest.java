@@ -95,7 +95,8 @@ class CcdDataServiceTest {
                 systemTokenGenerator,
                 systemUserProvider,
                 serviceAuthorization,
-                s2STokenValidator
+                s2STokenValidator,
+                false
             );
         setupCommonMocks();
     }
