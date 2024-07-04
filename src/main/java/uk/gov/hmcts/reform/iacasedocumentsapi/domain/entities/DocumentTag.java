@@ -86,8 +86,6 @@ public enum DocumentTag {
     INTERNAL_CASE_LISTED_LETTER("internalCaseListedLetter", CaseType.ASYLUM),
     INTERNAL_CASE_LISTED_LETTER_BUNDLE("internalCaseListedLetterBundle", CaseType.ASYLUM),
     APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
-    INTERNAL_ADJOURN_WITHOUT_DATE_LETTER("internalAdjournWithoutDateLetter", CaseType.ASYLUM),
-    INTERNAL_ADJOURN_WITHOUT_DATE_LETTER_BUNDLE("internalAdjournWithoutDateLetterBundle", CaseType.ASYLUM),
     INTERNAL_OUT_OF_TIME_DECISION_LETTER("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
     INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
 
