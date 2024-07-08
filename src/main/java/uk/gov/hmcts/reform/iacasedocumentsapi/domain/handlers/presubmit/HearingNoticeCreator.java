@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_FLAG_SET_ASIDE_REHEARD_EXISTS;
@@ -80,7 +81,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && List.of(Event.LIST_CASE, Event.ADJOURN_HEARING_WITHOUT_DATE).contains(callback.getEvent());
+            && asList(Event.LIST_CASE).contains(callback.getEvent());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -127,31 +128,15 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             );
 
             if (isInternalNonDetainedCase(asylumCase)) {
-                appendListedOrAdjournedLetter(asylumCase, hearingNotice, callback.getEvent());
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    hearingNotice,
+                    LETTER_NOTIFICATION_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LETTER
+                );
             }
         }
-
         return new PreSubmitCallbackResponse<>(asylumCase);
-    }
-
-    private void appendListedOrAdjournedLetter(AsylumCase asylumCase, Document hearingNotice, Event event) {
-        if (event == Event.LIST_CASE) {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                hearingNotice,
-                LETTER_NOTIFICATION_DOCUMENTS,
-                DocumentTag.INTERNAL_CASE_LISTED_LETTER
-            );
-        }
-
-        if (event == Event.ADJOURN_HEARING_WITHOUT_DATE) {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                hearingNotice,
-                LETTER_NOTIFICATION_DOCUMENTS,
-                DocumentTag.INTERNAL_ADJOURN_WITHOUT_DATE_LETTER
-            );
-        }
     }
 
     private void appendReheardHearingDocuments(AsylumCase asylumCase, Document hearingNotice) {

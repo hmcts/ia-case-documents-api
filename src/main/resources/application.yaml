@@ -476,14 +476,6 @@ internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
 
-internalAdjournWithoutDateLetter.contentType:  application/pdf
-internalAdjournWithoutDateLetter.fileExtension: PDF
-internalAdjournWithoutDateLetter.fileName: "internal-adjourn-without-date-letter"
-internalAdjournWithoutDateLetter.templateName: ${INTERNAL_ADJOURN_WITHOUT_DATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Adjourned-Without-Date.docx}
-
-internalAdjournWithoutDateLetterWithAttachment.fileExtension: PDF
-internalAdjournWithoutDateLetterWithAttachment.fileName: "internal-adjourn-without-date-letter-with-attachment"
-
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
 bailNoticeOfHearing.fileName: "hearing-notice"
