@@ -119,7 +119,7 @@ public class InternalEditCaseListingLetterTemplateTest {
         assertEquals(postTown, templateFieldValues.get("address_line_4"));
         assertEquals(postCode, templateFieldValues.get("address_line_5"));
         assertEquals("20 December 2024", templateFieldValues.get("hearingDate"));
-        assertEquals("12:34 pm", templateFieldValues.get("hearingTime"));
+        assertEquals("12:34 PM", templateFieldValues.get("hearingTime"));
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
     }
 
@@ -141,7 +141,7 @@ public class InternalEditCaseListingLetterTemplateTest {
         Assert.assertEquals(oocAddressLine3, templateFieldValues.get("address_line_3"));
         Assert.assertEquals(oocAddressCountry, templateFieldValues.get("address_line_4"));
         assertEquals("20 December 2024", templateFieldValues.get("hearingDate"));
-        assertEquals("12:34 pm", templateFieldValues.get("hearingTime"));
+        assertEquals("12:34 PM", templateFieldValues.get("hearingTime"));
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
     }
 
