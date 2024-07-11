@@ -154,6 +154,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             LATEST_DECISION_AND_REASONS_DOCUMENTS, REHEARD_DECISION_REASONS_COLLECTION);
 
         Optional<List<IdValue<Bundle>>> maybeCaseBundles = responseData.read(AsylumCaseDefinition.CASE_BUNDLES);
+
         asylumCase.write(AsylumCaseDefinition.CASE_BUNDLES, maybeCaseBundles);
 
         final List<Bundle> caseBundles = maybeCaseBundles
@@ -166,8 +167,26 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             throw new IllegalStateException("case bundles size is not 1 and is : " + caseBundles.size());
         }
 
+        Bundle failedBundle = new Bundle(
+            caseBundles.get(0).getId(),
+            caseBundles.get(0).getTitle(),
+            caseBundles.get(0).getDescription(),
+            caseBundles.get(0).getEligibleForStitching(),
+            caseBundles.get(0).getDocuments(),
+            Optional.of("FAILED"),
+            caseBundles.get(0).getStitchedDocument(),
+            caseBundles.get(0).getHasCoversheets(),
+            caseBundles.get(0).getHasTableOfContents(),
+            caseBundles.get(0).getFilename()
+        );
+
+        maybeCaseBundles = Optional.of(List.of(
+            new IdValue<>("", failedBundle)));
+
+        asylumCase.write(AsylumCaseDefinition.CASE_BUNDLES, maybeCaseBundles);
+
         //stitchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
-        final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
+        final String stitchStatus = "FAILED";
 
         asylumCase.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
