@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
@@ -663,6 +664,9 @@ public enum AsylumCaseDefinition {
 
     APPELLANT_IN_UK(
         "appellantInUk", new TypeReference<YesOrNo>() {}),
+
+    OOC_APPEAL_ADMIN_J(
+        "oocAppealAdminJ", new TypeReference<OutOfCountryCircumstances>() {}),
     ;
 
     private final String value;
