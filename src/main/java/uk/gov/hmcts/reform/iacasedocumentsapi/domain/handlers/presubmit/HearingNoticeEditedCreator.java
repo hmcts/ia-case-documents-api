@@ -5,6 +5,8 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -134,6 +136,16 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 hearingNoticeEdited,
                 HEARING_DOCUMENTS,
                 DocumentTag.HEARING_NOTICE
+            );
+        }
+
+        if (isInternalNonDetainedCase(asylumCase)
+            && hasAppellantAddressInCountryOrOoc(asylumCase)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNoticeEdited,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
             );
         }
     }
