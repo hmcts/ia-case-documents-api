@@ -460,6 +460,14 @@ internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-I
 internalEndAppealLetterWithAttachment.fileExtension: PDF
 internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
 
+internalEditCaseListingLetter.contentType:  application/pdf
+internalEditCaseListingLetter.fileExtension: PDF
+internalEditCaseListingLetter.fileName: "internal-edit-case-listing-letter"
+internalEditCaseListingLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+
+internalEditCaseListingLetterWithAttachment.fileExtension: PDF
+internalEditCaseListingLetterWithAttachment.fileName: "internal-edit-case-listing-letter-with-attachment"
+
 internalOutOfTimeDecisionLetter.contentType:  application/pdf
 internalOutOfTimeDecisionLetter.fileExtension: PDF
 internalOutOfTimeDecisionLetter.fileName: "internal-out-of-time-decision-letter"
