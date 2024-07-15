@@ -1,9 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static java.util.stream.Collectors.joining;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances.ENTRY_CLEARANCE_DECISION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances.LEAVE_UK;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInUk;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -11,6 +15,7 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -24,6 +29,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
+    protected static final String CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE = "Circumstances of the appellant's out of country appeal";
+    protected static final String THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION = "The appellant is appealing an entry clearance decision";
+    protected static final String THE_APPELLANT_HAD_TO_LEAVE_THE_UK_IN_ORDER_TO_APPEAL = "The appellant had to leave the UK in order to appeal";
 
     private final String templateName;
     private final StringProvider stringProvider;
@@ -87,8 +95,19 @@ public class AppealSubmissionTemplate implements DocumentTemplate<AsylumCase> {
         if (asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
 
             Optional<OutOfCountryDecisionType> maybeOutOfCountryDecisionType = asylumCase.read(OUT_OF_COUNTRY_DECISION_TYPE, OutOfCountryDecisionType.class);
+            Optional<OutOfCountryCircumstances> maybeOutOfCountryCircumstances = asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class);
 
-            if (maybeOutOfCountryDecisionType.isPresent()) {
+            if (maybeOutOfCountryCircumstances.isPresent() && isInternalCase(asylumCase) && !isAppellantInUk(asylumCase)) {
+                OutOfCountryCircumstances outOfCountryCircumstances = maybeOutOfCountryCircumstances.get();
+                if (outOfCountryCircumstances.equals(ENTRY_CLEARANCE_DECISION)) {
+                    fieldValues.put("outOfCountryDecisionTypeTitle", CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE);
+                    fieldValues.put("outOfCountryDecisionType", THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION);
+                } else if (outOfCountryCircumstances.equals(LEAVE_UK)) {
+                    fieldValues.put("outOfCountryDecisionTypeTitle", CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE);
+                    fieldValues.put("outOfCountryDecisionType", THE_APPELLANT_HAD_TO_LEAVE_THE_UK_IN_ORDER_TO_APPEAL);
+                }
+            } else if (maybeOutOfCountryDecisionType.isPresent()) {
+                fieldValues.put("outOfCountryDecisionTypeTitle", "Out of country decision type");
 
                 OutOfCountryDecisionType decisionType = maybeOutOfCountryDecisionType.get();
                 fieldValues.put("outOfCountryDecisionType", maybeOutOfCountryDecisionType.get().getDescription());
