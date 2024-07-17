@@ -197,7 +197,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
                 maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
-        verify(asylumCase, times(1)).write(STITCHING_STATUS, "FAILED");
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
 
@@ -274,7 +274,7 @@ class CustomiseHearingBundleHandlerTest {
             maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
             "PA 50002 2020-" + appellantFamilyName + "-amended-1");
-        verify(asylumCase, times(1)).write(STITCHING_STATUS, "FAILED");
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
 
@@ -426,7 +426,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
             + appellantFamilyName + ((event == Event.GENERATE_AMENDED_HEARING_BUNDLE) ? "-amended-1" : ""));
-        verify(asylumCase, times(1)).write(STITCHING_STATUS, "FAILED");
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
     @ParameterizedTest
@@ -607,7 +607,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-remitted-reheard-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
-        verify(asylumCase, times(1)).write(STITCHING_STATUS, "FAILED");
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
 
@@ -859,7 +859,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
             + appellantFamilyName + ((event == Event.GENERATE_AMENDED_HEARING_BUNDLE) ? "-amended-1" : ""));
-        verify(asylumCase, times(1)).write(STITCHING_STATUS, "FAILED");
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
     //When the reheard case is not through remitted path, check the reheardHearingDocuments and add the updated document list in the
