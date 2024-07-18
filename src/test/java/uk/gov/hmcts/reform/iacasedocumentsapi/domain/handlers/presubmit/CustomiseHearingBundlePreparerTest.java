@@ -726,6 +726,8 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE, "test")));
         when(asylumCase.read(HEARING_DOCUMENTS))
             .thenReturn(Optional.of(hearingDocumentList));
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocumentList));
 
         customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
         verify(appender, times(0)).append(any(DocumentWithDescription.class), anyList());
@@ -735,6 +737,8 @@ class CustomiseHearingBundlePreparerTest {
                 new IdValue<>("2", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE, "test")));
 
         when(asylumCase.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocumentList));
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS))
             .thenReturn(Optional.of(hearingDocumentList));
 
         customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);

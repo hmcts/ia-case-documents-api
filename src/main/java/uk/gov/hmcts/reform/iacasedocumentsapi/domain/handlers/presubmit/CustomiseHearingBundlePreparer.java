@@ -204,7 +204,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         List<IdValue<DocumentWithDescription>> customDocuments = new ArrayList<>();
 
         for (IdValue<DocumentWithMetadata> documentWithMetadata : documents) {
-            if (sourceField == HEARING_DOCUMENTS &&
+            if ((sourceField == HEARING_DOCUMENTS || sourceField == REHEARD_HEARING_DOCUMENTS) &&
                 documentWithMetadata.getValue().getTag() == DocumentTag.HEARING_BUNDLE) {
                 continue;
             }
