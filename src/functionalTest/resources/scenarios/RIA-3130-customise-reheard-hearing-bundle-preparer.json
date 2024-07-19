@@ -351,6 +351,17 @@
         ],
         "customReheardHearingDocs": [
           {
+            "id": "3",
+            "value": {
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "description": ""
+            }
+          },
+          {
             "id": "2",
             "value": {
               "document": {
