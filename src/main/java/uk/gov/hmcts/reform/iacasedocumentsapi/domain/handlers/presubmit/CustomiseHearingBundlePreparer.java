@@ -106,7 +106,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             RemittalDocument remittalDocument = allRemittalDocuments.get(0).getValue();
             DocumentWithDescription remittalDocWithDesc = getDocumentWithDescFromMetaData(remittalDocument.getDecisionDocument());
 
-            List<IdValue<DocumentWithDescription>> remittalOtherDocsWithDesc = getDocumentWithDescListFromMetaData(remittalDocument.getOtherRemittalDocs());
+            List<IdValue<DocumentWithDescription>> remittalOtherDocsWithDesc = getDocumentWithDescListFromMetaDataWithoutBundles(remittalDocument.getOtherRemittalDocs());
 
             return documentWithDescriptionAppender
                 .append(remittalDocWithDesc, remittalOtherDocsWithDesc);
@@ -128,6 +128,17 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         return listDocumentWithDesc;
     }
 
+    private List<IdValue<DocumentWithDescription>> getDocumentWithDescListFromMetaDataWithoutBundles(List<IdValue<DocumentWithMetadata>> listDocumentWithMetaData) {
+        List<IdValue<DocumentWithDescription>> listDocumentWithDesc = new ArrayList<>();
+        for (IdValue<DocumentWithMetadata> documentWithMetadataIdValue : listDocumentWithMetaData) {
+            if (documentWithMetadataIdValue.getValue().getTag() != DocumentTag.HEARING_BUNDLE) {
+                listDocumentWithDesc = documentWithDescriptionAppender.append(
+                    getDocumentWithDescFromMetaData(documentWithMetadataIdValue.getValue()), listDocumentWithDesc);
+            }
+        }
+        return listDocumentWithDesc;
+    }
+
     private List<IdValue<DocumentWithDescription>> fetchLatestReheardDocuments(AsylumCase asylumCase) {
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
             asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
@@ -142,7 +153,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingReheardDocumentsPreSetAside =
             asylumCase.read(REHEARD_HEARING_DOCUMENTS);
         if (maybeExistingReheardDocumentsPreSetAside.isPresent()) {
-            List<IdValue<DocumentWithDescription>> existingReheardDocumentsPreSetAside = getDocumentWithDescListFromMetaData(maybeExistingReheardDocumentsPreSetAside.get());
+            List<IdValue<DocumentWithDescription>> existingReheardDocumentsPreSetAside = getDocumentWithDescListFromMetaDataWithoutBundles(maybeExistingReheardDocumentsPreSetAside.get());
             for (IdValue<DocumentWithDescription> document : reheardHearingDocsInCollection) {
                 existingReheardDocumentsPreSetAside = documentWithDescriptionAppender.append(document.getValue(), existingReheardDocumentsPreSetAside);
             }
