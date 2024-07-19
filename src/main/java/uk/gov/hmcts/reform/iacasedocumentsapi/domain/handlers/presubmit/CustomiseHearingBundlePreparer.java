@@ -147,7 +147,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         List<IdValue<DocumentWithDescription>> reheardHearingDocsInCollection = emptyList();
         if (!allReheardHearingDocuments.isEmpty()) {
-            reheardHearingDocsInCollection = getDocumentWithDescListFromMetaData(allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs());
+            reheardHearingDocsInCollection = getDocumentWithDescListFromMetaDataWithoutBundles(allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs());
         }
         // Also if there were any documents prior to set-aside release in REHEARD_HEARING_DOCUMENTS take them into account as well.
         Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingReheardDocumentsPreSetAside =
