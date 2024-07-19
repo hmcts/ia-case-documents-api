@@ -562,7 +562,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(appellantAddendumEvidenceList)));
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
-
+        when(document.getDocumentBinaryUrl()).thenReturn("some-binary-url");
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -870,9 +870,8 @@ class CustomiseHearingBundleHandlerTest {
         when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
-
+        when(document.getDocumentBinaryUrl()).thenReturn("some-binary-url");
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-
         IdValue<DocumentWithDescription> reheardHearingDocs =
             new IdValue<>("1", createDocumentWithDescription());
         List<IdValue<ReheardHearingDocuments>> reheardHearingDocuments = buildReheardDocuments();

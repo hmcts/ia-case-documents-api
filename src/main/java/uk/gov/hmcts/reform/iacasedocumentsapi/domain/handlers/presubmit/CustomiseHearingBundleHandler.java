@@ -146,7 +146,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         restoreAddendumEvidence(asylumCase, asylumCaseCopy,isReheardCase);
 
         restoreRemittalDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath);
-        //for cases which progressed to finalBundling pre set-aside release,
+        // for cases which progressed to finalBundling pre set-aside release,
         // we want that all the documents should be restored in the collection field
         restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath
             ? LATEST_REHEARD_HEARING_DOCUMENTS : REHEARD_HEARING_DOCUMENTS, REHEARD_HEARING_DOCUMENTS_COLLECTION);
@@ -378,6 +378,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         for (IdValue<DocumentWithMetadata> documentWithMetadata : missingDocuments) {
             currentList = documentWithMetadataAppender.append(documentWithMetadata.getValue(), currentList);
         }
+        restoreDocumentMetaData(currentList, existingList);
         return currentList;
     }
 
@@ -398,6 +399,46 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         return found;
     }
+
+    private IdValue<DocumentWithMetadata> getExistingDocument(
+        List<IdValue<DocumentWithMetadata>> existingDocuments,
+        IdValue<DocumentWithMetadata> documentWithMetadata
+    ) {
+        for (IdValue<DocumentWithMetadata> doc : existingDocuments) {
+            Document legalDocument = doc.getValue().getDocument();
+            Document document = documentWithMetadata.getValue().getDocument();
+            if (legalDocument.getDocumentBinaryUrl().equals(document.getDocumentBinaryUrl())) {
+                return doc;
+            }
+        }
+        return null;
+    }
+
+    private void restoreDocumentMetaData(List<IdValue<DocumentWithMetadata>> finalCurrentList, List<IdValue<DocumentWithMetadata>> existingList) {
+        for (int i = 0; i < finalCurrentList.size(); i++) {
+            IdValue<DocumentWithMetadata> currentDocument = finalCurrentList.get(i);
+
+            if (contains(existingList, currentDocument)) {
+                IdValue<DocumentWithMetadata> existingDocument = getExistingDocument(existingList, currentDocument);
+
+                if (existingDocument != null) {
+                    DocumentWithMetadata alteredDoc = new DocumentWithMetadata(
+                        currentDocument.getValue().getDocument(),
+                        currentDocument.getValue().getDescription(),
+                        existingDocument.getValue().getDateUploaded(),
+                        existingDocument.getValue().getTag(),
+                        existingDocument.getValue().getSuppliedBy(),
+                        existingDocument.getValue().getUploadedBy()
+                    );
+
+                    currentDocument = new IdValue<>(currentDocument.getId(), alteredDoc);
+
+                    finalCurrentList.set(i, currentDocument);
+                }
+            }
+        }
+    }
+
 
     private List<AsylumCaseDefinition> getFieldDefinitions(boolean isReheardCase, boolean isOrWasAda) {
         List<AsylumCaseDefinition> fieldDefnList;
