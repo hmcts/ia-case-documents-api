@@ -533,7 +533,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                         if (maybeDocumentTag != DocumentTag.HEARING_BUNDLE) {
                             newDocumentWithMetadata = new DocumentWithMetadata(document,
                                 documentWithDescription.getValue().getDescription().orElse(""),
-                                dateProvider.now().toString(),
+                                maybeDocument.get().getValue().getDateUploaded(),
                                 maybeDocumentTag,
                                 "");
                         }
