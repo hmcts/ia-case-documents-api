@@ -36,6 +36,8 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: Immigration & Asylum case documents API
+  config:
+    import: "optional:configtree:/mnt/secrets/ia/"    
   jackson.date-format: yyyy-MM-dd
   security:
     oauth2:
