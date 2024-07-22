@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RecordDecisionType.CONDITIONAL_GRANT;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RecordDecisionType.GRANTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RecordDecisionType.REFUSED;
 
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RecordDecisionType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email.LegalRepresentativeBailSignedDecisionNoticeUploadedPersonalisation;
 
 @ExtendWith(MockitoExtension.class)
@@ -98,7 +102,8 @@ class LegalRepresentativeBailSignedDecisionNoticeUploadedPersonalisationTest {
 
     @Test
     public void should_return_personalisation_with_decision_granted() {
-        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of("granted"));
+        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, RecordDecisionType.class))
+            .thenReturn(Optional.of(GRANTED));
 
         Map<String, String> personalisation =
             legalRepresentativeBailSignedDecisionNoticeUploadedPersonalisation.getPersonalisation(bailCase);
@@ -108,7 +113,8 @@ class LegalRepresentativeBailSignedDecisionNoticeUploadedPersonalisationTest {
 
     @Test
     public void should_return_personalisation_with_decision_Refused() {
-        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of("refused"));
+        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, RecordDecisionType.class))
+            .thenReturn(Optional.of(REFUSED));
 
         Map<String, String> personalisation =
             legalRepresentativeBailSignedDecisionNoticeUploadedPersonalisation.getPersonalisation(bailCase);
@@ -118,7 +124,8 @@ class LegalRepresentativeBailSignedDecisionNoticeUploadedPersonalisationTest {
 
     @Test
     public void should_return_personalisation_with_decision_conditionally_granted() {
-        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of("conditionalGrant"));
+        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, RecordDecisionType.class))
+            .thenReturn(Optional.of(CONDITIONAL_GRANT));
 
         Map<String, String> personalisation =
             legalRepresentativeBailSignedDecisionNoticeUploadedPersonalisation.getPersonalisation(bailCase);
@@ -134,7 +141,7 @@ class LegalRepresentativeBailSignedDecisionNoticeUploadedPersonalisationTest {
         when(bailCase.read(BailCaseFieldDefinition.APPLICANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(bailCase.read(BailCaseFieldDefinition.LEGAL_REP_REFERENCE, String.class)).thenReturn(Optional.empty());
         when(bailCase.read(BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.empty());
+        when(bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.empty());
 
         Map<String, String> personalisation =
             legalRepresentativeBailSignedDecisionNoticeUploadedPersonalisation.getPersonalisation(bailCase);

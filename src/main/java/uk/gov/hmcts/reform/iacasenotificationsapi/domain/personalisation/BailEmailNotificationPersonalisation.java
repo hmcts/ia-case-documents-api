@@ -2,20 +2,23 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.*;
 
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.BailCaseUtils;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 
 public interface BailEmailNotificationPersonalisation extends BaseNotificationPersonalisation<BailCase> {
 
     default String decision(BailCase bailCase) {
-        String decision = bailCase.read(BailCaseFieldDefinition.RECORD_DECISION_TYPE, String.class).orElse("");
 
-        return decision.equals("granted") || decision.equals("conditionalGrant")
+        Boolean bailGranted = BailCaseUtils.isBailGranted(bailCase);
+
+        if (bailGranted == null) {
+            return "";
+        }
+
+        return bailGranted
             ? "Granted"
-            : decision.equals("refused")
-            ? "Refused"
-            : "";
+            : "Refused";
     }
 
     default boolean isLegallyRepresented(BailCase bailCase) {
