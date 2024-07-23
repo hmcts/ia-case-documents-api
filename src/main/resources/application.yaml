@@ -51,6 +51,7 @@ spring:
       spec: expireAfterAccess=3600s
 featureFlag:
   homeOfficeGovNotifyEnabled: ${IA_HOME_OFFICE_GOV_NOTIFY_ENABLED:true}
+  appealsLocationReferenceData: ${APPEALS_LOCATION_REFERENCE_DATA_ENABLED:true}
 
 govnotify:
   baseUrl: "https://api.notifications.service.gov.uk"
@@ -315,7 +316,7 @@ govnotify:
         sms: 5b7faa5a-792e-48bf-a512-d21a27ae9b23
       remoteHearing:
         legalRep:
-          email: df3c0c01-e865-4142-aa89-a9b67de85f1f
+          email: 2bd64cd0-72a3-4c07-80c4-9a382e43eebe
       detentionEngagementTeam:
         nonAda:
           email: b7e398f0-4a1a-4e13-ae98-9569967e1a7d
@@ -334,8 +335,8 @@ govnotify:
           ada: 29e7830e-0c7d-40c1-a6d6-2fddeb64cef4
           nonAda: 6b301851-6395-4e47-ba08-b208d30396e5
       appellant:
-        email: 305742e9-73d9-49a5-a4bf-fb86c9c4808f
-        sms: 7d23fda4-9ff7-4642-aa97-1a8a3ccafaba
+        email: 576a79ea-3a29-47cd-bf9e-165dbcd99a4b
+        sms: 2fa8e3dc-b8a1-42e9-9763-30ca7a96b6ed
     caseEditedNoChange:
       legalRep:
         email: e5ef4876-375b-429d-9fc6-f871a7cf7bc4
@@ -344,6 +345,31 @@ govnotify:
     caseEditedRemoteHearing:
       legalRep:
         email: 74825ed3-240e-4b2a-afe9-9167c0ae29f5
+    listAssistHearing:
+      caseListed:
+        caseOfficer:
+          email: ddb88c55-c97e-45df-a6b1-dc92fd0433b3
+        homeOffice:
+          email: 9e7b4606-78c1-41dd-b294-5eb432a6b92f
+        legalRep:
+          email: 59000d04-4a97-45ae-8a1e-036ca9faa9b5
+        appellant:
+          email: 398c92a5-10db-43d9-980b-2de2981d22f7
+        remoteHearing:
+          legalRep:
+            email: 031b65ee-6f5f-4c02-8a5f-8d56221272e9
+      caseEdited:
+        homeOffice:
+          email: 071cc334-89f7-4bce-bf88-637057f4811a
+        caseOfficer:
+          email: 513c5d12-7e26-4430-8560-d3a42a2d5df0
+        legalRep:
+          email: f3cb29a5-5367-4a1e-a600-6573fc2aeb01
+        appellant:
+          email: 77a6883d-2c3d-43a8-b637-4d95262ec494
+      caseEditedRemoteHearing:
+        legalRep:
+          email: 74825ed3-240e-4b2a-afe9-9167c0ae29f5
     appealOutcomeAllowed:
       homeOffice:
         email: 448a3cd5-a984-4981-9ac8-6388e65882ae
@@ -618,6 +644,15 @@ govnotify:
         email: 8a87904f-5a67-4a79-a56a-8450b7829f9b
       detentionEngagementTeam:
         email: b1c38360-82de-4aa7-bbe1-a395d73376b5
+    recordAdjournmentDetails:
+      respondent:
+        email: 85442b94-d5ed-4542-b483-94556cc4e3bb
+      caseOfficer:
+        email: ea5abf36-c37b-4d9d-88ff-ef9cda6fd3cf
+      legalRep:
+        email: 153cab2a-0533-424f-bcaf-41b916d06321
+      adminOfficer:
+        email: 6c007d84-488d-498a-9d53-85ba5e008d31
     reListCase:
       adminOfficer:
         email: 495c6f2b-46da-431f-a890-22371f2150dd
@@ -710,6 +745,8 @@ govnotify:
       applicant:
         legalRep:
           email: 742bbd08-4bda-4e90-a261-778ca01b15b6
+        homeOffice:
+          email: 8dc2a7c2-9cbe-472f-b04a-c0bf2073a43e
         respondent:
           email: 732beeb3-63ea-4ede-a131-dc2c316c51d6
         citizen:
@@ -724,6 +761,8 @@ govnotify:
       applicant:
         legalRep:
           email: b1b3dab0-bc6a-4395-a42a-5cafaeccf759
+        homeOffice:
+          email: 9cd8317c-3c89-43cc-b106-5c44041e9298
         respondent:
           email: 52feff55-1be3-4a3b-9ad9-d33f288762f8
         citizen:
@@ -741,6 +780,8 @@ govnotify:
       applicant:
         legalRep:
           email: 29136fb1-5143-4106-b1e8-8d83042bb103
+        homeOffice:
+          email: fcbe9da1-628b-4661-9128-4e57f1f5e21d
         respondent:
           email: 0f746c17-06df-43e5-bc89-e7b2e8602666
         citizen:
@@ -1323,8 +1364,6 @@ govnotify:
         email: 8a745ed0-63f0-4a35-8cf0-f2ed4f962daf
       nocChangedLRForApplicant:
         sms: 8141263c-c1f1-4f86-a164-ab48df561dbe
-      decisionRefusedIma:
-        email: 4a724840-8e62-489b-bc69-43a0be3ff12d
       sendUploadBailSummaryDirection:
         email: 12eec4f2-7261-4640-b18b-93666bde0b54
       caseListing:
@@ -1340,6 +1379,9 @@ govnotify:
           withoutLegalRep:
             email: a0f2751f-7e3f-4529-9714-6acbce5b0904
           sms: 3e591016-42d8-4083-b81a-30756a1c4ca8
+      decisionRefusedIma:
+        email: 4a724840-8e62-489b-bc69-43a0be3ff12d
+
 
 notificationSender.deduplicateSendsWithinSeconds: 60
 
@@ -1470,6 +1512,7 @@ security:
       - "decisionWithoutHearing"
       - "createCaseLink"
       - "maintainCaseLinks"
+      - "recordAdjournmentDetails"
       - "removeDetainedStatus"
       - "markAppealAsDetained"
       - "markAsReadyForUtTransfer"
@@ -1518,6 +1561,8 @@ security:
       - "createBailCaseLink"
       - "maintainBailCaseLinks"
       - "decisionWithoutHearing"
+      - "recordAdjournmentDetails"
+      - "caseListing"
       - "recordTheDecision"
       - "editAppealAfterSubmit"
       - "markAppealAsAda"
@@ -1607,6 +1652,7 @@ security:
       - "endAppealAutomatically"
       - "updatePaymentStatus"
       - "listCase"
+      - "recordAdjournmentDetails"
       - "editCaseListing"
       - "caseListing"
     caseworker-ia-homeofficebail:
@@ -1654,8 +1700,7 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
-  harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
-  yarlswood: ${IA_HEARING_CENTRE_YARLSWOOD_EMAIL:hc-yarlswood@example.com}
+  harmondsworth: ${IA_HOME_OFFICE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
   hendon: ${IA_HOME_OFFICE_HENDON_EMAIL:hc-hendon@example.com}
   yarlsWood: ${IA_HOME_OFFICE_YARLS_WOOD_EMAIL:hc-yarls-wood@example.com}
   bradfordKeighley: ${IA_HOME_OFFICE_BRADFORD_KEIGHLEY_EMAIL:hc-bradford-keighley@example.com}

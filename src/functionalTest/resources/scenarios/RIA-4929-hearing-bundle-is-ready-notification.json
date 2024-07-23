@@ -1,5 +1,6 @@
 {
   "description": "RIA-4929 hearing bundle is ready notification to Citizen",
+  "disabled": "true",
   "launchDarklyKey": "aip-hearing-bundle-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

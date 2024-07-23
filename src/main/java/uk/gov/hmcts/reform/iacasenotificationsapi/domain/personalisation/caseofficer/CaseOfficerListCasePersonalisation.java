@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsF
 public class CaseOfficerListCasePersonalisation implements EmailNotificationPersonalisation {
 
     private final String caseOfficerCaseListedTemplateId;
+    private final String listAssistHearingCaseOfficerCaseListedTemplateId;
     private final String iaExUiFrontendUrl;
     private final DateTimeExtractor dateTimeExtractor;
     private final EmailAddressFinder emailAddressFinder;
@@ -33,11 +35,13 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
 
     public CaseOfficerListCasePersonalisation(
             @Value("${govnotify.template.caseListed.caseOfficer.email}") String caseOfficerCaseListedTemplateId,
+            @Value("${govnotify.template.listAssistHearing.caseListed.caseOfficer.email}") String listAssistHearingCaseOfficerCaseListedTemplateId,
             @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
             DateTimeExtractor dateTimeExtractor,
             EmailAddressFinder emailAddressFinder,
             HearingDetailsFinder hearingDetailsFinder) {
         this.caseOfficerCaseListedTemplateId = caseOfficerCaseListedTemplateId;
+        this.listAssistHearingCaseOfficerCaseListedTemplateId = listAssistHearingCaseOfficerCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.dateTimeExtractor = dateTimeExtractor;
         this.emailAddressFinder = emailAddressFinder;
@@ -45,8 +49,9 @@ public class CaseOfficerListCasePersonalisation implements EmailNotificationPers
     }
 
     @Override
-    public String getTemplateId() {
-        return caseOfficerCaseListedTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES
+                ? listAssistHearingCaseOfficerCaseListedTemplateId : caseOfficerCaseListedTemplateId;
     }
 
     @Override

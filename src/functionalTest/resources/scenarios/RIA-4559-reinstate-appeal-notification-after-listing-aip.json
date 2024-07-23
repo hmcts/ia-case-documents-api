@@ -10,6 +10,8 @@
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
+          "appellantGivenNames": "Talha",
+          "appellantFamilyName": "Awan",
           "hearingCentre": "taylorHouse",
           "listCaseHearingCentre": "birmingham",
           "ariaListingReference": "LP/12345/2019",
@@ -39,6 +41,8 @@
     "caseData": {
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
+        "appellantGivenNames": "Talha",
+        "appellantFamilyName": "Awan",
         "hearingCentre": "taylorHouse",
         "listCaseHearingCentre": "birmingham",
         "ariaListingReference": "LP/12345/2019",
@@ -83,7 +87,7 @@
           "PA/12345/2019",
           "LP/12345/2019",
           "A1234567",
-          "Pablo Jimenez,",
+          "Talha Awan,",
           "{$TODAY|d MMM yyyy}",
           "Withdraw",
           "This decision was made by a Admin Officer.",
@@ -109,7 +113,7 @@
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
-          "Pablo Jimenez",
+          "Talha Awan",
           "{$iaExUiFrontendUrl}"
         ]
       }

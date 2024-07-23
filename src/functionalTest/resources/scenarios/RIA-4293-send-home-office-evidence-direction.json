@@ -12,7 +12,8 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "legalRepCompany": "Some Updated Company Ltd",
-          "legalRepName": "Bob Smith",
+          "legalRepName": "Bob",
+          "legalRepFamilyName": "Smith",
           "legalRepresentativeEmailAddress": "email@updated.com",
           "legalRepReferenceNumber": "updated-reference",
           "directions": [

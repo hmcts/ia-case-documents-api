@@ -1,0 +1,111 @@
+{
+  "description": "RIA-8803 Send bail initial case listing notification to HO, LR and Applicant with ref data location",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 8351,
+      "eventId": "caseListing",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted.json",
+        "replacements": {
+          "applicantHasMobile": "Yes",
+          "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
+          "listingEvent": "initialListing",
+          "listingHearingDate": "2024-04-25T10:29:00.000",
+          "listingLocation": "newport",
+          "isBailsLocationReferenceDataEnabled": "Yes",
+          "isRemoteHearing": "No",
+          "refDataListingLocationDetail": {
+            "postcode": "NP18 2LX",
+            "epimms_id": "227101",
+            "site_name": "Newport (South Wales) Immigration and Asylum Tribunal",
+            "court_name": "Newport Tribunal Centre - Columbus House",
+            "court_status": "Open",
+            "court_address": "Langstone Business Park, Newport",
+            "is_hearing_location": "Y",
+            "is_case_management_location": "Y"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted.json",
+      "replacements": {
+        "applicantHasMobile": "Yes",
+        "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
+        "listingEvent": "initialListing",
+        "listingHearingDate": "2024-04-25T10:29:00.000",
+        "listingLocation": "newport",
+        "notificationsSent": [
+          {
+            "id": "8351_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8351_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8351_BAIL_APPLICATION_CASE_LISTING_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8351_BAIL_APPLICATION_CASE_LISTING_APPLICANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      },
+      "notifications": [
+        {
+          "reference": "8351_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+          "recipient": "{$bailHomeOfficeEmailAddress}",
+          "subject": "Bail application: Upload the Bail Summary direction",
+          "body": [
+            "1650-6221-2061-5101",
+            "John Smith",
+            "{$iaExUiFrontendUrl}"
+          ]
+        },
+        {
+          "reference": "8351_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
+          "recipient": "{$bailHomeOfficeEmailAddress}",
+          "subject": "Bail application: Bail hearing listed",
+          "body": [
+            "1650-6221-2061-5101",
+            "John Smith",
+            "{$iaExUiFrontendUrl}",
+            "Newport Tribunal Centre - Columbus House, Langstone Business Park, Newport, NP18 2LX"
+          ]
+        },
+        {
+          "reference": "8351_BAIL_APPLICATION_CASE_LISTING_LEGAL_REPRESENTATIVE",
+          "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "subject": "Bail application: Bail hearing listed",
+          "body": [
+            "1650-6221-2061-5101",
+            "John Smith",
+            "{$iaExUiFrontendUrl}",
+            "Newport Tribunal Centre - Columbus House, Langstone Business Park, Newport, NP18 2LX"
+          ]
+        },
+        {
+          "reference": "8351_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+          "recipient": "{$TEST_CITIZEN_MOBILE}",
+          "subject": "Bail application: Bail hearing listed",
+          "body": [
+            "1650-6221-2061-5101",
+            "John Smith",
+            "Newport Tribunal Centre - Columbus House, Langstone Business Park, Newport, NP18 2LX"
+          ]
+        }
+      ]
+    }
+  }
+}

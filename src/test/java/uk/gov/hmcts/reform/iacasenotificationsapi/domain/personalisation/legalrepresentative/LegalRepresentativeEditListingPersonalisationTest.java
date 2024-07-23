@@ -49,6 +49,8 @@ public class LegalRepresentativeEditListingPersonalisationTest {
     private String adaTemplateId = "adaTemplateId";
     private String nonAdaTemplateId = "nonAdaTemplateId";
     private String templateIdRemoteHearing = "remoteTemplateId";
+    private String listAssistHearingTemplateId = "listAssistHearingTemplateId";
+    private String listAssistHearingTemplateIdRemoteHearing = "listAssistHearingRemoteTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String legalRepEmailAddress = "legalRep@example.com";
     private String hearingCentreAddress = "some hearing centre address";
@@ -83,6 +85,8 @@ public class LegalRepresentativeEditListingPersonalisationTest {
             nonAdaTemplateId,
             adaTemplateId,
             templateIdRemoteHearing,
+            listAssistHearingTemplateId,
+            listAssistHearingTemplateIdRemoteHearing,
             personalisationProvider,
             customerServicesProvider
         );

@@ -5,7 +5,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "id": 1015,
+      "id": 1017,
       "eventId": "listCase",
       "state": "prepareForHearing",
       "caseData": {
@@ -32,15 +32,15 @@
         "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
         "notificationsSent": [
           {
-            "id": "1015_CASE_LISTED_LEGAL_REPRESENTATIVE",
+            "id": "1017_CASE_LISTED_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1015_CASE_LISTED_HOME_OFFICE",
+            "id": "1017_CASE_LISTED_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "1015_CASE_LISTED_CASE_OFFICER",
+            "id": "1017_CASE_LISTED_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -48,7 +48,7 @@
     },
     "notifications": [
       {
-        "reference": "1015_CASE_LISTED_LEGAL_REPRESENTATIVE",
+        "reference": "1017_CASE_LISTED_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Immigration and Asylum appeal: check the details of your hearing",
         "body": [
@@ -60,7 +60,7 @@
         ]
       },
       {
-        "reference": "1015_CASE_LISTED_HOME_OFFICE",
+        "reference": "1017_CASE_LISTED_HOME_OFFICE",
         "recipient": "{$homeOfficeEmailAddresses.harmondsworth}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [
@@ -72,7 +72,7 @@
         ]
       },
       {
-        "reference": "1015_CASE_LISTED_CASE_OFFICER",
+        "reference": "1017_CASE_LISTED_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.harmondsworth}",
         "subject": "Immigration and Asylum appeal: case listed",
         "body": [

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_INTEGRATED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -20,6 +22,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class AppellantEditListingPersonalisationEmail implements EmailNotificationPersonalisation {
 
     private final String editListingAppellantEmailTemplateId;
+    private final String listAssistHearingEditListingAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final CustomerServicesProvider customerServicesProvider;
@@ -32,12 +35,14 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
 
     public AppellantEditListingPersonalisationEmail(
         @Value("${govnotify.template.caseEdited.appellant.email}") String editListingAppellantEmailTemplateId,
+        @Value("${govnotify.template.listAssistHearing.caseEdited.appellant.email}") String listAssistHearingEditListingAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         PersonalisationProvider personalisationProvider,
         CustomerServicesProvider customerServicesProvider,
         RecipientsFinder recipientsFinder
     ) {
         this.editListingAppellantEmailTemplateId = editListingAppellantEmailTemplateId;
+        this.listAssistHearingEditListingAppellantEmailTemplateId = listAssistHearingEditListingAppellantEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.customerServicesProvider = customerServicesProvider;
@@ -45,8 +50,9 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
     }
 
     @Override
-    public String getTemplateId() {
-        return editListingAppellantEmailTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        return asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES
+                ? listAssistHearingEditListingAppellantEmailTemplateId : editListingAppellantEmailTemplateId;
     }
 
     @Override

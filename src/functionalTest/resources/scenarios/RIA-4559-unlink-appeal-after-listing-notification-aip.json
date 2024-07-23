@@ -10,6 +10,8 @@
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
+          "appellantGivenNames": "Talha",
+          "appellantFamilyName": "Awan",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "appellantGivenNames": "Talha",

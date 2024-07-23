@@ -66,7 +66,7 @@ public class LegalRepresentativeBailCaseListingPersonalisation implements LegalR
             .put("homeOfficeReferenceNumber", bailCase.read(BailCaseFieldDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDetailsFinder.getBailHearingDateTime(bailCase)))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDetailsFinder.getBailHearingDateTime(bailCase)))
-            .put("hearingCentre", hearingDetailsFinder.getBailHearingCentreAddress(bailCase))
+            .put("hearingCentre", hearingDetailsFinder.getListingLocationAddressFromRefDataOrCcd(bailCase))
             .build();
     }
 }

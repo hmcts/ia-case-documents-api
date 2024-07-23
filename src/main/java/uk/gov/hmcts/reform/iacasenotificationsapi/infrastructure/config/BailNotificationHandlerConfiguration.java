@@ -491,47 +491,6 @@ public class BailNotificationHandlerConfiguration {
     }
 
     @Bean
-    public PreSubmitCallbackHandler<BailCase> upperTribunalDecisionRefusedImaNotificationHandler(
-        @Qualifier("upperTribunalDecisionRefusedImaNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators) {
-        return new BailNotificationHandler(
-            (callbackStage, callback) -> {
-                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                                             && callback.getEvent() == Event.RECORD_THE_DECISION);
-                if (isAllowedBailCase) {
-                    BailCase bailCase = callback.getCaseDetails().getCaseData();
-                    return (callback.getEvent() == Event.RECORD_THE_DECISION
-                            && (isHoFlagged(bailCase)));
-                } else {
-                    return false;
-                }
-            },
-            bailNotificationGenerators,
-            getErrorHandler()
-        );
-    }
-
-    @Bean
-    public PreSubmitCallbackHandler<BailCase> endApplicationNotificationForUtHandler(
-        @Qualifier("endApplicationNotificationForUtGenerator") List<BailNotificationGenerator> bailNotificationGenerators
-    ) {
-        return new BailNotificationHandler(
-            (callbackStage, callback) -> {
-                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.END_APPLICATION);
-
-                if (isAllowedBailCase) {
-                    BailCase bailCase = callback.getCaseDetails().getCaseData();
-                    return callback.getEvent() == Event.END_APPLICATION && hasImaStatus(bailCase);
-                } else {
-                    return false;
-                }
-            },
-            bailNotificationGenerators,
-            getErrorHandler()
-        );
-    }
-
-    @Bean
     public PreSubmitCallbackHandler<BailCase> bailCaseListingBailSummaryDirectionNotificationHandler(
         @Qualifier("caseListingBailSummaryDirectionNotificationGenerator")
         List<BailNotificationGenerator> bailNotificationGenerators
@@ -553,6 +512,26 @@ public class BailNotificationHandlerConfiguration {
         );
     }
 
+    @Bean
+    public PreSubmitCallbackHandler<BailCase> upperTribunalDecisionRefusedImaNotificationHandler(
+        @Qualifier("upperTribunalDecisionRefusedImaNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators) {
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                                             && callback.getEvent() == Event.RECORD_THE_DECISION);
+                if (isAllowedBailCase) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+                    return (callback.getEvent() == Event.RECORD_THE_DECISION
+                            && (isHoFlagged(bailCase)));
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+  
     @Bean
     public PreSubmitCallbackHandler<BailCase> bailCaseListingNotificationHandler(
             @Qualifier("caseListingNotificationGenerator")
@@ -588,6 +567,28 @@ public class BailNotificationHandlerConfiguration {
                     BailCase bailCase = callback.getCaseDetails().getCaseData();
                     return (callback.getEvent() == Event.CASE_LISTING
                             && !isLegallyRepresented(bailCase));
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<BailCase> endApplicationNotificationForUtHandler(
+        @Qualifier("endApplicationNotificationForUtGenerator") List<BailNotificationGenerator> bailNotificationGenerators
+
+    ) {
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean isAllowedBailCase = (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.END_APPLICATION);
+
+                if (isAllowedBailCase) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+                    return callback.getEvent() == Event.END_APPLICATION && hasImaStatus(bailCase);
                 } else {
                     return false;
                 }

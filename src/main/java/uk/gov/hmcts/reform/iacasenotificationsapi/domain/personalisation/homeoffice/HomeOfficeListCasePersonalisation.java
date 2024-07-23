@@ -14,6 +14,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.*;
@@ -23,6 +24,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
 
     private final String homeOfficeCaseListedNonAdaTemplateId;
     private final String homeOfficeCaseListedAdaTemplateId;
+    private final String listAssistHearingHomeOfficeCaseListedTemplateId;
     private final String iaExUiFrontendUrl;
     private final int appellantProvidingAppealArgumentDeadlineDelay;
     private final int respondentResponseToAppealArgumentDeadlineDelay;
@@ -34,6 +36,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
     public HomeOfficeListCasePersonalisation(
         @Value("${govnotify.template.caseListed.homeOffice.email.nonAda}") String homeOfficeCaseListedNonAdaTemplateId,
         @Value("${govnotify.template.caseListed.homeOffice.email.ada}") String homeOfficeCaseListedAdaTemplateId,
+        @Value("${govnotify.template.listAssistHearing.caseListed.homeOffice.email}") String listAssistHearingHomeOfficeCaseListedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         @Value("${adaCaseListed.deadlines.appellantProvidingAppealArgumentDelay}") int appellantProvidingAppealArgumentDeadlineDelay,
         @Value("${adaCaseListed.deadlines.respondentResponseToAppealArgumentDelay}") int respondentResponseToAppealArgumentDeadlineDelay,
@@ -44,6 +47,7 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
     ) {
         this.homeOfficeCaseListedNonAdaTemplateId = homeOfficeCaseListedNonAdaTemplateId;
         this.homeOfficeCaseListedAdaTemplateId = homeOfficeCaseListedAdaTemplateId;
+        this.listAssistHearingHomeOfficeCaseListedTemplateId = listAssistHearingHomeOfficeCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.appellantProvidingAppealArgumentDeadlineDelay = appellantProvidingAppealArgumentDeadlineDelay;
         this.respondentResponseToAppealArgumentDeadlineDelay = respondentResponseToAppealArgumentDeadlineDelay;
@@ -55,9 +59,11 @@ public class HomeOfficeListCasePersonalisation implements EmailNotificationPerso
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
+
         return AsylumCaseUtils.isAcceleratedDetainedAppeal(asylumCase)
             ? homeOfficeCaseListedAdaTemplateId
-            : homeOfficeCaseListedNonAdaTemplateId;
+            : asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES
+            ? listAssistHearingHomeOfficeCaseListedTemplateId : homeOfficeCaseListedNonAdaTemplateId;
     }
 
     @Override

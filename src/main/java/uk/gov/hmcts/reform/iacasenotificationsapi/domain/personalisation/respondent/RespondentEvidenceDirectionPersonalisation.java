@@ -141,11 +141,15 @@ public class RespondentEvidenceDirectionPersonalisation implements EmailNotifica
                 .map(it -> it.getCaseRoleId() == null)
                 .orElse(false);
 
+        String lrName = asylumCase.read(LEGAL_REP_NAME, String.class).orElse("");
+        String lrLastName = asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class).orElse("");
+        String legalRepName = (lrName + " " + lrLastName).trim();
+
         return ImmutableMap
                 .<String, String>builder()
                 .put("companyName", hasNoc ? "" : asylumCase.read(LEGAL_REP_COMPANY, String.class).orElse(""))
                 .put("companyAddress", hasNoc ? "" : companyAddress)
-                .put("legalRepName", hasNoc ? "" : asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""))
+                .put("legalRepName", hasNoc ? "" : legalRepName)
                 .put("legalRepEmail", hasNoc ? "" : asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""))
                 .put("legalRepReference", hasNoc ? "" : asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
                 .build();

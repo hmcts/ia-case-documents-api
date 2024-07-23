@@ -88,6 +88,9 @@ public enum AsylumCaseDefinition {
     LEGAL_REP_NAME(
         "legalRepName", new TypeReference<String>(){}),
 
+    LEGAL_REP_FAMILY_NAME(
+        "legalRepFamilyName", new TypeReference<String>(){}),
+
     LEGAL_REP_COMPANY_NAME(
             "legalRepCompanyName", new TypeReference<String>(){}),
 
@@ -121,8 +124,14 @@ public enum AsylumCaseDefinition {
     ARIA_LISTING_REFERENCE(
             "ariaListingReference",  new TypeReference<String>(){}),
 
+    IS_CASE_USING_LOCATION_REF_DATA(
+        "isCaseUsingLocationRefData", new TypeReference<YesOrNo>(){}),
+
     LIST_CASE_HEARING_CENTRE(
             "listCaseHearingCentre",  new TypeReference<HearingCentre>(){}),
+
+    LIST_CASE_HEARING_CENTRE_ADDRESS(
+        "listCaseHearingCentreAddress",  new TypeReference<String>(){}),
 
     APPEAL_REVIEW_OUTCOME(
         "appealReviewOutcome", new TypeReference<AppealReviewOutcome>(){}),
@@ -204,6 +213,9 @@ public enum AsylumCaseDefinition {
 
     ADJOURN_HEARING_WITHOUT_DATE_REASONS(
         "adjournHearingWithoutDateReasons", new TypeReference<String>() {}),
+
+    RELIST_CASE_IMMEDIATELY(
+            "relistCaseImmediately", new TypeReference<YesOrNo>(){}),
 
     REASON_FOR_LINK_APPEAL(
         "reasonForLinkAppeal", new TypeReference<ReasonForLinkAppealOptions>() {}),
@@ -375,6 +387,9 @@ public enum AsylumCaseDefinition {
 
     APPELLANT_HAS_FIXED_ADDRESS("appellantHasFixedAddress", new TypeReference<YesOrNo>(){}),
 
+    IS_INTEGRATED(
+            "isIntegrated", new TypeReference<YesOrNo>(){}),
+
     CASE_LINKS(
             "caseLinks", new TypeReference<List<IdValue<CaseLink>>>(){}),
 
@@ -394,6 +409,24 @@ public enum AsylumCaseDefinition {
             "typesOfUpdateTribunalDecision", new TypeReference<DynamicList>(){}),
     UPDATED_APPEAL_DECISION(
             "updatedAppealDecision", new TypeReference<String>(){}),
+
+    REMOTE_HEARING_DECISION_FOR_DISPLAY(
+        "remoteHearingDecisionForDisplay", new TypeReference<String>() {}),
+
+    MULTIMEDIA_DECISION_FOR_DISPLAY(
+        "multimediaDecisionForDisplay", new TypeReference<String>() {}),
+
+    SINGLE_SEX_COURT_DECISION_FOR_DISPLAY(
+        "singleSexCourtDecisionForDisplay", new TypeReference<String>() {}),
+
+    IN_CAMERA_COURT_DECISION_FOR_DISPLAY(
+        "inCameraCourtDecisionForDisplay", new TypeReference<String>() {}),
+
+    VULNERABILITIES_DECISION_FOR_DISPLAY(
+        "vulnerabilitiesDecisionForDisplay", new TypeReference<String>() {}),
+
+    OTHER_DECISION_FOR_DISPLAY(
+        "otherDecisionForDisplay", new TypeReference<String>() {}),
 
     IS_ACCELERATED_DETAINED_APPEAL(
         "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
@@ -468,12 +501,15 @@ public enum AsylumCaseDefinition {
         "addEvidenceForCostsList", new TypeReference<DynamicList>() {}),
 
     DECIDE_COSTS_APPLICATION_LIST(
-        "decideCostsApplicationList", new TypeReference<DynamicList>(){}
-    ),
+        "decideCostsApplicationList", new TypeReference<DynamicList>(){}),
 
     SOURCE_OF_REMITTAL(
         "sourceOfRemittal", new TypeReference<SourceOfRemittal>(){}),
-    ;
+
+    IS_REMOTE_HEARING(
+        "isRemoteHearing", new TypeReference<YesOrNo>(){}),
+
+    IS_DECISION_WITHOUT_HEARING("isDecisionWithoutHearing", new TypeReference<YesOrNo>(){});
 
 
     private final String value;

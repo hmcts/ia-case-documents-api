@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailHearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils;
 
 
 @Service
@@ -201,9 +202,10 @@ public class EmailAddressFinder {
     }
 
     private boolean isDecisionWithoutHearing(AsylumCase asylumCase) {
-        return asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .map(hearingCentre -> hearingCentre == HearingCentre.DECISION_WITHOUT_HEARING)
-                .orElse(false);
+        return AsylumCaseUtils.isDecisionWithoutHearingAppeal(asylumCase)
+               || asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                   .map(hearingCentre -> hearingCentre == HearingCentre.DECISION_WITHOUT_HEARING)
+                   .orElse(false);
     }
 
 

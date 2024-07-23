@@ -20,10 +20,12 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +35,8 @@ class HomeOfficeEditListingPersonalisationTest {
     @Mock
     Callback<AsylumCase> callback;
     @Mock
+    CaseDetails<AsylumCase> caseDetails;
+    @Mock
     AsylumCase asylumCase;
     @Mock
     EmailAddressFinder emailAddressFinder;
@@ -40,10 +44,14 @@ class HomeOfficeEditListingPersonalisationTest {
     PersonalisationProvider personalisationProvider;
     @Mock
     CustomerServicesProvider customerServicesProvider;
+    @Mock
+    HearingDetailsFinder hearingDetailsFinder;
 
     private Long caseId = 12345L;
+
     private String adaTemplateId = "adaTemplateId";
     private String nonAdaTemplateId = "nonAdaTemplateId";
+    private String listAssistHearingTemplateId = "listAssistHearingTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String homeOfficeEmailAddress = "homeoffice@example.com";
     private String listCaseHomeOfficeEmailAddress = "listCaseHomeoOffice@example.com";
@@ -63,21 +71,25 @@ class HomeOfficeEditListingPersonalisationTest {
 
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
+    private String hearingCentreAddress = "hearingCentreAddress";
 
     private HomeOfficeEditListingPersonalisation homeOfficeEditListingPersonalisation;
 
     @BeforeEach
     public void setup() {
-
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(listCaseHomeOfficeEmailAddress);
         when(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeEmailAddress);
 
         homeOfficeEditListingPersonalisation = new HomeOfficeEditListingPersonalisation(
             nonAdaTemplateId,
             adaTemplateId,
+            listAssistHearingTemplateId,
             emailAddressFinder,
             personalisationProvider,
-            customerServicesProvider
+            customerServicesProvider,
+            hearingDetailsFinder
         );
     }
 
@@ -116,6 +128,8 @@ class HomeOfficeEditListingPersonalisationTest {
     @Test
     void should_return_personalisation_when_all_information_given() {
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
+        when(hearingDetailsFinder.getHearingCentreLocation(callback.getCaseDetails().getCaseData()))
+                .thenReturn(hearingCentreAddress);
 
         Map<String, String> personalisation = homeOfficeEditListingPersonalisation.getPersonalisation(callback);
 

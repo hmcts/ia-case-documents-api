@@ -48,6 +48,8 @@ public class LegalRepresentativeListCasePersonalisationTest {
     private String nonAdaTemplateId = "nonAdaTemplateId";
     private String adaTemplateId = "adaTemplateId";
     private String outOfCountryTemplateId = "someOocTemplateId";
+    private String listAssistHearingTemplateId = "listAssistHearingTemplateId";
+    private String listAssistHearingOutOfCountryTemplateId = "listAssistHearingOocTemplateId";
     private String iaExUiFrontendUrl = "http://somefrontendurl";
     private HearingCentre hearingCentre = HearingCentre.TAYLOR_HOUSE;
     private String legalRepEmailAddress = "legalRepEmailAddress@example.com";
@@ -72,6 +74,7 @@ public class LegalRepresentativeListCasePersonalisationTest {
     private String requirementsSingleSexCourt = "someRequirementsSingleSexCourt";
     private String requirementsInCamera = "someRequirementsInCamera";
     private String requirementsOther = "someRequirementsOther";
+    private String videoHearingSuitability = "someVideoHearingSuitability";
 
     private String caseOfficerReviewedVulnerabilities = "someCaseOfficerReviewedVulnerabilities";
     private String caseOfficerReviewedMultimedia = "someCaseOfficerReviewedMultimedia";
@@ -139,6 +142,8 @@ public class LegalRepresentativeListCasePersonalisationTest {
             nonAdaTemplateId,
             adaTemplateId,
             outOfCountryTemplateId,
+            listAssistHearingTemplateId,
+            listAssistHearingOutOfCountryTemplateId,
             iaExUiFrontendUrl,
             appellantProvidingAppealArgumentDeadline,
             respondentResponseToAppealArgumentDeadline,
@@ -276,6 +281,28 @@ public class LegalRepresentativeListCasePersonalisationTest {
             assertFalse(personalisation.containsKey("appellantProvidingAppealArgumentDeadline"));
             assertFalse(personalisation.containsKey("respondentResponseToAppealArgumentDeadline"));
         }
+    }
+
+    @Test
+    public void should_return_personalisation_with_requested_and_granted_hearing_requirement() {
+
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(asylumCase.read(VULNERABILITIES_DECISION_FOR_DISPLAY, String.class)).thenReturn(Optional.of("Granted - Granted to vulnerabilities"));
+        when(asylumCase.read(MULTIMEDIA_DECISION_FOR_DISPLAY, String.class)).thenReturn(Optional.of("Granted - Granted to multimedia"));
+        when(asylumCase.read(SINGLE_SEX_COURT_DECISION_FOR_DISPLAY, String.class)).thenReturn(Optional.of("Refused - Refused to single sex court"));
+        when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(videoHearingSuitability));
+        initializePrefixes(legalRepresentativeListCasePersonalisation);
+        Map<String, String> personalisation = legalRepresentativeListCasePersonalisation.getPersonalisation(asylumCase);
+
+        assertEquals("Request Granted - Granted to vulnerabilities", personalisation.get("hearingRequirementVulnerabilities"));
+        assertEquals("Request Granted - Granted to multimedia", personalisation.get("hearingRequirementMultimedia"));
+        assertEquals("Request Refused - Refused to single sex court", personalisation.get("hearingRequirementSingleSexCourt"));
+        assertEquals("The hearing will be held in public court", personalisation.get("hearingRequirementInCameraCourt"));
+        assertEquals("No other adjustments are being made", personalisation.get("hearingRequirementOther"));
+        assertEquals(videoHearingSuitability, personalisation.get("remoteVideoCallTribunalResponse"));
     }
 
     @ParameterizedTest

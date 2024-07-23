@@ -61,7 +61,7 @@ class LegalRepresentativeBailCaseListingPersonalisationTest {
         when(bailCase.read(LISTING_LOCATION, BailHearingLocation.class)).thenReturn(Optional.of(BailHearingLocation.GLASGOW_TRIBUNAL_CENTRE));
         when(bailCase.read(LISTING_HEARING_DATE, String.class)).thenReturn(Optional.of(bailHearingDateTime));
         when(hearingDetailsFinder.getBailHearingDateTime(bailCase)).thenReturn(bailHearingDateTime);
-        when(hearingDetailsFinder.getBailHearingCentreAddress(bailCase)).thenReturn(bailHearingLocation);
+        when(hearingDetailsFinder.getListingLocationAddressFromRefDataOrCcd(bailCase)).thenReturn(bailHearingLocation);
         when(dateTimeExtractor.extractHearingDate(bailHearingDateTime)).thenReturn(hearingDate);
         when(dateTimeExtractor.extractHearingTime(bailHearingDateTime)).thenReturn(hearingTime);
 

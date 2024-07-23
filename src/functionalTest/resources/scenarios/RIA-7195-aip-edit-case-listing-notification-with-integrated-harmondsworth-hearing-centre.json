@@ -1,0 +1,114 @@
+{
+  "description": "RIA-7195 AIP edit case listing notification with isIntegrated field (Harmondsworth hearing centre)",
+  "enabled": "{$featureFlag.appealsLocationReferenceData}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1019,
+      "eventId": "editCaseListing",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "PA/12345/2023",
+          "ariaListingReference": "LP/12345/2023",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingCentreAddress": "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB",
+          "listCaseHearingDate": "2023-09-03T14:25:15.000",
+          "isIntegrated": "Yes",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}"
+              }
+            }
+          ]
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2023-09-02T14:25:15.000"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "appealReferenceNumber": "PA/12345/2023",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingDate": "2023-09-03T14:25:15.000",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1019_CASE_RE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1019_CASE_RE_LISTED_APPELLANT_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1019_CASE_RE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1019_CASE_RE_LISTED_APPELLANT_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Your hearing details have changed",
+        "body": [
+          "PA/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth"
+        ]
+      },
+      {
+        "reference": "1019_CASE_RE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.harmondsworth}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      },
+      {
+        "reference": "1019_CASE_RE_LISTED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.harmondsworth}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      }
+    ]
+  }
+}

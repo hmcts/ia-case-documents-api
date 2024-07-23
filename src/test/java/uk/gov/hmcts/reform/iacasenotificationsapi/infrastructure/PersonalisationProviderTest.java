@@ -12,6 +12,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -84,6 +86,14 @@ class PersonalisationProviderTest {
     private final String caseOfficerReviewedInCamera = "someCaseOfficerReviewedInCamera";
     private final String caseOfficerReviewedOther = "someCaseOfficerReviewedOther";
 
+    private final String caseOfficerReviewedVulnerabilitiesDisplay = "someCaseOfficerReviewedVulnerabilitiesDisplay";
+    private final String caseOfficerReviewedMultimediaDisplay = "someCaseOfficerReviewedMultimediaDisplay";
+    private final String caseOfficerReviewedSingleSexCourtDisplay = "someCaseOfficerReviewedSingleSexCourtDisplay";
+    private final String caseOfficerReviewedInCameraDisplay = "someCaseOfficerReviewedInCameraDisplay";
+    private final String caseOfficerReviewedOtherDisplay = "someCaseOfficerReviewedOtherDisplay";
+    private final String caseOfficerReviewedRemoteHearingDisplay = "caseOfficerReviewedRemoteHearingDisplay";
+
+
     private final String directionExplanation = "someExplanation";
     private final String directionDueDate = "2019-10-29";
     private final String recipientReferenceNumber = "recipientReferenceNumber";
@@ -100,6 +110,7 @@ class PersonalisationProviderTest {
     public void setUp() {
         when(hearingDetailsFinder.getHearingCentreName(asylumCase)).thenReturn(hearingCentreName);
         when(hearingDetailsFinder.getHearingCentreAddress(asylumCase)).thenReturn(hearingCentreAddress);
+        when(hearingDetailsFinder.getHearingCentreLocation(asylumCase)).thenReturn(hearingCentreAddress);
         when(hearingDetailsFinder.getHearingDateTime(asylumCase)).thenReturn(hearingDateTime);
         when(hearingDetailsFinder.getHearingCentreName(asylumCaseBefore)).thenReturn(oldHearingCentreName);
         when(hearingDetailsFinder.getHearingDateTime(asylumCaseBefore)).thenReturn(oldHearingDateTime);
@@ -173,23 +184,74 @@ class PersonalisationProviderTest {
         assertThat(personalisation.get("hearingRequirementOther")).contains(requirementsOther);
     }
 
-    @Test
-    void should_return_edit_case_listing_personalisation_when_submit_hearing_present() {
+    @ParameterizedTest
+    @CsvSource({
+        "true, true",
+        "false, true",
+        "false, false"
+    })
+    void should_return_edit_case_listing_personalisation_when_submit_hearing_present(boolean displayFieldsPresent,
+                                                                                     boolean responseFieldsPresent) {
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
 
+        when(asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class))
+            .thenReturn(responseFieldsPresent ? Optional.of(caseOfficerReviewedVulnerabilities) : Optional.empty());
+        when(asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class))
+            .thenReturn(responseFieldsPresent ? Optional.of(caseOfficerReviewedMultimedia) : Optional.empty());
+        when(asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class))
+            .thenReturn(responseFieldsPresent ? Optional.of(caseOfficerReviewedSingleSexCourt) : Optional.empty());
+        when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class))
+            .thenReturn(responseFieldsPresent ? Optional.of(caseOfficerReviewedInCamera) : Optional.empty());
+        when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class))
+            .thenReturn(responseFieldsPresent ? Optional.of(caseOfficerReviewedOther) : Optional.empty());
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class))
+            .thenReturn(responseFieldsPresent ? Optional.of(remoteVideoCallTribunalResponse) : Optional.empty());
+
+        when(asylumCase.read(VULNERABILITIES_DECISION_FOR_DISPLAY, String.class))
+            .thenReturn(displayFieldsPresent ? Optional.of(caseOfficerReviewedVulnerabilitiesDisplay) : Optional.empty());
+        when(asylumCase.read(MULTIMEDIA_DECISION_FOR_DISPLAY, String.class))
+            .thenReturn(displayFieldsPresent ? Optional.of(caseOfficerReviewedMultimediaDisplay) : Optional.empty());
+        when(asylumCase.read(SINGLE_SEX_COURT_DECISION_FOR_DISPLAY, String.class))
+            .thenReturn(displayFieldsPresent ? Optional.of(caseOfficerReviewedSingleSexCourtDisplay) : Optional.empty());
+        when(asylumCase.read(IN_CAMERA_COURT_DECISION_FOR_DISPLAY, String.class))
+            .thenReturn(displayFieldsPresent ? Optional.of(caseOfficerReviewedInCameraDisplay) : Optional.empty());
+        when(asylumCase.read(OTHER_DECISION_FOR_DISPLAY, String.class))
+            .thenReturn(displayFieldsPresent ? Optional.of(caseOfficerReviewedOtherDisplay) : Optional.empty());
+
         Map<String, String> personalisation = personalisationProvider.getPersonalisation(callback);
 
+        String vulnerabilitiesDefaultText = "No special adjustments are being made to accommodate vulnerabilities";
+        String multimediaDefaultText = "No multimedia equipment is being provided";
+        String singleSexCourtDefaultText = "The court will not be single sex";
+        String inCameraCourtDefaultText = "The hearing will be held in public court";
+        String otherAdjustmentsDefaultText = "No other adjustments are being made";
+        String remoteHearingDefaultText = "";
+
         assertThat(asylumCase).isEqualToComparingOnlyGivenFields(personalisation);
-        assertThat(personalisation.get("remoteVideoCallTribunalResponse"))
-            .contains(remoteVideoCallTribunalResponse);
-        assertThat(personalisation.get("hearingRequirementVulnerabilities"))
-            .contains(caseOfficerReviewedVulnerabilities);
-        assertThat(personalisation.get("hearingRequirementMultimedia")).contains(caseOfficerReviewedMultimedia);
-        assertThat(personalisation.get("hearingRequirementSingleSexCourt"))
-            .contains(caseOfficerReviewedSingleSexCourt);
-        assertThat(personalisation.get("hearingRequirementInCameraCourt")).contains(caseOfficerReviewedInCamera);
-        assertThat(personalisation.get("hearingRequirementOther")).contains(caseOfficerReviewedOther);
+
+        assertThat(personalisation.get("hearingRequirementVulnerabilities")).contains(
+            displayFieldsPresent ? caseOfficerReviewedVulnerabilitiesDisplay
+                : responseFieldsPresent ? caseOfficerReviewedVulnerabilities : vulnerabilitiesDefaultText);
+
+        assertThat(personalisation.get("hearingRequirementMultimedia")).contains(
+            displayFieldsPresent ? caseOfficerReviewedMultimediaDisplay
+                : responseFieldsPresent ? caseOfficerReviewedMultimedia : multimediaDefaultText);
+
+        assertThat(personalisation.get("hearingRequirementSingleSexCourt")).contains(
+            displayFieldsPresent ? caseOfficerReviewedSingleSexCourtDisplay
+                : responseFieldsPresent ? caseOfficerReviewedSingleSexCourt : singleSexCourtDefaultText);
+
+        assertThat(personalisation.get("hearingRequirementInCameraCourt")).contains(
+            displayFieldsPresent ? caseOfficerReviewedInCameraDisplay
+                : responseFieldsPresent ? caseOfficerReviewedInCamera : inCameraCourtDefaultText);
+
+        assertThat(personalisation.get("hearingRequirementOther")).contains(
+            displayFieldsPresent ? caseOfficerReviewedOtherDisplay
+                : responseFieldsPresent ? caseOfficerReviewedOther : otherAdjustmentsDefaultText);
+
+        assertThat(personalisation.get("remoteVideoCallTribunalResponse")).contains(
+            responseFieldsPresent ? remoteVideoCallTribunalResponse : remoteHearingDefaultText);
     }
 
     @Test

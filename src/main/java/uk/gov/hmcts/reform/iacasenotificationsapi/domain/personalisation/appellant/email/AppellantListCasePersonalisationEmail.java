@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -24,6 +25,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsF
 public class AppellantListCasePersonalisationEmail implements EmailNotificationPersonalisation {
 
     private final String appellantCaseListedTemplateId;
+    private final String listAssistHearingAppellantCaseListedTemplateId;
     private final DateTimeExtractor dateTimeExtractor;
     private final CustomerServicesProvider customerServicesProvider;
     private final HearingDetailsFinder hearingDetailsFinder;
@@ -37,6 +39,7 @@ public class AppellantListCasePersonalisationEmail implements EmailNotificationP
 
     public AppellantListCasePersonalisationEmail(
         @Value("${govnotify.template.caseListed.appellant.email}") String appellantCaseListedEmailTemplateId,
+        @Value("${govnotify.template.listAssistHearing.caseListed.appellant.email}") String listAssistHearingAppellantCaseListedTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         DateTimeExtractor dateTimeExtractor,
         CustomerServicesProvider customerServicesProvider,
@@ -44,6 +47,7 @@ public class AppellantListCasePersonalisationEmail implements EmailNotificationP
         RecipientsFinder recipientsFinder
     ) {
         this.appellantCaseListedTemplateId = appellantCaseListedEmailTemplateId;
+        this.listAssistHearingAppellantCaseListedTemplateId = listAssistHearingAppellantCaseListedTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.dateTimeExtractor = dateTimeExtractor;
         this.customerServicesProvider = customerServicesProvider;
@@ -53,7 +57,8 @@ public class AppellantListCasePersonalisationEmail implements EmailNotificationP
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        return appellantCaseListedTemplateId;
+        return asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES
+                ? listAssistHearingAppellantCaseListedTemplateId : appellantCaseListedTemplateId;
     }
 
     @Override

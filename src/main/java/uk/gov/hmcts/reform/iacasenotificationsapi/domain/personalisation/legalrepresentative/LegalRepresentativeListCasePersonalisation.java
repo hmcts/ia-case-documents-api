@@ -5,6 +5,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ARIA_LISTING_REFERENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_INTEGRATED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
@@ -29,6 +31,8 @@ public class LegalRepresentativeListCasePersonalisation implements LegalRepresen
     private final String legalRepresentativeCaseListedNonAdaTemplateId;
     private final String legalRepresentativeCaseListedAdaTemplateId;
     private final String legalRepresentativeOutOfCountryCaseListedTemplateId;
+    private final String listAssistHearingLegalRepresentativeCaseListedTemplateId;
+    private final String listAssistHearingLegalRepresentativeOutOfCountryCaseListedTemplateId;
     private final String iaExUiFrontendUrl;
     private final int appellantProvidingAppealArgumentDeadlineDelay;
     private final int respondentResponseToAppealArgumentDeadlineDelay;
@@ -45,6 +49,8 @@ public class LegalRepresentativeListCasePersonalisation implements LegalRepresen
         @Value("${govnotify.template.caseListed.legalRep.email.nonAda}") String legalRepresentativeCaseListedNonAdaTemplateId,
         @Value("${govnotify.template.caseListed.legalRep.email.ada}") String legalRepresentativeCaseListedAdaTemplateId,
         @Value("${govnotify.template.caseListed.remoteHearing.legalRep.email}") String legalRepresentativeOutOfCountryCaseListedTemplateId,
+        @Value("${govnotify.template.listAssistHearing.caseListed.legalRep.email}") String listAssistHearingLegalRepresentativeCaseListedTemplateId,
+        @Value("${govnotify.template.listAssistHearing.caseListed.remoteHearing.legalRep.email}") String listAssistHearingLegalRepresentativeOutOfCountryCaseListedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
         @Value("${adaCaseListed.deadlines.appellantProvidingAppealArgumentDelay}") int appellantProvidingAppealArgumentDeadlineDelay,
         @Value("${adaCaseListed.deadlines.respondentResponseToAppealArgumentDelay}") int respondentResponseToAppealArgumentDeadlineDelay,
@@ -55,6 +61,8 @@ public class LegalRepresentativeListCasePersonalisation implements LegalRepresen
         this.legalRepresentativeCaseListedNonAdaTemplateId = legalRepresentativeCaseListedNonAdaTemplateId;
         this.legalRepresentativeCaseListedAdaTemplateId = legalRepresentativeCaseListedAdaTemplateId;
         this.legalRepresentativeOutOfCountryCaseListedTemplateId = legalRepresentativeOutOfCountryCaseListedTemplateId;
+        this.listAssistHearingLegalRepresentativeCaseListedTemplateId = listAssistHearingLegalRepresentativeCaseListedTemplateId;
+        this.listAssistHearingLegalRepresentativeOutOfCountryCaseListedTemplateId = listAssistHearingLegalRepresentativeOutOfCountryCaseListedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.appellantProvidingAppealArgumentDeadlineDelay = appellantProvidingAppealArgumentDeadlineDelay;
         this.respondentResponseToAppealArgumentDeadlineDelay = respondentResponseToAppealArgumentDeadlineDelay;
@@ -65,14 +73,17 @@ public class LegalRepresentativeListCasePersonalisation implements LegalRepresen
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
+        YesOrNo isIntegrated = asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO);
         if (asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
             .map(centre -> centre == HearingCentre.REMOTE_HEARING)
             .orElse(false)) {
-            return legalRepresentativeOutOfCountryCaseListedTemplateId;
+            return (isIntegrated == YesOrNo.YES ?
+                    listAssistHearingLegalRepresentativeOutOfCountryCaseListedTemplateId : legalRepresentativeOutOfCountryCaseListedTemplateId);
         } else {
             return isAcceleratedDetainedAppeal(asylumCase)
                 ? legalRepresentativeCaseListedAdaTemplateId
-                : legalRepresentativeCaseListedNonAdaTemplateId;
+                : (isIntegrated == YesOrNo.YES ?
+                listAssistHearingLegalRepresentativeCaseListedTemplateId : legalRepresentativeCaseListedNonAdaTemplateId);
         }
     }
 
