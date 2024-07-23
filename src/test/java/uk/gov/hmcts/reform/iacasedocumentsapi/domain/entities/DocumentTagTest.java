@@ -32,6 +32,7 @@ class DocumentTagTest {
         assertEquals("upperTribunalBundle", DocumentTag.UPPER_TRIBUNAL_BUNDLE.toString());
         assertEquals("appealReasons", DocumentTag.APPEAL_REASONS.toString());
         assertEquals("clarifyingQuestions", DocumentTag.CLARIFYING_QUESTIONS.toString());
+        assertEquals("noticeOfAdjournedHearing", DocumentTag.NOTICE_OF_ADJOURNED_HEARING.toString());
         assertEquals("appealForm", DocumentTag.APPEAL_FORM.toString());
         assertEquals("noticeOfDecisionUtTransfer", DocumentTag.NOTICE_OF_DECISION_UT_TRANSFER.toString());
         assertEquals("remittalDecision", DocumentTag.REMITTAL_DECISION.toString());
@@ -89,6 +90,6 @@ class DocumentTagTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(85, DocumentTag.values().length);
+        assertEquals(86, DocumentTag.values().length);
     }
 }

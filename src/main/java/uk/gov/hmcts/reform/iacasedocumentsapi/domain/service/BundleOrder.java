@@ -23,7 +23,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case CASE_SUMMARY:
                 return 1;
             case REHEARD_HEARING_NOTICE:
-                return 2;                
+                return 2;
             case HEARING_NOTICE:
                 return 3;
             case APPEAL_SUBMISSION:
@@ -224,8 +224,10 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 74;
             case REMITTAL_DECISION:
                 return 75;
-            case NONE:
+            case NOTICE_OF_ADJOURNED_HEARING:
                 return 76;
+            case NONE:
+                return 77;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }
