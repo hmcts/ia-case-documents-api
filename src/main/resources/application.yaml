@@ -16,6 +16,8 @@ management:
       enabled: true
 
 spring:
+  config:
+    import: "optional:configtree:/mnt/secrets/ia/"
   application:
     name: ia-case-payments-api
   main:
