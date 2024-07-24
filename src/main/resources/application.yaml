@@ -578,6 +578,7 @@ security:
       - "buildCase"
       - "listCase"
       - "draftHearingRequirements"
+      - "updateTribunalDecision"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
