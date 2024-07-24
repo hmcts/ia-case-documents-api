@@ -11,12 +11,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -76,7 +71,7 @@ public class CcdScenarioRunnerTest {
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
-        RestAssured.useRelaxedHTTPSValidation();
+        RestAssured.useRelaxedHTTPSValidation();        
     }
 
     @Test
@@ -100,10 +95,9 @@ public class CcdScenarioRunnerTest {
             scenarioPattern = "*" + scenarioPattern + "*.json";
         }
 
-        Collection<String> scenarioSources =
-            StringResourceLoader
-                .load("/scenarios/" + scenarioPattern)
-                .values();
+        Collection<String> scenarioSources = new ArrayList<>();
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/" + scenarioPattern).values());
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern).values());
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
@@ -112,8 +106,10 @@ public class CcdScenarioRunnerTest {
         List<String> runScenarios = new ArrayList<>();
         int maxRetries = 3;
         for (String scenarioSource : scenarioSources) {
-            String description = "";
+
             for (int i = 0; i < maxRetries; i++) {
+
+                String description = "";
                 try {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
 
@@ -362,7 +358,6 @@ public class CcdScenarioRunnerTest {
         }
 
         if ("System".equalsIgnoreCase(credentials)) {
-
             return authorizationHeadersProvider
                 .getSystemAuthorization();
         }
@@ -370,13 +365,13 @@ public class CcdScenarioRunnerTest {
         if ("HomeOfficeLart".equalsIgnoreCase(credentials)) {
 
             return authorizationHeadersProvider
-                    .getHomeOfficeLartAuthorization();
+                .getHomeOfficeLartAuthorization();
         }
 
         if ("HomeOfficePOU".equalsIgnoreCase(credentials)) {
 
             return authorizationHeadersProvider
-                    .getHomeOfficePouAuthorization();
+                .getHomeOfficePouAuthorization();
         }
 
         return new Headers();
