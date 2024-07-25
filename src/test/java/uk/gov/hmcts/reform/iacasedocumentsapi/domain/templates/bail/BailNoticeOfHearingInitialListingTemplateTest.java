@@ -63,8 +63,9 @@ class BailNoticeOfHearingInitialListingTemplateTest {
 
     @BeforeEach
     public void setUp() {
-        template = new BailNoticeOfHearingInitialListingTemplate(
-                        initialListingTemplateName, customerServicesProvider, stringProvider);
+        template =
+            new BailNoticeOfHearingInitialListingTemplate(
+                initialListingTemplateName, customerServicesProvider, stringProvider);
         hattonCross = new CourtVenue("Hatton Cross Tribunal Hearing Centre",
                 "Hatton Cross Tribunal Hearing Centre",
                 "386417",
