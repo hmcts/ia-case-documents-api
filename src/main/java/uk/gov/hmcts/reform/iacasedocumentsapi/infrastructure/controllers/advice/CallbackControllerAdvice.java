@@ -35,7 +35,7 @@ public class CallbackControllerAdvice extends ResponseEntityExceptionHandler {
     })
     protected ResponseEntity<String> handleExceptions(
         HttpServletRequest request,
-        RequiredFieldMissingException e
+        Exception e
     ) {
         log.error("Exception for the CCDCaseId: {}",
             RequestContextHolder.currentRequestAttributes().getAttribute("CCDCaseId", RequestAttributes.SCOPE_REQUEST));

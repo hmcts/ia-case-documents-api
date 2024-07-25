@@ -43,6 +43,7 @@ public class EventTest {
         assertEquals("generateUpperTribunalBundle", Event.GENERATE_UPPER_TRIBUNAL_BUNDLE.toString());
         assertEquals("submitReasonsForAppeal", Event.SUBMIT_REASONS_FOR_APPEAL.toString());
         assertEquals("submitClarifyingQuestionAnswers",Event.SUBMIT_CLARIFYING_QUESTION_ANSWERS.toString());
+        assertEquals("recordAdjournmentDetails", Event.RECORD_ADJOURNMENT_DETAILS.toString());
         assertEquals("updateTribunalDecision",Event.UPDATE_TRIBUNAL_DECISION.toString());
         assertEquals("submitApplication",Event.SUBMIT_APPLICATION.toString());
         assertEquals("recordTheDecision",Event.RECORD_THE_DECISION.toString());
