@@ -82,11 +82,6 @@ public class CcdDataService {
         final StartEventDetails startEventDetails = getCase(userToken, s2sToken, uid, jurisdiction, caseType, caseId);
         log.info("Case details found for the caseId: {}", caseId);
 
-        if (debugLoggingEnabled) {
-            log.info("Case details found for the caseId: {}, StartEventResponse: {}",
-                     caseId, startEventDetails.getCaseDetails().getCaseData());
-        }
-
         if (!isPaymentReferenceExists(startEventDetails.getCaseDetails().getCaseData(),
                                       caseMetaData.getPaymentReference()) && !isWaysToPay) {
 
