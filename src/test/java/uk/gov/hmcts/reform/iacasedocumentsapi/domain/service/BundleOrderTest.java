@@ -123,6 +123,10 @@ public class BundleOrderTest {
             DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER,
+            DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE,
             DocumentTag.NONE
         );
 
