@@ -99,7 +99,13 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).orElse(HearingCentre.TAYLOR_HOUSE);
 
         Document hearingNotice;
-        if (listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING)) {
+        boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
+                .orElse(YesOrNo.NO).equals(YesOrNo.YES);
+
+        //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
+        //IS_REMOTE_HEARING is used for the case ref data
+        if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
+                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;

@@ -122,6 +122,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("noticeOfAdjournedHearing")
+    public DocumentCreator<AsylumCase> getNoticeOfAdjournedHearingDocumentCreator(
+        @Value("${noticeOfAdjournedHearingDocument.contentType}") String contentType,
+        @Value("${noticeOfAdjournedHearingDocument.fileExtension}") String fileExtension,
+        @Value("${noticeOfAdjournedHearingDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("noticeOfAdjournedHearingTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("hearingNoticeEdited")
     public DocumentCreator<AsylumCase> getHearingNoticeEditedDocumentCreator(
         @Value("${hearingNoticeEditedDocument.contentType}") String contentType,

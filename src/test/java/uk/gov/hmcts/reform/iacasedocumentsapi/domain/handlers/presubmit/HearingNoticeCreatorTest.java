@@ -20,6 +20,8 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -99,16 +101,24 @@ class HearingNoticeCreatorTest {
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(NO));
     }
 
-    @Test
-    void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
+    @ParameterizedTest
+    @CsvSource({ "TAYLOR_HOUSE, NO, NO", "TAYLOR_HOUSE, YES, NO", "REMOTE_HEARING, YES, NO"})
+    void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case(
+            HearingCentre hearingCentre,
+            YesOrNo enabledRefData,
+            YesOrNo isRefDataRemoteHearing) {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(enabledRefData));
+        if (enabledRefData.equals(YesOrNo.YES)) {
+            when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isRefDataRemoteHearing));
+        }
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -153,6 +163,8 @@ class HearingNoticeCreatorTest {
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(NO));
+
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -174,6 +186,7 @@ class HearingNoticeCreatorTest {
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -185,8 +198,11 @@ class HearingNoticeCreatorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
     }
 
-    @Test
-    void should_create_remote_hearing_notice_pdf_and_append_to_reheard_hearing_documents_for_the_case() {
+    @ParameterizedTest
+    @CsvSource({ "NO, NO", "YES, YES", "NO, YES" })
+    void should_create_remote_hearing_notice_pdf_and_append_to_reheard_hearing_documents_for_the_case(
+            YesOrNo enabledRefData,
+            YesOrNo isRefDataRemoteHearing) {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
@@ -196,6 +212,10 @@ class HearingNoticeCreatorTest {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YES));
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(enabledRefData));
+        if (enabledRefData.equals(YesOrNo.YES)) {
+            when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isRefDataRemoteHearing));
+        }
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
