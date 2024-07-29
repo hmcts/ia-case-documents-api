@@ -23,7 +23,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case CASE_SUMMARY:
                 return 1;
             case REHEARD_HEARING_NOTICE:
-                return 2;                
+                return 2;
             case HEARING_NOTICE:
                 return 3;
             case APPEAL_SUBMISSION:
@@ -252,6 +252,8 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE:
                 log.warn("INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 return 85;
+            case NOTICE_OF_ADJOURNED_HEARING:
+                return 86;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

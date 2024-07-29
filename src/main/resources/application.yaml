@@ -36,6 +36,8 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: Immigration & Asylum case documents API
+  config:
+    import: "optional:configtree:/mnt/secrets/ia/"    
   jackson.date-format: yyyy-MM-dd
   security:
     oauth2:
@@ -81,6 +83,11 @@ hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
 hearingNoticeAdjournedWithoutDateDocument.fileName: "hearing-notice"
 hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00376.docx}
+
+noticeOfAdjournedHearingDocument.contentType: application/pdf
+noticeOfAdjournedHearingDocument.fileExtension: PDF
+noticeOfAdjournedHearingDocument.fileName: "notice-of-adjourned-hearing"
+noticeOfAdjournedHearingDocument.templateName: ${NOTICE_OF_ADJOURNED_HEARING_TEMPLATE:TB-IAC-HNO-ENG-00240.docx}
 
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
@@ -559,6 +566,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateHearingBundle"
       - "customiseHearingBundle"
+      - "recordAdjournmentDetails"
       - "requestCaseBuilding"
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
@@ -600,6 +608,8 @@ security:
       - "makeNewApplication"
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
+      - "caseListing"
+      - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
       - "recordRemissionDecision"
@@ -651,7 +661,10 @@ security:
     caseworker-ia-system:
       - "submitReasonsForAppeal"
       - "endAppealAutomatically"
+      - "listCase"
+      - "editCaseListing"
       - "caseListing"
+      - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
@@ -662,7 +675,7 @@ security:
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
       - "submitApplication"
-      - "makeNewApplication"      
+      - "makeNewApplication"
     caseworker-ia-respondentofficer:
       - "applyForFTPARespondent"
       - "uploadAdditionalEvidenceHomeOffice"
