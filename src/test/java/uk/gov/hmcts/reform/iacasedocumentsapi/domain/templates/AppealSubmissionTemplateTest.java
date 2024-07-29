@@ -59,6 +59,8 @@ public class AppealSubmissionTemplateTest {
     private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
     private String appealReferenceNumber = "RP/11111/2020";
     private String legalRepReferenceNumber = "OUR-REF";
+    private final String legalRepFirstName = "legalRepFirstName";
+    private final String legalRepFamilyName = "legalRepFamilyName";
     private String homeOfficeReferenceNumber = "A1234567/001";
     private String homeOfficeDecisionDate = "2020-12-23";
     private String decisionLetterReceivedDate = "2020-12-23";
@@ -243,6 +245,43 @@ public class AppealSubmissionTemplateTest {
 
         assertEquals(YesOrNo.NO, templateFieldValues.get("isAdmin"));
         assertEquals(YesOrNo.YES, templateFieldValues.get("hasOtherAppeals"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_only_first_name_provided() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepFirstName));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepFirstName, templateFieldValues.get("legalRepName"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_only_family_name_provided() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+        when(asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("", templateFieldValues.get("legalRepName"));
+    }
+
+    @Test
+    void should_correctly_map_legal_rep_name_when_first_name_and_family_name_provided() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(caseDetails.getCreatedDate()).thenReturn(createdDate);
+        when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.of(legalRepFirstName));
+        when(asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class)).thenReturn(Optional.of(legalRepFamilyName));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepFirstName + " " + legalRepFamilyName, templateFieldValues.get("legalRepName"));
     }
 
     @Test

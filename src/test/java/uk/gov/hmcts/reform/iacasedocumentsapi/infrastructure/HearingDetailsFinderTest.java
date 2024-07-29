@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.*;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,6 +73,13 @@ public class HearingDetailsFinderTest {
         when(stringProvider.get("hearingCentreName", hearingCentre.toString())).thenReturn(Optional.of(hearingCentreName));
 
         assertEquals(hearingCentreName, hearingDetailsFinder.getHearingCentreName(asylumCase));
+    }
+
+    @Test
+    public void should_return_hearing_centre_name_for_decision_without_hearing_appeal() {
+        when(asylumCase.read(IS_DECISION_WITHOUT_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        assertEquals(HearingDetailsFinder.DECISION_WITHOUT_HEARING, hearingDetailsFinder.getHearingCentreName(asylumCase));
     }
 
     @Test

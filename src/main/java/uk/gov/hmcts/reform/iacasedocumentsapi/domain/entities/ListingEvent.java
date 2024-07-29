@@ -10,7 +10,8 @@ public enum ListingEvent {
     INITIAL_LISTING("initialListing"),
     RELISTING("relisting");
 
-    @JsonValue private final String value;
+    @JsonValue
+    private final String value;
 
     ListingEvent(String value) {
         this.value = value;

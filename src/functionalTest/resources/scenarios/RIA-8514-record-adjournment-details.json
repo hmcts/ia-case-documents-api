@@ -1,0 +1,53 @@
+{
+  "description": "RIA-8514 Create notice of adjourned hearing PDF (IAC Harmondsworth)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "eventId": "recordAdjournmentDetails",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingDocuments": [],
+          "appealReferenceNumber": "DC/50001/2024",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2024-01-22T09:45:00",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "DC 50001 2024-Gonzlez-notice-of-adjourned-hearing.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "noticeOfAdjournedHearing"
+            }
+          }
+        ],
+        "appealReferenceNumber": "DC/50001/2024",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2024-01-22T09:45:00",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}"
+      }
+    }
+  }
+}
