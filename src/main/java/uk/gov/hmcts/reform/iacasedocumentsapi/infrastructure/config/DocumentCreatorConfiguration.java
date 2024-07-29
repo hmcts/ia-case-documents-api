@@ -38,6 +38,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalOocAppealSubmission")
+    public DocumentCreator<AsylumCase> getInternalOocAppealSubmissionDocumentCreator(
+        @Value("${appealSubmissionDocumentInternalOoc.contentType}") String contentType,
+        @Value("${appealSubmissionDocumentInternalOoc.fileExtension}") String fileExtension,
+        @Value("${appealSubmissionDocumentInternalOoc.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalOocAppealSubmissionTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("hearingRequirements")
     public DocumentCreator<AsylumCase> getHearingRequirementsDocumentCreator(
         @Value("${hearingRequirementsDocument.contentType}") String contentType,
