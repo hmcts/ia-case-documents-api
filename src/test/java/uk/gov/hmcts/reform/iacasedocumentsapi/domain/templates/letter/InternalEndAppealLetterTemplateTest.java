@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -50,7 +51,7 @@ class InternalEndAppealLetterTemplateTest {
     private String oocAddressLine1 = "Calle Toledo 32";
     private String oocAddressLine2 = "Madrid";
     private String oocAddressLine3 = "28003";
-    private String oocAddressCountry = "Spain";
+    private Nationality oocAddressCountry = Nationality.ES;
     private InternalEndAppealLetterTemplate internalEndAppealLetterTemplate;
     private Map<String, Object> fieldValuesMap;
 
@@ -96,7 +97,7 @@ class InternalEndAppealLetterTemplateTest {
         when(asylumCase.read(ADDRESS_LINE_1_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine1));
         when(asylumCase.read(ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine2));
         when(asylumCase.read(ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine3));
-        when(asylumCase.read(COUNTRY_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressCountry));
+        when(asylumCase.read(COUNTRY_OOC_ADMIN_J, Nationality.class)).thenReturn(Optional.of(oocAddressCountry));
     }
 
     @Test
@@ -135,6 +136,6 @@ class InternalEndAppealLetterTemplateTest {
         assertEquals(oocAddressLine1, fieldValuesMap.get("address_line_1"));
         assertEquals(oocAddressLine2, fieldValuesMap.get("address_line_2"));
         assertEquals(oocAddressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(oocAddressCountry, fieldValuesMap.get("address_line_4"));
+        assertEquals(oocAddressCountry.toString(), fieldValuesMap.get("address_line_4"));
     }
 }
