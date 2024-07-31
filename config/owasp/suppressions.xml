@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2024-06-01">
+    <suppress until="2024-09-01">
         <notes><![CDATA[
             This vulnerability is about potential Remote Code Execution when serializing and deserializing Java classes
             using HttpInvokerServiceExport and org.springframework.remoting.
@@ -10,7 +10,7 @@
         ]]></notes>
         <cve>CVE-2016-1000027</cve>
     </suppress>
-    <suppress until="2024-06-01">
+    <suppress until="2024-09-01">
         <notes>![CDATA[
             False positive - https://github.com/jeremylong/DependencyCheck/issues/5502
 
@@ -23,7 +23,7 @@
     <suppress until="2023-11-30">
         <cve>CVE-2023-35116</cve><!-- 2023-09-04 jackson-databind 2.15.2 (the latest version at time of checking) is still vulnerable. Try again when a new version comes out. -->
     </suppress>
-    <suppress until="2024-01-31">
+    <suppress until="2024-09-31">
         <notes>Suppress until org.springframework.cloud, service-auth-provider-client, document-management-client and cd-case-document-am-cli upgrade their org.bouncycastle dependents</notes>
         <cve>CVE-2023-33202</cve>
     </suppress>
