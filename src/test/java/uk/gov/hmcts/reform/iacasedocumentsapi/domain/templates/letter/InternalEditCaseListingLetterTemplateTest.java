@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,6 +32,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeUpdatedTemplateProvider;
@@ -62,7 +64,7 @@ public class InternalEditCaseListingLetterTemplateTest {
     private String oocAddressLine1 = "Calle Toledo 32";
     private String oocAddressLine2 = "Madrid";
     private String oocAddressLine3 = "28003";
-    private Nationality oocAddressCountry = Nationality.ES;
+    private NationalityFieldValue oocAddressCountry = mock(NationalityFieldValue.class);
     private String hearingDate = "2024-12-20T12:34:56";
     @Mock private HearingNoticeUpdatedTemplateProvider hearingNoticeUpdatedTemplateProvider;
 
@@ -140,7 +142,7 @@ public class InternalEditCaseListingLetterTemplateTest {
         Assert.assertEquals(oocAddressLine1, templateFieldValues.get("address_line_1"));
         Assert.assertEquals(oocAddressLine2, templateFieldValues.get("address_line_2"));
         Assert.assertEquals(oocAddressLine3, templateFieldValues.get("address_line_3"));
-        Assert.assertEquals(oocAddressCountry.toString(), templateFieldValues.get("address_line_4"));
+        Assert.assertEquals(Nationality.ES.toString(), templateFieldValues.get("address_line_4"));
         assertEquals("20 December 2024", templateFieldValues.get("hearingDate"));
         assertEquals("12:34 PM", templateFieldValues.get("hearingTime"));
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
@@ -153,6 +155,7 @@ public class InternalEditCaseListingLetterTemplateTest {
         when(asylumCase.read(ADDRESS_LINE_1_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine1));
         when(asylumCase.read(ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine2));
         when(asylumCase.read(ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine3));
-        when(asylumCase.read(COUNTRY_OOC_ADMIN_J, Nationality.class)).thenReturn(Optional.of(oocAddressCountry));
+        when(asylumCase.read(COUNTRY_OOC_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(oocAddressCountry));
+        when(oocAddressCountry.getCode()).thenReturn(Nationality.ES.name());
     }
 }

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
@@ -19,6 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
@@ -50,7 +52,7 @@ class InternalCaseListedLetterTemplateTest {
     private String addressLine2 = "Building name";
     private String addressLine3 = "Street name";
     private String postCode = "XX1 2YY";
-    private Nationality nationalityOoc = Nationality.ES;
+    private NationalityFieldValue nationalityOoc = mock(NationalityFieldValue.class);
     private String postTown = "Town name";
     private String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
     private String formattedManchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
@@ -112,7 +114,7 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
         assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
         assertEquals(postTown, fieldValuesMap.get("address_line_4"));
-        assertEquals(nationalityOoc.toString(), fieldValuesMap.get("address_line_5"));
+        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_5"));
     }
 
     void dataSetup(boolean appellantInUk) {
@@ -139,7 +141,8 @@ class InternalCaseListedLetterTemplateTest {
             when(asylumCase.read(ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of(addressLine2));
             when(asylumCase.read(ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of(addressLine3));
             when(asylumCase.read(ADDRESS_LINE_4_ADMIN_J, String.class)).thenReturn(Optional.of(postTown));
-            when(asylumCase.read(COUNTRY_OOC_ADMIN_J, Nationality.class)).thenReturn(Optional.of(nationalityOoc));
+            when(asylumCase.read(COUNTRY_OOC_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(nationalityOoc));
+            when(nationalityOoc.getCode()).thenReturn(Nationality.ES.name());
         }
     }
 }

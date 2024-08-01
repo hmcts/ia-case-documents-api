@@ -5,7 +5,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
@@ -810,7 +810,7 @@ public enum AsylumCaseDefinition {
         "addressLine4AdminJ", new TypeReference<String>(){}),
 
     COUNTRY_OOC_ADMIN_J(
-        "countryOocAdminJ", new TypeReference<Nationality>(){}),
+        "countryOocAdminJ", new TypeReference<NationalityFieldValue>(){}),
 
     APPELLANT_IN_UK(
         "appellantInUk", new TypeReference<YesOrNo>() {}),
