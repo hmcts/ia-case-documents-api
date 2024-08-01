@@ -1687,7 +1687,7 @@ adminEmailAddresses:
   bradford: ${IA_ADMIN_BRADFORD_EMAIL:bradfordedets@example.com}
   birmingham: ${IA_ADMIN_BIRMINGHAM_EMAIL:birminghamedets@example.com}
   harmondsworth: ${IA_ADMIN_HARMONDSWORTH_EMAIL:harmondsworthedets@example.com}
-  yarlswood: ${IA_ADMIN_YARLSWOOD_EMAIL:yarlswoodedets@example.com}
+  yarlsWood: ${IA_ADMIN_YARLSWOOD_EMAIL:yarlswoodedets@example.com}
 
 hearingCentreEmailAddresses:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}

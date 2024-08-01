@@ -15,7 +15,7 @@ class BailHearingCentreTest {
         assertEquals("manchester", BailHearingCentre.MANCHESTER.toString());
         assertEquals("newport", BailHearingCentre.NEWPORT.toString());
         assertEquals("taylorHouse", BailHearingCentre.TAYLOR_HOUSE.toString());
-        assertEquals("yarlswood", BailHearingCentre.YARLSWOOD.toString());
+        assertEquals("yarlsWood", BailHearingCentre.YARLS_WOOD.toString());
     }
 
     @Test
@@ -27,7 +27,7 @@ class BailHearingCentreTest {
         assertEquals(BailHearingCentre.MANCHESTER, BailHearingCentre.from("manchester").get());
         assertEquals(BailHearingCentre.NEWPORT, BailHearingCentre.from("newport").get());
         assertEquals(BailHearingCentre.TAYLOR_HOUSE, BailHearingCentre.from("taylorHouse").get());
-        assertEquals(BailHearingCentre.YARLSWOOD, BailHearingCentre.from("yarlswood").get());
+        assertEquals(BailHearingCentre.YARLS_WOOD, BailHearingCentre.from("yarlsWood").get());
     }
 
     @Test

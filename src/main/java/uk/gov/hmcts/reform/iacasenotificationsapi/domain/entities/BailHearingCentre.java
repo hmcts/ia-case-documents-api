@@ -14,7 +14,7 @@ public enum BailHearingCentre {
     MANCHESTER("manchester"),
     NEWPORT("newport"),
     TAYLOR_HOUSE("taylorHouse"),
-    YARLSWOOD("yarlswood");
+    YARLS_WOOD("yarlsWood");
 
     @JsonValue
     private final String value;
