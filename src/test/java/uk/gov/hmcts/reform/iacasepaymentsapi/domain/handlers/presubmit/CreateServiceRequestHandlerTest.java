@@ -237,8 +237,7 @@ class CreateServiceRequestHandlerTest {
                 boolean canHandle = createServiceRequestHandler.canHandle(callbackStage, callback);
 
                 if ((callback.getEvent() == Event.GENERATE_SERVICE_REQUEST
-                     && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                        || callbackStage == PreSubmitCallbackStage.ABOUT_TO_START))
+                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT)
                     || isWaysToPay(callbackStage, callback, true)) {
 
                     assertTrue(canHandle);
