@@ -5,10 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate.CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate.THE_APPELLANT_HAD_TO_LEAVE_THE_UK_IN_ORDER_TO_APPEAL;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate.THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate.formatComplexString;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AppealSubmissionDocFieldMapper.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDateTime;
@@ -17,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
