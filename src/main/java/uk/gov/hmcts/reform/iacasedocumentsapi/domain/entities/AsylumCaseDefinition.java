@@ -5,7 +5,6 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
