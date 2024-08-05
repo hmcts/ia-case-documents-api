@@ -52,7 +52,7 @@ public class CdamDocumentManagementUploader {
             ByteStreams.toByteArray(resource.getInputStream())
         );
 
-        log.info("Uploading {} using CaseDocumentClient", resource.getFilename());
+        log.info("Uploading {} using CaseDocumentClient (no CDAM)", resource.getFilename());
         UploadResponse uploadResponse = caseDocumentClient.uploadDocuments(
             accessToken,
             serviceAuthorizationToken,

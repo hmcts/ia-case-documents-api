@@ -53,7 +53,7 @@ public class DmDocumentDownloadClient {
 
         UserDetails userDetails = userDetailsProvider.getUserDetails();
 
-        log.info("Downloading {} using DocumentDownloadClientApi", documentBinaryUrl);
+        log.info("Downloading {} using DocumentDownloadClientApi (no CDAM)", documentBinaryUrl);
         ResponseEntity<Resource> resourceResponseEntity = documentDownloadClientApi.downloadBinary(
             accessTokenProvider.getAccessToken(),
             serviceAuthTokenGenerator.generate(),
