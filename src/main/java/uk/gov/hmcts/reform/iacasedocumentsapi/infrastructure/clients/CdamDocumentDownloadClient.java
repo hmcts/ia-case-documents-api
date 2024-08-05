@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
 @Component
+@Slf4j
 public class CdamDocumentDownloadClient {
     private final CaseDocumentClient caseDocumentClient;
     private final AuthTokenGenerator serviceAuthTokenGenerator;
@@ -26,6 +28,7 @@ public class CdamDocumentDownloadClient {
 
     //TODO Upgrade ccd-case-document-am-client. Need to get UUID, string cannot be converted.
     public Resource download(String documentBinaryUrl) {
+        log.info("Downloading {} using CaseDocumentClient", documentBinaryUrl);
         ResponseEntity<Resource> resourceResponseEntity = caseDocumentClient.getDocumentBinary(
             accessTokenProvider.getAccessToken(),
             serviceAuthTokenGenerator.generate(),
