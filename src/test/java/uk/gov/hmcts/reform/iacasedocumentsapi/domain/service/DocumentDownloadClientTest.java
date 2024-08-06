@@ -45,18 +45,4 @@ public class DocumentDownloadClientTest {
         // Then
         verify(cdamDocumentDownloadClient, times(1)).download(null);
     }
-
-    @Test
-    void should_use_dm_when_feature_flag_false() throws IOException {
-        // Given
-        // given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(false);
-
-        // When
-        documentDownloadClient.download(null);
-
-        // Then
-        // verify(dmDocumentDownloadClient, times(1)).download(null);
-        verify(cdamDocumentDownloadClient, times(1)).download(null);
-    }
-
 }

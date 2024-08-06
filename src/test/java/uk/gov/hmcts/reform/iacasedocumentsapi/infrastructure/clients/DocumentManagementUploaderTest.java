@@ -48,20 +48,4 @@ class DocumentManagementUploaderTest {
         // Then
         verify(cdamDocumentManagementUploader, times(1)).upload(resource, null);
     }
-
-    @Test
-    void should_use_dm_when_feature_flag_false() throws IOException {
-        // Given
-        Resource resource = mock(Resource.class);
-        given(resource.getFilename()).willReturn("file.ext");
-        // given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(false);
-
-        // When
-        documentManagementUploader.upload(resource, null);
-
-        // Then
-        // verify(dmDocumentManagementUploader, times(1)).upload(resource, null);
-        verify(cdamDocumentManagementUploader, times(1)).upload(resource, null);
-    }
-
 }
