@@ -61,6 +61,7 @@ class DocumentManagementUploaderTest {
 
         // Then
         // verify(dmDocumentManagementUploader, times(1)).upload(resource, null);
+        verify(cdamDocumentManagementUploader, times(1)).upload(resource, null);
     }
 
 }

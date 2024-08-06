@@ -56,6 +56,7 @@ public class DocumentDownloadClientTest {
 
         // Then
         // verify(dmDocumentDownloadClient, times(1)).download(null);
+        verify(cdamDocumentDownloadClient, times(1)).download(null);
     }
 
 }
