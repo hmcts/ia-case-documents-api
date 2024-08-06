@@ -19,8 +19,13 @@ public class LaunchDarklyFeatureToggler implements FeatureToggler {
         this.userDetailsProvider = userDetailsProvider;
     }
 
-    public boolean getValue(String key, Boolean defaultValue) {
+    @Override
+    public boolean isFlagKnown(String key) {
+        return ldClient.isFlagKnown(key);
+    }
 
+    @Override
+    public boolean getValue(String key, Boolean defaultValue) {
         UserDetails userDetails = userDetailsProvider.getUserDetails();
 
         return ldClient.boolVariation(
@@ -33,5 +38,4 @@ public class LaunchDarklyFeatureToggler implements FeatureToggler {
             defaultValue
         );
     }
-
 }
