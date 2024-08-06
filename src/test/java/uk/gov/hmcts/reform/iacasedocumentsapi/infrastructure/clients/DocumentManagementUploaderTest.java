@@ -40,7 +40,6 @@ class DocumentManagementUploaderTest {
         // Given
         Resource resource = mock(Resource.class);
         given(resource.getFilename()).willReturn("file.ext");
-        // given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
 
         // When
         documentManagementUploader.upload(resource, null);

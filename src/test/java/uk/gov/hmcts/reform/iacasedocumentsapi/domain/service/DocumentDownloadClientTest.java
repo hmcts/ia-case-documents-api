@@ -36,8 +36,6 @@ public class DocumentDownloadClientTest {
 
     @Test
     void should_use_cdam_when_feature_flag_true() throws IOException {
-        // Given
-        // given(featureToggler.getValue(eq("use-ccd-document-am"), anyBoolean())).willReturn(true);
 
         // When
         documentDownloadClient.download(null);
