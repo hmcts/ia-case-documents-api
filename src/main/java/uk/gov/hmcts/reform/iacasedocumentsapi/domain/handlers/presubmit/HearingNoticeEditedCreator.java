@@ -131,14 +131,14 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 asylumCase,
                 hearingNoticeEdited,
                 REHEARD_HEARING_DOCUMENTS,
-                DocumentTag.REHEARD_HEARING_NOTICE
+                DocumentTag.REHEARD_HEARING_NOTICE_RELISTED
             );
         } else {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,
                 HEARING_DOCUMENTS,
-                DocumentTag.HEARING_NOTICE
+                DocumentTag.HEARING_NOTICE_RELISTED
             );
         }
     }
