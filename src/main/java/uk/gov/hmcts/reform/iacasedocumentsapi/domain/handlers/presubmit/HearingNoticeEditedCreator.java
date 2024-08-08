@@ -1,28 +1,28 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @Component
@@ -34,6 +34,10 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
     private final DocumentCreator<AsylumCase> adaHearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentHandler documentHandler;
     private final HearingDetailsFinder hearingDetailsFinder;
+    private final FeatureToggler featureToggler;
+    private final DocumentReceiver documentReceiver;
+    private final DocumentsAppender documentsAppender;
+    private final Appender<ReheardHearingDocuments> reheardHearingAppender;
 
     public HearingNoticeEditedCreator(
         @Qualifier("hearingNoticeUpdatedRequirements") DocumentCreator<AsylumCase> hearingNoticeUpdatedRequirementsDocumentCreator,
@@ -41,7 +45,11 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         @Qualifier("remoteHearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator,
         @Qualifier("adaHearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> adaHearingNoticeUpdatedDetailsDocumentCreator,
         DocumentHandler documentHandler,
-        HearingDetailsFinder hearingDetailsFinder
+        HearingDetailsFinder hearingDetailsFinder,
+        FeatureToggler featureToggler,
+        DocumentReceiver documentReceiver,
+        DocumentsAppender documentsAppender,
+        Appender<ReheardHearingDocuments> reheardHearingAppender
     ) {
         this.hearingNoticeUpdatedRequirementsDocumentCreator = hearingNoticeUpdatedRequirementsDocumentCreator;
         this.hearingNoticeUpdatedDetailsDocumentCreator = hearingNoticeUpdatedDetailsDocumentCreator;
@@ -49,6 +57,10 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         this.adaHearingNoticeUpdatedDetailsDocumentCreator = adaHearingNoticeUpdatedDetailsDocumentCreator;
         this.documentHandler = documentHandler;
         this.hearingDetailsFinder = hearingDetailsFinder;
+        this.featureToggler = featureToggler;
+        this.documentReceiver = documentReceiver;
+        this.documentsAppender = documentsAppender;
+        this.reheardHearingAppender = reheardHearingAppender;
     }
 
     public boolean canHandle(
@@ -59,7 +71,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && asList(Event.EDIT_CASE_LISTING).contains(callback.getEvent());
+            && Event.EDIT_CASE_LISTING == callback.getEvent();
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -87,12 +99,12 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
 
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
             boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
-                    .orElse(YesOrNo.NO).equals(YesOrNo.YES);
+                .orElse(YesOrNo.NO).equals(YesOrNo.YES);
 
             //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
             //IS_REMOTE_HEARING is used for the case ref data
             if ((!isCaseUsingLocationRefData && asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING)))
-                    || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
+                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
                 generateDocument(caseDetails, asylumCase, caseDetailsBefore, remoteHearingNoticeUpdatedDetailsDocumentCreator);
             } else if (hearingCentreNameBefore.equals(listCaseHearingCentre) && oldHearingDate.equals(hearingDate)) {
                 if (isAda) {
@@ -126,13 +138,17 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                     .orElseThrow(() -> new IllegalStateException("previous case data is not present")));
 
         if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YesOrNo.YES))
-             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                hearingNoticeEdited,
-                REHEARD_HEARING_DOCUMENTS,
-                DocumentTag.REHEARD_HEARING_NOTICE_RELISTED
-            );
+            && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)))) {
+            if (featureToggler.getValue("dlrm-remitted-feature-flag", false)) {
+                appendReheardHearingDocuments(asylumCase, hearingNoticeEdited);
+            } else {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    hearingNoticeEdited,
+                    REHEARD_HEARING_DOCUMENTS,
+                    DocumentTag.REHEARD_HEARING_NOTICE_RELISTED
+                );
+            }
         } else {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
@@ -141,5 +157,28 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 DocumentTag.HEARING_NOTICE_RELISTED
             );
         }
+    }
+
+    private void appendReheardHearingDocuments(AsylumCase asylumCase, Document hearingNotice) {
+        DocumentWithMetadata documentWithMetadata =
+            documentReceiver.receive(
+                hearingNotice,
+                "",
+                DocumentTag.REHEARD_HEARING_NOTICE_RELISTED
+            );
+
+        List<IdValue<DocumentWithMetadata>> allDocuments =
+            documentsAppender.append(
+                Collections.emptyList(),
+                Collections.singletonList(documentWithMetadata)
+            );
+
+        ReheardHearingDocuments newReheardDocuments = new ReheardHearingDocuments(allDocuments);
+
+        Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
+            asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        List<IdValue<ReheardHearingDocuments>> allReheardDocuments =
+            reheardHearingAppender.append(newReheardDocuments, maybeExistingReheardDocuments.orElse(emptyList()));
+        asylumCase.write(REHEARD_HEARING_DOCUMENTS_COLLECTION, allReheardDocuments);
     }
 }
