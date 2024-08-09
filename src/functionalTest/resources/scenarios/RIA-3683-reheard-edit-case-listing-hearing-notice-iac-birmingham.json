@@ -37,18 +37,25 @@
               }
             }
           ],
-          "reheardHearingDocuments": [
+          "reheardHearingDocumentsCollection": [
             {
               "id": "1",
               "value": {
-                "document": {
-                  "document_url": "old-reheard-hearing-notice",
-                  "document_binary_url": "old-reheard-hearing-notice",
-                  "document_filename": "old-reheard-hearing-notice"
-                },
-                "description": "OLD REHEARD HEARING NOTICE",
-                "dateUploaded": "{$TODAY}",
-                "tag": "reheardHearingNotice"
+                "reheardHearingDocs": [
+                  {
+                    "id": "1",
+                    "value": {
+                      "document": {
+                        "document_url": "old-reheard-hearing-notice",
+                        "document_binary_url": "old-reheard-hearing-notice",
+                        "document_filename": "old-reheard-hearing-notice"
+                      },
+                      "description": "OLD REHEARD HEARING NOTICE",
+                      "dateUploaded": "{$TODAY}",
+                      "tag": "reheardHearingNotice"
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -85,18 +92,25 @@
               }
             }
           ],
-          "reheardHearingDocuments": [
+          "reheardHearingDocumentsCollection": [
             {
               "id": "1",
               "value": {
-                "document": {
-                  "document_url": "old-reheard-hearing-notice",
-                  "document_binary_url": "old-reheard-hearing-notice",
-                  "document_filename": "old-reheard-hearing-notice"
-                },
-                "description": "OLD REHEARD HEARING NOTICE",
-                "dateUploaded": "{$TODAY}",
-                "tag": "reheardHearingNotice"
+                "reheardHearingDocs": [
+                  {
+                    "id": "1",
+                    "value": {
+                      "document": {
+                        "document_url": "old-reheard-hearing-notice",
+                        "document_binary_url": "old-reheard-hearing-notice",
+                        "document_filename": "old-reheard-hearing-notice"
+                      },
+                      "description": "OLD REHEARD HEARING NOTICE",
+                      "dateUploaded": "{$TODAY}",
+                      "tag": "reheardHearingNotice"
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -127,31 +141,38 @@
             }
           }
         ],
-        "reheardHearingDocuments": [
-          {
-            "id": "2",
-            "value": {
-              "document": {
-                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "PA 11111 2019-Gonzlez-hearing-notice.PDF"
-              },
-              "description": "",
-              "dateUploaded": "{$TODAY}",
-              "tag": "reheardHearingNoticeRelisted"
-            }
-          },
+        "reheardHearingDocumentsCollection": [
           {
             "id": "1",
             "value": {
-              "document": {
-                "document_url": "old-reheard-hearing-notice",
-                "document_binary_url": "old-reheard-hearing-notice",
-                "document_filename": "old-reheard-hearing-notice"
-              },
-              "description": "OLD REHEARD HEARING NOTICE",
-              "dateUploaded": "{$TODAY}",
-              "tag": "reheardHearingNotice"
+              "reheardHearingDocs": [
+                {
+                  "id": "2",
+                  "value": {
+                    "document": {
+                      "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                      "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                      "document_filename": "PA 11111 2019-Gonzlez-hearing-notice.PDF"
+                    },
+                    "description": "",
+                    "dateUploaded": "{$TODAY}",
+                    "tag": "reheardHearingNoticeRelisted"
+                  }
+                },
+                {
+                  "id": "1",
+                  "value": {
+                    "document": {
+                      "document_url": "old-reheard-hearing-notice",
+                      "document_binary_url": "old-reheard-hearing-notice",
+                      "document_filename": "old-reheard-hearing-notice"
+                    },
+                    "description": "OLD REHEARD HEARING NOTICE",
+                    "dateUploaded": "{$TODAY}",
+                    "tag": "reheardHearingNotice"
+                  }
+                }
+              ]
             }
           }
         ],
