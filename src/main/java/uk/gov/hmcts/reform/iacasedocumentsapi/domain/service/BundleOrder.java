@@ -224,10 +224,36 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 return 74;
             case REMITTAL_DECISION:
                 return 75;
-            case NOTICE_OF_ADJOURNED_HEARING:
-                return 76;
             case NONE:
+                return 76;
+            case APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT:
                 return 77;
+            case INTERNAL_END_APPEAL_LETTER:
+                log.warn("INTERNAL_END_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 78;
+            case INTERNAL_END_APPEAL_LETTER_BUNDLE:
+                log.warn("INTERNAL_END_APPEAL_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 79;
+            case INTERNAL_CASE_LISTED_LETTER:
+                log.warn("INTERNAL_CASE_LISTED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 80;
+            case INTERNAL_CASE_LISTED_LETTER_BUNDLE:
+                log.warn("INTERNAL_CASE_LISTED_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 81;
+            case INTERNAL_OUT_OF_TIME_DECISION_LETTER:
+                log.warn("INTERNAL_OUT_OF_TIME_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 82;
+            case INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE:
+                log.warn("INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 83;
+            case INTERNAL_EDIT_CASE_LISTING_LETTER:
+                log.warn("INTERNAL_EDIT_CASE_LISTING_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 84;
+            case INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE:
+                log.warn("INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                return 85;
+            case NOTICE_OF_ADJOURNED_HEARING:
+                return 86;
             default:
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         }

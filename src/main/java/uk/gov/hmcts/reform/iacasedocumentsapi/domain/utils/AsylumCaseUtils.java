@@ -12,17 +12,14 @@ import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
-
 
 public class AsylumCaseUtils {
 
@@ -48,6 +45,17 @@ public class AsylumCaseUtils {
 
     public static boolean isInternalCase(AsylumCase asylumCase) {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
+    }
+
+    public static boolean isInternalNonDetainedCase(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase);
+    }
+
+    public static boolean hasAppellantAddressInCountryOrOoc(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
+               || asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
     }
 
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
@@ -206,4 +214,80 @@ public class AsylumCaseUtils {
                 .build();
     }
 
+    public static List<String> getAppellantAddressAsList(final AsylumCase asylumCase) {
+        AddressUk address = asylumCase
+            .read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)
+            .orElseThrow(() -> new IllegalStateException("appellantAddress is not present"));
+
+        List<String> appellantAddressAsList = new ArrayList<>();
+
+        appellantAddressAsList.add(address.getAddressLine1().orElseThrow(() -> new IllegalStateException("appellantAddress line 1 is not present")));
+        String addressLine2 = address.getAddressLine2().orElse(null);
+        String addressLine3 = address.getAddressLine3().orElse(null);
+
+        if (addressLine2 != null) {
+            appellantAddressAsList.add(addressLine2);
+        }
+        if (addressLine3 != null) {
+            appellantAddressAsList.add(addressLine3);
+        }
+        appellantAddressAsList.add(address.getPostTown().orElseThrow(() -> new IllegalStateException("appellantAddress postTown is not present")));
+        appellantAddressAsList.add(address.getPostCode().orElseThrow(() -> new IllegalStateException("appellantAddress postCode is not present")));
+
+        return appellantAddressAsList;
+    }
+
+    public static List<String> getAppellantAddressAsListOoc(final AsylumCase asylumCase) {
+
+        String oocAddressLine1 = asylumCase
+            .read(ADDRESS_LINE_1_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address line 1 is not present"));
+
+        String oocAddressLine2 = asylumCase
+            .read(ADDRESS_LINE_2_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address line 2 is not present"));
+
+        List<String> appellantAddressAsList = new ArrayList<>();
+
+        appellantAddressAsList.add(oocAddressLine1);
+        appellantAddressAsList.add(oocAddressLine2);
+
+        String oocAddressLine3 = asylumCase
+            .read(ADDRESS_LINE_3_ADMIN_J, String.class)
+            .orElse(null);
+
+        String oocAddressLine4 = asylumCase
+            .read(ADDRESS_LINE_4_ADMIN_J, String.class)
+            .orElse(null);
+
+        String oocAddressCountry = asylumCase
+            .read(COUNTRY_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address country is not present"));
+
+        if (oocAddressLine3 != null) {
+            appellantAddressAsList.add(oocAddressLine3);
+        }
+        if (oocAddressLine4 != null) {
+            appellantAddressAsList.add(oocAddressLine4);
+        }
+        appellantAddressAsList.add(oocAddressCountry);
+
+        return appellantAddressAsList;
+    }
+
+    public static List<DocumentWithMetadata> getMaybeLetterNotificationDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS);
+
+        return maybeLetterNotificationDocuments
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(IdValue::getValue)
+            .filter(document -> document.getTag() == documentTag)
+            .collect(Collectors.toList());
+    }
+
+    public static boolean isAppellantInUk(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)
+            .map(inUk -> YesOrNo.YES == inUk).orElse(true);
+    }
 }

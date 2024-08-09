@@ -84,12 +84,20 @@ class DocumentTagTest {
         assertEquals("internalReinstateAppealLetter", DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER.toString());
         assertEquals("internalAdjournHearingWithoutDate", DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE.toString());
         assertEquals("upperTribunalTransferOrderDocument", DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT.toString());
+        assertEquals("internalEndAppealLetter", DocumentTag.INTERNAL_END_APPEAL_LETTER.toString());
+        assertEquals("internalEndAppealLetterBundle", DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE.toString());
+        assertEquals("internalCaseListedLetter", DocumentTag.INTERNAL_CASE_LISTED_LETTER.toString());
+        assertEquals("internalCaseListedLetterBundle", DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE.toString());
         assertEquals("iAUT2Form", DocumentTag.IAUT_2_FORM.toString());
         assertEquals("", DocumentTag.NONE.toString());
+        assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER.toString());
+        assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE.toString());
+        assertEquals("internalEditCaseListingLetter", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER.toString());
+        assertEquals("internalEditCaseListingLetterBundle", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(86, DocumentTag.values().length);
+        assertEquals(95, DocumentTag.values().length);
     }
 }
