@@ -29,7 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentToPdfConverter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.bail.UploadSignedDecisionPdfService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
@@ -39,7 +39,7 @@ public class UploadSignedDecisionPdfServiceTest {
 
     @Mock private DocumentDownloadClient documentDownloadClient;
     @Mock private DocumentUploader documentUploader;
-    @Mock private WordDocumentToPdfConverter wordDocumentToPdfConverter;
+    @Mock private DocumentToPdfConverter documentToPdfConverter;
     @Mock private CaseDetails<BailCase> caseDetails;
     @Mock private BailCase bailCase;
     @Mock private Document mockSignedDecisionDocument;
@@ -56,7 +56,7 @@ public class UploadSignedDecisionPdfServiceTest {
         uploadSignedDecisionPdfService = new UploadSignedDecisionPdfService(
             documentDownloadClient,
             documentUploader,
-            wordDocumentToPdfConverter,
+            documentToPdfConverter,
             "decision-notice"
         );
         mockSignedDecisionNoticePdf = createTempFile("test-file", ".pdf");
@@ -67,7 +67,7 @@ public class UploadSignedDecisionPdfServiceTest {
             .thenReturn(binaryDocumentUrl);
         when(documentDownloadClient.download(binaryDocumentUrl))
             .thenReturn(mockResource);
-        when(wordDocumentToPdfConverter.convertResourceToPdf(mockResource))
+        when(documentToPdfConverter.convertWordDocResourceToPdf(mockResource))
             .thenReturn(mockSignedDecisionNoticePdf);
         when(bailCase.read(APPLICANT_FAMILY_NAME, String.class))
             .thenReturn(Optional.of("Smith"));
@@ -82,8 +82,8 @@ public class UploadSignedDecisionPdfServiceTest {
         assertEquals(mockSignedGeneratedPdfDocument, finalPdf);
         verify(documentDownloadClient, times(1))
             .download(binaryDocumentUrl);
-        verify(wordDocumentToPdfConverter, times(1))
-            .convertResourceToPdf(mockResource);
+        verify(documentToPdfConverter, times(1))
+            .convertWordDocResourceToPdf(mockResource);
         verify(bailCase, times(1))
             .write(UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT, finalPdf);
         verify(bailCase, times(1))
@@ -99,7 +99,7 @@ public class UploadSignedDecisionPdfServiceTest {
             .hasMessage("Signed decision document must be present");
         verifyNoInteractions(documentDownloadClient);
         verifyNoInteractions(documentUploader);
-        verifyNoInteractions(wordDocumentToPdfConverter);
+        verifyNoInteractions(documentToPdfConverter);
     }
 
     @Test
@@ -112,8 +112,8 @@ public class UploadSignedDecisionPdfServiceTest {
         verifyNoInteractions(documentUploader);
         verify(documentDownloadClient, times(1))
             .download(binaryDocumentUrl);
-        verify(wordDocumentToPdfConverter, times(1))
-            .convertResourceToPdf(mockResource);
+        verify(documentToPdfConverter, times(1))
+            .convertWordDocResourceToPdf(mockResource);
     }
 
 

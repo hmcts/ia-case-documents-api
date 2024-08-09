@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.FileType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocmosisDocumentConversionClient;
 
 @ExtendWith(MockitoExtension.class)
-public class WordDocumentToPdfConverterTest {
+public class DocumentToPdfConverterTest {
 
     @Mock
     private DocmosisDocumentConversionClient docmosisDocumentConversionClient;
@@ -28,12 +28,12 @@ public class WordDocumentToPdfConverterTest {
     @Mock IOException ioException;
     @Mock InputStream inputStream;
 
-    private WordDocumentToPdfConverter wordDocumentToPdfConverter;
+    private DocumentToPdfConverter documentToPdfConverter;
     private ClassLoader classLoader = getClass().getClassLoader();
 
     @BeforeEach
     public void setUp() throws IOException {
-        wordDocumentToPdfConverter = new WordDocumentToPdfConverter(
+        documentToPdfConverter = new DocumentToPdfConverter(
             docmosisDocumentConversionClient);
     }
 
@@ -44,7 +44,7 @@ public class WordDocumentToPdfConverterTest {
 
         when(resource.getInputStream()).thenThrow(ioException);
 
-        assertThatThrownBy(() -> wordDocumentToPdfConverter.convertResourceToPdf(resource))
+        assertThatThrownBy(() -> documentToPdfConverter.convertWordDocResourceToPdf(resource))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Unable to convert the document to a pdf")
             .hasCause(ioException);
@@ -68,7 +68,7 @@ public class WordDocumentToPdfConverterTest {
             eq(FileType.PDF))).thenReturn(convertedBytes);
 
 
-        File pdf = wordDocumentToPdfConverter.convertResourceToPdf(byteArrayResource);
+        File pdf = documentToPdfConverter.convertWordDocResourceToPdf(byteArrayResource);
 
         assertNotNull(pdf);
         //assertEquals(readAllBytes(pdf.toPath()), convertedBytes);
@@ -93,7 +93,7 @@ public class WordDocumentToPdfConverterTest {
             eq(FileType.PDF))).thenReturn(convertedBytes);
 
 
-        File pdf = wordDocumentToPdfConverter.convertResourceToPdf(byteArrayResource);
+        File pdf = documentToPdfConverter.convertWordDocResourceToPdf(byteArrayResource);
 
         assertNotNull(pdf);
         //assertEquals(readAllBytes(pdf.toPath()), convertedBytes);
