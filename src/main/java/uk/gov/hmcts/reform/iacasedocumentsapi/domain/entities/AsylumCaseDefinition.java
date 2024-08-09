@@ -25,6 +25,12 @@ public enum AsylumCaseDefinition {
     BUNDLE_FILE_NAME_PREFIX(
         "bundleFileNamePrefix", new TypeReference<String>(){}),
 
+    AMENDED_BUNDLE_COUNT(
+        "amendedBundleCount", new TypeReference<Integer>() {}),
+
+    AMENDED_REHEARD_BUNDLE_COUNT(
+        "amendedReheardBundleCount", new TypeReference<Integer>() {}),
+
     HOME_OFFICE_REFERENCE_NUMBER(
         "homeOfficeReferenceNumber", new TypeReference<String>(){}),
 
