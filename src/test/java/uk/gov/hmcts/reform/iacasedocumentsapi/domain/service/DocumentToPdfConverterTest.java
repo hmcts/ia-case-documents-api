@@ -2,13 +2,16 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Random;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.FileType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocmosisDocumentConversionClient;
 
 @ExtendWith(MockitoExtension.class)
-public class DocumentToPdfConverterTest {
+class DocumentToPdfConverterTest {
 
     @Mock
     private DocmosisDocumentConversionClient docmosisDocumentConversionClient;
@@ -32,13 +35,13 @@ public class DocumentToPdfConverterTest {
     private ClassLoader classLoader = getClass().getClassLoader();
 
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() {
         documentToPdfConverter = new DocumentToPdfConverter(
             docmosisDocumentConversionClient);
     }
 
     @Test
-    public void handles_ioexception() throws IOException {
+    void handles_ioexception() throws IOException {
 
         when(resource.getInputStream()).thenReturn(inputStream);
 
@@ -51,10 +54,10 @@ public class DocumentToPdfConverterTest {
     }
 
     @Test
-    public void handles_docx_files() throws IOException {
+    void handles_docx_files() {
         File docxFile = new File(
-            classLoader.getResource(
-                "draft-doc.docx").getPath());
+            Objects.requireNonNull(classLoader.getResource(
+                "draft-doc.docx")).getPath());
 
         ByteArrayResource byteArrayResource =
             getByteArrayResource(
@@ -71,15 +74,14 @@ public class DocumentToPdfConverterTest {
         File pdf = documentToPdfConverter.convertWordDocResourceToPdf(byteArrayResource);
 
         assertNotNull(pdf);
-        //assertEquals(readAllBytes(pdf.toPath()), convertedBytes);
     }
 
     @Test
-    public void convertsDocToPdf() throws IOException {
+    void convertsDocToPdf() {
 
         File docFile = new File(
-            classLoader.getResource(
-                "draft-doc.doc").getPath());
+            Objects.requireNonNull(classLoader.getResource(
+                "draft-doc.doc")).getPath());
 
         ByteArrayResource byteArrayResource =
             getByteArrayResource(
@@ -96,7 +98,6 @@ public class DocumentToPdfConverterTest {
         File pdf = documentToPdfConverter.convertWordDocResourceToPdf(byteArrayResource);
 
         assertNotNull(pdf);
-        //assertEquals(readAllBytes(pdf.toPath()), convertedBytes);
     }
 
     private ByteArrayResource getByteArrayResource(
@@ -114,7 +115,7 @@ public class DocumentToPdfConverterTest {
         return new ByteArrayResource(byteArray) {
 
             @Override
-            public File getFile() {
+            public @NotNull File getFile() {
                 return file;
             }
 

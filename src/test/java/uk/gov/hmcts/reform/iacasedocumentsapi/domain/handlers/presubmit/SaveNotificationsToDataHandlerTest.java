@@ -31,7 +31,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
 @ExtendWith(MockitoExtension.class)
-public class SaveNotificationsToDataHandlerTest {
+class SaveNotificationsToDataHandlerTest {
 
     @Mock
     private SaveNotificationsToDataPdfService saveNotificationsToDataPdfService;
@@ -57,13 +57,13 @@ public class SaveNotificationsToDataHandlerTest {
     private SaveNotificationsToDataHandler saveNotificationsToDataHandler;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         saveNotificationsToDataHandler =
             new SaveNotificationsToDataHandler(saveNotificationsToDataPdfService);
     }
 
     @Test
-    public void should_write_empty_list_if_no_stored_notifications() {
+    void should_write_empty_list_if_no_stored_notifications() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
@@ -79,14 +79,15 @@ public class SaveNotificationsToDataHandlerTest {
     }
 
     @Test
-    public void should_not_change_notification_if_document_not_null() {
+    void should_not_change_notification_if_document_not_null() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         StoredNotification storedNotification =
             new StoredNotification(notificationId, "2024-01-01", email,
-                "<div>" + body + "</div>", document, notificationType, status, reference);
+                "<div>" + body + "</div>", notificationType, status, reference);
+        storedNotification.setNotificationDocument(document);
         List<IdValue<StoredNotification>> storedNotifications =
             List.of(new IdValue<>(reference, storedNotification));
         when(asylumCase.read(NOTIFICATIONS)).thenReturn(Optional.of(storedNotifications));
@@ -103,13 +104,13 @@ public class SaveNotificationsToDataHandlerTest {
     @ParameterizedTest
     @ValueSource(strings = {"cancelled", "failed", "technical-failure",
         "temporary-failure", "permanent-failure", "validation-failed", "virus-scan-failed"})
-    public void should_not_change_notification_if_status_invalid(String invalidStatus) {
+    void should_not_change_notification_if_status_invalid(String invalidStatus) {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         StoredNotification storedNotification =
             new StoredNotification(notificationId, "2024-01-01", email,
-                "<div>" + body + "</div>", null,
+                "<div>" + body + "</div>",
                 notificationType, invalidStatus, reference);
         List<IdValue<StoredNotification>> storedNotifications =
             List.of(new IdValue<>(reference, storedNotification));
@@ -125,7 +126,7 @@ public class SaveNotificationsToDataHandlerTest {
     }
 
     @Test
-    public void should_set_notification_document_if_valid() {
+    void should_set_notification_document_if_valid() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
@@ -145,14 +146,14 @@ public class SaveNotificationsToDataHandlerTest {
     }
 
     @Test
-    public void should_generate_and_add_document_to_notification() {
+    void should_generate_and_add_document_to_notification() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         StoredNotification storedNotification =
             new StoredNotification(notificationId, "2024-01-01", email,
-                "<div>" + body + "</div>", null, notificationType, status, reference);
+                "<div>" + body + "</div>", notificationType, status, reference);
         List<IdValue<StoredNotification>> storedNotifications =
             List.of(new IdValue<>(reference, storedNotification));
         when(asylumCase.read(NOTIFICATIONS)).thenReturn(Optional.of(storedNotifications));
@@ -173,7 +174,7 @@ public class SaveNotificationsToDataHandlerTest {
 
     @ParameterizedTest
     @EnumSource(value = Event.class)
-    public void it_can_handle_callback(Event event) {
+    void it_can_handle_callback(Event event) {
         when(callback.getEvent()).thenReturn(event);
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
             boolean canHandle = saveNotificationsToDataHandler.canHandle(callbackStage, callback);
@@ -187,14 +188,14 @@ public class SaveNotificationsToDataHandlerTest {
     }
 
     @Test
-    public void throws_if_cannot_handle_callback() {
+    void throws_if_cannot_handle_callback() {
         assertThatThrownBy(() -> saveNotificationsToDataHandler.handle(ABOUT_TO_START, callback))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Cannot handle callback");
     }
 
     @Test
-    public void should_not_allow_null_arguments() {
+    void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> saveNotificationsToDataHandler.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
