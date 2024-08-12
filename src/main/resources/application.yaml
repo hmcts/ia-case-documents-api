@@ -554,6 +554,7 @@ security:
       - "buildCase"
       - "listCase"
       - "draftHearingRequirements"
+      - "saveNotificationsToData"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
