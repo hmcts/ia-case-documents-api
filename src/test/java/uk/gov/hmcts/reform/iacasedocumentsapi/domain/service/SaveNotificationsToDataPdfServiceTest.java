@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentManagementUploader;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,7 @@ class SaveNotificationsToDataPdfServiceTest {
     @Mock
     private File mockPdfFile;
     @Mock
-    private DocumentManagementUploader documentUploader;
+    private DocumentUploader documentUploader;
     @Mock
     private DocumentToPdfConverter documentToPdfConverter;
 

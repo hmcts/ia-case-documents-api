@@ -5,7 +5,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentManagementUploader;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +15,10 @@ public class SaveNotificationsToDataPdfService {
     private static final String PDF_CONTENT_TYPE = "application/pdf";
 
     private final DocumentToPdfConverter documentToPdfConverter;
-    private final DocumentManagementUploader documentUploader;
+    private final DocumentUploader documentUploader;
 
     public SaveNotificationsToDataPdfService(
-        DocumentManagementUploader documentUploader,
+        DocumentUploader documentUploader,
         DocumentToPdfConverter documentToPdfConverter
     ) {
         this.documentUploader = documentUploader;
