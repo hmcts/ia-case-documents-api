@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.ad
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.hearingcentre.email.HearingCentreSubmitApplicationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.homeoffice.email.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email.LegalRepresentativeForceCaseToHearingPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.uppertribunal.UpperTribunalApplicationEndedImaPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.uppertribunal.UpperTribunalDecisionRefusedImaPersonalisation;
@@ -535,6 +537,44 @@ public class BailNotificationGeneratorConfiguration {
             ),
             new BailSmsNotificationGenerator(
                 newArrayList(applicantBailCaseListingPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("forceCaseToHearingNotificationGenerator")
+    public List<BailNotificationGenerator> forceCaseToHearingNotificationGenerator(
+            HomeOfficeForceCaseToHearingPersonalisation respondentForceCaseToHearingPersonalisation,
+            LegalRepresentativeForceCaseToHearingPersonalisation legalRepForceCaseToHearingPersonalisation,
+            BailGovNotifyNotificationSender notificationSender,
+            BailNotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+                new BailEmailNotificationGenerator(
+                        newArrayList(
+                                legalRepForceCaseToHearingPersonalisation,
+                                respondentForceCaseToHearingPersonalisation
+                        ),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
+    @Bean("forceCaseToHearingNotificationGeneratorWithoutLegalRep")
+    public List<BailNotificationGenerator> forceCaseToHearingNotificationGeneratorWithoutLegalRep(
+        HomeOfficeForceCaseToHearingPersonalisation respondentForceCaseToHearingPersonalisation,
+        BailGovNotifyNotificationSender notificationSender,
+        BailNotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new BailEmailNotificationGenerator(
+                newArrayList(
+                    respondentForceCaseToHearingPersonalisation
+                ),
                 notificationSender,
                 notificationIdAppender
             )

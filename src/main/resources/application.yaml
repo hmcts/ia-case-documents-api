@@ -1366,6 +1366,12 @@ govnotify:
         sms: 8141263c-c1f1-4f86-a164-ab48df561dbe
       sendUploadBailSummaryDirection:
         email: 12eec4f2-7261-4640-b18b-93666bde0b54
+      forceCaseToHearing:
+        withLegalRep:
+          legalRep: 6c5188d8-3099-474d-a649-3fcdd78fe4f9
+          respondent: 6dd70a4d-ac2d-4c57-8edd-63d80cc945fb
+        withoutLegalRep:
+          respondent: dfc9fc03-e160-4ffb-a6c4-11bc65633d50
       caseListing:
         initial:
           withLegalRep:
@@ -1573,6 +1579,7 @@ security:
       - "recordOutOfTimeDecision"
       - "turnOnNotifications"
       - "caseListing"
+      - "forceCaseToHearing"
       - "markAppealAsRemitted"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
@@ -1647,6 +1654,7 @@ security:
       - "editAppeal"
       - "considerMakingCostsOrder"
       - "decideCostsApplication"
+      - "forceCaseToHearing"
     caseworker-ia-system:
       - "requestHearingRequirementsFeature"
       - "endAppealAutomatically"
