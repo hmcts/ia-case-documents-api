@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
@@ -120,7 +121,8 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
                         State.DECIDED,
                         State.ENDED,
                         State.APPEAL_TAKEN_OFFLINE,
-                        State.REMITTED
+                        State.REMITTED,
+                        State.LISTING
                 ).contains(currentState) && appealService.isAppealListed(asylumCase)) {
                     final Optional<HearingCentre> maybeCaseIsListed = asylumCase
                             .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
@@ -128,10 +130,10 @@ public class RespondentNonStandardDirectionPersonalisation implements EmailNotif
                     if (maybeCaseIsListed.isPresent()) {
                         return Collections.singleton(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase));
                     } else {
-                        return  Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
+                        return Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
                     }
                 }
-                throw new IllegalStateException(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT);
+                throw new IllegalStateException("1 - " + CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT);
             })
             .orElseThrow(() -> new IllegalStateException(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT));
     }

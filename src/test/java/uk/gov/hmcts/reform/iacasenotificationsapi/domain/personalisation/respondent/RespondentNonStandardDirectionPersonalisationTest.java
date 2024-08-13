@@ -197,7 +197,8 @@ public class RespondentNonStandardDirectionPersonalisationTest {
                 State.DECIDED,
                 State.ENDED,
                 State.APPEAL_TAKEN_OFFLINE,
-                State.REMITTED
+                State.REMITTED,
+                State.LISTING
         );
 
         Map<String, List<State>> states = new HashMap<>();

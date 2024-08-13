@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCase
 
 import com.google.common.collect.ImmutableMap;
 import java.util.*;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
@@ -118,7 +119,8 @@ public class RespondentChangeDirectionDueDatePersonalisation implements EmailNot
                     State.DECIDED,
                     State.ENDED,
                     State.APPEAL_TAKEN_OFFLINE,
-                    State.CMA_LISTED
+                    State.CMA_LISTED,
+                    State.LISTING
                 ).contains(currentState) && appealService.isAppealListed(asylumCase)) {
                     final Optional<HearingCentre> maybeCaseIsListed = asylumCase
                         .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
