@@ -47,7 +47,7 @@ class SaveNotificationsToDataPdfServiceTest {
         when(documentToPdfConverter.convertHtmlDocResourceToPdf(any(Resource.class))).thenReturn(mockPdfFile);
         when(documentUploader.upload(any(ByteArrayResource.class), anyString())).thenReturn(pdf);
 
-        Document result = saveNotificationsToDataPdfService.createPdf(notificationBody, notificationReference);
+        Document result = saveNotificationsToDataPdfService.createPdf(notificationBody, notificationReference +  ".PDF");
 
         assertNotNull(result);
         verify(documentToPdfConverter).convertHtmlDocResourceToPdf(any(Resource.class));

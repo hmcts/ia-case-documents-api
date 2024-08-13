@@ -35,7 +35,7 @@ public class SaveNotificationsToDataPdfService {
 
         ByteArrayResource byteArrayResource = getByteArrayResource(
             notificationPdf,
-            notificationReference
+            notificationReference + ".PDF"
             );
 
         return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
