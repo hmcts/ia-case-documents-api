@@ -48,6 +48,7 @@ class SaveNotificationsToDataHandlerTest {
     private StoredNotification mockedStoredNotification;
 
     private final String reference = "someReference";
+    private final String subject = "someSubject";
     private final String notificationId = "someNotificationId";
     private final String body = "someBody";
     private final String notificationType = "someNotificationType";
@@ -84,9 +85,18 @@ class SaveNotificationsToDataHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
         StoredNotification storedNotification =
-            new StoredNotification(notificationId, "2024-01-01", email,
-                "<div>" + body + "</div>", notificationType, status, reference);
+            StoredNotification.builder()
+                .notificationId(notificationId)
+                .notificationDateSent("2024-01-01")
+                .notificationSentTo(email)
+                .notificationBody("<div>" + body + "</div>")
+                .notificationMethod(notificationType)
+                .notificationStatus(status)
+                .notificationReference(reference)
+                .notificationSubject(subject)
+                .build();
         storedNotification.setNotificationDocument(document);
         List<IdValue<StoredNotification>> storedNotifications =
             List.of(new IdValue<>(reference, storedNotification));
@@ -109,9 +119,16 @@ class SaveNotificationsToDataHandlerTest {
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         StoredNotification storedNotification =
-            new StoredNotification(notificationId, "2024-01-01", email,
-                "<div>" + body + "</div>",
-                notificationType, invalidStatus, reference);
+            StoredNotification.builder()
+                .notificationId(notificationId)
+                .notificationDateSent("2024-01-01")
+                .notificationSentTo(email)
+                .notificationBody("<div>" + body + "</div>")
+                .notificationMethod(notificationType)
+                .notificationStatus(invalidStatus)
+                .notificationReference(reference)
+                .notificationSubject(subject)
+                .build();
         List<IdValue<StoredNotification>> storedNotifications =
             List.of(new IdValue<>(reference, storedNotification));
         when(asylumCase.read(NOTIFICATIONS)).thenReturn(Optional.of(storedNotifications));
@@ -152,8 +169,16 @@ class SaveNotificationsToDataHandlerTest {
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         StoredNotification storedNotification =
-            new StoredNotification(notificationId, "2024-01-01", email,
-                "<div>" + body + "</div>", notificationType, status, reference);
+            StoredNotification.builder()
+                .notificationId(notificationId)
+                .notificationDateSent("2024-01-01")
+                .notificationSentTo(email)
+                .notificationBody("<div>" + body + "</div>")
+                .notificationMethod(notificationType)
+                .notificationStatus(status)
+                .notificationReference(reference)
+                .notificationSubject(subject)
+                .build();
         List<IdValue<StoredNotification>> storedNotifications =
             List.of(new IdValue<>(reference, storedNotification));
         when(asylumCase.read(NOTIFICATIONS)).thenReturn(Optional.of(storedNotifications));
