@@ -1,11 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
@@ -62,6 +65,10 @@ class HearingNoticeEditedCreatorTest {
     private DocumentsAppender documentsAppender;
     @Mock
     private Appender<ReheardHearingDocuments> reheardHearingAppender;
+    @Mock
+    private ReheardHearingDocuments mockReheardHearingDocuments;
+    @Mock
+    private List<IdValue<DocumentWithMetadata>> documentWithMetadataList;
 
     private HearingNoticeEditedCreator hearingNoticeEditedCreator;
 
@@ -273,7 +280,7 @@ class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    void should_create_reheard_hearing_notice_pdf_and_append_to_reheard_collection_when_dlrm_flag_on() {
+    void should_create_reheard_hearing_notice_pdf_and_make_new_reheard_collection_when_empty_and_dlrm_flag_on() {
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
@@ -313,6 +320,57 @@ class HearingNoticeEditedCreatorTest {
         verify(asylumCase).read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
         verify(reheardHearingAppender).append(any(ReheardHearingDocuments.class), anyList());
         verify(asylumCase).write(eq(REHEARD_HEARING_DOCUMENTS_COLLECTION), anyList());
+    }
+
+    @Test
+    void should_create_reheard_hearing_notice_pdf_and_append_to_reheard_collection_when_not_empty_and_dlrm_flag_on() {
+        when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        List<IdValue<ReheardHearingDocuments>> reheardDocumentsCollection =
+            List.of(new IdValue<>("id", mockReheardHearingDocuments));
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardDocumentsCollection));
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(oldHearingDate);
+        when(documentReceiver.receive(uploadedDocument, "", DocumentTag.REHEARD_HEARING_NOTICE_RELISTED))
+            .thenReturn(uploadedDocumentWithMetadata);
+        when(documentsAppender.append(eq(mockReheardHearingDocuments.getReheardHearingDocs()), anyList()))
+            .thenReturn(documentWithMetadataList);
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(0)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE_RELISTED);
+        verify(documentReceiver, times(1)).receive(uploadedDocument, "", DocumentTag.REHEARD_HEARING_NOTICE_RELISTED);
+        verify(documentsAppender).append(Collections.emptyList(), Collections.singletonList(uploadedDocumentWithMetadata));
+        verify(asylumCase).read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
+        verify(reheardHearingAppender, never()).append(any(ReheardHearingDocuments.class), anyList());
+        IdValue<ReheardHearingDocuments> newIdValue = new IdValue<>("id", mockReheardHearingDocuments);
+        List<IdValue<ReheardHearingDocuments>> expectedList = List.of(newIdValue);
+        verify(asylumCase).write(eq(REHEARD_HEARING_DOCUMENTS_COLLECTION), anyList());
+        assertThat(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION))
+            .usingRecursiveComparison().isEqualTo(Optional.of(expectedList));
     }
 
     @Test

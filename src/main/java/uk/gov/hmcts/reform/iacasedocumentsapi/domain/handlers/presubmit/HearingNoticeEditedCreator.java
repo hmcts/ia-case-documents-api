@@ -6,6 +6,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -167,18 +168,32 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 DocumentTag.REHEARD_HEARING_NOTICE_RELISTED
             );
 
-        List<IdValue<DocumentWithMetadata>> allDocuments =
-            documentsAppender.append(
-                Collections.emptyList(),
-                Collections.singletonList(documentWithMetadata)
-            );
-
-        ReheardHearingDocuments newReheardDocuments = new ReheardHearingDocuments(allDocuments);
-
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
             asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
-        List<IdValue<ReheardHearingDocuments>> allReheardDocuments =
-            reheardHearingAppender.append(newReheardDocuments, maybeExistingReheardDocuments.orElse(emptyList()));
-        asylumCase.write(REHEARD_HEARING_DOCUMENTS_COLLECTION, allReheardDocuments);
+        List<IdValue<ReheardHearingDocuments>> existingReheardDocuments = maybeExistingReheardDocuments.orElse(emptyList());
+
+        if (!existingReheardDocuments.isEmpty()) {
+            IdValue<ReheardHearingDocuments> latestReheardHearingDocument = existingReheardDocuments.get(0);
+            List<IdValue<DocumentWithMetadata>> allDocuments = documentsAppender.append(
+                latestReheardHearingDocument.getValue().getReheardHearingDocs(),
+                Collections.singletonList(documentWithMetadata)
+            );
+            IdValue<ReheardHearingDocuments> updatedReheardHearingDocuments = new IdValue<>(
+                latestReheardHearingDocument.getId(),
+                new ReheardHearingDocuments(allDocuments)
+            );
+            ArrayList<IdValue<ReheardHearingDocuments>> newReheardCollection = new ArrayList<>(existingReheardDocuments);
+            newReheardCollection.set(0, updatedReheardHearingDocuments);
+            existingReheardDocuments = newReheardCollection;
+        } else {
+            List<IdValue<DocumentWithMetadata>> allDocuments = documentsAppender.append(
+                emptyList(),
+                Collections.singletonList(documentWithMetadata)
+            );
+            ReheardHearingDocuments newReheardDocuments = new ReheardHearingDocuments(allDocuments);
+            existingReheardDocuments = reheardHearingAppender.append(newReheardDocuments, existingReheardDocuments);
+        }
+
+        asylumCase.write(REHEARD_HEARING_DOCUMENTS_COLLECTION, existingReheardDocuments);
     }
 }
