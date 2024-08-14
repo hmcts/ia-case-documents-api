@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.bail.BailInterpreterLanguageRefData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -345,16 +346,21 @@ public enum BailCaseFieldDefinition {
         "fcs4InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
     FCS4_INTERPRETER_SIGN_LANGUAGE(
         "fcs4InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    LISTING_EVENT(
-        "listingEvent", new TypeReference<ListingEvent>(){}),
-    LISTING_LOCATION(
-        "listingLocation", new TypeReference<String>(){}),
-    LISTING_HEARING_DATE(
-        "listingHearingDate", new TypeReference<String>(){}),
+
+    LISTING_EVENT("listingEvent", new TypeReference<ListingEvent>(){}),
+    LISTING_LOCATION("listingLocation", new TypeReference<String>(){}),
+    LISTING_HEARING_DATE("listingHearingDate", new TypeReference<String>(){}),
     HEARING_DOCUMENTS(
-        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),    
     IS_IMA_ENABLED(
-        "isImaEnabled", new TypeReference<YesOrNo>() {});
+        "isImaEnabled", new TypeReference<YesOrNo>() {}),
+    IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED(
+            "isBailsLocationReferenceDataEnabled", new TypeReference<YesOrNo>() {}),
+    REF_DATA_LISTING_LOCATION_DETAIL(
+            "refDataListingLocationDetail", new TypeReference<CourtVenue>() {}),
+    IS_REMOTE_HEARING(
+            "isRemoteHearing", new TypeReference<YesOrNo>() {});
+
 
     private final String value;
     private final TypeReference typeReference;
