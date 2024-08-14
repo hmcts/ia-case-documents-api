@@ -115,9 +115,9 @@ public class EmailAddressFinder {
             .orElseThrow(() -> new IllegalStateException("hearingCentre is not present"));
     }
 
-    private BailHearingCentre getBailHearingCentre(BailCase bailCase, BailCaseFieldDefinition bailCaseDefinition) {
+    private BailHearingCentre getBailHearingCentre(BailCase bailCase) {
         return bailCase
-            .read(bailCaseDefinition, BailHearingCentre.class)
+            .read(BailCaseFieldDefinition.HEARING_CENTRE, BailHearingCentre.class)
             .orElseThrow(() -> new IllegalStateException("Bail hearingCentre is not present"));
     }
 
@@ -182,7 +182,7 @@ public class EmailAddressFinder {
     public String getBailHearingCentreEmailAddress(BailCase bailCase) {
 
         final BailHearingCentre hearingCentre =
-            getBailHearingCentre(bailCase, BailCaseFieldDefinition.HEARING_CENTRE);
+            getBailHearingCentre(bailCase);
 
         final String bailHearingCentreEmailAddress =
             bailHearingCentreEmailAddresses

@@ -65,7 +65,8 @@ public class NotificationHandler implements PreSubmitCallbackHandler<AsylumCase>
             Event.RECORD_THE_DECISION,
             Event.SEND_UPLOAD_BAIL_SUMMARY_DIRECTION,
             Event.CASE_LISTING,
-            Event.FORCE_CASE_TO_HEARING
+            Event.FORCE_CASE_TO_HEARING,
+            Event.CHANGE_TRIBUNAL_CENTRE
         );
     }
 

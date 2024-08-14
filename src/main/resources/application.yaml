@@ -1387,6 +1387,14 @@ govnotify:
           sms: 3e591016-42d8-4083-b81a-30756a1c4ca8
       decisionRefusedIma:
         email: 4a724840-8e62-489b-bc69-43a0be3ff12d
+      changeTribunalCentre:
+        adminOfficer:
+          withLegalRep:
+            email: 4afe4332-a9d9-48b5-80a8-e2f9dc1cae9a
+          withoutLegalRep:
+            email: 2885b41a-4764-4ca9-a5b0-189e230ae849
+        legalRep:
+          email: fc83bd69-afdb-4ec9-9cb9-bae5f009bf60
 
 
 notificationSender.deduplicateSendsWithinSeconds: 60
@@ -1581,6 +1589,7 @@ security:
       - "caseListing"
       - "forceCaseToHearing"
       - "markAppealAsRemitted"
+      - "changeTribunalCentre"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"

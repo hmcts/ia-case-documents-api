@@ -7,13 +7,12 @@ import java.util.Collections;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.adminofficer.email.AdminOfficerBailNocChangedLrPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.adminofficer.email.AdminOfficerBailStopLegalRepresentingPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.adminofficer.email.AdminOfficerBailSummaryUploadedPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.adminofficer.email.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.hearingcentre.email.HearingCentreSubmitApplicationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.homeoffice.email.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email.LegalRepresentativeForceCaseToHearingPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email.LegalRepresentativeBailChangeTribunalCentrePersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.uppertribunal.UpperTribunalApplicationEndedImaPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.uppertribunal.UpperTribunalDecisionRefusedImaPersonalisation;
@@ -578,6 +577,39 @@ public class BailNotificationGeneratorConfiguration {
                 notificationSender,
                 notificationIdAppender
             )
+        );
+    }
+
+    @Bean("bailChangeTribunalCentreNotificationGeneratorWithoutLegalRep")
+    public List<BailNotificationGenerator> bailChangeTribunalCentreNotificationGeneratorWithoutLegalRep(
+            AdminOfficerBailChangeTribunalCentrePersonalisation adminOfficerBailChangeTribunalCentrePersonalisation,
+            BailGovNotifyNotificationSender notificationSender,
+            BailNotificationIdAppender notificationIdAppender) {
+
+        return List.of(
+                new BailEmailNotificationGenerator(
+                        newArrayList(adminOfficerBailChangeTribunalCentrePersonalisation),
+                        notificationSender,
+                        notificationIdAppender
+                )
+        );
+    }
+
+    @Bean("bailChangeTribunalCentreNotificationGeneratorWithLegalRep")
+    public List<BailNotificationGenerator> bailChangeTribunalCentreNotificationGeneratorWithLegalRep(
+            AdminOfficerBailChangeTribunalCentrePersonalisation adminOfficerBailChangeTribunalCentrePersonalisation,
+            LegalRepresentativeBailChangeTribunalCentrePersonalisation legalRepresentativeBailChangeTribunalCentrePersonalisation,
+            BailGovNotifyNotificationSender notificationSender,
+            BailNotificationIdAppender notificationIdAppender) {
+
+        return List.of(
+                new BailEmailNotificationGenerator(
+                        newArrayList(
+                                adminOfficerBailChangeTribunalCentrePersonalisation,
+                                legalRepresentativeBailChangeTribunalCentrePersonalisation),
+                        notificationSender,
+                        notificationIdAppender
+                )
         );
     }
 }

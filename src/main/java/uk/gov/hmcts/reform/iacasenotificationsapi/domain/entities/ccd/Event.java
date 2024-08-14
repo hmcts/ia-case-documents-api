@@ -125,6 +125,7 @@ public enum Event {
     UPDATE_TRIBUNAL_DECISION("updateTribunalDecision"),
     MARK_APPEAL_AS_REMITTED("markAppealAsRemitted"),
     FORCE_CASE_TO_HEARING("forceCaseToHearing"),
+    CHANGE_TRIBUNAL_CENTRE("changeTribunalCentre"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
