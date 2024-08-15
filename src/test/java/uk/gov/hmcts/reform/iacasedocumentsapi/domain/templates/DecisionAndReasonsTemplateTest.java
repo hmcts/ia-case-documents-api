@@ -4,8 +4,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.MANCHESTER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -13,8 +16,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -22,6 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class DecisionAndReasonsTemplateTest {
 
     @Mock private StringProvider stringProvider;
@@ -50,10 +58,18 @@ public class DecisionAndReasonsTemplateTest {
         assertEquals(templateName, decisionAndReasonsTemplate.getName());
     }
 
-    @Test
-    public void should_map_case_data_to_template_field_values() {
+    @ParameterizedTest
+    @EnumSource(value = HearingCentre.class, names = {"MANCHESTER", "DECISION_WITHOUT_HEARING", "REMOTE_HEARING"})
+    public void should_map_case_data_to_template_field_values(HearingCentre testCase) {
 
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
+        if (testCase.equals(REMOTE_HEARING)) {
+            when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        } else if (testCase.equals(DECISION_WITHOUT_HEARING)) {
+            when(asylumCase.read(IS_DECISION_WITHOUT_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        } else {
+            when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(testCase));
+        }
+
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("some-appeal-ref"));
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of("2020-12-25T12:34:56"));
@@ -81,6 +97,8 @@ public class DecisionAndReasonsTemplateTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of("Manchester"));
+        when(stringProvider.get("hearingCentreName", "remoteHearing")).thenReturn(Optional.of("Remote hearing"));
+        when(stringProvider.get("hearingCentreName", "decisionWithoutHearing")).thenReturn(Optional.of("Decision Without Hearing"));
 
         Map<String, Object> templateFieldValues = decisionAndReasonsTemplate.mapFieldValues(caseDetails);
 
@@ -90,7 +108,13 @@ public class DecisionAndReasonsTemplateTest {
         assertEquals(templateFieldValues.get("appealReferenceNumber"), "some-appeal-ref");
         assertEquals(templateFieldValues.get("hearingDate"), "25122020");
         assertEquals(templateFieldValues.get("hearingTime"), "1234");
-        assertEquals(templateFieldValues.get("hearingCentre"), "Manchester");
+        if (testCase.equals(REMOTE_HEARING)) {
+            assertEquals(templateFieldValues.get("hearingCentre"), "Remote hearing");
+        } else if (testCase.equals(DECISION_WITHOUT_HEARING)) {
+            assertEquals(templateFieldValues.get("hearingCentre"), "Decision Without Hearing");
+        } else {
+            assertEquals(templateFieldValues.get("hearingCentre"), "Manchester");
+        }
 
         assertEquals(templateFieldValues.get("appellantGivenNames"), "some-given-name");
         assertEquals(templateFieldValues.get("appellantFamilyName"), "some-family-name");
