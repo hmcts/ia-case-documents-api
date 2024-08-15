@@ -11,6 +11,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder.NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING;
 
 import java.util.Collections;
@@ -35,6 +37,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeEditListingNoChangePersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeEditListingPersonalisation;
@@ -303,5 +306,33 @@ public class EditListingEmailNotificationGeneratorTest {
         verifyNoMoreInteractions(notificationIdAppender);
 
         verify(asylumCase, never()).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
+    }
+
+    @Test
+    public void should_send_change_notification_when_is_remote_hearing_is_changed() {
+        notificationGenerator =
+            new EditListingEmailNotificationGenerator(repEmailNotificationPersonalisationList, notificationSender,
+                notificationIdAppender);
+
+        when(editListingChangeEmailNotificationPersonalisation1.getRecipientsList(asylumCase))
+            .thenReturn(singleton(emailAddress2));
+
+        when(asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class))
+            .thenReturn(Optional.of(YES));
+        when(asylumCaseBefore.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class))
+            .thenReturn(Optional.of(NO));
+
+        notificationGenerator.generate(callback);
+
+        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
+        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
+
+        verify(notificationIdAppender, never())
+            .appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
+        verify(notificationIdAppender, never()).append(notificationsSent, refId1, notificationId1);
+        verify(notificationIdAppender).appendAll(asylumCase, refId2, Collections.singletonList(notificationId2));
+        verify(notificationIdAppender).append(notificationsSent, refId2, notificationId2);
+
+        verify(asylumCase, times(1)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
     }
 }

@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeoffice.HomeOfficeEditListingNoChangePersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative.LegalRepresentativeEditListingNoChangePersonalisation;
@@ -72,7 +73,8 @@ public class EditListingEmailNotificationGenerator extends EmailNotificationGene
     private boolean isEditListingContentUnchanged(AsylumCase caseData, AsylumCase caseDataBefore) {
 
         return
-            isDateOfHearingUnchanged(caseData, caseDataBefore) && isHearingCentreUnchanged(caseData, caseDataBefore);
+            isDateOfHearingUnchanged(caseData, caseDataBefore) && isHearingCentreUnchanged(caseData, caseDataBefore)
+                && isHearingChannelUnchanged(caseData, caseDataBefore);
     }
 
     private boolean isHearingCentreUnchanged(AsylumCase caseData, AsylumCase caseDataBefore) {
@@ -90,6 +92,14 @@ public class EditListingEmailNotificationGenerator extends EmailNotificationGene
         return
             caseData.read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class).orElse("")
                 .equalsIgnoreCase(caseDataBefore.read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class).orElse(""));
+
+    }
+
+    private boolean isHearingChannelUnchanged(AsylumCase caseData, AsylumCase caseDataBefore) {
+
+        return
+            caseData.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class).orElse(null)
+                == caseDataBefore.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class).orElse(null);
 
     }
 

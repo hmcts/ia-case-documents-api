@@ -139,7 +139,7 @@ public class HearingDetailsFinder {
         boolean isRemote = Stream.of("remoteHearing", "decisionWithoutHearing").anyMatch(listCaseHearingCentre.getValue()::equalsIgnoreCase);
         return listCaseHearingCentre.getDescription() + (isRemote ? "" : "\n" + hearingCentreAddress);
     }
-
+  
     private boolean isCaseUsingLocationRefData(AsylumCase asylumCase) {
         return asylumCase.read(AsylumCaseDefinition.IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
             .map(yesOrNo -> yesOrNo.equals(YES))

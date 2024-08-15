@@ -300,7 +300,6 @@ public enum BailCaseFieldDefinition {
         "adminSelectImaStatus", new TypeReference<YesOrNo>() {}),
     HO_SELECT_IMA_STATUS(
         "hoSelectImaStatus", new TypeReference<YesOrNo>() {}),
-
     IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED(
             "isBailsLocationReferenceDataEnabled", new TypeReference<YesOrNo>() {}),
     REF_DATA_LISTING_LOCATION_DETAIL(
