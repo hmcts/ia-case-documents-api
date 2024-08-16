@@ -93,6 +93,8 @@ public enum DocumentTag {
     INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_CASE_LISTING_LETTER("internalEditCaseListingLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE("internalEditCaseListingLetterBundle", CaseType.ASYLUM),
+    INTERNAL_DETAINED_UPDATE_TRIBUNAL_DECISION_R31_LETTER("internalUpdateTribunalDecisionR31Letter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_UPDATE_TRIBUNAL_DECISION_R32_LETTER("internalUpdateTribunalDecisionR32Letter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),

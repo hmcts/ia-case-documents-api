@@ -816,6 +816,16 @@ public enum AsylumCaseDefinition {
 
     OOC_APPEAL_ADMIN_J(
         "oocAppealAdminJ", new TypeReference<OutOfCountryCircumstances>() {}),
+
+    TYPES_OF_UPDATE_TRIBUNAL_DECISION(
+        "typesOfUpdateTribunalDecision", new TypeReference<DynamicList>(){}),
+
+    UPDATE_TRIBUNAL_DECISION_AND_REASONS_FINAL_CHECK(
+        "updateTribunalDecisionAndReasonsFinalCheck", new TypeReference<YesOrNo>(){}),
+
+    SEND_DECISIONS_AND_REASONS_DATE(
+        "sendDecisionsAndReasonsDate", new TypeReference<String>(){}),
+
     ;
 
     private final String value;
