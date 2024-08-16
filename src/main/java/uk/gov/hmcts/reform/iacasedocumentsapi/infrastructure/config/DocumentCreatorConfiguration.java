@@ -1720,4 +1720,46 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("internalUpdateTribunalDecisionRule31")
+    public DocumentCreator<AsylumCase> getInternalUpdateTribunalDecisionR31DocumentCreator(
+        @Value("${internalUpdateTribunalDecisionR31Letter.contentType}") String contentType,
+        @Value("${internalUpdateTribunalDecisionR31Letter.fileExtension}") String fileExtension,
+        @Value("${internalUpdateTribunalDecisionR31Letter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalUpdateTribunalDecisionR31Template documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalUpdateTribunalDecisionRule32")
+    public DocumentCreator<AsylumCase> getInternalUpdateTribunalDecisionR32DocumentCreator(
+        @Value("${internalUpdateTribunalDecisionR32Letter.contentType}") String contentType,
+        @Value("${internalUpdateTribunalDecisionR32Letter.fileExtension}") String fileExtension,
+        @Value("${internalUpdateTribunalDecisionR32Letter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalUpdateTribunalDecisionR32Template documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 }

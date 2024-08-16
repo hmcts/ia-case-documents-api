@@ -502,6 +502,16 @@ bailNoticeOfHearing.fileName: "hearing-notice"
 bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx}
 bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
 
+internalUpdateTribunalDecisionR31Letter.contentType:  application/pdf
+internalUpdateTribunalDecisionR31Letter.fileExtension: PDF
+internalUpdateTribunalDecisionR31Letter.fileName: "internal-update-tribunal-decision-r31-letter"
+internalUpdateTribunalDecisionR31Letter.templateName: ${INTERNAL_UPDATE_TRIBUNAL_DECISION_R31_LETTER_TEMPLATE:TB-IAC-LET-ENG-00101.docx}
+
+internalUpdateTribunalDecisionR32Letter.contentType:  application/pdf
+internalUpdateTribunalDecisionR32Letter.fileExtension: PDF
+internalUpdateTribunalDecisionR32Letter.fileName: "internal-update-tribunal-decision-r32-letter"
+internalUpdateTribunalDecisionR32Letter.templateName: ${INTERNAL_UPDATE_TRIBUNAL_DECISION_R32_LETTER_TEMPLATE:TB-IAC-LET-ENG-00102.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -724,6 +734,8 @@ iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 appellantDaysToWait:
   letter:
     afterSubmission: 28
+    appealEndDateDetained: 14
+
 
 
 ### Email addresses
