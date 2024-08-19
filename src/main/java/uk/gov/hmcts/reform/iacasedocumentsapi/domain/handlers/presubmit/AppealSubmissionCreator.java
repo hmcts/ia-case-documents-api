@@ -137,6 +137,7 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
         return isInternalCase(asylumCase)
                && !isAppellantInUk(asylumCase)
+               && maybeOutOfCountryCircumstances.isPresent()
                && maybeOutOfCountryCircumstances.get().equals(OutOfCountryCircumstances.NONE);
     }
 }

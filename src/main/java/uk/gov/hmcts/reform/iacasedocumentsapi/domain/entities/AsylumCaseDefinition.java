@@ -808,8 +808,8 @@ public enum AsylumCaseDefinition {
     ADDRESS_LINE_4_ADMIN_J(
         "addressLine4AdminJ", new TypeReference<String>(){}),
 
-    COUNTRY_ADMIN_J(
-        "countryAdminJ", new TypeReference<String>(){}),
+    COUNTRY_OOC_ADMIN_J(
+        "countryOocAdminJ", new TypeReference<NationalityFieldValue>(){}),
 
     APPELLANT_IN_UK(
         "appellantInUk", new TypeReference<YesOrNo>() {}),
