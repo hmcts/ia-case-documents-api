@@ -9,11 +9,16 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.form
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
@@ -289,5 +294,26 @@ public class AsylumCaseUtils {
     public static boolean isAppellantInUk(AsylumCase asylumCase) {
         return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)
             .map(inUk -> YesOrNo.YES == inUk).orElse(true);
+    }
+
+    public static String calculateFeeDifference(String originalFeeTotal, String newFeeTotal) {
+        try {
+
+            BigDecimal originalFee = new BigDecimal(String.valueOf(Double.parseDouble(originalFeeTotal) / 100));
+            BigDecimal newFee = new BigDecimal(String.valueOf(Double.parseDouble(newFeeTotal) / 100));
+            BigDecimal difference = originalFee.subtract(newFee).abs();
+            return difference.setScale(2, RoundingMode.DOWN).toString();
+
+        } catch (NumberFormatException e) {
+
+            return "0.00";
+        }
+    }
+
+    public static String convertAsylumCaseFeeValue(String amountFromAsylumCase) {
+        return StringUtils.isNotBlank(amountFromAsylumCase)
+                ? new BigDecimal(String.valueOf(Double.parseDouble(amountFromAsylumCase) / 100))
+                .setScale(2, RoundingMode.DOWN).toString()
+                : "";
     }
 }

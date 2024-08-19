@@ -58,6 +58,7 @@ public enum DocumentTag {
     INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER("internalRequestHearingRequirementsLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_REQUEST_HO_RESPONSE_REVIEW("internalDetainedRequestHomeOfficeResponseReview", CaseType.ASYLUM),
     INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER("internalDetainedEditCaseListingLetter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER("internalDetainedManageFeeUpdateLetter", CaseType.ASYLUM),
     INTERNAL_DET_MARK_AS_ADA_LETTER("internalDetMarkAsAdaLetter", CaseType.ASYLUM),
     INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER("internalDecideAnAppellantApplicationLetter", CaseType.ASYLUM),
     INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER("internalDecideHomeOfficeApplicationLetter", CaseType.ASYLUM),

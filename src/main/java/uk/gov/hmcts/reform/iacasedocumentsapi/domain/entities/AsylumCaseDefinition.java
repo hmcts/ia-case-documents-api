@@ -816,6 +816,12 @@ public enum AsylumCaseDefinition {
 
     OOC_APPEAL_ADMIN_J(
         "oocAppealAdminJ", new TypeReference<OutOfCountryCircumstances>() {}),
+
+    NEW_FEE_AMOUNT(
+            "newFeeAmount", new TypeReference<String>(){}),
+
+    FEE_UPDATE_REASON(
+            "feeUpdateReason", new TypeReference<FeeUpdateReason>(){}),
     ;
 
     private final String value;
