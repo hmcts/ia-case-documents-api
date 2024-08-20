@@ -76,9 +76,6 @@ public class InternalDetainedManageFeeUpdateLetterTemplate implements DocumentTe
     }
 
     public static String formatFeeUpdateReason(FeeUpdateReason feeUpdateReason) {
-        if (feeUpdateReason == null) {
-            throw new IllegalArgumentException("FeeUpdateReason must not be null");
-        }
         String value = feeUpdateReason.getValue();
         return Arrays.stream(value.split("(?=[A-Z])"))
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())

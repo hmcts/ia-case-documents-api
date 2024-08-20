@@ -9,7 +9,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.form
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
