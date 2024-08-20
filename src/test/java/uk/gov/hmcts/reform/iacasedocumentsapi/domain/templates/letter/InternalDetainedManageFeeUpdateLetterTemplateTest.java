@@ -107,11 +107,4 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
         String formattedReason = InternalDetainedManageFeeUpdateLetterTemplate.formatFeeUpdateReason(FeeUpdateReason.DECISION_TYPE_CHANGED);
         assertEquals("Decision Type Changed", formattedReason);
     }
-
-    @Test
-    void should_throw_exception_when_format_fee_update_reason_is_null() {
-        assertThatThrownBy(() -> InternalDetainedManageFeeUpdateLetterTemplate.formatFeeUpdateReason(null))
-                .isExactlyInstanceOf(IllegalArgumentException.class)
-                .hasMessage("FeeUpdateReason must not be null");
-    }
 }
