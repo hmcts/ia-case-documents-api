@@ -58,8 +58,8 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
             asylumCase.read(NOTIFICATIONS);
 
         ArrayList<IdValue<StoredNotification>> newNotifications = new ArrayList<>();
-        List<String> invalidNotificationStatuses = List.of("cancelled", "failed", "technical-failure",
-            "temporary-failure", "permanent-failure", "validation-failed", "virus-scan-failed");
+        List<String> invalidNotificationStatuses = List.of("Cancelled", "Failed", "Technical-failure",
+            "Temporary-failure", "Permanent-failure", "Validation-failed", "Virus-scan-failed");
         for (IdValue<StoredNotification> notification : maybeExistingNotifications.orElse(emptyList())) {
             StoredNotification storedNotification = notification.getValue();
             if (storedNotification.getNotificationDocument() == null

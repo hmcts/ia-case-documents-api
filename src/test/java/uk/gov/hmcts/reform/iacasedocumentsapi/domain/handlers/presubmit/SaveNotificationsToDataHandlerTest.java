@@ -112,8 +112,8 @@ class SaveNotificationsToDataHandlerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"cancelled", "failed", "technical-failure",
-        "temporary-failure", "permanent-failure", "validation-failed", "virus-scan-failed"})
+    @ValueSource(strings = {"Cancelled", "Failed", "Technical-failure",
+        "Temporary-failure", "Permanent-failure", "Validation-failed", "Virus-scan-failed"})
     void should_not_change_notification_if_status_invalid(String invalidStatus) {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
