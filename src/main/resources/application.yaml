@@ -315,6 +315,11 @@ internalDetainedEditCaseListingLetter.fileExtension: PDF
 internalDetainedEditCaseListingLetter.fileName: "detained-appellant-edit-case-listing-letter"
 internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
 
+internalDetainedManageFeeUpdateLetter.contentType: application/pdf
+internalDetainedManageFeeUpdateLetter.fileExtension: PDF
+internalDetainedManageFeeUpdateLetter.fileName: "internal-detained-manage-fee-update-letter"
+internalDetainedManageFeeUpdateLetter.templateName: ${IA_INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00808.docx}
+
 internalMarkAppealAsAda.contentType:  application/pdf
 internalMarkAppealAsAda.fileExtension: PDF
 internalMarkAppealAsAda.fileName: "detained-appellant-mark-as-ada-notice"
@@ -591,6 +596,7 @@ security:
       - "buildCase"
       - "listCase"
       - "draftHearingRequirements"
+      - "manageFeeUpdate"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -626,6 +632,7 @@ security:
       - "buildCase"
       - "caseListing"
       - "asyncStitchingComplete"
+      - "manageFeeUpdate"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -724,6 +731,7 @@ iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 appellantDaysToWait:
   letter:
     afterSubmission: 28
+    afterManageFeeUpdate: 14
 
 
 ### Email addresses

@@ -984,6 +984,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetManageFeeUpdateLetter")
+    public DocumentCreator<AsylumCase> getInternalDetManageFeeUpdateLetterCreator(
+            @Value("${internalDetainedManageFeeUpdateLetter.contentType}") String contentType,
+            @Value("${internalDetainedManageFeeUpdateLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedManageFeeUpdateLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedManageFeeUpdateLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalMarkAsAdaNotice")
     public DocumentCreator<AsylumCase> getInternalMarkAsAdaDocumentCreator(
             @Value("${internalMarkAppealAsAda.contentType}") String contentType,

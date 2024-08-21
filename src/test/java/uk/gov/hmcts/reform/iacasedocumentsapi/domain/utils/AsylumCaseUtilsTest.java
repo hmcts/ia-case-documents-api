@@ -375,4 +375,72 @@ public class AsylumCaseUtilsTest {
 
         assertEquals(true, result);
     }
+
+    @Test
+    void should_calculate_fee_difference_correctly() {
+        String originalFee = "15000";
+        String newFee = "10000";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("50.00", feeDifference);
+    }
+
+    @Test
+    void should_return_zero_when_original_fee_is_invalid() {
+        String originalFee = "invalid";
+        String newFee = "10000";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("0.00", feeDifference);
+    }
+
+    @Test
+    void should_return_zero_when_new_fee_is_invalid() {
+        String originalFee = "15000";
+        String newFee = "invalid";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("0.00", feeDifference);
+    }
+
+    @Test
+    void should_return_zero_when_both_fees_are_invalid() {
+        String originalFee = "invalid";
+        String newFee = "invalid";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("0.00", feeDifference);
+    }
+
+
+    @Test
+    void should_convert_asylum_case_fee_value_correctly() {
+        String feeValue = "12345";
+
+        String convertedFeeValue = AsylumCaseUtils.convertAsylumCaseFeeValue(feeValue);
+
+        assertEquals("123.45", convertedFeeValue);
+    }
+
+
+    @Test
+    void should_return_empty_string_for_blank_fee_value_input() {
+        String feeValue = "";
+
+        String convertedFeeValue = AsylumCaseUtils.convertAsylumCaseFeeValue(feeValue);
+
+        assertEquals("", convertedFeeValue);
+    }
+
+    @Test
+    void should_return_empty_string_for_null_fee_value_input() {
+
+        String convertedFeeValue = AsylumCaseUtils.convertAsylumCaseFeeValue(null);
+
+        assertEquals("", convertedFeeValue);
+    }
 }
