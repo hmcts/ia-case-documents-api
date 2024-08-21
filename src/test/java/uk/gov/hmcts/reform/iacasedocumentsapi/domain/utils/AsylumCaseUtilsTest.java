@@ -336,6 +336,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
         assertTrue(AsylumCaseUtils.isRemoteHearing(asylumCase));
     }
+
     @Test
     void should_return_address_with_all_fields_populated() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
