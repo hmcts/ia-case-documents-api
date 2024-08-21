@@ -15,6 +15,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
 
 import java.util.Collections;
 import java.util.List;
@@ -107,7 +108,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
         //IS_REMOTE_HEARING is used for the case ref data
         if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
-                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
+                || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;

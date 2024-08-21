@@ -326,6 +326,17 @@ public class AsylumCaseUtilsTest {
     }
 
     @Test
+    void should_return_isDecisionWithoutHearingAppeal() {
+        when(asylumCase.read(IS_DECISION_WITHOUT_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.isDecisionWithoutHearingAppeal(asylumCase));
+    }
+
+    @Test
+    void should_return_isRemoteHearing() {
+        when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.isRemoteHearing(asylumCase));
+    }
+    @Test
     void should_return_address_with_all_fields_populated() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
         when(address.getAddressLine1()).thenReturn(Optional.of("Apartment 99"));
