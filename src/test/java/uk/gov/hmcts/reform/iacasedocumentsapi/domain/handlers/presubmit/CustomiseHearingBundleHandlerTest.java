@@ -196,7 +196,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
                 maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
+            "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
@@ -273,7 +274,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
             maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
-            "PA 50002 2020-" + appellantFamilyName + "-updated-1");
+            "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
@@ -424,8 +425,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumEvidenceDocumentList);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
-            + appellantFamilyName + ((event == Event.GENERATE_UPDATED_HEARING_BUNDLE) ? "-updated-1" : ""));
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
@@ -857,8 +857,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
 
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
-            + appellantFamilyName + ((event == Event.GENERATE_UPDATED_HEARING_BUNDLE) ? "-updated-1" : ""));
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
+            "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
