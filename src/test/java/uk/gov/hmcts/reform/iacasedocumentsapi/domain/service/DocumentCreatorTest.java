@@ -81,7 +81,7 @@ public class DocumentCreatorTest {
     }
 
     @Test
-    public void should_orchestrate_amended_document_creation() {
+    public void should_orchestrate_updated_document_creation() {
 
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
         when(documentTemplate.getName()).thenReturn(templateName);

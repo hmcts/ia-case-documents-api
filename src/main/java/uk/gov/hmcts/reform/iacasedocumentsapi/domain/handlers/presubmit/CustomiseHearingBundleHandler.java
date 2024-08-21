@@ -72,7 +72,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && (callback.getEvent() == Event.CUSTOMISE_HEARING_BUNDLE
-            || callback.getEvent() == Event.GENERATE_AMENDED_HEARING_BUNDLE);
+            || callback.getEvent() == Event.GENERATE_UPDATED_HEARING_BUNDLE);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -107,9 +107,9 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                     isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
         }
 
-        boolean isAmendedEvent = callback.getEvent() == Event.GENERATE_AMENDED_HEARING_BUNDLE;
+        boolean isUpdatedEvent = callback.getEvent() == Event.GENERATE_UPDATED_HEARING_BUNDLE;
 
-        asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase, isAmendedEvent, isReheardCase));
+        asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase, isUpdatedEvent, isReheardCase));
 
         //deep copy the case
         AsylumCase asylumCaseCopy;
@@ -517,7 +517,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return Collections.emptyList();
     }
 
-    private String getBundlePrefix(AsylumCase asylumCase, boolean isAmendedEvent, boolean isReheardCase) {
+    private String getBundlePrefix(AsylumCase asylumCase, boolean isUpdatedEvent, boolean isReheardCase) {
 
         final String appealReferenceNumber =
                 asylumCase
@@ -529,13 +529,13 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                         .read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class)
                         .orElseThrow(() -> new IllegalStateException("appellantFamilyName is not present"));
 
-        if (isAmendedEvent) {
-            Integer amendedCount = isReheardCase ?
-                asylumCase.read(AMENDED_REHEARD_BUNDLE_COUNT, Integer.class).orElse(0) :
-                asylumCase.read(AMENDED_BUNDLE_COUNT, Integer.class).orElse(0);
-            amendedCount++;
+        if (isUpdatedEvent) {
+            Integer updatedCount = isReheardCase ?
+                asylumCase.read(UPDATED_REHEARD_BUNDLE_COUNT, Integer.class).orElse(0) :
+                asylumCase.read(UPDATED_BUNDLE_COUNT, Integer.class).orElse(0);
+            updatedCount++;
             return appealReferenceNumber.replace("/", " ")
-                + "-" + appellantFamilyName + "-amended-" + amendedCount;
+                + "-" + appellantFamilyName + "-updated-" + updatedCount;
         } else {
             return appealReferenceNumber.replace("/", " ")
                 + "-" + appellantFamilyName;

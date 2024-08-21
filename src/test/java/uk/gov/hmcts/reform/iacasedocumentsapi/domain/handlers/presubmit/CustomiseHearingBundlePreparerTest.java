@@ -135,8 +135,8 @@ class CustomiseHearingBundlePreparerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
-    void should_create_custom_collections_amended_bundle_without_addendum(String maybeDecision) {
-        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
+    void should_create_custom_collections_updated_bundle_without_addendum(String maybeDecision) {
+        when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
             ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
 
@@ -191,8 +191,8 @@ class CustomiseHearingBundlePreparerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
-    void should_create_custom_collections_amended_bundle_with_addendum(String maybeDecision) {
-        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
+    void should_create_custom_collections_updated_bundle_with_addendum(String maybeDecision) {
+        when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
             ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
 
@@ -257,7 +257,7 @@ class CustomiseHearingBundlePreparerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_create_custom_collections_in_reheard_case(Event event) {
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class))
@@ -331,7 +331,7 @@ class CustomiseHearingBundlePreparerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_filter_legal_rep_document_with_correct_tags(Event event) {
 
         when(callback.getEvent()).thenReturn(event);
@@ -403,7 +403,7 @@ class CustomiseHearingBundlePreparerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_show_all_legal_rep_document_with_for_aip(Event event) {
 
         when(callback.getEvent()).thenReturn(event);
@@ -475,7 +475,7 @@ class CustomiseHearingBundlePreparerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_filter_addendum_evidence_document_with_correct_appellant_respondent_tags(Event event) {
 
         when(callback.getEvent()).thenReturn(event);
@@ -551,7 +551,7 @@ class CustomiseHearingBundlePreparerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_not_create_custom_collections_if_source_collections_are_empty(Event event) {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(event);
@@ -573,7 +573,7 @@ class CustomiseHearingBundlePreparerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_not_create_custom_collections_if_source_collections_are_empty_in_reheard_case(Event event) {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
@@ -684,7 +684,7 @@ class CustomiseHearingBundlePreparerTest {
                 boolean canHandle = customiseHearingBundlePreparer.canHandle(callbackStage, callback);
 
                 if ((event == Event.CUSTOMISE_HEARING_BUNDLE
-                    || event == Event.GENERATE_AMENDED_HEARING_BUNDLE)
+                    || event == Event.GENERATE_UPDATED_HEARING_BUNDLE)
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_START) {
                     assertTrue(canHandle);
                 } else {
@@ -717,7 +717,7 @@ class CustomiseHearingBundlePreparerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_ignore_existing_hearing_bundles_in_new_bundles(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());

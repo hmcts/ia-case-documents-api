@@ -28,7 +28,7 @@ public enum Event {
     ASYNC_STITCHING_COMPLETE("asyncStitchingComplete", CaseType.ASYLUM),
     REQUEST_HEARING_REQUIREMENTS_FEATURE("requestHearingRequirementsFeature", CaseType.ASYLUM),
     CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle", CaseType.ASYLUM),
-    GENERATE_AMENDED_HEARING_BUNDLE("generateAmendedHearingBundle", CaseType.ASYLUM),
+    GENERATE_UPDATED_HEARING_BUNDLE("generateUpdatedHearingBundle", CaseType.ASYLUM),
     GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons", CaseType.ASYLUM),
     ADA_SUITABILITY_REVIEW("adaSuitabilityReview", CaseType.ASYLUM),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons", CaseType.ASYLUM),

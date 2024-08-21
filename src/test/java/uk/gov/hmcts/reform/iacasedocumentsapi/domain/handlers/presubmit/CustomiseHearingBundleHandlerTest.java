@@ -203,8 +203,8 @@ class CustomiseHearingBundleHandlerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
-    void should_successfully_handle_the_callback_amended_bundle(String maybeDecision) throws JsonProcessingException {
-        when(callback.getEvent()).thenReturn(Event.GENERATE_AMENDED_HEARING_BUNDLE);
+    void should_successfully_handle_the_callback_updated_bundle(String maybeDecision) throws JsonProcessingException {
+        when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
             ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
         IdValue<DocumentWithDescription> legalRepDoc = new IdValue<>("1", createDocumentWithDescription());
@@ -273,7 +273,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
             maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
-            "PA 50002 2020-" + appellantFamilyName + "-amended-1");
+            "PA 50002 2020-" + appellantFamilyName + "-updated-1");
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
@@ -306,7 +306,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_successfully_handle_Reheard_the_callback(Event event) throws JsonProcessingException {
         when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
@@ -425,12 +425,12 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
-            + appellantFamilyName + ((event == Event.GENERATE_AMENDED_HEARING_BUNDLE) ? "-amended-1" : ""));
+            + appellantFamilyName + ((event == Event.GENERATE_UPDATED_HEARING_BUNDLE) ? "-updated-1" : ""));
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_return_values_for_document_with_description_present(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
@@ -613,7 +613,7 @@ class CustomiseHearingBundleHandlerTest {
 
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_return_values_for_document_with_description_present_throw_exception(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
@@ -636,7 +636,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void contains_should_return_true_for_document_with_metadata_present(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
@@ -655,7 +655,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_create_custom_collections_if_source_collections_are_empty(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -678,7 +678,7 @@ class CustomiseHearingBundleHandlerTest {
 
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_throw_when_appeal_reference_is_not_present(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -690,7 +690,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_throw_when_asylumcase_can_not_copied(Event event) throws JsonProcessingException {
         when(callback.getEvent()).thenReturn(event);
 
@@ -703,7 +703,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_throw_when_appellant_family_name_is_not_present(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -715,7 +715,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_throw_when_case_bundle_is_not_present(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -727,7 +727,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_throw_when_case_bundle_is_empty(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -739,7 +739,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void handling_should_throw_if_cannot_actually_handle(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -765,7 +765,7 @@ class CustomiseHearingBundleHandlerTest {
                 boolean canHandle = customiseHearingBundleHandler.canHandle(callbackStage, callback);
 
                 if ((event == Event.CUSTOMISE_HEARING_BUNDLE
-                    || event == Event.GENERATE_AMENDED_HEARING_BUNDLE)
+                    || event == Event.GENERATE_UPDATED_HEARING_BUNDLE)
                     && callbackStage == ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
                 } else {
@@ -778,7 +778,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_not_allow_null_arguments(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -800,7 +800,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void test_contains_not_null(Event event) {
         when(callback.getEvent()).thenReturn(event);
         IdValue<DocumentWithMetadata> legalRepDocWithMetadata =
@@ -812,9 +812,9 @@ class CustomiseHearingBundleHandlerTest {
     @ParameterizedTest
     @CsvSource({
         "CUSTOMISE_HEARING_BUNDLE, true",
-        "GENERATE_AMENDED_HEARING_BUNDLE, true",
+        "GENERATE_UPDATED_HEARING_BUNDLE, true",
         "CUSTOMISE_HEARING_BUNDLE, false",
-        "GENERATE_AMENDED_HEARING_BUNDLE, false"
+        "GENERATE_UPDATED_HEARING_BUNDLE, false"
     })
     void should_ignore_existing_hearing_bundles_in_new_bundles(Event event, boolean hasExistingHearingBundle) {
         when(callback.getEvent()).thenReturn(event);
@@ -858,14 +858,14 @@ class CustomiseHearingBundleHandlerTest {
 
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
-            + appellantFamilyName + ((event == Event.GENERATE_AMENDED_HEARING_BUNDLE) ? "-amended-1" : ""));
+            + appellantFamilyName + ((event == Event.GENERATE_UPDATED_HEARING_BUNDLE) ? "-updated-1" : ""));
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
     //When the reheard case is not through remitted path, check the reheardHearingDocuments and add the updated document list in the
     // reheardHearingDocumentsCollection.
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_AMENDED_HEARING_BUNDLE"})
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void test_reheard_documents_saved_in_collection_field(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
