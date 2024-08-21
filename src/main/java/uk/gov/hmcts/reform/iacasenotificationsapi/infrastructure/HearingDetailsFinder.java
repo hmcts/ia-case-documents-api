@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailHearingLocation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
@@ -48,7 +49,7 @@ public class HearingDetailsFinder {
 
     public String getHearingCentreName(AsylumCase asylumCase) {
         if (isCaseUsingLocationRefData(asylumCase)) {
-            return getRefDataLocationValue(asylumCase);
+            return getRefDataLocationAddress(asylumCase);
         }
 
         final HearingCentre hearingCentre =
@@ -58,6 +59,20 @@ public class HearingDetailsFinder {
 
         return stringProvider.get("hearingCentreName", hearingCentre.toString())
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentreName is not present"));
+    }
+
+    public String getOldHearingCentreName(AsylumCase asylumCaseBefore) {
+        if (isCaseUsingLocationRefData(asylumCaseBefore)) {
+            return getRefDataLocationName(asylumCaseBefore);
+        }
+
+        final HearingCentre hearingCentre =
+            asylumCaseBefore
+                .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+
+        return stringProvider.get("hearingCentreName", hearingCentre.toString())
+            .orElseThrow(() -> new IllegalStateException("listCaseHearingCentreName is not present"));
     }
 
     public String getHearingDateTime(AsylumCase asylumCase) {
@@ -89,7 +104,7 @@ public class HearingDetailsFinder {
 
     public String getHearingCentreLocation(AsylumCase asylumCase) {
         if (isCaseUsingLocationRefData(asylumCase)) {
-            return getRefDataLocationValue(asylumCase);
+            return getRefDataLocationAddress(asylumCase);
         }
 
         HearingCentre hearingCentre =
@@ -104,7 +119,7 @@ public class HearingDetailsFinder {
         }
     }
 
-    private String getRefDataLocationValue(AsylumCase asylumCase) {
+    private String getRefDataLocationAddress(AsylumCase asylumCase) {
         YesOrNo isRemoteHearing = asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)
             .orElseThrow(() -> new IllegalStateException("isRemoteHearing is not present"));
 
@@ -114,6 +129,19 @@ public class HearingDetailsFinder {
 
         return asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE_ADDRESS, String.class)
             .orElseThrow(() -> new IllegalStateException("listCaseHearingCentreAddress is not present"));
+    }
+
+    private String getRefDataLocationName(AsylumCase asylumCase) {
+        YesOrNo isRemoteHearing = asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)
+            .orElseThrow(() -> new IllegalStateException("isRemoteHearing is not present"));
+
+        if (isRemoteHearing.equals(YES)) {
+            return "Remote hearing";
+        }
+
+        return asylumCase.read(AsylumCaseDefinition.LISTING_LOCATION, DynamicList.class)
+            .map(listingLocation -> listingLocation.getValue().getLabel())
+            .orElseThrow(() -> new IllegalStateException("listingLocation is not present"));
     }
 
     public String getBailHearingCentreLocation(BailCase bailCase) {

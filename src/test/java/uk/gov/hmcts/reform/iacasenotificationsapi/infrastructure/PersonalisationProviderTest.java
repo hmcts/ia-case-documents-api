@@ -112,7 +112,7 @@ class PersonalisationProviderTest {
         when(hearingDetailsFinder.getHearingCentreAddress(asylumCase)).thenReturn(hearingCentreAddress);
         when(hearingDetailsFinder.getHearingCentreLocation(asylumCase)).thenReturn(hearingCentreAddress);
         when(hearingDetailsFinder.getHearingDateTime(asylumCase)).thenReturn(hearingDateTime);
-        when(hearingDetailsFinder.getHearingCentreName(asylumCaseBefore)).thenReturn(oldHearingCentreName);
+        when(hearingDetailsFinder.getOldHearingCentreName(asylumCaseBefore)).thenReturn(oldHearingCentreName);
         when(hearingDetailsFinder.getHearingDateTime(asylumCaseBefore)).thenReturn(oldHearingDateTime);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);

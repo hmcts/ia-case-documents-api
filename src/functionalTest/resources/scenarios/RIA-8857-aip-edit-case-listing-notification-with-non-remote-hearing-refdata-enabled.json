@@ -11,6 +11,12 @@
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
+          "listingLocation": {
+            "value": {
+              "code": "28837",
+              "label": "Harmondsworth Tribunal Hearing Centre"
+            }
+          },
           "appealReferenceNumber": "PA/12345/2023",
           "ariaListingReference": "LP/12345/2023",
           "listCaseHearingCentre": "harmondsworth",
@@ -34,6 +40,14 @@
       "caseDataBefore": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "listingLocation": {
+            "value": {
+              "code": "28837",
+              "label": "Harmondsworth Tribunal Hearing Centre"
+            }
+          },
+          "isCaseUsingLocationRefData": "Yes",
+          "isRemoteHearing": "No",
           "listCaseHearingCentre": "harmondsworth",
           "listCaseHearingDate": "2023-09-02T14:25:15.000"
         }
@@ -83,6 +97,7 @@
         "subject": "Immigration and Asylum appeal: Your hearing details have changed",
         "body": [
           "PA/12345/2023",
+          "Harmondsworth Tribunal Hearing Centre",
           "3 Sep 2023",
           "14:25",
           "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
@@ -94,6 +109,7 @@
         "subject": "Immigration and Asylum appeal: case re-listed",
         "body": [
           "PA/12345/2023",
+          "Harmondsworth Tribunal Hearing Centre",
           "3 Sep 2023",
           "14:25",
           "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
@@ -105,6 +121,7 @@
         "subject": "Immigration and Asylum appeal: case re-listed",
         "body": [
           "PA/12345/2023",
+          "Harmondsworth Tribunal Hearing Centre",
           "3 Sep 2023",
           "14:25",
           "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"

@@ -102,7 +102,7 @@ public class PersonalisationProvider {
         if (caseDetailsBefore.isPresent()) {
 
             hearingCentreNameBefore =
-                hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.get().getCaseData());
+                hearingDetailsFinder.getOldHearingCentreName(caseDetailsBefore.get().getCaseData());
 
             oldHearingDate =
                 hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.get().getCaseData());
