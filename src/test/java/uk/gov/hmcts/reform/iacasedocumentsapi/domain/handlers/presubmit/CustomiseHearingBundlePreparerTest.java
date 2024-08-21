@@ -608,25 +608,25 @@ class CustomiseHearingBundlePreparerTest {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
 
         final List<IdValue<DocumentWithDescription>> customDocumentList =
-            asList(new IdValue("1", createDocumentWithDescription()));
+            List.of(new IdValue<>("1", createDocumentWithDescription()));
 
         final List<IdValue<DocumentWithMetadata>> hearingDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.REHEARD_HEARING_NOTICE, "test")));
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.REHEARD_HEARING_NOTICE, "test")));
         final List<IdValue<DocumentWithMetadata>> ftpaAppellantEvidenceDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
         final List<IdValue<DocumentWithMetadata>> ftpaRespondentEvidenceDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
         final List<IdValue<DocumentWithMetadata>> ftpaAppellantDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.FTPA_APPELLANT, "test")));
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_APPELLANT, "test")));
         final List<IdValue<DocumentWithMetadata>> ftpaRespondentDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.FTPA_RESPONDENT, "test")));
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_RESPONDENT, "test")));
         final List<IdValue<DocumentWithMetadata>> finalDecisionAndReasonsDocumentList =
-            asList(new IdValue("1", createDocumentWithMetadata(DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "test")));
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "test")));
 
         final List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentList = asList(
-            new IdValue("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "")),
-            new IdValue("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
-            new IdValue("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")));
 
         final List<IdValue<ReheardHearingDocuments>> reheardHearingDocs = buildReheardDocuments();
         final List<IdValue<ReheardHearingDocuments>> reheardDecisionDocs = buildReheardDocuments();
