@@ -131,7 +131,8 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     private List<IdValue<DocumentWithDescription>> getDocumentWithDescListFromMetaDataWithoutBundles(List<IdValue<DocumentWithMetadata>> listDocumentWithMetaData) {
         List<IdValue<DocumentWithDescription>> listDocumentWithDesc = new ArrayList<>();
         for (IdValue<DocumentWithMetadata> documentWithMetadataIdValue : listDocumentWithMetaData) {
-            if (documentWithMetadataIdValue.getValue().getTag() != DocumentTag.HEARING_BUNDLE) {
+            if (documentWithMetadataIdValue.getValue().getTag() != DocumentTag.HEARING_BUNDLE &&
+                documentWithMetadataIdValue.getValue().getTag() != DocumentTag.UPDATED_HEARING_BUNDLE) {
                 listDocumentWithDesc = documentWithDescriptionAppender.append(
                     getDocumentWithDescFromMetaData(documentWithMetadataIdValue.getValue()), listDocumentWithDesc);
             }
@@ -216,7 +217,8 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         for (IdValue<DocumentWithMetadata> documentWithMetadata : documents) {
             if (documentWithMetadata.getValue().getTag() != null &&
-                documentWithMetadata.getValue().getTag() == DocumentTag.HEARING_BUNDLE) {
+                documentWithMetadata.getValue().getTag() == DocumentTag.HEARING_BUNDLE ||
+                documentWithMetadata.getValue().getTag() == DocumentTag.UPDATED_HEARING_BUNDLE) {
                 continue;
             }
             DocumentWithDescription newDocumentWithDescription =

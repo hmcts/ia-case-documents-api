@@ -35,9 +35,9 @@ public class BundleOrderTest {
             .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag,"test"))
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)
-            .collect(Collectors.toList());
+            .toList();
 
-        assertEquals(79, sortedTags.size());
+        assertEquals(80, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -52,6 +52,7 @@ public class BundleOrderTest {
             DocumentTag.RESPONDENT_EVIDENCE,
             DocumentTag.ADDENDUM_EVIDENCE,
             DocumentTag.HEARING_BUNDLE,
+            DocumentTag.UPDATED_HEARING_BUNDLE,
             DocumentTag.REHEARD_DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_COVER_LETTER,
