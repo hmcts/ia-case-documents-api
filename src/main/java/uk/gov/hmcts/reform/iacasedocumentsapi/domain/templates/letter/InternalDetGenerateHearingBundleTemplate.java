@@ -8,9 +8,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
@@ -50,12 +51,13 @@ public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplat
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
 
-        final String listCaseHearingDate = asylumCase.read(LIST_CASE_HEARING_DATE, String.class)
-                .orElseThrow(() -> new RequiredFieldMissingException("List case hearing date not found."));
-        LocalDateTime hearingDateTime = LocalDateTime.parse(listCaseHearingDate);
-        fieldValues.put("hearingDate", formatDateForNotificationAttachmentDocument(hearingDateTime.toLocalDate()));
-        fieldValues.put("hearingTime", hearingDateTime.toLocalTime());
-        fieldValues.put("hearingLocation", hearingDetailsFinder.getHearingCentreName(asylumCase));
+        Optional<String> listCaseHearingDate = asylumCase.read(LIST_CASE_HEARING_DATE, String.class);
+        if (listCaseHearingDate.isPresent()){
+            LocalDateTime hearingDateTime = LocalDateTime.parse(listCaseHearingDate.get());
+            fieldValues.put("hearingDate", formatDateForNotificationAttachmentDocument(hearingDateTime.toLocalDate()));
+            fieldValues.put("hearingTime", hearingDateTime.toLocalTime());
+            fieldValues.put("hearingLocation", hearingDetailsFinder.getHearingCentreName(asylumCase));
+        }
 
         return fieldValues;
     }
