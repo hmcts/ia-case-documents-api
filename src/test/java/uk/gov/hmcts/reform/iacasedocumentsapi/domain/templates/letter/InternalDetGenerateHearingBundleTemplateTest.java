@@ -72,10 +72,9 @@ public class InternalDetGenerateHearingBundleTemplateTest {
 
     @Test
     void should_map_case_data_to_template_field_values() {
-        String listCaseHearingDateTime = "2023-07-10T20:23:35";
-        String listCaseHearingDate = "2023-07-10";
-
         dataSetUp();
+
+        String listCaseHearingDateTime = "2023-07-10T20:23:35";
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(listCaseHearingDateTime));
 
         when(hearingDetailsFinder.getHearingCentreName(asylumCase)).thenReturn(listCaseHearingCentre);
@@ -94,7 +93,7 @@ public class InternalDetGenerateHearingBundleTemplateTest {
         assertEquals(internalAdaCustomerServicesEmailAddress, templateFieldValues.get("customerServicesEmail"));
 
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.parse(listCaseHearingDate)), templateFieldValues.get("hearingDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.parse("2023-07-10")), templateFieldValues.get("hearingDate"));
         assertEquals(LocalDateTime.parse(listCaseHearingDateTime).toLocalTime(), templateFieldValues.get("hearingTime"));
         assertEquals(listCaseHearingCentre, templateFieldValues.get("hearingLocation"));
     }

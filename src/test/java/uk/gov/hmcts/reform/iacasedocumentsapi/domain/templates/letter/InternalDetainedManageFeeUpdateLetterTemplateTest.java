@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 
@@ -59,13 +59,10 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
     }
 
     void dataSetUp() {
-        String originalFeeTotal = "10000";
-        String newFeeTotal = "15000";
-
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.of(originalFeeTotal));
-        when(asylumCase.read(NEW_FEE_AMOUNT, String.class)).thenReturn(Optional.of(newFeeTotal));
+        when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.of("10000"));
+        when(asylumCase.read(NEW_FEE_AMOUNT, String.class)).thenReturn(Optional.of("15000"));
         when(asylumCase.read(FEE_UPDATE_REASON, FeeUpdateReason.class)).thenReturn(Optional.of(FeeUpdateReason.DECISION_TYPE_CHANGED));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(appealReferenceNumber));
 
@@ -77,23 +74,20 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
 
     @Test
     void should_map_case_data_to_template_field_values() {
-        String formattedFeeDifference = "50.00";
         dataSetUp();
 
         Map<String, Object> templateFieldValues = internalDetainedManageFeeUpdateLetterTemplate.mapFieldValues(caseDetails);
 
+        assertEquals("50.00", templateFieldValues.get("feeDifference"));
         assertEquals(14, templateFieldValues.size());
         assertEquals("100.00", templateFieldValues.get("originalFeeTotal"));
         assertEquals("150.00", templateFieldValues.get("newFeeTotal"));
-        assertEquals(formattedFeeDifference, templateFieldValues.get("feeDifference"));
         assertEquals("Decision Type Changed", templateFieldValues.get("feeUpdateReasonSelected"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("onlineCaseRefNumber"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(dueDate, templateFieldValues.get("dueDate14Days"));
-
-        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy"));
-        assertEquals(today, templateFieldValues.get("dateLetterSent"));
+        assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
     }
 
     @Test

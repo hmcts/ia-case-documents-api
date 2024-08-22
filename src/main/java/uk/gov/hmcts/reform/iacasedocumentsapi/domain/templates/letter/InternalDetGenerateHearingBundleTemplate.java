@@ -52,7 +52,7 @@ public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplat
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
 
         Optional<String> listCaseHearingDate = asylumCase.read(LIST_CASE_HEARING_DATE, String.class);
-        if (listCaseHearingDate.isPresent()){
+        if (listCaseHearingDate.isPresent()) {
             LocalDateTime hearingDateTime = LocalDateTime.parse(listCaseHearingDate.get());
             fieldValues.put("hearingDate", formatDateForNotificationAttachmentDocument(hearingDateTime.toLocalDate()));
             fieldValues.put("hearingTime", hearingDateTime.toLocalTime());
