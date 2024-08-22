@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -105,7 +104,7 @@ public class InternalDetGenerateHearingBundleTemplateTest {
 
         Map<String, Object> templateFieldValues = internalDetGenerateHearingBundleTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(8, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
         assertEquals(internalAdaCustomerServicesTelephoneNumber, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(internalAdaCustomerServicesEmailAddress, templateFieldValues.get("customerServicesEmail"));
 
@@ -117,8 +116,8 @@ public class InternalDetGenerateHearingBundleTemplateTest {
 
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
 
-        assertFalse(templateFieldValues.containsKey("hearingDate"), "hearingDate is not populated");
-        assertFalse(templateFieldValues.containsKey("hearingTime"), "hearingTime is not populated");
-        assertFalse(templateFieldValues.containsKey("hearingLocation"), "hearingLocation is not populated");
+        assertEquals("", templateFieldValues.get("hearingDate"));
+        assertEquals("", templateFieldValues.get("hearingTime"));
+        assertEquals("", templateFieldValues.get("hearingLocation"));
     }
 }

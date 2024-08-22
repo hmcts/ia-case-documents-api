@@ -20,7 +20,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinde
 
 @Component
 public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplate<AsylumCase> {
-
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
     private final HearingDetailsFinder hearingDetailsFinder;
@@ -57,6 +56,10 @@ public class InternalDetGenerateHearingBundleTemplate implements DocumentTemplat
             fieldValues.put("hearingDate", formatDateForNotificationAttachmentDocument(hearingDateTime.toLocalDate()));
             fieldValues.put("hearingTime", hearingDateTime.toLocalTime());
             fieldValues.put("hearingLocation", hearingDetailsFinder.getHearingCentreName(asylumCase));
+        } else {
+            fieldValues.put("hearingDate", "");
+            fieldValues.put("hearingTime", "");
+            fieldValues.put("hearingLocation", "");
         }
 
         return fieldValues;
