@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,9 +38,6 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
     private final String templateName = "TB-IAC-LET-ENG-00808.docx";
     private final int afterManageFeeEvent = 14;
 
-    private final String originalFeeTotal = "10000";
-    private final String newFeeTotal = "15000";
-    private final String formattedFeeDifference = "50.00";
     private final String appealReferenceNumber = "HU/12345/2023";
     private final String customerServicesTelephone = "0300 123 4567";
     private final String customerServicesEmail = "contact@service.gov.uk";
@@ -60,6 +59,9 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
     }
 
     void dataSetUp() {
+        String originalFeeTotal = "10000";
+        String newFeeTotal = "15000";
+
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.of(originalFeeTotal));
@@ -75,6 +77,7 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
 
     @Test
     void should_map_case_data_to_template_field_values() {
+        String formattedFeeDifference = "50.00";
         dataSetUp();
 
         Map<String, Object> templateFieldValues = internalDetainedManageFeeUpdateLetterTemplate.mapFieldValues(caseDetails);
@@ -88,7 +91,9 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(dueDate, templateFieldValues.get("dueDate14Days"));
-        assertEquals("20 Aug 2024", templateFieldValues.get("dateLetterSent"));
+
+        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+        assertEquals(today, templateFieldValues.get("dateLetterSent"));
     }
 
     @Test
