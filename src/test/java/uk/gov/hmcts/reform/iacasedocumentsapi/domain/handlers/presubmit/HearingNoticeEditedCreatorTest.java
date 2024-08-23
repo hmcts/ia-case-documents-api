@@ -41,6 +41,7 @@ class HearingNoticeEditedCreatorTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
     @Mock private AsylumCase asylumCase;
+    @Mock private AsylumCase asylumCaseBefore;
     @Mock private Document uploadedDocument;
 
     private HearingNoticeEditedCreator hearingNoticeEditedCreator;
@@ -75,9 +76,10 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = oldHearingDate;
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
@@ -114,9 +116,10 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = oldHearingDate;
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
@@ -159,9 +162,10 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = oldHearingDate;
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
@@ -205,9 +209,10 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = oldHearingDate;
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
@@ -245,9 +250,10 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = oldHearingDate;
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
@@ -275,9 +281,10 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = "2020-02-05T12:30:00";
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
@@ -305,9 +312,10 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = oldHearingDate;
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
@@ -335,11 +343,12 @@ class HearingNoticeEditedCreatorTest {
         final String hearingDate = oldHearingDate;
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(listCaseHearingCentre);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(hearingDate);
 
