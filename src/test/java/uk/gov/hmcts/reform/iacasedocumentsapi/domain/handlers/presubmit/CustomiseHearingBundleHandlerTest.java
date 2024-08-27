@@ -212,6 +212,8 @@ class CustomiseHearingBundleHandlerTest {
         IdValue<DocumentWithDescription> respondentDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> additionalEvidenceDoc = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> appAddendumDoc = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> resAddendumDoc = new IdValue<>("1", createDocumentWithDescription());
         List<IdValue<DocumentWithMetadata>> tribunalDocumentList = List.of(
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
 
@@ -223,6 +225,10 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDoc)));
         when(asylumCase.read(CUSTOM_TRIBUNAL_DOCUMENTS))
             .thenReturn(Optional.of(tribunalDocumentList));
+        when(asylumCaseCopy.read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(appAddendumDoc)));
+        when(asylumCaseCopy.read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(resAddendumDoc)));
 
         IdValue<DocumentWithMetadata> legalRepDocWithMetadata =
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
@@ -232,21 +238,36 @@ class CustomiseHearingBundleHandlerTest {
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test"));
         IdValue<DocumentWithMetadata> additionalEvidenceDocWithMetadata =
             new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
+        IdValue<DocumentWithMetadata> appAddendumDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant"));
+        IdValue<DocumentWithMetadata> resAddendumDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent"));
 
-        final List<IdValue<DocumentWithMetadata>> hearingDocuments = Lists.newArrayList(hearingDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> hearingDocuments =
+            Lists.newArrayList(hearingDocWithMetadata);
         final List<IdValue<DocumentWithMetadata>> legalRepresentativeDocuments =
             Lists.newArrayList(legalRepDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> respondentDocuments =
+            Lists.newArrayList(respondentDocWithMetadata);
         final List<IdValue<DocumentWithMetadata>> additionalEvidenceDocuments =
             Lists.newArrayList(additionalEvidenceDocWithMetadata);
-        final List<IdValue<DocumentWithMetadata>> respondentDocuments = Lists.newArrayList(respondentDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> addendumDocuments =
+            Lists.newArrayList(appAddendumDocWithMetadata, resAddendumDocWithMetadata);
 
-        when(asylumCase.read(HEARING_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(hearingDocWithMetadata)));
+        when(asylumCase.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocuments));
         when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS))
-            .thenReturn(Optional.of(Lists.newArrayList(legalRepDocWithMetadata)));
+            .thenReturn(Optional.of(legalRepresentativeDocuments));
         when(asylumCase.read(RESPONDENT_DOCUMENTS))
-            .thenReturn(Optional.of(Lists.newArrayList(respondentDocWithMetadata)));
+            .thenReturn(Optional.of(respondentDocuments));
         when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
-            .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDocWithMetadata)));
+            .thenReturn(Optional.of(additionalEvidenceDocuments));
+        when(asylumCaseCopy.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(appAddendumDocWithMetadata)));
+        when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(resAddendumDocWithMetadata)));
+        when(appender.append(any(DocumentWithMetadata.class), anyList()))
+            .thenReturn(addendumDocuments);
 
         PreSubmitCallbackResponse<AsylumCase> response =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
@@ -258,6 +279,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCaseCopy, times(2)).read(CUSTOM_LEGAL_REP_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESPONDENT_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCaseCopy, maybeDecision.isEmpty() ? never() : times(1))
             .read(CUSTOM_TRIBUNAL_DOCUMENTS);
 
@@ -265,6 +288,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(LEGAL_REPRESENTATIVE_DOCUMENTS, legalRepresentativeDocuments);
         verify(asylumCase, times(1)).write(ADDITIONAL_EVIDENCE_DOCUMENTS, additionalEvidenceDocuments);
         verify(asylumCase, times(1)).write(RESPONDENT_DOCUMENTS, respondentDocuments);
+        verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumDocuments);
 
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
@@ -401,7 +425,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
         when(asylumCase.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
-        when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
+        when(asylumCaseCopy.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(appellantAddendumEvidenceList)));
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));

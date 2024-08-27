@@ -97,12 +97,16 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
 
         boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
+        boolean isUpdatedBundle = callback.getEvent().equals(Event.GENERATE_UPDATED_HEARING_BUNDLE);
         if (isReheardCase) {
             //populate these collections to avoid error on the Stitching api
             initializeNewCollections(asylumCase);
 
             asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, isRemittedPath ? "iac-remitted-reheard-hearing-bundle-config.yaml" : "iac-reheard-hearing-bundle-config.yaml");
         } else {
+            if (isUpdatedBundle) {
+                initializeNewCollections(asylumCase);
+            }
             asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
                 isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
         }
@@ -118,7 +122,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             throw new IllegalStateException("Cannot make a deep copy of the case");
         }
 
-        prepareDocuments(getMappingFields(isReheardCase, isRemittedPath, isOrWasAda), asylumCaseCopy);
+        prepareDocuments(getMappingFields(isReheardCase, isRemittedPath, isOrWasAda, isUpdatedBundle), asylumCaseCopy);
         if (isReheardCase) {
             prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(), asylumCaseCopy);
         }
@@ -141,7 +145,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         restoreCollections(asylumCase, asylumCaseCopy, isReheardCase);
 
-        restoreAddendumEvidence(asylumCase, asylumCaseCopy, isReheardCase);
+        restoreAddendumEvidence(asylumCase, asylumCaseCopy, isReheardCase, isUpdatedBundle);
 
         restoreRemittalDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath);
         // for cases which progressed to finalBundling pre set-aside release,
@@ -220,8 +224,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return Optional.ofNullable(documentWithMetadataIdValue);
     }
 
-    private void restoreAddendumEvidence(AsylumCase asylumCase, AsylumCase asylumCaseBefore, boolean isReheardCase) {
-        if (!isReheardCase) {
+    private void restoreAddendumEvidence(AsylumCase asylumCase, AsylumCase asylumCaseBefore, boolean isReheardCase, boolean isUpdatedBundle) {
+        if (!isReheardCase && !isUpdatedBundle) {
             return;
         }
 
@@ -462,7 +466,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return fieldDefnList;
     }
 
-    private Map<AsylumCaseDefinition, AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isRemittedFeature, boolean isOrWasAda) {
+    private Map<AsylumCaseDefinition, AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isRemittedFeature, boolean isOrWasAda, boolean isUpdatedBundle) {
         Map<AsylumCaseDefinition, AsylumCaseDefinition> fieldMap;
         if (isReheardCase) {
             if (isRemittedFeature) {
@@ -474,14 +478,14 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                     CUSTOM_LATEST_REMITTAL_DOCS, LATEST_REMITTAL_DOCUMENTS
                 );
             }
-            fieldMap = new HashMap<>(Map.of(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, APP_ADDITIONAL_EVIDENCE_DOCS,
+            return Map.of(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS, APP_ADDITIONAL_EVIDENCE_DOCS,
                 CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS, RESP_ADDITIONAL_EVIDENCE_DOCS,
                 CUSTOM_FTPA_APPELLANT_DOCS, FTPA_APPELLANT_DOCUMENTS,
                 CUSTOM_FTPA_RESPONDENT_DOCS, FTPA_RESPONDENT_DOCUMENTS,
                 CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, FINAL_DECISION_AND_REASONS_DOCUMENTS,
                 CUSTOM_REHEARD_HEARING_DOCS, REHEARD_HEARING_DOCUMENTS,
                 CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, APPELLANT_ADDENDUM_EVIDENCE_DOCS,
-                CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, RESPONDENT_ADDENDUM_EVIDENCE_DOCS));
+                CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
         } else {
             fieldMap = new HashMap<>(Map.of(CUSTOM_HEARING_DOCUMENTS, HEARING_DOCUMENTS,
                 CUSTOM_LEGAL_REP_DOCUMENTS, LEGAL_REPRESENTATIVE_DOCUMENTS,
@@ -489,6 +493,10 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                 CUSTOM_RESPONDENT_DOCUMENTS, RESPONDENT_DOCUMENTS));
             if (isOrWasAda) {
                 fieldMap.put(CUSTOM_TRIBUNAL_DOCUMENTS, TRIBUNAL_DOCUMENTS);
+            }
+            if (isUpdatedBundle) {
+                fieldMap.put(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, APPELLANT_ADDENDUM_EVIDENCE_DOCS);
+                fieldMap.put(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
             }
         }
         return fieldMap;
