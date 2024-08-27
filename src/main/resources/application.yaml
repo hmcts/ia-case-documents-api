@@ -314,6 +314,9 @@ govnotify:
       appellant:
         email: c87b9b3d-9054-4f75-a7df-aa53b317422d
         sms: 5b7faa5a-792e-48bf-a512-d21a27ae9b23
+      legallyReppedAppellant:
+        email: 3593d788-2d44-452f-a0c8-218e33be57da
+        sms: 367f98a9-57f2-4905-a696-529b27341b47
       remoteHearing:
         legalRep:
           email: 2bd64cd0-72a3-4c07-80c4-9a382e43eebe
@@ -337,6 +340,9 @@ govnotify:
       appellant:
         email: 576a79ea-3a29-47cd-bf9e-165dbcd99a4b
         sms: 2fa8e3dc-b8a1-42e9-9763-30ca7a96b6ed
+      legallyReppedAppellant:
+        email: 0cc6a14e-eb13-47e9-9cb6-b8b7b7525be5
+        sms: 979cd7a2-7717-4321-8f1a-63c429b3f759
     caseEditedNoChange:
       legalRep:
         email: e5ef4876-375b-429d-9fc6-f871a7cf7bc4
@@ -353,6 +359,8 @@ govnotify:
           email: 9e7b4606-78c1-41dd-b294-5eb432a6b92f
         legalRep:
           email: 59000d04-4a97-45ae-8a1e-036ca9faa9b5
+        legallyReppedAppellant:
+          email: 59a9e5a0-e5ef-4e97-8592-1a60bc94987f
         appellant:
           email: 398c92a5-10db-43d9-980b-2de2981d22f7
         remoteHearing:
@@ -367,6 +375,8 @@ govnotify:
           email: f3cb29a5-5367-4a1e-a600-6573fc2aeb01
         appellant:
           email: 77a6883d-2c3d-43a8-b637-4d95262ec494
+        legallyReppedAppellant:
+          email: 29985e49-8d2a-4b94-9f0b-1484e1324efd
       caseEditedRemoteHearing:
         legalRep:
           email: 74825ed3-240e-4b2a-afe9-9167c0ae29f5

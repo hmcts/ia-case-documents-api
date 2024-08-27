@@ -4,14 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
 import com.google.common.collect.ImmutableMap;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
@@ -53,6 +57,8 @@ public class AppellantEditListingPersonalisationEmailTest {
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
     private String listAssistHearingTemplateId = "listAssistHearingTemplateId";
+    private String lrAppellantTemplateId = "lrAppellantTemplateId";
+    private String lrAppellantListAssistHearingTemplateId = "lrAppellantListAssistHearingTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
     private String mockedAppellantEmailAddress = "legalRep@example.com";
     private String hearingCentreAddress = "some hearing centre address";
@@ -75,15 +81,17 @@ public class AppellantEditListingPersonalisationEmailTest {
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
     private String iaAipFrontendUrl = "http://localhost";
-
+    private HearingCentre tribunalCentre = HearingCentre.HATTON_CROSS;
     private AppellantEditListingPersonalisationEmail appellantEditListingPersonalisationEmail;
 
     @BeforeEach
     public void setup() {
-
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(tribunalCentre));
         appellantEditListingPersonalisationEmail = new AppellantEditListingPersonalisationEmail(
             templateId,
             listAssistHearingTemplateId,
+            lrAppellantTemplateId,
+            lrAppellantListAssistHearingTemplateId,
             iaAipFrontendUrl,
             personalisationProvider,
             customerServicesProvider,
@@ -93,7 +101,19 @@ public class AppellantEditListingPersonalisationEmailTest {
 
     @Test
     public void should_return_given_template_id() {
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.AIP));
         assertEquals(templateId, appellantEditListingPersonalisationEmail.getTemplateId(asylumCase));
+
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.REP));
+        assertEquals(lrAppellantTemplateId, appellantEditListingPersonalisationEmail.getTemplateId(asylumCase));
+
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.AIP));
+        assertEquals(listAssistHearingTemplateId, appellantEditListingPersonalisationEmail.getTemplateId(asylumCase));
+
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.REP));
+        assertEquals(lrAppellantListAssistHearingTemplateId, appellantEditListingPersonalisationEmail.getTemplateId(asylumCase));
     }
 
     @Test
@@ -103,31 +123,54 @@ public class AppellantEditListingPersonalisationEmailTest {
     }
 
     @Test
-    public void should_return_given_email_address_from_asylum_case() {
+    public void should_return_given_email_address_from_asylum_case_aip() {
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.AIP));
         when(recipientsFinder.findAll(asylumCase, NotificationType.EMAIL))
             .thenReturn(Collections.singleton(mockedAppellantEmailAddress));
-        assertTrue(
-            appellantEditListingPersonalisationEmail.getRecipientsList(asylumCase).contains(mockedAppellantEmailAddress));
+        Set<String> response = appellantEditListingPersonalisationEmail.getRecipientsList(asylumCase);
+        verify(recipientsFinder, times(1)).findAll(asylumCase, NotificationType.EMAIL);
+        verify(recipientsFinder, times(0)).findReppedAppellant(asylumCase, NotificationType.EMAIL);
+        assertTrue(response.contains(mockedAppellantEmailAddress));
+    }
+
+    @Test
+    public void should_return_given_email_address_from_asylum_case_legally_repped_appellant() {
+        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.REP));
+        when(recipientsFinder.findReppedAppellant(asylumCase, NotificationType.EMAIL))
+            .thenReturn(Collections.singleton(mockedAppellantEmailAddress));
+        Set<String> response = appellantEditListingPersonalisationEmail.getRecipientsList(asylumCase);
+        verify(recipientsFinder, times(0)).findAll(asylumCase, NotificationType.EMAIL);
+        verify(recipientsFinder, times(1)).findReppedAppellant(asylumCase, NotificationType.EMAIL);
+        assertTrue(response.contains(mockedAppellantEmailAddress));
     }
 
     @Test
     public void should_throw_exception_on_personalisation_when_case_is_null() {
-
         assertThatThrownBy(
             () -> appellantEditListingPersonalisationEmail.getPersonalisation((Callback<AsylumCase>) null))
             .isExactlyInstanceOf(NullPointerException.class)
             .hasMessage("callback must not be null");
     }
 
+    @Test
+    public void should_throw_exception_on_personalisation_when_hearing_centre_is_null() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+        assertThatThrownBy(
+            () -> appellantEditListingPersonalisationEmail.getPersonalisation((Callback<AsylumCase>) callback))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("No hearing centre present");
+    }
+
     @ParameterizedTest
-    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    @EnumSource(value = YesOrNo.class, names = {"YES", "NO"})
     public void should_return_personalisation_when_all_information_given(YesOrNo isAda) {
         initializePrefixes(appellantEditListingPersonalisationEmail);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
         when(personalisationProvider.getPersonalisation(callback)).thenReturn(getPersonalisationMapWithGivenValues());
-
         Map<String, String> personalisation =
             appellantEditListingPersonalisationEmail.getPersonalisation(callback);
 
@@ -136,7 +179,7 @@ public class AppellantEditListingPersonalisationEmailTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
+    @EnumSource(value = YesOrNo.class, names = {"YES", "NO"})
     public void should_return_personalisation_when_optional_fields_are_blank(YesOrNo isAda) {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);

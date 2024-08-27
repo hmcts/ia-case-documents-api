@@ -1,13 +1,18 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAipJourney;
 
 import com.google.common.collect.ImmutableMap;
+
 import java.util.Map;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
@@ -18,6 +23,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class AppellantEditListingPersonalisationSms implements SmsNotificationPersonalisation {
 
     private final String editListingAppellantSmsTemplateId;
+    private final String editListingLegallyReppedAppellantSmsTemplateId;
     private final String iaAipFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final RecipientsFinder recipientsFinder;
@@ -25,11 +31,13 @@ public class AppellantEditListingPersonalisationSms implements SmsNotificationPe
 
     public AppellantEditListingPersonalisationSms(
         @Value("${govnotify.template.caseEdited.appellant.sms}") String editListingAppellantSmsTemplateId,
+        @Value("${govnotify.template.caseEdited.legallyReppedAppellant.sms}") String editListingLegallyReppedAppellantSmsTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         PersonalisationProvider personalisationProvider,
         RecipientsFinder recipientsFinder
     ) {
         this.editListingAppellantSmsTemplateId = editListingAppellantSmsTemplateId;
+        this.editListingLegallyReppedAppellantSmsTemplateId = editListingLegallyReppedAppellantSmsTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.recipientsFinder = recipientsFinder;
@@ -38,13 +46,17 @@ public class AppellantEditListingPersonalisationSms implements SmsNotificationPe
 
 
     @Override
-    public String getTemplateId() {
-        return editListingAppellantSmsTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+
+        return isAipJourney(asylumCase) ? editListingAppellantSmsTemplateId : editListingLegallyReppedAppellantSmsTemplateId;
     }
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return recipientsFinder.findAll(asylumCase, NotificationType.SMS);
+        requireNonNull(asylumCase, "asylumCase must not be null");
+        return isAipJourney(asylumCase) ?
+            recipientsFinder.findAll(asylumCase, NotificationType.SMS) :
+            recipientsFinder.findReppedAppellant(asylumCase, NotificationType.SMS);
     }
 
     @Override
@@ -55,12 +67,14 @@ public class AppellantEditListingPersonalisationSms implements SmsNotificationPe
     @Override
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
-
-        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+        HearingCentre hearingCentre = callback.getCaseDetails().getCaseData()
+            .read(HEARING_CENTRE, HearingCentre.class).orElseThrow(
+                () -> new IllegalArgumentException("No hearing centre present"));
+        return ImmutableMap
             .<String, String>builder()
             .putAll(personalisationProvider.getPersonalisation(callback))
-            .put("hyperlink to service", iaAipFrontendUrl);
-
-        return listCaseFields.build();
+            .put("tribunalCentre", hearingCentre.getValue())
+            .put("hyperlink to service", iaAipFrontendUrl)
+            .build();
     }
 }

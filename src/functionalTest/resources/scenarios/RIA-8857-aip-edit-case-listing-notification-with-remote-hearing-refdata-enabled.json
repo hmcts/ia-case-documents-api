@@ -12,6 +12,7 @@
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
           "appealReferenceNumber": "PA/12345/2023",
+          "hearingCentre": "harmondsworth",
           "ariaListingReference": "LP/12345/2023",
           "listCaseHearingCentre": "harmondsworth",
           "listCaseHearingDate": "2023-09-03T14:25:15.000",
@@ -45,6 +46,7 @@
     "caseData": {
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
+        "hearingCentre": "harmondsworth",
         "appealReferenceNumber": "PA/12345/2023",
         "listCaseHearingCentre": "harmondsworth",
         "listCaseHearingDate": "2023-09-03T14:25:15.000",

@@ -1,15 +1,20 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_INTEGRATED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAipJourney;
 
 import com.google.common.collect.ImmutableMap;
+
 import java.util.Map;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
@@ -23,6 +28,8 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
 
     private final String editListingAppellantEmailTemplateId;
     private final String listAssistHearingEditListingAppellantEmailTemplateId;
+    private final String editListingLegallyReppedAppellantEmailTemplateId;
+    private final String listAssistHearingEditListingLegallyReppedAppellantEmailTemplateId;
     private final String iaAipFrontendUrl;
     private final PersonalisationProvider personalisationProvider;
     private final CustomerServicesProvider customerServicesProvider;
@@ -36,6 +43,8 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
     public AppellantEditListingPersonalisationEmail(
         @Value("${govnotify.template.caseEdited.appellant.email}") String editListingAppellantEmailTemplateId,
         @Value("${govnotify.template.listAssistHearing.caseEdited.appellant.email}") String listAssistHearingEditListingAppellantEmailTemplateId,
+        @Value("${govnotify.template.caseEdited.legallyReppedAppellant.email}") String editListingLegallyReppedAppellantEmailTemplateId,
+        @Value("${govnotify.template.listAssistHearing.caseEdited.legallyReppedAppellant.email}") String listAssistHearingEditListingLegallyReppedAppellantEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         PersonalisationProvider personalisationProvider,
         CustomerServicesProvider customerServicesProvider,
@@ -43,6 +52,8 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
     ) {
         this.editListingAppellantEmailTemplateId = editListingAppellantEmailTemplateId;
         this.listAssistHearingEditListingAppellantEmailTemplateId = listAssistHearingEditListingAppellantEmailTemplateId;
+        this.editListingLegallyReppedAppellantEmailTemplateId = editListingLegallyReppedAppellantEmailTemplateId;
+        this.listAssistHearingEditListingLegallyReppedAppellantEmailTemplateId = listAssistHearingEditListingLegallyReppedAppellantEmailTemplateId;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.personalisationProvider = personalisationProvider;
         this.customerServicesProvider = customerServicesProvider;
@@ -51,13 +62,22 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
 
     @Override
     public String getTemplateId(AsylumCase asylumCase) {
-        return asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES
-                ? listAssistHearingEditListingAppellantEmailTemplateId : editListingAppellantEmailTemplateId;
+        if (asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
+            return isAipJourney(asylumCase) ?
+                listAssistHearingEditListingAppellantEmailTemplateId :
+                listAssistHearingEditListingLegallyReppedAppellantEmailTemplateId;
+        } else {
+            return isAipJourney(asylumCase) ?
+                editListingAppellantEmailTemplateId : editListingLegallyReppedAppellantEmailTemplateId;
+        }
     }
 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
-        return recipientsFinder.findAll(asylumCase, NotificationType.EMAIL);
+        requireNonNull(asylumCase, "asylumCase must not be null");
+        return isAipJourney(asylumCase) ?
+            recipientsFinder.findAll(asylumCase, NotificationType.EMAIL) :
+            recipientsFinder.findReppedAppellant(asylumCase, NotificationType.EMAIL);
     }
 
     @Override
@@ -68,14 +88,16 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
     @Override
     public Map<String, String> getPersonalisation(Callback<AsylumCase> callback) {
         requireNonNull(callback, "callback must not be null");
-
-        final ImmutableMap.Builder<String, String> listCaseFields = ImmutableMap
+        HearingCentre hearingCentre = callback.getCaseDetails().getCaseData()
+            .read(HEARING_CENTRE, HearingCentre.class).orElseThrow(
+                () -> new IllegalArgumentException("No hearing centre present"));
+        return ImmutableMap
             .<String, String>builder()
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
             .putAll(personalisationProvider.getPersonalisation(callback))
             .put("subjectPrefix", isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData()) ? adaPrefix : nonAdaPrefix)
-            .put("hyperlink to service", iaAipFrontendUrl);
-
-        return listCaseFields.build();
+            .put("tribunalCentre", hearingCentre.getValue())
+            .put("hyperlink to service", iaAipFrontendUrl)
+            .build();
     }
 }
