@@ -1,9 +1,14 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.opentest4j.AssertionFailedError;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -110,6 +116,40 @@ public class DocumentHandlerTest {
         verify(documentReceiver).receive(document, "", tag);
         verify(documentsAppender).append(existingDocuments, Collections.singletonList(newDocumentWithMetadata));
         verify(asylumCase).write(documentField, allDocuments);
+    }
+
+    @Test
+    public void should_add_document_with_metadata_to_non_empty_list_without_replacing_documents() {
+
+        DocumentWithMetadata newDocumentWithMetadata = createDocumentWithMetadata();
+        List<IdValue<DocumentWithMetadata>> existingDocuments = newArrayList(new IdValue<>("1", createDocumentWithMetadata()));
+        List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(existingDocuments.get(0), new IdValue<>("2", newDocumentWithMetadata));
+
+        when(asylumCase.read(documentField))
+            .thenReturn(Optional.of(existingDocuments));
+        when(documentReceiver.receive(document, "", tag))
+            .thenReturn(newDocumentWithMetadata);
+        when(documentsAppender.append(existingDocuments, Collections.singletonList(newDocumentWithMetadata)))
+            .thenReturn(allDocuments);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String currentDateTime = ZonedDateTime.now(ZoneId.of("Europe/London"))
+            .toLocalDateTime().format(formatter);
+        documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
+            asylumCase,
+            document,
+            documentField,
+            tag
+        );
+        verify(asylumCase).read(documentField);
+        verify(documentReceiver).receive(document, "", tag);
+        verify(documentsAppender).append(existingDocuments, Collections.singletonList(newDocumentWithMetadata));
+        verify(asylumCase).write(documentField, allDocuments);
+        try {
+            assertEquals(currentDateTime, LocalDateTime.parse(newDocumentWithMetadata.getDateTimeUploaded()).format(formatter));
+        } catch (AssertionFailedError e) {
+            assertEquals(currentDateTime, LocalDateTime.parse(newDocumentWithMetadata.getDateTimeUploaded()).minusMinutes(1).format(formatter));
+        }
+
     }
 
     private DocumentWithMetadata createDocumentWithMetadata() {

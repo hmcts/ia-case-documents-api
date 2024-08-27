@@ -16,6 +16,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -169,7 +170,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(respondentDocWithMetadata)));
         when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
             .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDocWithMetadata)));
-
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -325,7 +326,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(appellantAddendumEvidenceList)));
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
-
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -482,6 +483,7 @@ class CustomiseHearingBundleHandlerTest {
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
         when(document.getDocumentBinaryUrl()).thenReturn("some-binary-url");
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -777,7 +779,7 @@ class CustomiseHearingBundleHandlerTest {
         when(appender.append(any(DocumentWithMetadata.class), anyList()))
             .thenReturn(documentsListAfterAppend);
         reheardHearingDocuments.get(0).getValue().setReheardHearingDocs(documentsListAfterAppend);
-
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 

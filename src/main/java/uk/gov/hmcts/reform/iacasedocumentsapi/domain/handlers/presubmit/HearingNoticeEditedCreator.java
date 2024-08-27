@@ -6,6 +6,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -143,7 +145,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             if (featureToggler.getValue("dlrm-remitted-feature-flag", false)) {
                 appendReheardHearingDocuments(asylumCase, hearingNoticeEdited);
             } else {
-                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNoticeEdited,
                     REHEARD_HEARING_DOCUMENTS,
@@ -151,7 +153,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 );
             }
         } else {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+            documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,
                 HEARING_DOCUMENTS,
@@ -167,7 +169,9 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 "",
                 DocumentTag.REHEARD_HEARING_NOTICE_RELISTED
             );
-
+        String currentDateTime = ZonedDateTime.now(ZoneId.of("Europe/London"))
+            .toLocalDateTime().toString();
+        documentWithMetadata.setDateTimeUploaded(currentDateTime);
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
             asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
         List<IdValue<ReheardHearingDocuments>> existingReheardDocuments = maybeExistingReheardDocuments.orElse(emptyList());
