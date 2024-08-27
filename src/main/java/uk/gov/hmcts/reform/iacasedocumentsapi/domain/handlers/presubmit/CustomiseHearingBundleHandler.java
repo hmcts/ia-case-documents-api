@@ -98,19 +98,20 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         boolean isUpdatedBundle = callback.getEvent().equals(Event.GENERATE_UPDATED_HEARING_BUNDLE);
-        if (isReheardCase) {
+        if (isReheardCase || isUpdatedBundle) {
             //populate these collections to avoid error on the Stitching api
             initializeNewCollections(asylumCase);
-
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, isRemittedPath ? "iac-remitted-reheard-hearing-bundle-config.yaml" : "iac-reheard-hearing-bundle-config.yaml");
+        }
+        String bundle;
+        if (isReheardCase) {
+            bundle = isRemittedPath ? "iac-remitted-reheard-hearing-bundle-config.yaml" : "iac-reheard-hearing-bundle-config.yaml";
+        } else if (isUpdatedBundle) {
+            bundle = isOrWasAda ? "iac-updated-hearing-bundle-inc-tribunal-config.yaml" : "iac-updated-hearing-bundle-config.yaml";
         } else {
-            if (isUpdatedBundle) {
-                initializeNewCollections(asylumCase);
-            }
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-                isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
+            bundle = isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml";
         }
 
+        asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, bundle);
         asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase));
 
         //deep copy the case

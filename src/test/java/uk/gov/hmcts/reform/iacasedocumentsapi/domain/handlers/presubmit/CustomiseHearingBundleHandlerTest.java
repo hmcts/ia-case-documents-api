@@ -296,7 +296,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-            maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
+            maybeDecision.isEmpty() ? "iac-updated-hearing-bundle-config.yaml" : "iac-updated-hearing-bundle-inc-tribunal-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
             "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
