@@ -145,13 +145,13 @@ public class DocumentHandlerTest {
             documentField,
             tag
         );
+        LocalDateTime actual = LocalDateTime.parse(newDocumentWithMetadata.getDateTimeUploaded());
+        assertTrue(currentDateTime.equals(actual.format(formatter))
+            || currentDateTime.equals(actual.minusMinutes(1).format(formatter)));
         verify(asylumCase).read(documentField);
         verify(documentReceiver).receive(document, "", tag);
         verify(documentsAppender).append(existingDocuments, Collections.singletonList(newDocumentWithMetadata));
         verify(asylumCase).write(documentField, allDocuments);
-        LocalDateTime actual = LocalDateTime.parse(newDocumentWithMetadata.getDateTimeUploaded());
-        assertTrue(currentDateTime.equals(actual.format(formatter))
-            || currentDateTime.equals(actual.minusMinutes(1).format(formatter)));
 
     }
 
