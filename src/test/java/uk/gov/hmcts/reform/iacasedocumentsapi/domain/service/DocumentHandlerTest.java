@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,13 +12,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opentest4j.AssertionFailedError;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -29,18 +29,23 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 @ExtendWith(MockitoExtension.class)
 public class DocumentHandlerTest {
 
-    @Mock private AsylumCase asylumCase;
-    @Mock private Document document;
-    @Mock private DocumentsAppender documentsAppender;
-    @Mock private DocumentReceiver documentReceiver;
+    @Mock
+    private AsylumCase asylumCase;
+    @Mock
+    private Document document;
+    @Mock
+    private DocumentsAppender documentsAppender;
+    @Mock
+    private DocumentReceiver documentReceiver;
 
-    @InjectMocks private DocumentHandler documentHandler;
+    @InjectMocks
+    private DocumentHandler documentHandler;
 
     private final DocumentTag tag = DocumentTag.ADDITIONAL_EVIDENCE;
     private final AsylumCaseDefinition documentField = AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 
     @Test
-    public void should_add_document_to_empty_list() {
+    void should_add_document_to_empty_list() {
         DocumentWithMetadata documentWithMetadata = createDocumentWithMetadata();
         List<IdValue<DocumentWithMetadata>> documents = newArrayList();
         List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(new IdValue<>("1", documentWithMetadata));
@@ -66,7 +71,7 @@ public class DocumentHandlerTest {
     }
 
     @Test
-    public void should_add_document_to_non_empty_list() {
+    void should_add_document_to_non_empty_list() {
         DocumentWithMetadata documentWithMetadata = createDocumentWithMetadata();
         List<IdValue<DocumentWithMetadata>> documents = newArrayList(new IdValue<>("1", createDocumentWithMetadata()));
         List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(documents.get(0), new IdValue<>("2", documentWithMetadata));
@@ -92,7 +97,7 @@ public class DocumentHandlerTest {
     }
 
     @Test
-    public void should_add_document_to_non_empty_list_without_replacing_documents() {
+    void should_add_document_to_non_empty_list_without_replacing_documents() {
 
         DocumentWithMetadata newDocumentWithMetadata = createDocumentWithMetadata();
         List<IdValue<DocumentWithMetadata>> existingDocuments = newArrayList(new IdValue<>("1", createDocumentWithMetadata()));
@@ -119,7 +124,7 @@ public class DocumentHandlerTest {
     }
 
     @Test
-    public void should_add_document_with_metadata_to_non_empty_list_without_replacing_documents() {
+    void should_add_document_with_metadata_to_non_empty_list_without_replacing_documents() {
 
         DocumentWithMetadata newDocumentWithMetadata = createDocumentWithMetadata();
         List<IdValue<DocumentWithMetadata>> existingDocuments = newArrayList(new IdValue<>("1", createDocumentWithMetadata()));
@@ -144,11 +149,9 @@ public class DocumentHandlerTest {
         verify(documentReceiver).receive(document, "", tag);
         verify(documentsAppender).append(existingDocuments, Collections.singletonList(newDocumentWithMetadata));
         verify(asylumCase).write(documentField, allDocuments);
-        try {
-            assertEquals(currentDateTime, LocalDateTime.parse(newDocumentWithMetadata.getDateTimeUploaded()).format(formatter));
-        } catch (AssertionFailedError e) {
-            assertEquals(currentDateTime, LocalDateTime.parse(newDocumentWithMetadata.getDateTimeUploaded()).minusMinutes(1).format(formatter));
-        }
+        LocalDateTime actual = LocalDateTime.parse(newDocumentWithMetadata.getDateTimeUploaded());
+        assertTrue(currentDateTime.equals(actual.format(formatter))
+            || currentDateTime.equals(actual.minusMinutes(1).format(formatter)));
 
     }
 
@@ -157,7 +160,7 @@ public class DocumentHandlerTest {
             document,
             RandomStringUtils.random(20),
             "31-01-1987",
-            tag,"test"
+            tag, "test"
         );
     }
 }
