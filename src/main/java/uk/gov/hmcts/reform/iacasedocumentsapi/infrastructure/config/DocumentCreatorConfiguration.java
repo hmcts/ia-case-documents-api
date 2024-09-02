@@ -1299,6 +1299,48 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalAppellantFtpaDecidedSetAsideLetter")
+    public DocumentCreator<AsylumCase> getInternalAppellantFtpaDecidedSetAsideLetterCreator(
+        @Value("${internalAppellantFtpaDecidedSetAsideLetter.contentType}") String contentType,
+        @Value("${internalAppellantFtpaDecidedSetAsideLetter.fileExtension}") String fileExtension,
+        @Value("${internalAppellantFtpaDecidedSetAsideLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAppellantFtpaDecidedSetAsideTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalAppellantFtpaDecidedDisposedLetter")
+    public DocumentCreator<AsylumCase> getInternalAppellantFtpaDecidedDisposedLetterCreator(
+        @Value("${internalAppellantFtpaDecidedDisposedLetter.contentType}") String contentType,
+        @Value("${internalAppellantFtpaDecidedDisposedLetter.fileExtension}") String fileExtension,
+        @Value("${internalAppellantFtpaDecidedDisposedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalAppellantFtpaDecidedSetAsideTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalHearingAdjustmentsUpdatedLetter")
     public DocumentCreator<AsylumCase> getInternalHearingAdjustmentsUpdatedLetterCreator(
         @Value("${internalHearingAdjustmentsUpdated.contentType}") String contentType,

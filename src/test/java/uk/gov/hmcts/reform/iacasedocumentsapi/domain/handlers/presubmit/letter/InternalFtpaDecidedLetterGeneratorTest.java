@@ -39,6 +39,8 @@ class InternalFtpaDecidedLetterGeneratorTest {
     private DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedCreator;
     @Mock
     private DocumentCreator<AsylumCase> internalAppellantFtpaDecidedRefusedCreator;
+    private DocumentCreator<AsylumCase> internalAppellantFtpaDecidedSetAsideCreator;
+    private DocumentCreator<AsylumCase> internalAppellantFtpaDecidedDisposedCreator;
     @Mock
     private DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedCreator;
     @Mock
@@ -66,6 +68,8 @@ class InternalFtpaDecidedLetterGeneratorTest {
                 internalAppellantFtpaDecidedGrantedCreator,
                 internalAppellantFtpaDecidedPartiallyGrantedCreator,
                 internalAppellantFtpaDecidedRefusedCreator,
+                internalAppellantFtpaDecidedSetAsideCreator,
+                internalAppellantFtpaDecidedDisposedCreator,
                 internalHoFtpaDecidedGrantedCreator,
                 internalHoFtpaDecidedPartiallyGrantedCreator,
                 internalHoFtpaDecidedRefusedCreator,
@@ -128,6 +132,8 @@ class InternalFtpaDecidedLetterGeneratorTest {
         when(asylumCase.read(FTPA_APPLICANT_TYPE, String.class)).thenReturn(Optional.of(ftpaApplicantAppellant));
 
         when(internalAppellantFtpaDecidedRefusedCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantFtpaDecidedDisposedCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(internalAppellantFtpaDecidedSetAsideCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             internalFtpaDecidedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

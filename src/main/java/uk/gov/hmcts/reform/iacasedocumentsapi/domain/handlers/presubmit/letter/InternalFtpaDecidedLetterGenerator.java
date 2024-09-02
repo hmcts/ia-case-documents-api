@@ -28,6 +28,8 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter;
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedLetter;
     private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedRefusedLetter;
+    private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedSetAsideLetter;
+    private final DocumentCreator<AsylumCase> internalAppellantFtpaDecidedDisposedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedLetter;
@@ -38,6 +40,8 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
             @Qualifier("internalAppellantFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter,
             @Qualifier("internalAppellantFtpaDecidedPartiallyGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedPartiallyGrantedLetter,
             @Qualifier("internalAppellantFtpaDecidedRefusedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedRefusedLetter,
+            @Qualifier("internalAppellantFtpaDecidedSetAsideLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedSetAsideLetter,
+            @Qualifier("internalAppellantFtpaDecidedDisposedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedDisposedLetter,
             @Qualifier("internalHoFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedGrantedLetter,
             @Qualifier("internalHoFtpaDecidedPartiallyGrantedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter,
             @Qualifier("internalHoFtpaDecidedRefusedLetter") DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedLetter,
@@ -46,6 +50,8 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
         this.internalAppellantFtpaDecidedGrantedLetter = internalAppellantFtpaDecidedGrantedLetter;
         this.internalAppellantFtpaDecidedPartiallyGrantedLetter = internalAppellantFtpaDecidedPartiallyGrantedLetter;
         this.internalAppellantFtpaDecidedRefusedLetter = internalAppellantFtpaDecidedRefusedLetter;
+        this.internalAppellantFtpaDecidedSetAsideLetter = internalAppellantFtpaDecidedSetAsideLetter;
+        this.internalAppellantFtpaDecidedDisposedLetter = internalAppellantFtpaDecidedDisposedLetter;
         this.internalHoFtpaDecidedGrantedLetter = internalHoFtpaDecidedGrantedLetter;
         this.internalHoFtpaDecidedPartiallyGrantedLetter = internalHoFtpaDecidedPartiallyGrantedLetter;
         this.internalHoFtpaDecidedRefusedLetter = internalHoFtpaDecidedRefusedLetter;
@@ -95,6 +101,11 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
                 documentForUpload = internalAppellantFtpaDecidedPartiallyGrantedLetter.create(caseDetails);
             } else if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_REFUSED))) {
                 documentForUpload = internalAppellantFtpaDecidedRefusedLetter.create(caseDetails);
+            } else if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_REMADE31)) ||
+                ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_REMADE32))) {
+                documentForUpload = internalAppellantFtpaDecidedDisposedLetter.create(caseDetails);
+            } else if (ftpaAppellantDecisionOutcomeType.equals(Optional.of(FTPA_REHEARD35))) {
+                documentForUpload = internalAppellantFtpaDecidedSetAsideLetter.create(caseDetails);
             } else {
                 return new PreSubmitCallbackResponse<>(asylumCase);
             }
