@@ -431,7 +431,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                         existingDocument.getValue().getDateUploaded(),
                         existingDocument.getValue().getTag(),
                         existingDocument.getValue().getSuppliedBy(),
-                        existingDocument.getValue().getUploadedBy()
+                        existingDocument.getValue().getUploadedBy(),
+                        existingDocument.getValue().getDateTimeUploaded()
                     );
 
                     currentDocument = new IdValue<>(currentDocument.getId(), alteredDoc);
@@ -575,7 +576,9 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                 documentWithDescription.getValue().getDescription().orElse(""),
                                 maybeDocument.get().getValue().getDateUploaded(),
                                 maybeDocumentTag,
-                                "");
+                                maybeDocument.get().getValue().getSuppliedBy(),
+                                maybeDocument.get().getValue().getUploadedBy(),
+                                maybeDocument.get().getValue().getDateTimeUploaded());
                         }
                     } else {
                         switch (sourceField) {
