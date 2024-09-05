@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Interpre
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PreviousDecisionDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata.CourtVenue;
 
 public enum BailCaseFieldDefinition {
     SENT_BY_CHECKLIST(
@@ -360,7 +359,9 @@ public enum BailCaseFieldDefinition {
     REF_DATA_LISTING_LOCATION_DETAIL(
             "refDataListingLocationDetail", new TypeReference<CourtVenue>() {}),
     IS_REMOTE_HEARING(
-            "isRemoteHearing", new TypeReference<YesOrNo>() {});
+            "isRemoteHearing", new TypeReference<YesOrNo>() {}),
+    CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS(
+        "currentCaseStateVisibleToAllUsers", new TypeReference<String>() {});
 
 
     private final String value;

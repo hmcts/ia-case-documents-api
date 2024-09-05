@@ -28,9 +28,7 @@ public enum State {
     PENDING_PAYMENT("pendingPayment"),
     ADJOURNED("adjourned"),
     FTPA_SUBMITTED("ftpaSubmitted"),
-
-
-
+    DECISION_CONDITIONAL_BAIL("decisionConditionalBail"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
