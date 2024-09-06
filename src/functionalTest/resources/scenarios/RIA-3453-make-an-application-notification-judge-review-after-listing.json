@@ -108,7 +108,7 @@
       {
         "reference": "34532_MAKE_AN_APPLICATION_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: An application has been submitted",
+        "subject": "Immigration and Asylum appeal: Judges review application submitted",
         "body": [
           "PA/12345/2019",
           "Talha Awan",
