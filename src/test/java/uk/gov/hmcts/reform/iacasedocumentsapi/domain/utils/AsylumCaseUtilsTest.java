@@ -443,6 +443,7 @@ public class AsylumCaseUtilsTest {
 
         assertEquals("", convertedFeeValue);
     }
+
     @Test
     void should_return_isDecisionWithoutHearingAppeal() {
         when(asylumCase.read(IS_DECISION_WITHOUT_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));

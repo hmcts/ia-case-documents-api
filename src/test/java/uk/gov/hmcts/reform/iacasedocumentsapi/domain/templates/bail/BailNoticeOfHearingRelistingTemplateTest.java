@@ -54,7 +54,6 @@ class BailNoticeOfHearingRelistingTemplateTest {
 
     private CourtVenue newCastle;
 
-    private CourtVenue newCastle;
     private BailNoticeOfHearingRelistingTemplate template;
     private Map<String, Object> fieldValuesMap;
 
