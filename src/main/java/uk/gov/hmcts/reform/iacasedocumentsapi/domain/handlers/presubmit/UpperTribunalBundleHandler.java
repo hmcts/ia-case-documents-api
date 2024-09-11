@@ -31,7 +31,7 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
     private final String emBundlerStitchUri;
 
     public UpperTribunalBundleHandler(
-        @Value("Hello world") String emBundlerUrl,
+        @Value("${emBundler.url}") String emBundlerUrl,
         @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
         EmBundleRequestExecutor emBundleRequestExecutor) {
         this.emBundlerUrl = emBundlerUrl;
@@ -86,7 +86,7 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
             .orElseThrow(() -> new IllegalStateException("caseBundle is not present"))
             .stream()
             .map(IdValue::getValue)
-            .collect(Collectors.toList());
+            .toList();
 
         if (caseBundles.size() != 1) {
             throw new IllegalStateException("case bundles size is not 1 and is : " + caseBundles.size());
