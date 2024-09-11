@@ -31,8 +31,8 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
     private final String emBundlerStitchUri;
 
     public UpperTribunalBundleHandler(
-        @Value("${emBundler.url}") String emBundlerUrl,
-        @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
+        @Value("Hello world") String emBundlerUrl,
+        @Value("Hello world again") String emBundlerStitchUri,
         EmBundleRequestExecutor emBundleRequestExecutor) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
@@ -92,8 +92,8 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
             throw new IllegalStateException("case bundles size is not 1 and is : " + caseBundles.size());
         }
 
-        // stitchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
-        final String stitchStatus = "FAILED";
+        //stictchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
+        final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
 
         responseData.write(AsylumCaseDefinition.STITCHING_STATUS_UPPER_TRIBUNAL, stitchStatus);
         log.info("Stitch status in case documents api repo is " + stitchStatus + " on case id "
