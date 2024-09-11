@@ -32,7 +32,7 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
 
     public UpperTribunalBundleHandler(
         @Value("Hello world") String emBundlerUrl,
-        @Value("Hello world again") String emBundlerStitchUri,
+        @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
         EmBundleRequestExecutor emBundleRequestExecutor) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
