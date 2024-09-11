@@ -131,30 +131,6 @@ class HearingNoticeCreatorTest {
     }
 
     @Test
-    public void should_create_end_appeal_notice_pdf_and_append_to_letter_notifications_documents_for_internal_non_detained() {
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        JourneyType journeyType = JourneyType.REP;
-        when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
-            .thenReturn(Optional.of(journeyType));
-
-        when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
-    }
-
-    @Test
     void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_when_reheard_featue_flag_disabled() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -162,9 +138,8 @@ class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(NO));
-
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -184,9 +159,9 @@ class HearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
