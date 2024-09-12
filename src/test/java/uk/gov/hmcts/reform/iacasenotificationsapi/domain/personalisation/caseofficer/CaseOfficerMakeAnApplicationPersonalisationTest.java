@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -84,25 +85,29 @@ public class CaseOfficerMakeAnApplicationPersonalisationTest {
                 featureToggler);
     }
 
-    @Test
-    public void should_return_given_template_id() {
-        when(appealService.isAppealListed(asylumCase)).thenReturn(false);
-        when(makeAnApplication.getType()).thenReturn("");
-        assertEquals(makeAnApplicationCaseOfficerBeforeListingTemplateId,
-            caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
-
-        when(appealService.isAppealListed(asylumCase)).thenReturn(true);
-        assertEquals(makeAnApplicationCaseOfficerAfterListingTemplateId,
-            caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
-
+    @ParameterizedTest
+    @ValueSource(strings = {"Judge's review of application decision", "Judge's review of Legal Officer decision"})
+    public void should_return_given_template_id_for_judge_review(String applicationType) {
         when(makeAnApplication.getType())
-            .thenReturn("Judge's review of application decision");
+            .thenReturn(applicationType);
         when(appealService.isAppealListed(asylumCase)).thenReturn(false);
         assertEquals(makeAnApplicationCaseOfficerJudgeReviewBeforeListingTemplateId,
             caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
 
         when(appealService.isAppealListed(asylumCase)).thenReturn(true);
         assertEquals(makeAnApplicationCaseOfficerJudgeReviewAfterListingTemplateId,
+            caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_given_template_id() {
+        when(makeAnApplication.getType()).thenReturn("some application type");
+        when(appealService.isAppealListed(asylumCase)).thenReturn(false);
+        assertEquals(makeAnApplicationCaseOfficerBeforeListingTemplateId,
+            caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
+
+        when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+        assertEquals(makeAnApplicationCaseOfficerAfterListingTemplateId,
             caseOfficerMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
     }
 

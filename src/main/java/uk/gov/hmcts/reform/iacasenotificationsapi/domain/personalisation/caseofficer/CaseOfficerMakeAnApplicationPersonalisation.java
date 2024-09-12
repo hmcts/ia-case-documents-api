@@ -67,7 +67,8 @@ public class CaseOfficerMakeAnApplicationPersonalisation implements EmailNotific
     public String getTemplateId(AsylumCase asylumCase) {
         boolean isAppealListed = appealService.isAppealListed(asylumCase);
         String applicationType = makeAnApplicationService.getMakeAnApplication(asylumCase, false).map(MakeAnApplication::getType).orElse("");
-        boolean isJudgeReviewApplicationType = applicationType.equals("Judge's review of application decision");
+        boolean isJudgeReviewApplicationType = applicationType.equals("Judge's review of application decision")
+            || applicationType.equals("Judge's review of Legal Officer decision");
         if (isAppealListed) {
             return isJudgeReviewApplicationType ? makeAnApplicationCaseOfficerJudgeReviewAfterListingTemplateId : makeAnApplicationCaseOfficerAfterListingTemplateId;
         } else {
