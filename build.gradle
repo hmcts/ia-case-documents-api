@@ -251,9 +251,7 @@ sonarqube {
         property "sonar.pitest.reportsDirectory", "build/reports/pitest"
         property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/config/**," +
                                      "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/SystemDateProvider.java," +
-                                     "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/Application.java," +
-                                     "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/handlers/presubmit/UpperTribunalBundleHandler.java"
-
+                                     "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/Application.java"
         property "sonar.cpd.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCase.java," +
                                          "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCaseBuilder.java"
     }
