@@ -25,4 +25,14 @@ spring:
         hearing-centre-birmingham-email: IA_HEARING_CENTRE_BIRMINGHAM_EMAIL
         hearing-centre-hatton-cross-email: IA_HEARING_CENTRE_HATTON_CROSS_EMAIL
         hearing-centre-glasgow-email: IA_HEARING_CENTRE_GLASGOW_EMAIL
+        hearing-centre-harmondsworth-email: IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL
+        hearing-centre-hendon-email: IA_HEARING_CENTRE_HENDON_EMAIL
+        hearing-centre-yarls-wood-email: IA_HEARING_CENTRE_YARLS_WOOD_EMAIL
+        hearing-centre-bradford-keighley-email: IA_HEARING_CENTRE_BRADFORD_KEIGHLEY_EMAIL
+        hearing-centre-mcc-minshull-email: IA_HEARING_CENTRE_MCC_MINSHULL_EMAIL
+        hearing-centre-mcc-crown-square-email: IA_HEARING_CENTRE_MCC_CROWN_SQUARE_EMAIL
+        hearing-centre-manchester-mags-email: IA_HEARING_CENTRE_MANCHESTER_MAGS_EMAIL
+        hearing-centre-nth-tyne-mags-email: IA_HEARING_CENTRE_NTH_TYNE_MAGS_EMAIL
+        hearing-centre-leeds-mags-email: IA_HEARING_CENTRE_LEEDS_MAGS_EMAIL
+        hearing-centre-alloa-sherrif-email: IA_HEARING_CENTRE_ALLOA_SHERRIF_EMAIL
         ia-config-validator-secret: IA_CONFIG_VALIDATOR_SECRET

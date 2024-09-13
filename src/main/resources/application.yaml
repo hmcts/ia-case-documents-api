@@ -697,6 +697,15 @@ hearingCentreEmailAddresses:
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
+  hendon: ${IA_HEARING_CENTRE_HENDON_EMAIL:hc-hendon@example.com}
+  yarlsWood: ${IA_HEARING_CENTRE_YARLS_WOOD_EMAIL:hc-yarls-wood@example.com}
+  bradfordKeighley: ${IA_HEARING_CENTRE_BRADFORD_KEIGHLEY_EMAIL:hc-bradford-keighley@example.com}
+  mccMinshull: ${IA_HEARING_CENTRE_MCC_MINSHULL_EMAIL:hc-mcc-minshull@example.com}
+  mccCrownSquare: ${IA_HEARING_CENTRE_MCC_CROWN_SQUARE_EMAIL:hc-mcc-crown-square@example.com}
+  manchesterMags: ${IA_HEARING_CENTRE_MANCHESTER_MAGS_EMAIL:hc-manchester-mags@example.com}
+  nthTyneMags: ${IA_HEARING_CENTRE_NTH_TYNE_MAGS_EMAIL:hc-nth-tyne-mags@example.com}
+  leedsMags: ${IA_HEARING_CENTRE_LEEDS_MAGS_EMAIL:hc-leeds-mags@example.com}
+  alloaSherrif: ${IA_HEARING_CENTRE_ALLOA_SHERRIF_EMAIL:hc-alloa-sherrif@example.com}
 
 govUkHolidays:
   url: https://www.gov.uk/
