@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -265,8 +265,8 @@ public class AsylumCaseUtils {
             .read(ADDRESS_LINE_4_ADMIN_J, String.class)
             .orElse(null);
 
-        Nationality  oocAddressCountry = Nationality.valueOf(asylumCase
-            .read(COUNTRY_OOC_ADMIN_J, NationalityFieldValue.class)
+        NationalityGovUk oocAddressCountry = NationalityGovUk.valueOf(asylumCase
+            .read(COUNTRY_GOV_UK_OOC_ADMIN_J, NationalityFieldValue.class)
             .orElseThrow(() -> new IllegalStateException("OOC Address country is not present")).getCode());
 
         if (oocAddressLine3 != null) {

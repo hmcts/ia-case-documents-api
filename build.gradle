@@ -34,7 +34,7 @@ def versions = [
     junitPlatform      : '1.10.2',
     gradlePitest       : '1.5.1',
     pitest             : '1.15.8',
-    reformLogging      : '5.1.7',
+    reformLogging      : '6.0.1',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
     serenity           : '4.1.4',
@@ -345,10 +345,10 @@ dependencies {
 
     implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
 
-    implementation group: 'uk.gov.hmcts.reform', name: 'document-management-client', version: '7.0.0'
-    implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
-    implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
-    implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.4'
+    implementation group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.0'
+    implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
+    implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-client', version: '4.0.2'
     
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
