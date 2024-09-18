@@ -50,7 +50,6 @@ class BailNoticeOfHearingRelistingTemplateTest {
     private final String customerServicesEmail = "customer@services.com";
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
-
     private final String relistingTemplateName = "TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx";
 
     private CourtVenue newCastle;
@@ -72,7 +71,6 @@ class BailNoticeOfHearingRelistingTemplateTest {
                 "Y",
                 "Barras Bridge, Newcastle-Upon-Tyne",
                 "NE1 8QF");
-
     }
 
     @Test

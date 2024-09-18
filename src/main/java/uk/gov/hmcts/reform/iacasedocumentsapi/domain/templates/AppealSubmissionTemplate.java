@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import java.util.*;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;

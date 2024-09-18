@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 
@@ -88,7 +90,7 @@ class InternalDetainedManageFeeUpdateLetterTemplateTest {
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(dueDate, templateFieldValues.get("dueDate14Days"));
-        assertEquals("20 Aug 2024", templateFieldValues.get("dateLetterSent"));
+        assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), templateFieldValues.get("dateLetterSent"));
     }
 
     @Test
