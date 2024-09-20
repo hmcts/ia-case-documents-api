@@ -141,7 +141,7 @@ class InternalCaseListedLetterTemplateTest {
             when(asylumCase.read(ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of(addressLine2));
             when(asylumCase.read(ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of(addressLine3));
             when(asylumCase.read(ADDRESS_LINE_4_ADMIN_J, String.class)).thenReturn(Optional.of(postTown));
-            when(asylumCase.read(COUNTRY_OOC_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(nationalityOoc));
+            when(asylumCase.read(COUNTRY_GOV_UK_OOC_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(nationalityOoc));
             when(nationalityOoc.getCode()).thenReturn(Nationality.ES.name());
         }
     }
