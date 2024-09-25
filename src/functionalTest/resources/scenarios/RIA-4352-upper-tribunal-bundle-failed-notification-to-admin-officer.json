@@ -43,7 +43,7 @@
     "notifications": [
       {
         "reference": "4352_UPPER_TRIBUNAL_BUNDLE_FAILED_ADMIN_OFFICER",
-        "recipient": "{$ctscAdminFtpaDecisionEmailAddress}",
+        "recipient": "{$upperTribunalPermissionApplicationsEmailAddress}",
         "subject": "Immigration and Asylum appeal: The Upper Tribunal bundle failed to generate",
         "body": [
           "PA/12345/2019",

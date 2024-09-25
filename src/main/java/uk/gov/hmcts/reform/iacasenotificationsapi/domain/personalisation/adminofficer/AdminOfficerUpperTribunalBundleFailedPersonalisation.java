@@ -16,7 +16,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class AdminOfficerUpperTribunalBundleFailedPersonalisation implements EmailNotificationPersonalisation {
 
     private final String upperTribunalBundleFailedAdminOfficerTemplateId;
-    private final String ctscAdminFtpaDecisionEmailAddress;
+    private final String upperTribunalEmailAddress;
     private final PersonalisationProvider personalisationProvider;
 
     @Value("${govnotify.emailPrefix.ada}")
@@ -26,11 +26,11 @@ public class AdminOfficerUpperTribunalBundleFailedPersonalisation implements Ema
 
     public AdminOfficerUpperTribunalBundleFailedPersonalisation(
         @Value("${govnotify.template.upperTribunalBundleFailed.adminOfficer.email}") String upperTribunalBundleFailedAdminOfficerTemplateId,
-        @Value("${ctscAdminFtpaDecisionEmailAddress}") String ctscAdminFtpaDecisionEmailAddress,
+        @Value("${upperTribunalPermissionApplicationsEmailAddress}") String upperTribunalEmailAddress,
         PersonalisationProvider personalisationProvider
     ) {
         this.upperTribunalBundleFailedAdminOfficerTemplateId = upperTribunalBundleFailedAdminOfficerTemplateId;
-        this.ctscAdminFtpaDecisionEmailAddress = ctscAdminFtpaDecisionEmailAddress;
+        this.upperTribunalEmailAddress = upperTribunalEmailAddress;
         this.personalisationProvider = personalisationProvider;
     }
 
@@ -41,7 +41,7 @@ public class AdminOfficerUpperTribunalBundleFailedPersonalisation implements Ema
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(ctscAdminFtpaDecisionEmailAddress);
+        return Collections.singleton(upperTribunalEmailAddress);
     }
 
     @Override

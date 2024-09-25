@@ -4485,9 +4485,11 @@ public class NotificationHandlerConfiguration {
         return new NotificationHandler(
             (callbackStage, callback) -> {
 
-                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
-
                 final String stitchStatus = getStitchStatus(callback);
+
+                log.info("Entering notification handler config with values: event "
+                        + callback.getEvent() + "and state " + callback.getCaseDetails().getState()
+                        + " stitch status " + stitchStatus);
 
                 return
                     callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT

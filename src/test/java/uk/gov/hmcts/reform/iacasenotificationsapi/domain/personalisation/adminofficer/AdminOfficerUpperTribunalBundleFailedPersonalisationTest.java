@@ -6,8 +6,12 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
 import com.google.common.collect.ImmutableMap;
+
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,6 +53,12 @@ public class AdminOfficerUpperTribunalBundleFailedPersonalisationTest {
     @Test
     public void should_return_given_template_id() {
         assertEquals(bundleFailedTemplateId, adminOfficerUpperTribunalBundleFailedPersonalisation.getTemplateId());
+    }
+
+    @Test
+    void should_return_given_recipients_list() {
+        Set<String> recipients = adminOfficerUpperTribunalBundleFailedPersonalisation.getRecipientsList(asylumCase);
+        assertEquals(Collections.singleton(adminOfficeEmailAddress), recipients);
     }
 
     @Test
