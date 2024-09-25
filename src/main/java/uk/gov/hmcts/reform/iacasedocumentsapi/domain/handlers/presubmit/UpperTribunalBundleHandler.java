@@ -5,7 +5,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -20,6 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleReq
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 
+@Slf4j
 @Component
 public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -83,7 +85,7 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
             .orElseThrow(() -> new IllegalStateException("caseBundle is not present"))
             .stream()
             .map(IdValue::getValue)
-            .collect(Collectors.toList());
+            .toList();
 
         if (caseBundles.size() != 1) {
             throw new IllegalStateException("case bundles size is not 1 and is : " + caseBundles.size());
@@ -93,6 +95,8 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
         final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
 
         responseData.write(AsylumCaseDefinition.STITCHING_STATUS_UPPER_TRIBUNAL, stitchStatus);
+        log.info("The case document stitch status is " + stitchStatus + " on case id "
+            + callback.getCaseDetails().getId());
 
         return new PreSubmitCallbackResponse<>(responseData);
     }
