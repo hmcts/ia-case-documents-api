@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_FLAG_SET_ASIDE_REHEARD_EXISTS;
@@ -16,9 +15,12 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -83,7 +85,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && asList(Event.LIST_CASE).contains(callback.getEvent());
+            && Event.LIST_CASE.equals(callback.getEvent());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -102,25 +104,24 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         Document hearingNotice;
         boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
-                .orElse(YesOrNo.NO).equals(YesOrNo.YES);
+            .orElse(YesOrNo.NO).equals(YesOrNo.YES);
 
         //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
         //IS_REMOTE_HEARING is used for the case ref data
         if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
-                || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))) {
+            || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
             hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
         }
-
         if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YES))
             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YES)).orElse(false)))) {
 
             if (featureToggler.getValue("dlrm-remitted-feature-flag", false)) {
                 appendReheardHearingDocuments(asylumCase, hearingNotice);
             } else {
-                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
                     REHEARD_HEARING_DOCUMENTS,
@@ -128,7 +129,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 );
             }
         } else {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+            documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNotice,
                 HEARING_DOCUMENTS,
@@ -154,6 +155,9 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 "",
                 DocumentTag.REHEARD_HEARING_NOTICE
             );
+        String currentDateTime = ZonedDateTime.now(ZoneId.of("Europe/London"))
+            .toLocalDateTime().toString();
+        documentWithMetadata.setDateTimeUploaded(currentDateTime);
 
         List<IdValue<DocumentWithMetadata>> allDocuments =
             documentsAppender.append(

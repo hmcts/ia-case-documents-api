@@ -143,13 +143,13 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         restoreAddendumEvidence(asylumCase, asylumCaseCopy,isReheardCase);
 
         restoreRemittalDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath);
-        //for cases which progressed to finalBundling pre set-aside release,
+        // for cases which progressed to finalBundling pre set-aside release,
         // we want that all the documents should be restored in the collection field
         restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy, isRemittedPath
             ? LATEST_REHEARD_HEARING_DOCUMENTS : REHEARD_HEARING_DOCUMENTS, REHEARD_HEARING_DOCUMENTS_COLLECTION);
         restoreReheardDocumentsInCollections(asylumCase, asylumCaseCopy,
             LATEST_DECISION_AND_REASONS_DOCUMENTS, REHEARD_DECISION_REASONS_COLLECTION);
-        
+
         Optional<List<IdValue<Bundle>>> maybeCaseBundles = responseData.read(AsylumCaseDefinition.CASE_BUNDLES);
         asylumCase.write(AsylumCaseDefinition.CASE_BUNDLES, maybeCaseBundles);
 
@@ -157,7 +157,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                 .orElseThrow(() -> new IllegalStateException("caseBundle is not present"))
                 .stream()
                 .map(IdValue::getValue)
-                .collect(Collectors.toList());
+                .toList();
 
         if (caseBundles.size() != 1) {
             throw new IllegalStateException("case bundles size is not 1 and is : " + caseBundles.size());
@@ -172,31 +172,31 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     }
 
     void initializeNewCollections(AsylumCase asylumCase) {
-        if (!asylumCase.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS).isPresent()) {
+        if (asylumCase.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS).isEmpty()) {
             asylumCase.write(APPELLANT_ADDENDUM_EVIDENCE_DOCS, emptyList());
         }
 
-        if (!asylumCase.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS).isPresent()) {
+        if (asylumCase.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS).isEmpty()) {
             asylumCase.write(RESPONDENT_ADDENDUM_EVIDENCE_DOCS, emptyList());
         }
 
-        if (!asylumCase.read(APP_ADDITIONAL_EVIDENCE_DOCS).isPresent()) {
+        if (asylumCase.read(APP_ADDITIONAL_EVIDENCE_DOCS).isEmpty()) {
             asylumCase.write(APP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
         }
 
-        if (!asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS).isPresent()) {
+        if (asylumCase.read(RESP_ADDITIONAL_EVIDENCE_DOCS).isEmpty()) {
             asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
         }
 
-        if (!asylumCase.read(LATEST_REMITTAL_DOCUMENTS).isPresent()) {
+        if (asylumCase.read(LATEST_REMITTAL_DOCUMENTS).isEmpty()) {
             asylumCase.write(LATEST_REMITTAL_DOCUMENTS, emptyList());
         }
 
-        if (!asylumCase.read(LATEST_REHEARD_HEARING_DOCUMENTS).isPresent()) {
+        if (asylumCase.read(LATEST_REHEARD_HEARING_DOCUMENTS).isEmpty()) {
             asylumCase.write(LATEST_REHEARD_HEARING_DOCUMENTS, emptyList());
         }
 
-        if (!asylumCase.read(LATEST_DECISION_AND_REASONS_DOCUMENTS).isPresent()) {
+        if (asylumCase.read(LATEST_DECISION_AND_REASONS_DOCUMENTS).isEmpty()) {
             asylumCase.write(LATEST_DECISION_AND_REASONS_DOCUMENTS, emptyList());
         }
     }
@@ -239,7 +239,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             .stream()
             .filter(document -> document.getValue().getSuppliedBy().equals(SUPPLIED_BY_APPELLANT))
             .filter(document -> !contains(currentAppellantAddendumEvidenceDocs.orElse(emptyList()), document))
-            .collect(Collectors.toList());
+            .toList();
 
         List<IdValue<DocumentWithMetadata>> allAppellantDocuments = currentAppellantAddendumEvidenceDocs.orElse(emptyList());
 
@@ -251,7 +251,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             .stream()
             .filter(document -> document.getValue().getSuppliedBy().equals(SUPPLIED_BY_RESPONDENT))
             .filter(document -> !contains(currentRespondentAddendumEvidenceDocs.orElse(emptyList()), document))
-            .collect(Collectors.toList());
+            .toList();
 
         List<IdValue<DocumentWithMetadata>> allRespondentDocuments = currentRespondentAddendumEvidenceDocs.orElse(emptyList());
         for (IdValue<DocumentWithMetadata> documentWithMetadata : missingRespondentDocuments) {
@@ -294,7 +294,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             List<IdValue<DocumentWithMetadata>> missingDocuments = beforeDocuments
                     .stream()
                     .filter(document -> !contains(currentIdValues.orElse(emptyList()), document))
-                    .collect(Collectors.toList());
+                    .toList();
 
             List<IdValue<DocumentWithMetadata>> allDocuments = currentIdValues.orElse(emptyList());
             for (IdValue<DocumentWithMetadata> documentWithMetadata : missingDocuments) {
@@ -370,11 +370,12 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         List<IdValue<DocumentWithMetadata>> missingDocuments = existingList
             .stream()
             .filter(document -> !contains(finalCurrentList, document))
-            .collect(Collectors.toList());
+            .toList();
 
         for (IdValue<DocumentWithMetadata> documentWithMetadata : missingDocuments) {
             currentList = documentWithMetadataAppender.append(documentWithMetadata.getValue(), currentList);
         }
+        restoreDocumentMetaData(currentList, existingList);
         return currentList;
     }
 
@@ -395,6 +396,46 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         return found;
     }
+
+    private IdValue<DocumentWithMetadata> getExistingDocument(
+        List<IdValue<DocumentWithMetadata>> existingDocuments,
+        IdValue<DocumentWithMetadata> documentWithMetadata
+    ) {
+        for (IdValue<DocumentWithMetadata> doc : existingDocuments) {
+            Document legalDocument = doc.getValue().getDocument();
+            Document document = documentWithMetadata.getValue().getDocument();
+            if (legalDocument.getDocumentBinaryUrl().equals(document.getDocumentBinaryUrl())) {
+                return doc;
+            }
+        }
+        return null;
+    }
+
+    private void restoreDocumentMetaData(List<IdValue<DocumentWithMetadata>> finalCurrentList, List<IdValue<DocumentWithMetadata>> existingList) {
+        for (int i = 0; i < finalCurrentList.size(); i++) {
+            IdValue<DocumentWithMetadata> currentDocument = finalCurrentList.get(i);
+
+            if (contains(existingList, currentDocument)) {
+                IdValue<DocumentWithMetadata> existingDocument = getExistingDocument(existingList, currentDocument);
+
+                if (existingDocument != null) {
+                    DocumentWithMetadata alteredDoc = new DocumentWithMetadata(
+                        currentDocument.getValue().getDocument(),
+                        currentDocument.getValue().getDescription(),
+                        existingDocument.getValue().getDateUploaded(),
+                        existingDocument.getValue().getTag(),
+                        existingDocument.getValue().getSuppliedBy(),
+                        existingDocument.getValue().getUploadedBy()
+                    );
+
+                    currentDocument = new IdValue<>(currentDocument.getId(), alteredDoc);
+
+                    finalCurrentList.set(i, currentDocument);
+                }
+            }
+        }
+    }
+
 
     private List<AsylumCaseDefinition> getFieldDefinitions(boolean isReheardCase, boolean isOrWasAda) {
         List<AsylumCaseDefinition> fieldDefnList;
@@ -494,7 +535,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         mappingFields.forEach((sourceField,targetField) -> {
 
-            if (!asylumCase.read(sourceField).isPresent()) {
+            if (asylumCase.read(sourceField).isEmpty()) {
                 return;
             }
 
@@ -508,21 +549,24 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
             List<IdValue<DocumentWithMetadata>> customDocuments = new ArrayList<>();
 
-            if (documents != null && documents.size() > 0) {
+            if (!documents.isEmpty()) {
 
                 for (IdValue<DocumentWithDescription> documentWithDescription : documents) {
-                    //if the any document is missing the tag, add the appropriate tag to it.
+                    //if the 'any document' is missing the tag, add the appropriate tag to it.
                     Optional<IdValue<DocumentWithMetadata>> maybeDocument = isDocumentWithDescriptionPresent(targetDocuments, documentWithDescription);
                     Document document = documentWithDescription.getValue().getDocument().orElseThrow(() -> new IllegalStateException(MISSING_DOCUMENT_EXCEPTION_MESSAGE));
 
                     DocumentWithMetadata newDocumentWithMetadata = null;
 
                     if (maybeDocument.isPresent()) {
-                        newDocumentWithMetadata = new DocumentWithMetadata(document,
-                            documentWithDescription.getValue().getDescription().orElse(""),
-                            dateProvider.now().toString(),
-                            maybeDocument.get().getValue().getTag(),
-                            "");
+                        DocumentTag maybeDocumentTag = maybeDocument.get().getValue().getTag();
+                        if (maybeDocumentTag != DocumentTag.HEARING_BUNDLE) {
+                            newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                documentWithDescription.getValue().getDescription().orElse(""),
+                                maybeDocument.get().getValue().getDateUploaded(),
+                                maybeDocumentTag,
+                                "");
+                        }
                     } else {
                         switch (sourceField) {
                             case CUSTOM_HEARING_DOCUMENTS:
@@ -530,14 +574,18 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                     documentWithDescription.getValue().getDescription().orElse(""),
                                     dateProvider.now().toString(),
                                     DocumentTag.HEARING_NOTICE,
-                                    "");
+                                    "",
+                                    "",
+                                    dateProvider.nowWithTime().toString());
                                 break;
                             case CUSTOM_REHEARD_HEARING_DOCS:
                                 newDocumentWithMetadata = new DocumentWithMetadata(document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
                                     dateProvider.now().toString(),
                                     DocumentTag.REHEARD_HEARING_NOTICE,
-                                    "");
+                                    "",
+                                    "",
+                                    dateProvider.nowWithTime().toString());
                                 break;
                             case CUSTOM_LEGAL_REP_DOCUMENTS:
                                 newDocumentWithMetadata = new DocumentWithMetadata(document,
@@ -617,7 +665,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                     DocumentTag.REMITTAL_DECISION,
                                     "");
                                 break;
-                            default:break;
+                            default:
+                                break;
                         }
                     }
                     customDocuments = documentWithMetadataAppender.append(newDocumentWithMetadata, customDocuments);
