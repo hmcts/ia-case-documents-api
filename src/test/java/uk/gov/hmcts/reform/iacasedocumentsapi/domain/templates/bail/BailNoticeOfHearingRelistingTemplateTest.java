@@ -53,7 +53,6 @@ class BailNoticeOfHearingRelistingTemplateTest {
     private final String relistingTemplateName = "TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx";
 
     private CourtVenue newCastle;
-
     private BailNoticeOfHearingRelistingTemplate template;
     private Map<String, Object> fieldValuesMap;
 

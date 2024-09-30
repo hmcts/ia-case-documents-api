@@ -26,6 +26,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 
+
 public class AsylumCaseUtils {
 
     private AsylumCaseUtils() {
@@ -217,6 +218,15 @@ public class AsylumCaseUtils {
                 .put("dueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(directionEditDueDate)))
                 .put("directionExplaination", directionEditExplanation)
                 .build();
+    }
+
+    public static boolean isDecisionWithoutHearingAppeal(AsylumCase asylumCase) {
+        return asylumCase.read(IS_DECISION_WITHOUT_HEARING, YesOrNo.class)
+            .map(yesOrNo -> YesOrNo.YES == yesOrNo).orElse(false);
+    }
+
+    public static boolean isRemoteHearing(AsylumCase asylumCase) {
+        return asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
     }
 
     public static List<String> getAppellantAddressAsList(final AsylumCase asylumCase) {

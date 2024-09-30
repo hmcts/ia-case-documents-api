@@ -597,6 +597,7 @@ security:
       - "listCase"
       - "draftHearingRequirements"
       - "manageFeeUpdate"
+      - "updateTribunalDecision"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"

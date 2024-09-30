@@ -1,13 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDecisionWithoutHearingAppeal;
 
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @Service
@@ -68,11 +67,6 @@ public class HearingDetailsFinder {
             case NORTH_SHIELDS -> "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
             default -> "Hearing centre url not available";
         };
-    }
-
-    private boolean isDecisionWithoutHearingAppeal(AsylumCase asylumCase) {
-        return asylumCase.read(IS_DECISION_WITHOUT_HEARING, YesOrNo.class)
-            .map(yesOrNo -> YesOrNo.YES == yesOrNo).orElse(false);
     }
 
 }
