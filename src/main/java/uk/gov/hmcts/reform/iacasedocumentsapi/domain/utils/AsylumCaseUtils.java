@@ -327,13 +327,4 @@ public class AsylumCaseUtils {
                 : "";
     }
 
-    public static boolean isDecisionWithoutHearingAppeal(AsylumCase asylumCase) {
-        return asylumCase.read(IS_DECISION_WITHOUT_HEARING, YesOrNo.class)
-            .map(yesOrNo -> YesOrNo.YES == yesOrNo).orElse(false);
-    }
-
-    public static boolean isRemoteHearing(AsylumCase asylumCase) {
-        return asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
-    }
-
 }
