@@ -1,12 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.SIGNED_DECISION_DOCUMENT_WITH_METADATA;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +17,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailDocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.bail.UploadSignedDecisionOrchestrator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.bail.UploadSignedDecisionPdfService;
+
+import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class UploadSignedDecisionOrchestratorTest {
@@ -55,6 +54,36 @@ public class UploadSignedDecisionOrchestratorTest {
                 SIGNED_DECISION_DOCUMENT_WITH_METADATA,
                 DocumentTag.SIGNED_DECISION_NOTICE
             );
+        verify(documentHandler, times(0))
+            .appendWithMetadata(
+                bailCase,
+                finalSignedDecisionPdf,
+                SIGNED_DECISION_DOCUMENT_WITH_METADATA,
+                DocumentTag.SIGNED_DECISION_NOTICE
+            );
+    }
+
+    @Test
+    void test_generate_pdf_service_called_new_document_appended_if_previous() {
+        when(bailCase.read(PREVIOUS_DECISION_DETAILS)).thenReturn(Optional.ofNullable(mock(List.class)));
+        uploadSignedDecisionOrchestrator.uploadSignedDecision(caseDetails);
+        verify(uploadSignedDecisionPdfService, times(1)).generatePdf(caseDetails);
+        verify(bailCase, times(1)).clear(BailCaseFieldDefinition.DECISION_UNSIGNED_DOCUMENT);
+        verify(bailCase, times(1)).clear(BailCaseFieldDefinition.UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA);
+        verify(documentHandler, times(1))
+            .appendWithMetadata(
+                bailCase,
+                finalSignedDecisionPdf,
+                SIGNED_DECISION_DOCUMENT_WITH_METADATA,
+                DocumentTag.SIGNED_DECISION_NOTICE
+            );
+        verify(documentHandler, times(0))
+            .addWithMetadata(
+                bailCase,
+                finalSignedDecisionPdf,
+                SIGNED_DECISION_DOCUMENT_WITH_METADATA,
+                DocumentTag.SIGNED_DECISION_NOTICE
+            );
     }
 
     @Test
@@ -78,5 +107,4 @@ public class UploadSignedDecisionOrchestratorTest {
         verifyNoInteractions(documentHandler);
         verify(bailCase, times(1)).clear(UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT);
     }
-
 }

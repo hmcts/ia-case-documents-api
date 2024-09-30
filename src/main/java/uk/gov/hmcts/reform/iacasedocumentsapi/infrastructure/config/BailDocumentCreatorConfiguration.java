@@ -9,14 +9,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseFileNameWit
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedGrantedTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedMindedRefusalTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailDecisionUnsignedRefusalTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailEndApplicationTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingInitialListingTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailNoticeOfHearingRelistingTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.BailSubmissionUtTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail.*;
 
 @Configuration
 public class BailDocumentCreatorConfiguration {
@@ -176,6 +169,27 @@ public class BailDocumentCreatorConfiguration {
         @Value("${bailNoticeOfHearing.fileName}") String fileName,
         BailCaseFileNameWithCaseIdQualifier fileNameQualifier,
         BailNoticeOfHearingRelistingTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<BailCase>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("bailNoticeOfHearingConditionalBailRelisting")
+    public DocumentCreator<BailCase> getBailNoticeOfHearingConditionalBailRelistingCreator(
+        @Value("${bailNoticeOfHearing.contentType}") String contentType,
+        @Value("${bailNoticeOfHearing.fileExtension}") String fileExtension,
+        @Value("${bailNoticeOfHearing.fileName}") String fileName,
+        BailCaseFileNameWithCaseIdQualifier fileNameQualifier,
+        BailNoticeOfHearingConditionalBailRelistingTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

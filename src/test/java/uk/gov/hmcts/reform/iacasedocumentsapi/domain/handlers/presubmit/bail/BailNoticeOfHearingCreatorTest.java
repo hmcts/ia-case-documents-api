@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.LISTING_EVENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent.INITIAL_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent.RELISTING;
@@ -24,6 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
@@ -36,6 +38,7 @@ class BailNoticeOfHearingCreatorTest {
 
     @Mock private DocumentCreator<BailCase> bailInitialListingNoticeOfHearingCreator;
     @Mock private DocumentCreator<BailCase> bailRelistingNoticeOfHearingCreator;
+    @Mock private DocumentCreator<BailCase> bailConditionalBailRelistingNoticeOfHearingCreator;
     @Mock private BailDocumentHandler bailDocumentHandler;
     @Mock private Callback<BailCase> callback;
     @Mock private CaseDetails<BailCase> caseDetails;
@@ -47,7 +50,10 @@ class BailNoticeOfHearingCreatorTest {
     @BeforeEach
     void setUp() {
         bailNoticeOfHearingCreator = new BailNoticeOfHearingCreator(
-            bailInitialListingNoticeOfHearingCreator, bailRelistingNoticeOfHearingCreator, bailDocumentHandler);
+            bailInitialListingNoticeOfHearingCreator,
+            bailRelistingNoticeOfHearingCreator,
+            bailConditionalBailRelistingNoticeOfHearingCreator,
+            bailDocumentHandler);
     }
 
     @Test
@@ -90,6 +96,27 @@ class BailNoticeOfHearingCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(bailCase);
         when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(RELISTING));
         when(bailRelistingNoticeOfHearingCreator.create(caseDetails)).thenReturn(bailNoticeOfHearingDocument);
+
+        PreSubmitCallbackResponse<BailCase> response = bailNoticeOfHearingCreator
+            .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+        assertEquals(bailCase, response.getData());
+        verify(bailDocumentHandler, times(1))
+            .appendWithMetadata(bailCase, bailNoticeOfHearingDocument,
+                BailCaseFieldDefinition.HEARING_DOCUMENTS, DocumentTag.BAIL_NOTICE_OF_HEARING);
+    }
+
+    @Test
+    void should_create_notice_of_hearing_for_conditional_bail_relisting_event_and_add_to_bailcase() {
+        when(callback.getEvent()).thenReturn(Event.CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(bailCase);
+        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(RELISTING));
+        when(bailCase.read(CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS, String.class))
+            .thenReturn(Optional.of(State.DECISION_CONDITIONAL_BAIL.toString()));
+        when(bailConditionalBailRelistingNoticeOfHearingCreator.create(caseDetails))
+            .thenReturn(bailNoticeOfHearingDocument);
 
         PreSubmitCallbackResponse<BailCase> response = bailNoticeOfHearingCreator
             .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
