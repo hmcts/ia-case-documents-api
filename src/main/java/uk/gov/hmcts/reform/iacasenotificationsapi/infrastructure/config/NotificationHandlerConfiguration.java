@@ -1,23 +1,65 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.DC;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.EA;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.EU;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.HU;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.PA;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.RP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicantType.APPELLANT;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicantType.RESPONDENT;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FeeTribunalAction.ADDITIONAL_PAYMENT;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_NOT_ADMITTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_REFUSED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.REP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.OutOfTimeDecisionType.IN_TIME;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.OutOfTimeDecisionType.UNKNOWN;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.*;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.*;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.*;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.APPROVED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.REJECTED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.EXCEPTIONAL_CIRCUMSTANCES_REMISSION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HELP_WITH_FEES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType.NO_REMISSION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.ADD_EVIDENCE_FOR_COSTS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.APPLY_FOR_COSTS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.BUILD_CASE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.CONSIDER_MAKING_COSTS_ORDER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.DECIDE_COSTS_APPLICATION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.REQUEST_RESPONSE_AMEND;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.RESIDENT_JUDGE_FTPA_DECISION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.RESPOND_TO_COSTS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.TURN_ON_NOTIFICATIONS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.UPDATE_HEARING_ADJUSTMENTS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.UPLOAD_ADDENDUM_EVIDENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.UPLOAD_ADDENDUM_EVIDENCE_ADMIN_OFFICER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.UPLOAD_ADDITIONAL_EVIDENCE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.UPLOAD_ADDITIONAL_EVIDENCE_HOME_OFFICE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus.PAID;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus.PAYMENT_PENDING;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus.TIMEOUT;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getLatestAddendumEvidenceDocument;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAgeAssessmentAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isLegalRepEjp;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +67,26 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.RequiredFieldMissingException;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicantType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ApplicationDecision;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ContactPreference;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FeeTribunalAction;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.OutOfTimeDecisionType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Parties;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionOption;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionType;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Subscriber;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.TimeExtension;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.TimeExtensionStatus;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
@@ -3569,6 +3630,7 @@ public class NotificationHandlerConfiguration {
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.RECORD_REMISSION_DECISION
                        && !isInternalCase(asylumCase)
+                       && !isAipJourney(asylumCase)
                        && isPartiallyApproved;
             },
             notificationGenerators
@@ -3590,6 +3652,8 @@ public class NotificationHandlerConfiguration {
 
                 boolean isRejected = asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
                     .map(decision -> REJECTED == decision)
+
+
                     .orElse(false);
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
@@ -3614,13 +3678,42 @@ public class NotificationHandlerConfiguration {
                         .getCaseData();
 
                 Optional<List<String>> completedStages = asylumCase.read(FEE_UPDATE_COMPLETED_STAGES);
-                boolean isRefundInstructed = completedStages.isPresent()
-                                             && completedStages.get().get(completedStages.get().size() - 1)
-                                                 .equals("feeUpdateRefundInstructed");
+                boolean isRefundInstructed = false;
+                if (completedStages.isPresent() && !completedStages.get().isEmpty()) {
+                    isRefundInstructed = completedStages.get().get(completedStages.get().size() - 1)
+                        .equals("feeUpdateRefundInstructed");
+                }
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                        && callback.getEvent() == Event.MANAGE_FEE_UPDATE
                        && isRefundInstructed;
+            },
+            notificationGenerators
+        );
+
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> manageFeeUpdateAdditionalPaymentRequestedNotificationHandler(
+        @Qualifier("manageFeeUpdateAdditionalPaymentRequestedNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase =
+                    callback
+                        .getCaseDetails()
+                        .getCaseData();
+
+                boolean additionalPaymentRequested = asylumCase.read(FEE_UPDATE_TRIBUNAL_ACTION, FeeTribunalAction.class)
+                    .map(action -> ADDITIONAL_PAYMENT == action)
+                    .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.MANAGE_FEE_UPDATE
+                       && additionalPaymentRequested
+                       && !isAipJourney(asylumCase)
+                       && isDlrmFeeRefundEnabled(asylumCase);
             },
             notificationGenerators
         );
@@ -3733,11 +3826,9 @@ public class NotificationHandlerConfiguration {
     ) {
 
         return new NotificationHandler(
-            (callbackStage, callback) -> {
-
-                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                       && callback.getEvent() == Event.REQUEST_FEE_REMISSION;
-            },
+            (callbackStage, callback) -> callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                   && !isAipJourney(callback.getCaseDetails().getCaseData())
+                   && callback.getEvent() == Event.REQUEST_FEE_REMISSION,
             notificationGenerators
         );
     }
@@ -5105,6 +5196,43 @@ public class NotificationHandlerConfiguration {
         );
     }
 
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> appellantRefundRequestedAipNotificationHandler(
+        @Qualifier("appellantRefundRequestedAipNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.REQUEST_FEE_REMISSION
+                    && isAipJourney(asylumCase);
+            },
+            notificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> appellantInPersonRemissionPaymentReminderEmailNotificationHandler(
+        @Qualifier("appellantInPersonRemissionPaymentReminderEmailNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.RECORD_REMISSION_REMINDER
+                    && isRemissionRejectedOrPartiallyApproved(asylumCase)
+                    && isAipJourney(asylumCase);
+            },
+            notificationGenerators,
+            getErrorHandler()
+        );
+    }
+
     private boolean isApplicationCreatedByAdmin(AsylumCase asylumCase) {
         String id = asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class).orElse("");
         Optional<List<IdValue<MakeAnApplication>>> mayBeMakeAnApplications = asylumCase.read(MAKE_AN_APPLICATIONS);
@@ -5689,6 +5817,103 @@ public class NotificationHandlerConfiguration {
         );
     }
 
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> aipAppellantRecordRefundDecisionNotificationHandler(
+        @Qualifier("aipAppellantRecordRefundDecisionNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.RECORD_REMISSION_DECISION
+                    && isAipJourney(asylumCase)
+                    && isDlrmFeeRefundEnabled(asylumCase)
+                    && isLateRemissionRequest(asylumCase);
+            },
+            notificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> legalRepRemissionPaymentReminderEmailNotificationHandler(
+        @Qualifier("legalRepRemissionPaymentReminderEmailNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == Event.RECORD_REMISSION_REMINDER
+                    && isRemissionRejectedOrPartiallyApproved(asylumCase);
+            },
+            notificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> aipManageFeeUpdatePaymentInstructedNotificationHandler(
+        @Qualifier("aipManageFeeUpdatePaymentInstructedNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                boolean isPaymentInstructed = asylumCase.read(FEE_UPDATE_TRIBUNAL_ACTION, FeeTribunalAction.class)
+                        .map(action -> action.equals(ADDITIONAL_PAYMENT))
+                        .orElse(false);
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                        && callback.getEvent() == Event.MANAGE_FEE_UPDATE
+                        && isPaymentInstructed
+                        && isAipJourney(asylumCase);
+            },
+            notificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> legalRepRefundConfirmationPersonalisationEmailNotificationHandler(
+        @Qualifier("legalRepRefundConfirmationPersonalisationEmailNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.REFUND_CONFIRMATION
+                       && !isAipJourney(asylumCase);
+            },
+            notificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<AsylumCase> aipRefundConfirmationNotificationHandler(
+        @Qualifier("aipRefundConfirmationNotificationGenerator")
+        List<NotificationGenerator> notificationGenerators) {
+
+        return new NotificationHandler(
+            (callbackStage, callback) -> {
+                AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+                return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                       && callback.getEvent() == Event.REFUND_CONFIRMATION
+                       && isAipJourney(asylumCase);
+            },
+            notificationGenerators,
+            getErrorHandler()
+        );
+    }
+
     private boolean isDlrmSetAsideEnabled(AsylumCase asylumCase) {
         return asylumCase.read(IS_DLRM_SET_ASIDE_ENABLED, YesOrNo.class)
             .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
@@ -5738,5 +5963,21 @@ public class NotificationHandlerConfiguration {
                 .findFirst(asylumCase, DirectionTag.NONE)
                 .map(direction -> direction.getParties().equals(party))
                 .orElse(false);
+    }
+
+    private boolean isRemissionRejectedOrPartiallyApproved(AsylumCase asylumCase) {
+        return asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+            .map(decision -> decision == RemissionDecision.REJECTED || decision == RemissionDecision.PARTIALLY_APPROVED)
+            .orElse(false);
+    }
+
+    private boolean isLateRemissionRequest(AsylumCase asylumCase) {
+        return asylumCase.read(IS_LATE_REMISSION_REQUEST, YesOrNo.class)
+            .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
+    }
+
+    private boolean isDlrmFeeRefundEnabled(AsylumCase asylumCase) {
+        return asylumCase.read(IS_DLRM_FEE_REFUND_ENABLED, YesOrNo.class)
+            .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
     }
 }

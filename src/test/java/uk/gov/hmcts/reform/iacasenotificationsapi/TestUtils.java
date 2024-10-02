@@ -20,6 +20,7 @@ public class TestUtils {
 
     public static List<IdValue<DocumentWithMetadata>> getDocumentWithMetadataList(String docId, String filename,
                                                                                   String description, DocumentTag tag) {
+
         return Arrays.asList(new IdValue<>(docId, getDocumentWithMetadata(docId, filename, description, tag)));
     }
 

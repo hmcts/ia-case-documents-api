@@ -13,7 +13,8 @@
         "replacements": {
           "remissionDecision": "partiallyApproved",
           "remittedAmount": "10000",
-          "amountLeftToPay": "4000"
+          "amountLeftToPay": "4000",
+          "ccdReferenceNumberForDisplay": "1111222233334444"
         }
       }
     }
@@ -47,6 +48,8 @@
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "40.00",
+          "{$TODAY+14|d MMM yyyy}",
+          "1111222233334444",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
         ]

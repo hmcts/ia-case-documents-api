@@ -1,30 +1,35 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.AMOUNT_LEFT_TO_PAY;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisationTest {
 
     @Mock
     private AsylumCase asylumCase;
     @Mock
     private CustomerServicesProvider customerServicesProvider;
+    @Mock
+    private FeatureToggler featureToggler;
 
     private String appealReferenceNumber = "someReferenceNumber";
     private String legalRepRefNumber = "someLegalRepRefNumber";
@@ -37,6 +42,8 @@ class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisationTest {
     private String amountLeftToPayInGbp = "40.00";
     private String customerServicesTelephone = "555 555 555";
     private String customerServicesEmail = "cust.services@example.com";
+    private String someTestDateEmail = "14/14/2024";
+    private String onlineCaseReferenceNumber = "1111222233334444";
 
     private LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation
         legalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation;
@@ -46,13 +53,29 @@ class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisationTest {
 
         legalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation =
             new LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation(
-                templateId, iaExUiFrontendUrl, customerServicesProvider);
+                templateId, iaExUiFrontendUrl, customerServicesProvider, featureToggler);
     }
 
     @Test
     void should_return_given_template_id() {
         assertEquals(templateId,
             legalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation.getTemplateId(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    public void should_return_given_email_address_from_lookup_map_when_feature_flag_is_on_or_off(boolean value) {
+        when(featureToggler.getValue("dlrm-telephony-feature-flag", false)).thenReturn(value);
+        if (value) {
+            when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class))
+                    .thenReturn(Optional.of(legalRepEmailAddress));
+            assertTrue(
+                    legalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation
+                            .getRecipientsList(asylumCase).contains("legalRepEmailAddress@example.com"));
+        } else {
+            assertTrue(legalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation
+                    .getRecipientsList(asylumCase).isEmpty());
+        }
     }
 
     @Test
@@ -64,6 +87,8 @@ class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(AMOUNT_LEFT_TO_PAY, String.class)).thenReturn(Optional.of(amountLeftToPay));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(onlineCaseReferenceNumber));
+        when(asylumCase.read(REMISSION_REJECTED_DATE_PLUS_14DAYS, String.class)).thenReturn(Optional.of(someTestDateEmail));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
@@ -76,6 +101,8 @@ class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisationTest {
         assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
         assertEquals(iaExUiFrontendUrl, personalisation.get("linkToOnlineService"));
         assertEquals(amountLeftToPayInGbp, personalisation.get("feeAmount"));
+        assertEquals(someTestDateEmail, personalisation.get("14 days after remission decision"));
+        assertEquals(onlineCaseReferenceNumber, personalisation.get("onlineCaseReferenceNumber"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
         assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }

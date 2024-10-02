@@ -1,10 +1,14 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
 
@@ -398,7 +402,8 @@ public enum AsylumCaseDefinition {
 
     IS_DLRM_FEE_REMISSION_ENABLED(
             "isDlrmFeeRemissionEnabled", new TypeReference<YesOrNo>(){}),
-
+    IS_DLRM_FEE_REFUND_ENABLED(
+        "isDlrmFeeRefundEnabled", new TypeReference<YesOrNo>(){}),
     UPDATE_TRIBUNAL_DECISION_AND_REASONS(
             "updateTribunalDecisionAndReasons", new TypeReference<YesOrNo>(){}),
     UPDATE_TRIBUNAL_DECISION_AND_REASONS_FINAL_CHECK(
@@ -428,9 +433,24 @@ public enum AsylumCaseDefinition {
     OTHER_DECISION_FOR_DISPLAY(
         "otherDecisionForDisplay", new TypeReference<String>() {}),
 
+    REQUEST_FEE_REMISSION_DATE(
+        "requestFeeRemissionDate", new TypeReference<String>(){}),
+    REMISSION_REJECTED_DATE_PLUS_14DAYS(
+        "remissionRejectedDatePlus14days", new TypeReference<String>(){}),
+    FEE_AMOUNT_GBP(
+        "feeAmountGbp", new TypeReference<String>(){}),
+    NEW_FEE_AMOUNT(
+        "newFeeAmount", new TypeReference<String>(){}),
+    PREVIOUS_FEE_AMOUNT_GBP(
+        "previousFeeAmountGbp", new TypeReference<String>(){}),
+    FEE_UPDATE_REASON(
+        "feeUpdateReason", new TypeReference<FeeUpdateReason>(){}),
+    MANAGE_FEE_REQUESTED_AMOUNT(
+        "manageFeeRequestedAmount", new TypeReference<String>(){}),
+    FEE_UPDATE_TRIBUNAL_ACTION(
+        "feeUpdateTribunalAction", new TypeReference<FeeTribunalAction>(){}),
     IS_ACCELERATED_DETAINED_APPEAL(
         "isAcceleratedDetainedAppeal", new TypeReference<YesOrNo>(){}),
-
     SUITABILITY_REVIEW_DECISION(
         "suitabilityReviewDecision", new TypeReference<AdaSuitabilityReviewDecision>(){}),
     TRANSFER_OUT_OF_ADA_REASON(
@@ -445,61 +465,41 @@ public enum AsylumCaseDefinition {
         "ircName", new TypeReference<String>(){}),
     DETENTION_FACILITY(
         "detentionFacility", new TypeReference<String>(){}),
-
     PREVIOUS_DETENTION_LOCATION(
-
             "previousDetentionLocation", new TypeReference<String>() {}),
-
-
     PRISON_NAME(
             "prisonName", new TypeReference<String>(){}),
-
     OTHER_DETENTION_FACILITY_NAME(
             "otherDetentionFacilityName", new TypeReference<OtherDetentionFacilityName>(){}),
-
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>(){}),
-
     IS_APPELLANT_RESPONDENT(
             "isAppellantRespondent", new TypeReference<String>(){}),
-    IS_EJP(
-            "isEjp", new TypeReference<YesOrNo>() {}),
-
+    IS_EJP("isEjp", new TypeReference<YesOrNo>() {}),
     LEGAL_REP_COMPANY_EJP(
             "legalRepCompanyEjp", new TypeReference<String>() {}),
-
     LEGAL_REP_NAME_EJP(
             "legalRepNameEjp", new TypeReference<String>() {}),
     LEGAL_REP_GIVEN_NAME_EJP(
             "legalRepGivenNameEjp", new TypeReference<String>() {}),
-
     LEGAL_REP_FAMILY_NAME_EJP(
             "legalRepFamilyNameEjp", new TypeReference<String>() {}),
-
     LEGAL_REP_EMAIL_EJP(
             "legalRepEmailEjp", new TypeReference<String>() {}),
-
     LEGAL_REP_REFERENCE_EJP(
             "legalRepReferenceEjp", new TypeReference<String>() {}),
-
     IS_LEGALLY_REPRESENTED_EJP(
             "isLegallyRepresentedEjp", new TypeReference<YesOrNo>() {}),
-
     APPLIES_FOR_COSTS(
             "appliesForCosts", new TypeReference<List<IdValue<ApplyForCosts>>>(){}),
-
     UPPER_TRIBUNAL_REFERENCE_NUMBER(
             "upperTribunalReferenceNumber", new TypeReference<String>() {}),
-
     CCD_REFERENCE_NUMBER_FOR_DISPLAY(
         "ccdReferenceNumberForDisplay", new TypeReference<String>() {}),
-
     RESPOND_TO_COSTS_LIST(
         "respondToCostsList", new TypeReference<DynamicList>(){}),
-
     ADD_EVIDENCE_FOR_COSTS_LIST(
         "addEvidenceForCostsList", new TypeReference<DynamicList>() {}),
-
     DECIDE_COSTS_APPLICATION_LIST(
         "decideCostsApplicationList", new TypeReference<DynamicList>(){}),
 
@@ -512,7 +512,17 @@ public enum AsylumCaseDefinition {
     LISTING_LOCATION(
         "listingLocation", new TypeReference<DynamicList>(){}),
 
-    IS_DECISION_WITHOUT_HEARING("isDecisionWithoutHearing", new TypeReference<YesOrNo>(){});
+    IS_DECISION_WITHOUT_HEARING("isDecisionWithoutHearing", new TypeReference<YesOrNo>(){}),
+
+    IS_LATE_REMISSION_REQUEST(
+        "isLateRemissionRequest", new TypeReference<YesOrNo>(){}),
+
+    PREVIOUS_DECISION_HEARING_FEE_OPTION(
+        "previousDecisionHearingFeeOption", new TypeReference<String>(){}),
+
+    DECISION_HEARING_FEE_OPTION(
+        "decisionHearingFeeOption", new TypeReference<String>(){}),
+    ;
 
 
     private final String value;

@@ -1,6 +1,6 @@
 {
   "description": "RIA-8059 AIP Appellant notifications: remission decision partially approved",
-  "launchDarklyKey": "dlrm-fee-remission-feature-flag:true",
+  "enabled": "{$featureFlag.dlrmTelephonyFeatureFlag}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -57,10 +57,6 @@
         ],
         "notificationsSent": [
           {
-            "id": "8059_REMISSION_DECISION_PARTIALLY_APPROVED_ADMIN_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
             "id": "8059_REMISSION_DECISION_DECIDED_AIP_APPELLANT_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
@@ -72,16 +68,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "8059_REMISSION_DECISION_PARTIALLY_APPROVED_ADMIN_OFFICER",
-        "recipient": "{$FEES_ADMIN_OFFICER_EMAIL}",
-        "subject": "Immigration and Asylum appeal: Remission application partially approved",
-        "body": [
-          "PA/12345/2019",
-          "Pablo Jimenez",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
       {
         "reference": "8059_REMISSION_DECISION_DECIDED_AIP_APPELLANT_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",

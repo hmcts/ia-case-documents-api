@@ -1,15 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.sms;
 
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
-
 import com.google.common.collect.ImmutableMap;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
@@ -17,8 +8,20 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefi
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
 
 @Service
 public class AipAppellantRecordRemissionDecisionPersonalisationSms implements SmsNotificationPersonalisation {
@@ -30,6 +33,7 @@ public class AipAppellantRecordRemissionDecisionPersonalisationSms implements Sm
     private final int daysAfterRemissionDecision;
     private final RecipientsFinder recipientsFinder;
     private final SystemDateProvider systemDateProvider;
+    private final FeatureToggler featureToggler;
 
     public AipAppellantRecordRemissionDecisionPersonalisationSms(
         @Value("${govnotify.template.remissionDecision.appellant.approved.sms}") String aipAppellantRemissionApprovedTemplateId,
@@ -38,7 +42,8 @@ public class AipAppellantRecordRemissionDecisionPersonalisationSms implements Sm
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterRemissionDecision}") int daysAfterRemissionDecision,
         RecipientsFinder recipientsFinder,
-        SystemDateProvider systemDateProvider
+        SystemDateProvider systemDateProvider,
+        FeatureToggler featureToggler
     ) {
         this.aipAppellantRemissionApprovedTemplateId = aipAppellantRemissionApprovedTemplateId;
         this.aipAppellantRemissionPartiallyApprovedTemplateId = aipAppellantRemissionPartiallyApprovedTemplateId;
@@ -47,6 +52,7 @@ public class AipAppellantRecordRemissionDecisionPersonalisationSms implements Sm
         this.daysAfterRemissionDecision = daysAfterRemissionDecision;
         this.recipientsFinder = recipientsFinder;
         this.systemDateProvider = systemDateProvider;
+        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -68,7 +74,9 @@ public class AipAppellantRecordRemissionDecisionPersonalisationSms implements Sm
 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
-        return recipientsFinder.findAll(asylumCase, NotificationType.SMS);
+        return featureToggler.getValue("dlrm-telephony-feature-flag", false)
+                ? recipientsFinder.findAll(asylumCase, NotificationType.SMS)
+                : Collections.emptySet();
     }
 
     @Override

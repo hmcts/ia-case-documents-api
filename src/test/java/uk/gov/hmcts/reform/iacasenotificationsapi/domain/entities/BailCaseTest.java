@@ -75,4 +75,5 @@ public class BailCaseTest {
         bailCase.clear(APPLICANT_FAMILY_NAME);
         assertEquals(Optional.empty(), bailCase.read(APPLICANT_FAMILY_NAME));
     }
+
 }

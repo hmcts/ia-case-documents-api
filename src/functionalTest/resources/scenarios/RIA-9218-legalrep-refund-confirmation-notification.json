@@ -1,0 +1,62 @@
+{
+  "description": "RIA-9218 Refund confirmation notification for legal rep",
+  "launchDarklyKey": "dlrm-refund-feature-flag:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 9218,
+      "eventId": "refundConfirmation",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "PA/12345/2023",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2023-09-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "previousDecisionHearingFeeOption": "decisionWithHearing",
+          "decisionHearingFeeOption": "decisionWithoutHearing",
+          "newFeeAmount": "8000"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealReferenceNumber": "PA/12345/2023",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingDate": "2023-09-03T14:25:15.000",
+        "previousDecisionHearingFeeOption": "decisionWithHearing",
+        "decisionHearingFeeOption": "decisionWithoutHearing",
+        "newFeeAmount": "8000",
+        "notificationsSent": [
+          {
+            "id": "9218_REFUND_CONFIRMATION_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "9218_REFUND_CONFIRMATION_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Your appeal has changed – new fee required",
+        "body": [
+          "HMCTS reference: PA/12345/2023",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}",
+          "{$TODAY+14|d MMM yyyy}"
+        ]
+      }
+    ]
+  }
+}

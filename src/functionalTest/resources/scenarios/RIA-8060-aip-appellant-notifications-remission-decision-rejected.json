@@ -1,6 +1,6 @@
 {
   "description": "RIA-8060 AIP Appellant notifications: remission decision rejected",
-  "launchDarklyKey": "dlrm-fee-remission-feature-flag:true",
+  "enabled": "{$featureFlag.dlrmTelephonyFeatureFlag}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

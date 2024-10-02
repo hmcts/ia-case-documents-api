@@ -44,7 +44,6 @@ public class AsylumPreSubmitCallbackControllerTest {
 
     @Test
     public void should_deserialize_about_to_start_callback_then_dispatch_then_return_response() {
-
         when(callback.getCaseDetails()).thenReturn(caseDetails);
 
         doReturn(callbackResponse)

@@ -175,6 +175,18 @@ withPipeline(type, product, component) {
 
     loadVaultSecrets(secrets)
 
+    afterAlways('test') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+        publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/test",
+                reportFiles          : "index.html",
+                reportName           : "Unit Test Report"
+        ]
+    }
+
     afterSuccess('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }

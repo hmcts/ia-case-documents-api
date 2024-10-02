@@ -3737,6 +3737,24 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
+    @Bean("manageFeeUpdateAdditionalPaymentRequestedNotificationGenerator")
+    public List<NotificationGenerator> manageFeeUpdateAdditionalPaymentRequestedNotificationHandler(
+        LegalRepresentativeManageFeeUpdateAdditionalPaymentPersonalisation legalRepresentativeManageFeeUpdateAdditionalPaymentPersonalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Collections.singletonList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepresentativeManageFeeUpdateAdditionalPaymentPersonalisation
+                ),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
     @Bean("recordOfTimeDecisionCanProceedEmailNotificationGenerator")
     public List<NotificationGenerator> recordOfTimeDecisionCanProceedEmailNotificationHandler(
         LegalRepresentativeRecordOutOfTimeDecisionCanProceed legalRepresentativeRecordOutOfTimeDecisionCanProceed,
@@ -5310,7 +5328,6 @@ public class NotificationGeneratorConfiguration {
         GovNotifyNotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender
     ) {
-
         return Arrays.asList(
             new EmailNotificationGenerator(
                 newArrayList(legalRepresentativeMarkAppealAsRemittedPersonalisation),
@@ -5334,5 +5351,148 @@ public class NotificationGeneratorConfiguration {
             )
         );
     }
-}
 
+    @Bean("appellantRefundRequestedAipNotificationGenerator")
+    public List<NotificationGenerator> appellantRefundRequestedAipNotificationGenerator(
+        AiPAppellantRefundRequestedNotificationEmail aipAppellantRefundRequestedNotificationEmail,
+        AiPAppellantRefundRequestedNotificationSms aipAppellantRefundRequestedNotificationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return List.of(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    aipAppellantRefundRequestedNotificationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipAppellantRefundRequestedNotificationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("aipAppellantRecordRefundDecisionNotificationGenerator")
+    public List<NotificationGenerator> aipAppellantRecordRefundDecisionNotificationGenerator(
+        AppellantRecordRefundDecisionPersonalisationEmail appellantRecordRefundDecisionPersonalisationEmail,
+        AppellantRecordRefundDecisionPersonalisationSms appellantRecordRefundDecisionPersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(appellantRecordRefundDecisionPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(appellantRecordRefundDecisionPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("aipManageFeeUpdatePaymentInstructedNotificationGenerator")
+    public List<NotificationGenerator> aipManageFeeUpdatePaymentInstructedNotificationGenerator(
+        AipAppellantManageFeeUpdatePersonalisationEmail aipAppellantManageFeeUpdatePersonalisationEmail,
+        AipAppellantManageFeeUpdatePersonalisationSms aipAppellantManageFeeUpdatePersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(aipAppellantManageFeeUpdatePersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipAppellantManageFeeUpdatePersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+
+    @Bean("legalRepRemissionPaymentReminderEmailNotificationGenerator")
+    public List<NotificationGenerator> legalRepRemissionPaymentReminderEmailNotificationGenerator(
+        LegalRepRemissionPaymentReminderPersonalisation legalRepRemissionPaymentReminderPersonalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepRemissionPaymentReminderPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("appellantInPersonRemissionPaymentReminderEmailNotificationGenerator")
+    public List<NotificationGenerator> legalRepRemissionPaymentReminderEmailNotificationGenerator(
+        AipRemissionRequestAutomaticReminderEmail aipRemissionRequestAutomaticReminderEmail,
+        AipRemissionRequestAutomaticReminderSms aipRemissionRequestAutomaticReminderSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    aipRemissionRequestAutomaticReminderEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipRemissionRequestAutomaticReminderSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("legalRepRefundConfirmationPersonalisationEmailNotificationGenerator")
+    public List<NotificationGenerator> legalRepRefundConfirmationPersonalisationEmailNotificationGenerator(
+        LegalRepRefundConfirmationPersonalisation legalRepRefundConfirmationPersonalisation,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender
+    ) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(
+                    legalRepRefundConfirmationPersonalisation),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("aipRefundConfirmationNotificationGenerator")
+    public List<NotificationGenerator> aipRefundConfirmationNotificationGenerator(
+        AipAppellantRefundConfirmationPersonalisationEmail aipAppellantRefundConfirmationPersonalisationEmail,
+        AipAppellantRefundConfirmationPersonalisationSms aipAppellantRefundConfirmationPersonalisationSms,
+        GovNotifyNotificationSender notificationSender,
+        NotificationIdAppender notificationIdAppender) {
+
+        return Arrays.asList(
+            new EmailNotificationGenerator(
+                newArrayList(aipAppellantRefundConfirmationPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            ),
+            new SmsNotificationGenerator(
+                newArrayList(aipAppellantRefundConfirmationPersonalisationSms),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+}

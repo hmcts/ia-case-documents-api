@@ -52,6 +52,7 @@ spring:
 featureFlag:
   homeOfficeGovNotifyEnabled: ${IA_HOME_OFFICE_GOV_NOTIFY_ENABLED:true}
   appealsLocationReferenceData: ${APPEALS_LOCATION_REFERENCE_DATA_ENABLED:true}
+  dlrmTelephonyFeatureFlag: ${DLRM_TELEPHONY_FEATURE_FLAG:false}
 
 govnotify:
   baseUrl: "https://api.notifications.service.gov.uk"
@@ -127,7 +128,7 @@ govnotify:
         approved:
           email: 252ce51b-69c3-4441-8a85-3c4179eebfbb
         partiallyApproved:
-          email: 717b0290-36eb-4adf-a4c5-baacf59d379d
+          email: ce04b98a-5958-4dfb-8c7f-abc97b70a323
         rejected:
           email: bd1bc55d-cece-4aff-b38a-a72e506f662a
       adminOfficer:
@@ -148,6 +149,21 @@ govnotify:
     editPaymentMethod:
       adminOfficer:
         email: 7b6a238c-2fd5-4f29-afe0-a772fb0e9c27
+
+    remissionDecisionReminder:
+      legalRep:
+        rejected:
+          email: 9059ed22-4845-4699-80c0-b7b2e0a4d414
+        partiallyApproved:
+          email: 56cac95c-a2e2-4c2d-8914-f1da32520bcd
+      appellant:
+        rejected:
+          email: c1f1e953-12e1-45ec-8508-9bed3799b49c
+          sms: ff5801f0-a1c4-417e-b56f-db52ff4a7ec4
+        partiallyApproved:
+          email: e1461a4c-9437-4ec9-8aae-dc3d1134e3b0
+          sms: f84000c5-7ba0-4bd9-bb64-437f4b51b878
+
 
     decisionHomeOfficeNotificationFailed:
       caseOfficer:
@@ -1008,6 +1024,9 @@ govnotify:
         email: 7c336cc1-ff6e-431a-afc1-812c9bf1b883
       adminOfficer:
         email: a004f172-3973-4aa7-af27-652ab3c6c637
+      appellant:
+        email: 8ff8227a-82c2-4a36-8469-2e948ed50c50
+        sms: e2a60fc6-da83-4d39-94fc-2fc7c3a610a2
     nocRequestDecision:
       legalRep:
         beforeListing:
@@ -1036,6 +1055,11 @@ govnotify:
       legalRep:
         refundInstructed:
           email: 68970ef0-72c7-4eea-957a-51d23c8e72b9
+        additionalPayment:
+          email: 1ceb95bc-0026-4dea-9843-ee1355676861
+      appellant:
+        email: b3181829-da2c-4526-9c84-ba0130274a27
+        sms: 97ac746b-1e37-4b17-873f-2f010548b7f8
     recordOutOfTimeDecision:
       legalRep:
         canProceed:
@@ -1299,6 +1323,26 @@ govnotify:
       appellant:
         email: ad550328-3529-443a-be7e-b9109e1926ab
         sms: a898d622-e399-4dfd-b86d-cc92be0c777d
+    recordRefundDecision:
+      appellant:
+        approved:
+          email: c9d2a883-5dc5-432c-a012-24a33c48f68a
+          sms: 5b8bd583-1eb1-4f25-83e0-d91326c05e0a
+        partiallyApproved:
+          email: f6e15d1f-aa25-43a6-aa67-0ad50d4bf952
+          sms: 890584f2-f5a7-4bf8-bc8e-39c447884b69
+        rejected:
+          email: 50e2aede-5faf-4182-809c-f4736f54c2c0
+          sms: 0c79aca1-c7ad-4ff3-8c65-455db50e3b5f
+    refundConfirmation:
+      legalRep:
+        email: 28b12dcc-d365-43be-a918-0b1fe654323e
+      appellant:
+        sms: 0a039334-5604-4f8a-b38b-0c1df140cb9c
+        inCountry:
+          email: df941fa9-e41a-4ab2-8c0f-7a7ec5d7d924
+        outOfCountry:
+          email: 3a4ab356-65df-4afb-ac49-4993d88b9bd7
 
   bail:
     key: ${IA_BAIL_GOV_NOTIFY_KEY}
@@ -1456,6 +1500,7 @@ security:
       - "asyncStitchingComplete"
       - "uploadAddendumEvidenceLegalRep"
       - "applyForFTPAAppellant"
+      - "requestFeeRemission"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -1545,6 +1590,7 @@ security:
       - "buildCase"
       - "listCase"
       - "turnOnNotifications"
+      - "recordRemissionReminder"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -1600,6 +1646,7 @@ security:
       - "forceCaseToHearing"
       - "markAppealAsRemitted"
       - "changeTribunalCentre"
+      - "refundConfirmation"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -1682,6 +1729,7 @@ security:
       - "recordAdjournmentDetails"
       - "editCaseListing"
       - "caseListing"
+      - "recordRemissionReminder"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "uploadBailSummary"
@@ -2023,8 +2071,13 @@ appellantDaysToWait:
   afterCmaRequirements: 14
   afterHearingRequirementsSubmitted: 14
   afterRemissionDecision: 14
+  afterSubmittingAppealRemission: 14
+  afterNotificationSent: 14
 
 appellantDaysToAskReinstate: 14
+
+legalRepDaysToWait:
+  afterManageFeeUpdate: 14
 
 ftpaOutOfCountryDays: 28
 ftpaInCountryDays: 14

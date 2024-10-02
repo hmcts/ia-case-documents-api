@@ -23,6 +23,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvider;
@@ -56,6 +57,8 @@ class AipAppellantRecordRemissionDecisionPersonalisationEmailTest {
     CustomerServicesProvider customerServicesProvider;
     @Mock
     SystemDateProvider systemDateProvider;
+    @Mock
+    FeatureToggler featureToggler;
 
     private AipAppellantRecordRemissionDecisionPersonalisationEmail aipAppellantRecordRemissionDecisionPersonalisationEmail;
 
@@ -79,7 +82,8 @@ class AipAppellantRecordRemissionDecisionPersonalisationEmailTest {
             daysAfterRemissionDecision,
             customerServicesProvider,
             recipientsFinder,
-            systemDateProvider
+            systemDateProvider,
+            featureToggler
         );
     }
 
@@ -89,6 +93,7 @@ class AipAppellantRecordRemissionDecisionPersonalisationEmailTest {
         names = {"APPROVED", "PARTIALLY_APPROVED", "REJECTED"})
     void should_return_approved_template_id(RemissionDecision remissionDecision) {
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+        when(featureToggler.getValue("dlrm-telephony-feature-flag", false)).thenReturn(true);
 
         switch (remissionDecision) {
             case APPROVED ->
@@ -109,6 +114,7 @@ class AipAppellantRecordRemissionDecisionPersonalisationEmailTest {
 
     @Test
     void should_return_appellant_email_address_from_asylum_case() {
+        when(featureToggler.getValue("dlrm-telephony-feature-flag", false)).thenReturn(true);
         when(recipientsFinder.findAll(asylumCase, NotificationType.EMAIL))
             .thenReturn(Collections.singleton(appellantEmail));
 

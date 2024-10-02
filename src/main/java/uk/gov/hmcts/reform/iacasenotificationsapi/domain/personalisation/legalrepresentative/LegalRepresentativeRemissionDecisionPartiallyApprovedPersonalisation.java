@@ -1,19 +1,19 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.legalrepresentative;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.AMOUNT_LEFT_TO_PAY;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 
 @Component
@@ -23,17 +23,19 @@ public class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisatio
     private final String partiallyApprovedTemplateId;
     private final String iaExUiFrontendUrl;
     private final CustomerServicesProvider customerServicesProvider;
+    private final FeatureToggler featureToggler;
 
     public LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisation(
         @Value("${govnotify.template.remissionDecision.legalRep.partiallyApproved.email}")
             String partiallyApprovedTemplateId,
         @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
-        CustomerServicesProvider customerServicesProvider
-
+        CustomerServicesProvider customerServicesProvider,
+        FeatureToggler featureToggler
     ) {
         this.partiallyApprovedTemplateId = partiallyApprovedTemplateId;
         this.iaExUiFrontendUrl = iaExUiFrontendUrl;
         this.customerServicesProvider = customerServicesProvider;
+        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -44,6 +46,13 @@ public class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisatio
     @Override
     public String getReferenceId(Long caseId) {
         return caseId + "_REMISSION_DECISION_PARTIALLY_APPROVED_LEGAL_REPRESENTATIVE";
+    }
+
+    @Override
+    public Set<String> getRecipientsList(AsylumCase asylumCase) {
+        return featureToggler.getValue("dlrm-telephony-feature-flag", false)
+                ? LegalRepresentativeEmailNotificationPersonalisation.super.getRecipientsList(asylumCase)
+                : Collections.emptySet();
     }
 
     @Override
@@ -63,6 +72,8 @@ public class LegalRepresentativeRemissionDecisionPartiallyApprovedPersonalisatio
             .put("linkToOnlineService", iaExUiFrontendUrl)
             .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
             .put("feeAmount", amountLeftToPayInGbp.toString())
+            .put("14 days after remission decision", asylumCase.read(REMISSION_REJECTED_DATE_PLUS_14DAYS, String.class).orElse(""))
+            .put("onlineCaseReferenceNumber", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse(""))
             .build();
     }
 }

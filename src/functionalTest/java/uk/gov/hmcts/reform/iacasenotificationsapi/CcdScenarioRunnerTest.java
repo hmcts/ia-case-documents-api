@@ -3,11 +3,6 @@ package uk.gov.hmcts.reform.iacasenotificationsapi;
 
 import static org.junit.Assert.assertFalse;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import feign.RetryableException;
-import io.restassured.RestAssured;
-import io.restassured.http.Headers;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +14,11 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.RetryableException;
+import io.restassured.RestAssured;
+import io.restassured.http.Headers;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.jupiter.api.BeforeEach;

@@ -293,7 +293,7 @@ public enum BailCaseFieldDefinition {
     LISTING_HEARING_DATE(
         "listingHearingDate", new TypeReference<String>(){}),
     LISTING_LOCATION(
-        "listingLocation", new TypeReference<BailHearingLocation>(){}),    
+        "listingLocation", new TypeReference<BailHearingLocation>(){}),
     DECISION_GRANTED_OR_REFUSED(
         "decisionGrantedOrRefused", new TypeReference<String>(){}),
     ADMIN_SELECT_IMA_STATUS(
