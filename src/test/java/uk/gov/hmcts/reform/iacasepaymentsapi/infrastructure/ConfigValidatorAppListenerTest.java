@@ -22,7 +22,6 @@ class ConfigValidatorAppListenerTest {
 
     @Mock
     private Environment env;
-
     private ConfigValidatorAppListener configValidatorAppListener;
     private static final String PREVIEW_REFERENCE = "cft-preview-01-aks";
     private static final String SECRET = "secret";

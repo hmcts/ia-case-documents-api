@@ -9,7 +9,7 @@ during appeal submission. There are exceptions based on Business logic when paym
 To run the project you will need to have the following installed:
 
 * Java 17
-* Docker (optional)
+* Docker (Optional)
 
 For information about the software versions used to build this API and a complete list of it's dependencies see build.gradle
 

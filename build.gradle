@@ -199,7 +199,7 @@ sonarqube {
 
 project.ext {
   pacticipant = 'ia_casePaymentsApi'
-  pacticipantVersion = getCheckedOutGitCommitHash()
+  pacticipantVersion = System.env.GIT_COMMIT.substring(0,9)
   set('springCloudVersion', "2021.0.8")
 }
 
@@ -228,7 +228,7 @@ pact {
   publish {
     pactDirectory = 'pacts'
     tags = [System.getenv("PACT_BRANCH_NAME") ?:'Dev']
-    version = project.pacticipantVersion
+    version = project.pacticipantVersion + '_' + System.nanoTime().toString()
   }
 }
 // before committing a change, make sure task still works

@@ -321,6 +321,28 @@ class PaymentAppealPreparerTest {
 
     @ParameterizedTest
     @MethodSource("feeOptionParameters")
+    void should_return_valid_fee_for_decision_with_hearing_with_remission_partially_approved(
+        Event event, String hearingType, FeeType feeType, Fee fee
+    ) {
+        when(callback.getEvent()).thenReturn(event);
+        accountsFromOrg.add("PBA1234567");
+
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(HELP_WITH_FEES));
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
+            .thenReturn(Optional.of(RemissionDecision.PARTIALLY_APPROVED));
+        when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
+            .thenReturn(Optional.of(hearingType));
+        when(feeService.getFee(feeType)).thenReturn(fee);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse = handlePaymentAppealPreparer();
+        assertThat(callbackResponse.getData()).isEqualTo(asylumCase);
+
+        verifyHearingInteractions(feeType, fee);
+        verify(asylumCase, times(1)).write(PAYMENT_STATUS, PAYMENT_PENDING);
+    }
+
+    @ParameterizedTest
+    @MethodSource("feeOptionParameters")
     void should_not_return_valid_pba_accounts_but_return_fee_for_decision_with_hearing_with_remission_approved(
         Event event, String hearingType, FeeType feeType, Fee fee
     ) {
@@ -432,7 +454,6 @@ class PaymentAppealPreparerTest {
 
     @Test
     void handling_should_throw_if_appeal_type_is_wrong() {
-
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
