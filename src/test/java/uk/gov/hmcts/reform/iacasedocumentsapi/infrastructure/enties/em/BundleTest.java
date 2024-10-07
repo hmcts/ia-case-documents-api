@@ -83,6 +83,24 @@ public class BundleTest {
     }
 
     @Test
+    public void shouldConvertNullValuesToOptionalEmptyCoverSheetContentsConstructor() {
+        bundle = new Bundle(
+            id,
+            title,
+            description,
+            eligibleForStitching,
+            documents,
+            hasCoversheets,
+            hasTableOfContents,
+            filename
+        );
+
+        assertEquals(bundle.getStitchStatus(), Optional.empty());
+        assertEquals(bundle.getStitchedDocument(), Optional.empty());
+
+    }
+
+    @Test
     public void shouldConvertNullValuesToOptionalEmptyWhenUsingEmptyConstructor() throws Exception {
 
         bundle = findPrivateNoArgsConstructor(Bundle.class).newInstance();

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate.formatComplexString;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AppealSubmissionDocFieldMapper.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDateTime;
@@ -13,15 +13,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -402,9 +406,10 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(33, templateFieldValues.size());
+        assertEquals(34, templateFieldValues.size());
         assertTrue(templateFieldValues.containsKey("appealOutOfCountry"));
         assertTrue(templateFieldValues.containsKey("decisionLetterReceivedDate"));
+        assertTrue(templateFieldValues.containsKey("outOfCountryDecisionTypeTitle"));
         assertTrue(templateFieldValues.containsKey("outOfCountryDecisionType"));
         assertTrue(templateFieldValues.containsKey("decisionLetterReceived"));
         assertTrue(templateFieldValues.containsKey("gwfReferenceNumber"));
@@ -455,7 +460,8 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(39, templateFieldValues.size());
+        assertEquals(40, templateFieldValues.size());
+        assertTrue(templateFieldValues.containsKey("outOfCountryDecisionTypeTitle"));
         assertTrue(templateFieldValues.containsKey("appellantOutOfCountryAddress"));
         assertTrue(templateFieldValues.containsKey("hasSponsor"));
         assertTrue(templateFieldValues.containsKey("sponsorGivenNames"));
@@ -481,6 +487,41 @@ public class AppealSubmissionTemplateTest {
         assertFalse(templateFieldValues.containsKey("detentionFacilityName"));
         assertFalse(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("outOfCountryCircumstances")
+    void should_add_out_of_country_circumstances(OutOfCountryCircumstances oocCircumstancesType, String oocCircumstancesText) {
+        dataSetUp();
+        when(asylumCase.read(HAS_SPONSOR, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class)).thenReturn(Optional.of(homeOfficeDecisionReceivedDate));
+        when(asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class)).thenReturn(Optional.of(oocCircumstancesType));
+        when(asylumCase.read(GWF_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(gwfReference));
+        when(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class)).thenReturn(Optional.of(dateEntryClearanceDecision));
+        when(asylumCase.read(HAS_CORRESPONDENCE_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
+        if (!oocCircumstancesType.equals(OutOfCountryCircumstances.NONE)) {
+            assertEquals(32, templateFieldValues.size());
+            assertEquals(CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE,templateFieldValues.get("outOfCountryDecisionTypeTitle"));
+            assertEquals(oocCircumstancesText,templateFieldValues.get("outOfCountryDecisionType"));
+        } else {
+            assertEquals(30, templateFieldValues.size());
+            assertFalse(templateFieldValues.containsKey("outOfCountryDecisionTypeTitle"));
+            assertFalse(templateFieldValues.containsKey("outOfCountryDecisionType"));
+        }
+    }
+
+    private static Stream<Arguments> outOfCountryCircumstances() {
+        return Stream.of(
+            Arguments.of(OutOfCountryCircumstances.ENTRY_CLEARANCE_DECISION, THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION),
+            Arguments.of(OutOfCountryCircumstances.LEAVE_UK, THE_APPELLANT_HAD_TO_LEAVE_THE_UK_IN_ORDER_TO_APPEAL),
+            Arguments.of(OutOfCountryCircumstances.NONE, "")
+        );
     }
 
     @Test

@@ -11,4 +11,10 @@ public interface DocumentBundler {
         String bundleTitle,
         String bundleFilename
     );
+
+    Document bundleWithoutContentsOrCoverSheets(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename
+    );
 }
