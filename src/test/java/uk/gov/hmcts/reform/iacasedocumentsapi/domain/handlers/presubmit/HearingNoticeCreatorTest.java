@@ -123,7 +123,7 @@ class HearingNoticeCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
@@ -144,7 +144,7 @@ class HearingNoticeCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
@@ -166,7 +166,7 @@ class HearingNoticeCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
     }
 
     @ParameterizedTest
@@ -196,7 +196,7 @@ class HearingNoticeCreatorTest {
 
         verify(hearingNoticeDocumentCreator, times(0)).create(caseDetails);
         verify(remoteHearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE);
     }
 
     @Test
@@ -217,7 +217,7 @@ class HearingNoticeCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(adaHearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test

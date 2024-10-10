@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +65,35 @@ public class DocumentHandler {
                 "",
                 tag
             );
+
+        List<IdValue<DocumentWithMetadata>> allDocuments =
+            documentsAppender.append(
+                existingDocuments,
+                Collections.singletonList(documentWithMetadata)
+            );
+
+        asylumCase.write(documentField, allDocuments);
+    }
+
+    public void addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
+        AsylumCase asylumCase,
+        Document document,
+        AsylumCaseDefinition documentField,
+        DocumentTag tag
+    ) {
+
+        final List<IdValue<DocumentWithMetadata>> existingDocuments =
+            extractExistingDocuments(asylumCase, documentField);
+
+        DocumentWithMetadata documentWithMetadata =
+            documentReceiver.receive(
+                document,
+                "",
+                tag
+            );
+        String currentDateTime = ZonedDateTime.now(ZoneId.of("Europe/London"))
+            .toLocalDateTime().toString();
+        documentWithMetadata.setDateTimeUploaded(currentDateTime);
 
         List<IdValue<DocumentWithMetadata>> allDocuments =
             documentsAppender.append(

@@ -15,6 +15,8 @@ public enum DocumentTag {
     HEARING_REQUIREMENTS("hearingRequirements", CaseType.ASYLUM),
     HEARING_NOTICE("hearingNotice", CaseType.ASYLUM),
     REHEARD_HEARING_NOTICE("reheardHearingNotice", CaseType.ASYLUM),
+    HEARING_NOTICE_RELISTED("hearingNoticeRelisted", CaseType.ASYLUM),
+    REHEARD_HEARING_NOTICE_RELISTED("reheardHearingNoticeRelisted", CaseType.ASYLUM),
     ADA_SUITABILITY("adaSuitability", CaseType.ASYLUM),
     INTERNAL_ADA_SUITABILITY("internalAdaSuitability", CaseType.ASYLUM),
     CASE_SUMMARY("caseSummary", CaseType.ASYLUM),

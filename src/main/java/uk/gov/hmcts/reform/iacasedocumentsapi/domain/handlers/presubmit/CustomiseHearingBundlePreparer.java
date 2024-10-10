@@ -72,6 +72,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         if (isCaseReheard || isUpdatedBundle) {
             populateCustomCollections(asylumCase, ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
             if (isCaseReheard) {
+                populateCustomCollections(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, isAipJourney);
                 if (isRemittedPath) {
                     asylumCase.write(CUSTOM_LATEST_REMITTAL_DOCS, fetchLatestRemittalDocuments(asylumCase));
                 }
