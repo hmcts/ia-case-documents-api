@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -35,9 +34,9 @@ public class BundleOrderTest {
             .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag,"test"))
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)
-            .collect(Collectors.toList());
+            .toList();
 
-        assertEquals(81, sortedTags.size());
+        assertEquals(82, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -54,6 +53,7 @@ public class BundleOrderTest {
             DocumentTag.RESPONDENT_EVIDENCE,
             DocumentTag.ADDENDUM_EVIDENCE,
             DocumentTag.HEARING_BUNDLE,
+            DocumentTag.UPDATED_HEARING_BUNDLE,
             DocumentTag.REHEARD_DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_COVER_LETTER,
