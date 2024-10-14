@@ -65,7 +65,8 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             .map(type -> type == AIP).orElse(false);
         boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
-        getMappingFields(isCaseReheard, isOrWasAda, isUpdatedBundle, isRemittedPath).forEach((sourceField, targetField) ->
+        Map<AsylumCaseDefinition, AsylumCaseDefinition> mappingFields = getMappingFields(isCaseReheard, isOrWasAda, isUpdatedBundle, isRemittedPath);
+        mappingFields.forEach((sourceField, targetField) ->
             populateCustomCollections(asylumCase, sourceField, targetField, isAipJourney)
         );
         // Map does not accept duplicate keys, so need to process this separately

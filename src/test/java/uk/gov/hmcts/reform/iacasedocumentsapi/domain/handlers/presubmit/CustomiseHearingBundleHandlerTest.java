@@ -16,6 +16,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -170,7 +171,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(respondentDocWithMetadata)));
         when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
             .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDocWithMetadata)));
-
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -429,7 +430,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(appellantAddendumEvidenceList)));
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
-
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -449,7 +450,8 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumEvidenceDocumentList);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
+            + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
@@ -587,6 +589,7 @@ class CustomiseHearingBundleHandlerTest {
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
         when(document.getDocumentBinaryUrl()).thenReturn("some-binary-url");
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -913,7 +916,7 @@ class CustomiseHearingBundleHandlerTest {
         when(appender.append(any(DocumentWithMetadata.class), anyList()))
             .thenReturn(documentsListAfterAppend);
         reheardHearingDocuments.get(0).getValue().setReheardHearingDocs(documentsListAfterAppend);
-
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 

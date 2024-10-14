@@ -587,14 +587,18 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                     documentWithDescription.getValue().getDescription().orElse(""),
                                     dateProvider.now().toString(),
                                     DocumentTag.HEARING_NOTICE,
-                                    "");
+                                    "",
+                                    "",
+                                    String.valueOf(dateProvider.nowWithTime()));
                                 break;
                             case CUSTOM_REHEARD_HEARING_DOCS:
                                 newDocumentWithMetadata = new DocumentWithMetadata(document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
                                     dateProvider.now().toString(),
                                     DocumentTag.REHEARD_HEARING_NOTICE,
-                                    "");
+                                    "",
+                                    "",
+                                    String.valueOf(dateProvider.nowWithTime()));
                                 break;
                             case CUSTOM_LEGAL_REP_DOCUMENTS:
                                 newDocumentWithMetadata = new DocumentWithMetadata(document,
