@@ -17,6 +17,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailHearingLocation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ListingEvent;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
@@ -30,6 +31,8 @@ class HomeOfficeBailCaseListingPersonalisationTest {
     private String initialTemplateIdWithoutLegalRep = "initialTemplateIdWithoutLegalRep";
     private String relistingTemplateId = "relistingTemplateId";
     private String relistingTemplateIdWithoutLegalRep = "relistingTemplateIdWithoutLegalRep";
+    private final String conditionalBailRelistingTemplateId = "conditionalBailRelistingTemplateId";
+    private final String conditionalBailRelistingTemplateIdWithoutLegalRep = "conditionalBailRelistingTemplateIdWithoutLegalRep";
     private String homeOfficeEmailAddress = "HO_user@example.com";
     private String bailReferenceNumber = "someReferenceNumber";
     private String legalRepReference = "someLegalRepReference";
@@ -70,6 +73,8 @@ class HomeOfficeBailCaseListingPersonalisationTest {
                 initialTemplateIdWithoutLegalRep,
                 relistingTemplateId,
                 relistingTemplateIdWithoutLegalRep,
+                conditionalBailRelistingTemplateId,
+                conditionalBailRelistingTemplateIdWithoutLegalRep,
                 homeOfficeEmailAddress,
                 hearingDetailsFinder,
                 dateTimeExtractor
@@ -93,6 +98,16 @@ class HomeOfficeBailCaseListingPersonalisationTest {
 
         when(bailCase.read(IS_LEGALLY_REPRESENTED_FOR_FLAG, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         assertEquals(relistingTemplateIdWithoutLegalRep, homeOfficeBailCaseListingPersonalisation.getTemplateId(bailCase));
+    }
+
+    @Test
+    public void should_return_conditional_bail_relisting_template_ids() {
+        when(bailCase.read(CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS, String.class)).thenReturn(Optional.of(State.DECISION_CONDITIONAL_BAIL.toString()));
+        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.RELISTING));
+        assertEquals(conditionalBailRelistingTemplateId, homeOfficeBailCaseListingPersonalisation.getTemplateId(bailCase));
+
+        when(bailCase.read(IS_LEGALLY_REPRESENTED_FOR_FLAG, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        assertEquals(conditionalBailRelistingTemplateIdWithoutLegalRep, homeOfficeBailCaseListingPersonalisation.getTemplateId(bailCase));
     }
 
     @Test

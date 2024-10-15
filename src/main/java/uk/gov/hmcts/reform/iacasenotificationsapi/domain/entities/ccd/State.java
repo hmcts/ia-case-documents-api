@@ -38,6 +38,8 @@ public enum State {
     ENDED("ended"),
     APPEAL_TAKEN_OFFLINE("appealTakenOffline"),
     REMITTED("remitted"),
+    DECISION_CONDITIONAL_BAIL("decisionConditionalBail"),
+
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

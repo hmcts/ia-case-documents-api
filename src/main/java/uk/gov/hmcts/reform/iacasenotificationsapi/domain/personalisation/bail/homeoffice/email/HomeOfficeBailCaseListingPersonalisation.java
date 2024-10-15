@@ -1,14 +1,17 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.homeoffice.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.BailCaseUtils.isBailConditionalGrant;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.IS_LEGALLY_REPRESENTED_FOR_FLAG;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.LISTING_EVENT;
 
 import com.google.common.collect.ImmutableMap;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
@@ -26,6 +29,8 @@ public class HomeOfficeBailCaseListingPersonalisation implements BailEmailNotifi
     private final String homeOfficeCaseListingInitialWithoutLegalRepPersonalisationTemplateId;
     private final String homeOfficeCaseListingRelistingWithLegalRepPersonalisationTemplateId;
     private final String homeOfficeCaseListingRelistingWithoutLegalRepPersonalisationTemplateId;
+    private final String homeOfficeCaseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId;
+    private final String homeOfficeCaseListingConditionalBailRelistingWithoutLegalRepPersonalisationTemplateId;
     private final String bailHomeOfficeEmailAddress;
     private final HearingDetailsFinder hearingDetailsFinder;
     private final DateTimeExtractor dateTimeExtractor;
@@ -36,6 +41,8 @@ public class HomeOfficeBailCaseListingPersonalisation implements BailEmailNotifi
         @Value("${govnotify.bail.template.caseListing.initial.withoutLegalRep.email}") String homeOfficeCaseListingInitialWithoutLegalRepPersonalisationTemplateId,
         @Value("${govnotify.bail.template.caseListing.relisting.withLegalRep.email}") String homeOfficeCaseListingRelistingWithLegalRepPersonalisationTemplateId,
         @Value("${govnotify.bail.template.caseListing.relisting.withoutLegalRep.email}") String homeOfficeCaseListingRelistingWithoutLegalRepPersonalisationTemplateId,
+        @Value("${govnotify.bail.template.caseListing.conditionalBailRelisting.withLegalRep.email}") String homeOfficeCaseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId,
+        @Value("${govnotify.bail.template.caseListing.conditionalBailRelisting.withoutLegalRep.email}") String homeOfficeCaseListingConditionalBailRelistingWithoutLegalRepPersonalisationTemplateId,
         @Value("${bailHomeOfficeEmailAddress}") String bailHomeOfficeEmailAddress,
         HearingDetailsFinder hearingDetailsFinder,
         DateTimeExtractor dateTimeExtractor
@@ -44,6 +51,8 @@ public class HomeOfficeBailCaseListingPersonalisation implements BailEmailNotifi
         this.homeOfficeCaseListingInitialWithoutLegalRepPersonalisationTemplateId = homeOfficeCaseListingInitialWithoutLegalRepPersonalisationTemplateId;
         this.homeOfficeCaseListingRelistingWithLegalRepPersonalisationTemplateId = homeOfficeCaseListingRelistingWithLegalRepPersonalisationTemplateId;
         this.homeOfficeCaseListingRelistingWithoutLegalRepPersonalisationTemplateId = homeOfficeCaseListingRelistingWithoutLegalRepPersonalisationTemplateId;
+        this.homeOfficeCaseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId = homeOfficeCaseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId;
+        this.homeOfficeCaseListingConditionalBailRelistingWithoutLegalRepPersonalisationTemplateId = homeOfficeCaseListingConditionalBailRelistingWithoutLegalRepPersonalisationTemplateId;
         this.bailHomeOfficeEmailAddress = bailHomeOfficeEmailAddress;
         this.hearingDetailsFinder = hearingDetailsFinder;
         this.dateTimeExtractor = dateTimeExtractor;
@@ -65,11 +74,15 @@ public class HomeOfficeBailCaseListingPersonalisation implements BailEmailNotifi
         return switch (isLegallyRepresented) {
             case YES -> switch (listingEvent) {
                 case INITIAL -> homeOfficeCaseListingInitialWithLegalRepPersonalisationTemplateId;
-                case RELISTING -> homeOfficeCaseListingRelistingWithLegalRepPersonalisationTemplateId;
+                case RELISTING -> isBailConditionalGrant(bailCase) ?
+                    homeOfficeCaseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId :
+                    homeOfficeCaseListingRelistingWithLegalRepPersonalisationTemplateId;
             };
             case NO -> switch (listingEvent) {
                 case INITIAL -> homeOfficeCaseListingInitialWithoutLegalRepPersonalisationTemplateId;
-                case RELISTING -> homeOfficeCaseListingRelistingWithoutLegalRepPersonalisationTemplateId;
+                case RELISTING -> isBailConditionalGrant(bailCase) ?
+                    homeOfficeCaseListingConditionalBailRelistingWithoutLegalRepPersonalisationTemplateId :
+                    homeOfficeCaseListingRelistingWithoutLegalRepPersonalisationTemplateId;
             };
         };
     }

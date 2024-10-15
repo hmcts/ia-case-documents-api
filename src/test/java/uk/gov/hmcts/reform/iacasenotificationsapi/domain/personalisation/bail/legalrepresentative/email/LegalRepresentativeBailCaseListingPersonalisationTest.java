@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailHearingLocation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ListingEvent;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
 
@@ -29,6 +30,7 @@ class LegalRepresentativeBailCaseListingPersonalisationTest {
     private final Long caseId = 12345L;
     private String initialTemplateId = "initialTemplateId";
     private String relistingTemplateId = "relistingTemplateId";
+    private String conditionalBailRelistingTemplateId = "conditionalBailRelistingTemplateId";
     private final String legalRepEmailAddress = "legalRep@example.com";
     private final String bailReferenceNumber = "someReferenceNumber";
     private final String legalRepReference = "someLegalRepReference";
@@ -68,6 +70,7 @@ class LegalRepresentativeBailCaseListingPersonalisationTest {
         legalRepresentativeBailCaseListingPersonalisation = new LegalRepresentativeBailCaseListingPersonalisation(
             initialTemplateId,
             relistingTemplateId,
+            conditionalBailRelistingTemplateId,
             hearingDetailsFinder,
             dateTimeExtractor
         );
@@ -83,6 +86,13 @@ class LegalRepresentativeBailCaseListingPersonalisationTest {
     public void should_return_relisting_template_id() {
         when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.RELISTING));
         assertEquals(relistingTemplateId, legalRepresentativeBailCaseListingPersonalisation.getTemplateId(bailCase));
+    }
+
+    @Test
+    public void should_return_conditional_bail_relisting_template_id() {
+        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.RELISTING));
+        when(bailCase.read(CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS, String.class)).thenReturn(Optional.of(State.DECISION_CONDITIONAL_BAIL.toString()));
+        assertEquals(conditionalBailRelistingTemplateId, legalRepresentativeBailCaseListingPersonalisation.getTemplateId(bailCase));
     }
 
     @Test

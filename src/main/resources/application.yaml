@@ -1439,6 +1439,12 @@ govnotify:
           withoutLegalRep:
             email: a0f2751f-7e3f-4529-9714-6acbce5b0904
           sms: 3e591016-42d8-4083-b81a-30756a1c4ca8
+        conditionalBailRelisting:
+          withLegalRep:
+            email: 1d43fd29-69ea-4bfa-95f7-da0f2a7a9bdd
+          withoutLegalRep:
+            email: 6fde30ba-89b6-4dda-92a9-d446b7551d11
+          sms: 753a2ab7-40b6-4d27-ae8e-7c14aa81e269
       decisionRefusedIma:
         email: 4a724840-8e62-489b-bc69-43a0be3ff12d
       changeTribunalCentre:

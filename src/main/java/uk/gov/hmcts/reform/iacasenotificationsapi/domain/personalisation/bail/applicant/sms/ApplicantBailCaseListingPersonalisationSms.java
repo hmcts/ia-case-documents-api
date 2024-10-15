@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.applicant.sms;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.BailCaseUtils.isBailConditionalGrant;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.LISTING_EVENT;
 
 import com.google.common.collect.ImmutableMap;
@@ -19,16 +20,19 @@ public class ApplicantBailCaseListingPersonalisationSms implements ApplicantBail
 
     private final String caseListingInitialApplicantSmsTemplateId;
     private final String caseListingRelistingApplicantSmsTemplateId;
+    private final String caseListingConditionalBailRelistingApplicantSmsTemplateId;
     private final HearingDetailsFinder hearingDetailsFinder;
     private final DateTimeExtractor dateTimeExtractor;
 
     public ApplicantBailCaseListingPersonalisationSms(
         @Value("${govnotify.bail.template.caseListing.initial.sms}") String caseListingInitialApplicantSmsTemplateId,
         @Value("${govnotify.bail.template.caseListing.relisting.sms}") String caseListingRelistingApplicantSmsTemplateId,
+        @Value("${govnotify.bail.template.caseListing.conditionalBailRelisting.sms}") String caseListingConditionalBailRelistingApplicantSmsTemplateId,
         HearingDetailsFinder hearingDetailsFinder,
         DateTimeExtractor dateTimeExtractor) {
         this.caseListingInitialApplicantSmsTemplateId = caseListingInitialApplicantSmsTemplateId;
         this.caseListingRelistingApplicantSmsTemplateId = caseListingRelistingApplicantSmsTemplateId;
+        this.caseListingConditionalBailRelistingApplicantSmsTemplateId = caseListingConditionalBailRelistingApplicantSmsTemplateId;
         this.hearingDetailsFinder = hearingDetailsFinder;
         this.dateTimeExtractor = dateTimeExtractor;
     }
@@ -41,7 +45,9 @@ public class ApplicantBailCaseListingPersonalisationSms implements ApplicantBail
 
         return switch (listingEvent) {
             case INITIAL -> caseListingInitialApplicantSmsTemplateId;
-            case RELISTING -> caseListingRelistingApplicantSmsTemplateId;
+            case RELISTING -> isBailConditionalGrant(bailCase) ?
+                caseListingConditionalBailRelistingApplicantSmsTemplateId :
+                caseListingRelistingApplicantSmsTemplateId;
         };
     }
 

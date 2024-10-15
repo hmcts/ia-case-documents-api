@@ -17,6 +17,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailHearingLocation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ListingEvent;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
 
@@ -26,6 +27,7 @@ class ApplicantBailCaseListingPersonalisationSmsTest {
 
     private final String initialTemplateId = "initialTemplateId";
     private final String relistingTemplateId = "relistingTemplateId";
+    private final String conditionalBailRelistingTemplateId = "conditionalBailRelistingTemplateId";
     private String mobileNumber = "07781122334";
     private final String bailReferenceNumber = "someReferenceNumber";
     private String bailHearingDateTime = "2024-01-01T10:29:00.000";
@@ -57,6 +59,7 @@ class ApplicantBailCaseListingPersonalisationSmsTest {
             new ApplicantBailCaseListingPersonalisationSms(
                 initialTemplateId,
                 relistingTemplateId,
+                conditionalBailRelistingTemplateId,
                 hearingDetailsFinder,
                 dateTimeExtractor
                 );
@@ -72,6 +75,13 @@ class ApplicantBailCaseListingPersonalisationSmsTest {
     public void should_return_relisting_template_id() {
         when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.RELISTING));
         assertEquals(relistingTemplateId, applicantBailCaseListingPersonalisationSms.getTemplateId(bailCase));
+    }
+
+    @Test
+    public void should_return_conditional_bail_relisting_template_id() {
+        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.RELISTING));
+        when(bailCase.read(CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS, String.class)).thenReturn(Optional.of(State.DECISION_CONDITIONAL_BAIL.toString()));
+        assertEquals(conditionalBailRelistingTemplateId, applicantBailCaseListingPersonalisationSms.getTemplateId(bailCase));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.bail.legalrepresentative.email;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.BailCaseUtils.isBailConditionalGrant;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.LISTING_EVENT;
 
 import com.google.common.collect.ImmutableMap;
@@ -20,6 +21,7 @@ public class LegalRepresentativeBailCaseListingPersonalisation implements LegalR
 
     private final String caseListingInitialWithLegalRepPersonalisationTemplateId;
     private final String caseListingRelistingWithLegalRepPersonalisationTemplateId;
+    private final String caseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId;
     private final HearingDetailsFinder hearingDetailsFinder;
     private final DateTimeExtractor dateTimeExtractor;
 
@@ -27,11 +29,13 @@ public class LegalRepresentativeBailCaseListingPersonalisation implements LegalR
         @NotNull(message = "caseListingWithLegalRepPersonalisationTemplateId cannot be null")
         @Value("${govnotify.bail.template.caseListing.initial.withLegalRep.email}") String caseListingInitialWithLegalRepPersonalisationTemplateId,
         @Value("${govnotify.bail.template.caseListing.relisting.withLegalRep.email}") String caseListingRelistingWithLegalRepPersonalisationTemplateId,
+        @Value("${govnotify.bail.template.caseListing.conditionalBailRelisting.withLegalRep.email}") String caseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId,
         HearingDetailsFinder hearingDetailsFinder,
         DateTimeExtractor dateTimeExtractor
     ) {
         this.caseListingInitialWithLegalRepPersonalisationTemplateId = caseListingInitialWithLegalRepPersonalisationTemplateId;
         this.caseListingRelistingWithLegalRepPersonalisationTemplateId = caseListingRelistingWithLegalRepPersonalisationTemplateId;
+        this.caseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId = caseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId;
         this.hearingDetailsFinder = hearingDetailsFinder;
         this.dateTimeExtractor = dateTimeExtractor;
     }
@@ -44,7 +48,9 @@ public class LegalRepresentativeBailCaseListingPersonalisation implements LegalR
 
         return switch (listingEvent) {
             case INITIAL -> caseListingInitialWithLegalRepPersonalisationTemplateId;
-            case RELISTING -> caseListingRelistingWithLegalRepPersonalisationTemplateId;
+            case RELISTING -> isBailConditionalGrant(bailCase) ?
+                caseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId :
+                caseListingRelistingWithLegalRepPersonalisationTemplateId;
         };
     }
 
