@@ -6,15 +6,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.PREVIOUS_DECISION_DETAILS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +32,8 @@ import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PreviousDecisionDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentToPdfConverter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.bail.UploadSignedDecisionPdfService;
@@ -84,6 +90,31 @@ public class UploadSignedDecisionPdfServiceTest {
             .download(binaryDocumentUrl);
         verify(documentToPdfConverter, times(1))
             .convertWordDocResourceToPdf(mockResource);
+        verify(bailCase, times(1))
+            .write(UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT, finalPdf);
+        verify(bailCase, times(1))
+            .read(APPLICANT_FAMILY_NAME, String.class);
+        verify(bailCase, times(1)).read(PREVIOUS_DECISION_DETAILS);
+    }
+
+    @Test
+    void test_generate_pdf_with_previous_pdf() {
+        List<PreviousDecisionDetails> storedPrevDecisionDetails =
+            List.of(new PreviousDecisionDetails(
+                "some-old-date",
+                "some-old-type",
+                mock(Document.class)));
+        List<IdValue<PreviousDecisionDetails>> idValueStoredPrevDecisionDetails = new ArrayList<>();
+        idValueStoredPrevDecisionDetails.add(new IdValue<>("1", storedPrevDecisionDetails.get(0)));
+        when(bailCase.read(PREVIOUS_DECISION_DETAILS)).thenReturn(Optional.of(idValueStoredPrevDecisionDetails));
+        Document finalPdf = uploadSignedDecisionPdfService.generatePdf(caseDetails);
+        assertNotNull(finalPdf);
+        assertEquals(mockSignedGeneratedPdfDocument, finalPdf);
+        verify(documentDownloadClient, times(1))
+            .download(binaryDocumentUrl);
+        verify(wordDocumentToPdfConverter, times(1))
+            .convertResourceToPdf(mockResource);
+        verify(bailCase, times(1)).read(PREVIOUS_DECISION_DETAILS);
         verify(bailCase, times(1))
             .write(UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT, finalPdf);
         verify(bailCase, times(1))
