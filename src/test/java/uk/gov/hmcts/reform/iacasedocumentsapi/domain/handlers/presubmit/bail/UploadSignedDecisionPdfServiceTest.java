@@ -112,7 +112,7 @@ public class UploadSignedDecisionPdfServiceTest {
         assertEquals(mockSignedGeneratedPdfDocument, finalPdf);
         verify(documentDownloadClient, times(1))
             .download(binaryDocumentUrl);
-        verify(wordDocumentToPdfConverter, times(1))
+        verify(documentToPdfConverter, times(1))
             .convertResourceToPdf(mockResource);
         verify(bailCase, times(1)).read(PREVIOUS_DECISION_DETAILS);
         verify(bailCase, times(1))
