@@ -13,15 +13,23 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.FileType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocmosisDocumentConversionClient;
 
 @Service
-public class WordDocumentToPdfConverter {
+public class DocumentToPdfConverter {
 
     private final DocmosisDocumentConversionClient docmosisDocumentConversionClient;
 
-    public WordDocumentToPdfConverter(DocmosisDocumentConversionClient docmosisDocumentConversionClient) {
+    public DocumentToPdfConverter(DocmosisDocumentConversionClient docmosisDocumentConversionClient) {
         this.docmosisDocumentConversionClient = docmosisDocumentConversionClient;
     }
 
-    public File convertResourceToPdf(Resource resource) {
+    public File convertWordDocResourceToPdf(Resource resource) {
+        return convertResourceToPdf(resource, ".docx");
+    }
+
+    public File convertHtmlDocResourceToPdf(Resource resource) {
+        return convertResourceToPdf(resource, ".html");
+    }
+
+    private File convertResourceToPdf(Resource resource, String suffix) {
 
         File tempPdfFile;
 
@@ -29,7 +37,7 @@ public class WordDocumentToPdfConverter {
 
             File tempWordDocumentFile = createTempFile(
                 "tmp_",
-                ".docx");
+                suffix);
 
             Files.copy(
                 wordDocumentInputStream,

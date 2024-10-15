@@ -782,7 +782,8 @@ public enum AsylumCaseDefinition {
         "customLatestRemittalDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
 
     SOURCE_OF_REMITTAL(
-        "sourceOfRemittal", new TypeReference<String>(){}),;
+        "sourceOfRemittal", new TypeReference<String>(){}),
+    NOTIFICATIONS("notifications", new TypeReference<List<IdValue<StoredNotification>>>(){});
 
     private final String value;
     private final TypeReference typeReference;

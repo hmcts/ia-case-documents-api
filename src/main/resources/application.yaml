@@ -590,6 +590,7 @@ security:
       - "buildCase"
       - "caseListing"
       - "asyncStitchingComplete"
+      - "saveNotificationsToData"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -634,6 +635,7 @@ security:
       - "caseListing"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
+      - "saveNotificationsToData"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"

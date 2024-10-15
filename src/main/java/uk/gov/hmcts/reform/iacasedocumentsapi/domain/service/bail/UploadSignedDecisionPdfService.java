@@ -17,7 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PreviousDecisionDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.WordDocumentToPdfConverter;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentToPdfConverter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentDownloadClient;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.PREVIOUS_DECISION_DETAILS;
@@ -29,18 +29,18 @@ public class UploadSignedDecisionPdfService {
 
     private final DocumentDownloadClient documentDownloadClient;
     private final DocumentUploader documentUploader;
-    private final WordDocumentToPdfConverter wordDocumentToPdfConverter;
+    private final DocumentToPdfConverter documentToPdfConverter;
     private final String signedDecisionFinalPdfFilename;
 
     public UploadSignedDecisionPdfService(
         DocumentDownloadClient documentDownloadClient,
         DocumentUploader documentUploader,
-        WordDocumentToPdfConverter wordDocumentToPdfConverter,
+        DocumentToPdfConverter documentToPdfConverter,
         @Value("${decisionSignedDocumentFinalPdf.fileName}") String signedDecisionFinalPdfFilename
     ) {
         this.documentDownloadClient = documentDownloadClient;
         this.documentUploader = documentUploader;
-        this.wordDocumentToPdfConverter = wordDocumentToPdfConverter;
+        this.documentToPdfConverter = documentToPdfConverter;
         this.signedDecisionFinalPdfFilename = signedDecisionFinalPdfFilename;
     }
 
@@ -64,7 +64,7 @@ public class UploadSignedDecisionPdfService {
             documentDownloadClient.download(signedDecisionDocument.getDocumentBinaryUrl());
 
         File signedDecisionNoticePdf =
-            wordDocumentToPdfConverter.convertResourceToPdf(resource);
+            documentToPdfConverter.convertWordDocResourceToPdf(resource);
 
         ByteArrayResource byteArrayResource = getByteArrayResource(
             signedDecisionNoticePdf,
