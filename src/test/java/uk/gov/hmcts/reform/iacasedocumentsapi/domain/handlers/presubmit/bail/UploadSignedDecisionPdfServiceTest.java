@@ -113,7 +113,7 @@ public class UploadSignedDecisionPdfServiceTest {
         verify(documentDownloadClient, times(1))
             .download(binaryDocumentUrl);
         verify(documentToPdfConverter, times(1))
-            .convertResourceToPdf(mockResource);
+            .convertWordDocResourceToPdf(mockResource);
         verify(bailCase, times(1)).read(PREVIOUS_DECISION_DETAILS);
         verify(bailCase, times(1))
             .write(UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT, finalPdf);
