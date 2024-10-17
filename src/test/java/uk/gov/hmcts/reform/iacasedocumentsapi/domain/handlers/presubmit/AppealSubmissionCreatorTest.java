@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -33,6 +34,7 @@ public class AppealSubmissionCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> internalOocAppealSubmissionDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -49,6 +51,7 @@ public class AppealSubmissionCreatorTest {
             new AppealSubmissionCreator(
                 appealSubmissionDocumentCreator,
                 internalAppealSubmissionDocumentCreator,
+                internalOocAppealSubmissionDocumentCreator,
                 documentHandler
             );
     }
@@ -234,6 +237,8 @@ public class AppealSubmissionCreatorTest {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class)).thenReturn(Optional.of(OutOfCountryCircumstances.LEAVE_UK));
+        when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PAID));
 
         when(asylumCase.read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payOffline"));
@@ -256,6 +261,8 @@ public class AppealSubmissionCreatorTest {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class)).thenReturn(Optional.of(OutOfCountryCircumstances.LEAVE_UK));
+        when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PAID));
         when(asylumCase.read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payOffline"));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -272,5 +279,29 @@ public class AppealSubmissionCreatorTest {
 
         verify(internalAppealSubmissionDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadata(eq(asylumCase), any(), eq(NOTIFICATION_ATTACHMENT_DOCUMENTS), eq(DocumentTag.INTERNAL_APPEAL_SUBMISSION));
+    }
+
+    @Test
+    public void should_call_internal_ooc_appeal_submission_creator_when_case_is_internal_ooc_circumstance_none() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class)).thenReturn(Optional.of(OutOfCountryCircumstances.NONE));
+
+        when(asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PAID));
+        when(asylumCase.read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payOffline"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            appealSubmissionCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(internalOocAppealSubmissionDocumentCreator, times(1)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadata(eq(asylumCase), any(), eq(LEGAL_REPRESENTATIVE_DOCUMENTS), eq(DocumentTag.APPEAL_SUBMISSION));
     }
 }
