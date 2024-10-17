@@ -37,7 +37,7 @@ spring:
   application:
     name: Immigration & Asylum case documents API
   config:
-    import: "optional:configtree:/mnt/secrets/ia/"    
+    import: "optional:configtree:/mnt/secrets/ia/"
   jackson.date-format: yyyy-MM-dd
   security:
     oauth2:
@@ -505,6 +505,7 @@ bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
 bailNoticeOfHearing.fileName: "hearing-notice"
 bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx}
+bailNoticeOfHearingConditionalBailRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted-conditional-bail.docx}
 bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
@@ -633,6 +634,7 @@ security:
       - "buildCase"
       - "caseListing"
       - "asyncStitchingComplete"
+      - "saveNotificationsToData"
       - "manageFeeUpdate"
     citizen:
       - "startAppeal"
@@ -653,7 +655,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
       - "recordTheDecision"
-      - "endApplication"    
+      - "endApplication"
       - "uploadSignedDecisionNotice"
       - "updateTribunalDecision"
       - "adaSuitabilityReview"
@@ -678,6 +680,7 @@ security:
       - "caseListing"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
+      - "saveNotificationsToData"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"
