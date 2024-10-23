@@ -26,6 +26,8 @@ public class AppealSubmissionDocFieldMapper {
     public static final String CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE = "Circumstances of the appellant's out of country appeal";
     public static final String THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION = "The appellant is appealing an entry clearance decision";
     public static final String THE_APPELLANT_HAD_TO_LEAVE_THE_UK_IN_ORDER_TO_APPEAL = "The appellant had to leave the UK in order to appeal";
+    public static final String OUT_OF_COUNTRY_DECISION_TYPE_TITLE = "outOfCountryDecisionTypeTitle";
+    public static final String OUT_OF_COUNTRY_DECISION_TYPE_TEXT = "outOfCountryDecisionType";
     private final StringProvider stringProvider;
 
     public AppealSubmissionDocFieldMapper(
@@ -79,58 +81,7 @@ public class AppealSubmissionDocFieldMapper {
         fieldValues.put("hasSponsor", YesOrNo.NO);
         fieldValues.put("appealOutOfCountry", asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO));
 
-        if (asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-
-            Optional<OutOfCountryDecisionType> maybeOutOfCountryDecisionType = asylumCase.read(OUT_OF_COUNTRY_DECISION_TYPE, OutOfCountryDecisionType.class);
-            Optional<OutOfCountryCircumstances> maybeOutOfCountryCircumstances = asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class);
-
-            if (maybeOutOfCountryCircumstances.isPresent() && isInternalCase(asylumCase) && !isAppellantInUk(asylumCase)) {
-                OutOfCountryCircumstances outOfCountryCircumstances = maybeOutOfCountryCircumstances.get();
-                if (outOfCountryCircumstances.equals(ENTRY_CLEARANCE_DECISION)) {
-                    fieldValues.put("outOfCountryDecisionTypeTitle", CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE);
-                    fieldValues.put("outOfCountryDecisionType", THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION);
-                } else if (outOfCountryCircumstances.equals(LEAVE_UK)) {
-                    fieldValues.put("outOfCountryDecisionTypeTitle", CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE);
-                    fieldValues.put("outOfCountryDecisionType", THE_APPELLANT_HAD_TO_LEAVE_THE_UK_IN_ORDER_TO_APPEAL);
-                }
-            } else if (maybeOutOfCountryDecisionType.isPresent()) {
-                fieldValues.put("outOfCountryDecisionTypeTitle", "Out of country decision type");
-
-                OutOfCountryDecisionType decisionType = maybeOutOfCountryDecisionType.get();
-                fieldValues.put("outOfCountryDecisionType", maybeOutOfCountryDecisionType.get().getDescription());
-                fieldValues.put("decisionLetterReceived", YesOrNo.YES);
-
-                if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_HUMAN_RIGHTS || decisionType == OutOfCountryDecisionType.REFUSE_PERMIT) {
-                    fieldValues.put("gwfReferenceNumber", asylumCase.read(GWF_REFERENCE_NUMBER, String.class).orElse(null));
-                    fieldValues.put("dateEntryClearanceDecision", formatDateForRendering(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class).orElse(null), DOCUMENT_DATE_FORMAT));
-                    fieldValues.put("decisionLetterReceived", YesOrNo.NO);
-
-                } else if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_PROTECTION) {
-                    fieldValues.put("dateClientLeaveUk", formatDateForRendering(asylumCase.read(DATE_CLIENT_LEAVE_UK, String.class).orElse(null), DOCUMENT_DATE_FORMAT));
-                    fieldValues.put("didClientLeaveUk", YesOrNo.YES);
-                }
-            }
-
-            if (asylumCase.read(HAS_CORRESPONDENCE_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-                fieldValues.put("appellantOutOfCountryAddress", asylumCase.read(APPELLANT_OUT_OF_COUNTRY_ADDRESS, String.class).orElse(""));
-            }
-
-            Optional<YesOrNo> hasSponsor = asylumCase.read(HAS_SPONSOR, YesOrNo.class);
-            if (hasSponsor.isPresent() && hasSponsor.get().equals(YesOrNo.YES)) {
-                fieldValues.put("hasSponsor", YesOrNo.YES);
-                fieldValues.put("sponsorGivenNames", asylumCase.read(SPONSOR_GIVEN_NAMES, String.class).orElse(null));
-                fieldValues.put("sponsorFamilyName", asylumCase.read(SPONSOR_FAMILY_NAME, String.class).orElse(null));
-                fieldValues.put("sponsorAddress", asylumCase.read(SPONSOR_ADDRESS_FOR_DISPLAY, String.class).orElse(null));
-                Optional<ContactPreference> sponsorContactPreference = asylumCase.read(SPONSOR_CONTACT_PREFERENCE, ContactPreference.class);
-                if (sponsorContactPreference.isPresent()
-                    && sponsorContactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
-                    fieldValues.put("wantsSponsorEmail", YesOrNo.YES);
-                    fieldValues.put("sponsorEmail", asylumCase.read(SPONSOR_EMAIL, String.class).orElse(null));
-                } else {
-                    fieldValues.put("sponsorMobileNumber", asylumCase.read(SPONSOR_MOBILE_NUMBER, String.class).orElse(null));
-                }
-            }
-        }
+        addAppealOocFields(asylumCase, fieldValues);
 
         Optional<AsylumAppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AsylumAppealType.class);
 
@@ -194,6 +145,23 @@ public class AppealSubmissionDocFieldMapper {
         Optional<List<IdValue<Map<String, String>>>> otherAppeals = asylumCase
             .read(OTHER_APPEALS);
 
+        populateOtherAppeals(fieldValues, otherAppeals, asylumCase);
+
+        fieldValues.put("applicationOutOfTimeExplanation", asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class).orElse(""));
+        fieldValues.put("submissionOutOfTime", asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(YesOrNo.NO));
+        fieldValues.put(
+            "applicationOutOfTimeDocumentName",
+            asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)
+                .map(Document::getDocumentFilename)
+                .orElse("")
+        );
+
+        fieldValues.put("isAdmin", asylumCase.read(IS_ADMIN, YesOrNo.class).orElse(YesOrNo.NO));
+
+        return fieldValues;
+    }
+
+    private static void populateOtherAppeals(Map<String, Object> fieldValues, Optional<List<IdValue<Map<String, String>>>> otherAppeals, AsylumCase asylumCase) {
         fieldValues.put(
             "otherAppeals",
             otherAppeals
@@ -210,19 +178,69 @@ public class AppealSubmissionDocFieldMapper {
         } else {
             fieldValues.put("hasOtherAppeals", YesOrNo.NO);
         }
+    }
 
-        fieldValues.put("applicationOutOfTimeExplanation", asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class).orElse(""));
-        fieldValues.put("submissionOutOfTime", asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(YesOrNo.NO));
-        fieldValues.put(
-            "applicationOutOfTimeDocumentName",
-            asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)
-                .map(Document::getDocumentFilename)
-                .orElse("")
-        );
+    private static void addAppealOocFields(AsylumCase asylumCase, Map<String, Object> fieldValues) {
+        if (asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
 
-        fieldValues.put("isAdmin", asylumCase.read(IS_ADMIN, YesOrNo.class).orElse(YesOrNo.NO));
+            Optional<OutOfCountryDecisionType> maybeOutOfCountryDecisionType = asylumCase.read(OUT_OF_COUNTRY_DECISION_TYPE, OutOfCountryDecisionType.class);
+            Optional<OutOfCountryCircumstances> maybeOutOfCountryCircumstances = asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class);
 
-        return fieldValues;
+            if (maybeOutOfCountryCircumstances.isPresent() && isInternalCase(asylumCase) && !isAppellantInUk(asylumCase)) {
+                populateOutOfCircumstancesInternalCase(fieldValues, maybeOutOfCountryCircumstances);
+            } else if (maybeOutOfCountryDecisionType.isPresent()) {
+                fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TITLE, "Out of country decision type");
+
+                OutOfCountryDecisionType decisionType = maybeOutOfCountryDecisionType.get();
+                fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TEXT, maybeOutOfCountryDecisionType.get().getDescription());
+                fieldValues.put("decisionLetterReceived", YesOrNo.YES);
+
+                if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_HUMAN_RIGHTS || decisionType == OutOfCountryDecisionType.REFUSE_PERMIT) {
+                    fieldValues.put("gwfReferenceNumber", asylumCase.read(GWF_REFERENCE_NUMBER, String.class).orElse(null));
+                    fieldValues.put("dateEntryClearanceDecision", formatDateForRendering(asylumCase.read(DATE_ENTRY_CLEARANCE_DECISION, String.class).orElse(null), DOCUMENT_DATE_FORMAT));
+                    fieldValues.put("decisionLetterReceived", YesOrNo.NO);
+
+                } else if (decisionType == OutOfCountryDecisionType.REFUSAL_OF_PROTECTION) {
+                    fieldValues.put("dateClientLeaveUk", formatDateForRendering(asylumCase.read(DATE_CLIENT_LEAVE_UK, String.class).orElse(null), DOCUMENT_DATE_FORMAT));
+                    fieldValues.put("didClientLeaveUk", YesOrNo.YES);
+                }
+            }
+
+            if (asylumCase.read(HAS_CORRESPONDENCE_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
+                fieldValues.put("appellantOutOfCountryAddress", asylumCase.read(APPELLANT_OUT_OF_COUNTRY_ADDRESS, String.class).orElse(""));
+            }
+
+            populateSponsorFields(asylumCase, fieldValues);
+        }
+    }
+
+    private static void populateOutOfCircumstancesInternalCase(Map<String, Object> fieldValues, Optional<OutOfCountryCircumstances> maybeOutOfCountryCircumstances) {
+        OutOfCountryCircumstances outOfCountryCircumstances = maybeOutOfCountryCircumstances.get();
+        if (outOfCountryCircumstances.equals(ENTRY_CLEARANCE_DECISION)) {
+            fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TITLE, CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE);
+            fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TEXT, THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION);
+        } else if (outOfCountryCircumstances.equals(LEAVE_UK)) {
+            fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TITLE, CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE);
+            fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TEXT, THE_APPELLANT_HAD_TO_LEAVE_THE_UK_IN_ORDER_TO_APPEAL);
+        }
+    }
+
+    private static void populateSponsorFields(AsylumCase asylumCase, Map<String, Object> fieldValues) {
+        Optional<YesOrNo> hasSponsor = asylumCase.read(HAS_SPONSOR, YesOrNo.class);
+        if (hasSponsor.isPresent() && hasSponsor.get().equals(YesOrNo.YES)) {
+            fieldValues.put("hasSponsor", YesOrNo.YES);
+            fieldValues.put("sponsorGivenNames", asylumCase.read(SPONSOR_GIVEN_NAMES, String.class).orElse(null));
+            fieldValues.put("sponsorFamilyName", asylumCase.read(SPONSOR_FAMILY_NAME, String.class).orElse(null));
+            fieldValues.put("sponsorAddress", asylumCase.read(SPONSOR_ADDRESS_FOR_DISPLAY, String.class).orElse(null));
+            Optional<ContactPreference> sponsorContactPreference = asylumCase.read(SPONSOR_CONTACT_PREFERENCE, ContactPreference.class);
+            if (sponsorContactPreference.isPresent()
+                && sponsorContactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+                fieldValues.put("wantsSponsorEmail", YesOrNo.YES);
+                fieldValues.put("sponsorEmail", asylumCase.read(SPONSOR_EMAIL, String.class).orElse(null));
+            } else {
+                fieldValues.put("sponsorMobileNumber", asylumCase.read(SPONSOR_MOBILE_NUMBER, String.class).orElse(null));
+            }
+        }
     }
 
     private void populateDetainedFields(AsylumCase asylumCase, Map<String, Object> fieldValues) {

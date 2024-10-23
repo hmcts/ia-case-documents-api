@@ -108,13 +108,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
         //IS_REMOTE_HEARING is used for the case ref data
-        if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
-            || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))) {
-            hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
-        } else {
-            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
-            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
-        }
+        hearingNotice = getHearingNotice(isCaseUsingLocationRefData, listCaseHearingCentre, asylumCase, caseDetails);
         if ((asylumCase.read(AsylumCaseDefinition.IS_REHEARD_APPEAL_ENABLED, YesOrNo.class).equals(Optional.of(YES))
             && (asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YES)).orElse(false)))) {
 
@@ -146,6 +140,18 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
         }
         return new PreSubmitCallbackResponse<>(asylumCase);
+    }
+
+    private Document getHearingNotice(boolean isCaseUsingLocationRefData, HearingCentre listCaseHearingCentre, AsylumCase asylumCase, CaseDetails<AsylumCase> caseDetails) {
+        Document hearingNotice;
+        if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
+            || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))) {
+            hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
+        } else {
+            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
+            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
+        }
+        return hearingNotice;
     }
 
     private void appendReheardHearingDocuments(AsylumCase asylumCase, Document hearingNotice) {
