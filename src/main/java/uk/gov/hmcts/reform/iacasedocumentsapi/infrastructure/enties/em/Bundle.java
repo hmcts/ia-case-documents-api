@@ -55,6 +55,26 @@ public class Bundle implements CaseData {
         String description,
         String eligibleForStitching,
         List<IdValue<BundleDocument>> documents,
+        YesOrNo hasCoversheets,
+        YesOrNo hasTableOfContents,
+        String filename
+    ) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.eligibleForStitching = eligibleForStitching;
+        this.documents = documents;
+        this.hasCoversheets = hasCoversheets;
+        this.hasTableOfContents = hasTableOfContents;
+        this.filename = filename;
+    }
+
+    public Bundle(
+        String id,
+        String title,
+        String description,
+        String eligibleForStitching,
+        List<IdValue<BundleDocument>> documents,
         Optional<String> stitchStatus,
         Optional<Document> stitchedDocument,
         YesOrNo hasCoversheets,
@@ -71,7 +91,6 @@ public class Bundle implements CaseData {
         this.hasCoversheets = hasCoversheets;
         this.hasTableOfContents = hasTableOfContents;
         this.filename = filename;
-
     }
 
     public String getId() {

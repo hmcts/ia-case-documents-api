@@ -57,7 +57,6 @@ class BailNoticeOfHearingInitialListingTemplateTest {
     private CourtVenue hattonCross;
 
     private final String initialListingTemplateName = "TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx";
-
     private BailNoticeOfHearingInitialListingTemplate template;
     private Map<String, Object> fieldValuesMap;
 
