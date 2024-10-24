@@ -187,7 +187,7 @@ public class AppealSubmissionDocFieldMapper {
             Optional<OutOfCountryCircumstances> maybeOutOfCountryCircumstances = asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class);
 
             if (maybeOutOfCountryCircumstances.isPresent() && isInternalCase(asylumCase) && !isAppellantInUk(asylumCase)) {
-                populateOutOfCircumstancesInternalCase(fieldValues, maybeOutOfCountryCircumstances);
+                populateOutOfCircumstancesInternalCase(fieldValues, maybeOutOfCountryCircumstances.get());
             } else if (maybeOutOfCountryDecisionType.isPresent()) {
                 fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TITLE, "Out of country decision type");
 
@@ -214,8 +214,7 @@ public class AppealSubmissionDocFieldMapper {
         }
     }
 
-    private static void populateOutOfCircumstancesInternalCase(Map<String, Object> fieldValues, Optional<OutOfCountryCircumstances> maybeOutOfCountryCircumstances) {
-        OutOfCountryCircumstances outOfCountryCircumstances = maybeOutOfCountryCircumstances.get();
+    private static void populateOutOfCircumstancesInternalCase(Map<String, Object> fieldValues, OutOfCountryCircumstances outOfCountryCircumstances) {
         if (outOfCountryCircumstances.equals(ENTRY_CLEARANCE_DECISION)) {
             fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TITLE, CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE);
             fieldValues.put(OUT_OF_COUNTRY_DECISION_TYPE_TEXT, THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION);
