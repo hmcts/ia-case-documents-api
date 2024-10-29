@@ -1,0 +1,60 @@
+{
+  "description": "RIA-8669 mark appeal as remitted non detained appellant notification completed by admin",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7662,
+      "eventId": "markAppealAsRemitted",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantInUk": "Yes",
+          "upperTribunalReferenceNumber": "UI-2020-123456",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "appealReferenceNumber": "PA/12345/2018",
+          "appellantInDetention": "No",
+          "internalAppellantEmail": "appellant@test.com",
+          "internalAppellantMobileNumber": "{$TEST_CITIZEN_MOBILE}",
+          "sourceOfRemittal": "Upper Tribunal",
+          "ccdReferenceNumberForDisplay": "refNumber"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantInUk": "Yes",
+        "upperTribunalReferenceNumber": "UI-2020-123456",
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+        "appealReferenceNumber": "PA/12345/2018",
+        "appellantInDetention": "No",
+        "internalAppellantEmail": "appellant@test.com",
+        "internalAppellantMobileNumber": "{$TEST_CITIZEN_MOBILE}",
+        "sourceOfRemittal": "Upper Tribunal",
+        "ccdReferenceNumberForDisplay": "refNumber",
+        "notificationsSent": [
+          {
+            "id": "7662_APPELLANT_MARK_APPEAL_AS_REMITTED_NON_DETAINED_APPELLANT_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7662_APPELLANT_MARK_APPEAL_AS_REMITTED_NON_DETAINED_APPELLANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7662_HOME_OFFICE_MARK_APPEAL_AS_REMITTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

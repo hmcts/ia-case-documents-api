@@ -1,0 +1,32 @@
+{
+  "description": "RIA-9234 Post-submit payment paid notifications to LR (PA / Pay by card after submitting the appeal) - before listing for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 923411,
+      "eventId": "paymentAppeal",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "hearingCentre": "taylorHouse",
+          "appealType": "protection",
+          "paymentStatus": "Paid"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_PAYMENT_PAID_LEGAL_REPRESENTATIVE])"
+    }
+  }
+}
+

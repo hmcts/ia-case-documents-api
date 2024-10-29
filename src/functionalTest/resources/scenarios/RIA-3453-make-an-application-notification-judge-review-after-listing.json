@@ -19,7 +19,7 @@
             {
               "id": "1",
               "value": {
-                "type":"Judge's review of application decision",
+                "type":"An application has been submitted",
                 "details":"",
                 "evidence":[],
                 "applicant":"",
@@ -51,7 +51,7 @@
           {
             "id": "1",
             "value": {
-              "type":"Judge's review of application decision",
+              "type":"An application has been submitted",
               "details":"",
               "evidence":[],
               "applicant":"",
@@ -108,7 +108,7 @@
       {
         "reference": "34532_MAKE_AN_APPLICATION_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: Judges review application submitted",
+        "subject": "Immigration and Asylum appeal: An application has been submitted",
         "body": [
           "PA/12345/2019",
           "Talha Awan",

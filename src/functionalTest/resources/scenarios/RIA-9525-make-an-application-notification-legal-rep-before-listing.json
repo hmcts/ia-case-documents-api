@@ -1,0 +1,83 @@
+{
+  "description": "RIA-9525 Send make an application notification Legal Rep before listing for admin and represented cases",
+  "launchDarklyKey": "tcw-application-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 952514,
+      "eventId": "makeAnApplication",
+      "state": "ended",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "currentCaseStateVisibleToHomeOfficeAll":"ended",
+          "currentCaseStateVisibleToLegalRepresentative": "ended",
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"withdraw",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Pending",
+                "state":"ended",
+                "applicantRole":"",
+                "decisionReason":"",
+                "decisionDate":"",
+                "decisionMaker": ""
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "currentCaseStateVisibleToHomeOfficeAll":"ended",
+        "currentCaseStateVisibleToLegalRepresentative": "ended",
+        "makeAnApplications": [
+          {
+            "id": "1",
+            "value": {
+              "type":"withdraw",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"{$TODAY}",
+              "decision":"Pending",
+              "state":"ended",
+              "applicantRole":"",
+              "decisionReason":"",
+              "decisionDate":"",
+              "decisionMaker": ""
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "952514_MAKE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "952514_MAKE_AN_APPLICATION_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

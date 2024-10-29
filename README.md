@@ -138,6 +138,7 @@ additional information where necessary.
 
   Note that it will also alter other behaviours in GitHub. Hopefully these will also be improvements to you.
 
+
 *In case of problems*
 
 1. Get in touch with your Technical Lead and inform them, so they can adjust the git hooks accordingly
@@ -147,4 +148,3 @@ additional information where necessary.
    `git config --local --unset core.hooksPath`
 
    Still, you shouldn't be doing it so make sure you get in touch with a Technical Lead soon afterwards.
-

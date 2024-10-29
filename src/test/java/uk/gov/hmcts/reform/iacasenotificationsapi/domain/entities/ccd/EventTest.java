@@ -135,6 +135,8 @@ public class EventTest {
         assertEquals("decideCostsApplication", DECIDE_COSTS_APPLICATION.toString());
         assertEquals("recordTheDecision", RECORD_THE_DECISION.toString());
         assertEquals("changeTribunalCentre", CHANGE_TRIBUNAL_CENTRE.toString());
+        assertEquals("sendPaymentReminderNotification", SEND_PAYMENT_REMINDER_NOTIFICATION.toString());
+        assertEquals("progressMigratedCase", PROGRESS_MIGRATED_CASE.toString());
         assertEquals("recordRemissionReminder", Event.RECORD_REMISSION_REMINDER.toString());
         assertEquals("refundConfirmation", Event.REFUND_CONFIRMATION.toString());
     }
@@ -158,6 +160,6 @@ public class EventTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(123, Event.values().length);
+        assertEquals(125, Event.values().length);
     }
 }

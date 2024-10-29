@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation;
 
-public interface LetterNotificationPersonalisation extends BaseNotificationPersonalisation {
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+
+public interface LetterNotificationPersonalisation extends BaseNotificationPersonalisation<AsylumCase> {
 
 }

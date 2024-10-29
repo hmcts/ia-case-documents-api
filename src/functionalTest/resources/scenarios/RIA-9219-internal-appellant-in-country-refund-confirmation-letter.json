@@ -1,0 +1,69 @@
+{
+  "description": "RIA-9219 Internal appellant Refund confirmation letter - In country",
+  "enabled": "{$featureFlag.dlrmTelephonyFeatureFlag}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 92191,
+      "eventId": "refundConfirmation",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "previousDecisionHearingFeeOption": "decisionWithHearing",
+          "decisionHearingFeeOption": "decisionWithoutHearing",
+          "newFeeAmount": "8000",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInUk": "Yes",
+          "appellantInDetention": "No",
+          "appellantHasFixedAddress": "Yes",
+          "paymentStatus": "Paid",
+          "feeUpdateReason": "appealNotValid",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "previousDecisionHearingFeeOption": "decisionWithHearing",
+        "decisionHearingFeeOption": "decisionWithoutHearing",
+        "newFeeAmount": "8000",
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInUk": "Yes",
+        "appellantInDetention": "No",
+        "appellantHasFixedAddress": "Yes",
+        "paymentStatus": "Paid",
+        "feeUpdateReason": "appealNotValid",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "92191_INTERNAL_REFUND_CONFIRMATION_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

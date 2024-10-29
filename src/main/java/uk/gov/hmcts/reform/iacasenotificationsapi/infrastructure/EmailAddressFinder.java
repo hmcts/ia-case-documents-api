@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getLegalRepEmailInternalOrLegalRepJourney;
 
 import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,9 +65,7 @@ public class EmailAddressFinder {
     }
 
     public String getLegalRepEmailAddress(AsylumCase asylumCase) {
-        return asylumCase
-            .read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)
-            .orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
+        return getLegalRepEmailInternalOrLegalRepJourney(asylumCase);
     }
 
     public String getListCaseHomeOfficeEmailAddress(AsylumCase asylumCase) {

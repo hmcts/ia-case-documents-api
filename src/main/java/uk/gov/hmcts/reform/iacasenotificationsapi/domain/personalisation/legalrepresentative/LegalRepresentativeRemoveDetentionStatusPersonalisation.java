@@ -43,7 +43,6 @@ public class LegalRepresentativeRemoveDetentionStatusPersonalisation implements 
     @Override
     public Map<String, String> getPersonalisation(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
-        System.out.println("HREE 1");
         String ariaListingReferenceIfPresent = asylumCase.read(ARIA_LISTING_REFERENCE, String.class)
                 .map(ariaListingReference -> "Listing reference: " + ariaListingReference)
                 .orElse("");

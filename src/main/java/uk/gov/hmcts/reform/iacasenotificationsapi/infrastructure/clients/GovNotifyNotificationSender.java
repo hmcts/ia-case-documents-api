@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.io.InputStream;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,38 @@ public class GovNotifyNotificationSender implements NotificationSender {
                 notificationClient,
                 deduplicateSendsWithinSeconds,
                 LOG
+        );
+    }
+
+    @Override
+    public synchronized String sendLetter(
+        final String templateId,
+        final String address,
+        final Map<String, String> personalisation,
+        final String reference) {
+
+        return senderHelper.sendLetter(
+            templateId,
+            address,
+            personalisation,
+            reference,
+            notificationClient,
+            deduplicateSendsWithinSeconds,
+            LOG
+        );
+    }
+
+    @Override
+    public synchronized String sendPrecompiledLetter(
+        final String reference,
+        final InputStream stream
+    ) {
+        return senderHelper.sendPrecompiledLetter(
+            reference,
+            stream,
+            notificationClient,
+            deduplicateSendsWithinSeconds,
+            LOG
         );
     }
 }

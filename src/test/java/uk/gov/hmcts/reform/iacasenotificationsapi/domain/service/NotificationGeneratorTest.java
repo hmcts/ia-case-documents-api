@@ -4,16 +4,13 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singleton;
-import static org.mockito.Mockito.mockStatic;
 import static java.util.Collections.singletonList;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFinder.NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,23 +18,25 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.ApplicationContextProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.LetterNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.SmsNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.GovNotifyNotificationSender;
+import uk.gov.service.notify.NotificationClientException;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -51,6 +50,10 @@ public class NotificationGeneratorTest {
     SmsNotificationPersonalisation smsNotificationPersonalisation1;
     @Mock
     SmsNotificationPersonalisation smsNotificationPersonalisation2;
+    @Mock
+    LetterNotificationPersonalisation letterNotificationPersonalisation1;
+    @Mock
+    LetterNotificationPersonalisation letterNotificationPersonalisation2;
     @Mock
     GovNotifyNotificationSender notificationSender;
     @Spy
@@ -66,10 +69,18 @@ public class NotificationGeneratorTest {
     static ApplicationContext applicationContext;
     @Mock
     static CustomerServicesProvider customerServicesProvider;
+    @Mock
+    DocumentDownloadClient documentDownloadClient;
+    @Mock
+    Resource resource;
+    @Mock
+    InputStream mockInputStream;
 
     private List<EmailNotificationPersonalisation> repEmailNotificationPersonalisationList;
     private List<EmailNotificationPersonalisation> aipEmailNotificationPersonalisationList;
     private List<SmsNotificationPersonalisation> aipSmsNotificationPersonalisationList;
+    private List<LetterNotificationPersonalisation> letterNotificationPersonalisationList;
+    private List<DocumentTag> documentTagList;
 
     private NotificationGenerator notificationGenerator;
 
@@ -80,12 +91,14 @@ public class NotificationGeneratorTest {
 
     private String refId1 = "refId1";
     private String refId2 = "refId2";
-
     private String emailAddress1 = "email1@example.com";
     private String emailAddress2 = "email2@example.com";
 
     private String phoneNumber1 = "07123456789";
     private String phoneNumber2 = "07123456780";
+
+    private String address1 = "20_realstreet_London";
+    private String address2 = "80_realstreet_London";
 
     private Map<String, String> personalizationMap1 = emptyMap();
     private Map<String, String> personalizationMap2 = emptyMap();
@@ -94,9 +107,18 @@ public class NotificationGeneratorTest {
 
     private String notificationId1 = "notificationId1";
     private String notificationId2 = "notificationId2";
+    private String documentBinaryUrl = "http://host:8080/a/b/c";
+
+    private DocumentTag documentTag = DocumentTag.END_APPEAL;
+
+    Document document = new Document(documentBinaryUrl, documentBinaryUrl, "end-appeal-notice");
+    DocumentWithMetadata documentWithMetadata = new DocumentWithMetadata(document, "desc", null, documentTag);
+    IdValue<DocumentWithMetadata> documentWithMetadataId = new IdValue<>("1", documentWithMetadata);
+    private String refId3 = caseId + "_" + documentTag.name();
+
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws NotificationClientException, IOException {
         mocked = mockStatic(ApplicationContextProvider.class);
         mocked.when(ApplicationContextProvider::getApplicationContext).thenReturn(applicationContext);
         when(applicationContext.getBean(CustomerServicesProvider.class)).thenReturn(customerServicesProvider);
@@ -135,6 +157,20 @@ public class NotificationGeneratorTest {
         when(notificationSender.sendSms(templateId2, phoneNumber2, personalizationMap2, refId2))
             .thenReturn(notificationId2);
 
+        when(letterNotificationPersonalisation1.getReferenceId(caseId)).thenReturn(refId1);
+        when(letterNotificationPersonalisation2.getReferenceId(caseId)).thenReturn(refId2);
+
+        when(letterNotificationPersonalisation1.getTemplateId()).thenReturn(templateId1);
+        when(letterNotificationPersonalisation2.getTemplateId()).thenReturn(templateId2);
+
+        when(letterNotificationPersonalisation1.getPersonalisation(callback)).thenReturn(personalizationMap1);
+        when(letterNotificationPersonalisation2.getPersonalisation(callback)).thenReturn(personalizationMap2);
+
+        when(notificationSender.sendLetter(templateId1, address1, personalizationMap1, refId1))
+            .thenReturn(notificationId1);
+        when(notificationSender.sendLetter(templateId2, address2, personalizationMap2, refId2))
+            .thenReturn(notificationId2);
+
         when(notificationIdAppender.append(notificationsSent, refId1, notificationId1)).thenReturn(notificationsSent);
         when(notificationIdAppender.append(notificationsSent, refId2, notificationId2)).thenReturn(notificationsSent);
 
@@ -144,6 +180,19 @@ public class NotificationGeneratorTest {
             newArrayList(emailNotificationPersonalisation, emailNotificationPersonalisation1);
         aipSmsNotificationPersonalisationList =
             newArrayList(smsNotificationPersonalisation1, smsNotificationPersonalisation2);
+        letterNotificationPersonalisationList =
+            newArrayList(letterNotificationPersonalisation1, letterNotificationPersonalisation2);
+
+        documentTagList = newArrayList(documentTag);
+
+        when(notificationSender.sendPrecompiledLetter(refId3, mockInputStream))
+            .thenReturn(notificationId1);
+        when(notificationIdAppender.append(notificationsSent, refId3, notificationId1)).thenReturn(notificationsSent);
+
+        when(asylumCase.read(LETTER_BUNDLE_DOCUMENTS)).thenReturn(Optional.of(newArrayList(documentWithMetadataId)));
+
+        when(documentDownloadClient.download(documentBinaryUrl)).thenReturn(resource);
+        when(resource.getInputStream()).thenReturn(mockInputStream);
 
     }
 
@@ -218,6 +267,43 @@ public class NotificationGeneratorTest {
     }
 
     @Test
+    public void should_send_notification_for_each_letter_personalisation() {
+        notificationGenerator =
+            new LetterNotificationGenerator(letterNotificationPersonalisationList, notificationSender,
+                notificationIdAppender);
+
+        when(letterNotificationPersonalisation1.getRecipientsList(asylumCase)).thenReturn(singleton(address1));
+        when(letterNotificationPersonalisation2.getRecipientsList(asylumCase)).thenReturn(singleton(address2));
+
+        notificationGenerator.generate(callback);
+
+        verify(notificationSender).sendLetter(templateId1, address1, personalizationMap1, refId1);
+        verify(notificationSender).sendLetter(templateId2, address2, personalizationMap2, refId2);
+
+        verify(notificationIdAppender).appendAll(asylumCase, refId1, singletonList(notificationId1));
+        verify(notificationIdAppender).append(notificationsSent, refId1, notificationId1);
+        verify(notificationIdAppender).appendAll(asylumCase, refId2, singletonList(notificationId2));
+        verify(notificationIdAppender).append(notificationsSent, refId2, notificationId2);
+
+        verify(asylumCase, times(2)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
+    }
+
+    @Test
+    public void should_send_notification_for_each_precompiled_letter_document_tag() {
+
+        notificationGenerator =
+            new PrecompiledLetterNotificationGenerator(documentTagList, notificationSender,
+                notificationIdAppender, documentDownloadClient);
+
+        notificationGenerator.generate(callback);
+
+        verify(notificationSender).sendPrecompiledLetter(refId3, mockInputStream);
+        verify(notificationIdAppender).append(notificationsSent, refId3, notificationId1);
+        verify(notificationIdAppender).appendAll(asylumCase, refId3, singletonList(notificationId1));
+        verify(asylumCase, times(1)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
+    }
+
+    @Test
     public void should_not_send_notification_when_email_personalisation_list_empty() {
         notificationGenerator = new EmailNotificationGenerator(emptyList(), notificationSender, notificationIdAppender);
         notificationGenerator.generate(callback);
@@ -254,6 +340,28 @@ public class NotificationGeneratorTest {
     @Test
     public void should_not_send_notification_when_sms_personalisation_list_empty() {
         notificationGenerator = new SmsNotificationGenerator(emptyList(), notificationSender, notificationIdAppender);
+        notificationGenerator.generate(callback);
+
+        verifyNoInteractions(notificationSender);
+        verifyNoInteractions(notificationIdAppender);
+
+        verify(asylumCase, times(0)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
+    }
+
+    @Test
+    public void should_not_send_notification_when_letter_personalisation_list_empty() {
+        notificationGenerator = new LetterNotificationGenerator(emptyList(), notificationSender, notificationIdAppender);
+        notificationGenerator.generate(callback);
+
+        verifyNoInteractions(notificationSender);
+        verifyNoInteractions(notificationIdAppender);
+
+        verify(asylumCase, times(0)).write(AsylumCaseDefinition.NOTIFICATIONS_SENT, notificationsSent);
+    }
+
+    @Test
+    public void should_not_send_notification_when_precompiled_letter_document_tag_list_empty() {
+        notificationGenerator = new PrecompiledLetterNotificationGenerator(emptyList(), notificationSender, notificationIdAppender, documentDownloadClient);
         notificationGenerator.generate(callback);
 
         verifyNoInteractions(notificationSender);

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain;
 
+import java.io.InputStream;
 import java.util.Map;
 
 
@@ -17,5 +18,17 @@ public interface NotificationSender {
         String phoneNumber,
         Map<String, String> personalisation,
         String reference
+    );
+
+    String sendLetter(
+        String templateId,
+        String address,
+        Map<String, String> personalisation,
+        String reference
+    );
+
+    String sendPrecompiledLetter(
+        String reference,
+        InputStream stream
     );
 }

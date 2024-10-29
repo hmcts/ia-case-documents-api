@@ -44,10 +44,8 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     Direction direction;
 
     private final Long caseId = 12345L;
-    private final String afterListingTemplateId = "afterListingTemplateId";
     private final String beforeListingTemplateId = "beforeListingTemplateId";
     private final String toAppellantAndRespondentBeforeListingTemplateId = "ToAppellantAndRespondentBeforeListingTemplateId";
-    private final String toAppellantAndRespondentAfterListingTemplateId = "ToAppellantAndRespondentAfterListingTemplateId";
     private final String iaExUiFrontendUrl = "http://localhost";
     private final String apcHomeOfficeEmailAddress = "homeoffice-apc@example.com";
     private final String lartHomeOfficeEmailAddress = "homeoffice-respondent@example.com";
@@ -58,7 +56,6 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     private String directionDueDate = "2019-08-27";
     private String expectedDirectionDueDate = "27 Aug 2019";
     private String directionExplanation = "someExplanation";
-    private String directionParties = "";
     private String appealReferenceNumber = "someReferenceNumber";
     private final String ariaListingReference = "someAriaListingReference";
     private final String homeOfficeRefNumber = "homeOfficeReference";
@@ -96,9 +93,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
         respondentNonStandardDirectionPersonalisation = new RespondentNonStandardDirectionPersonalisation(
                 beforeListingTemplateId,
-                afterListingTemplateId,
                 toAppellantAndRespondentBeforeListingTemplateId,
-                toAppellantAndRespondentAfterListingTemplateId,
                 iaExUiFrontendUrl,
                 apcHomeOfficeEmailAddress,
                 lartHomeOfficeEmailAddress,
@@ -118,15 +113,6 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     }
 
     @Test
-    void should_return_the_given_after_listing_template_id() {
-        when(appealService.isAppealListed(asylumCase))
-                .thenReturn(true);
-
-        assertEquals(afterListingTemplateId,
-                respondentNonStandardDirectionPersonalisation.getTemplateId(asylumCase));
-    }
-
-    @Test
     void should_return_the_given_before_listing_template_to_appellant_and_respondent_id() {
         when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
                 .thenReturn(Optional.of(State.FINAL_BUNDLING));
@@ -134,17 +120,6 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         when(direction.getParties()).thenReturn(Parties.APPELLANT_AND_RESPONDENT);
 
         assertEquals(toAppellantAndRespondentBeforeListingTemplateId, respondentNonStandardDirectionPersonalisation.getTemplateId(asylumCase));
-    }
-
-    @Test
-    void should_return_the_given_after_listing_template_to_appellant_and_respondent_id() {
-        when(appealService.isAppealListed(asylumCase))
-                .thenReturn(true);
-        when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
-        when(direction.getParties()).thenReturn(Parties.APPELLANT_AND_RESPONDENT);
-
-        assertEquals(toAppellantAndRespondentAfterListingTemplateId,
-                respondentNonStandardDirectionPersonalisation.getTemplateId(asylumCase));
     }
 
     @Test

@@ -45,7 +45,6 @@ public class BailNotificationHandlerTest {
 
     @BeforeEach
     public void setup() {
-
         bailNotificationHandler = new BailNotificationHandler(canHandle, Collections.singletonList(bailNotificationGenerator));
     }
 

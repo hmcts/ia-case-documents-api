@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
@@ -43,7 +44,9 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisationTest {
     private String appellantFamilyName = "someAppellantFamilyName";
 
     private String grantedTemplateId = "grantedTemplateId";
+    private String grantedWithoutListingTemplateId = "grantedithoutListingTemplateId";
     private String partiallyGrantedTemplateId = "partiallyGrantedTemplateId";
+    private String partiallyGrantedWithoutListingTemplateId = "partiallyGrantedWithoutListingTemplateId";
 
     private FtpaDecisionOutcomeType granted = FtpaDecisionOutcomeType.FTPA_GRANTED;
     private FtpaDecisionOutcomeType partiallyGranted = FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
@@ -54,7 +57,9 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisationTest {
     public void setup() {
         adminOfficerFtpaDecisionRespondentPersonalisation = new AdminOfficerFtpaDecisionRespondentPersonalisation(
             grantedTemplateId,
+            grantedWithoutListingTemplateId,
             partiallyGrantedTemplateId,
+            partiallyGrantedWithoutListingTemplateId,
             adminOfficeEmailAddress,
             upperTribunalPermissionApplicationsEmailAddress,
             personalisationProvider
@@ -105,6 +110,21 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisationTest {
         when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
             .thenReturn(Optional.of(partiallyGranted));
         assertEquals(partiallyGrantedTemplateId,
+            adminOfficerFtpaDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_given_template_id_for_internal_case() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(granted));
+        assertEquals(grantedWithoutListingTemplateId, adminOfficerFtpaDecisionRespondentPersonalisation.getTemplateId(asylumCase));
+
+        when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
+            .thenReturn(Optional.of(partiallyGranted));
+
+        assertEquals(partiallyGrantedWithoutListingTemplateId,
             adminOfficerFtpaDecisionRespondentPersonalisation.getTemplateId(asylumCase));
     }
 

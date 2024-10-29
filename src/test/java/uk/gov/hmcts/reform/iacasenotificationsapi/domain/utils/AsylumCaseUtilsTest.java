@@ -21,6 +21,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
@@ -32,7 +33,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Docu
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AccessCodeGenerator;
-
 
 @ExtendWith(MockitoExtension.class)
 public class AsylumCaseUtilsTest {
@@ -108,6 +108,33 @@ public class AsylumCaseUtilsTest {
     void isAdmin_should_return_false() {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
         assertFalse(AsylumCaseUtils.isInternalCase(asylumCase));
+    }
+
+    @Test
+    void isNotInternalOrIsInternalWithLegalRepresentation_should_return_true() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertTrue(AsylumCaseUtils.isNotInternalOrIsInternalWithLegalRepresentation(asylumCase));
+    }
+
+    @Test
+    void isNotInternalOrIsInternalWithLegalRepresentation_should_return_false() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        assertFalse(AsylumCaseUtils.isNotInternalOrIsInternalWithLegalRepresentation(asylumCase));
+    }
+
+    @Test
+    void isAriaMigrated_should_return_true() {
+        when(asylumCase.read(IS_ARIA_MIGRATED, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.isAriaMigrated(asylumCase));
+    }
+
+    @Test
+    void isAriaMigrated_should_return_false() {
+        when(asylumCase.read(IS_ARIA_MIGRATED, YesOrNo.class)).thenReturn(Optional.of(NO));
+        assertFalse(AsylumCaseUtils.isAriaMigrated(asylumCase));
     }
 
     @Test
@@ -350,5 +377,49 @@ public class AsylumCaseUtilsTest {
         assertEquals(generatedCode, generatedPinDetails.getAccessCode());
         assertEquals(LocalDate.now().plusDays(30).toString(), generatedPinDetails.getExpiryDate());
         assertEquals(NO, generatedPinDetails.getPinUsed());
+    }
+
+    @Test
+    void submissionOutOfTime_should_return_true() {
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.isSubmissionOutOfTime(asylumCase));
+    }
+
+    @Test
+    void submissionOutOfTime_should_return_false() {
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(NO));
+        assertFalse(AsylumCaseUtils.isSubmissionOutOfTime(asylumCase));
+    }
+
+    @Test
+    void should_return_true_if_in_country_is_present() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+    }
+
+    @Test
+    void should_return_true_if_ooc_is_present() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+    }
+
+    @Test
+    void should_return_false_if_neither_in_country_nor_ooc_is_present() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+
+        assertFalse(AsylumCaseUtils.hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "14000, 8000, 60.00",
+        "8000, 14000, 60.00",
+        "10000, 10000, 0.00"
+    })
+    void should_return_absolute_fee_amount_even_when_negative_difference(String originalFeeTotal, String newFeeTotal, String expectedDifference) {
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFeeTotal, newFeeTotal);
+        assertEquals(expectedDifference, feeDifference);
     }
 }

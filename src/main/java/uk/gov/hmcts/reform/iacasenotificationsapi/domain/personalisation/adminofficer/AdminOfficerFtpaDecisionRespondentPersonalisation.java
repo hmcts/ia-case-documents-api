@@ -5,6 +5,7 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumC
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -23,7 +24,9 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.Personalisation
 public class AdminOfficerFtpaDecisionRespondentPersonalisation implements EmailNotificationPersonalisation, FtpaNotificationPersonalisationUtil {
 
     private final String applicationGrantedAdminTemplateId;
+    private final String applicationGrantedAdminWithoutListingTemplateId;
     private final String applicationPartiallyGrantedAdminTemplateId;
+    private final String applicationPartiallyGrantedAdminWithoutListingTemplateId;
     private final String ctscAdminFtpaDecisionEmailAddress;
     private final String upperTribunalPermissionApplicationsEmailAddress;
     private final PersonalisationProvider personalisationProvider;
@@ -35,12 +38,17 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisation implements EmailN
 
     public AdminOfficerFtpaDecisionRespondentPersonalisation(
         @Value("${govnotify.template.applicationGranted.admin.email}") String applicationGrantedAdminTemplateId,
+        @Value("${govnotify.template.applicationGranted.admin.withoutListing.email}") String applicationGrantedAdminWithoutListingTemplateId,
         @Value("${govnotify.template.applicationPartiallyGranted.admin.email}") String applicationPartiallyGrantedAdminTemplateId,
+        @Value("${govnotify.template.applicationPartiallyGranted.admin.withoutListing.email}") String applicationPartiallyGrantedAdminWithoutListingTemplateId,
+
         @Value("${ctscAdminFtpaDecisionEmailAddress}") String ctscAdminFtpaDecisionEmailAddress,
         @Value("${upperTribunalPermissionApplicationsEmailAddress}") String upperTribunalPermissionApplicationsEmailAddress,
         PersonalisationProvider personalisationProvider) {
         this.applicationGrantedAdminTemplateId = applicationGrantedAdminTemplateId;
+        this.applicationGrantedAdminWithoutListingTemplateId = applicationGrantedAdminWithoutListingTemplateId;
         this.applicationPartiallyGrantedAdminTemplateId = applicationPartiallyGrantedAdminTemplateId;
+        this.applicationPartiallyGrantedAdminWithoutListingTemplateId = applicationPartiallyGrantedAdminWithoutListingTemplateId;
         this.ctscAdminFtpaDecisionEmailAddress = ctscAdminFtpaDecisionEmailAddress;
         this.upperTribunalPermissionApplicationsEmailAddress = upperTribunalPermissionApplicationsEmailAddress;
         this.personalisationProvider = personalisationProvider;
@@ -58,9 +66,9 @@ public class AdminOfficerFtpaDecisionRespondentPersonalisation implements EmailN
         }
 
         if (ftpaDecisionOutcomeType.isPresent() && ftpaDecisionOutcomeType.get().toString().equals(FtpaDecisionOutcomeType.FTPA_GRANTED.toString())) {
-            return applicationGrantedAdminTemplateId;
+            return isInternalCase(asylumCase) ? applicationGrantedAdminWithoutListingTemplateId : applicationGrantedAdminTemplateId;
         } else {
-            return applicationPartiallyGrantedAdminTemplateId;
+            return isInternalCase(asylumCase) ? applicationPartiallyGrantedAdminWithoutListingTemplateId : applicationPartiallyGrantedAdminTemplateId;
         }
     }
 

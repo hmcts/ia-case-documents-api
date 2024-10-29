@@ -1,12 +1,10 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.io.InputStream;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +26,12 @@ public class GovNotifyNotificationSenderTest {
     private RetryableNotificationClient notificationClient;
 
     @Mock private NotificationSenderHelper senderHelper;
+    @Mock private InputStream stream;
 
     private String templateId = "a-b-c-d-e-f";
     private String emailAddress = "recipient@example.com";
     private String phoneNumber = "07123456789";
+    private String address = "20_realstreet_London";
     private Map<String, String> personalisation = mock(Map.class);
     private Map<String, Object> personalisationWithLink = mock(Map.class);
     private String reference = "our-reference";
@@ -153,6 +153,70 @@ public class GovNotifyNotificationSenderTest {
                 LOG
         );
 
+        assertEquals(expectedNotificationId.toString(), actualNotificationId);
+    }
+
+    @Test
+    public void should_send_letter_using_gov_notify() throws NotificationClientException {
+
+        final UUID expectedNotificationId = UUID.randomUUID();
+
+        when(senderHelper.sendLetter(
+            templateId,
+            address,
+            personalisation,
+            reference,
+            notificationClient,
+            deduplicateSendsWithinSeconds,
+            LOG
+        )).thenReturn(String.valueOf(expectedNotificationId));
+
+        String actualNotificationId =
+            govNotifyNotificationSender.sendLetter(
+                templateId,
+                address,
+                personalisation,
+                reference
+            );
+
+        verify(senderHelper, times(1)).sendLetter(
+            templateId,
+            address,
+            personalisation,
+            reference,
+            notificationClient,
+            deduplicateSendsWithinSeconds,
+            LOG
+        );
+        assertEquals(expectedNotificationId.toString(), actualNotificationId);
+    }
+
+    @Test
+    public void should_send_precompiled_letter_using_gov_notify() throws NotificationClientException {
+
+        final UUID expectedNotificationId = UUID.randomUUID();
+
+        when(senderHelper.sendPrecompiledLetter(
+            reference,
+            stream,
+            notificationClient,
+            deduplicateSendsWithinSeconds,
+            LOG
+        )).thenReturn(String.valueOf(expectedNotificationId));
+
+        String actualNotificationId =
+            govNotifyNotificationSender.sendPrecompiledLetter(
+                reference,
+                stream
+            );
+
+        verify(senderHelper, times(1)).sendPrecompiledLetter(
+            reference,
+            stream,
+            notificationClient,
+            deduplicateSendsWithinSeconds,
+            LOG
+        );
         assertEquals(expectedNotificationId.toString(), actualNotificationId);
     }
 }

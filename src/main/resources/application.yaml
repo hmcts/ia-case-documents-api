@@ -97,6 +97,14 @@ govnotify:
       appellant:
         email: 4625616a-178b-45fb-aebf-8cb945369ae0
         sms: 5b7091e5-908a-4c5b-ac66-5dc5216fc53b
+        letter:
+          inTime:
+            withExemption: a50c2b6c-d3ff-4d54-b8c7-f62bd57d624a
+            withFee: d70da0bd-baad-4ae8-ad0a-777b8c7aecc3
+          outOfTime:
+            withExemption: 3049a8fc-8d13-47d0-84dd-a6997229a8e1
+            withRemission: 0080386f-f3ec-46da-bc29-4c33f8d4e254
+            withFee: 823d5412-b528-4a17-bdd1-ae66d9b6dadb
         noHomeOfficeReference:
           email: b7207dc3-6947-4b8e-93cf-2f54a73b8296
         legalRep:
@@ -123,6 +131,13 @@ govnotify:
           email: c6fb22e2-c3fa-41f6-a4de-b9f6a55aa417
         nonAdaInTimeDetainedOnly:
           email: 0e187f28-ee4e-4ef0-8218-0f922c433bf4
+    sendPaymentReminder:
+      appellant:
+        email: a1628213-dfd3-4f91-a66e-b8d3961947a9
+        sms: 269d6e07-e6c8-4117-b672-4311fa09fe98
+    appealSubmittedWithRemission:
+      appellant:
+        letter: 34d347f7-5d5b-4c43-be9c-b494ceacdf9c
     remissionDecision:
       legalRep:
         approved:
@@ -143,9 +158,21 @@ govnotify:
         partiallyApproved:
           email: 6ed39862-b574-4df6-b82e-e544957cf529
           sms: 87e44e78-ee3a-41af-98b1-d8e78bd54681
+          letter: cd5cad85-e337-4b06-9501-ff4cc1e6c892
         rejected:
           email: 5e23cb62-9c63-4fc2-8c04-cdb3adf69013
           sms: 4bebbf93-8aef-47c0-b1a9-a89da915f9e5
+          letter: 473a6c61-69a0-41bf-bd7c-8919445695d6
+          outOfTime:
+            letter: 5360d4f4-511e-496a-ae35-ffdd04f3705f
+          onTime:
+            letter: 14fd949c-d879-4878-ae6d-844abce5baf3
+        approvedOrPartiallyApproved:
+          approved:
+            letter: 590ee79d-a47c-47a0-9d31-a804aad483c2
+          partiallyApproved:
+            letter: 7e81f236-db91-4f42-b3b2-a7e56edf5957
+
     editPaymentMethod:
       adminOfficer:
         email: 7b6a238c-2fd5-4f29-afe0-a772fb0e9c27
@@ -209,6 +236,7 @@ govnotify:
       appellant:
         email: 9c8ab848-b1f7-4dbe-9854-4922e94ece67
         sms: e805b3c5-b1e2-4ad1-9416-3298ca765738
+        letter: 7d88a00a-a1f7-4a3f-8dcb-d27b56a648ac
       legalRep:
         email:
           ada: f43d0290-c78b-4698-a95e-b967cbd312b7
@@ -308,9 +336,14 @@ govnotify:
         email: f1d0d726-138c-4e73-ac56-aeefbe6c9611
       respondent:
         email: 03f9eaad-7d71-4563-a23a-821847303aae
+      appellant:
+        letter: 98a209f4-1b65-4fe0-9873-e483213a63c4
     hearingRequirementsDirection:
       legalRep:
         email: db70b725-e0d9-4af5-aa3a-00007766bc3b
+    requestRespondentReview:
+      appellant:
+        letter: c0fe7c11-ff2e-4d49-80dc-3a87fe5b4393
     submitCase:
       caseOfficer:
         email: 89662b5b-2f4e-4432-b256-13a6e1c702f6
@@ -670,6 +703,13 @@ govnotify:
         email: 8a87904f-5a67-4a79-a56a-8450b7829f9b
       detentionEngagementTeam:
         email: b1c38360-82de-4aa7-bbe1-a395d73376b5
+      nonDetained:
+        homeOffice:
+          email: 59774cb8-1360-448b-ad65-192c1157a7ee
+        admin:
+          email: fce53459-8463-43a5-86ce-b160b4a26bb4
+        appellant:
+          letter: 9843c2a6-c416-4c19-9a73-563487bab982
     recordAdjournmentDetails:
       respondent:
         email: 85442b94-d5ed-4542-b483-94556cc4e3bb
@@ -749,6 +789,8 @@ govnotify:
     applicationGranted:
       admin:
         email: 3c6c1ef6-e4a4-440c-9cbe-25fa0f3f000d
+        withoutListing:
+          email: 211ee637-14a7-47d3-8a62-80059425d286
       applicant:
         legalRep:
           email: 3b4d2ea8-b164-4f5a-918c-b03236b9d6c3
@@ -768,6 +810,8 @@ govnotify:
     applicationPartiallyGranted:
       admin:
         email: f5846789-5eb1-49d6-a500-dcab04695d5f
+        withoutListing:
+          email: ee13482d-8caa-4d0d-a67b-20a60f57bcba
       applicant:
         legalRep:
           email: 742bbd08-4bda-4e90-a261-778ca01b15b6
@@ -872,6 +916,7 @@ govnotify:
           sms: 2f7ae47e-733a-4e1b-bb1d-e62101dd6844
         afterListing:
           email: c193b002-fdd4-4e51-8cdf-064942937ff9
+        letter: 99b483c6-2940-4c7f-8e8e-99b96046ac96
       detentionEngagementTeam:
         email:
           ada: 3e328516-5262-44b4-8a65-41dc795d669b
@@ -933,6 +978,7 @@ govnotify:
             afterListing:
               email: 9bf51c1a-3d44-40fe-96e4-fa77bd04fb30
             sms: 38e8b40b-98b4-45ed-a1c4-45cd5f177dbf
+            letter: c980d4b2-80c6-4446-b55e-9a090225d8a3
         granted:
           applicant:
             legalRep:
@@ -994,6 +1040,8 @@ govnotify:
     decideARespondentApplication:
       detentionEngagementTeam:
         email: 9eb1f5c7-2a2a-4c0d-b152-c71fa5fc7227
+      appellant:
+        letter: 8a0363ff-067f-43de-a2f8-599eb4488424
     decisionAndReasonsTemplateUploaded:
       admin:
         email: 489aadaf-2d48-4ea4-a388-bbc6d6942e91
@@ -1060,6 +1108,9 @@ govnotify:
       appellant:
         email: b3181829-da2c-4526-9c84-ba0130274a27
         sms: 97ac746b-1e37-4b17-873f-2f010548b7f8
+        letter: d74e5a52-8e4b-4ba3-8a16-fb495804e38d
+      detentionEngagementTeam:
+        email: cc477164-29dd-4d0b-bf83-d38400270ccf
     recordOutOfTimeDecision:
       legalRep:
         canProceed:
@@ -1092,6 +1143,7 @@ govnotify:
       appellant:
         email: 9dce71ff-5985-4bea-8958-b1dc155132dd
         sms: f1ce1bb3-ddef-4b6b-95d1-cf4809e2b9d9
+        letter: c8f81920-5b59-4db6-b565-d4c997181618
       detentionEngagementTeam:
         nonAda:
           email: 0eb6e602-b92d-4e28-93c1-9ab94d22387e
@@ -1101,6 +1153,7 @@ govnotify:
       appellant:
         email: 8f071df1-61e6-44f3-baae-58209d42ab62
         sms: 380ea39c-a4f7-43ed-99f1-cd9c78060070
+        letter: 620b880f-9d99-4ba9-b2e6-7c5fe317c6dc
     adaSuitabilityReview:
       legalRep:
         unsuitable:
@@ -1286,6 +1339,7 @@ govnotify:
         appellant:
           email: d84a747f-64b9-4c98-bb8f-387ef920ba89
           sms: 3f59be15-89e4-4241-9d6d-61a516dcd159
+          letter: 0eb26449-9557-4b1e-b79e-328d62a90754
       reheardUnderRule35:
         appellant:
           email: 47f31922-1e17-4be5-84c9-0d65340a8e18
@@ -1307,6 +1361,7 @@ govnotify:
           smsUpdatedDecision: f281b2ee-91a9-4c4c-a47f-b48f2d36cb42
           smsUpdatedDocument: 308e47c0-38aa-4664-917b-9a25de7fcc6d
           smsUpdatedBoth: d6d4985f-cf1a-4c23-9915-ff1da99390a2
+          letter: bea3f22d-cce7-4b42-9daf-0324dcb2500d
       rule32:
         legalrep:
           email: 6b948ce8-b9aa-4b36-aa21-9b4c0ba6ff6e
@@ -1320,9 +1375,14 @@ govnotify:
         email: 0e8e1bc7-feea-4b7d-9cd8-09606ca0bcf9
       homeOffice:
         email: 0d55ec2a-b33c-478e-b467-4291b0f66563
+      nonDetained:
+        appellant:
+          email: 48a76c74-0109-4885-9a2e-b12d0cef34bc
+          sms: 47451541-24f7-4078-9a1f-432edd1adb06
       appellant:
         email: ad550328-3529-443a-be7e-b9109e1926ab
         sms: a898d622-e399-4dfd-b86d-cc92be0c777d
+        letter: fb14e920-9834-4d11-91b7-bb38e7dfbb1e
     recordRefundDecision:
       appellant:
         approved:
@@ -1339,10 +1399,22 @@ govnotify:
         email: 28b12dcc-d365-43be-a918-0b1fe654323e
       appellant:
         sms: 0a039334-5604-4f8a-b38b-0c1df140cb9c
+        letter: 1d05b6b7-7c37-4afb-a7cd-edc830c78785
         inCountry:
           email: df941fa9-e41a-4ab2-8c0f-7a7ec5d7d924
         outOfCountry:
           email: 3a4ab356-65df-4afb-ac49-4993d88b9bd7
+    ftpaSubmitted:
+      nonDetainedAndOoc:
+        homeOffice:
+          letter: 8458015d-e43e-4dfb-8683-293db32e4286
+    generateHearingBundle:
+      nonDetainedAndOoc:
+        homeOffice:
+          email: 3b756f11-4c9c-4aac-9f39-b1d594a933b3
+    editAppealPostSubmit:
+      appellant:
+        letter: e68faac4-cf30-4e0b-b746-a7baf036dc65
 
   bail:
     key: ${IA_BAIL_GOV_NOTIFY_KEY}
@@ -1596,6 +1668,7 @@ security:
       - "buildCase"
       - "listCase"
       - "turnOnNotifications"
+      - "updateTribunalDecision"
       - "recordRemissionReminder"
     caseworker-ia-admofficer:
       - "listCase"
@@ -1652,6 +1725,7 @@ security:
       - "forceCaseToHearing"
       - "markAppealAsRemitted"
       - "changeTribunalCentre"
+      - "progressMigratedCase"
       - "refundConfirmation"
     caseworker-ia-homeofficeapc:
       - "uploadHomeOfficeBundle"
@@ -1735,6 +1809,7 @@ security:
       - "recordAdjournmentDetails"
       - "editCaseListing"
       - "caseListing"
+      - "sendPaymentReminderNotification"
       - "recordRemissionReminder"
     caseworker-ia-homeofficebail:
       - "submitApplication"
@@ -2079,6 +2154,15 @@ appellantDaysToWait:
   afterRemissionDecision: 14
   afterSubmittingAppealRemission: 14
   afterNotificationSent: 14
+  afterPaymentReminder: 7
+  letter:
+    afterSubmitAppeal: 10
+    afterSubmitAppealWithFee: 14
+    afterManageFeeEvent: 14
+    toReinstateAppeal: 14
+    afterRespondentApplicationDecided:
+      inCountry: 14
+      outOfCountry: 28
 
 appellantDaysToAskReinstate: 14
 

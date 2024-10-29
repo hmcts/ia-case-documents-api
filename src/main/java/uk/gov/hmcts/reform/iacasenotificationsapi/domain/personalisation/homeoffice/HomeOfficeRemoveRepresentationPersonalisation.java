@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.homeof
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getLegalRepEmailInternalOrLegalRepJourneyNonMandatory;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import com.google.common.collect.ImmutableMap;
@@ -124,7 +125,7 @@ public class HomeOfficeRemoveRepresentationPersonalisation implements EmailNotif
             .put("linkToOnlineService", iaExUiFrontendUrl)
             .put("legalRepresentativeName", asylumCase.read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_NAME, String.class).orElse(""))
             .put("legalRepCompanyAddress", formatCompanyAddress(asylumCase))
-            .put("legalRepresentativeEmailAddress", asylumCase.read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""));
+            .put("legalRepresentativeEmailAddress", getLegalRepEmailInternalOrLegalRepJourneyNonMandatory(asylumCase));
 
         if (appealService.isAppealListed(asylumCase)) {
             personalizationBuilder.put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));

@@ -1,16 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
-import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.PaymentStatus;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
+
+import java.util.List;
 
 public enum AsylumCaseDefinition {
 
@@ -363,8 +360,14 @@ public enum AsylumCaseDefinition {
     EMAIL(
         "email", new TypeReference<String>(){}),
 
+    INTERNAL_APPELLANT_EMAIL(
+        "internalAppellantEmail", new TypeReference<String>(){}),
+
     MOBILE_NUMBER(
         "mobileNumber", new TypeReference<String>(){}),
+
+    INTERNAL_APPELLANT_MOBILE_NUMBER(
+        "internalAppellantMobileNumber", new TypeReference<String>(){}),
 
     CONTACT_PREFERENCE(
         "contactPreference", new TypeReference<ContactPreference>(){}),
@@ -457,6 +460,8 @@ public enum AsylumCaseDefinition {
             "transferOutOfAdaReason", new TypeReference<String>(){}),
     IS_ADMIN(
         "isAdmin", new TypeReference<YesOrNo>() {}),
+    IS_ARIA_MIGRATED(
+        "isAriaMigrated", new TypeReference<YesOrNo>() {}),
     UT_APPEAL_REFERENCE_NUMBER(
         "utAppealReferenceNumber", new TypeReference<String>() {}),
     NOTIFICATION_ATTACHMENT_DOCUMENTS(
@@ -501,10 +506,20 @@ public enum AsylumCaseDefinition {
     ADD_EVIDENCE_FOR_COSTS_LIST(
         "addEvidenceForCostsList", new TypeReference<DynamicList>() {}),
     DECIDE_COSTS_APPLICATION_LIST(
-        "decideCostsApplicationList", new TypeReference<DynamicList>(){}),
+        "decideCostsApplicationList", new TypeReference<DynamicList>(){}
+    ),
+
+    SEND_DIRECTION_DATE_DUE(
+        "sendDirectionDateDue", new TypeReference<String>() {}),
 
     SOURCE_OF_REMITTAL(
         "sourceOfRemittal", new TypeReference<SourceOfRemittal>(){}),
+
+    LETTER_BUNDLE_DOCUMENTS(
+        "letterBundleDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    PAID_AMOUNT(
+        "paidAmount", new TypeReference<String>(){}),
 
     IS_REMOTE_HEARING(
         "isRemoteHearing", new TypeReference<YesOrNo>(){}),
@@ -514,14 +529,78 @@ public enum AsylumCaseDefinition {
 
     IS_DECISION_WITHOUT_HEARING("isDecisionWithoutHearing", new TypeReference<YesOrNo>(){}),
 
+    APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J(
+        "appellantHasFixedAddressAdminJ", new TypeReference<YesOrNo>(){}),
+
+    ADDRESS_LINE_1_ADMIN_J(
+        "addressLine1AdminJ", new TypeReference<String>(){}),
+
+    ADDRESS_LINE_2_ADMIN_J(
+        "addressLine2AdminJ", new TypeReference<String>(){}),
+
+    ADDRESS_LINE_3_ADMIN_J(
+        "addressLine3AdminJ", new TypeReference<String>(){}),
+
+    ADDRESS_LINE_4_ADMIN_J(
+        "addressLine4AdminJ", new TypeReference<String>(){}),
+
+    COUNTRY_GOV_UK_OOC_ADMIN_J(
+        "countryGovUkOocAdminJ", new TypeReference<NationalityFieldValue>(){}),
+
+    REMISSION_DECISION_REASON(
+        "remissionDecisionReason", new TypeReference<String>(){}),
+
+    LATE_REMISSION_TYPE(
+        "lateRemissionType", new TypeReference<RemissionType>(){}),
+
+    FTPA_APPELLANT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaAppellantDecisionRemadeRule32Text", new TypeReference<String>(){}),
+
+    FTPA_RESPONDENT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaRespondentDecisionRemadeRule32Text", new TypeReference<String>(){}),
+
+    LEGAL_REP_ADDRESS_U_K(
+        "legalRepAddressUK", new TypeReference<AddressUk>(){}),
+
+    OOC_ADDRESS_LINE_1(
+        "oocAddressLine1", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_2(
+        "oocAddressLine2", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_3(
+        "oocAddressLine3", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_4(
+        "oocAddressLine4", new TypeReference<String>(){}),
+
+    OOC_COUNTRY_LINE(
+        "oocCountryLine", new TypeReference<String>(){}),
+
+    OOC_LR_COUNTRY_GOV_UK_ADMIN_J(
+        "oocLrCountryGovUkAdminJ", new TypeReference<NationalityFieldValue>(){}),
+
+    LEGAL_REP_HAS_ADDRESS(
+        "legalRepHasAddress", new TypeReference<YesOrNo>(){}),
+
+    //Paper journey legal representative email
+    LEGAL_REP_EMAIL(
+        "legalRepEmail", new TypeReference<String>(){}),
+
+    COUNTRY_ADMIN_J(
+            "countryAdminJ", new TypeReference<String>(){}),
+
+    APPELLANTS_REPRESENTATION(
+        "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
+
     IS_LATE_REMISSION_REQUEST(
-        "isLateRemissionRequest", new TypeReference<YesOrNo>(){}),
+            "isLateRemissionRequest", new TypeReference<YesOrNo>(){}),
 
     PREVIOUS_DECISION_HEARING_FEE_OPTION(
-        "previousDecisionHearingFeeOption", new TypeReference<String>(){}),
+            "previousDecisionHearingFeeOption", new TypeReference<String>(){}),
 
     DECISION_HEARING_FEE_OPTION(
-        "decisionHearingFeeOption", new TypeReference<String>(){}),
+            "decisionHearingFeeOption", new TypeReference<String>(){}),
     ;
 
 

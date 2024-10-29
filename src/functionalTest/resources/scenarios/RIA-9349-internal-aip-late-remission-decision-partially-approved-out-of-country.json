@@ -1,0 +1,64 @@
+{
+  "description": "RIA-9349 Send letter notification to appellant for late remission decision (partially approved) - out of country (internal case creation)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 93492,
+      "eventId": "recordRemissionDecision",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "amountRemitted": "14000",
+          "appealType": "refusalOfHumanRights",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "No",
+          "remissionDecision": "partiallyApproved",
+          "lateRemissionType": "hoWaiverRemission",
+          "remissionClaim": "legalAid",
+          "legalAidAccountNumber": "1A234B",
+          "remissionDecisionReason": "Some reason",
+          "appellantInUk": "No",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "amountRemitted": "14000",
+        "appealType": "refusalOfHumanRights",
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "No",
+        "remissionDecision": "partiallyApproved",
+        "lateRemissionType": "hoWaiverRemission",
+        "remissionClaim": "legalAid",
+        "legalAidAccountNumber": "1A234B",
+        "remissionDecisionReason": "Some reason",
+        "appellantInUk": "No",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+        "notificationsSent": [
+          {
+            "id": "93492_INTERNAL_LATE_REMISSION_PARTIALLY_OR_GRANTED_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

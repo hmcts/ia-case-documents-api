@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isNotInternalOrIsInternalWithLegalRepresentation;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.*;
@@ -61,7 +62,7 @@ public class LegalRepresentativeMakeAnApplicationPersonalisation implements Lega
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return isInternalCase(asylumCase)
+        return isInternalCase(asylumCase) && !isNotInternalOrIsInternalWithLegalRepresentation(asylumCase)
             ? Collections.emptySet()
             : LegalRepresentativeEmailNotificationPersonalisation.super.getRecipientsList(asylumCase);
     }

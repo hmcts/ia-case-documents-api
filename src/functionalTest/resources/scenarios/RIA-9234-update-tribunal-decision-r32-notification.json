@@ -1,0 +1,50 @@
+{
+  "description": "RIA-9234 Update Tribunal Decision Rule 32 Notification for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 923431,
+      "eventId": "updateTribunalDecision",
+      "state": "ftpaDecided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "isDlrmSetAsideEnabled": "Yes",
+          "listCaseHearingCentre": "taylorHouse",
+          "legalRepresentativeEmailAddress": "sample@mail.com",
+          "updateTribunalDecisionList": "underRule32"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "isDlrmSetAsideEnabled": "Yes",
+        "listCaseHearingCentre": "taylorHouse",
+        "legalRepresentativeEmailAddress": "sample@mail.com",
+        "updateTribunalDecisionList": "underRule32",
+        "notificationsSent": [
+          {
+            "id": "923431_RESPONDENT_UPDATE_TRIBUNAL_DECISION_RULE_32_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "923431_LEGAL_REPRESENTATIVE_UPDATE_TRIBUNAL_DECISION_RULE_32_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

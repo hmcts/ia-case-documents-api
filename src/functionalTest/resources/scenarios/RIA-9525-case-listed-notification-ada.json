@@ -1,0 +1,80 @@
+{
+  "description": "RIA-9525 Send case listed notification to case officer, legal rep and home office for ADA appeal for admin and represented cases",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 95255,
+      "eventId": "listCase",
+      "state": "submitHearingRequirements",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "ADA listCase direction explanation.",
+                "parties": "legalRepresentative",
+                "dateDue": "2023-01-04",
+                "dateSent": "2022-12-20",
+                "tag": "adaListCase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "ADA listCase direction explanation.",
+              "parties": "legalRepresentative",
+              "dateDue": "2023-01-04",
+              "dateSent": "2022-12-20",
+              "tag": "adaListCase"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "95255_CASE_LISTED_SEND_DIRECTION_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "95255_CASE_LISTED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "95255_CASE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
