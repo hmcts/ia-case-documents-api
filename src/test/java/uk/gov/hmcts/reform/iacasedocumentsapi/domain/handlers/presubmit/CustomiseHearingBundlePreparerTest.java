@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -48,7 +50,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.WARN)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 class CustomiseHearingBundlePreparerTest {
 
@@ -127,20 +129,143 @@ class CustomiseHearingBundlePreparerTest {
         verify(asylumCase).write(CUSTOM_LEGAL_REP_DOCUMENTS, customCollections);
         verify(asylumCase).write(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS, customCollections);
         verify(asylumCase).write(CUSTOM_RESPONDENT_DOCUMENTS, customCollections);
-        verify(asylumCase, times(0)).write(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, customCollections);
-        verify(asylumCase, times(0)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCase,times(0)).write(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS,customCollections);
+        verify(asylumCase,times(0)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
         verify(asylumCase, times(maybeDecision.isEmpty() ? 0 : 1))
-            .write(CUSTOM_TRIBUNAL_DOCUMENTS, customCollections);
+                .write(CUSTOM_TRIBUNAL_DOCUMENTS,customCollections);
     }
 
-    @Test
-    void should_create_custom_collections_in_reheard_case() {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
+    void should_create_custom_collections_updated_bundle_without_addendum(String maybeDecision) {
+        when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
+            ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+
+        List<IdValue<DocumentWithDescription>> customCollections =
+            List.of(new IdValue<>("1", createDocumentWithDescription()));
+        List<IdValue<DocumentWithMetadata>> hearingDocumentList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test")));
+
+        List<IdValue<DocumentWithMetadata>> legalDocumentList = asList(
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.CASE_ARGUMENT, "test")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.APPEAL_SUBMISSION, "tes")),
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.CASE_SUMMARY, "test")));
+
+        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = List.of(
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
+
+        List<IdValue<DocumentWithMetadata>> additionalEvidenceList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test")));
+        List<IdValue<DocumentWithMetadata>> respondentList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.RESPONDENT_EVIDENCE, "test")));
+
+        when(appender.append(any(DocumentWithDescription.class), anyList()))
+            .thenReturn(customCollections);
+
+        when(asylumCase.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocumentList));
+
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS))
+            .thenReturn(Optional.of(legalDocumentList));
+
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(additionalEvidenceList));
+
+        when(asylumCase.read(RESPONDENT_DOCUMENTS))
+            .thenReturn(Optional.of(respondentList));
+
+        when(asylumCase.read(TRIBUNAL_DOCUMENTS))
+            .thenReturn(Optional.of(tribunalDocumentList));
+
+        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+
+        verify(asylumCase).write(CUSTOM_HEARING_DOCUMENTS, customCollections);
+        verify(asylumCase).write(CUSTOM_LEGAL_REP_DOCUMENTS, customCollections);
+        verify(asylumCase).write(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS, customCollections);
+        verify(asylumCase).write(CUSTOM_RESPONDENT_DOCUMENTS, customCollections);
+        verify(asylumCase,times(0)).write(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS,customCollections);
+        verify(asylumCase,times(0)).write(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS,customCollections);
+        verify(asylumCase,times(2)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCase,times(maybeDecision.isEmpty() ? 0 : 1))
+            .write(CUSTOM_TRIBUNAL_DOCUMENTS,customCollections);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
+    void should_create_custom_collections_updated_bundle_with_addendum(String maybeDecision) {
+        when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
+            ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+
+        List<IdValue<DocumentWithDescription>> customCollections =
+            List.of(new IdValue<>("1", createDocumentWithDescription()));
+        List<IdValue<DocumentWithMetadata>> hearingDocumentList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test")));
+
+        List<IdValue<DocumentWithMetadata>> legalDocumentList = asList(
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.CASE_ARGUMENT, "test")),
+            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.APPEAL_SUBMISSION, "tes")),
+            new IdValue<>("3", createDocumentWithMetadata(DocumentTag.CASE_SUMMARY, "test")));
+
+        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = List.of(
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
+
+        List<IdValue<DocumentWithMetadata>> additionalEvidenceList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test")));
+        List<IdValue<DocumentWithMetadata>> respondentList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.RESPONDENT_EVIDENCE, "test")));
+
+        List<IdValue<DocumentWithMetadata>> addendumEvidenceList =
+            List.of(
+                new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+                new IdValue<>("2", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant")),
+                new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent")),
+                new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "none"))
+            );
+
+        when(appender.append(any(DocumentWithDescription.class), anyList()))
+            .thenReturn(customCollections);
+
+        when(asylumCase.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocumentList));
+
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS))
+            .thenReturn(Optional.of(legalDocumentList));
+
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(additionalEvidenceList));
+
+        when(asylumCase.read(RESPONDENT_DOCUMENTS))
+            .thenReturn(Optional.of(respondentList));
+
+        when(asylumCase.read(TRIBUNAL_DOCUMENTS))
+            .thenReturn(Optional.of(tribunalDocumentList));
+
+        when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(addendumEvidenceList));
+
+        customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+
+        verify(asylumCase).write(CUSTOM_HEARING_DOCUMENTS, customCollections);
+        verify(asylumCase).write(CUSTOM_LEGAL_REP_DOCUMENTS, customCollections);
+        verify(asylumCase).write(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS, customCollections);
+        verify(asylumCase).write(CUSTOM_RESPONDENT_DOCUMENTS, customCollections);
+        verify(asylumCase,times(1)).write(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS,customCollections);
+        verify(asylumCase,times(1)).write(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS,customCollections);
+        verify(asylumCase,times(4)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCase,times(maybeDecision.isEmpty() ? 0 : 1))
+            .write(CUSTOM_TRIBUNAL_DOCUMENTS,customCollections);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_create_custom_collections_in_reheard_case(Event event) {
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class))
             .thenReturn(Optional.of(YesOrNo.YES));
 
-        assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class),
-            Optional.of(YesOrNo.YES));
+        when(callback.getEvent()).thenReturn(event);
 
         final List<IdValue<DocumentWithDescription>> customDocumentList =
             List.of(new IdValue<>("1", createDocumentWithDescription()));
@@ -199,54 +324,59 @@ class CustomiseHearingBundlePreparerTest {
         verify(asylumCase).write(CUSTOM_FTPA_RESPONDENT_DOCS, customDocumentList);
         verify(asylumCase, times(2)).write(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS, customDocumentList);
         verify(asylumCase).write(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS, customDocumentList);
-        verify(asylumCase, times(1)).write(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS, customDocumentList);
-        verify(asylumCase, times(4)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCase,times(1)).write(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS,customDocumentList);
+        verify(asylumCase,times(4)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
         verify(asylumCase, never()).read(TRIBUNAL_DOCUMENTS);
     }
 
-    @Test
-    void should_filter_legal_rep_document_with_correct_tags() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_filter_legal_rep_document_with_correct_tags(Event event) {
+
+        when(callback.getEvent()).thenReturn(event);
+
         List<IdValue<DocumentWithDescription>> customCollections = new ArrayList<>();
 
         when(appender.append(any(DocumentWithDescription.class), anyList()))
             .thenReturn(customCollections);
 
-        List<IdValue<DocumentWithMetadata>> legalDocumentList = List.of(
-            new IdValue<>(
-                "1",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.CASE_ARGUMENT
+        DocumentWithMetadata legalDocument = new DocumentWithMetadata(
+                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                "description",
+                "dateUploaded",
+                DocumentTag.CASE_ARGUMENT
+        );
+        List<IdValue<DocumentWithMetadata>> legalDocumentList = asList(
+                new IdValue<>(
+                        "1",
+                        legalDocument
+                ),
+                new IdValue<>(
+                        "2",
+                        new DocumentWithMetadata(
+                                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                                "description",
+                                "dateUploaded",
+                                DocumentTag.APPEAL_SUBMISSION
+                        )
+                ),
+                new IdValue<>(
+                        "3",
+                        new DocumentWithMetadata(
+                                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                                "description",
+                                "dateUploaded",
+                                DocumentTag.CASE_SUMMARY
+                        )
+                ), new IdValue<>(
+                        "4",
+                        new DocumentWithMetadata(
+                                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                                "description",
+                                "dateUploaded",
+                                DocumentTag.APPEAL_RESPONSE
+                        )
                 )
-            ),
-            new IdValue<>(
-                "2",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.APPEAL_SUBMISSION
-                )
-            ),
-            new IdValue<>(
-                "3",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.CASE_SUMMARY
-                )
-            ), new IdValue<>(
-                "4",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.APPEAL_RESPONSE
-                )
-            )
         );
 
         when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS))
@@ -271,22 +401,27 @@ class CustomiseHearingBundlePreparerTest {
         assertEquals(2, legalRepresentativeDocuments.size());
     }
 
-    @Test
-    void should_show_all_legal_rep_document_with_for_aip() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_show_all_legal_rep_document_with_for_aip(Event event) {
+
+        when(callback.getEvent()).thenReturn(event);
+
         List<IdValue<DocumentWithDescription>> customCollections = new ArrayList<>();
 
         when(appender.append(any(DocumentWithDescription.class), anyList()))
             .thenReturn(customCollections);
 
-        List<IdValue<DocumentWithMetadata>> legalDocumentList = List.of(
+        DocumentWithMetadata legalDocument = new DocumentWithMetadata(
+            new Document("documentUrl", "binaryUrl", "documentFilename"),
+            "description",
+            "dateUploaded",
+            DocumentTag.CASE_ARGUMENT
+        );
+        List<IdValue<DocumentWithMetadata>> legalDocumentList = asList(
             new IdValue<>(
                 "1",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.CASE_ARGUMENT
-                )
+                legalDocument
             ),
             new IdValue<>(
                 "2",
@@ -338,54 +473,58 @@ class CustomiseHearingBundlePreparerTest {
         assertEquals(4, legalRepresentativeDocuments.size());
     }
 
-    @Test
-    void should_filter_addendum_evidence_document_with_correct_appellant_respondent_tags() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_filter_addendum_evidence_document_with_correct_appellant_respondent_tags(Event event) {
+
+        when(callback.getEvent()).thenReturn(event);
         List<IdValue<DocumentWithDescription>> customCollections = new ArrayList<>();
 
         when(appender.append(any(DocumentWithDescription.class), anyList()))
-            .thenReturn(customCollections);
+                .thenReturn(customCollections);
 
-        List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentsList = List.of(
-            new IdValue<>(
-                "1",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.ADDENDUM_EVIDENCE,
-                    "test"
+        DocumentWithMetadata addendumEvidenceDocuments = new DocumentWithMetadata(
+                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                "description",
+                "dateUploaded",
+                DocumentTag.ADDENDUM_EVIDENCE,
+                "test"
+        );
+        List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentsList = asList(
+                new IdValue<>(
+                        "1",
+                        addendumEvidenceDocuments
+                ),
+                new IdValue<>(
+                        "2",
+                        new DocumentWithMetadata(
+                                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                                "description",
+                                "dateUploaded",
+                                DocumentTag.ADDENDUM_EVIDENCE,
+                                "The appellant"
+                        )
+                ),
+                new IdValue<>(
+                        "3",
+                        new DocumentWithMetadata(
+                                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                                "description",
+                                "dateUploaded",
+                                DocumentTag.ADDENDUM_EVIDENCE,
+                                "The respondent"
+                        )
+                ),
+                new IdValue<>(
+                        "4",
+                        new DocumentWithMetadata(
+                                new Document("documentUrl", "binaryUrl", "documentFilename"),
+                                "description",
+                                "dateUploaded",
+                                DocumentTag.ADDENDUM_EVIDENCE,
+                                "test"
+                        )
                 )
-            ),
-            new IdValue<>(
-                "2",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.ADDENDUM_EVIDENCE,
-                    "The appellant"
-                )
-            ),
-            new IdValue<>(
-                "3",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.ADDENDUM_EVIDENCE,
-                    "The respondent"
-                )
-            ),
-            new IdValue<>(
-                "4",
-                new DocumentWithMetadata(
-                    new Document("documentUrl", "binaryUrl", "documentFilename"),
-                    "description",
-                    "dateUploaded",
-                    DocumentTag.ADDENDUM_EVIDENCE,
-                    "test"
-                )
-            )
         );
 
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS))
@@ -410,10 +549,13 @@ class CustomiseHearingBundlePreparerTest {
         assertEquals(2, appDocuments.size());
     }
 
-    @Test
-    void should_not_create_custom_collections_if_source_collections_are_empty() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_not_create_custom_collections_if_source_collections_are_empty(Event event) {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(event);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
 
         when(asylumCase.read(HEARING_DOCUMENTS))
             .thenReturn(Optional.empty());
@@ -429,11 +571,13 @@ class CustomiseHearingBundlePreparerTest {
         verify(asylumCase, never()).write(any(), any());
     }
 
-    @Test
-    void should_not_create_custom_collections_if_source_collections_are_empty_in_reheard_case() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_not_create_custom_collections_if_source_collections_are_empty_in_reheard_case(Event event) {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(event);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
@@ -465,6 +609,8 @@ class CustomiseHearingBundlePreparerTest {
         final List<IdValue<DocumentWithDescription>> customDocumentList =
             List.of(new IdValue<>("1", createDocumentWithDescription()));
 
+        final List<IdValue<DocumentWithMetadata>> hearingDocumentList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.REHEARD_HEARING_NOTICE, "test")));
         final List<IdValue<DocumentWithMetadata>> ftpaAppellantEvidenceDocumentList =
             List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "")));
         final List<IdValue<DocumentWithMetadata>> ftpaRespondentEvidenceDocumentList =
@@ -473,6 +619,8 @@ class CustomiseHearingBundlePreparerTest {
             List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_APPELLANT, "test")));
         final List<IdValue<DocumentWithMetadata>> ftpaRespondentDocumentList =
             List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FTPA_RESPONDENT, "test")));
+        final List<IdValue<DocumentWithMetadata>> finalDecisionAndReasonsDocumentList =
+            List.of(new IdValue<>("1", createDocumentWithMetadata(DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "test")));
 
         final List<IdValue<DocumentWithMetadata>> addendumEvidenceDocumentList = List.of(
             new IdValue<>("3", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "")),
@@ -534,7 +682,8 @@ class CustomiseHearingBundlePreparerTest {
 
                 boolean canHandle = customiseHearingBundlePreparer.canHandle(callbackStage, callback);
 
-                if (event == Event.CUSTOMISE_HEARING_BUNDLE
+                if ((event == Event.CUSTOMISE_HEARING_BUNDLE
+                    || event == Event.GENERATE_UPDATED_HEARING_BUNDLE)
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_START) {
                     assertTrue(canHandle);
                 } else {
@@ -566,8 +715,10 @@ class CustomiseHearingBundlePreparerTest {
             .isExactlyInstanceOf(NullPointerException.class);
     }
 
-    @Test
-    void should_ignore_existing_hearing_bundles_in_new_bundles() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_ignore_existing_hearing_bundles_in_new_bundles(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
 
         List<IdValue<DocumentWithMetadata>> hearingDocumentList = List.of(
@@ -580,9 +731,9 @@ class CustomiseHearingBundlePreparerTest {
         customiseHearingBundlePreparer.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
         verify(appender, times(0)).append(any(DocumentWithDescription.class), anyList());
 
-        hearingDocumentList = List.of(
-            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test")),
-            new IdValue<>("2", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE, "test")));
+        hearingDocumentList = asList(
+                new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test")),
+                new IdValue<>("2", createDocumentWithMetadata(DocumentTag.HEARING_BUNDLE, "test")));
 
         when(asylumCase.read(HEARING_DOCUMENTS))
             .thenReturn(Optional.of(hearingDocumentList));
