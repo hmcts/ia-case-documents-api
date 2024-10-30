@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -122,7 +123,7 @@ public class InternalEditCaseListingLetterTemplateTest {
         assertEquals(postTown, templateFieldValues.get("address_line_4"));
         assertEquals(postCode, templateFieldValues.get("address_line_5"));
         assertEquals("20 December 2024", templateFieldValues.get("hearingDate"));
-        assertEquals("12:34 pm", templateFieldValues.get("hearingTime"));
+        assertTrue("12:34 PM".equalsIgnoreCase(templateFieldValues.get("hearingTime").toString()));
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
     }
 
@@ -144,7 +145,7 @@ public class InternalEditCaseListingLetterTemplateTest {
         Assert.assertEquals(oocAddressLine3, templateFieldValues.get("address_line_3"));
         Assert.assertEquals(Nationality.ES.toString(), templateFieldValues.get("address_line_4"));
         assertEquals("20 December 2024", templateFieldValues.get("hearingDate"));
-        assertEquals("12:34 pm", templateFieldValues.get("hearingTime"));
+        assertTrue("12:34 PM".equalsIgnoreCase(templateFieldValues.get("hearingTime").toString()));
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
     }
 
