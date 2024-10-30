@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppea
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.NO_REMISSION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -39,6 +41,8 @@ public class AsylumCaseUtilsTest {
     private AsylumCase asylumCase;
     @Mock
     private Document document;
+    @Mock
+    private AddressUk address;
     private final String directionExplanation = "some explanation";
     private final Parties directionParties = Parties.APPELLANT;
     private final String directionDateDue = "2023-06-16";
@@ -148,6 +152,14 @@ public class AsylumCaseUtilsTest {
         } else {
             assertFalse(AsylumCaseUtils.isInternalCase(asylumCase));
         }
+    }
+
+    @Test
+    void should_return_true_for_internal_non_detained_case() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertTrue(AsylumCaseUtils.isInternalNonDetainedCase(asylumCase));
     }
 
     @Test
@@ -324,4 +336,124 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
         assertTrue(AsylumCaseUtils.isRemoteHearing(asylumCase));
     }
+
+    @Test
+    void should_return_address_with_all_fields_populated() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
+        when(address.getAddressLine1()).thenReturn(Optional.of("Apartment 99"));
+        when(address.getAddressLine2()).thenReturn(Optional.of("Example Road"));
+        when(address.getAddressLine3()).thenReturn(Optional.of("Example County"));
+        when(address.getPostTown()).thenReturn(Optional.of("Example Town"));
+        when(address.getPostCode()).thenReturn(Optional.of("PostCode"));
+
+        List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
+
+        assertEquals(5, result.size());
+        assertEquals("Apartment 99", result.get(0));
+        assertEquals("Example Road", result.get(1));
+        assertEquals("Example County", result.get(2));
+        assertEquals("Example Town", result.get(3));
+        assertEquals("PostCode", result.get(4));
+    }
+
+    @Test
+    void should_throw_when_address_is_not_present() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalStateException.class, () -> {
+            AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
+        }, "appellantAddress is not present");
+    }
+
+    @Test
+    void hasAppellantAddressInCountryOrOoc_should_return_true_for_in_country() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOoc(asylumCase));
+    }
+
+    @Test
+    void hasAppellantAddressInCountryOrOoc_should_return_true_for_out_of_country() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+
+        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOoc(asylumCase));
+    }
+
+    @Test
+    void should_return_appellant_in_uk() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        boolean result = AsylumCaseUtils.isAppellantInUk(asylumCase);
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    void should_calculate_fee_difference_correctly() {
+        String originalFee = "15000";
+        String newFee = "10000";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("50.00", feeDifference);
+    }
+
+    @Test
+    void should_return_zero_when_original_fee_is_invalid() {
+        String originalFee = "invalid";
+        String newFee = "10000";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("0.00", feeDifference);
+    }
+
+    @Test
+    void should_return_zero_when_new_fee_is_invalid() {
+        String originalFee = "15000";
+        String newFee = "invalid";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("0.00", feeDifference);
+    }
+
+    @Test
+    void should_return_zero_when_both_fees_are_invalid() {
+        String originalFee = "invalid";
+        String newFee = "invalid";
+
+        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFee, newFee);
+
+        assertEquals("0.00", feeDifference);
+    }
+
+
+    @Test
+    void should_convert_asylum_case_fee_value_correctly() {
+        String feeValue = "12345";
+
+        String convertedFeeValue = AsylumCaseUtils.convertAsylumCaseFeeValue(feeValue);
+
+        assertEquals("123.45", convertedFeeValue);
+    }
+
+
+    @Test
+    void should_return_empty_string_for_blank_fee_value_input() {
+        String feeValue = "";
+
+        String convertedFeeValue = AsylumCaseUtils.convertAsylumCaseFeeValue(feeValue);
+
+        assertEquals("", convertedFeeValue);
+    }
+
+    @Test
+    void should_return_empty_string_for_null_fee_value_input() {
+
+        String convertedFeeValue = AsylumCaseUtils.convertAsylumCaseFeeValue(null);
+
+        assertEquals("", convertedFeeValue);
+    }
+
 }

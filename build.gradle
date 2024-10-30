@@ -350,7 +350,6 @@ dependencies {
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.2'
 
-
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.16.0'
 
@@ -368,6 +367,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.32'
 
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.4.0'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 

@@ -9,16 +9,19 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.form
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
@@ -48,6 +51,17 @@ public class AsylumCaseUtils {
 
     public static boolean isInternalCase(AsylumCase asylumCase) {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
+    }
+
+    public static boolean isInternalNonDetainedCase(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase);
+    }
+
+    public static boolean hasAppellantAddressInCountryOrOoc(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
+               || asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
+                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
     }
 
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
@@ -213,6 +227,104 @@ public class AsylumCaseUtils {
 
     public static boolean isRemoteHearing(AsylumCase asylumCase) {
         return asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
+    }
+
+    public static List<String> getAppellantAddressAsList(final AsylumCase asylumCase) {
+        AddressUk address = asylumCase
+            .read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)
+            .orElseThrow(() -> new IllegalStateException("appellantAddress is not present"));
+
+        List<String> appellantAddressAsList = new ArrayList<>();
+
+        appellantAddressAsList.add(address.getAddressLine1().orElseThrow(() -> new IllegalStateException("appellantAddress line 1 is not present")));
+        String addressLine2 = address.getAddressLine2().orElse(null);
+        String addressLine3 = address.getAddressLine3().orElse(null);
+
+        if (addressLine2 != null) {
+            appellantAddressAsList.add(addressLine2);
+        }
+        if (addressLine3 != null) {
+            appellantAddressAsList.add(addressLine3);
+        }
+        appellantAddressAsList.add(address.getPostTown().orElseThrow(() -> new IllegalStateException("appellantAddress postTown is not present")));
+        appellantAddressAsList.add(address.getPostCode().orElseThrow(() -> new IllegalStateException("appellantAddress postCode is not present")));
+
+        return appellantAddressAsList;
+    }
+
+    public static List<String> getAppellantAddressAsListOoc(final AsylumCase asylumCase) {
+
+        String oocAddressLine1 = asylumCase
+            .read(ADDRESS_LINE_1_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address line 1 is not present"));
+
+        String oocAddressLine2 = asylumCase
+            .read(ADDRESS_LINE_2_ADMIN_J, String.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address line 2 is not present"));
+
+        List<String> appellantAddressAsList = new ArrayList<>();
+
+        appellantAddressAsList.add(oocAddressLine1);
+        appellantAddressAsList.add(oocAddressLine2);
+
+        String oocAddressLine3 = asylumCase
+            .read(ADDRESS_LINE_3_ADMIN_J, String.class)
+            .orElse(null);
+
+        String oocAddressLine4 = asylumCase
+            .read(ADDRESS_LINE_4_ADMIN_J, String.class)
+            .orElse(null);
+
+        NationalityGovUk oocAddressCountry = NationalityGovUk.valueOf(asylumCase
+            .read(COUNTRY_GOV_UK_OOC_ADMIN_J, NationalityFieldValue.class)
+            .orElseThrow(() -> new IllegalStateException("OOC Address country is not present")).getCode());
+
+        if (oocAddressLine3 != null) {
+            appellantAddressAsList.add(oocAddressLine3);
+        }
+        if (oocAddressLine4 != null) {
+            appellantAddressAsList.add(oocAddressLine4);
+        }
+        appellantAddressAsList.add(oocAddressCountry.toString());
+
+        return appellantAddressAsList;
+    }
+
+    public static List<DocumentWithMetadata> getMaybeLetterNotificationDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS);
+
+        return maybeLetterNotificationDocuments
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(IdValue::getValue)
+            .filter(document -> document.getTag() == documentTag)
+            .collect(Collectors.toList());
+    }
+
+    public static boolean isAppellantInUk(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)
+            .map(inUk -> YesOrNo.YES == inUk).orElse(true);
+    }
+
+    public static String calculateFeeDifference(String originalFeeTotal, String newFeeTotal) {
+        try {
+
+            BigDecimal originalFee = new BigDecimal(String.valueOf(Double.parseDouble(originalFeeTotal) / 100));
+            BigDecimal newFee = new BigDecimal(String.valueOf(Double.parseDouble(newFeeTotal) / 100));
+            BigDecimal difference = originalFee.subtract(newFee).abs();
+            return difference.setScale(2, RoundingMode.DOWN).toString();
+
+        } catch (NumberFormatException e) {
+
+            return "0.00";
+        }
+    }
+
+    public static String convertAsylumCaseFeeValue(String amountFromAsylumCase) {
+        return StringUtils.isNotBlank(amountFromAsylumCase)
+                ? new BigDecimal(String.valueOf(Double.parseDouble(amountFromAsylumCase) / 100))
+                .setScale(2, RoundingMode.DOWN).toString()
+                : "";
     }
 
 }
