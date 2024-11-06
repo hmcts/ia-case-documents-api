@@ -63,7 +63,7 @@
       },
       {
         "reference": "92342_ADMIN_OFFICER_LATE_REMISSION_SUBMITTED",
-        "recipient": "{$ftpaSubmitted.ctscAdminEmailAddress}",
+        "recipient": "{$PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL}",
         "subject": "Immigration and Asylum appeal: Fee remission requested",
         "body": [
           "PA/12345/2019",

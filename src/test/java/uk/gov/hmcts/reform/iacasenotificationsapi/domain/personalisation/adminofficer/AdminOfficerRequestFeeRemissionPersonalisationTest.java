@@ -31,7 +31,7 @@ class AdminOfficerRequestFeeRemissionPersonalisationTest {
     private Long caseId = 12345L;
     private String templateId = "applyForLateRemissionTemplateId";
     private String iaExUiFrontendUrl = "http://localhost";
-    private String adminOfficerEmailAddress = "adminOfficer@example.com";
+    private String paymentExceptionsAdminOfficerEmailAddress = "payment-exceptions-ao@example.com";
 
     private AdminOfficerRequestFeeRemissionPersonalisation adminOfficerRequestFeeRemissionPersonalisation;
 
@@ -41,7 +41,7 @@ class AdminOfficerRequestFeeRemissionPersonalisationTest {
         adminOfficerRequestFeeRemissionPersonalisation =
             new AdminOfficerRequestFeeRemissionPersonalisation(
                 templateId, iaExUiFrontendUrl,
-                adminOfficerEmailAddress, customerServicesProvider);
+                paymentExceptionsAdminOfficerEmailAddress, customerServicesProvider);
 
         initializePrefixes(adminOfficerRequestFeeRemissionPersonalisation);
     }
@@ -61,7 +61,7 @@ class AdminOfficerRequestFeeRemissionPersonalisationTest {
     @Test
     void should_return_given_email_address_from_asylum_case() {
         assertTrue(adminOfficerRequestFeeRemissionPersonalisation.getRecipientsList(asylumCase)
-            .contains(adminOfficerEmailAddress));
+            .contains(paymentExceptionsAdminOfficerEmailAddress));
     }
 
     @Test
