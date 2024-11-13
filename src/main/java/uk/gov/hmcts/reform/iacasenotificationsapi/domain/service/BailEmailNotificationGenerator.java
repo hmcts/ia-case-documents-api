@@ -72,8 +72,7 @@ public class BailEmailNotificationGenerator implements BailNotificationGenerator
             emailTemplateId,
             email,
             personalisation.getPersonalisation(callback),
-            referenceId,
-            callback
+            referenceId
         );
     }
 

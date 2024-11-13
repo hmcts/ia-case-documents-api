@@ -82,8 +82,7 @@ public class EmailNotificationGenerator implements NotificationGenerator {
             emailTemplateId,
             email,
             personalisation.getPersonalisation(callback),
-            referenceId,
-            callback
+            referenceId
         );
     }
 

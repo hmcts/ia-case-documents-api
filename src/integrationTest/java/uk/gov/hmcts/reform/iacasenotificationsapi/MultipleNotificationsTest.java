@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyMap;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
@@ -94,7 +93,7 @@ class MultipleNotificationsTest extends SpringBootIntegrationTest implements Wit
         List<IdValue<String>> existingNotifications =
             Lists.newArrayList(new IdValue<>(existingReference, notificationId));
 
-        when(notificationSender.sendEmail(anyString(), anyString(), anyMap(), anyString(), any(Callback.class))).thenReturn(notificationId);
+        when(notificationSender.sendEmail(anyString(), anyString(), anyMap(), anyString())).thenReturn(notificationId);
 
         Direction direction = createExistingDirection(eventWithSuffixPair.getKey());
 

@@ -75,8 +75,7 @@ public class BailSmsNotificationGenerator implements BailNotificationGenerator {
             smsTemplateId,
             mobileNumber,
             personalisation.getPersonalisation(callback),
-            referenceId,
-            callback
+            referenceId
         );
     }
 }
