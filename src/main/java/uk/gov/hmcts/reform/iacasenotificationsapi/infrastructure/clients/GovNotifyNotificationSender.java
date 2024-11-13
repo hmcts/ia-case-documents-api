@@ -7,21 +7,23 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.NotificationSender;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.helper.NotificationSenderHelper;
 
 @Service
-public class GovNotifyNotificationSender implements NotificationSender {
+public class GovNotifyNotificationSender implements NotificationSender<AsylumCase> {
 
     private static final org.slf4j.Logger LOG = getLogger(GovNotifyNotificationSender.class);
 
     private final int deduplicateSendsWithinSeconds;
     private final RetryableNotificationClient notificationClient;
-    private final NotificationSenderHelper senderHelper;
+    private final NotificationSenderHelper<AsylumCase> senderHelper;
 
     public GovNotifyNotificationSender(
         @Value("${notificationSender.deduplicateSendsWithinSeconds}") int deduplicateSendsWithinSeconds,
         RetryableNotificationClient notificationClient,
-        NotificationSenderHelper senderHelper
+        NotificationSenderHelper<AsylumCase> senderHelper
     ) {
         this.deduplicateSendsWithinSeconds = deduplicateSendsWithinSeconds;
         this.notificationClient = notificationClient;
@@ -32,7 +34,8 @@ public class GovNotifyNotificationSender implements NotificationSender {
         String templateId,
         String emailAddress,
         Map<String, String> personalisation,
-        String reference
+        String reference,
+        Callback<AsylumCase> callback
     ) {
         return senderHelper.sendEmail(
                 templateId,
@@ -41,7 +44,9 @@ public class GovNotifyNotificationSender implements NotificationSender {
                 reference,
                 notificationClient,
                 deduplicateSendsWithinSeconds,
-                LOG
+                LOG,
+                callback
+
         );
     }
 
@@ -67,7 +72,8 @@ public class GovNotifyNotificationSender implements NotificationSender {
         final String templateId,
         final String phoneNumber,
         final Map<String, String> personalisation,
-        final String reference) {
+        final String reference,
+        final Callback<AsylumCase> callback) {
 
         return senderHelper.sendSms(
                 templateId,
@@ -76,7 +82,8 @@ public class GovNotifyNotificationSender implements NotificationSender {
                 reference,
                 notificationClient,
                 deduplicateSendsWithinSeconds,
-                LOG
+                LOG,
+                callback
         );
     }
 
@@ -85,7 +92,8 @@ public class GovNotifyNotificationSender implements NotificationSender {
         final String templateId,
         final String address,
         final Map<String, String> personalisation,
-        final String reference) {
+        final String reference,
+        final Callback<AsylumCase> callback) {
 
         return senderHelper.sendLetter(
             templateId,

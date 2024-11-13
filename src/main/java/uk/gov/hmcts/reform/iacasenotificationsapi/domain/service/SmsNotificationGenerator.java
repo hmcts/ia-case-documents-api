@@ -72,7 +72,8 @@ public class SmsNotificationGenerator implements NotificationGenerator {
             smsTemplateId,
             mobileNumber,
             personalisation.getPersonalisation(callback),
-            referenceId
+            referenceId,
+            callback
         );
     }
 }

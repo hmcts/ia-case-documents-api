@@ -122,9 +122,9 @@ public class EditListingEmailNotificationGeneratorTest {
         when(editListingChangeEmailNotificationPersonalisation1.getPersonalisation(callback))
             .thenReturn(personalizationMap2);
 
-        when(notificationSender.sendEmail(templateId1, emailAddress1, personalizationMap1, refId1))
+        when(notificationSender.sendEmail(templateId1, emailAddress1, personalizationMap1, refId1, callback))
             .thenReturn(notificationId1);
-        when(notificationSender.sendEmail(templateId2, emailAddress2, personalizationMap2, refId2))
+        when(notificationSender.sendEmail(templateId2, emailAddress2, personalizationMap2, refId2, callback))
             .thenReturn(notificationId2);
 
         when(notificationIdAppender.append(notificationsSent, refId1, notificationId1)).thenReturn(notificationsSent);
@@ -162,8 +162,8 @@ public class EditListingEmailNotificationGeneratorTest {
 
         notificationGenerator.generate(callback);
 
-        verify(notificationSender).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
-        verify(notificationSender, never()).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
+        verify(notificationSender).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1, callback);
+        verify(notificationSender, never()).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2, callback);
 
         verify(notificationIdAppender).appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
         verify(notificationIdAppender).append(notificationsSent, refId1, notificationId1);
@@ -196,8 +196,8 @@ public class EditListingEmailNotificationGeneratorTest {
 
         notificationGenerator.generate(callback);
 
-        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
-        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
+        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1, callback);
+        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2, callback);
 
         verify(notificationIdAppender, never())
             .appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
@@ -226,8 +226,8 @@ public class EditListingEmailNotificationGeneratorTest {
 
         notificationGenerator.generate(callback);
 
-        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
-        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
+        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1, callback);
+        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2, callback);
 
         verify(notificationIdAppender, never())
             .appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
@@ -256,8 +256,8 @@ public class EditListingEmailNotificationGeneratorTest {
 
         notificationGenerator.generate(callback);
 
-        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
-        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
+        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1, callback);
+        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2, callback);
 
         verify(notificationIdAppender, never())
             .appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
@@ -324,8 +324,8 @@ public class EditListingEmailNotificationGeneratorTest {
 
         notificationGenerator.generate(callback);
 
-        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1);
-        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2);
+        verify(notificationSender, never()).sendEmail(templateId1, emailAddress1, personalizationMap1, refId1, callback);
+        verify(notificationSender).sendEmail(templateId2, emailAddress2, personalizationMap2, refId2, callback);
 
         verify(notificationIdAppender, never())
             .appendAll(asylumCase, refId1, Collections.singletonList(notificationId1));
