@@ -13,11 +13,11 @@ public class LetterNotificationGenerator implements NotificationGenerator {
 
     protected final List<LetterNotificationPersonalisation> personalisationList;
     protected final NotificationIdAppender notificationIdAppender;
-    protected final NotificationSender notificationSender;
+    protected final NotificationSender<AsylumCase> notificationSender;
 
     public LetterNotificationGenerator(
         List<LetterNotificationPersonalisation> personalisationList,
-        NotificationSender notificationSender,
+        NotificationSender<AsylumCase> notificationSender,
         NotificationIdAppender notificationIdAppender) {
 
         this.personalisationList = personalisationList;
@@ -69,7 +69,8 @@ public class LetterNotificationGenerator implements NotificationGenerator {
             letterTemplateId,
             address,
             personalisation.getPersonalisation(callback),
-            referenceId
+            referenceId,
+            callback
         );
     }
 
