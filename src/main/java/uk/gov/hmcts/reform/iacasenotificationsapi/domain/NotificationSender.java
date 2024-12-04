@@ -1,36 +1,30 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain;
 
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseData;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-
 import java.io.InputStream;
 import java.util.Map;
 
 
-public interface NotificationSender<T extends CaseData> {
+public interface NotificationSender {
 
     String sendEmail(
         String templateId,
         String emailAddress,
         Map<String, String> personalisation,
-        String reference,
-        Callback<T> callback
+        String reference
     );
 
     String sendSms(
         String templateId,
         String phoneNumber,
         Map<String, String> personalisation,
-        String reference,
-        Callback<T> callback
+        String reference
     );
 
     String sendLetter(
         String templateId,
         String address,
         Map<String, String> personalisation,
-        String reference,
-        Callback<T> callback
+        String reference
     );
 
     String sendPrecompiledLetter(
