@@ -7,12 +7,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Qualifier;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.helper.NotificationSenderHelper;
 import uk.gov.service.notify.NotificationClientException;
 
@@ -28,8 +31,12 @@ public class BailGovNotifyNotificationSenderTest {
     @Qualifier("BailClient")
     private RetryableNotificationClient notificationBailClient;
 
-    @Mock private NotificationSenderHelper senderHelper;
-    @Mock private InputStream stream;
+    @Mock
+    private NotificationSenderHelper<BailCase> senderHelper;
+    @Mock
+    private Callback<BailCase> callback;
+    @Mock
+    private InputStream stream;
 
     private String templateId = "a-b-c-d-e-f";
     private String emailAddress = "recipient@example.com";
@@ -55,31 +62,34 @@ public class BailGovNotifyNotificationSenderTest {
         final UUID expectedNotificationId = UUID.randomUUID();
 
         when(senderHelper.sendEmail(
-                templateId,
-                emailAddress,
-                personalisation,
-                reference,
-                notificationBailClient,
-                deduplicateSendsWithinSeconds,
-                LOG
+            templateId,
+            emailAddress,
+            personalisation,
+            reference,
+            notificationBailClient,
+            deduplicateSendsWithinSeconds,
+            LOG,
+            callback
         )).thenReturn(String.valueOf(expectedNotificationId));
 
         String actualNotificationId =
-                bailGovNotifyNotificationSender.sendEmail(
-                        templateId,
-                        emailAddress,
-                        personalisation,
-                        reference
-                );
-
-        verify(senderHelper, times(1)).sendEmail(
+            bailGovNotifyNotificationSender.sendEmail(
                 templateId,
                 emailAddress,
                 personalisation,
                 reference,
-                notificationBailClient,
-                deduplicateSendsWithinSeconds,
-                LOG
+                callback
+            );
+
+        verify(senderHelper, times(1)).sendEmail(
+            templateId,
+            emailAddress,
+            personalisation,
+            reference,
+            notificationBailClient,
+            deduplicateSendsWithinSeconds,
+            LOG,
+            callback
         );
 
         assertEquals(expectedNotificationId.toString(), actualNotificationId);
@@ -91,31 +101,34 @@ public class BailGovNotifyNotificationSenderTest {
         final UUID expectedNotificationId = UUID.randomUUID();
 
         when(senderHelper.sendSms(
-                templateId,
-                phoneNumber,
-                personalisation,
-                reference,
-                notificationBailClient,
-                deduplicateSendsWithinSeconds,
-                LOG
+            templateId,
+            phoneNumber,
+            personalisation,
+            reference,
+            notificationBailClient,
+            deduplicateSendsWithinSeconds,
+            LOG,
+            callback
         )).thenReturn(String.valueOf(expectedNotificationId));
 
         String actualNotificationId =
-                bailGovNotifyNotificationSender.sendSms(
-                        templateId,
-                        phoneNumber,
-                        personalisation,
-                        reference
-                );
-
-        verify(senderHelper, times(1)).sendSms(
+            bailGovNotifyNotificationSender.sendSms(
                 templateId,
                 phoneNumber,
                 personalisation,
                 reference,
-                notificationBailClient,
-                deduplicateSendsWithinSeconds,
-                LOG
+                callback
+            );
+
+        verify(senderHelper, times(1)).sendSms(
+            templateId,
+            phoneNumber,
+            personalisation,
+            reference,
+            notificationBailClient,
+            deduplicateSendsWithinSeconds,
+            LOG,
+            callback
         );
 
         assertEquals(expectedNotificationId.toString(), actualNotificationId);
