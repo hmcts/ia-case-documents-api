@@ -26,6 +26,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -97,7 +99,6 @@ class CustomiseHearingBundleHandlerTest {
                 featureToggler
             );
 
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
@@ -128,7 +129,7 @@ class CustomiseHearingBundleHandlerTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
     void should_successfully_handle_the_callback(String maybeDecision) throws JsonProcessingException {
-
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
                 ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
         IdValue<DocumentWithDescription> legalRepDoc = new IdValue<>("1", createDocumentWithDescription());
@@ -196,10 +197,111 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
                 maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
+            "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
+    }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
+    void should_successfully_handle_the_callback_updated_bundle(String maybeDecision) throws JsonProcessingException {
+        when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
+            ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+        IdValue<DocumentWithDescription> legalRepDoc = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> respondentDoc = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> additionalEvidenceDoc = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> appAddendumDoc = new IdValue<>("1", createDocumentWithDescription());
+        IdValue<DocumentWithDescription> resAddendumDoc = new IdValue<>("1", createDocumentWithDescription());
+        List<IdValue<DocumentWithMetadata>> tribunalDocumentList = List.of(
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADA_SUITABILITY, "test")));
+
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(hearingDoc)));
+        when(asylumCaseCopy.read(CUSTOM_LEGAL_REP_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc)));
+        when(asylumCaseCopy.read(CUSTOM_RESPONDENT_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(respondentDoc)));
+        when(asylumCaseCopy.read(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(additionalEvidenceDoc)));
+        when(asylumCase.read(CUSTOM_TRIBUNAL_DOCUMENTS))
+            .thenReturn(Optional.of(tribunalDocumentList));
+        when(asylumCaseCopy.read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(appAddendumDoc)));
+        when(asylumCaseCopy.read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(resAddendumDoc)));
+
+        IdValue<DocumentWithMetadata> legalRepDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
+        IdValue<DocumentWithMetadata> respondentDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.APPEAL_RESPONSE, "test"));
+        IdValue<DocumentWithMetadata> hearingDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.HEARING_NOTICE, "test"));
+        IdValue<DocumentWithMetadata> additionalEvidenceDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
+        IdValue<DocumentWithMetadata> appAddendumDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The appellant"));
+        IdValue<DocumentWithMetadata> resAddendumDocWithMetadata =
+            new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDENDUM_EVIDENCE, "The respondent"));
+
+        final List<IdValue<DocumentWithMetadata>> hearingDocuments =
+            Lists.newArrayList(hearingDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> legalRepresentativeDocuments =
+            Lists.newArrayList(legalRepDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> respondentDocuments =
+            Lists.newArrayList(respondentDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> additionalEvidenceDocuments =
+            Lists.newArrayList(additionalEvidenceDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> addendumDocuments =
+            Lists.newArrayList(appAddendumDocWithMetadata, resAddendumDocWithMetadata);
+
+        when(asylumCase.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(hearingDocuments));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS))
+            .thenReturn(Optional.of(legalRepresentativeDocuments));
+        when(asylumCase.read(RESPONDENT_DOCUMENTS))
+            .thenReturn(Optional.of(respondentDocuments));
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(additionalEvidenceDocuments));
+        when(asylumCaseCopy.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(appAddendumDocWithMetadata)));
+        when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
+            .thenReturn(Optional.of(Lists.newArrayList(resAddendumDocWithMetadata)));
+        when(appender.append(any(DocumentWithMetadata.class), anyList()))
+            .thenReturn(addendumDocuments);
+
+        PreSubmitCallbackResponse<AsylumCase> response =
+            customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
+
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_HEARING_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_LEGAL_REP_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_RESPONDENT_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
+        verify(asylumCaseCopy, maybeDecision.isEmpty() ? never() : times(1))
+            .read(CUSTOM_TRIBUNAL_DOCUMENTS);
+
+        verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
+        verify(asylumCase, times(1)).write(LEGAL_REPRESENTATIVE_DOCUMENTS, legalRepresentativeDocuments);
+        verify(asylumCase, times(1)).write(ADDITIONAL_EVIDENCE_DOCUMENTS, additionalEvidenceDocuments);
+        verify(asylumCase, times(1)).write(RESPONDENT_DOCUMENTS, respondentDocuments);
+        verify(asylumCase, times(1)).write(ADDENDUM_EVIDENCE_DOCUMENTS, addendumDocuments);
+
+        verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
+        verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
+
+        verify(asylumCase, times(1)).clear(AsylumCaseDefinition.CASE_BUNDLES);
+        verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
+            maybeDecision.isEmpty() ? "iac-updated-hearing-bundle-config.yaml" : "iac-updated-hearing-bundle-inc-tribunal-config.yaml");
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
+            "PA 50002 2020-" + appellantFamilyName);
+        verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
+        verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
 
     private void verifyAsylumCaseReadsFor_should_successfully_handle_Reheard_the_callback() throws JsonProcessingException {
@@ -229,8 +331,10 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
     }
 
-    @Test
-    void should_successfully_handle_Reheard_the_callback() throws JsonProcessingException {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_successfully_handle_Reheard_the_callback(Event event) throws JsonProcessingException {
+        when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -322,7 +426,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
         when(asylumCase.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
-        when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
+        when(asylumCaseCopy.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(appellantAddendumEvidenceList)));
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
@@ -351,8 +455,10 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
-    @Test
-    void should_return_values_for_document_with_description_present() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_return_values_for_document_with_description_present(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -373,8 +479,8 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @Test
-    void should_successfully_handle_Reheard_the_callback_with_Remitted() throws JsonProcessingException {
-
+        void should_successfully_handle_Reheard_the_callback_with_Remitted() throws JsonProcessingException {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
 
@@ -533,8 +639,10 @@ class CustomiseHearingBundleHandlerTest {
     }
 
 
-    @Test
-    void should_return_values_for_document_with_description_present_throw_exception() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_return_values_for_document_with_description_present_throw_exception(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -554,8 +662,10 @@ class CustomiseHearingBundleHandlerTest {
 
     }
 
-    @Test
-    void contains_should_return_true_for_document_with_metadata_present() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void contains_should_return_true_for_document_with_metadata_present(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -571,8 +681,10 @@ class CustomiseHearingBundleHandlerTest {
             documentMetadataList, documentWithMetadataIdValue));
     }
 
-    @Test
-    void should_create_custom_collections_if_source_collections_are_empty() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_create_custom_collections_if_source_collections_are_empty(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         when(asylumCase.read(AsylumCaseDefinition.APP_ADDITIONAL_EVIDENCE_DOCS))
             .thenReturn(Optional.empty());
@@ -592,8 +704,10 @@ class CustomiseHearingBundleHandlerTest {
     }
 
 
-    @Test
-    void should_throw_when_appeal_reference_is_not_present() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_throw_when_appeal_reference_is_not_present(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
 
@@ -602,8 +716,10 @@ class CustomiseHearingBundleHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    void should_throw_when_asylumcase_can_not_copied() throws JsonProcessingException {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_throw_when_asylumcase_can_not_copied(Event event) throws JsonProcessingException {
+        when(callback.getEvent()).thenReturn(event);
 
         when(objectMapper.readValue("Test", AsylumCase.class))
             .thenThrow(new IllegalStateException("Cannot make a deep copy of the case"));
@@ -613,8 +729,10 @@ class CustomiseHearingBundleHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    void should_throw_when_appellant_family_name_is_not_present() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_throw_when_appellant_family_name_is_not_present(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
 
@@ -623,8 +741,10 @@ class CustomiseHearingBundleHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    void should_throw_when_case_bundle_is_not_present() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_throw_when_case_bundle_is_not_present(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         when(asylumCase.read(CASE_BUNDLES)).thenReturn(Optional.empty());
 
@@ -633,8 +753,10 @@ class CustomiseHearingBundleHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    void should_throw_when_case_bundle_is_empty() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_throw_when_case_bundle_is_empty(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         caseBundles.clear();
 
@@ -643,8 +765,10 @@ class CustomiseHearingBundleHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    void handling_should_throw_if_cannot_actually_handle() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void handling_should_throw_if_cannot_actually_handle(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         assertThatThrownBy(() -> customiseHearingBundleHandler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
@@ -667,7 +791,8 @@ class CustomiseHearingBundleHandlerTest {
 
                 boolean canHandle = customiseHearingBundleHandler.canHandle(callbackStage, callback);
 
-                if (event == Event.CUSTOMISE_HEARING_BUNDLE
+                if ((event == Event.CUSTOMISE_HEARING_BUNDLE
+                    || event == Event.GENERATE_UPDATED_HEARING_BUNDLE)
                     && callbackStage == ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
                 } else {
@@ -679,8 +804,10 @@ class CustomiseHearingBundleHandlerTest {
         }
     }
 
-    @Test
-    void should_not_allow_null_arguments() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void should_not_allow_null_arguments(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         assertThatThrownBy(() -> customiseHearingBundleHandler.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
@@ -699,8 +826,10 @@ class CustomiseHearingBundleHandlerTest {
             .isExactlyInstanceOf(NullPointerException.class);
     }
 
-    @Test
-    void test_contains_not_null() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void test_contains_not_null(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         IdValue<DocumentWithMetadata> legalRepDocWithMetadata =
                 new IdValue<>("1", createDocumentWithMetadata(DocumentTag.ADDITIONAL_EVIDENCE, "test"));
         Boolean bool = customiseHearingBundleHandler.contains(List.of(), legalRepDocWithMetadata);
@@ -708,8 +837,14 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = {true, false})
-    void should_ignore_existing_hearing_bundles_in_new_bundles(boolean hasExistingHearingBundle) {
+    @CsvSource({
+        "CUSTOMISE_HEARING_BUNDLE, true",
+        "GENERATE_UPDATED_HEARING_BUNDLE, true",
+        "CUSTOMISE_HEARING_BUNDLE, false",
+        "GENERATE_UPDATED_HEARING_BUNDLE, false"
+    })
+    void should_ignore_existing_hearing_bundles_in_new_bundles(Event event, boolean hasExistingHearingBundle) {
+        when(callback.getEvent()).thenReturn(event);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
 
         IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
@@ -749,15 +884,17 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
 
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
-        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-"
-            + appellantFamilyName);
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
+            "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
     }
 
     //When the reheard case is not through remitted path, check the reheardHearingDocuments and add the updated document list in the
     // reheardHearingDocumentsCollection.
-    @Test
-    void test_reheard_documents_saved_in_collection_field() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
+    void test_reheard_documents_saved_in_collection_field(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
         when(document.getDocumentBinaryUrl()).thenReturn("some-binary-url");

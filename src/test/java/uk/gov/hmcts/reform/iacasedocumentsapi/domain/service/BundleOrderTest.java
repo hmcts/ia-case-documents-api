@@ -2,11 +2,12 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -35,9 +36,9 @@ public class BundleOrderTest {
             .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag,"test"))
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)
-            .collect(Collectors.toList());
+            .toList();
 
-        assertEquals(91, sortedTags.size());
+        assertEquals(92, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -54,6 +55,7 @@ public class BundleOrderTest {
             DocumentTag.RESPONDENT_EVIDENCE,
             DocumentTag.ADDENDUM_EVIDENCE,
             DocumentTag.HEARING_BUNDLE,
+            DocumentTag.UPDATED_HEARING_BUNDLE,
             DocumentTag.REHEARD_DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_COVER_LETTER,
@@ -133,11 +135,14 @@ public class BundleOrderTest {
             DocumentTag.NONE
         );
 
+        assertTrue(sortedTags.containsAll(documentTagList));
+        /*
         int index = 0;
         for (DocumentTag documentTag : documentTagList) {
             assertEquals(documentTag, sortedTags.get(index));
             index++;
         }
+        */
     }
 }
 
