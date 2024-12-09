@@ -43,7 +43,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private final ObjectMapper objectMapper;
     private final FeatureToggler featureToggler;
 
-
     public CustomiseHearingBundleHandler(
         @Value("${emBundler.url}") String emBundlerUrl,
         @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
