@@ -33,19 +33,19 @@ public class DocumentCreatorTest {
 
     @Mock private CaseDetails<CaseData> caseDetails;
     @Mock private CaseDetails<CaseData> caseDetailsBefore;
-    private String qualifiedDocumentFileName = "unique-to-appellant-some-document";
-    private String templateName = "template.docx";
+    private final String qualifiedDocumentFileName = "unique-to-appellant-some-document";
+    private final String templateName = "template.docx";
     @Mock private Map<String, Object> templateFieldValues;
     @Mock private Resource documentResource;
     @Mock private Document expectedDocument;
 
-    private DocumentCreator documentCreator;
+    private DocumentCreator<CaseData> documentCreator;
 
     @BeforeEach
     public void setUp() {
 
         documentCreator =
-            new DocumentCreator(
+            new DocumentCreator<>(
                 documentContentType,
                 documentFileExtension,
                 documentFileName,
@@ -81,7 +81,7 @@ public class DocumentCreatorTest {
     }
 
     @Test
-    public void should_orchestrate_amended_document_creation() {
+    public void should_orchestrate_updated_document_creation() {
 
         when(fileNameQualifier.get(documentFileName, caseDetails)).thenReturn(qualifiedDocumentFileName);
         when(documentTemplate.getName()).thenReturn(templateName);
