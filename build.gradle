@@ -199,7 +199,11 @@ sonarqube {
 
 project.ext {
   pacticipant = 'ia_casePaymentsApi'
-  pacticipantVersion = System.env.GIT_COMMIT.substring(0,9)
+  if (System.env.GIT_COMMIT) {
+    pacticipantVersion = System.env.GIT_COMMIT.substring(0,9)
+  } else {
+    pacticipantVersion = getCheckedOutGitCommitHash()
+  }
   set('springCloudVersion', "2021.0.8")
 }
 
