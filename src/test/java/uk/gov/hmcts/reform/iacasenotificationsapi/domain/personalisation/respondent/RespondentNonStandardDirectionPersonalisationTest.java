@@ -27,8 +27,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("unchecked")
-public class RespondentNonStandardDirectionPersonalisationTest {
+class RespondentNonStandardDirectionPersonalisationTest {
 
     @Mock
     AsylumCase asylumCase;
@@ -43,7 +42,6 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     @Mock
     Direction direction;
 
-    private final Long caseId = 12345L;
     private final String beforeListingTemplateId = "beforeListingTemplateId";
     private final String toAppellantAndRespondentBeforeListingTemplateId = "ToAppellantAndRespondentBeforeListingTemplateId";
     private final String iaExUiFrontendUrl = "http://localhost";
@@ -53,10 +51,9 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     private final String homeOfficeEmail = "ho-taylorhouse@example.com";
     private final String homeOfficeFtpaEmailAddress = "ho-ftpa-taylorhouse@example.com";
 
-    private String directionDueDate = "2019-08-27";
-    private String expectedDirectionDueDate = "27 Aug 2019";
-    private String directionExplanation = "someExplanation";
-    private String appealReferenceNumber = "someReferenceNumber";
+    private final String expectedDirectionDueDate = "27 Aug 2019";
+    private final String directionExplanation = "someExplanation";
+    private final String appealReferenceNumber = "someReferenceNumber";
     private final String ariaListingReference = "someAriaListingReference";
     private final String homeOfficeRefNumber = "homeOfficeReference";
     private final String appellantGivenNames = "someAppellantGivenNames";
@@ -67,7 +64,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     private RespondentNonStandardDirectionPersonalisation respondentNonStandardDirectionPersonalisation;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
 
         when((emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)))
                 .thenReturn(homeOfficeHearingCentreEmail);
@@ -76,6 +73,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
         when((emailAddressFinder.getHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeEmail);
 
+        String directionDueDate = "2019-08-27";
         when((direction.getDateDue())).thenReturn(directionDueDate);
         when((direction.getExplanation())).thenReturn(directionExplanation);
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
@@ -139,9 +137,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
                 State.AWAITING_RESPONDENT_EVIDENCE,
                 State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
                 State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED
-
         );
-
 
         List<State> lartEmail = newArrayList(
                 State.CASE_BUILDING,
@@ -163,7 +159,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
                 State.APPEAL_TAKEN_OFFLINE
         );
 
-        List<State> poulistedEmail = newArrayList(
+        List<State> pouListedEmail = newArrayList(
                 State.PREPARE_FOR_HEARING,
                 State.FINAL_BUNDLING,
                 State.PRE_HEARING,
@@ -182,8 +178,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
         states.put(lartHomeOfficeEmailAddress, lartEmail);
         states.put(homeOfficeFtpaEmailAddress, ftpaEmail);
         states.put(homeOfficeEmail, pouNoListedEmail);
-        states.put(homeOfficeHearingCentreEmail, poulistedEmail);
-
+        states.put(homeOfficeHearingCentreEmail, pouListedEmail);
 
         Set<String> emailAddresses = states.keySet();
 
@@ -193,23 +188,42 @@ public class RespondentNonStandardDirectionPersonalisationTest {
                 when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
                         .thenReturn(Optional.of(state));
 
-                if (emailAddress != null && emailAddress.equals(homeOfficeHearingCentreEmail)) {
-                    // test the same state when the case is listed
-                    when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+                if (homeOfficeHearingCentreEmail.equals(emailAddress)) {
                     when(asylumCase.read(HEARING_CENTRE)).thenReturn(Optional.of(Optional.empty()));
                     when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
                             .thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
 
+                    // test the same state when the case is listed
+                    when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+
                     assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase)
                             .contains(homeOfficeHearingCentreEmail));
-                } else if (emailAddress != null && emailAddress.equals(homeOfficeEmail)) {
-                    //case not listed yet
-                    when(appealService.isAppealListed(asylumCase)).thenReturn(false);
+
+                    // exclude states containing in both pouNoListedEmail and pouListedEmail
+                    if (!pouNoListedEmail.contains(state) || !pouListedEmail.contains(state)) {
+                        // test the same state when the case is not listed
+                        when(appealService.isAppealListed(asylumCase)).thenReturn(false);
+
+                        assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase)
+                                .contains(homeOfficeHearingCentreEmail));
+                    }
+                } else if (homeOfficeEmail.equals(emailAddress)) {
                     when(asylumCase.read(HEARING_CENTRE)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
                     when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
+                    // case not listed yet
+                    when(appealService.isAppealListed(asylumCase)).thenReturn(false);
+
                     assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase)
                             .contains(homeOfficeEmail));
+
+                    // exclude states containing in both pouNoListedEmail and pouListedEmail
+                    if (!pouNoListedEmail.contains(state) || !pouListedEmail.contains(state)) {
+                        // test the same state when the case is listed
+                        when(appealService.isAppealListed(asylumCase)).thenReturn(true);
+
+                        assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase).isEmpty());
+                    }
                 } else {
                     assertTrue(respondentNonStandardDirectionPersonalisation.getRecipientsList(asylumCase)
                             .contains(emailAddress));
@@ -230,12 +244,13 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
     @Test
     void should_return_given_reference_id() {
+        Long caseId = 12345L;
         assertEquals(caseId + "_RESPONDENT_NON_STANDARD_DIRECTION",
                 respondentNonStandardDirectionPersonalisation.getReferenceId(caseId));
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(() -> respondentNonStandardDirectionPersonalisation.getPersonalisation((AsylumCase) null))
                 .isExactlyInstanceOf(NullPointerException.class)
@@ -244,7 +259,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
     @ParameterizedTest
     @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
-    public void should_return_personalisation_when_all_information_given(YesOrNo isAda) {
+    void should_return_personalisation_when_all_information_given(YesOrNo isAda) {
 
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
         initializePrefixes(respondentNonStandardDirectionPersonalisation);
@@ -268,7 +283,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
 
     @ParameterizedTest
     @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
-    public void should_return_personalisation_when_all_mandatory_information_given(YesOrNo isAda) {
+    void should_return_personalisation_when_all_mandatory_information_given(YesOrNo isAda) {
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
         initializePrefixes(respondentNonStandardDirectionPersonalisation);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -298,7 +313,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_direction_is_empty() {
+    void should_throw_exception_on_personalisation_when_direction_is_empty() {
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> respondentNonStandardDirectionPersonalisation.getPersonalisation(asylumCase))
@@ -307,7 +322,7 @@ public class RespondentNonStandardDirectionPersonalisationTest {
     }
 
     @Test
-    public void should_return_false_if_appeal_not_yet_listed() {
+    void should_return_false_if_appeal_not_yet_listed() {
         assertFalse(appealService.isAppealListed(asylumCase));
     }
 }

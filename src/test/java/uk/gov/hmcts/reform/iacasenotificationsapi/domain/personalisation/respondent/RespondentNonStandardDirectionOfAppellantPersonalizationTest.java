@@ -2,12 +2,11 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respon
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentNonStandardDirectionOfAppellantPersonalization.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.respondent.RespondentNonStandardDirectionOfAppellantPersonalization.EVENT_NOT_AVAILABLE;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
 import java.util.HashMap;
@@ -36,7 +35,6 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("unchecked")
 class RespondentNonStandardDirectionOfAppellantPersonalizationTest {
 
     @Mock
@@ -52,19 +50,16 @@ class RespondentNonStandardDirectionOfAppellantPersonalizationTest {
     @Mock
     Direction direction;
 
-    private final Long caseId = 12345L;
     private final String templateId = "templateId";
     private final String iaExUiFrontendUrl = "http://localhost";
     private final String apcHomeOfficeEmailAddress = "homeoffice-apc@example.com";
     private final String lartHomeOfficeEmailAddress = "homeoffice-respondent@example.com";
     private final String homeOfficeHearingCentreEmail = "hc-taylorhouse@example.com";
     private final String homeOfficeEmail = "ho-taylorhouse@example.com";
-    private final String homeOfficeFtpaEmailAddress = "ho-ftpa-taylorhouse@example.com";
 
-    private String directionDueDate = "2019-08-27";
-    private String expectedDirectionDueDate = "27 Aug 2019";
-    private String directionExplanation = "someExplanation";
-    private String appealReferenceNumber = "someReferenceNumber";
+    private final String expectedDirectionDueDate = "27 Aug 2019";
+    private final String directionExplanation = "someExplanation";
+    private final String appealReferenceNumber = "someReferenceNumber";
     private final String ariaListingReference = "someAriaListingReference";
     private final String homeOfficeRefNumber = "homeOfficeReference";
     private final String appellantGivenNames = "someAppellantGivenNames";
@@ -75,15 +70,17 @@ class RespondentNonStandardDirectionOfAppellantPersonalizationTest {
     private RespondentNonStandardDirectionOfAppellantPersonalization respondentNonStandardDirectionOfAppellantPersonalization;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
 
         when((emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)))
             .thenReturn(homeOfficeHearingCentreEmail);
 
+        String homeOfficeFtpaEmailAddress = "ho-ftpa-taylorhouse@example.com";
         when(emailAddressFinder.getListCaseFtpaHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeFtpaEmailAddress);
 
         when((emailAddressFinder.getHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeEmail);
 
+        String directionDueDate = "2019-08-27";
         when((direction.getDateDue())).thenReturn(directionDueDate);
         when((direction.getExplanation())).thenReturn(directionExplanation);
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(direction));
@@ -205,19 +202,18 @@ class RespondentNonStandardDirectionOfAppellantPersonalizationTest {
         when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
             .thenReturn(Optional.of(currentState));
 
-        assertThatThrownBy(() -> respondentNonStandardDirectionOfAppellantPersonalization.getRecipientsList(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage(EVENT_NOT_AVAILABLE);
+        assertTrue(respondentNonStandardDirectionOfAppellantPersonalization.getRecipientsList(asylumCase).isEmpty());
     }
 
     @Test
     void should_return_given_reference_id() {
+        Long caseId = 12345L;
         assertEquals(caseId + "_RESPONDENT_NON_STANDARD_DIRECTION_OF_APPELLANT",
             respondentNonStandardDirectionOfAppellantPersonalization.getReferenceId(caseId));
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_case_is_null() {
+    void should_throw_exception_on_personalisation_when_case_is_null() {
 
         assertThatThrownBy(() -> respondentNonStandardDirectionOfAppellantPersonalization.getPersonalisation((AsylumCase) null))
             .isExactlyInstanceOf(NullPointerException.class)
@@ -226,7 +222,7 @@ class RespondentNonStandardDirectionOfAppellantPersonalizationTest {
 
     @ParameterizedTest
     @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
-    public void should_return_personalisation_when_all_information_given(YesOrNo isAda) {
+    void should_return_personalisation_when_all_information_given(YesOrNo isAda) {
 
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
         initializePrefixes(respondentNonStandardDirectionOfAppellantPersonalization);
@@ -251,7 +247,7 @@ class RespondentNonStandardDirectionOfAppellantPersonalizationTest {
 
     @ParameterizedTest
     @EnumSource(value = YesOrNo.class, names = { "YES", "NO" })
-    public void should_return_personalisation_when_all_mandatory_information_given(YesOrNo isAda) {
+    void should_return_personalisation_when_all_mandatory_information_given(YesOrNo isAda) {
 
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
         initializePrefixes(respondentNonStandardDirectionOfAppellantPersonalization);
@@ -280,7 +276,7 @@ class RespondentNonStandardDirectionOfAppellantPersonalizationTest {
     }
 
     @Test
-    public void should_throw_exception_on_personalisation_when_direction_is_empty() {
+    void should_throw_exception_on_personalisation_when_direction_is_empty() {
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> respondentNonStandardDirectionOfAppellantPersonalization.getPersonalisation(asylumCase))

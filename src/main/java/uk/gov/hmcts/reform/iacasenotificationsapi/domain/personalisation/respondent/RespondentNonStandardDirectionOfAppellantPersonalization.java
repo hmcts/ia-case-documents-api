@@ -24,8 +24,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.EmailAddressFin
 @Slf4j
 public class RespondentNonStandardDirectionOfAppellantPersonalization implements EmailNotificationPersonalisation {
 
-    public static final String CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT = "currentCaseStateVisibleToHomeOfficeAll flag is not present";
-    public static final String EVENT_NOT_AVAILABLE = "Send direction event not available in current state";
+    static final String CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT = "currentCaseStateVisibleToHomeOfficeAll flag is not present";
     private final String templateId;
     private final String iaExUiFrontendUrl;
     private final String apcHomeOfficeEmailAddress;
@@ -97,7 +96,7 @@ public class RespondentNonStandardDirectionOfAppellantPersonalization implements
                     State.PRE_HEARING,
                     State.DECISION,
                     State.ADJOURNED
-                ).contains(currentState) && appealService.isAppealListed(asylumCase)) {
+                ).contains(currentState)) {
                     final Optional<HearingCentre> maybeCaseIsListed = asylumCase
                         .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
 
@@ -106,10 +105,17 @@ public class RespondentNonStandardDirectionOfAppellantPersonalization implements
                     } else {
                         return  Collections.singleton(emailAddressFinder.getHomeOfficeEmailAddress(asylumCase));
                     }
+                } else {
+                    log.warn(
+                        "No recipients for respondent non-standard direction, case ref {}",
+                        asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse("")
+                    );
+                    return new HashSet<String>();
                 }
-                throw new IllegalStateException(EVENT_NOT_AVAILABLE);
             })
-            .orElseThrow(() -> new IllegalStateException(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT));
+            .orElseThrow(
+                () -> new IllegalStateException(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL_FLAG_IS_NOT_PRESENT)
+            );
     }
 
     @Override
