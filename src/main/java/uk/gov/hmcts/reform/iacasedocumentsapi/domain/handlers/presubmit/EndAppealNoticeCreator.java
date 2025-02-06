@@ -5,8 +5,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -22,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 
 @Component
+@Slf4j
 public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> endAppealNoticeDocumentCreator;
@@ -59,6 +62,10 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
+
+        log.info("EndAppeal Test:: Appeal type: {} asylumCase data in document-api - {}",
+                asylumCase.read(APPEAL_TYPE, AppealType.class).orElse(null),
+                asylumCase);
 
         boolean isAipJourney = asylumCase
                 .read(JOURNEY_TYPE, JourneyType.class)

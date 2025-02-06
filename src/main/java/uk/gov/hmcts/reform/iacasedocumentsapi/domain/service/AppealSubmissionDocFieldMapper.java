@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
@@ -20,6 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 @Service
+@Slf4j
 public class AppealSubmissionDocFieldMapper {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
@@ -158,6 +160,7 @@ public class AppealSubmissionDocFieldMapper {
 
         fieldValues.put("isAdmin", asylumCase.read(IS_ADMIN, YesOrNo.class).orElse(YesOrNo.NO));
 
+        log.info("AppealType test:: {}, fieldValues mpa: {}", fieldValues.get("appealType"), fieldValues);
         return fieldValues;
     }
 
