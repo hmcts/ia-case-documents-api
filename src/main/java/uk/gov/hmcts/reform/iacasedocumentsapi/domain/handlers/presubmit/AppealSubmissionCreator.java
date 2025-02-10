@@ -6,8 +6,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.P
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Arrays;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -27,15 +29,18 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
 
     private final DocumentCreator<AsylumCase> appealSubmissionDocumentCreator;
     private final DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator;
+    private final DocumentCreator<AsylumCase> internalOocAppealSubmissionDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public AppealSubmissionCreator(
         @Qualifier("appealSubmission") DocumentCreator<AsylumCase> appealSubmissionDocumentCreator,
         @Qualifier("internalAppealSubmission") DocumentCreator<AsylumCase> internalAppealSubmissionDocumentCreator,
+        @Qualifier("internalOocAppealSubmission") DocumentCreator<AsylumCase> internalOocAppealSubmissionDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.appealSubmissionDocumentCreator = appealSubmissionDocumentCreator;
         this.internalAppealSubmissionDocumentCreator = internalAppealSubmissionDocumentCreator;
+        this.internalOocAppealSubmissionDocumentCreator = internalOocAppealSubmissionDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -87,16 +92,29 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         DocumentTag documentTag;
         AsylumCaseDefinition documentField;
 
-        appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
-        documentTag = DocumentTag.APPEAL_SUBMISSION;
-        documentField = LEGAL_REPRESENTATIVE_DOCUMENTS;
+        if (isInternalOocCircumstancesNone(asylumCase)) {
+            appealSubmission = internalOocAppealSubmissionDocumentCreator.create(caseDetails);
+            documentTag = DocumentTag.APPEAL_SUBMISSION;
+            documentField = LEGAL_REPRESENTATIVE_DOCUMENTS;
 
-        documentHandler.addWithMetadata(
-            asylumCase,
-            appealSubmission,
-            documentField,
-            documentTag
-        );
+            documentHandler.addWithMetadata(
+                asylumCase,
+                appealSubmission,
+                documentField,
+                documentTag
+            );
+        } else {
+            appealSubmission = appealSubmissionDocumentCreator.create(caseDetails);
+            documentTag = DocumentTag.APPEAL_SUBMISSION;
+            documentField = LEGAL_REPRESENTATIVE_DOCUMENTS;
+
+            documentHandler.addWithMetadata(
+                asylumCase,
+                appealSubmission,
+                documentField,
+                documentTag
+            );
+        }
 
         if (callback.getEvent().equals(Event.SUBMIT_APPEAL) && isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
             appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
@@ -113,5 +131,14 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
+    private boolean isInternalOocCircumstancesNone(AsylumCase asylumCase) {
+
+        Optional<OutOfCountryCircumstances> maybeOutOfCountryCircumstances = asylumCase.read(OOC_APPEAL_ADMIN_J, OutOfCountryCircumstances.class);
+
+        return isInternalCase(asylumCase)
+               && !isAppellantInUk(asylumCase)
+               && maybeOutOfCountryCircumstances.isPresent()
+               && maybeOutOfCountryCircumstances.get().equals(OutOfCountryCircumstances.NONE);
+    }
 }
 

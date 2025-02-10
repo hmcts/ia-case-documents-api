@@ -37,7 +37,7 @@ spring:
   application:
     name: Immigration & Asylum case documents API
   config:
-    import: "optional:configtree:/mnt/secrets/ia/"    
+    import: "optional:configtree:/mnt/secrets/ia/"
   jackson.date-format: yyyy-MM-dd
   security:
     oauth2:
@@ -61,6 +61,11 @@ appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
 appealSubmissionDocument.fileName: "appeal-form"
 appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00676.docx}
+
+appealSubmissionDocumentInternalOoc.contentType: application/pdf
+appealSubmissionDocumentInternalOoc.fileExtension: PDF
+appealSubmissionDocumentInternalOoc.fileName: "appeal-form"
+appealSubmissionDocumentInternalOoc.templateName: ${IA_APPEAL_SUBMISSION_INTERNAL_OOC_TEMPLATE:TB-IAC-APP-ENG-00677.docx}
 
 hearingRequirementsDocument.contentType: application/pdf
 hearingRequirementsDocument.fileExtension: PDF
@@ -149,7 +154,7 @@ decisionAndReasonsCoverLetter.contentType:  application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
-updatedDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter-AMENDED"
+updatedDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter-UPDATED"
 
 internalDetainedDecisionsAndReasonsAllowedLetter.contentType: application/pdf
 internalDetainedDecisionsAndReasonsAllowedLetter.fileExtension: PDF
@@ -310,6 +315,11 @@ internalDetainedEditCaseListingLetter.fileExtension: PDF
 internalDetainedEditCaseListingLetter.fileName: "detained-appellant-edit-case-listing-letter"
 internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
 
+internalDetainedManageFeeUpdateLetter.contentType: application/pdf
+internalDetainedManageFeeUpdateLetter.fileExtension: PDF
+internalDetainedManageFeeUpdateLetter.fileName: "internal-detained-manage-fee-update-letter"
+internalDetainedManageFeeUpdateLetter.templateName: ${IA_INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00808.docx}
+
 internalMarkAppealAsAda.contentType:  application/pdf
 internalMarkAppealAsAda.fileExtension: PDF
 internalMarkAppealAsAda.fileName: "detained-appellant-mark-as-ada-notice"
@@ -459,10 +469,43 @@ internalDetainedAdjournHearingWithoutDateLetter.fileExtension: PDF
 internalDetainedAdjournHearingWithoutDateLetter.fileName: "internal-detained-adjourn-hearing-without-date-letter"
 internalDetainedAdjournHearingWithoutDateLetter.templateName: ${INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00040.docx}
 
+internalEndAppealLetter.contentType:  application/pdf
+internalEndAppealLetter.fileExtension: PDF
+internalEndAppealLetter.fileName: "internal-end-appeal-letter"
+internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-End-Appeal.docx}
+
+internalEndAppealLetterWithAttachment.fileExtension: PDF
+internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
+
+internalEditCaseListingLetter.contentType:  application/pdf
+internalEditCaseListingLetter.fileExtension: PDF
+internalEditCaseListingLetter.fileName: "internal-edit-case-listing-letter"
+internalEditCaseListingLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+
+internalEditCaseListingLetterWithAttachment.fileExtension: PDF
+internalEditCaseListingLetterWithAttachment.fileName: "internal-edit-case-listing-letter-with-attachment"
+
+internalOutOfTimeDecisionLetter.contentType:  application/pdf
+internalOutOfTimeDecisionLetter.fileExtension: PDF
+internalOutOfTimeDecisionLetter.fileName: "internal-out-of-time-decision-letter"
+internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-record-out-time-decision-final.docx}
+
+internalOutOfTimeDecisionLetterWithAttachment.fileExtension: PDF
+internalOutOfTimeDecisionLetterWithAttachment.fileName: "internal-out-of-time-decision-letter-with-attachment"
+
+internalCaseListedLetter.contentType:  application/pdf
+internalCaseListedLetter.fileExtension: PDF
+internalCaseListedLetter.fileName: "internal-case-listed-letter"
+internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+
+internalCaseListedLetterWithAttachment.fileExtension: PDF
+internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
+
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
 bailNoticeOfHearing.fileName: "hearing-notice"
 bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx}
+bailNoticeOfHearingConditionalBailRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted-conditional-bail.docx}
 bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
@@ -524,7 +567,7 @@ security:
       - "requestRespondentReview"
       - "addAppealResponse"
       - "createCaseSummary"
-      - "generateHearingBundle"
+      - "generateUpdatedHearingBundle"
       - "generateDecisionAndReasons"
       - "sendDecisionAndReasons"
       - "editCaseListing"
@@ -554,6 +597,8 @@ security:
       - "buildCase"
       - "listCase"
       - "draftHearingRequirements"
+      - "manageFeeUpdate"
+      - "updateTribunalDecision"
     caseworker-ia-admofficer:
       - "listCase"
       - "submitAppeal"
@@ -589,6 +634,8 @@ security:
       - "buildCase"
       - "caseListing"
       - "asyncStitchingComplete"
+      - "saveNotificationsToData"
+      - "manageFeeUpdate"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -608,7 +655,7 @@ security:
       - "editAppealAfterSubmit"
       - "generateUpperTribunalBundle"
       - "recordTheDecision"
-      - "endApplication"    
+      - "endApplication"
       - "uploadSignedDecisionNotice"
       - "updateTribunalDecision"
       - "adaSuitabilityReview"
@@ -633,6 +680,7 @@ security:
       - "caseListing"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
+      - "saveNotificationsToData"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -683,6 +731,12 @@ customerServices:
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
 iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
+
+appellantDaysToWait:
+  letter:
+    afterSubmission: 28
+    afterManageFeeUpdate: 14
+
 
 ### Email addresses
 hearingCentreEmailAddresses:

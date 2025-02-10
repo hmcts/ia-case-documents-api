@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRecordOutOfTimeDecisionLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
@@ -22,6 +24,27 @@ public class DocumentCreatorConfiguration {
         @Value("${appealSubmissionDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         AppealSubmissionTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalOocAppealSubmission")
+    public DocumentCreator<AsylumCase> getInternalOocAppealSubmissionDocumentCreator(
+        @Value("${appealSubmissionDocumentInternalOoc.contentType}") String contentType,
+        @Value("${appealSubmissionDocumentInternalOoc.fileExtension}") String fileExtension,
+        @Value("${appealSubmissionDocumentInternalOoc.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalOocAppealSubmissionTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
@@ -961,6 +984,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetManageFeeUpdateLetter")
+    public DocumentCreator<AsylumCase> getInternalDetManageFeeUpdateLetterCreator(
+            @Value("${internalDetainedManageFeeUpdateLetter.contentType}") String contentType,
+            @Value("${internalDetainedManageFeeUpdateLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedManageFeeUpdateLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedManageFeeUpdateLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalMarkAsAdaNotice")
     public DocumentCreator<AsylumCase> getInternalMarkAsAdaDocumentCreator(
             @Value("${internalMarkAppealAsAda.contentType}") String contentType,
@@ -1600,6 +1644,90 @@ public class DocumentCreatorConfiguration {
         @Value("${updatedDecisionAndReasonsCoverLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         UpdatedTribunalAipDecisionAndReasonsCoverLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalEndAppealLetter")
+    public DocumentCreator<AsylumCase> getinternalEndAppealLetterDocumentCreator(
+        @Value("${internalEndAppealLetter.contentType}") String contentType,
+        @Value("${internalEndAppealLetter.fileExtension}") String fileExtension,
+        @Value("${internalEndAppealLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalEndAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalCaseListedLetter")
+    public DocumentCreator<AsylumCase> getinternalCaseListedlLetterDocumentCreator(
+        @Value("${internalCaseListedLetter.contentType}") String contentType,
+        @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
+        @Value("${internalCaseListedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCaseListedLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalOutOfTimeDecisionLetter")
+    public DocumentCreator<AsylumCase> getinternalOutOfTimeDecisionLetterDocumentCreator(
+        @Value("${internalOutOfTimeDecisionLetter.contentType}") String contentType,
+        @Value("${internalOutOfTimeDecisionLetter.fileExtension}") String fileExtension,
+        @Value("${internalOutOfTimeDecisionLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalRecordOutOfTimeDecisionLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalEditCaseListingLetter")
+    public DocumentCreator<AsylumCase> getinternalEditCaseListingLetterDocumentCreator(
+        @Value("${internalEditCaseListingLetter.contentType}") String contentType,
+        @Value("${internalEditCaseListingLetter.fileExtension}") String fileExtension,
+        @Value("${internalEditCaseListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalEditCaseListingLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

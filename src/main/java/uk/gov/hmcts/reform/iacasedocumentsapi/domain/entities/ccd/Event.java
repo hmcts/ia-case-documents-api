@@ -28,10 +28,12 @@ public enum Event {
     ASYNC_STITCHING_COMPLETE("asyncStitchingComplete", CaseType.ASYLUM),
     REQUEST_HEARING_REQUIREMENTS_FEATURE("requestHearingRequirementsFeature", CaseType.ASYLUM),
     CUSTOMISE_HEARING_BUNDLE("customiseHearingBundle", CaseType.ASYLUM),
+    GENERATE_UPDATED_HEARING_BUNDLE("generateUpdatedHearingBundle", CaseType.ASYLUM),
     GENERATE_DECISION_AND_REASONS("generateDecisionAndReasons", CaseType.ASYLUM),
     ADA_SUITABILITY_REVIEW("adaSuitabilityReview", CaseType.ASYLUM),
     SEND_DECISION_AND_REASONS("sendDecisionAndReasons", CaseType.ASYLUM),
     EDIT_CASE_LISTING("editCaseListing", CaseType.ASYLUM),
+    MANAGE_FEE_UPDATE("manageFeeUpdate", CaseType.ASYLUM),
     END_APPEAL("endAppeal", CaseType.ASYLUM),
     END_APPEAL_AUTOMATICALLY("endAppealAutomatically", CaseType.ASYLUM),
     ADJOURN_HEARING_WITHOUT_DATE("adjournHearingWithoutDate", CaseType.ASYLUM),
@@ -77,6 +79,7 @@ public enum Event {
 
     UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments", CaseType.ASYLUM),
+    SAVE_NOTIFICATIONS_TO_DATA("saveNotificationsToData", CaseType.ASYLUM),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);
