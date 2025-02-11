@@ -305,9 +305,10 @@ class HearingNoticeEditedCreatorTest {
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(hearingCentreNameBefore);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(oldHearingDate);
         when(documentReceiver.receive(uploadedDocument, "", DocumentTag.REHEARD_HEARING_NOTICE_RELISTED))
@@ -350,9 +351,10 @@ class HearingNoticeEditedCreatorTest {
             List.of(new IdValue<>("id", mockReheardHearingDocuments));
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardDocumentsCollection));
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
         when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.getCaseData())).thenReturn(oldHearingDate);
         when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(hearingCentreNameBefore);
         when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(oldHearingDate);
         when(documentReceiver.receive(uploadedDocument, "", DocumentTag.REHEARD_HEARING_NOTICE_RELISTED))
