@@ -6,10 +6,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.google.common.base.Strings;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.RetryableNotificationClient;
@@ -35,8 +39,7 @@ public class NotificationVerifier implements Verifier {
         List<Map<String, Object>> expectedNotifications =
             MapValueExtractor.extractOrDefault(scenario, "expectation.notifications", Collections.emptyList());
 
-        if (expectedNotifications == null
-            || expectedNotifications.size() == 0) {
+        if (expectedNotifications == null || expectedNotifications.isEmpty()) {
             return;
         }
 
@@ -54,7 +57,7 @@ public class NotificationVerifier implements Verifier {
             notificationsSent
                 .stream()
                 .collect(Collectors.toMap(
-                    notificationSent -> (String) notificationSent.get("id"),
+                    notificationSent -> sanitizeNotificationId((String) notificationSent.get("id")),
                     notificationSent -> (String) notificationSent.get("value")
                 ));
 
@@ -79,7 +82,7 @@ public class NotificationVerifier implements Verifier {
 
                     Notification notification = notificationClient.getNotificationById(deliveredNotificationId);
 
-                    final String actualReference = notification.getReference().orElse("");
+                    final String actualReference = sanitizeNotificationId(notification.getReference().orElse(""));
                     final String actualRecipient =
                         notification.getEmailAddress().orElse(notification.getPhoneNumber().orElse(""));
                     final String actualSubject = notification.getSubject().orElse("");
@@ -147,5 +150,12 @@ public class NotificationVerifier implements Verifier {
                     );
                 }
             });
+    }
+
+    private String sanitizeNotificationId(String notificationIdWithTimestamp) {
+        // Regular expression to remove the last underscore and following timestamp in epochmillis
+        Pattern pattern = Pattern.compile("^(.*)_\\d{13}$");
+        Matcher matcher = pattern.matcher(notificationIdWithTimestamp);
+        return matcher.find() ? matcher.group(1) : notificationIdWithTimestamp;
     }
 }

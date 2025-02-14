@@ -27,6 +27,7 @@ public class NotificationIdAppenderTest {
 
     @Test
     public void should_append_first_notification_without_qualifier() {
+        final String timestampRegex = "([0-9]{13})";
 
         List<IdValue<String>> actualNotificationsSent =
             notificationIdAppender.append(
@@ -39,14 +40,17 @@ public class NotificationIdAppenderTest {
         assertEquals(existingNotification1, actualNotificationsSent.get(0));
         assertEquals(existingNotification2, actualNotificationsSent.get(1));
 
-        assertEquals("something", actualNotificationsSent.get(2).getId());
+        assertThat(actualNotificationsSent.get(2).getId()).startsWith("something_");
+        assertThat(actualNotificationsSent.get(2).getId()
+                .substring("something_".length()))
+                .matches(timestampRegex);
         assertEquals("555-666", actualNotificationsSent.get(2).getValue());
     }
 
     @Test
     public void should_append_subsequent_notifications_with_qualifiers() {
 
-        final String uuidRegex = "([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}";
+        final String uuidRegex = "([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}_[0-9]{13})";
 
         List<IdValue<String>> actualNotificationsSent1 =
             notificationIdAppender.append(
