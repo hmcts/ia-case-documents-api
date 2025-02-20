@@ -101,7 +101,6 @@
           "Pablo Jimenez",
           "PA/12345/2019",
           "{$iaExUiFrontendUrl}",
-          "Review the built case",
           "{$TODAY+14|d MMM yyyy}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"        ]
