@@ -78,7 +78,6 @@ public class LegalRepresentativeRequestCaseBuildingPersonalisation implements Le
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .put("linkToOnlineService", iaExUiFrontendUrl)
-                .put("explanation", direction.getExplanation())
                 .put("dueDate", directionDueDate)
                 .build();
     }
