@@ -5433,13 +5433,14 @@ public class NotificationGeneratorConfiguration {
     public List<NotificationGenerator> appellantSubmittedWithRemissionRequestNotificationGenerator(
         AppellantSubmittedWithRemissionRequestPersonalisationEmail appellantSubmittedWithRemissionRequestPersonalisationEmail,
         AppellantSubmittedWithRemissionRequestPersonalisationSms appellantSubmittedWithRemissionRequestPersonalisationSms,
+        HomeOfficeAppealSubmittedPendingPaymentPersonalisation homeOfficeAppealSubmittedPendingPaymentPersonalisation,
         GovNotifyNotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender
     ) {
 
         return Arrays.asList(
             new EmailNotificationGenerator(
-                newArrayList(appellantSubmittedWithRemissionRequestPersonalisationEmail),
+                newArrayList(appellantSubmittedWithRemissionRequestPersonalisationEmail, homeOfficeAppealSubmittedPendingPaymentPersonalisation),
                 notificationSender,
                 notificationIdAppender
             ),

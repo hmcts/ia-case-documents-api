@@ -29,7 +29,7 @@ public class HomeOfficeAppealSubmittedPendingPaymentPersonalisation implements E
     private String nonAdaPrefix;
 
     public HomeOfficeAppealSubmittedPendingPaymentPersonalisation(
-            @NotNull(message = "pendingPaymentAdminOfficerTemplateId cannot be null")
+            @NotNull(message = "pendingPaymentHomeOfficeTemplateId cannot be null")
             @Value("${govnotify.template.appealSubmitted.homeOffice.pendingPaymentEaHu.email}") String homeOfficeAppealSubmittedPendingPaymentTemplateId,
             @Value("${iaExUiFrontendUrl}") String iaExUiFrontendUrl,
             CustomerServicesProvider customerServicesProvider,

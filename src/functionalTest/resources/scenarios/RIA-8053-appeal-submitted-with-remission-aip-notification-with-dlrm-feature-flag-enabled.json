@@ -13,7 +13,6 @@
           "isDlrmFeeRemissionEnabled": "Yes",
           "isRemissionsEnabled": "Yes",
           "journeyType": "aip",
-          "remissionType":"hoWaiverRemission",
           "remissionOption": "feeWaiverFromHo",
           "appealType":"refusalOfEu",
           "eaHuAppealTypePaymentOption": "payLater",
@@ -42,21 +41,16 @@
       "replacements": {
         "hearingCentre": "taylorHouse",
         "isRemissionsEnabled": "Yes",
-        "remissionType":"hoWaiverRemission",
         "remissionOption": "feeWaiverFromHo",
         "appealType":"refusalOfEu",
         "eaHuAppealTypePaymentOption": "payLater",
         "notificationsSent": [
           {
-            "id": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_HOME_OFFICE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
             "id": "3689_SUBMITTED_WITH_REMISSION_REQUEST_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
@@ -67,18 +61,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_HOME_OFFICE",
-        "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
-        "subject": "Immigration and Asylum appeal: appeal submitted",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}",
-          "{$customerServices.telephoneNumber}",
-          "{$customerServices.emailAddress}"
-        ]
-      },
       {
         "reference": "3689_SUBMITTED_WITH_REMISSION_REQUEST_AIP_EMAIL",
         "recipient": "{$TEST_CITIZEN_USERNAME}",
@@ -98,6 +80,18 @@
           "",
           "This should be by {$TODAY+14|d MMM yyyy} but it might take longer than that.",
           ""
+        ]
+      },
+      {
+        "reference": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_HOME_OFFICE",
+        "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
         ]
       },
       {
