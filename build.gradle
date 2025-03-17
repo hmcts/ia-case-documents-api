@@ -32,8 +32,8 @@ apply plugin: 'idea'
 def versions = [
     junit              : '5.12.1',
     junitPlatform      : '1.12.1',
-    gradlePitest       : '1.5.1',
-    pitest             : '1.18.2',
+    gradlePitest       : '1.15.0',
+    pitest             : '1.16.2',
     reformLogging      : '6.1.8',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
@@ -372,7 +372,7 @@ dependencies {
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
     testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
-    testImplementation "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0"
+    testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
     testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
 
     testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
