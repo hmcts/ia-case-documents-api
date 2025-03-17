@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantDetainedLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -40,9 +41,12 @@ public class BailNoticeOfHearingTemplate {
     private final StringProvider stringProvider;
 
     public BailNoticeOfHearingTemplate(
-        CustomerServicesProvider customerServicesProvider, StringProvider stringProvider) {
+        CustomerServicesProvider customerServicesProvider,
+        StringProvider stringProvider) {
+
         this.customerServicesProvider = customerServicesProvider;
         this.stringProvider = stringProvider;
+
     }
 
     public Map<String, Object> mapFieldValues(

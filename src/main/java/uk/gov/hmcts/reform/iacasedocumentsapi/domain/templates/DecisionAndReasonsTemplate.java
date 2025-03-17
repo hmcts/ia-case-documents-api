@@ -1,7 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.DECISION_WITHOUT_HEARING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDecisionWithoutHearingAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -40,20 +44,22 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
-
-        final HearingCentre listedHearingCentre =
-            asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("decisionsandreasons", "[userImage:decisionsandreasons.png]");
+        if (isDecisionWithoutHearingAppeal(asylumCase)) {
+            assignHearingCentreValue(DECISION_WITHOUT_HEARING, fieldValues);
+        } else if (isRemoteHearing(asylumCase)) {
+            assignHearingCentreValue(REMOTE_HEARING, fieldValues);
+        } else {
+            final HearingCentre listedHearingCentre =
+                asylumCase
+                    .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                    .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
-        fieldValues.put(
-                "hearingCentre",
-                stringProvider.get("hearingCentreName", listedHearingCentre.toString()).orElse("")
-        );
+            assignHearingCentreValue(listedHearingCentre, fieldValues);
+        }
+
+        fieldValues.put("decisionsandreasons", "[userImage:decisionsandreasons.png]");
 
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
@@ -83,6 +89,13 @@ public class DecisionAndReasonsTemplate implements DocumentTemplate<AsylumCase> 
         fieldValues.put("currentYear", String.valueOf(LocalDate.now().getYear()));
 
         return fieldValues;
+    }
+
+    private void assignHearingCentreValue(HearingCentre location, Map<String, Object> fieldValues) {
+        fieldValues.put(
+            "hearingCentre",
+            stringProvider.get("hearingCentreName", location.toString()).orElse("")
+        );
     }
 
 }

@@ -4,6 +4,8 @@ import static java.lang.String.join;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessToke
  */
 @Component
 @Deprecated
+@Slf4j
 public class DmDocumentDownloadClient {
 
     private final DocumentDownloadClientApi documentDownloadClientApi;
@@ -50,6 +53,7 @@ public class DmDocumentDownloadClient {
 
         UserDetails userDetails = userDetailsProvider.getUserDetails();
 
+        log.info("Downloading {} using DocumentDownloadClientApi (no CDAM)", documentBinaryUrl);
         ResponseEntity<Resource> resourceResponseEntity = documentDownloadClientApi.downloadBinary(
             accessTokenProvider.getAccessToken(),
             serviceAuthTokenGenerator.generate(),

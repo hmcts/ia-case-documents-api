@@ -1,0 +1,69 @@
+{
+  "description": "RIA-8249 Internal detained manage fee update letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "eventId": "manageFeeUpdate",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedAppeal": "No",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "feeAmount": "14000",
+          "newFeeAmount": "2000",
+          "paymentStatus": "Paid",
+          "feeUpdateReason": "appealNotValid",
+          "isDlrmSetAsideEnabled": "Yes",
+          "paymentDate": "10 Oct 2000",
+          "feeAmountGbp": "14000",
+          "feeUpdateRecorded": {
+            "values": [
+              "feeUpdateRecorded"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedAppeal": "No",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "feeAmount": "14000",
+        "newFeeAmount": "2000",
+        "paymentStatus": "Paid",
+        "feeUpdateReason": "appealNotValid",
+        "isDlrmSetAsideEnabled": "Yes",
+        "paymentDate": "10 Oct 2000",
+        "feeAmountGbp": "14000",
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 11111 2019-Gonzlez-internal-detained-manage-fee-update-letter.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "internalDetainedManageFeeUpdateLetter"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

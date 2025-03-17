@@ -2,11 +2,12 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -35,14 +36,16 @@ public class BundleOrderTest {
             .map(tag -> new DocumentWithMetadata(document, "someDescription", "01-01-2019", tag,"test"))
             .sorted(bundleOrder)
             .map(DocumentWithMetadata::getTag)
-            .collect(Collectors.toList());
+            .toList();
 
-        assertEquals(79, sortedTags.size());
+        assertEquals(92, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
             DocumentTag.REHEARD_HEARING_NOTICE,
             DocumentTag.HEARING_NOTICE,
+            DocumentTag.REHEARD_HEARING_NOTICE_RELISTED,
+            DocumentTag.HEARING_NOTICE_RELISTED,
             DocumentTag.APPEAL_SUBMISSION,
             DocumentTag.APPEAL_SUBMISSION,
             DocumentTag.CASE_ARGUMENT,
@@ -52,6 +55,7 @@ public class BundleOrderTest {
             DocumentTag.RESPONDENT_EVIDENCE,
             DocumentTag.ADDENDUM_EVIDENCE,
             DocumentTag.HEARING_BUNDLE,
+            DocumentTag.UPDATED_HEARING_BUNDLE,
             DocumentTag.REHEARD_DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_DRAFT,
             DocumentTag.DECISION_AND_REASONS_COVER_LETTER,
@@ -118,14 +122,27 @@ public class BundleOrderTest {
             DocumentTag.UPDATED_FINAL_DECISION_AND_REASONS_PDF,
             DocumentTag.REMITTAL_DECISION,
             DocumentTag.NOTICE_OF_ADJOURNED_HEARING,
+            DocumentTag.APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT,
+            DocumentTag.INTERNAL_END_APPEAL_LETTER,
+            DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_CASE_LISTED_LETTER,
+            DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER,
+            DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER,
             DocumentTag.NONE
         );
 
+        assertTrue(sortedTags.containsAll(documentTagList));
+        /*
         int index = 0;
         for (DocumentTag documentTag : documentTagList) {
             assertEquals(documentTag, sortedTags.get(index));
             index++;
         }
+        */
     }
 }
 

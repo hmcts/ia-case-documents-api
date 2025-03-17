@@ -37,10 +37,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refda
 @ExtendWith(MockitoExtension.class)
 class BailNoticeOfHearingInitialListingTemplateTest {
 
-    @Mock private CaseDetails<BailCase> caseDetails;
-    @Mock private BailCase bailCase;
-    @Mock private CustomerServicesProvider customerServicesProvider;
-    @Mock private StringProvider stringProvider;
+    @Mock
+    private CaseDetails<BailCase> caseDetails;
+    @Mock
+    private BailCase bailCase;
+    @Mock
+    private CustomerServicesProvider customerServicesProvider;
+    @Mock
+    private StringProvider stringProvider;
 
     private final String applicantGivenNames = "John";
     private final String applicantFamilyName = "Smith";
@@ -51,8 +55,8 @@ class BailNoticeOfHearingInitialListingTemplateTest {
     private final String customerServicesPhone = "111122223333";
     final String legalRepReference = "legalRepReference";
     private CourtVenue hattonCross;
-    private final String initialListingTemplateName = "TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx";
 
+    private final String initialListingTemplateName = "TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx";
     private BailNoticeOfHearingInitialListingTemplate template;
     private Map<String, Object> fieldValuesMap;
 
@@ -187,4 +191,5 @@ class BailNoticeOfHearingInitialListingTemplateTest {
         assertEquals("Nottingham Justice Centre\nCarrington Street\nNottingham\nNG2 1EE",
                 fieldValuesMap.get("hearingCentreAddress"));
     }
+
 }

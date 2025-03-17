@@ -1,6 +1,6 @@
 {
   "description": "RIA-3683 Create reheard hearing notice PDF (IAC Birmingham) - FTPA reheard case",
-  "disabled": "true",
+  "enabled": "false",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
