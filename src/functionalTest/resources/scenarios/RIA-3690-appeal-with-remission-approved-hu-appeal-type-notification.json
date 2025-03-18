@@ -33,10 +33,6 @@
         "amountLeftToPay": "00.00",
         "notificationsSent": [
           {
-            "id": "3690_REMISSION_DECISION_APPROVED_ADMIN_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
             "id": "3690_REMISSION_DECISION_APPROVED_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
@@ -48,16 +44,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "3690_REMISSION_DECISION_APPROVED_ADMIN_OFFICER",
-        "recipient": "{$FEES_ADMIN_OFFICER_EMAIL}",
-        "subject": "Immigration and Asylum appeal: Remission application approved",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
       {
         "reference": "3690_REMISSION_DECISION_APPROVED_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
