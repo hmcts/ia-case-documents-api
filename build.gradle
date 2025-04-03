@@ -33,7 +33,7 @@ def versions = [
     junit              : '5.12.1',
     junitPlatform      : '1.12.1',
     gradlePitest       : '1.15.0',
-    pitest             : '1.19.0',
+    pitest             : '1.17.0',
     reformLogging      : '6.1.8',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
@@ -225,7 +225,7 @@ jacocoTestReport {
 
 pitest {
 //    print('./gradlew --version'.execute().text.trim())
-    junit5PluginVersion = '1.2.2'
+    junit5PluginVersion = '1.2.3'
     targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
     excludedClasses = [
         'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
