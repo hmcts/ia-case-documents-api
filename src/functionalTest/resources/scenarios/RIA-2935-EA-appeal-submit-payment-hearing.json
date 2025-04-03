@@ -32,7 +32,7 @@
         "paymentStatus":"Paid",
         "pbaNumber":"PBA0072626",
         "feeCode":"FEE0238",
-        "feeVersion":"2",
+        "feeVersion":"3",
         "feeAmountGbp":"14000",
         "feeDescription":"Appeal determined with a hearing",
         "paymentDescription":"The fee for an appeal with a hearing is £140"

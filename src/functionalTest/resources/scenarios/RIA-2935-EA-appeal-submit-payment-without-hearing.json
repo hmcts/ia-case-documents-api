@@ -32,7 +32,7 @@
         "paymentStatus":"Paid",
         "pbaNumber":"PBA0072626",
         "feeCode":"FEE0456",
-        "feeVersion":"2",
+        "feeVersion":"3",
         "feeAmountGbp":"8000",
         "feeDescription":"Appeal determined without a hearing",
         "paymentDescription":"The fee for an appeal without a hearing is £80"
