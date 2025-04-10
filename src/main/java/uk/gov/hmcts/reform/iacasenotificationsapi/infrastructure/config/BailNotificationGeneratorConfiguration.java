@@ -22,9 +22,40 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.BailNotificatio
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.BailSmsNotificationGenerator;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.BailGovNotifyNotificationSender;
 
+import static java.util.Collections.singletonList;
+
 @Configuration
 public class BailNotificationGeneratorConfiguration {
 
+    @Bean("startApplicationDisposalNotificationGenerator")
+    public List<BailNotificationGenerator> startApplicationDisposalNotificationGenerator(
+        LegalRepresentativeBailApplicationStartedDisposalPersonalisationEmail legalRepresentativeBailApplicationStartedDisposalPersonalisationEmail,
+        BailGovNotifyNotificationSender notificationSender,
+        BailNotificationIdAppender notificationIdAppender
+    ) {
+        return singletonList(
+            new BailEmailNotificationGenerator(
+                newArrayList(legalRepresentativeBailApplicationStartedDisposalPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
+
+    @Bean("editBailApplicationDisposalNotificationGenerator")
+    public List<BailNotificationGenerator> editBailApplicationDisposalNotificationGenerator(
+        LegalRepresentativeBailApplicationEditedDisposalPersonalisationEmail legalRepresentativeBailApplicationEditedDisposalPersonalisationEmail,
+        BailGovNotifyNotificationSender notificationSender,
+        BailNotificationIdAppender notificationIdAppender
+    ) {
+        return singletonList(
+            new BailEmailNotificationGenerator(
+                newArrayList(legalRepresentativeBailApplicationEditedDisposalPersonalisationEmail),
+                notificationSender,
+                notificationIdAppender
+            )
+        );
+    }
 
     @Bean("submitApplicationNotificationGenerator")
     public List<BailNotificationGenerator> submitApplicationNotificationGenerator(

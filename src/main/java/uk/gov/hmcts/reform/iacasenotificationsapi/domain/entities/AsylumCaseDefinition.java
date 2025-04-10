@@ -603,6 +603,9 @@ public enum AsylumCaseDefinition {
 
     DECISION_HEARING_FEE_OPTION(
             "decisionHearingFeeOption", new TypeReference<String>(){}),
+
+    TTL(
+            "TTL", new TypeReference<TtlCcdObject>(){}),
     ;
 
 

@@ -1,6 +1,9 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config;
 
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.BailCaseUtils.isInternalCase;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.EDIT_BAIL_APPLICATION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event.START_APPLICATION;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
 
@@ -27,6 +30,50 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.BailNotificatio
 @Slf4j
 @Configuration
 public class BailNotificationHandlerConfiguration {
+    @Bean
+    public PreSubmitCallbackHandler<BailCase> startApplicationDisposalNotificationHandler(
+        @Qualifier("startApplicationDisposalNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators
+    ) {
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean canBeHandled = callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == START_APPLICATION;
+
+                if (canBeHandled) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+
+                    return !isInternalCase(bailCase);
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+
+    @Bean
+    public PreSubmitCallbackHandler<BailCase> editBailApplicationDisposalNotificationHandler(
+        @Qualifier("editBailApplicationDisposalNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators
+    ) {
+
+        return new BailNotificationHandler(
+            (callbackStage, callback) -> {
+                boolean canBeHandled = callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                    && callback.getEvent() == EDIT_BAIL_APPLICATION;
+
+                if (canBeHandled) {
+                    BailCase bailCase = callback.getCaseDetails().getCaseData();
+                    return !isInternalCase(bailCase);
+                } else {
+                    return false;
+                }
+            },
+            bailNotificationGenerators,
+            getErrorHandler()
+        );
+    }
+
     @Bean
     public PreSubmitCallbackHandler<BailCase> submitApplicationWithLegalRepNotificationHandler(
         @Qualifier("submitApplicationNotificationGenerator") List<BailNotificationGenerator> bailNotificationGenerators

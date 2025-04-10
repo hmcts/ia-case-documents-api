@@ -6,6 +6,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Addr
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.InterpreterLanguage;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.NationalityFieldValue;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.TtlCcdObject;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.refdata.CourtVenue;
 
@@ -214,6 +215,8 @@ public enum BailCaseFieldDefinition {
         "legalRepEmail", new TypeReference<String>(){}),
     LEGAL_REP_NAME(
         "legalRepName", new TypeReference<String>(){}),
+    LEGAL_REP_FAMILY_NAME(
+        "legalRepFamilyName", new TypeReference<String>(){}),
     LEGAL_REP_PHONE(
         "legalRepPhone", new TypeReference<String>(){}),
     LEGAL_REP_REFERENCE(
@@ -307,7 +310,9 @@ public enum BailCaseFieldDefinition {
     IS_REMOTE_HEARING(
             "isRemoteHearing", new TypeReference<YesOrNo>() {}),
     CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS(
-    "currentCaseStateVisibleToAllUsers", new TypeReference<String>() {});
+            "currentCaseStateVisibleToAllUsers", new TypeReference<String>() {}),
+    TTL(
+            "TTL", new TypeReference<TtlCcdObject>(){});
 
     private final String value;
     private final TypeReference typeReference;

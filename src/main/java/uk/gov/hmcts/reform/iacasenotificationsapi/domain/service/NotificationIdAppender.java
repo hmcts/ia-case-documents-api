@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 
 @Component
+@Slf4j
 public class NotificationIdAppender {
 
     public void appendAll(final AsylumCase asylumCase, final String referenceId, final List<String> notificationIds) {

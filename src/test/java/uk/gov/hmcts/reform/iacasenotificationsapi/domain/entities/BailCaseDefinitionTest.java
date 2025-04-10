@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class BailCaseDefinitionTest {
 
     List<BailCaseFieldDefinition> fieldsNamesWithDifferentNaming =
-        Arrays.asList(SUPPORTER_DOB, SUPPORTER_2_DOB, SUPPORTER_3_DOB, SUPPORTER_4_DOB);
+        Arrays.asList(SUPPORTER_DOB, SUPPORTER_2_DOB, SUPPORTER_3_DOB, SUPPORTER_4_DOB, TTL);
 
     @Test
     public void mapped_to_equivalent_field_name() {
@@ -25,10 +25,11 @@ public class BailCaseDefinitionTest {
         assertEquals(SUPPORTER_2_DOB.value(), "supporter2DOB");
         assertEquals(SUPPORTER_3_DOB.value(), "supporter3DOB");
         assertEquals(SUPPORTER_4_DOB.value(), "supporter4DOB");
+        assertEquals(TTL.value(), "TTL");
     }
 
     @Test
     public void should_fail_if_new_fields_added_in_class() {
-        assertEquals(149, values().length);
+        assertEquals(151, values().length);
     }
 }

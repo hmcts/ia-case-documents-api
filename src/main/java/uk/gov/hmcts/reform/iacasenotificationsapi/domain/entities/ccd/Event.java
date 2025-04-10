@@ -131,6 +131,9 @@ public enum Event {
     PROGRESS_MIGRATED_CASE("progressMigratedCase"),
     REFUND_CONFIRMATION("refundConfirmation"),
 
+    START_APPLICATION("startApplication"),
+    EDIT_BAIL_APPLICATION("editBailApplication"),
+
     @JsonEnumDefaultValue
     UNKNOWN("unknown");
 

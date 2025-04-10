@@ -84,6 +84,22 @@ govnotify:
       awaitingRespondentEvidence.to.caseBuilding:
         respondent:
           email: fe79c1c1-2f1c-4e46-a58d-e28845ac9761
+    appealStarted:
+      legalRep:
+        disposal:
+          email: 318e65c4-c432-4e63-a730-021d12d6a490
+      appellant:
+        aip:
+          disposal:
+            email: 4e6518c9-31a5-492c-b7e1-297d915df23a
+    appealEdited:
+      legalRep:
+        disposal:
+          email: bb79cc9b-f5f3-46e1-b5aa-d90f94d3952a
+      appellant:
+        aip:
+          disposal:
+            email: 5bd628ef-1793-4885-b2cf-b2003137164b
     appealSubmitted:
       legalRep:
         paid:
@@ -1420,6 +1436,12 @@ govnotify:
     key: ${IA_BAIL_GOV_NOTIFY_KEY}
     timeout: 5000
     template:
+      startApplication:
+        disposal:
+            email: 185fe400-26d9-46ee-ac2d-aa4b9bb32f2e
+      editApplication:
+        disposal:
+            email: a8569409-08dc-4e68-b5db-19a582bc4e94
       submitApplication:
         email: 5f30774f-00fb-4c03-b010-e5a8afaa5f05
         sms: 64ac7c79-682f-4bd7-9847-bfd21240e8c6
@@ -1582,6 +1604,8 @@ security:
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
+      - "startApplication"
+      - "editBailApplication"
       - "submitAppeal"
       - "buildCase"
       - "submitCase"
@@ -1671,6 +1695,10 @@ security:
       - "updateTribunalDecision"
       - "recordRemissionReminder"
     caseworker-ia-admofficer:
+      - "startAppeal"
+      - "editAppeal"
+      - "startApplication"
+      - "editBailApplication"
       - "listCase"
       - "submitAppeal"
       - "editAppeal"
@@ -1728,6 +1756,8 @@ security:
       - "progressMigratedCase"
       - "refundConfirmation"
     caseworker-ia-homeofficeapc:
+      - "startApplication"
+      - "editBailApplication"
       - "uploadHomeOfficeBundle"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
@@ -1736,6 +1766,8 @@ security:
       - "respondToCosts"
       - "addEvidenceForCosts"
     caseworker-ia-homeofficelart:
+      - "startApplication"
+      - "editBailApplication"
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
@@ -1744,6 +1776,8 @@ security:
       - "respondToCosts"
       - "addEvidenceForCosts"
     caseworker-ia-homeofficepou:
+      - "startApplication"
+      - "editBailApplication"
       - "uploadAdditionalEvidenceHomeOffice"
       - "uploadAddendumEvidenceHomeOffice"
       - "applyForFTPARespondent"
@@ -1812,6 +1846,8 @@ security:
       - "sendPaymentReminderNotification"
       - "recordRemissionReminder"
     caseworker-ia-homeofficebail:
+      - "startApplication"
+      - "editBailApplication"
       - "submitApplication"
       - "uploadBailSummary"
       - "uploadDocuments"

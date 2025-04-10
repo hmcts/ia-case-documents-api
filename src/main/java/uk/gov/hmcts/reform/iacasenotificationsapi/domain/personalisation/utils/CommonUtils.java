@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
 import org.apache.commons.lang3.StringUtils;
 
 public final class CommonUtils {
