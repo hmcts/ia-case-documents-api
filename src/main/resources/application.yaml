@@ -60,7 +60,7 @@ spring:
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
 appealSubmissionDocument.fileName: "appeal-form"
-appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00676-v2.docx}
+appealSubmissionDocument.templateName: ${IA_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-APP-ENG-00676-v2.docx}./gradlew clean bootrun --no-daemon
 
 appealSubmissionDocumentInternalOoc.contentType: application/pdf
 appealSubmissionDocumentInternalOoc.fileExtension: PDF
