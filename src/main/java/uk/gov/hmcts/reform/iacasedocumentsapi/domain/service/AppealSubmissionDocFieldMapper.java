@@ -273,17 +273,6 @@ public class AppealSubmissionDocFieldMapper {
                 }
                 fieldValues.put("nomsAvailable", nomsAvailable);
 
-                YesOrNo releaseDateProvided = YesOrNo.NO;
-                if (asylumCase.containsKey("dateCustodialSentence")) {
-                    String prisonerReleaseDate = formatComplexString(asylumCase
-                        .get("dateCustodialSentence")
-                        .toString());
-                    if (!prisonerReleaseDate.isBlank()) {
-                        releaseDateProvided = YesOrNo.YES;
-                        fieldValues.put("releaseDate", prisonerReleaseDate);
-                    }
-                }
-                fieldValues.put("releaseDateProvided", releaseDateProvided);
                 break;
             case "other":
                 detentionFacility = "Other";
@@ -292,6 +281,19 @@ public class AppealSubmissionDocFieldMapper {
             default:
                 // Required for sonar scan. Can never reach here.
         }
+
+        YesOrNo releaseDateProvided = YesOrNo.NO;
+        if (asylumCase.containsKey("dateCustodialSentence")) {
+            String prisonerReleaseDate = formatComplexString(asylumCase
+                    .get("dateCustodialSentence")
+                    .toString());
+            if (!prisonerReleaseDate.isBlank()) {
+                releaseDateProvided = YesOrNo.YES;
+                fieldValues.put("releaseDate", prisonerReleaseDate);
+            }
+        }
+        fieldValues.put("releaseDateProvided", releaseDateProvided);
+
         fieldValues.put("detentionFacility", detentionFacility);
         fieldValues.put("detentionFacilityName", detentionFacilityName);
 
