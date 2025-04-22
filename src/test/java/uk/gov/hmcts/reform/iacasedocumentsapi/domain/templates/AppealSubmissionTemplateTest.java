@@ -692,7 +692,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(35, templateFieldValues.size());
+        assertEquals(37, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -711,10 +711,12 @@ public class AppealSubmissionTemplateTest {
 
         assertEquals(BailApplicationStatus.NO, templateFieldValues.get("hasPendingBailApplication"));
 
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
         assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
     }
 
@@ -728,7 +730,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -751,8 +753,11 @@ public class AppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
 
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
     }
 
     @Test
@@ -813,7 +818,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -835,8 +840,11 @@ public class AppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
 
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
     }
 
     @Test
@@ -1058,7 +1066,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -1067,11 +1075,12 @@ public class AppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
@@ -1090,7 +1099,7 @@ public class AppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = appealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -1099,11 +1108,12 @@ public class AppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
