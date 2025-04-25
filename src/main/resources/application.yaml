@@ -1892,7 +1892,7 @@ hearingCentreEmailAddresses:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
-  harmondsworth: ${IA_HOME_OFFICE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
+  harmondsworth: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
   hendon: ${IA_HOME_OFFICE_HENDON_EMAIL:hc-hendon@example.com}
   yarlsWood: ${IA_HOME_OFFICE_YARLS_WOOD_EMAIL:hc-yarls-wood@example.com}
   bradfordKeighley: ${IA_HOME_OFFICE_BRADFORD_KEIGHLEY_EMAIL:hc-bradford-keighley@example.com}
