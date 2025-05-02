@@ -30,14 +30,14 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.12.1',
-    junitPlatform      : '1.12.1',
+    junit              : '5.12.2',
+    junitPlatform      : '1.12.2',
     gradlePitest       : '1.15.0',
-    pitest             : '1.19.0',
+    pitest             : '1.19.1',
     reformLogging      : '6.1.8',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
-    serenity           : '4.2.17',
+    serenity           : '4.2.22',
     sonarPitest        : '0.5',
     pact_version       : '4.1.38',
     springDoc          : '1.8.0',
@@ -278,18 +278,18 @@ dependencyManagement {
         }
 
 
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.18.3') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.0') {
             entry 'jackson-databind'
             entry 'jackson-core'
             entry 'jackson-annotations'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.18.3') {
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.19.0') {
             entry 'jackson-dataformat-yaml'
             entry 'jackson-dataformat-csv'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.18.3') {
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.19.0') {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
@@ -341,7 +341,7 @@ dependencies {
 
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.13'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.13'
-    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.1'
 
     implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
 
@@ -351,13 +351,13 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.18.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.102'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.102'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.104'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.104'
 
     implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
@@ -398,9 +398,9 @@ dependencies {
     //pact contract testing
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.12.1")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.1")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.12.1')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.12.2')
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
