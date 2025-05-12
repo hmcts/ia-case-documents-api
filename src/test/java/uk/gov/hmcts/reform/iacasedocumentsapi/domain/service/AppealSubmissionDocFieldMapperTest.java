@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HasOtherAppeals;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -58,6 +61,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AppealSubmissionDocFieldMapperTest {
 
+    private static final Logger log = LoggerFactory.getLogger(AppealSubmissionDocFieldMapperTest.class);
+
     @Mock
     private StringProvider stringProvider;
     private AppealSubmissionDocFieldMapper appealSubmissionDocFieldMapper;
@@ -79,7 +84,7 @@ class AppealSubmissionDocFieldMapperTest {
         );
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
-//        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         // Set up the asylum case with the provided JSON data
         asylumCase.write(APPEAL_SUBMISSION_DATE, "2025-05-08");
@@ -143,8 +148,7 @@ class AppealSubmissionDocFieldMapperTest {
     void should_map_basic_case_details() throws Exception {
         // When
         Map<String, Object> result = appealSubmissionDocFieldMapper.mapFieldValues(caseDetails);
-        System.out.println("Mapped field values as JSON:");
-        System.out.println(objectMapper.writeValueAsString(result));
+        log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
         assertEquals("08052025", result.get("CREATED_DATE"));
@@ -163,8 +167,7 @@ class AppealSubmissionDocFieldMapperTest {
     void should_map_detained_appellant_details() throws Exception {
         // When
         Map<String, Object> result = appealSubmissionDocFieldMapper.mapFieldValues(caseDetails);
-        System.out.println("Mapped field values as JSON:");
-        System.out.println(objectMapper.writeValueAsString(result));
+        log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
         assertEquals(Optional.of(YesOrNo.YES), result.get("appellantInDetention"));
@@ -179,8 +182,7 @@ class AppealSubmissionDocFieldMapperTest {
     void should_map_appellant_address() throws Exception {
         // When
         Map<String, Object> result = appealSubmissionDocFieldMapper.mapFieldValues(caseDetails);
-        System.out.println("Mapped field values as JSON:");
-        System.out.println(objectMapper.writeValueAsString(result));
+        log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
         Map<String, String> addressMap = (Map<String, String>) result.get("appellantAddress");
@@ -197,8 +199,7 @@ class AppealSubmissionDocFieldMapperTest {
     void should_map_nationalities() throws Exception {
         // When
         Map<String, Object> result = appealSubmissionDocFieldMapper.mapFieldValues(caseDetails);
-        System.out.println("Mapped field values as JSON:");
-        System.out.println(objectMapper.writeValueAsString(result));
+        log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
         List<Map<String, String>> nationalityList = (List<Map<String, String>>) result.get("appellantNationalities");
@@ -210,8 +211,7 @@ class AppealSubmissionDocFieldMapperTest {
     void should_map_out_of_time_details() throws Exception {
         // When
         Map<String, Object> result = appealSubmissionDocFieldMapper.mapFieldValues(caseDetails);
-        System.out.println("Mapped field values as JSON:");
-        System.out.println(objectMapper.writeValueAsString(result));
+        log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
         assertEquals("Testing", result.get("applicationOutOfTimeExplanation"));
@@ -223,8 +223,7 @@ class AppealSubmissionDocFieldMapperTest {
     void should_map_removal_order_details() throws Exception {
         // When
         Map<String, Object> result = appealSubmissionDocFieldMapper.mapFieldValues(caseDetails);
-        System.out.println("Mapped field values as JSON:");
-        System.out.println(objectMapper.writeValueAsString(result));
+        log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
         assertEquals(YesOrNo.YES, result.get("removalOrderOption"));
@@ -235,8 +234,7 @@ class AppealSubmissionDocFieldMapperTest {
     void should_map_other_appeals() throws Exception {
         // When
         Map<String, Object> result = appealSubmissionDocFieldMapper.mapFieldValues(caseDetails);
-        System.out.println("Mapped field values as JSON:");
-        System.out.println(objectMapper.writeValueAsString(result));
+        log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
         assertEquals("EU/50003/2025", result.get("otherAppeals"));
