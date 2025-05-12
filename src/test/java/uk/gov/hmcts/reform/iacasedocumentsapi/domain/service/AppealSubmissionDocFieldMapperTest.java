@@ -1,20 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.collect.ImmutableMap;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,9 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HasOtherAppeals;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
@@ -34,11 +20,46 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_SUBMISSION_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_NATIONALITIES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_TITLE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPLICATION_OUT_OF_TIME_DOCUMENT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPLICATION_OUT_OF_TIME_EXPLANATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_OTHER_APPEALS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_PENDING_BAIL_APPLICATIONS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_COMPANY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OTHER_APPEALS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_ORDER_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_ORDER_OPTIONS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AppealSubmissionDocFieldMapperTest {
 
-    @Mock private StringProvider stringProvider;
+    @Mock
+    private StringProvider stringProvider;
     private AppealSubmissionDocFieldMapper appealSubmissionDocFieldMapper;
     private CaseDetails<AsylumCase> caseDetails;
     private AsylumCase asylumCase;
@@ -50,11 +71,11 @@ class AppealSubmissionDocFieldMapperTest {
         appealSubmissionDocFieldMapper = new AppealSubmissionDocFieldMapper(stringProvider);
         asylumCase = new AsylumCase();
         caseDetails = new CaseDetails<>(
-            123L,
-            "IA",
-            State.APPEAL_STARTED,
-            asylumCase,
-            createdDate
+                123L,
+                "IA",
+                State.APPEAL_STARTED,
+                asylumCase,
+                createdDate
         );
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
@@ -86,34 +107,34 @@ class AppealSubmissionDocFieldMapperTest {
 
         // Set up address
         AddressUk address = new AddressUk(
-            "Apartment 1",
-            "Westside One",
-            "22 Suffolk Street Queensway",
-            "Birmingham",
-            "",
-            "B1 1LS",
-            "United Kingdom"
+                "Apartment 1",
+                "Westside One",
+                "22 Suffolk Street Queensway",
+                "Birmingham",
+                "",
+                "B1 1LS",
+                "United Kingdom"
         );
         asylumCase.write(APPELLANT_ADDRESS, address);
 
         // Set up nationalities
         List<IdValue<Map<String, String>>> nationalities = Arrays.asList(
-            new IdValue<>("1", ImmutableMap.of("code", "ZZ"))
+                new IdValue<>("1", ImmutableMap.of("code", "ZZ"))
         );
         asylumCase.write(APPELLANT_NATIONALITIES, nationalities);
         when(stringProvider.get("isoCountries", "ZZ")).thenReturn(Optional.of("Unknown Country"));
 
         // Set up other appeals
         List<IdValue<Map<String, String>>> otherAppeals = Arrays.asList(
-            new IdValue<>("1", ImmutableMap.of("value", "EU/50003/2025"))
+                new IdValue<>("1", ImmutableMap.of("value", "EU/50003/2025"))
         );
         asylumCase.write(OTHER_APPEALS, otherAppeals);
 
         // Set up out of time document
         Document document = new Document(
-            "http://dm-store-aat.service.core-compute-aat.internal/documents/253c9ce3-05d0-4d97-a86f-30a0aa206abb",
-            "Supporting document - Test PDF.pdf",
-            "http://dm-store-aat.service.core-compute-aat.internal/documents/253c9ce3-05d0-4d97-a86f-30a0aa206abb/binary"
+                "http://dm-store-aat.service.core-compute-aat.internal/documents/253c9ce3-05d0-4d97-a86f-30a0aa206abb",
+                "Supporting document - Test PDF.pdf",
+                "http://dm-store-aat.service.core-compute-aat.internal/documents/253c9ce3-05d0-4d97-a86f-30a0aa206abb/binary"
         );
         asylumCase.write(APPLICATION_OUT_OF_TIME_DOCUMENT, document);
     }
@@ -146,9 +167,9 @@ class AppealSubmissionDocFieldMapperTest {
         System.out.println(objectMapper.writeValueAsString(result));
 
         // Then
-        assertEquals(YesOrNo.YES, result.get("appellantInDetention"));
+        assertEquals(Optional.of(YesOrNo.YES), result.get("appellantInDetention"));
         assertEquals("Detained", result.get("detentionStatus"));
-        assertEquals("other", result.get("detentionFacility"));
+        assertEquals("Other", result.get("detentionFacility"));
         assertEquals("Testing Facility", result.get("detentionFacilityName"));
         assertEquals(YesOrNo.NO, result.get("isAcceleratedDetainedAppeal"));
         assertEquals(BailApplicationStatus.NO, result.get("hasPendingBailApplication"));
@@ -195,7 +216,7 @@ class AppealSubmissionDocFieldMapperTest {
         // Then
         assertEquals("Testing", result.get("applicationOutOfTimeExplanation"));
         assertEquals(YesOrNo.YES, result.get("submissionOutOfTime"));
-        assertEquals("Supporting document - Test PDF.pdf", result.get("applicationOutOfTimeDocumentName"));
+        assertEquals("http://dm-store-aat.service.core-compute-aat.internal/documents/253c9ce3-05d0-4d97-a86f-30a0aa206abb/binary", result.get("applicationOutOfTimeDocumentName"));
     }
 
     @Test
