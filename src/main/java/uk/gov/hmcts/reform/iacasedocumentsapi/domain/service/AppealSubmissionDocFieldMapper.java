@@ -24,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 @Service
 public class AppealSubmissionDocFieldMapper {
 
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AppealSubmissionDocFieldMapper.class);
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     public static final String CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE = "Circumstances of the appellant's out of country appeal";
     public static final String THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION = "The appellant is appealing an entry clearance decision";
@@ -44,7 +45,7 @@ public class AppealSubmissionDocFieldMapper {
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         final Map<String, Object> fieldValues = new HashMap<>();
-
+        LOGGER.info("Mapping field values for case ID: {}", caseDetails.getId());
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("CREATED_DATE", caseDetails.getCreatedDate().format(DOCUMENT_DATE_FORMAT));
         fieldValues.put("appealSubmissionDate", formatDateForRendering(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
