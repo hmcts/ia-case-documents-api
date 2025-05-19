@@ -333,9 +333,9 @@ public class AppealSubmissionDocFieldMapper {
         }
 
         YesOrNo releaseDateProvided = YesOrNo.NO;
-        if (asylumCase.containsKey("dateCustodialSentence")) {
+        if (asylumCase.containsKey("releaseDate")) {
             String prisonerReleaseDate = formatComplexString(asylumCase
-                    .get("dateCustodialSentence")
+                    .get("releaseDate")
                     .toString());
             if (!prisonerReleaseDate.isBlank()) {
                 releaseDateProvided = YesOrNo.YES;
