@@ -33,7 +33,7 @@ def versions = [
     junit              : '5.12.2',
     junitPlatform      : '1.12.2',
     gradlePitest       : '1.15.0',
-    pitest             : '1.19.4',
+    pitest             : '1.19.3',
     reformLogging      : '6.1.9',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
