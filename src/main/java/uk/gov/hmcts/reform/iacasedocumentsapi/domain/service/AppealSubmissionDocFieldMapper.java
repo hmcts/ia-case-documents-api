@@ -3,14 +3,65 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import static java.util.stream.Collectors.joining;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances.ENTRY_CLEARANCE_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances.LEAVE_UK;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_GROUNDS_FOR_DISPLAY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_SUBMISSION_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_NATIONALITIES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_OUT_OF_COUNTRY_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_TITLE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPLICATION_OUT_OF_TIME_DOCUMENT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPLICATION_OUT_OF_TIME_EXPLANATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.BAIL_APPLICATION_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CONTACT_PREFERENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DATE_CLIENT_LEAVE_UK;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DATE_ENTRY_CLEARANCE_DECISION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECISION_LETTER_RECEIVED_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.EMAIL;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.GWF_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_CORRESPONDENCE_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_OTHER_APPEALS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_PENDING_BAIL_APPLICATIONS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_SPONSOR;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IRC_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_COMPANY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.MOBILE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NEW_MATTERS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_APPEAL_ADMIN_J;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OTHER_APPEALS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_COUNTRY_DECISION_TYPE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PRISON_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_ORDER_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_ORDER_OPTIONS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_ADDRESS_FOR_DISPLAY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_CONTACT_PREFERENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_EMAIL;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_MOBILE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInUk;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import com.google.common.collect.ImmutableMap;
+
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
@@ -22,6 +73,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 @Service
 public class AppealSubmissionDocFieldMapper {
 
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AppealSubmissionDocFieldMapper.class);
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     public static final String CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE = "Circumstances of the appellant's out of country appeal";
     public static final String THE_APPELLANT_IS_APPEALING_AN_ENTRY_CLEARANCE_DECISION = "The appellant is appealing an entry clearance decision";
@@ -31,25 +83,25 @@ public class AppealSubmissionDocFieldMapper {
     private final StringProvider stringProvider;
 
     public AppealSubmissionDocFieldMapper(
-        StringProvider stringProvider
+            StringProvider stringProvider
     ) {
         this.stringProvider = stringProvider;
     }
 
     public Map<String, Object> mapFieldValues(
-        CaseDetails<AsylumCase> caseDetails
+            CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         final Map<String, Object> fieldValues = new HashMap<>();
-
+        LOGGER.info("Mapping field values for case ID: {}", caseDetails.getId());
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("CREATED_DATE", caseDetails.getCreatedDate().format(DOCUMENT_DATE_FORMAT));
         fieldValues.put("appealSubmissionDate", formatDateForRendering(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("legalRepresentativeEmailAddress", asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""));
         fieldValues.put("legalRepName", formatLegalRepName(
-            asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""),
-            asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class).orElse("")));
+                asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""),
+                asylumCase.read(LEGAL_REP_FAMILY_NAME, String.class).orElse("")));
         fieldValues.put("legalRepCompany", asylumCase.read(LEGAL_REP_COMPANY, String.class).orElse(""));
         fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appellantDateOfBirth", formatDateForRendering(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
@@ -57,11 +109,11 @@ public class AppealSubmissionDocFieldMapper {
 
         Optional<String> homeOfficeDecisionDate = asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class);
         fieldValues.put("homeOfficeDecisionDate", homeOfficeDecisionDate.isPresent()
-            ? formatDateForRendering(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT) : null);
+                ? formatDateForRendering(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT) : null);
 
         Optional<String> decisionLetterReceivedDate = asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class);
         fieldValues.put("decisionLetterReceivedDate", decisionLetterReceivedDate.isPresent()
-            ? formatDateForRendering(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT) : null);
+                ? formatDateForRendering(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT) : null);
 
         Optional<YesOrNo> isDetained = Optional.of(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class).orElse(YesOrNo.NO));
         if (isDetained.equals(Optional.of(YesOrNo.YES))) {
@@ -71,7 +123,7 @@ public class AppealSubmissionDocFieldMapper {
 
         Optional<ContactPreference> contactPreference = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class);
         if (contactPreference.isPresent()
-            && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+                && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
             fieldValues.put("wantsEmail", YesOrNo.YES);
             fieldValues.put("email", asylumCase.read(EMAIL, String.class).orElse(""));
         } else {
@@ -88,8 +140,8 @@ public class AppealSubmissionDocFieldMapper {
         if (optionalAppealType.isPresent()) {
             String appealType = optionalAppealType.get().getValue();
             fieldValues.put(
-                "appealType",
-                stringProvider.get("appealType", appealType).orElse("")
+                    "appealType",
+                    stringProvider.get("appealType", appealType).orElse("")
             );
         }
 
@@ -106,54 +158,52 @@ public class AppealSubmissionDocFieldMapper {
 
         fieldValues.put("newMatters", asylumCase.read(NEW_MATTERS, String.class).orElse(""));
 
-        if (asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            populateAddressFields(asylumCase, fieldValues);
-        }
+        populateAddressFields(asylumCase, fieldValues);
 
         Optional<List<IdValue<Map<String, String>>>> appellantNationalities = asylumCase
-            .read(APPELLANT_NATIONALITIES);
+                .read(APPELLANT_NATIONALITIES);
 
         fieldValues.put(
-            "appellantNationalities",
-            appellantNationalities
-                .orElse(Collections.emptyList())
-                .stream()
-                .filter(idValue -> idValue.getValue().containsKey("code"))
-                .map(idValue -> idValue.getValue().get("code"))
-                .map(code -> stringProvider.get("isoCountries", code))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(nationality -> ImmutableMap.of("nationality", nationality))
-                .collect(Collectors.toList())
+                "appellantNationalities",
+                appellantNationalities
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .filter(idValue -> idValue.getValue().containsKey("code"))
+                        .map(idValue -> idValue.getValue().get("code"))
+                        .map(code -> stringProvider.get("isoCountries", code))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(nationality -> ImmutableMap.of("nationality", nationality))
+                        .collect(Collectors.toList())
         );
 
         Optional<List<String>> groundsOfAppealForDisplay = asylumCase
-            .read(APPEAL_GROUNDS_FOR_DISPLAY);
+                .read(APPEAL_GROUNDS_FOR_DISPLAY);
 
         fieldValues.put(
-            "appealGrounds",
-            groundsOfAppealForDisplay
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(code -> stringProvider.get("appealGrounds", code))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(appealGround -> ImmutableMap.of("appealGround", appealGround))
-                .collect(Collectors.toList())
+                "appealGrounds",
+                groundsOfAppealForDisplay
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .map(code -> stringProvider.get("appealGrounds", code))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(appealGround -> ImmutableMap.of("appealGround", appealGround))
+                        .collect(Collectors.toList())
         );
 
         Optional<List<IdValue<Map<String, String>>>> otherAppeals = asylumCase
-            .read(OTHER_APPEALS);
+                .read(OTHER_APPEALS);
 
         populateOtherAppeals(fieldValues, otherAppeals, asylumCase);
 
         fieldValues.put("applicationOutOfTimeExplanation", asylumCase.read(APPLICATION_OUT_OF_TIME_EXPLANATION, String.class).orElse(""));
         fieldValues.put("submissionOutOfTime", asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put(
-            "applicationOutOfTimeDocumentName",
-            asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)
-                .map(Document::getDocumentFilename)
-                .orElse("")
+                "applicationOutOfTimeDocumentName",
+                asylumCase.read(APPLICATION_OUT_OF_TIME_DOCUMENT, Document.class)
+                        .map(Document::getDocumentFilename)
+                        .orElse("")
         );
 
         fieldValues.put("isAdmin", asylumCase.read(IS_ADMIN, YesOrNo.class).orElse(YesOrNo.NO));
@@ -163,13 +213,13 @@ public class AppealSubmissionDocFieldMapper {
 
     private static void populateOtherAppeals(Map<String, Object> fieldValues, Optional<List<IdValue<Map<String, String>>>> otherAppeals, AsylumCase asylumCase) {
         fieldValues.put(
-            "otherAppeals",
-            otherAppeals
-                .orElse(Collections.emptyList())
-                .stream()
-                .filter(idValue -> idValue.getValue().containsKey("value"))
-                .map(idValue -> idValue.getValue().get("value"))
-                .collect(joining(", "))
+                "otherAppeals",
+                otherAppeals
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .filter(idValue -> idValue.getValue().containsKey("value"))
+                        .map(idValue -> idValue.getValue().get("value"))
+                        .collect(joining(", "))
         );
 
         Optional<HasOtherAppeals> hasOtherAppeals = asylumCase.read(HAS_OTHER_APPEALS, HasOtherAppeals.class);
@@ -233,7 +283,7 @@ public class AppealSubmissionDocFieldMapper {
             fieldValues.put("sponsorAddress", asylumCase.read(SPONSOR_ADDRESS_FOR_DISPLAY, String.class).orElse(null));
             Optional<ContactPreference> sponsorContactPreference = asylumCase.read(SPONSOR_CONTACT_PREFERENCE, ContactPreference.class);
             if (sponsorContactPreference.isPresent()
-                && sponsorContactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+                    && sponsorContactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
                 fieldValues.put("wantsSponsorEmail", YesOrNo.YES);
                 fieldValues.put("sponsorEmail", asylumCase.read(SPONSOR_EMAIL, String.class).orElse(null));
             } else {
@@ -265,25 +315,14 @@ public class AppealSubmissionDocFieldMapper {
 
                 YesOrNo nomsAvailable = YesOrNo.NO;
                 String nomsNumber = formatComplexString(asylumCase
-                    .get("prisonNOMSNumber")
-                    .toString());
+                        .get("prisonNOMSNumber")
+                        .toString());
                 if (!nomsNumber.isBlank()) {
                     nomsAvailable = YesOrNo.YES;
                     fieldValues.put("nomsNumber", nomsNumber);
                 }
                 fieldValues.put("nomsAvailable", nomsAvailable);
 
-                YesOrNo releaseDateProvided = YesOrNo.NO;
-                if (asylumCase.containsKey("dateCustodialSentence")) {
-                    String prisonerReleaseDate = formatComplexString(asylumCase
-                        .get("dateCustodialSentence")
-                        .toString());
-                    if (!prisonerReleaseDate.isBlank()) {
-                        releaseDateProvided = YesOrNo.YES;
-                        fieldValues.put("releaseDate", prisonerReleaseDate);
-                    }
-                }
-                fieldValues.put("releaseDateProvided", releaseDateProvided);
                 break;
             case "other":
                 detentionFacility = "Other";
@@ -292,6 +331,19 @@ public class AppealSubmissionDocFieldMapper {
             default:
                 // Required for sonar scan. Can never reach here.
         }
+
+        YesOrNo releaseDateProvided = YesOrNo.NO;
+        if (asylumCase.containsKey("releaseDate")) {
+            String prisonerReleaseDate = formatComplexString(asylumCase
+                    .get("releaseDate")
+                    .toString());
+            if (!prisonerReleaseDate.isBlank()) {
+                releaseDateProvided = YesOrNo.YES;
+                fieldValues.put("releaseDate", prisonerReleaseDate);
+            }
+        }
+        fieldValues.put("releaseDateProvided", releaseDateProvided);
+
         fieldValues.put("detentionFacility", detentionFacility);
         fieldValues.put("detentionFacilityName", detentionFacilityName);
 
@@ -317,17 +369,17 @@ public class AppealSubmissionDocFieldMapper {
             AddressUk appellantAddress = optionalAppellantAddress.get();
 
             fieldValues.put(
-                "appellantAddress",
-                ImmutableMap
-                    .builder()
-                    .put("appellantAddressLine1", appellantAddress.getAddressLine1().orElse(""))
-                    .put("appellantAddressLine2", appellantAddress.getAddressLine2().orElse(""))
-                    .put("appellantAddressLine3", appellantAddress.getAddressLine3().orElse(""))
-                    .put("appellantAddressPostTown", appellantAddress.getPostTown().orElse(""))
-                    .put("appellantAddressCounty", appellantAddress.getCounty().orElse(""))
-                    .put("appellantAddressPostCode", appellantAddress.getPostCode().orElse(""))
-                    .put("appellantAddressCountry", appellantAddress.getCountry().orElse(""))
-                    .build()
+                    "appellantAddress",
+                    ImmutableMap
+                            .builder()
+                            .put("appellantAddressLine1", appellantAddress.getAddressLine1().orElse(""))
+                            .put("appellantAddressLine2", appellantAddress.getAddressLine2().orElse(""))
+                            .put("appellantAddressLine3", appellantAddress.getAddressLine3().orElse(""))
+                            .put("appellantAddressPostTown", appellantAddress.getPostTown().orElse(""))
+                            .put("appellantAddressCounty", appellantAddress.getCounty().orElse(""))
+                            .put("appellantAddressPostCode", appellantAddress.getPostCode().orElse(""))
+                            .put("appellantAddressCountry", appellantAddress.getCountry().orElse(""))
+                            .build()
             );
         }
     }
