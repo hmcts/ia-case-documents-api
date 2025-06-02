@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.consumer.fee;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.infrastructure.clients.FeesRegisterApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.FeesRegisterApi;
 
 @SpringBootApplication
 @EnableFeignClients(clients = {

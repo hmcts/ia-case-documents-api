@@ -4,7 +4,9 @@ import static java.util.Arrays.stream;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Optional;
+import lombok.Getter;
 
+@Getter
 public enum AppealType {
 
     RP("revocationOfProtection", "Revocation of a protection status"),
@@ -15,10 +17,8 @@ public enum AppealType {
     EU("euSettlementScheme", "EU Settlement Scheme"),
     AG("ageAssessment", "Age assessment appeal");
 
-
     @JsonValue
     private String value;
-
     private String description;
 
     AppealType(String value, String description) {
@@ -32,14 +32,6 @@ public enum AppealType {
         return stream(values())
                 .filter(v -> v.getValue().equals(value))
                 .findFirst();
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     @Override

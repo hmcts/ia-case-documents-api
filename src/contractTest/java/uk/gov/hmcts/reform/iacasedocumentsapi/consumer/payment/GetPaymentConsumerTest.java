@@ -24,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.util.CardPaymentApi;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.PaymentDto;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
 
 @ExtendWith(PactConsumerTestExt.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

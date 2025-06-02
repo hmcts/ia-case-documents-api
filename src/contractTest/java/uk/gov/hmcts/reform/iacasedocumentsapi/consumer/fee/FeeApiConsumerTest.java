@@ -19,8 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.fee.FeeResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.infrastructure.clients.FeesRegisterApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.FeesRegisterApi;
 
 @ExtendWith(PactConsumerTestExt.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

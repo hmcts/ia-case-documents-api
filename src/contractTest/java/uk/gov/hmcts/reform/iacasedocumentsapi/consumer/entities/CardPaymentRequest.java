@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.consumer.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.PaymentDto;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
 
 @Setter
 @Getter

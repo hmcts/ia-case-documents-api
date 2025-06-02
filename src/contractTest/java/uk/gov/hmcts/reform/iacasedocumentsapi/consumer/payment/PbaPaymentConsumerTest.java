@@ -23,11 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.fee.Fee;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.CreditAccountPayment;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.Currency;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.Service;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.infrastructure.clients.PaymentApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.CreditAccountPayment;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Currency;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Service;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.PaymentApi;
 
 @ExtendWith(PactConsumerTestExt.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

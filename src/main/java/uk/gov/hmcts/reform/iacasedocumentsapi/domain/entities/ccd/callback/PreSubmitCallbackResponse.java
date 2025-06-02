@@ -6,10 +6,12 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import lombok.Getter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 
 public class PreSubmitCallbackResponse<T extends CaseData> {
 
+    @Getter
     private T data;
     private Set<String> errors = new LinkedHashSet<>();
 
@@ -22,10 +24,6 @@ public class PreSubmitCallbackResponse<T extends CaseData> {
     ) {
         requireNonNull(data);
         this.data = data;
-    }
-
-    public T getData() {
-        return data;
     }
 
     public void addError(String error) {

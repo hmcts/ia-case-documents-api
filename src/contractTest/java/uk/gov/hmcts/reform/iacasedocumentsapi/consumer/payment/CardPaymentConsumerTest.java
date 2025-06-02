@@ -12,7 +12,6 @@ import au.com.dius.pact.core.model.annotations.PactFolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,8 +25,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.entities.CardPaymentRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.util.CardPaymentApi;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.fee.FeeDto;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.PaymentDto;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeDto;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
 
 @ExtendWith(PactConsumerTestExt.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

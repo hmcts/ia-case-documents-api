@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.consumer.util;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.infrastructure.config.ServiceTokenGeneratorConfiguration.SERVICE_AUTHORIZATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.ServiceTokenGeneratorConfiguration.SERVICE_AUTHORIZATION;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.entities.CardPaymentRequest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.PaymentDto;
-import uk.gov.hmcts.reform.iacasedocumentsapi.iacasepaymentsapi.domain.entities.payment.PaymentResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentResponse;
 
 @FeignClient(name = "payment-api", url = "${payment.api.url}")
 public interface CardPaymentApi {

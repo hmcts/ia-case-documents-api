@@ -4,18 +4,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class AppealTypeTest {
-
-    @Test
-    public void has_correct_asylum_appeal_types() {
-        assertEquals(AppealType.from("revocationOfProtection").get(), AppealType.RP);
-        assertEquals(AppealType.from("protection").get(), AppealType.PA);
-        assertEquals(AppealType.from("refusalOfEu").get(), AppealType.EA);
-        assertEquals(AppealType.from("refusalOfHumanRights").get(), AppealType.HU);
-        assertEquals(AppealType.from("deprivation").get(), AppealType.DC);
-        assertEquals(AppealType.from("euSettlementScheme").get(), AppealType.EU);
-        assertEquals(AppealType.from("ageAssessment").get(), AppealType.AG);
+    @ParameterizedTest
+    @CsvSource({
+        "revocationOfProtection, RP",
+        "protection, PA",
+        "refusalOfEu, EA",
+        "refusalOfHumanRights, HU",
+        "deprivation, DC",
+        "euSettlementScheme, EU",
+        "ageAssessment, AG"
+    })
+    void has_correct_asylum_appeal_types(String input, AppealType expected) {
+        assertEquals(expected, AppealType.from(input).orElse(null));
     }
 
     @Test
