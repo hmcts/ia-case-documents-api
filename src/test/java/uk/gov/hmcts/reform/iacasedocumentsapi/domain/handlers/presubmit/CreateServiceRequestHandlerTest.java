@@ -35,8 +35,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.payments.CreateServiceRequestHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
@@ -81,7 +81,7 @@ class CreateServiceRequestHandlerTest {
     void should_generate_service_request_when_can_handle_ea_appeal(PaymentStatus paymentStatus, YesOrNo refundConfirmationApplied) {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.empty());
@@ -114,7 +114,7 @@ class CreateServiceRequestHandlerTest {
     void should_generate_service_request_when_can_handle_hu_appeal(PaymentStatus paymentStatus, YesOrNo refundConfirmationApplied) {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.HU));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.empty());
@@ -147,7 +147,7 @@ class CreateServiceRequestHandlerTest {
     void should_generate_service_request_when_can_handle_eu_appeal(PaymentStatus paymentStatus, YesOrNo refundConfirmationApplied) {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EU));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EU));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.empty());
@@ -180,7 +180,7 @@ class CreateServiceRequestHandlerTest {
     void should_generate_service_request_when_can_handle_pa_appeal(PaymentStatus paymentStatus, YesOrNo refundConfirmationApplied) {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.PA));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(NO_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.empty());
@@ -212,7 +212,7 @@ class CreateServiceRequestHandlerTest {
     void should_not_generate_service_request_when_flag_set_and_payment_status_paid() {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.HU));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
         when(asylumCase.read(REQUEST_FEE_REMISSION_FLAG_FOR_SERVICE_REQUEST, YesOrNo.class)).thenReturn(Optional.of(
             YesOrNo.YES));
         when(asylumCase.read(PAYMENT_STATUS, PaymentStatus.class))
@@ -269,7 +269,7 @@ class CreateServiceRequestHandlerTest {
     @Test
     void should_not_generate_service_request_when_case_is_DC_or_RP() {
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.DC));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.DC));
         when(asylumCase.read(REQUEST_FEE_REMISSION_FLAG_FOR_SERVICE_REQUEST, YesOrNo.class)).thenReturn(Optional.of(
             YesOrNo.NO));
         when(asylumCase.read(PAYMENT_STATUS, PaymentStatus.class))
@@ -287,7 +287,7 @@ class CreateServiceRequestHandlerTest {
         assertNotNull(callbackResponse);
         verify(serviceRequestService, times(0)).createServiceRequest(callback, feeWithHearing);
 
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.RP));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.RP));
         callbackResponse =
             createServiceRequestHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
         assertNotNull(callbackResponse);
@@ -299,7 +299,7 @@ class CreateServiceRequestHandlerTest {
     @Test
     void should_not_generate_service_request_when_no_appeal_type() {
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
         when(asylumCase.read(REQUEST_FEE_REMISSION_FLAG_FOR_SERVICE_REQUEST, YesOrNo.class)).thenReturn(Optional.of(
             YesOrNo.NO));
         when(asylumCase.read(PAYMENT_STATUS, PaymentStatus.class))
@@ -323,7 +323,7 @@ class CreateServiceRequestHandlerTest {
     void should_not_generate_service_request_when_remission_not_rejected() {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.HU));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.HO_WAIVER_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.of(RemissionDecision.APPROVED));
@@ -352,7 +352,7 @@ class CreateServiceRequestHandlerTest {
     void should_generate_service_request_when_remission_is_rejected(PaymentStatus paymentStatus, YesOrNo refundConfirmationApplied) {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.HU));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.HO_WAIVER_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.of(RemissionDecision.REJECTED));
@@ -385,7 +385,7 @@ class CreateServiceRequestHandlerTest {
     void should_generate_service_request_when_remission_is_partially_approved(PaymentStatus paymentStatus, YesOrNo refundConfirmationApplied) {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.HU));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.HO_WAIVER_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.of(RemissionDecision.PARTIALLY_APPROVED));
@@ -418,7 +418,7 @@ class CreateServiceRequestHandlerTest {
     void should_generate_service_request_when_remission_type_is_noRemission(PaymentStatus paymentStatus, YesOrNo refundConfirmationApplied) {
 
         when(callback.getEvent()).thenReturn(Event.GENERATE_SERVICE_REQUEST);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.HU));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.NO_REMISSION));
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class))
             .thenReturn(Optional.empty());
