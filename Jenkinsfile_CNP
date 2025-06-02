@@ -78,8 +78,6 @@ withPipeline(type, product, component) {
     env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
     env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
 
-    env.SKIP_CONTRACT_TESTS = "false"
-
     enableAksStagingDeployment()
     disableLegacyDeployment()
     loadVaultSecrets(secrets)
