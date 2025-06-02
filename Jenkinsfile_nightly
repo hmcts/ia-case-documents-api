@@ -27,7 +27,6 @@ def component = "case-documents-api"
 
 def secrets = [
     'ia-${env}': [
-
         secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
         secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
         secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
@@ -36,35 +35,30 @@ def secrets = [
         secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
         secret('test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
         secret('test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
-
         secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
         secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
         secret('system-username', 'SYSTEM_USERNAME'),
         secret('system-password', 'SYSTEM_PASSWORD'),
-
         secret('idam-client-id', 'IA_IDAM_CLIENT_ID'),
         secret('idam-secret', 'IA_IDAM_SECRET'),
         secret('s2s-secret', 'IA_S2S_SECRET'),
         secret('s2s-microservice', 'IA_S2S_MICROSERVICE'),
         secret('launch-darkly-sdk-key', 'LAUNCH_DARKLY_SDK_KEY'),
         secret('ia-config-validator-secret', 'IA_CONFIG_VALIDATOR_SECRET'),
-
         secret('app-insights-connection-string', 'app-insights-connection-string'),
-
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
         secret('gov-call-charges-url', 'IA_BAIL_GOV_CALL_CHARGES_URL'),
-
         secret('generic-docker-pact-broker-password', 'GENERIC_DOCKER_PACT_BROKER_YAML_PASS'),
-
-        secret('system-username', 'IA_SYSTEM_USERNAME'),
-        secret('system-password', 'IA_SYSTEM_PASSWORD'),
-
         secret('test-homeoffice-lart-username', 'TEST_HOMEOFFICE_LART_USERNAME'),
         secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD'),
-
         secret('test-homeoffice-pou-username', 'TEST_HOMEOFFICE_POU_USERNAME'),
-        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD')
+        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
+        secret('test-law-firm-org-success-username', 'TEST_LAW_FIRM_ORG_SUCCESS_USERNAME'),
+        secret('test-law-firm-org-success-password', 'TEST_LAW_FIRM_ORG_SUCCESS_PASSWORD'),
+        secret('test-law-firm-org-deleted-username', 'TEST_LAW_FIRM_ORG_DELETED_USERNAME'),
+        secret('test-law-firm-org-deleted-password', 'TEST_LAW_FIRM_ORG_DELETED_PASSWORD'),
+        secret('idam-redirect-uri', 'IA_IDAM_REDIRECT_URI')
     ]
 ]
 
@@ -93,6 +87,7 @@ withNightlyPipeline(type, product, component) {
     env.EM_BUNDLER_URL = "http://em-ccd-orchestrator-aat.service.core-compute-aat.internal"
     env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
     env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
+    env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
 
     loadVaultSecrets(secrets)
     if (!params.skipFortifyScan) {

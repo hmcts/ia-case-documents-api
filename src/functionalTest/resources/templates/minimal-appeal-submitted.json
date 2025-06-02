@@ -24,9 +24,11 @@
   },
   "hasNewMatters": "No",
   "hasOtherAppeals": "No",
+  "legalRepReferenceNumber": "CASE001",
   "appellantNameForDisplay": "Talha Awan",
   "appealReferenceNumber": "PA/11111/2019",
   "legalRepresentativeName": "A Test Legal Rep",
   "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+  "hearingCentre": "taylorHouse",
   "sendDirectionActionAvailable": "Yes"
 }
