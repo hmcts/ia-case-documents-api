@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 
 class GetWelcomeIntegrationTest extends SpringBootIntegrationTest {
 
@@ -17,6 +17,6 @@ class GetWelcomeIntegrationTest extends SpringBootIntegrationTest {
             .andExpect(status().isOk())
             .andReturn();
 
-        assertEquals("Welcome to Case Payment Service", response.getResponse().getContentAsString());
+        assertEquals("{\"message\": \"Welcome to Immigration & Asylum case documents API\"}", response.getResponse().getContentAsString());
     }
 }

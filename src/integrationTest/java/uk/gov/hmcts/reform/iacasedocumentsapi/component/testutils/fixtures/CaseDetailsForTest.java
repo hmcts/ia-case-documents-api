@@ -1,9 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.CCD_CASE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.JURISDICTION;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.Data;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 
 @Data
@@ -72,5 +76,15 @@ public class CaseDetailsForTest {
         public String toString() {
             return "CaseDetailsForTest.CaseDetailsForTestBuilder(id=" + this.id + ", jurisdiction=" + this.jurisdiction + ", state=" + this.state + ", caseData=" + this.caseData + ", createdDate=" + this.createdDate + ")";
         }
+    }
+
+    public static CaseDetails<AsylumCase> generateValidCaseDetailWithAsylumCase() {
+        return new CaseDetails<>(
+            Long.parseLong(CCD_CASE_NUMBER),
+            JURISDICTION,
+            State.PENDING_PAYMENT,
+            AsylumCaseForTest.generateValidPaymentStatusAsylumCase(),
+            LocalDateTime.now()
+        );
     }
 }

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
@@ -14,7 +14,7 @@ public interface WithFeeStub {
 
         String feesHearingRegisterUrl = "/fees/fees-register/fees/lookup?channel=default&event=issue"
                                         + "&jurisdiction1=tribunal"
-                                        + "&jurisdiction2=immigration%20and%20asylum%20chamber"
+                                        + "&jurisdiction2=immigration+and+asylum+chamber"
                                         + "&keyword=HearingOral"
                                         + "&service=other";
 
@@ -35,7 +35,7 @@ public interface WithFeeStub {
 
         String feesWithoutHearingRegisterUrl = "/fees/fees-register/fees/lookup?channel=default&event=issue"
                                                + "&jurisdiction1=tribunal"
-                                               + "&jurisdiction2=immigration%20and%20asylum%20chamber"
+                                               + "&jurisdiction2=immigration+and+asylum+chamber"
                                                + "&keyword=HearingPaper"
                                                + "&service=other";
 

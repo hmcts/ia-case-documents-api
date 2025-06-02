@@ -3,11 +3,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.CALLBACK_COMPLETED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.CCD_CASE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.PAYMENT_AMOUNT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.PAYMENT_CASE_REFERENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.SUCCESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.CALLBACK_COMPLETED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.CCD_CASE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.PAYMENT_AMOUNT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.PAYMENT_CASE_REFERENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.SUCCESS;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,14 +18,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.SubmitEventDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.ServiceRequestUpdateDtoForTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.SpringBootIntegrationTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithCcdStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithFeeStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithIdamStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithPaymentStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithServiceAuthStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.ServiceRequestUpdateDtoForTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithCcdStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithFeeStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithIdamStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithPaymentStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithServiceAuthStub;
 
 @Slf4j
 public class ServiceRequestUpdateIntegrationTest extends SpringBootIntegrationTest
@@ -33,11 +33,11 @@ public class ServiceRequestUpdateIntegrationTest extends SpringBootIntegrationTe
 
     public static final String SERVICE_REQUEST_REFERENCE = "2020-0000000000000";
 
-    private IaCasePaymentApiClient iaCasePaymentApiClient;
+    private IaCaseDocumentsApiClient iaCaseDocumentsApiClient;
 
     @BeforeEach
     public void setup() {
-        iaCasePaymentApiClient = new IaCasePaymentApiClient(mockMvc);
+        iaCaseDocumentsApiClient = new IaCaseDocumentsApiClient(objectMapper, mockMvc);
     }
 
     @Test
@@ -47,10 +47,10 @@ public class ServiceRequestUpdateIntegrationTest extends SpringBootIntegrationTe
         addPaymentStub(server);
         addUserInfoStub(server);
         addIdamTokenStub(server);
-        addCcdUpdatePaymentStatusGetTokenStub(server);
-        addCcdServiceRequestUpdateSubmitEventStub(server);
+        addCcdUpdatePaymentStatusGetTokenStub(objectMapper, server);
+        addCcdServiceRequestUpdateSubmitEventStub(objectMapper, server);
 
-        SubmitEventDetails response = iaCasePaymentApiClient.serviceRequestUpdate(ServiceRequestUpdateDtoForTest.generateValid().build());
+        SubmitEventDetails response = iaCaseDocumentsApiClient.serviceRequestUpdate(ServiceRequestUpdateDtoForTest.generateValid().build());
 
         assertNotNull(response);
         assertEquals(State.APPEAL_SUBMITTED, response.getState());
@@ -73,10 +73,10 @@ public class ServiceRequestUpdateIntegrationTest extends SpringBootIntegrationTe
         addPaymentStub(server);
         addUserInfoStub(server);
         addIdamTokenStub(server);
-        addCcdUpdatePaymentStatusGetTokenStub(server);
-        addCcdServiceRequestUpdateSubmitEventStub(server);
+        addCcdUpdatePaymentStatusGetTokenStub(objectMapper, server);
+        addCcdServiceRequestUpdateSubmitEventStub(objectMapper, server);
 
-        HttpServletResponse response = iaCasePaymentApiClient.serviceRequestUpdateWithError(ServiceRequestUpdateDtoForTest.generateValid().build());
+        HttpServletResponse response = iaCaseDocumentsApiClient.serviceRequestUpdateWithError(ServiceRequestUpdateDtoForTest.generateValid().build());
 
         assertThat(response).isNotNull();
         assertThat(response.getStatus()).isEqualTo(403);

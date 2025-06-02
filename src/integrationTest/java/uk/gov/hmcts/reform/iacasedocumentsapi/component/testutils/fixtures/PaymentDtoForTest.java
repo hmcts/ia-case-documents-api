@@ -1,9 +1,9 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.CCD_CASE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.ID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.PAYMENT_AMOUNT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.PAYMENT_CASE_REFERENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.CCD_CASE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.ID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.PAYMENT_AMOUNT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.PAYMENT_CASE_REFERENCE;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
 

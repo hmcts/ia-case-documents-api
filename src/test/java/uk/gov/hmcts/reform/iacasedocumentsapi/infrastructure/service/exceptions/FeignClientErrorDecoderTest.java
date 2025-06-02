@@ -32,7 +32,7 @@ class FeignClientErrorDecoderTest {
 
         Map<String, Collection<String>> headers = new HashMap<>();
         Request request =
-            Request.create(Request.HttpMethod.PUT, "http://localhost:8096",
+            Request.create(Request.HttpMethod.PUT, "http://localhost:8092",
                            headers, Request.Body.empty(), null);
         Response response = Response.builder()
             .request(request)
@@ -59,7 +59,7 @@ class FeignClientErrorDecoderTest {
 
         Map<String, Collection<String>> headers = new HashMap<>();
         Request request =
-            Request.create(Request.HttpMethod.PUT, "http://localhost:8096",
+            Request.create(Request.HttpMethod.PUT, "http://localhost:8092",
                            headers, Request.Body.empty(), null);
         Response response = Response.builder()
             .request(request)

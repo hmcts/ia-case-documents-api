@@ -1,21 +1,22 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.ServiceRequestUpdateIntegrationTest.SERVICE_REQUEST_REFERENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.CALLBACK_COMPLETED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.CCD_CASE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.ID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.JURISDICTION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.PAYMENT_AMOUNT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.PAYMENT_CASE_REFERENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.SUCCESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.CALLBACK_COMPLETED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.CCD_CASE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.ID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.JURISDICTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.PAYMENT_AMOUNT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.PAYMENT_CASE_REFERENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.SUCCESS;
 
 import java.util.HashMap;
 import java.util.Map;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.SubmitEventDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient;
 
 public class SubmitEventDetailsForTest extends SubmitEventDetails {
 
@@ -43,7 +44,7 @@ public class SubmitEventDetailsForTest extends SubmitEventDetails {
 
     private static Map<String, Object> generateEventDataForUpdatePaymentStatus() {
         Map<String, Object> data = new HashMap<>();
-        data.put(APPEAL_REFERENCE_NUMBER.value(), IaCasePaymentApiClient.APPEAL_REFERENCE_NUMBER);
+        data.put(APPEAL_REFERENCE_NUMBER.value(), IaCaseDocumentsApiClient.APPEAL_REFERENCE_NUMBER);
         data.put(PAYMENT_STATUS.value(), SUCCESS);
         data.put(PAYMENT_REFERENCE.value(), CCD_CASE_NUMBER);
         return data;

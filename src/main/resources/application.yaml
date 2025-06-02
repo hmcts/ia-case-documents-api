@@ -777,6 +777,10 @@ ia:
   config:
     validator:
       secret: ${IA_CONFIG_VALIDATOR_SECRET:}
+  payment:
+    debug:
+      logs:
+        enabled: false
 
 ### ia-case-payments-api
 fees-register:
@@ -805,7 +809,7 @@ rd-professional:
 payment:
   api:
     url: ${PAYMENT_API_URL:http://localhost:8083}
-    callback-url: ${PAY_CALLBACK_URL:http://host.docker.internal:8096/service-request-update}
+    callback-url: ${PAY_CALLBACK_URL:http://host.docker.internal:8092/service-request-update}
   params:
     organisationUrn: immigration and asylum chamber
     siteId: BFA1

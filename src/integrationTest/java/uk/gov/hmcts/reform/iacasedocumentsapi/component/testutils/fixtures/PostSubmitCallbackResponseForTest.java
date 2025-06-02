@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

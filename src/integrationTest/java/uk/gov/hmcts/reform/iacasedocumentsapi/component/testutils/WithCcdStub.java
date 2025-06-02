@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -11,28 +11,29 @@ import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.ServiceTokenGeneratorConfiguration.SERVICE_AUTHORIZATION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient.CCD_CASE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.SubmitEventDetailsForTest.generateValidPaymentUpdateEvent;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.SubmitEventDetailsForTest.generateValidServiceRequestEvent;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.CCD_CASE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.SubmitEventDetailsForTest.generateValidPaymentUpdateEvent;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.SubmitEventDetailsForTest.generateValidServiceRequestEvent;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.StartEventDetailsForTest;
 
 public interface WithCcdStub {
 
-    default void addCcdUpdatePaymentStatusGetTokenStub(WireMockServer server) throws JsonProcessingException {
+    default void addCcdUpdatePaymentStatusGetTokenStub(ObjectMapper objectMapper, WireMockServer server) throws JsonProcessingException {
         server.addStubMapping(
             new StubMapping(
-                newRequestPattern(GET, urlEqualTo("/ccd/caseworkers//jurisdictions/IA/case-types"
+                newRequestPattern(GET, urlEqualTo("/ccd/caseworkers/jurisdictions/IA/case-types"
                         + "/Asylum/cases/" + CCD_CASE_NUMBER + "/event-triggers/updatePaymentStatus"
                         + "/token?ignore-warning=true"))
                     .build(),
                 aResponse()
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json")
-                    .withBody(new ObjectMapper().writeValueAsString(
+                    .withBody(objectMapper.writeValueAsString(
                         StartEventDetailsForTest.generateValidUpdatePaymentStatusDetail()
                     ))
                     .build()
@@ -40,7 +41,7 @@ public interface WithCcdStub {
         );
     }
 
-    default void addCcdUpdatePaymentSubmitEventStub(WireMockServer server) throws JsonProcessingException {
+    default void addCcdUpdatePaymentSubmitEventStub(ObjectMapper objectMapper, WireMockServer server) throws JsonProcessingException {
         server.addStubMapping(
             new StubMapping(
                 newRequestPattern(POST, urlEqualTo("/ccd/cases/" + CCD_CASE_NUMBER + "/events"))
@@ -62,13 +63,13 @@ public interface WithCcdStub {
                 aResponse()
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json")
-                    .withBody(new ObjectMapper().writeValueAsString(generateValidPaymentUpdateEvent()))
+                    .withBody(objectMapper.writeValueAsString(generateValidPaymentUpdateEvent()))
                     .build()
             )
         );
     }
 
-    default void addCcdServiceRequestUpdateSubmitEventStub(WireMockServer server) throws JsonProcessingException {
+    default void addCcdServiceRequestUpdateSubmitEventStub(ObjectMapper objectMapper, WireMockServer server) throws JsonProcessingException {
         server.addStubMapping(
             new StubMapping(
                 newRequestPattern(POST, urlEqualTo("/ccd/cases/" + CCD_CASE_NUMBER + "/events"))
@@ -90,7 +91,7 @@ public interface WithCcdStub {
                 aResponse()
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json")
-                    .withBody(new ObjectMapper().writeValueAsString(generateValidServiceRequestEvent()))
+                    .withBody(objectMapper.writeValueAsString(generateValidServiceRequestEvent()))
                     .build()
             )
         );

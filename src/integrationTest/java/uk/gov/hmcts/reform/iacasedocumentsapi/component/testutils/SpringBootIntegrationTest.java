@@ -28,7 +28,17 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
     "docmosis.endpoint=http://127.0.0.1:8992",
     "docmosis.render.uri=/docmosis",
     "ccdGatewayUrl=http://127.0.0.1:8992",
-    "emBundler.url=http://127.0.0.1:8992"})
+    "emBundler.url=http://127.0.0.1:8992",
+    "CCD_URL=http://127.0.0.1:8992/ccd",
+    "IA_IDAM_CLIENT_ID=ia",
+    "IA_IDAM_SECRET=something",
+    "FEES_REGISTER_API_URL=http://127.0.0.1:8992/fees",
+    "PAYMENT_API_URL=http://127.0.0.1:8992/payment",
+    "PROF_REF_DATA_URL=http://127.0.0.1:8992/refdata",
+    "IA_IDAM_REDIRECT_URI=http://localhost:3002/oauth2/callback",
+    "IA_SYSTEM_USERNAME=ia-system-user@fake.hmcts.net",
+    "IA_SYSTEM_PASSWORD=something"
+})
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(classes = {TestConfiguration.class, Application.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -13,10 +13,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus.PAID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.AsylumCaseForTest.anAsylumCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.CallbackForTest.CallbackForTestBuilder.callback;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.testutils.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
@@ -26,14 +26,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.IaCasePaymentApiClient;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.PreSubmitCallbackResponseForTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.SpringBootIntegrationTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithFeeStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithIdamStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithPaymentStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithRefDataStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.testutils.WithServiceAuthStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithFeeStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithIdamStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithPaymentStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithRefDataStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithServiceAuthStub;
 
 
 class MakePaymentIntegrationTest extends SpringBootIntegrationTest
@@ -52,9 +52,9 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest
         addUserInfoStub(server);
         addRefDataStub(server, resourceFile);
 
-        IaCasePaymentApiClient iaCasePaymentApiClient = new IaCasePaymentApiClient(mockMvc);
+        IaCaseDocumentsApiClient iaCaseDocumentsApiClient = new IaCaseDocumentsApiClient(objectMapper, mockMvc);
 
-        PreSubmitCallbackResponseForTest response = iaCasePaymentApiClient.aboutToSubmit(callback()
+        PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.PAYMENT_APPEAL)
             .caseDetails(someCaseDetailsWith()
                 .state(State.APPEAL_STARTED)
@@ -81,7 +81,7 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest
         assertEquals("2", response.getAsylumCase().read(FEE_VERSION, String.class).orElse(""));
 
 
-        PreSubmitCallbackResponseForTest responseNoHearing = iaCasePaymentApiClient.aboutToSubmit(callback()
+        PreSubmitCallbackResponseForTest responseNoHearing = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.PAYMENT_APPEAL)
             .caseDetails(someCaseDetailsWith()
                 .state(State.APPEAL_STARTED)

@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.consumer.refdata;
 
-import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
+import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import au.com.dius.pact.consumer.dsl.DslPart;

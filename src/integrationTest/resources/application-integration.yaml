@@ -9,3 +9,9 @@ security:
 idam:
   s2s-authorised:
     services: ia,payment_app
+
+ia:
+  payment:
+    debug:
+      logs:
+        enabled: true
