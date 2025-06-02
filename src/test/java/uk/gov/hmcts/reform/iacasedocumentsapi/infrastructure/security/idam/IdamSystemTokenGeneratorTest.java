@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.oauth2;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,7 +86,7 @@ class IdamSystemTokenGeneratorTest {
             idamApi
         );
 
-        IdentityManagerResponseException thrown = assertThrows(
+        uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException thrown = assertThrows(
             IdentityManagerResponseException.class,
             idamSystemTokenGenerator::generate
         );

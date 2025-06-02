@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.oauth2;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,7 +49,7 @@ class IdamSystemUserProviderTest {
 
         IdamSystemUserProvider idamSystemUserProvider = new IdamSystemUserProvider(idamService);
 
-        IdentityManagerResponseException thrown = assertThrows(
+        uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException thrown = assertThrows(
             IdentityManagerResponseException.class,
             () -> idamSystemUserProvider.getSystemUserId(token)
         );
