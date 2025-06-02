@@ -205,7 +205,6 @@ tasks.register('contract', Test) {
   classpath = sourceSets.contractTest.runtimeClasspath
 }
 
-task fortifyScan(type: JavaExec, description: 'Run fortify scan.')
 tasks.register('fortifyScan', JavaExec) {
   description = 'Runs fortify scan.'
   mainClass = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
