@@ -45,7 +45,7 @@ public class IdamApiConsumerTest {
     IdamApi idamApi;
     private static final String AUTH_TOKEN = "Bearer someAuthorizationToken";
 
-    @Pact(provider = "idamApi_oidc", consumer = "ia_casePaymentsApi")
+    @Pact(provider = "idamApi_oidc", consumer = "ia_caseDocumentsApi")
     public RequestResponsePact generatePactFragmentUser(PactDslWithProvider builder) {
         return builder
             .given("userinfo is requested")
@@ -60,7 +60,7 @@ public class IdamApiConsumerTest {
 
     }
 
-    @Pact(provider = "idamApi_oidc", consumer = "ia_casePaymentsApi")
+    @Pact(provider = "idamApi_oidc", consumer = "ia_caseDocumentsApi")
     public RequestResponsePact generatePactFragmentToken(PactDslWithProvider builder) throws JSONException {
         Map<String, String> responseheaders = ImmutableMap.<String, String>builder()
             .put("Content-Type", "application/json")

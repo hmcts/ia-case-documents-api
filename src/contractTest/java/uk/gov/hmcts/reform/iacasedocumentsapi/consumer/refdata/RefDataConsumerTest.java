@@ -44,7 +44,7 @@ public class RefDataConsumerTest {
     static final String ORGANISATION_EMAIL = "someemailaddress@organisation.com";
 
 
-    @Pact(provider = "referenceData_organisationalExternalPbas", consumer = "ia_casePaymentsApi")
+    @Pact(provider = "referenceData_organisationalExternalPbas", consumer = "ia_caseDocumentsApi")
     public RequestResponsePact generatePactFragment(PactDslWithProvider builder) {
         return builder
             .given("Pbas organisational data exists for identifier " + ORGANISATION_EMAIL)

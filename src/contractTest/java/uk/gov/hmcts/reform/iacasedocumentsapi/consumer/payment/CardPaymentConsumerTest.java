@@ -49,7 +49,7 @@ public class CardPaymentConsumerTest {
     private static final String SERVICE_AUTH_TOKEN = "someServiceAuthToken";
     private static final String AUTHORIZATION_TOKEN = "Bearer some-access-token";
 
-    @Pact(provider = "payment_cardPayment", consumer = "ia_casePaymentsApi")
+    @Pact(provider = "payment_cardPayment", consumer = "ia_caseDocumentsApi")
     public RequestResponsePact generateCreatePaymentPactFragment(
         PactDslWithProvider builder) throws JSONException, IOException {
 

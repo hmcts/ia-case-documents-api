@@ -165,14 +165,16 @@ pmd {
     'category/java/bestpractices.xml'
   ]
 }
-
 tasks.register('integration', Test) {
+  description = 'Runs the integration tests.'
+  group = 'Verification'
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 tasks.register('functional', Test) {
-
+  description = 'Runs the functional tests.'
+  group = 'Verification'
   systemProperty "scenario", System.getProperty('scenario')
   systemProperty "file.encoding", "UTF-8"
 
@@ -188,6 +190,8 @@ tasks.register('functional', Test) {
 }
 
 tasks.register('smoke', Test) {
+  description = 'Runs the smoke tests.'
+  group = 'Verification'
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
   classpath = sourceSets.smokeTest.runtimeClasspath
 }
@@ -195,19 +199,55 @@ tasks.register('smoke', Test) {
 
 tasks.register('contract', Test) {
   description = "Runs the consumer Pact tests"
+  group = 'Verification'
   useJUnitPlatform()
   testClassesDirs = sourceSets.contractTest.output.classesDirs
   classpath = sourceSets.contractTest.runtimeClasspath
 }
 
+task fortifyScan(type: JavaExec, description: 'Run fortify scan.')
 tasks.register('fortifyScan', JavaExec) {
+  description = 'Runs fortify scan.'
   mainClass = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
   classpath += sourceSets.test.runtimeClasspath
   jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
 }
 
 project.ext {
-  pactVersion = getCheckedOutGitCommitHash()
+  pacticipant = 'ia_caseDocumentsApi'
+  if (System.env.GIT_COMMIT) {
+    pacticipantVersion = System.env.GIT_COMMIT.substring(0,9)
+  } else {
+    pacticipantVersion = getCheckedOutGitCommitHash()
+  }
+  set('springCloudVersion', versions.springCloud)
+}
+
+tasks.register('runAndPublishConsumerPactTests', Test) {
+  description = 'Publish pact test to broker.'
+  group = 'Verification'
+  onlyIf {
+    return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
+  }
+  useJUnitPlatform()
+  testClassesDirs = sourceSets.contractTest.output.classesDirs
+  classpath = sourceSets.contractTest.runtimeClasspath
+  systemProperty 'pact.rootDir', "pacts"
+  testLogging.showStandardStreams = true
+}
+
+runAndPublishConsumerPactTests.finalizedBy pactPublish
+
+pact {
+  broker {
+    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+  }
+  publish {
+    pactDirectory = 'pacts'
+    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+    tags = [System.getenv("PACT_BRANCH_NAME") ?:'Dev']
+    version = project.pacticipantVersion + '_' + System.nanoTime().toString()
+  }
 }
 
 jacoco {
@@ -417,15 +457,6 @@ dependencies {
   contractTestImplementation sourceSets.main.runtimeClasspath
   contractTestImplementation sourceSets.test.runtimeClasspath
 
-}
-
-pact {
-  publish {
-    pactDirectory = 'target/pacts'
-    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
-    tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
-    version = project.pactVersion
-  }
 }
 
 dependencyCheck {
