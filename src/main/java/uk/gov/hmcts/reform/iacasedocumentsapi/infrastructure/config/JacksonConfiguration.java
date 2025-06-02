@@ -17,29 +17,13 @@ public class JacksonConfiguration {
     @Bean
     @Primary
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        return builder
+        ObjectMapper objectMapper = builder
             .featuresToEnable(READ_ENUMS_USING_TO_STRING)
             .featuresToEnable(READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)
             .featuresToEnable(WRITE_ENUMS_USING_TO_STRING)
             .serializationInclusion(JsonInclude.Include.NON_ABSENT)
             .createXmlMapper(false)
             .build();
-    }
-
-    @Bean
-    @Primary
-    public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-        return new Jackson2ObjectMapperBuilder()
-            .featuresToEnable(READ_ENUMS_USING_TO_STRING)
-            .featuresToEnable(READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)
-            .featuresToEnable(WRITE_ENUMS_USING_TO_STRING)
-            .serializationInclusion(JsonInclude.Include.NON_ABSENT);
-    }
-
-    @Bean
-    @Primary
-    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
         objectMapper.registerModule(new Jdk8Module());
         return objectMapper;
     }
