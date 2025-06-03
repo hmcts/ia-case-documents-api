@@ -5,11 +5,12 @@ import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -25,6 +26,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.util.TestHelper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.Token;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
@@ -37,7 +39,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.RestTemplate
 @PactTestFor(providerName = "idamApi_oidc", port = "5000")
 @ContextConfiguration(classes = {IdamApiConsumerApplication.class})
 @TestPropertySource(
-    properties = {"idam.baseUrl=localhost:5000"}
+    properties = {"idam.baseUrl=localhost:5000", "document_management.url=http://localhost:8992"}
 )
 @Import(RestTemplateConfiguration.class)
 public class IdamApiConsumerTest {
@@ -46,7 +48,7 @@ public class IdamApiConsumerTest {
     private static final String AUTH_TOKEN = "Bearer someAuthorizationToken";
 
     @Pact(provider = "idamApi_oidc", consumer = "ia_caseDocumentsApi")
-    public RequestResponsePact generatePactFragmentUser(PactDslWithProvider builder) {
+    public V4Pact generatePactFragmentUser(PactDslWithProvider builder) {
         return builder
             .given("userinfo is requested")
             .uponReceiving("a request for a user")
@@ -56,12 +58,12 @@ public class IdamApiConsumerTest {
             .willRespondWith()
             .status(HttpStatus.SC_OK)
             .body(createUserDetailsResponse())
-            .toPact();
+            .toPact(V4Pact.class);
 
     }
 
     @Pact(provider = "idamApi_oidc", consumer = "ia_caseDocumentsApi")
-    public RequestResponsePact generatePactFragmentToken(PactDslWithProvider builder) throws JSONException {
+    public V4Pact generatePactFragmentToken(PactDslWithProvider builder) throws JSONException {
         Map<String, String> responseheaders = ImmutableMap.<String, String>builder()
             .put("Content-Type", "application/json")
             .build();
@@ -81,7 +83,7 @@ public class IdamApiConsumerTest {
             .status(org.springframework.http.HttpStatus.OK.value())
             .headers(responseheaders)
             .body(createAuthResponse())
-            .toPact();
+            .toPact(V4Pact.class);
     }
 
     private PactDslJsonBody createUserDetailsResponse() {
@@ -104,16 +106,18 @@ public class IdamApiConsumerTest {
     @Test
     @PactTestFor(pactMethod = "generatePactFragmentUser")
     public void verifyPactResponse() {
-        UserInfo userInfo = idamApi.userInfo(AUTH_TOKEN);
+        TestHelper<UserInfo> testHelper = new TestHelper<>();
+        UserInfo userInfo = testHelper.executeWithRetry(() -> idamApi.userInfo(AUTH_TOKEN), 3);
         Assertions.assertEquals("ia-caseofficer@fake.hmcts.net", userInfo.getEmail());
     }
 
     @Test
     @PactTestFor(pactMethod = "generatePactFragmentToken")
     public void verifyIdamUserDetailsRolesPactToken() {
-
         MultiValueMap<String, String> tokenRequestMap = buildTokenRequestMap();
-        Token token = idamApi.token(tokenRequestMap);
+        TestHelper<Token> testHelper = new TestHelper<>();
+        Callable<Token> tokenLookup = () -> idamApi.token(tokenRequestMap);
+        Token token = testHelper.executeWithRetry(tokenLookup, 3);
         Assertions.assertEquals("eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdjEre", token.getAccessToken(),
                                 "Token is not expected");
     }

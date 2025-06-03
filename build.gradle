@@ -450,9 +450,9 @@ dependencies {
   //pact contract testing
   contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
 
-  contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
-  contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
-  contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.12.2')
+  contractTestImplementation("org.junit.jupiter:junit-jupiter:${versions.junit}")
+  contractTestImplementation("org.junit.jupiter:junit-jupiter-api:${versions.junit}")
+  contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath

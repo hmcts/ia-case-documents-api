@@ -96,11 +96,11 @@ withPipeline(type, product, component) {
     }
 
     enableSlackNotifications('#ia-tech')
-//
-//    onMaster() {
-//        enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
-//    }
-//    onPR() {
-//        enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
-//    }
+
+    onMaster() {
+        enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
+    }
+    onPR() {
+        enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
+    }
 }

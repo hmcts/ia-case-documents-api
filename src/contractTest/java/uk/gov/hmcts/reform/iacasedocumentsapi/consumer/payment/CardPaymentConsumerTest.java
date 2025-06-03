@@ -6,7 +6,7 @@ import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -23,20 +24,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.entities.CardPaymentRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.util.CardPaymentApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.util.TestHelper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeDto;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentResponse;
 
 @ExtendWith(PactConsumerTestExt.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @PactTestFor(providerName = "payment_cardPayment", port = "8991")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(
-    classes = {PaymentConsumerApplication.class}
+    classes = {PaymentConsumerApplication.class, DocumentUploadClientApi.class}
 )
 @TestPropertySource(
-    properties = {"payment.api.url=localhost:8991"}
+    properties = {"payment.api.url=localhost:8991", "document_management.url=http://localhost:8992"}
 )
 @PactFolder("pacts")
 public class CardPaymentConsumerTest {
@@ -50,7 +54,7 @@ public class CardPaymentConsumerTest {
     private static final String AUTHORIZATION_TOKEN = "Bearer some-access-token";
 
     @Pact(provider = "payment_cardPayment", consumer = "ia_caseDocumentsApi")
-    public RequestResponsePact generateCreatePaymentPactFragment(
+    public V4Pact generateCreatePaymentPactFragment(
         PactDslWithProvider builder) throws JSONException, IOException {
 
         Map<String, Object> paymentMap = new HashMap<>();
@@ -74,13 +78,16 @@ public class CardPaymentConsumerTest {
                                                    + "65888814-3a93-48cf-8e6b-fc78536eb7ad", "GET"),
                                            null, null)
             ))
-            .toPact();
+            .toPact(V4Pact.class);
     }
 
     @Test
     @PactTestFor(pactMethod = "generateCreatePaymentPactFragment")
     public void createPayment() {
-        cardPaymentApi.cardPaymentRequest(AUTHORIZATION_TOKEN, SERVICE_AUTH_TOKEN, getCardPaymentRequest());
+        TestHelper<PaymentResponse> testHelper = new TestHelper<>();
+        Callable<PaymentResponse> getPayment = () ->
+            cardPaymentApi.cardPaymentRequest(AUTHORIZATION_TOKEN, SERVICE_AUTH_TOKEN, getCardPaymentRequest());
+        testHelper.executeWithRetry(getPayment, 3);
     }
 
     private DslPart buildCreatePaymentResponse(String reference, String status, String externalReference,
