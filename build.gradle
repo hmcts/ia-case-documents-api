@@ -415,8 +415,18 @@ dependencies {
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
   testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
 
-  testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
-  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
+  testImplementation("io.rest-assured:rest-assured-all:${versions.restAssured}") {
+    exclude group: 'org.apache.groovy', module: 'groovy-xml'
+  }
+  testImplementation("io.rest-assured:rest-assured:${versions.restAssured}") {
+    exclude group: 'org.apache.groovy', module: 'groovy-xml'
+  }
+
+  testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: "1.9.0"
+  testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-common', version: "1.9.0"
+  testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk7', version: "1.9.0"
+  testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: "1.9.0"
+
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
