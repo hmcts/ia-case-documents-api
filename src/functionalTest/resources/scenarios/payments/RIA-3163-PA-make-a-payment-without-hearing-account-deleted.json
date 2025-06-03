@@ -32,7 +32,7 @@
         "appealType": "protection",
         "appealReferenceNumber": "PA/50001/2020",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_SUCCESS_USERNAME}",
+        "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_DELETED_USERNAME}",
         "paymentAccountList":"PBA0087240",
         "feeCode":"FEE0372",
         "feeVersion":"3",
