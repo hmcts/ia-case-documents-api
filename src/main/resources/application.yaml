@@ -29,6 +29,18 @@ management:
       serviceAuth:
         uri: ${S2S_URL:http://localhost:4502}/health
         response: '"status":"UP"'
+      feesRegister:
+        uri: ${FEES_REGISTER_API_URL:http://localhost:8991}/health
+        response: '"status":"UP"'
+      rdProfessional:
+        uri: ${PROF_REF_DATA_URL:http://localhost:8991}/health
+        response: '"status":"UP"'
+      paymentApi:
+        url: ${PAYMENT_API_URL:http://localhost:8083}/health
+        response: '"status":"UP"'
+      ccd:
+        uri: ${CCD_URL:http:/localhost:4452}/health
+        response: '"status":"UP"'
 
 
 spring:
