@@ -13,14 +13,14 @@ plugins {
   id 'checkstyle'
   id 'jacoco'
   id 'pmd'
-  id 'com.github.ben-manes.versions' version '0.51.0'
+  id 'com.github.ben-manes.versions' version '0.52.0'
   id "info.solidsoft.pitest" version '1.15.0'
   id 'io.spring.dependency-management' version '1.1.7'
   id 'org.owasp.dependencycheck' version '10.0.4'
   id 'org.sonarqube' version '4.4.1.3373'
   id 'org.springframework.boot' version '2.7.18'
   id 'uk.gov.hmcts.java' version '0.12.66'
-  id 'au.com.dius.pact' version '4.2.14'
+  id 'au.com.dius.pact' version '4.6.17'
   id "io.freefair.lombok" version "6.6.3"
 }
 
@@ -39,7 +39,7 @@ def versions = [
   restAssured        : '5.4.0',
   serenity           : '4.2.30',
   sonarPitest        : '0.5',
-  pact_version       : '4.2.14',
+  pact_version       : '4.1.38',
   springDoc          : '1.8.0',
   springCloud        : '3.1.9'
 ]
@@ -220,6 +220,33 @@ project.ext {
     pacticipantVersion = getCheckedOutGitCommitHash()
   }
   set('springCloudVersion', versions.springCloud)
+}
+
+tasks.register('runAndPublishConsumerPactTests', Test) {
+  description = 'Publish pact test to broker.'
+  group = 'Verification'
+  onlyIf {
+    return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
+  }
+  useJUnitPlatform()
+  testClassesDirs = sourceSets.contractTest.output.classesDirs
+  classpath = sourceSets.contractTest.runtimeClasspath
+  systemProperty 'pact.rootDir', "pacts"
+  testLogging.showStandardStreams = true
+}
+
+runAndPublishConsumerPactTests.finalizedBy pactPublish
+
+pact {
+  broker {
+    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+  }
+  publish {
+    pactDirectory = 'pacts'
+    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+    tags = [System.getenv("PACT_BRANCH_NAME") ?:'Dev']
+    version = project.pacticipantVersion + '_' + System.nanoTime().toString()
+  }
 }
 
 jacoco {
@@ -421,7 +448,8 @@ dependencies {
   }
 
   //pact contract testing
-  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.2.14"
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
+
   contractTestImplementation("org.junit.jupiter:junit-jupiter:${versions.junit}")
   contractTestImplementation("org.junit.jupiter:junit-jupiter-api:${versions.junit}")
   contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
@@ -438,34 +466,6 @@ dependencies {
   contractTestImplementation sourceSets.main.runtimeClasspath
   contractTestImplementation sourceSets.test.runtimeClasspath
 
-}
-
-
-tasks.register('runAndPublishConsumerPactTests', Test) {
-  description = 'Publish pact test to broker.'
-  group = 'Verification'
-  onlyIf {
-    return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
-  }
-  useJUnitPlatform()
-  testClassesDirs = sourceSets.contractTest.output.classesDirs
-  classpath = sourceSets.contractTest.runtimeClasspath
-  systemProperty 'pact.rootDir', "pacts"
-  testLogging.showStandardStreams = true
-}
-
-runAndPublishConsumerPactTests.finalizedBy pactPublish
-
-pact {
-  broker {
-    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
-  }
-  publish {
-    pactDirectory = 'pacts'
-    pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
-    tags = [System.getenv("PACT_BRANCH_NAME") ?:'Dev']
-    version = project.pacticipantVersion + '_' + System.nanoTime().toString()
-  }
 }
 
 dependencyCheck {
