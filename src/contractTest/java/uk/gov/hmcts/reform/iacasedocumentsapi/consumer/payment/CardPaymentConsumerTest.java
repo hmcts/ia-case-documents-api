@@ -6,9 +6,9 @@ import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.V4Pact;
+import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import au.com.dius.pact.core.model.annotations.PactFolder;
+import au.com.dius.pact.core.model.annotations.PactDirectory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -42,7 +42,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentRes
 @TestPropertySource(
     properties = {"payment.api.url=localhost:8991", "document_management.url=http://localhost:8992"}
 )
-@PactFolder("pacts")
+@PactDirectory("pacts")
 public class CardPaymentConsumerTest {
 
     @Autowired
@@ -54,7 +54,7 @@ public class CardPaymentConsumerTest {
     private static final String AUTHORIZATION_TOKEN = "Bearer some-access-token";
 
     @Pact(provider = "payment_cardPayment", consumer = "ia_caseDocumentsApi")
-    public V4Pact generateCreatePaymentPactFragment(
+    public RequestResponsePact generateCreatePaymentPactFragment(
         PactDslWithProvider builder) throws JSONException, IOException {
 
         Map<String, Object> paymentMap = new HashMap<>();
@@ -78,7 +78,7 @@ public class CardPaymentConsumerTest {
                                                    + "65888814-3a93-48cf-8e6b-fc78536eb7ad", "GET"),
                                            null, null)
             ))
-            .toPact(V4Pact.class);
+            .toPact(RequestResponsePact.class);
     }
 
     @Test

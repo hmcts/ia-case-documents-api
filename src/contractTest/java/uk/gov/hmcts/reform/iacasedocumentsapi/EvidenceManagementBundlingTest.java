@@ -8,7 +8,7 @@ import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.V4Pact;
+import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
@@ -57,7 +57,7 @@ public class EvidenceManagementBundlingTest {
     }
 
     @Pact(provider = "em_api", consumer = "ia_caseDocumentsApi")
-    public V4Pact executeGetEvidenceBundleIdAndGet200Response(PactDslWithProvider builder) {
+    public RequestResponsePact executeGetEvidenceBundleIdAndGet200Response(PactDslWithProvider builder) {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
@@ -74,11 +74,11 @@ public class EvidenceManagementBundlingTest {
                 .status(HttpStatus.OK.value())
                 .body(new PactDslJsonBody()
                         .stringType("id", "12345"))
-                .toPact(V4Pact.class);
+                .toPact(RequestResponsePact.class);
     }
 
     @Pact(provider = "em_api", consumer = "ia_caseDocumentsApi")
-    public V4Pact executeGetEvidenceBundleCaseDataAndGetNotNullValues(PactDslWithProvider builder) {
+    public RequestResponsePact executeGetEvidenceBundleCaseDataAndGetNotNullValues(PactDslWithProvider builder) {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
@@ -94,11 +94,11 @@ public class EvidenceManagementBundlingTest {
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .body(createBundleCaseDataArrayResponse())
-                .toPact(V4Pact.class);
+                .toPact(RequestResponsePact.class);
     }
 
     @Pact(provider = "em_api", consumer = "ia_caseDocumentsApi")
-    public V4Pact executeGetEvidenceBundleCaseDataAndGetCorrectType(PactDslWithProvider builder) {
+    public RequestResponsePact executeGetEvidenceBundleCaseDataAndGetCorrectType(PactDslWithProvider builder) {
 
         return builder
                 .given("EM successfully returns Bundle Case Data")
@@ -109,7 +109,7 @@ public class EvidenceManagementBundlingTest {
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .body(createBundleCaseDataArrayResponse())
-                .toPact(V4Pact.class);
+                .toPact(RequestResponsePact.class);
     }
 
     @Test

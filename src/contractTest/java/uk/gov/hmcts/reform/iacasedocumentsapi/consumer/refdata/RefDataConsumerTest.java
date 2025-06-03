@@ -7,9 +7,9 @@ import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.V4Pact;
+import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import au.com.dius.pact.core.model.annotations.PactFolder;
+import au.com.dius.pact.core.model.annotations.PactDirectory;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,7 +32,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.RefDataApi;
 @TestPropertySource(
     properties = {"rd-professional.api.url=localhost:8991", "document_management.url=http://localhost:8992"}
 )
-@PactFolder("pacts")
+@PactDirectory("pacts")
 public class RefDataConsumerTest {
 
     @Autowired
@@ -46,7 +46,7 @@ public class RefDataConsumerTest {
 
 
     @Pact(provider = "referenceData_organisationalExternalPbas", consumer = "ia_caseDocumentsApi")
-    public V4Pact generatePactFragment(PactDslWithProvider builder) {
+    public RequestResponsePact generatePactFragment(PactDslWithProvider builder) {
         return builder
             .given("Pbas organisational data exists for identifier " + ORGANISATION_EMAIL)
             .uponReceiving("a request for information for that organisation's pbas")
@@ -57,7 +57,7 @@ public class RefDataConsumerTest {
             .willRespondWith()
             .body(buildOrganisationResponseDsl())
             .status(HttpStatus.SC_OK)
-            .toPact(V4Pact.class);
+            .toPact(RequestResponsePact.class);
     }
 
     private DslPart buildOrganisationResponseDsl() {
