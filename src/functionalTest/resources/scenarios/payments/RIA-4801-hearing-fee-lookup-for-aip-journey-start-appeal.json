@@ -7,7 +7,7 @@
       "eventId": "startAppeal",
       "state": "appealStarted",
       "caseData": {
-        "template": "minimal-appeal-started.json",
+        "template": "payments/minimal-appeal-started.json",
         "replacements": {
           "journeyType": "aip",
           "decisionHearingFeeOption": "decisionWithHearing",
@@ -21,7 +21,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-started.json",
+      "template": "payments/minimal-appeal-started.json",
       "replacements": {
         "homeOfficeReferenceNumber": "123456789",
         "feeCode": "FEE0238",

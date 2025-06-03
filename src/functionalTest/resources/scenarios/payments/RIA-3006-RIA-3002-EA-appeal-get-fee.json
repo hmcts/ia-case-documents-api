@@ -8,7 +8,7 @@
       "eventId": "startAppeal",
       "state": "appealStarted",
       "caseData": {
-        "template": "minimal-appeal-started.json",
+        "template": "payments/minimal-appeal-started.json",
         "replacements": {
           "appealReferenceNumber": "EA/50001/2020",
           "appealType": "refusalOfEu",
@@ -21,7 +21,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-started.json",
+      "template": "payments/minimal-appeal-started.json",
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
