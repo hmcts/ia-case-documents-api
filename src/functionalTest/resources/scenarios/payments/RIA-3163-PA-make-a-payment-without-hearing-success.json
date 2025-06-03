@@ -8,7 +8,7 @@
       "eventId": "paymentAppeal",
       "state": "caseBuilding",
       "caseData": {
-        "template": "payments/minimal-appeal-started.json",
+        "template": "minimal-payments-appeal-started.json",
         "replacements": {
           "appealReferenceNumber": "PA/50001/2020",
           "appealType": "protection",
@@ -27,7 +27,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "payments/minimal-appeal-started.json",
+      "template": "minimal-payments-appeal-started.json",
       "replacements": {
         "appealType": "protection",
         "homeOfficeDecisionDate": "{$TODAY-14}",

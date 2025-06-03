@@ -7,7 +7,7 @@
       "eventId": "editAppeal",
       "state": "appealStarted",
       "caseData": {
-        "template": "payments/minimal-appeal-started.json",
+        "template": "minimal-payments-appeal-started.json",
         "replacements": {
           "journeyType": "aip",
           "homeOfficeReferenceNumber": "123456789",
@@ -22,7 +22,7 @@
       "Cannot retrieve the fee from fees-register."
     ],
     "caseData": {
-      "template": "payments/minimal-appeal-started.json",
+      "template": "minimal-payments-appeal-started.json",
       "replacements": {
         "journeyType": "aip",
         "homeOfficeReferenceNumber": "123456789",
