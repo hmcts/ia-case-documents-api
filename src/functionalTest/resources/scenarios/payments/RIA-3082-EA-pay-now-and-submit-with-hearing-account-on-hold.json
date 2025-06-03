@@ -1,0 +1,45 @@
+{
+  "description": "RIA-3082 Account on hold for pay and submit now with a hearing (EA appeal type) - PBA0087442",
+  "enabled": false,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "eventId": "payAndSubmitAppeal",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-payments-appeal-started.json",
+        "replacements": {
+          "appealReferenceNumber": "EA/50001/2020",
+          "appealType": "refusalOfEu",
+          "decisionHearingFeeOption": "decisionWithHearing",
+          "homeOfficeDecisionDate": "{$TODAY-14}",
+          "paymentAccountList": "PBA0087442",
+          "homeOfficeReferenceNumber": "A123456",
+          "paymentDescription": "An IA pba test payment",
+          "customerReference": "543232"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-payments-appeal-started.json",
+      "replacements": {
+        "appealType": "refusalOfEu",
+        "homeOfficeDecisionDate": "{$TODAY-14}",
+        "paymentAccountList": "PBA0087442",
+        "feeCode": "FEE0238",
+        "feeVersion": "3",
+        "feeAmountGbp": "14000",
+        "feeDescription": "Appeal determined with a hearing",
+        "paymentStatus": "Failed",
+        "paymentErrorCode": "CA-E0004",
+        "paymentErrorMessage": "Your account is on hold",
+        "paymentFailedForDisplay": "Pending"
+      }
+    }
+  }
+}

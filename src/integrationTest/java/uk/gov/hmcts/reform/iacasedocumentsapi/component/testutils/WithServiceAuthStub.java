@@ -23,4 +23,26 @@ public interface WithServiceAuthStub {
                                 .withBody(SERVICE_TOKEN)
                                 .build()));
     }
+
+    default void addServiceAuthStub(WireMockServer server, String serviceName) {
+
+        server.addStubMapping(
+            new StubMapping(
+                newRequestPattern(RequestMethod.GET, urlEqualTo("/serviceAuth/details"))
+                    .build(),
+                aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBody(serviceName)
+                    .build()));
+
+        server.addStubMapping(
+            new StubMapping(
+                newRequestPattern(RequestMethod.POST, urlEqualTo("/serviceAuth/lease"))
+                    .build(),
+                aResponse()
+                    .withStatus(200)
+                    .withBody(SERVICE_TOKEN)
+                    .build()));
+    }
 }

@@ -1,0 +1,31 @@
+{
+  "homeOfficeReferenceNumber": "A123456",
+  "homeOfficeDecisionDate": "{$TODAY}",
+  "appellantTitle": "Mr",
+  "appellantGivenNames": "Talha",
+  "appellantFamilyName": "Awan",
+  "appellantDateOfBirth": "{$TODAY-7300}",
+  "contactPreference": "wantsSms",
+  "mobileNumber": "07987654321",
+  "legalRepName": "RS John",
+  "legalRepCompany": "RS Consulting",
+  "appellantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "Iceland": "IS"
+      }
+    }
+  ],
+  "appellantHasFixedAddress": "No",
+  "appealType": "protection",
+  "appealGroundsProtection": {
+    "values": [
+      "refugeeConvention"
+    ]
+  },
+  "hasNewMatters": "No",
+  "hasOtherAppeals": "No",
+  "appealReferenceNumber": "DRAFT",
+  "legalRepReferenceNumber": "CASE001"
+}

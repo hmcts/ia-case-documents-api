@@ -18,13 +18,11 @@ public class RestTemplateConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate(
-        ObjectMapper objectMapper
-    ) {
+    public RestTemplate restTemplate(ObjectMapper objectMapper) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate
-            .getMessageConverters()
-            .add(0, mappingJackson2HttpMessageConverter(objectMapper));
+        restTemplate.getMessageConverters()
+            .removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
+        restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter(objectMapper));
 
         return restTemplate;
     }

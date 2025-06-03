@@ -15,10 +15,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 @Service
 public class AuthorizationHeadersProvider {
 
-    @Value("${idam.redirectUrl}") protected String idamRedirectUrl;
-    @Value("${idam.scope}") protected String userScope;
-    @Value("${spring.security.oauth2.client.registration.oidc.client-id}") protected String idamClientId;
-    @Value("${spring.security.oauth2.client.registration.oidc.client-secret}") protected String idamClientSecret;
+    @Value("${idam.redirectUrl}")
+    protected String idamRedirectUrl;
+    @Value("${idam.scope}")
+    protected String userScope;
+    @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
+    protected String idamClientId;
+    @Value("${spring.security.oauth2.client.registration.oidc.client-secret}")
+    protected String idamClientSecret;
 
     @Autowired
     private AuthTokenGenerator serviceAuthTokenGenerator;
@@ -28,256 +32,130 @@ public class AuthorizationHeadersProvider {
 
     private final Map<String, String> tokens = new ConcurrentHashMap<>();
 
-    public Headers getLegalRepresentativeAuthorization() {
+    private Headers getUserAuthorization(String username, String password, String userType) {
 
         MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
         tokenRequestForm.add("grant_type", "password");
         tokenRequestForm.add("redirect_uri", idamRedirectUrl);
         tokenRequestForm.add("client_id", idamClientId);
         tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_LAW_FIRM_A_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_LAW_FIRM_A_PASSWORD"));
+        tokenRequestForm.add("username", username);
+        tokenRequestForm.add("password", password);
         tokenRequestForm.add("scope", userScope);
 
         String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
         String accessToken = tokens.computeIfAbsent(
-            "LegalRepresentative",
+            userType,
             user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
         );
 
         return new Headers(
             new Header("ServiceAuthorization", serviceToken),
             new Header("Authorization", accessToken)
+        );
+    }
+
+    public Headers getLegalRepresentativeAuthorization() {
+        return getUserAuthorization(
+            System.getenv("TEST_LAW_FIRM_A_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_A_PASSWORD"),
+            "LegalRepresentative"
+        );
+    }
+
+    public Headers getLegalRepresentativeOrgSuccessAuthorization() {
+        return getUserAuthorization(
+            System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_PASSWORD"),
+            "LegalRepresentativeOrgSuccess"
+        );
+    }
+
+    public Headers getLegalRepresentativeOrgDeletedAuthorization() {
+        return getUserAuthorization(
+            System.getenv("TEST_LAW_FIRM_ORG_DELETED_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_ORG_DELETED_PASSWORD"),
+            "LegalRepresentativeOrgDeleted"
         );
     }
 
     public Headers getCaseOfficerAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_CASEOFFICER_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_CASEOFFICER_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "CaseOfficer",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_CASEOFFICER_USERNAME"),
+            System.getenv("TEST_CASEOFFICER_PASSWORD"),
+            "CaseOfficer"
         );
     }
 
     public Headers getAdminOfficerAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_ADMINOFFICER_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_ADMINOFFICER_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "AdminOfficer",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_ADMINOFFICER_USERNAME"),
+            System.getenv("TEST_ADMINOFFICER_PASSWORD"),
+            "AdminOfficer"
         );
     }
 
     public Headers getHomeOfficeApcAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_HOMEOFFICE_APC_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_HOMEOFFICE_APC_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "HomeOfficeApc",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_HOMEOFFICE_APC_USERNAME"),
+            System.getenv("TEST_HOMEOFFICE_APC_PASSWORD"),
+            "HomeOfficeApc"
         );
     }
 
     public Headers getHomeOfficeLartAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_HOMEOFFICE_LART_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_HOMEOFFICE_LART_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "HomeOfficeLart",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_HOMEOFFICE_LART_USERNAME"),
+            System.getenv("TEST_HOMEOFFICE_LART_PASSWORD"),
+            "HomeOfficeLart"
         );
     }
 
     public Headers getHomeOfficePouAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_HOMEOFFICE_POU_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_HOMEOFFICE_POU_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "HomeOfficePou",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_HOMEOFFICE_POU_USERNAME"),
+            System.getenv("TEST_HOMEOFFICE_POU_PASSWORD"),
+            "HomeOfficePou"
         );
     }
 
     public Headers getHomeOfficeGenericAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_HOMEOFFICE_GENERIC_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_HOMEOFFICE_GENERIC_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "HomeOfficeGeneric",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_HOMEOFFICE_GENERIC_USERNAME"),
+            System.getenv("TEST_HOMEOFFICE_GENERIC_PASSWORD"),
+            "HomeOfficeGeneric"
         );
     }
 
     public Headers getLegalRepresentativeOrgAAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_LAW_FIRM_SHARE_CASE_A_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_LAW_FIRM_SHARE_CASE_A_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "LegalRepresentativeOrgA",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_LAW_FIRM_SHARE_CASE_A_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_SHARE_CASE_A_PASSWORD"),
+            "LegalRepresentativeOrgA"
         );
     }
 
     public Headers getJudgeAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_JUDGE_X_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_JUDGE_X_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "Judge",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_JUDGE_X_USERNAME"),
+            System.getenv("TEST_JUDGE_X_PASSWORD"),
+            "Judge"
         );
     }
 
     public Headers getCitizenAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("TEST_CITIZEN_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("TEST_CITIZEN_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "Citizen",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
-        );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
+        return getUserAuthorization(
+            System.getenv("TEST_CITIZEN_USERNAME"),
+            System.getenv("TEST_CITIZEN_PASSWORD"),
+            "Citizen"
         );
     }
-    
+
     public Headers getSystemAuthorization() {
-
-        MultiValueMap<String, String> tokenRequestForm = new LinkedMultiValueMap<>();
-        tokenRequestForm.add("grant_type", "password");
-        tokenRequestForm.add("redirect_uri", idamRedirectUrl);
-        tokenRequestForm.add("client_id", idamClientId);
-        tokenRequestForm.add("client_secret", idamClientSecret);
-        tokenRequestForm.add("username", System.getenv("IA_SYSTEM_USERNAME"));
-        tokenRequestForm.add("password", System.getenv("IA_SYSTEM_PASSWORD"));
-        tokenRequestForm.add("scope", userScope);
-
-        String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
-        String accessToken = tokens.computeIfAbsent(
-            "SystemUser",
-            user -> "Bearer " + idamApi.token(tokenRequestForm).getAccessToken()
+        return getUserAuthorization(
+            System.getenv("IA_SYSTEM_USERNAME"),
+            System.getenv("IA_SYSTEM_PASSWORD"),
+            "SystemUser"
         );
-
-        return new Headers(
-            new Header("ServiceAuthorization", serviceToken),
-            new Header("Authorization", accessToken)
-        );
-    }    
+    }
 }
