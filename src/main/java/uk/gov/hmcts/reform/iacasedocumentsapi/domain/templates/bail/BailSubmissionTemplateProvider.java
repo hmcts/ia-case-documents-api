@@ -196,7 +196,7 @@ public class BailSubmissionTemplateProvider {
 
         fieldValues.put("hasProbationOffenderManager", bailCase.read(HAS_PROBATION_OFFENDER_MANAGER, String.class).orElse(""));
         if (bailCase.read(HAS_PROBATION_OFFENDER_MANAGER, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.NO) {
-            fieldValues.put("probationOffenderManagerGivenName", bailCase.read(PROBATION_OFFENDER_MANAGER_GIVEN_NAME, String.class).orElse("test"));
+            fieldValues.put("probationOffenderManagerGivenName", bailCase.read(PROBATION_OFFENDER_MANAGER_GIVEN_NAME, String.class).orElse(""));
             fieldValues.put("probationOffenderManagerFamilyName", bailCase.read(PROBATION_OFFENDER_MANAGER_FAMILY_NAME, String.class).orElse(""));
             fieldValues.put("probationOffenderManagerTelephoneNumber", bailCase.read(PROBATION_OFFENDER_MANAGER_TELEPHONE_NUMBER, String.class).orElse(""));
             fieldValues.put("probationOffenderManagerMobileNumber", bailCase.read(PROBATION_OFFENDER_MANAGER_MOBILE_NUMBER, String.class).orElse(""));
