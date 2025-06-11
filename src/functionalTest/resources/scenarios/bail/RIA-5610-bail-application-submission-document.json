@@ -1,5 +1,6 @@
 {
   "description": "RIA-5610 Create bail application submission PDF",
+  "enabled": "false",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
