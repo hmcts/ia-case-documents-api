@@ -20,7 +20,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DATE_CLIENT_LEAVE_UK;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DATE_ENTRY_CLEARANCE_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECISION_LETTER_RECEIVED_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_ADDRESS_LINES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_BUILDING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_POSTCODE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.EMAIL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.GWF_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_CORRESPONDENCE_ADDRESS;
@@ -352,6 +355,21 @@ public class AppealSubmissionDocFieldMapper {
             fieldValues.put("bailApplicationNumber", asylumCase.read(BAIL_APPLICATION_NUMBER, String.class));
         }
         fieldValues.put("hasPendingBailApplication", hasBailApplication);
+
+        String detentionBuilding = asylumCase.read(DETENTION_BUILDING, String.class).orElse("");
+        if (!detentionBuilding.equals("")) {
+            fieldValues.put(DETENTION_BUILDING.value(), detentionBuilding);
+        }
+
+        String detentionAddressLines = asylumCase.read(DETENTION_ADDRESS_LINES, String.class).orElse("");
+        if (!detentionBuilding.equals("")) {
+            fieldValues.put(DETENTION_ADDRESS_LINES.value(), detentionAddressLines);
+        }
+
+        String detentionAddressPostcode = asylumCase.read(DETENTION_POSTCODE, String.class).orElse("");
+        if (!detentionBuilding.equals("")) {
+            fieldValues.put(DETENTION_POSTCODE.value(), detentionAddressPostcode);
+        }
     }
 
     private String formatLegalRepName(@NonNull String firstName, @NonNull String lastName) {

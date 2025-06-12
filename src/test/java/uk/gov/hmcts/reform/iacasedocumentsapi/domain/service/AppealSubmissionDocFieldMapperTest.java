@@ -42,7 +42,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_TITLE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPLICATION_OUT_OF_TIME_DOCUMENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPLICATION_OUT_OF_TIME_EXPLANATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_ADDRESS_LINES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_BUILDING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_POSTCODE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_OTHER_APPEALS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_PENDING_BAIL_APPLICATIONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
@@ -102,6 +105,9 @@ class AppealSubmissionDocFieldMapperTest {
         asylumCase.write(APPELLANT_IN_DETENTION, YesOrNo.YES);
         asylumCase.write(DETENTION_FACILITY, "other");
         asylumCase.put("otherDetentionFacilityName", "Testing Facility");
+        asylumCase.write(DETENTION_BUILDING, "someDetentionBuilding");
+        asylumCase.write(DETENTION_ADDRESS_LINES, "someDetentionAddressLines");
+        asylumCase.write(DETENTION_POSTCODE, "SW4 7TX");
         asylumCase.write(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.NO);
         asylumCase.write(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.NO);
         asylumCase.write(REMOVAL_ORDER_OPTIONS, YesOrNo.YES);
@@ -174,6 +180,9 @@ class AppealSubmissionDocFieldMapperTest {
         assertEquals("Detained", result.get("detentionStatus"));
         assertEquals("Other", result.get("detentionFacility"));
         assertEquals("Testing Facility", result.get("detentionFacilityName"));
+        assertEquals("someDetentionBuilding", result.get("detentionBuilding"));
+        assertEquals("someDetentionAddressLines", result.get("detentionAddressLines"));
+        assertEquals("SW4 7TX", result.get("detentionPostcode"));
         assertEquals(YesOrNo.NO, result.get("isAcceleratedDetainedAppeal"));
         assertEquals(BailApplicationStatus.NO, result.get("hasPendingBailApplication"));
     }
