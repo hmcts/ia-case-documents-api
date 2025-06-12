@@ -361,7 +361,17 @@ public enum BailCaseFieldDefinition {
     IS_REMOTE_HEARING(
             "isRemoteHearing", new TypeReference<YesOrNo>() {}),
     CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS(
-        "currentCaseStateVisibleToAllUsers", new TypeReference<String>() {});
+        "currentCaseStateVisibleToAllUsers", new TypeReference<String>() {}),
+    PROBATION_OFFENDER_MANAGER_GIVEN_NAME(
+            "probationOffenderManagerGivenName", new TypeReference<String>(){}),
+    PROBATION_OFFENDER_MANAGER_FAMILY_NAME(
+            "probationOffenderManagerFamilyName", new TypeReference<String>(){}),
+    PROBATION_OFFENDER_MANAGER_TELEPHONE_NUMBER(
+            "probationOffenderManagerTelephoneNumber", new TypeReference<String>(){}),
+    PROBATION_OFFENDER_MANAGER_MOBILE_NUMBER(
+            "probationOffenderManagerMobileNumber", new TypeReference<String>(){}),
+    PROBATION_OFFENDER_MANAGER_EMAIL_ADDRESS(
+            "probationOffenderManagerEmailAddress", new TypeReference<String>(){});
 
 
     private final String value;
