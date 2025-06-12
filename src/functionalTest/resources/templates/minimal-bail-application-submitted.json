@@ -55,5 +55,10 @@
   "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
   "groundsForBailProvideEvidenceOption": "No",
   "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
-  "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+  "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted",
+  "probationOffenderManagerGivenName": "John",
+  "probationOffenderManagerFamilyName": "Doe",
+  "probationOffenderManagerTelephoneNumber": "07896541231",
+  "probationOffenderManagerMobileNumber": "07896541231",
+  "probationOffenderManagerEmailAddress": "test@mailinator.com"
 }
