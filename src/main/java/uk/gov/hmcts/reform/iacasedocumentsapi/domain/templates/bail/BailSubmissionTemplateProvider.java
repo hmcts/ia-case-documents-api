@@ -194,13 +194,6 @@ public class BailSubmissionTemplateProvider {
         setSupporter3Details(bailCase, fieldValues);
         setSupporter4Details(bailCase, fieldValues);
 
-        fieldValues.put("probationOffenderManagerGivenName", bailCase.read(PROBATION_OFFENDER_MANAGER_GIVEN_NAME, String.class).orElse(""));
-        fieldValues.put("probationOffenderManagerFamilyName", bailCase.read(PROBATION_OFFENDER_MANAGER_FAMILY_NAME, String.class).orElse(""));
-        fieldValues.put("probationOffenderManagerTelephoneNumber", bailCase.read(PROBATION_OFFENDER_MANAGER_TELEPHONE_NUMBER, String.class).orElse(""));
-        fieldValues.put("probationOffenderManagerMobileNumber", bailCase.read(PROBATION_OFFENDER_MANAGER_MOBILE_NUMBER, String.class).orElse(""));
-        fieldValues.put("probationOffenderManagerEmailAddress", bailCase.read(PROBATION_OFFENDER_MANAGER_EMAIL_ADDRESS, String.class).orElse(""));
-
-
         fieldValues.put("groundsForBailReasons", bailCase.read(GROUNDS_FOR_BAIL_REASONS, String.class).orElse(""));
         fieldValues.put("transferBailManagementYesOrNo", bailCase.read(TRANSFER_BAIL_MANAGEMENT_YES_OR_NO, YesOrNo.class).orElse(YesOrNo.NO));
         if (bailCase.read(TRANSFER_BAIL_MANAGEMENT_YES_OR_NO, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.NO) {
