@@ -27,16 +27,17 @@ public interface WithIdamStub {
 
     default void someLoggedIn(UserDetailsForTest.UserDetailsForTestBuilder userDetailsForTestBuilder, WireMockServer server) {
         server.addStubMapping(
-                new StubMapping(
-                        newRequestPattern(RequestMethod.GET, urlEqualTo("/userAuth/o/userinfo"))
-                                .build(),
-                        aResponse()
-                                .withStatus(201)
-                                .withHeader("Content-Type", "application/json")
-                                .withBody(
-                                        getObjectAsJsonString(
-                                                userDetailsForTestBuilder))
-                                .build()));
+            new StubMapping(
+                newRequestPattern(RequestMethod.GET, urlEqualTo("/userAuth/o/userinfo"))
+                    .build(),
+                aResponse()
+                    .withStatus(201)
+                    .withHeader("Content-Type", "application/json")
+                    .withBody(
+                        getObjectAsJsonString(
+                            userDetailsForTestBuilder))
+                    .build()
+            ));
     }
 
     private String getObjectAsJsonString(Builder builder) {
@@ -67,11 +68,13 @@ public interface WithIdamStub {
             new StubMapping(
                 newRequestPattern(POST, urlEqualTo("/userAuth/o/token"))
                     .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED_VALUE))
-                    .withRequestBody(equalTo("grant_type=password&redirect_uri=http%3A%2F%2Flocalhost%3"
-                                                 + "A3002%2Foauth2%2Fcallback&client_id=ia&client_secret=some"
-                                                 + "thing&username=ia-system-user%40fake.hmcts.net&password=s"
-                                                 + "omething&scope=openid+profile+authorities+acr+roles+creat"
-                                                 + "e-user+manage-user+search-user"))
+                    .withRequestBody(equalTo("password=something" +
+                                                 "&grant_type=password" +
+                                                 "&scope=openid+profile+authorities+acr+roles+create-user+manage-user+search-user" +
+                                                 "&redirect_uri=http%3A%2F%2Flocalhost%3A3002%2Foauth2%2Fcallback" +
+                                                 "&client_secret=something" +
+                                                 "&client_id=ia" +
+                                                 "&username=ia-system-user%40fake.hmcts.net"))
                     .build(),
                 aResponse()
                     .withStatus(200)
