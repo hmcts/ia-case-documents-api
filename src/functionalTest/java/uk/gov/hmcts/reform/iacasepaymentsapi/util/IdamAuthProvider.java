@@ -3,12 +3,13 @@ package uk.gov.hmcts.reform.iacasepaymentsapi.util;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import uk.gov.hmcts.reform.iacasepaymentsapi.domain.service.IdamService;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.Token;
-import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.security.oauth2.IdentityManagerResponseException;
 
 @Service
@@ -17,7 +18,8 @@ public class IdamAuthProvider {
     @Value("${idam.redirectUrl}")
     protected String idamRedirectUri;
 
-    protected String userScope = "openid profile roles";
+    @Value("${idam.scope}") 
+    protected String userScope;
 
     @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
     protected String idamClientId;
@@ -26,9 +28,9 @@ public class IdamAuthProvider {
     protected String idamClientSecret;
 
     @Autowired private IdamApi idamApi;
+    @Autowired private IdamService idamService;
 
     public String getUserToken(String username, String password) {
-
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type", "password");
         map.add("redirect_uri", idamRedirectUri);
@@ -39,43 +41,42 @@ public class IdamAuthProvider {
         map.add("scope", userScope);
 
         try {
-
             Token tokenResponse = idamApi.token(map);
             return "Bearer " + tokenResponse.getAccessToken();
         } catch (FeignException ex) {
-
             throw new IdentityManagerResponseException("Could not get system user token from IDAM", ex);
         }
-
     }
 
-    public String getSystemUserToken() {
-
+    @Cacheable(value = "legalRepTokenCache")
+    public String getLegalRepToken() {
         return getUserToken(
-            System.getenv("IA_SYSTEM_USERNAME"),
-            System.getenv("IA_SYSTEM_PASSWORD")
+            System.getenv("TEST_LAW_FIRM_A_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_A_PASSWORD")
         );
     }
 
-    public String getLegalRepToken() {
+    @Cacheable(value = "legalRepOrgDeletedTokenCache")
+    public String getLegalRepOrgDeletedToken() {
+        return getUserToken(
+            System.getenv("TEST_LAW_FIRM_ORG_DELETED_USERNAME"),
+            System.getenv("TEST_LAW_FIRM_ORG_DELETED_PASSWORD")
+        );
+    }
 
+    @Cacheable(value = "legalRepOrgSuccessTokenCache")
+    public String getLegalRepOrgSuccessToken() {
         return getUserToken(
             System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_USERNAME"),
             System.getenv("TEST_LAW_FIRM_ORG_SUCCESS_PASSWORD")
         );
     }
 
-    public String getUserId(String token) {
-
-        try {
-
-            UserInfo userInfo = idamApi.userInfo(token);
-
-            return userInfo.getUid();
-
-        } catch (FeignException ex) {
-
-            throw new IdentityManagerResponseException("Could not get system user token from IDAM", ex);
-        }
+    @Cacheable(value = "citizenTokenCache")
+    public String getCitizenToken() {
+        return getUserToken(
+            System.getenv("TEST_CITIZEN_USERNAME"),
+            System.getenv("TEST_CITIZEN_PASSWORD")
+        );
     }
 }

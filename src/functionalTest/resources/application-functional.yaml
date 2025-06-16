@@ -1,1 +1,7 @@
 targetInstance: ${TEST_URL:http://localhost:8096}
+
+spring:
+  cache:
+    cache-names: userInfoCache, systemTokenCache, legalRepTokenCache, legalRepOrgDeletedTokenCache, legalRepOrgSuccessTokenCache, citizenTokenCache
+    caffeine:
+      spec: expireAfterAccess=3600s
