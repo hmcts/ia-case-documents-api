@@ -3,3 +3,9 @@ targetInstance: ${TEST_URL:http://localhost:8093}
 idam:
   redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
   scope: "openid profile roles"
+
+spring:
+  cache:
+    cache-names: userInfoCache, legalRepATokenCache, caseOfficerTokenCache, adminOfficerTokenCache, homeOfficeApcTokenCache, homeOfficeLartTokenCache, homeOfficePouTokenCache, homeOfficeGenericTokenCache, legalRepShareCaseATokenCache, judgeTokenCache, citizenTokenCache, systemTokenCache
+    caffeine:
+      spec: expireAfterAccess=3600s
