@@ -70,49 +70,49 @@ appealSubmissionDocumentInternalOoc.templateName: ${IA_APPEAL_SUBMISSION_INTERNA
 hearingRequirementsDocument.contentType: application/pdf
 hearingRequirementsDocument.fileExtension: PDF
 hearingRequirementsDocument.fileName: "hearing-requirements"
-hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-GNO-ENG-00675.docx}
+hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-GNO-ENG-00675-v2.docx}
 
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
-hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
+hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-v2.docx}
 
-hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
+hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001-v2.docx}
 
 remoteHearingNoticeDocument.contentType: application/pdf
 remoteHearingNoticeDocument.fileExtension: PDF
 remoteHearingNoticeDocument.fileName: "hearing-notice"
-remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680.docx}
+remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-v2.docx}
 
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
 hearingNoticeAdjournedWithoutDateDocument.fileName: "hearing-notice"
-hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00376.docx}
+hearingNoticeAdjournedWithoutDateDocument.templateName: ${IA_HEARING_NOTICE_ADJOURNED_WITHOUT_DATE_TEMPLATE:TB-IAC-HNO-ENG-00376-v2.docx}
 
 noticeOfAdjournedHearingDocument.contentType: application/pdf
 noticeOfAdjournedHearingDocument.fileExtension: PDF
 noticeOfAdjournedHearingDocument.fileName: "notice-of-adjourned-hearing"
-noticeOfAdjournedHearingDocument.templateName: ${NOTICE_OF_ADJOURNED_HEARING_TEMPLATE:TB-IAC-HNO-ENG-00240.docx}
+noticeOfAdjournedHearingDocument.templateName: ${NOTICE_OF_ADJOURNED_HEARING_TEMPLATE:TB-IAC-HNO-ENG-00240-v2.docx}
 
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
 hearingNoticeEditedDocument.fileName: "hearing-notice"
-hearingNoticeEditedDocument.templateName: ${IA_HEARING_NOTICE_EDITED_TEMPLATE:TB-IAC-HNO-ENG-00074B.docx}
+hearingNoticeEditedDocument.templateName: ${IA_HEARING_NOTICE_EDITED_TEMPLATE:TB-IAC-HNO-ENG-00074B-v2.docx}
 
 hearingNoticeUpdatedRequirementsDocument.contentType: application/pdf
 hearingNoticeUpdatedRequirementsDocument.fileExtension: PDF
 hearingNoticeUpdatedRequirementsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00243.docx}
+hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00243-v2.docx}
 
 hearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 hearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 hearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641.docx}
+hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641-v2.docx}
 
 adaHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 adaHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 adaHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-ADA-0002.docx}
+adaHearingNoticeUpdatedDetailsDocument.templateName: ${IA_ADA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-ADA-0002-v2.docx}
 
 adaSuitabilityDocument.contentType: application/pdf
 adaSuitabilityDocument.fileExtension: PDF
@@ -143,7 +143,7 @@ internalDetainedRequestBuildCaseDocument.templateName: ${IA_INTERNAL_DETAINED_BU
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-remoteHearingNoticeUpdatedDetailsDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00680.docx}
+remoteHearingNoticeUpdatedDetailsDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00680-v2.docx}
 
 decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
@@ -242,7 +242,7 @@ decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 hoReviewEvidenceLetter.contentType: application/pdf
 hoReviewEvidenceLetter.fileExtension: PDF
 hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
-hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
+hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-.00240docx}
 
 uploadAppealResponseMaintainedLetter.contentType: application/pdf
 uploadAppealResponseMaintainedLetter.fileExtension: PDF
