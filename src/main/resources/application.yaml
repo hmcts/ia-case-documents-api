@@ -242,7 +242,7 @@ decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 hoReviewEvidenceLetter.contentType: application/pdf
 hoReviewEvidenceLetter.fileExtension: PDF
 hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
-hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-.00240docx}
+hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
 
 uploadAppealResponseMaintainedLetter.contentType: application/pdf
 uploadAppealResponseMaintainedLetter.fileExtension: PDF
