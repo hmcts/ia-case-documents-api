@@ -17,6 +17,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCallbackDispatcher;
 
+import java.util.Optional;
+
 @ExtendWith(MockitoExtension.class)
 public class AsylumPreSubmitCallbackControllerTest {
 
@@ -39,6 +41,28 @@ public class AsylumPreSubmitCallbackControllerTest {
     public void should_dispatch_about_to_start_callback_then_return_response() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
+
+        doReturn(callbackResponse)
+            .when(callbackDispatcher)
+            .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+
+        ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> actualResponse =
+            asylumPreSubmitCallbackController.ccdAboutToStart(callback);
+
+        assertNotNull(actualResponse);
+
+        verify(callbackDispatcher, times(1)).handle(
+            PreSubmitCallbackStage.ABOUT_TO_START,
+            callback
+        );
+    }
+
+    @Test
+    public void should_dispatch_about_to_start_callback_then_return_response1() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
 
         doReturn(callbackResponse)
             .when(callbackDispatcher)
@@ -59,6 +83,28 @@ public class AsylumPreSubmitCallbackControllerTest {
     public void should_dispatch_about_to_submit_callback_then_return_response() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
+
+        doReturn(callbackResponse)
+            .when(callbackDispatcher)
+            .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> actualResponse =
+            asylumPreSubmitCallbackController.ccdAboutToSubmit(callback);
+
+        assertNotNull(actualResponse);
+
+        verify(callbackDispatcher, times(1)).handle(
+            PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
+            callback
+        );
+    }
+
+    @Test
+    public void should_dispatch_about_to_submit_callback_then_return_response1() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
 
         doReturn(callbackResponse)
             .when(callbackDispatcher)
