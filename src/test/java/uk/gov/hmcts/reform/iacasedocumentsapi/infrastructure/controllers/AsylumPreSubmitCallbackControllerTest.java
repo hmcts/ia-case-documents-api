@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -26,6 +28,7 @@ public class AsylumPreSubmitCallbackControllerTest {
     @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
+    @Mock private AsylumCase asylumCase;
 
     private AsylumPreSubmitCallbackController asylumPreSubmitCallbackController;
 
@@ -42,6 +45,8 @@ public class AsylumPreSubmitCallbackControllerTest {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
 
         doReturn(callbackResponse)
             .when(callbackDispatcher)
@@ -63,6 +68,8 @@ public class AsylumPreSubmitCallbackControllerTest {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
 
         doReturn(callbackResponse)
             .when(callbackDispatcher)
@@ -84,6 +91,8 @@ public class AsylumPreSubmitCallbackControllerTest {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
 
         doReturn(callbackResponse)
             .when(callbackDispatcher)
@@ -105,6 +114,8 @@ public class AsylumPreSubmitCallbackControllerTest {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
 
         doReturn(callbackResponse)
             .when(callbackDispatcher)
