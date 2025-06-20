@@ -47,19 +47,21 @@ public class PreSubmitCallbackController<T extends CaseData> {
     }
 
     private static <T extends CaseData> void printLogs(Callback<T> callback) {
-        AsylumCase asylumCase = (AsylumCase)callback.getCaseDetails().getCaseData();
-        Optional<AppealType> appealTypeOpt = asylumCase.read(APPEAL_TYPE, AppealType.class);
-        log.info("{}", appealTypeOpt);
-        log.info("----------");
-        Optional<CaseDetails<T>> c = callback.getCaseDetailsBefore();
-        if (c.isPresent()) {
-            AsylumCase asylumCaseDataBefore = (AsylumCase) c.get().getCaseData();
-            log.info("----------asylumCaseDataBefore111");
-            Optional<AppealType> appealTypeBeforeOpt = asylumCaseDataBefore.read(APPEAL_TYPE, AppealType.class);
-            log.info("{}", appealTypeBeforeOpt);
-            log.info("----------asylumCaseDataBefore222");
-        } else {
-            log.info("----------asylumCaseDataBefore is not present");
+        if (callback.getCaseDetails().getCaseData() instanceof AsylumCase) {
+            AsylumCase asylumCase = (AsylumCase) callback.getCaseDetails().getCaseData();
+            Optional<AppealType> appealTypeOpt = asylumCase.read(APPEAL_TYPE, AppealType.class);
+            log.info("{}", appealTypeOpt);
+            log.info("----------");
+            Optional<CaseDetails<T>> c = callback.getCaseDetailsBefore();
+            if (c.isPresent()) {
+                AsylumCase asylumCaseDataBefore = (AsylumCase) c.get().getCaseData();
+                log.info("----------asylumCaseDataBefore111");
+                Optional<AppealType> appealTypeBeforeOpt = asylumCaseDataBefore.read(APPEAL_TYPE, AppealType.class);
+                log.info("{}", appealTypeBeforeOpt);
+                log.info("----------asylumCaseDataBefore222");
+            } else {
+                log.info("----------asylumCaseDataBefore is not present");
+            }
         }
     }
 
