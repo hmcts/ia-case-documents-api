@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 import static java.util.Objects.requireNonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -45,13 +47,16 @@ public class PreSubmitCallbackController<T extends CaseData> {
     }
 
     private static <T extends CaseData> void printLogs(Callback<T> callback) {
-        log.info("{}", callback.getCaseDetails().getCaseData());
+        AsylumCase asylumCase = (AsylumCase)callback.getCaseDetails().getCaseData();
+        Optional<AppealType> appealTypeOpt = asylumCase.read(APPEAL_TYPE, AppealType.class);
+        log.info("{}", appealTypeOpt);
         log.info("----------");
         Optional<CaseDetails<T>> c = callback.getCaseDetailsBefore();
         if (c.isPresent()) {
             AsylumCase asylumCaseDataBefore = (AsylumCase) c.get().getCaseData();
             log.info("----------asylumCaseDataBefore111");
-            log.info("{}", asylumCaseDataBefore);
+            Optional<AppealType> appealTypeBeforeOpt = asylumCaseDataBefore.read(APPEAL_TYPE, AppealType.class);
+            log.info("{}", appealTypeBeforeOpt);
             log.info("----------asylumCaseDataBefore222");
         } else {
             log.info("----------asylumCaseDataBefore is not present");
