@@ -39,36 +39,30 @@ public class PreSubmitCallbackController<T extends CaseData> {
             @Parameter(name = "Asylum case data", required = true) @NotNull @RequestBody Callback<T> callback
     ) {
         log.info("------------------ccdAboutToStart111");
+        printLogs(callback);
+        log.info("------------------ccdAboutToStart333");
+        return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_START, callback);
+    }
+
+    private static <T extends CaseData> void printLogs(Callback<T> callback) {
         log.info("{}", callback.getCaseDetails().getCaseData());
-        log.info("------------------ccdAboutToStart222");
+        log.info("----------");
         Optional<CaseDetails<T>> c = callback.getCaseDetailsBefore();
         if (c.isPresent()) {
-            AsylumCase asylumCaseDataBefore = (AsylumCase)c.get().getCaseData();
+            AsylumCase asylumCaseDataBefore = (AsylumCase) c.get().getCaseData();
             log.info("----------asylumCaseDataBefore111");
             log.info("{}", asylumCaseDataBefore);
             log.info("----------asylumCaseDataBefore222");
         } else {
             log.info("----------asylumCaseDataBefore is not present");
         }
-        log.info("------------------ccdAboutToStart333");
-        return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_START, callback);
     }
 
     public ResponseEntity<PreSubmitCallbackResponse<T>> ccdAboutToSubmit(
             Callback<T> callback
     ) {
         log.info("------------------ccdAboutToSubmit111");
-        log.info("{}", callback.getCaseDetails().getCaseData());
-        log.info("------------------ccdAboutToSubmit222");
-        Optional<CaseDetails<T>> c = callback.getCaseDetailsBefore();
-        if (c.isPresent()) {
-            AsylumCase asylumCaseDataBefore = (AsylumCase)c.get().getCaseData();
-            log.info("----------asylumCaseDataBefore111");
-            log.info("{}", asylumCaseDataBefore);
-            log.info("----------asylumCaseDataBefore222");
-        } else {
-            log.info("----------asylumCaseDataBefore is not present");
-        }
+        printLogs(callback);
         log.info("------------------ccdAboutToSubmit333");
         return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
     }
