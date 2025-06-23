@@ -74,9 +74,11 @@ public class PreSubmitCallbackController<T extends CaseData> {
         ResponseEntity<PreSubmitCallbackResponse<T>> response =
                 performStageRequest(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
         AsylumCase asylumCase = (AsylumCase) response.getBody().getData();
-        Optional<AppealType> appealTypeOpt = asylumCase.read(APPEAL_TYPE, AppealType.class);
-        log.info("{}", appealTypeOpt);
-        log.info("------------------ccdAboutToSubmit444");
+        if (asylumCase != null) {
+            Optional<AppealType> appealTypeOpt = asylumCase.read(APPEAL_TYPE, AppealType.class);
+            log.info("{}", appealTypeOpt);
+            log.info("------------------ccdAboutToSubmit444");
+        }
         return response;
     }
 
