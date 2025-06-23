@@ -101,18 +101,20 @@ public class PersonalisationProvider {
 
         if (caseDetailsBefore.isPresent()) {
 
+            AsylumCase asylumCaseBefore = caseDetailsBefore.get().getCaseData();
+
             hearingCentreNameBefore =
-                hearingDetailsFinder.getOldHearingCentreName(caseDetailsBefore.get().getCaseData());
+                hearingDetailsFinder.getOldHearingCentreName(asylumCaseBefore);
 
             oldHearingDate =
-                hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.get().getCaseData());
+                asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse("");
         }
 
         final Builder<String, String> caseListingValues = ImmutableMap
             .<String, String>builder()
             .put(LINK_TO_ONLINE_SERVICE, iaExUiFrontendUrl)
             .put("oldHearingCentre", hearingCentreNameBefore)
-            .put("oldHearingDate", oldHearingDate == null || oldHearingDate.isEmpty() ? "" : dateTimeExtractor.extractHearingDate(oldHearingDate))
+            .put("oldHearingDate", oldHearingDate.isEmpty() ? oldHearingDate : dateTimeExtractor.extractHearingDate(oldHearingDate))
             .put("hearingDate", dateTimeExtractor.extractHearingDate(hearingDateTime))
             .put("hearingTime", dateTimeExtractor.extractHearingTime(hearingDateTime))
             .put("hearingCentreName", hearingDetailsFinder.getHearingCentreName(asylumCase))
