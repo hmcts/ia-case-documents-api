@@ -14,7 +14,7 @@ plugins {
     id 'jacoco'
     id 'pmd'
     id 'com.github.ben-manes.versions' version '0.52.0'
-    id "info.solidsoft.pitest" version '1.15.0'
+    id 'info.solidsoft.pitest' version '1.15.0'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.owasp.dependencycheck' version '10.0.4'
     id 'org.sonarqube' version '4.4.1.3373'
@@ -30,10 +30,10 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.12.2',
-    junitPlatform      : '1.12.2',
+    junit              : '5.13.0',
+    junitPlatform      : '1.13.0',
     gradlePitest       : '1.15.0',
-    pitest             : '1.19.4',
+    pitest             : '1.19.5',
     reformLogging      : '6.1.9',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
@@ -226,6 +226,7 @@ jacocoTestReport {
 pitest {
 //    print('./gradlew --version'.execute().text.trim())
     junit5PluginVersion = '1.2.3'
+    pitestVersion = versions.pitest
     targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
     excludedClasses = [
         'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
@@ -371,8 +372,6 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
-    testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
-    testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
     testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
 
     testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
@@ -398,9 +397,9 @@ dependencies {
     //pact contract testing
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.12.2')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.13.0")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.0")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.13.0')
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
