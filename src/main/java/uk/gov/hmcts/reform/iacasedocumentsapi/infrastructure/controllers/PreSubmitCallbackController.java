@@ -78,6 +78,8 @@ public class PreSubmitCallbackController<T extends CaseData> {
             Optional<AppealType> appealTypeOpt = asylumCase.read(APPEAL_TYPE, AppealType.class);
             log.info("{}", appealTypeOpt);
             log.info("{}", response);
+            log.info("{}", response.getBody());
+            log.info("{}", response.getBody().getData());
             log.info("------------------ccdAboutToSubmit444");
         }
         return response;
