@@ -35,6 +35,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 
@@ -187,7 +188,7 @@ public class CcdScenarioRunnerTest {
                     );
                     runScenarios.add(description);
                     break;
-                } catch (Error | RetryableException e) {
+                } catch (Error | RetryableException | IdentityManagerResponseException e) {
                     System.out.println("Scenario failed with error " + e.getMessage());
                     if (i == maxRetries - 1) {
                         this.failedScenarios.add(description);
