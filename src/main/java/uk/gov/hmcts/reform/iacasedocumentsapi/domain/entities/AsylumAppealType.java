@@ -7,18 +7,21 @@ import java.util.Optional;
 
 public enum AsylumAppealType {
 
-    RP("revocationOfProtection"),
-    PA("protection"),
-    EA("refusalOfEu"),
-    HU("refusalOfHumanRights"),
-    DC("deprivation"),
-    EU("euSettlementScheme");
+    RP("revocationOfProtection", "Revocation of a protection status"),
+    PA("protection", "Refusal of protection claim"),
+    EA("refusalOfEu", "Refusal of application under the EEA regulations"),
+    HU("refusalOfHumanRights", "Refusal of a human rights claim"),
+    DC("deprivation", "Deprivation of citizenship"),
+    EU("euSettlementScheme", "EU Settlement Scheme");
 
     @JsonValue
-    private String value;
+    private final String value;
 
-    AsylumAppealType(String value) {
+    private final String description;
+
+    AsylumAppealType(String value, String description) {
         this.value = value;
+        this.description = description;
     }
 
     public static Optional<AsylumAppealType> from(String value) {
@@ -31,8 +34,12 @@ public enum AsylumAppealType {
         return value;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public String toString() {
-        return value;
+        return value + ": " + description;
     }
 }

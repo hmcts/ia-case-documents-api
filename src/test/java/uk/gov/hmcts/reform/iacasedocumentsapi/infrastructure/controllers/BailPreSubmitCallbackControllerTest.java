@@ -27,6 +27,7 @@ public class BailPreSubmitCallbackControllerTest {
     @Mock private PreSubmitCallbackResponse<BailCase> callbackResponse;
     @Mock private Callback<BailCase> callback;
     @Mock private CaseDetails<BailCase> caseDetails;
+    @Mock private BailCase bailCase;
 
     private BailPreSubmitCallbackController bailPreSubmitCallbackController;
 
@@ -58,6 +59,7 @@ public class BailPreSubmitCallbackControllerTest {
     @Test
     public void should_dispatch_about_to_submit_callback_and_return_response() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(bailCase);
         doReturn(callbackResponse)
             .when(callbackDispatcher)
             .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
