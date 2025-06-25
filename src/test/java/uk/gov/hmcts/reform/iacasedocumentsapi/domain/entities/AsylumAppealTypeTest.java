@@ -19,12 +19,12 @@ public class AsylumAppealTypeTest {
 
     @Test
     public void has_correct_string_values_for_asylum_appeal_types() {
-        assertEquals("revocationOfProtection", AsylumAppealType.RP.toString());
-        assertEquals("protection", AsylumAppealType.PA.toString());
-        assertEquals("refusalOfHumanRights", AsylumAppealType.HU.toString());
-        assertEquals("refusalOfEu", AsylumAppealType.EA.toString());
-        assertEquals("deprivation", AsylumAppealType.DC.toString());
-        assertEquals("euSettlementScheme", AsylumAppealType.EU.toString());
+        assertEquals("revocationOfProtection: Revocation of a protection status", AsylumAppealType.RP.toString());
+        assertEquals("protection: Refusal of protection claim", AsylumAppealType.PA.toString());
+        assertEquals("refusalOfHumanRights: Refusal of a human rights claim", AsylumAppealType.HU.toString());
+        assertEquals("refusalOfEu: Refusal of application under the EEA regulations", AsylumAppealType.EA.toString());
+        assertEquals("deprivation: Deprivation of citizenship", AsylumAppealType.DC.toString());
+        assertEquals("euSettlementScheme: EU Settlement Scheme", AsylumAppealType.EU.toString());
     }
 
     @Test
