@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.HO_WAIVER_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.NO_REMISSION;
@@ -208,9 +208,9 @@ public class AsylumCaseUtilsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = AsylumAppealType.class)
-    void should_return_true_if_ea_hu_eu_appeal_type(AsylumAppealType appealType) {
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+    @EnumSource(value = AppealType.class)
+    void should_return_true_if_ea_hu_eu_appeal_type(AppealType appealType) {
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
         if (List.of(HU, EA, EU).contains(appealType)) {
             assertTrue(AsylumCaseUtils.isEaHuEuAppeal(asylumCase));
         } else {

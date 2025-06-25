@@ -99,7 +99,7 @@ public enum AsylumCaseDefinition {
         "appellantAddress", new TypeReference<AddressUk>(){}),
 
     APPEAL_TYPE(
-        "appealType", new TypeReference<AsylumAppealType>(){}),
+        "appealType", new TypeReference<AppealType>(){}),
 
     REASONS_FOR_APPEAL_DECISION(
         "reasonsForAppealDecision", new TypeReference<String>(){}),

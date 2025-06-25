@@ -83,7 +83,7 @@ public class AppealSubmissionDocFieldMapper {
 
         addAppealOocFields(asylumCase, fieldValues);
 
-        Optional<AsylumAppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AsylumAppealType.class);
+        Optional<AppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AppealType.class);
 
         if (optionalAppealType.isPresent()) {
             String appealType = optionalAppealType.get().getValue();
