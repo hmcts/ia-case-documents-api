@@ -271,7 +271,7 @@ dependencyManagement {
             entry 'snakeyaml'
         }
 
-        dependencySet(group: 'commons-fileupload', version: '1.6.0') {
+        dependencySet(group: 'commons-fileupload', version: '1.5') {
             entry 'commons-fileupload'
         }
 
