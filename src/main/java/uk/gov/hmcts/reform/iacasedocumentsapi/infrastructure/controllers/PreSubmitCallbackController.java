@@ -80,6 +80,7 @@ public class PreSubmitCallbackController<T extends CaseData> {
             log.info("{}", response);
             log.info("{}", response.getBody());
             log.info("{}", response.getBody().getData());
+            log.info("------------------ccdAboutToSubmit333 headers");
             for (String key: response.getHeaders().keySet()) {
                 log.info("----------ccdAboutToSubmit333 header: {} - {}", key, response.getHeaders().get(key));
             }
