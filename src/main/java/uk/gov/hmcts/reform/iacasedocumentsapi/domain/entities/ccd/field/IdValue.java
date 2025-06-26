@@ -1,7 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import static java.util.Objects.requireNonNull;
 
+@EqualsAndHashCode
+@ToString
 public class IdValue<T> {
 
     private String id = "";
