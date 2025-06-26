@@ -63,9 +63,6 @@ public class HearingNoticeOfAdjournmentWithoutADateTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
-//        verify(documentHandler, times(1))
-//            .addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-//                asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
