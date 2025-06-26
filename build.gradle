@@ -288,9 +288,8 @@ project.tasks['sonarqube'].group = "Verification"
 repositories {
     mavenLocal()
     mavenCentral()
-
     maven {
-        url 'https://www.jitpack.io'
+        url 'https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1'
     }
 }
 
@@ -368,8 +367,8 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.13'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
 
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.104'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.104'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.106'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.106'
 
     implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
     implementation (group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'){
