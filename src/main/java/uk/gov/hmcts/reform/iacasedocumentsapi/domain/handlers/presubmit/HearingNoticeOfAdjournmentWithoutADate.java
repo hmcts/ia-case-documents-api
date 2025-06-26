@@ -49,12 +49,12 @@ public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallback
 
         Document hearingNotice = documentCreator.create(caseDetails);
 
-        documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-            asylumCase,
-            hearingNotice,
-            HEARING_DOCUMENTS,
-            DocumentTag.HEARING_NOTICE
-        );
+//        documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
+//            asylumCase,
+//            hearingNotice,
+//            HEARING_DOCUMENTS,
+//            DocumentTag.HEARING_NOTICE
+//        );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
