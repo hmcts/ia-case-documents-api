@@ -35,7 +35,7 @@ def versions = [
     reformLogging      : '6.1.9',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
-    serenity           : '4.2.34',
+    serenity           : '4.2.31',
     pact_version       : '4.1.38',
     springDoc          : '1.8.0',
     springCloud        : '3.1.9'
@@ -75,7 +75,8 @@ ext.libraries = [
         "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
         "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
         "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
-        "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
+        "org.junit.platform:junit-platform-engine:${versions.junitPlatform}",
+        "org.junit.platform:junit-platform-launcher:${versions.junitPlatform}"
     ]
 ]
 
@@ -271,7 +272,7 @@ dependencyManagement {
             entry 'snakeyaml'
         }
 
-        dependencySet(group: 'commons-fileupload', version: '1.5') {
+        dependencySet(group: 'commons-fileupload', version: '1.6.0') {
             entry 'commons-fileupload'
         }
 
