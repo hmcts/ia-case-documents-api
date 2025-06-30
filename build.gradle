@@ -32,13 +32,10 @@ apply plugin: 'idea'
 def versions = [
     junit              : '5.13.0',
     junitPlatform      : '1.13.0',
-    gradlePitest       : '1.15.0',
-    pitest             : '1.19.5',
     reformLogging      : '6.1.9',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
     serenity           : '4.2.30',
-    sonarPitest        : '0.5',
     pact_version       : '4.1.38',
     springDoc          : '1.8.0',
     springCloud        : '3.1.9'
@@ -226,7 +223,7 @@ jacocoTestReport {
 pitest {
 //    print('./gradlew --version'.execute().text.trim())
     junit5PluginVersion = '1.2.3'
-    pitestVersion = versions.pitest
+    pitestVersion = "1.16.2"
     targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
     excludedClasses = [
         'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
@@ -264,7 +261,9 @@ project.tasks['sonarqube'].group = "Verification"
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+    maven {
+        url 'https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1'
+    }
 }
 
 dependencyManagement {
@@ -357,8 +356,8 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.105'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.105'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.106'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.106'
 
     implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
@@ -372,8 +371,8 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
-    testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
-
+    testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5"
+    testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
     testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
     testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity

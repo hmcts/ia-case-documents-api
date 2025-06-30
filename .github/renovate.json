@@ -31,6 +31,14 @@
     {
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "matchPackageNames": ["org.pitest:pitest"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["info.solidsoft.pitest"],
+      "enabled": false
     }
   ],
   "timezone": "Europe/London",
