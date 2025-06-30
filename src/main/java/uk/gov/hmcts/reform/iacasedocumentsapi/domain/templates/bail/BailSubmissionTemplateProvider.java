@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
@@ -30,7 +29,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseUtils;
 
 @Component
-@Slf4j
 public class BailSubmissionTemplateProvider {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
@@ -197,17 +195,11 @@ public class BailSubmissionTemplateProvider {
         setSupporter4Details(bailCase, fieldValues);
 
         fieldValues.put("hasProbationOffenderManager", bailCase.read(HAS_PROBATION_OFFENDER_MANAGER, YesOrNo.class).orElse(YesOrNo.NO));
-        log.info("hasProbationOffenderManager: {}", fieldValues.get("hasProbationOffenderManager"));
         fieldValues.put("probationOffenderManagerGivenName", bailCase.read(PROBATION_OFFENDER_MANAGER_GIVEN_NAME, String.class).orElse(""));
-        log.info("probationOffenderManagerGivenName: {}", fieldValues.get("probationOffenderManagerGivenName"));
         fieldValues.put("probationOffenderManagerFamilyName", bailCase.read(PROBATION_OFFENDER_MANAGER_FAMILY_NAME, String.class).orElse(""));
-        log.info("probationOffenderManagerFamilyName: {}", fieldValues.get("probationOffenderManagerFamilyName"));
         fieldValues.put("probationOffenderManagerTelephoneNumber", bailCase.read(PROBATION_OFFENDER_MANAGER_TELEPHONE_NUMBER, String.class).orElse(""));
-        log.info("probationOffenderManagerTelephoneNumber: {}", fieldValues.get("probationOffenderManagerTelephoneNumber"));
         fieldValues.put("probationOffenderManagerMobileNumber", bailCase.read(PROBATION_OFFENDER_MANAGER_MOBILE_NUMBER, String.class).orElse(""));
-        log.info("probationOffenderManagerMobileNumber: {}", fieldValues.get("probationOffenderManagerMobileNumber"));
         fieldValues.put("probationOffenderManagerEmailAddress", bailCase.read(PROBATION_OFFENDER_MANAGER_EMAIL_ADDRESS, String.class).orElse(""));
-        log.info("probationOffenderManagerEmailAddress: {}", fieldValues.get("probationOffenderManagerEmailAddress"));
 
         fieldValues.put("groundsForBailReasons", bailCase.read(GROUNDS_FOR_BAIL_REASONS, String.class).orElse(""));
         fieldValues.put("transferBailManagementYesOrNo", bailCase.read(TRANSFER_BAIL_MANAGEMENT_YES_OR_NO, YesOrNo.class).orElse(YesOrNo.NO));
@@ -245,7 +237,6 @@ public class BailSubmissionTemplateProvider {
             setFcs4InterpreterLanguageDetails(bailCase, fieldValues);
         }
 
-        log.info("hasProbationOffenderManager: {}", fieldValues.get("hasProbationOffenderManager"));
         return fieldValues;
     }
 

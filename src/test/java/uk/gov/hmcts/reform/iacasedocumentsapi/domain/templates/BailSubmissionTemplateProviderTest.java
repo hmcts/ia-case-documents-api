@@ -97,7 +97,6 @@ public class BailSubmissionTemplateProviderTest {
     private String supporterAddressPostCode = "AB1 2CD";
     private String supporterAddressCountry = "UK";
     private String dontKnowSelectedValue = "Don't Know";
-
     private LocalDateTime createdDate = LocalDateTime.parse("2020-12-31T12:34:56");
 
     private AddressUk addressUk = new AddressUk(
