@@ -188,7 +188,7 @@ public class CcdScenarioRunnerTest {
                     );
                     runScenarios.add(description);
                     break;
-                } catch (Error | RetryableException | IdentityManagerResponseException e) {
+                } catch (Error | RetryableException | IdentityManagerResponseException | ClassCastException e) {
                     System.out.println("Scenario failed with error " + e.getMessage());
                     if (i == maxRetries - 1) {
                         this.failedScenarios.add(description);
