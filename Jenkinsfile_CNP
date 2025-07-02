@@ -16,17 +16,16 @@ def component = "case-documents-api"
 def secrets = [
     'ia-${env}': [
 
-        secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
-        secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
+        secret('wa-test-caseofficer-a-username', 'TEST_CASEOFFICER_USERNAME'),
+        secret('wa-test-caseofficer-a-password', 'TEST_CASEOFFICER_PASSWORD'),
+        secret('wa-test-judge-username', 'TEST_JUDGE_X_USERNAME'),
+        secret('wa-test-judge-password', 'TEST_JUDGE_X_PASSWORD'),
+        secret('wa-test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
+        secret('wa-test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
         secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
         secret('test-law-firm-a-password', 'TEST_LAW_FIRM_A_PASSWORD'),
-        secret('test-adminofficer-username', 'TEST_ADMINOFFICER_USERNAME'),
-        secret('test-adminofficer-password', 'TEST_ADMINOFFICER_PASSWORD'),
         secret('test-citizen-username', 'TEST_CITIZEN_USERNAME'),
         secret('test-citizen-password', 'TEST_CITIZEN_PASSWORD'),
-
-        secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
-        secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
 
         secret('em-stitching-enabled', 'IA_EM_STITCHING_ENABLED'),
 
