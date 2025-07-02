@@ -2,8 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
@@ -52,7 +50,7 @@ public class IdamAuthoritiesConverterTest {
         when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "tribunal-caseworker"));
         when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(roleAssignmentService, idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
 
         List<GrantedAuthority> expectedGrantedAuthorities = Lists.newArrayList(
             new SimpleGrantedAuthority("caseworker-ia"),
@@ -69,7 +67,7 @@ public class IdamAuthoritiesConverterTest {
     @Test
     public void should_return_empty_list_when_token_is_missing() {
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(roleAssignmentService, idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
 
         assertEquals(Collections.emptyList(), idamAuthoritiesConverter.convert(jwt));
     }
@@ -80,7 +78,7 @@ public class IdamAuthoritiesConverterTest {
         when(userInfo.getRoles()).thenReturn(Lists.newArrayList());
         when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(roleAssignmentService, idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
 
         when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
@@ -98,40 +96,12 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(roleAssignmentService, idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
 
         IdentityManagerResponseException thrown = assertThrows(
             IdentityManagerResponseException.class,
             () -> idamAuthoritiesConverter.convert(jwt)
         );
         assertEquals("Could not get user details from IDAM or RoleAssignmentService", thrown.getMessage());
-    }
-
-    @Test
-    void should_concat_correctly_from_idam_and_role_assignment_service() {
-
-        when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
-        when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
-        when(jwt.getTokenValue()).thenReturn(tokenValue);
-        when(userInfo.getUid()).thenReturn("some-uuid");
-
-        when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "caseworker-ia-caseofficer"));
-        when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
-        when(roleAssignmentService.getAmRolesFromUser(anyString(), eq("Bearer " + tokenValue)))
-            .thenReturn(List.of("tribunal-caseworker", "senior-tribunal-caseworker"));
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(roleAssignmentService, idamService);
-
-        List<GrantedAuthority> expectedGrantedAuthorities = Lists.newArrayList(
-            new SimpleGrantedAuthority("tribunal-caseworker"),
-            new SimpleGrantedAuthority("senior-tribunal-caseworker"),
-            new SimpleGrantedAuthority("caseworker-ia"),
-            new SimpleGrantedAuthority("caseworker-ia-caseofficer")
-        );
-
-        Collection<GrantedAuthority> grantedAuthorities = idamAuthoritiesConverter.convert(jwt);
-
-        verify(idamService).getUserInfo("Bearer " + tokenValue);
-
-        assertEquals(expectedGrantedAuthorities, grantedAuthorities);
     }
 }
