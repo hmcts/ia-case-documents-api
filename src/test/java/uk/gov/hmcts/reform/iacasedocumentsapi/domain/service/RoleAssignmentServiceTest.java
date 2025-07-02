@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -70,17 +69,17 @@ class RoleAssignmentServiceTest {
             .build();
 
         when(roleAssignmentApi.getRoleAssignments(
-            eq(accessToken),
-            eq(serviceToken),
-            eq(userId)
+            accessToken,
+            serviceToken,
+            userId
         )).thenReturn(new RoleAssignmentResource(List.of(assignment1, assignment2, assignment3)));
 
         List<String> roles = roleAssignmentService.getAmRolesFromUser(userId, accessToken);
 
         verify(roleAssignmentApi).getRoleAssignments(
-            eq(accessToken),
-            eq(serviceToken),
-            eq(userId)
+            accessToken,
+            serviceToken,
+            userId
         );
         assertTrue(roles.contains(RoleName.CTSC_TEAM_LEADER.getValue()));
         assertTrue(roles.contains(RoleName.CTSC.getValue()));

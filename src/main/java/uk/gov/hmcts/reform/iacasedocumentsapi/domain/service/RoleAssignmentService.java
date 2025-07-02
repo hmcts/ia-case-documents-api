@@ -31,7 +31,7 @@ public class RoleAssignmentService {
             serviceAuthTokenGenerator.generate(),
             actorId
         );
-        return Optional.ofNullable(roleAssignmentResource.getRoleAssignmentResponse()).orElse(Collections.emptyList())
+        return Optional.ofNullable(roleAssignmentResource.roleAssignmentResponse()).orElse(Collections.emptyList())
             .stream()
             .map(Assignment::getRoleName)
             .map(RoleName::getValue)

@@ -177,7 +177,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_throw_exception_if_idam_or_am_roles_missing() {
+    void should_throw_exception_if_idam_or_am_roles_missing() {
 
         String accessToken = "ABCDEFG";
 
@@ -200,7 +200,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_throw_exception_if_idam_email_missing() {
+    void should_throw_exception_if_idam_email_missing() {
 
         String accessToken = "ABCDEFG";
 
@@ -246,7 +246,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_throw_exception_if_idam_surname_missing() {
+    void should_throw_exception_if_idam_surname_missing() {
 
         String accessToken = "ABCDEFG";
 
@@ -270,7 +270,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_wrap_server_exception_when_calling_idam() {
+    void should_wrap_server_exception_when_calling_idam() {
 
         String accessToken = "ABCDEFG";
 
@@ -287,7 +287,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_wrap_client_exception_when_calling_idam() {
+    void should_wrap_client_exception_when_calling_idam() {
 
         String accessToken = "ABCDEFG";
 
