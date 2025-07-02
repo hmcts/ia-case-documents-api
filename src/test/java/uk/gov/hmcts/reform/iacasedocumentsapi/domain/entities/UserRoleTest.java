@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 public class UserRoleTest {
 
-
     @ParameterizedTest
     @EnumSource(value = UserRole.class)
     void to_string_gets_ids(UserRole userRole) {
@@ -48,6 +47,7 @@ public class UserRoleTest {
         "caseworker-ia-homeofficepou, HOME_OFFICE_POU",
         "caseworker-ia-respondentofficer, HOME_OFFICE_GENERIC",
         "citizen, CITIZEN",
+        "unknown, UNKNOWN",
     })
     void has_correct_values(String expectedId, UserRole userRole) {
         assertEquals(expectedId, userRole.toString());
@@ -55,7 +55,7 @@ public class UserRoleTest {
 
     @Test
     void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(29, UserRole.values().length);
+        assertEquals(30, UserRole.values().length);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.List;
 import lombok.Getter;
@@ -39,7 +40,9 @@ public enum UserRole {
     HOME_OFFICE_LART("caseworker-ia-homeofficelart"),
     HOME_OFFICE_POU("caseworker-ia-homeofficepou"),
     HOME_OFFICE_GENERIC("caseworker-ia-respondentofficer"),
-    CITIZEN("citizen");
+    CITIZEN("citizen"),
+    @JsonEnumDefaultValue
+    UNKNOWN("unknown");
 
     @JsonValue
     private final String id;
