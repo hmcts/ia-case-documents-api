@@ -824,7 +824,10 @@ public enum AsylumCaseDefinition {
             "feeUpdateReason", new TypeReference<FeeUpdateReason>(){}),
 
     NOTIFICATIONS(
-            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){})
+            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){}),
+
+    SUBSCRIPTIONS(
+            "subscriptions", new TypeReference<List<IdValue<Subscriber>>>(){})
     ;
 
     private final String value;

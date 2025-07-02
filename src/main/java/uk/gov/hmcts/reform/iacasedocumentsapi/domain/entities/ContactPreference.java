@@ -1,35 +1,42 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.Arrays;
+import static java.util.Arrays.stream;
+
 import java.util.Optional;
 
 public enum ContactPreference {
 
-    WANTS_EMAIL("wantsEmail"),
-    WANTS_SMS("wantsSms");
+  WANTS_EMAIL("wantsEmail", "Email"),
+  WANTS_SMS("wantsSms", "Text message");
 
-    @JsonValue
-    private String value;
+  @JsonValue
+  private String value;
 
-    ContactPreference(String value) {
-        this.value = value;
-    }
+  private String description;
 
-    public static Optional<ContactPreference> from(
-        String value
-    ) {
-        return Arrays.stream(values())
-            .filter(v -> v.getValue().equals(value))
-            .findFirst();
-    }
+  ContactPreference(String value, String description) {
+    this.value = value;
+    this.description = description;
+  }
 
-    public String getValue() {
-        return value;
-    }
+  public static Optional<ContactPreference> from(
+      String value
+  ) {
+    return stream(values())
+        .filter(v -> v.getValue().equals(value))
+        .findFirst();
+  }
 
-    @Override
-    public String toString() {
-        return value;
-    }
+  public String getValue() {
+    return value;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public String toString() {
+    return value + ": " + description;
+  }
 }
