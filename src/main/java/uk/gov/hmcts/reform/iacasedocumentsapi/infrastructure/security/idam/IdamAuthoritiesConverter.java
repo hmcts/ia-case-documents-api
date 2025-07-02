@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RoleAssignmentService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 
 @Slf4j
@@ -25,12 +26,12 @@ public class IdamAuthoritiesConverter implements Converter<Jwt, Collection<Grant
 
     static final String TOKEN_NAME = "tokenName";
 
-    private final IdamApi idamApi;
+    private final RoleAssignmentService roleAssignmentService;
     private final IdamService idamService;
     
-    public IdamAuthoritiesConverter(IdamApi idamApi,
+    public IdamAuthoritiesConverter(RoleAssignmentService roleAssignmentService,
         IdamService idamService) {
-        this.idamApi = idamApi;
+        this.roleAssignmentService = roleAssignmentService;
         this.idamService = idamService;
     }
 
@@ -49,15 +50,16 @@ public class IdamAuthoritiesConverter implements Converter<Jwt, Collection<Grant
         try {
 
             UserInfo userInfo = idamService.getUserInfo("Bearer " + authorization);
-
-            return userInfo
-                .getRoles()
+            List<String> amRoles =
+                roleAssignmentService.getAmRolesFromUser(userInfo.getUid(), "Bearer " + authorization);
+            List<String> roles = Stream.concat(amRoles.stream(), userInfo.getRoles().stream()).toList();
+            return roles
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
         } catch (FeignException e) {
-            throw new IdentityManagerResponseException("Could not get user details from IDAM", e);
+            throw new IdentityManagerResponseException("Could not get user details from IDAM or RoleAssignmentService", e);
         }
 
     }

@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 
 import feign.FeignException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RoleAssignmentService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
@@ -12,17 +15,17 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessToke
 public class IdamUserDetailsProvider implements UserDetailsProvider {
 
     private final AccessTokenProvider accessTokenProvider;
-    private final IdamApi idamApi;
+    private final RoleAssignmentService roleAssignmentService;
     private final IdamService idamService;
 
     public IdamUserDetailsProvider(
         AccessTokenProvider accessTokenProvider,
-        IdamApi idamApi,
+        RoleAssignmentService roleAssignmentService,
         IdamService idamService
     ) {
 
         this.accessTokenProvider = accessTokenProvider;
-        this.idamApi = idamApi;
+        this.roleAssignmentService = roleAssignmentService;
         this.idamService = idamService;
     }
 
@@ -47,8 +50,15 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
         if (response.getUid() == null) {
             throw new IllegalStateException("IDAM user details missing 'uid' field");
         }
+        List<String> amRoles = roleAssignmentService.getAmRolesFromUser(response.getUid(), accessToken);
+        List<String> idamRoles = Collections.emptyList();
+        if (response.getRoles() != null) {
+            idamRoles = response.getRoles();
+        }
 
-        if (response.getRoles() == null) {
+        List<String> roles = Stream.concat(amRoles.stream(), idamRoles.stream()).toList();
+
+        if (roles.isEmpty()) {
             throw new IllegalStateException("IDAM user details missing 'roles' field");
         }
 
@@ -67,7 +77,7 @@ public class IdamUserDetailsProvider implements UserDetailsProvider {
         return new IdamUserDetails(
             accessToken,
             response.getUid(),
-            response.getRoles(),
+            roles,
             response.getEmail(),
             response.getGivenName(),
             response.getFamilyName()
