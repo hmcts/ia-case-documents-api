@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,6 +32,11 @@ class IdamServiceTest {
 
     private IdamService idamService;
 
+    @BeforeEach
+    void setUp() {
+        idamService = new IdamService(idamApi, roleAssignmentService);
+    }
+
     @Test
     void getUserDetails_from_am_and_idam() {
 
@@ -42,8 +48,6 @@ class IdamServiceTest {
         String expectedForename = "John";
         String expectedSurname = "Doe";
         String expectedName = expectedForename + " " + expectedSurname;
-
-        idamService = new IdamService(idamApi, roleAssignmentService);
 
         UserInfo expecteduUerInfo = new UserInfo(
                 expectedEmailAddress,
@@ -77,8 +81,6 @@ class IdamServiceTest {
         String expectedForename = "John";
         String expectedSurname = "Doe";
         String expectedName = expectedForename + " " + expectedSurname;
-
-        idamService = new IdamService(idamApi, roleAssignmentService);
 
         UserInfo expecteduUerInfo = new UserInfo(
             expectedEmailAddress,
@@ -150,8 +152,6 @@ class IdamServiceTest {
         String expectedForename = "John";
         String expectedSurname = "Doe";
         String expectedName = expectedForename + " " + expectedSurname;
-
-        idamService = new IdamService(idamApi, roleAssignmentService);
 
         UserInfo expecteduUerInfo = new UserInfo(
             expectedEmailAddress,
