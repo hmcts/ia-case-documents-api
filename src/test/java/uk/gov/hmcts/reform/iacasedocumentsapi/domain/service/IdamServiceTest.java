@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice.ErrorResponseLogger;
 
 @ExtendWith(MockitoExtension.class)
 class IdamServiceTest {
@@ -29,10 +28,6 @@ class IdamServiceTest {
     private RoleAssignmentService roleAssignmentService;
 
     private IdamService idamService;
-
-    @Mock
-    private ErrorResponseLogger errorResponseLogger;
-    private ListAppender<ILoggingEvent> listAppender;
 
     @Test
     void getUserDetails_from_am_and_idam() {
@@ -141,7 +136,7 @@ class IdamServiceTest {
     @Test
     void getUserDetails_logs_exception_when_role_assignment_service_fails() {
         Logger responseLogger = (Logger) LoggerFactory.getLogger(IdamService.class);
-        listAppender = new ListAppender<>();
+        ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
         listAppender.start();
         responseLogger.addAppender(listAppender);
 
@@ -169,7 +164,7 @@ class IdamServiceTest {
         when(roleAssignmentService.getAmRolesFromUser(expectedId, expectedAccessToken))
             .thenThrow(new NullPointerException("Role assignment service failed"));
         idamService.getUserInfo(expectedAccessToken);
-        List<ILoggingEvent> logEvents = this.listAppender.list;
+        List<ILoggingEvent> logEvents = listAppender.list;
         assertEquals(1, logEvents.size());
         assertEquals("Error fetching AM roles for user: 1234", logEvents.get(0).getFormattedMessage());
 
