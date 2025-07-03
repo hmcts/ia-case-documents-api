@@ -683,6 +683,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+    # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
       - "recordTheDecision"
@@ -875,6 +876,7 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
       - "applyForFTPAAppellant"
+    # These events are used by the bails service, they will need to be migrated to the judge access management roles - see DIAC-855
     caseworker-ia-iacjudge:
       - "recordTheDecision"
       - "endApplication"
