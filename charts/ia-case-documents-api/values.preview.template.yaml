@@ -4,4 +4,3 @@ java:
   ingressHost: ${SERVICE_FQDN}
   environment:
     IA_AIP_FRONTEND_URL: "https://immigration-appeal.{{ .Values.global.environment }}.platform.hmcts.net/"
-    ROLE_ASSIGNMENT_URL: https://am-role-assignment-${SERVICE_FQDN}
