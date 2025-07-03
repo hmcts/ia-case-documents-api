@@ -4,6 +4,9 @@ import static java.util.Arrays.stream;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
+
 public enum SubscriberType {
   APPELLANT("appellant"),
   SUPPORTER("supporter");
