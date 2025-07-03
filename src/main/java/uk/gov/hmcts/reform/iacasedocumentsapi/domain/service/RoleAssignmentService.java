@@ -14,7 +14,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.roleassignm
 @Component
 @Slf4j
 public class RoleAssignmentService {
-    public static final String ROLE_NAME = "tribunal-caseworker";
     private final AuthTokenGenerator serviceAuthTokenGenerator;
     private final RoleAssignmentApi roleAssignmentApi;
 
