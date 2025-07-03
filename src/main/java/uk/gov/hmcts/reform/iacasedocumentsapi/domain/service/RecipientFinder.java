@@ -22,63 +22,67 @@ import org.springframework.stereotype.Service;
 @Service
 public class RecipientFinder {
 
-  public Set<String> findAll(
-      AsylumCase asylumCase,
-      NotificationType notificationType) {
-    requireNonNull(asylumCase, "asylumCase must not be null");
+    public Set<String> findAll(
+        AsylumCase asylumCase,
+        NotificationType notificationType) {
+        requireNonNull(asylumCase, "asylumCase must not be null");
 
-    final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(
-        AsylumCaseDefinition.SUBSCRIPTIONS);
+        final Optional<List<IdValue<Subscriber>>> maybeSubscribers = asylumCase.read(
+            AsylumCaseDefinition.SUBSCRIPTIONS);
 
-    switch (notificationType) {
-      case SMS:
-        return maybeSubscribers
-            .orElse(Collections.emptyList()).stream()
-            .filter(subscriber -> YES.equals(subscriber.getValue().getWantsSms()))
-            .map(subscriber -> subscriber.getValue().getMobileNumber())
-            .collect(Collectors.toSet());
+        switch (notificationType) {
+            case SMS:
+                return maybeSubscribers
+                    .orElse(Collections.emptyList()).stream()
+                    .filter(subscriber -> YES.equals(subscriber.getValue().getWantsSms()))
+                    .map(subscriber -> subscriber.getValue().getMobileNumber())
+                    .collect(Collectors.toSet());
 
-      case EMAIL:
-        return maybeSubscribers
-            .orElse(Collections.emptyList()).stream()
-            .filter(subscriber -> YES.equals(subscriber.getValue().getWantsEmail()))
-            .map(subscriber -> subscriber.getValue().getEmail()).collect(Collectors.toSet());
+            case EMAIL:
+                return maybeSubscribers
+                    .orElse(Collections.emptyList()).stream()
+                    .filter(subscriber -> YES.equals(subscriber.getValue().getWantsEmail()))
+                    .map(subscriber -> subscriber.getValue().getEmail())
+                    .collect(Collectors.toSet());
 
-      default:
-        throw new IllegalArgumentException("Notification type must be one of 'SMS', 'EMAIL'");
+            default:
+                throw new IllegalArgumentException(
+                    "Notification type must be one of 'SMS', 'EMAIL'");
 
-    }
-  }
-
-  public Set<String> findReppedAppellant(
-      AsylumCase asylumCase,
-      NotificationType notificationType) {
-    requireNonNull(asylumCase, "asylumCase must not be null");
-
-    final ContactPreference contactPreference =
-        asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class).orElse(null);
-
-    switch (notificationType) {
-      case SMS:
-        if (contactPreference == ContactPreference.WANTS_SMS) {
-          Optional<String> appellantSms = asylumCase.read(MOBILE_NUMBER, String.class);
-          return appellantSms.map(Collections::singleton).orElse(Collections.emptySet());
-        } else {
-          return Collections.emptySet();
         }
-
-      case EMAIL:
-        if (contactPreference == ContactPreference.WANTS_EMAIL) {
-          Optional<String> appellantEmail = asylumCase.read(EMAIL, String.class);
-          return appellantEmail.map(Collections::singleton).orElse(Collections.emptySet());
-        } else {
-          return Collections.emptySet();
-        }
-
-      default:
-        throw new IllegalArgumentException("Notification type must be one of 'SMS', 'EMAIL'");
-
     }
-  }
+
+    public Set<String> findReppedAppellant(
+        AsylumCase asylumCase,
+        NotificationType notificationType) {
+        requireNonNull(asylumCase, "asylumCase must not be null");
+
+        final ContactPreference contactPreference =
+            asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class).orElse(null);
+
+        switch (notificationType) {
+            case SMS:
+                if (contactPreference == ContactPreference.WANTS_SMS) {
+                    Optional<String> appellantSms = asylumCase.read(MOBILE_NUMBER, String.class);
+                    return appellantSms.map(Collections::singleton).orElse(Collections.emptySet());
+                } else {
+                    return Collections.emptySet();
+                }
+
+            case EMAIL:
+                if (contactPreference == ContactPreference.WANTS_EMAIL) {
+                    Optional<String> appellantEmail = asylumCase.read(EMAIL, String.class);
+                    return appellantEmail.map(Collections::singleton)
+                        .orElse(Collections.emptySet());
+                } else {
+                    return Collections.emptySet();
+                }
+
+            default:
+                throw new IllegalArgumentException(
+                    "Notification type must be one of 'SMS', 'EMAIL'");
+
+        }
+    }
 }
 

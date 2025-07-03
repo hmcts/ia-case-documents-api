@@ -13,6 +13,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.NotificationType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
 
@@ -30,7 +31,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefiniti
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ReheardHearingDocuments;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -60,6 +60,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     private final DocumentReceiver documentReceiver;
     private final DocumentsAppender documentsAppender;
     private final Appender<ReheardHearingDocuments> reheardHearingAppender;
+    private final RecipientFinder recipientsFinder;
 
     public HearingNoticeCreator(
         @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
@@ -80,6 +81,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         this.documentReceiver = documentReceiver;
         this.documentsAppender = documentsAppender;
         this.reheardHearingAppender = reheardHearingAppender;
+        this.recipientsFinder = recipientsFinder;
     }
 
     public boolean canHandle(
@@ -105,15 +107,18 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         HearingCentre listCaseHearingCentre =
-            asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).orElse(HearingCentre.TAYLOR_HOUSE);
+            asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .orElse(HearingCentre.TAYLOR_HOUSE);
 
         Document hearingNotice;
-        boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
+        boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA,
+                YesOrNo.class)
             .orElse(YesOrNo.NO).equals(YesOrNo.YES);
 
         //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
         //IS_REMOTE_HEARING is used for the case ref data
-        hearingNotice = getHearingNotice(isCaseUsingLocationRefData, listCaseHearingCentre, asylumCase, caseDetails);
+        hearingNotice = getHearingNotice(isCaseUsingLocationRefData, listCaseHearingCentre,
+            asylumCase, caseDetails);
         if ((isReheardAppeal(asylumCase) && caseFlagSetAsideReheardExists(asylumCase))) {
 
             if (featureToggler.getValue("dlrm-remitted-feature-flag", false)) {
@@ -134,7 +139,8 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 DocumentTag.HEARING_NOTICE
             );
 
-            if (isInternalNonDetainedCase(asylumCase) || isNonDetainedAndDigitalContactNotAvailable(asylumCase)) {
+            if (isInternalNonDetainedCase(asylumCase) || isNonDetainedAndDigitalContactNotAvailable(
+                asylumCase)) {
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -147,10 +153,10 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     }
 
     private boolean isNonDetainedAndDigitalContactNotAvailable(AsylumCase asylumCase) {
-        return false;
+        return !isAppellantInDetention(asylumCase) && digitalAppellantContactNotAvailable(asylumCase);
     }
 
-    private boolean digitalAppellantContactNotAvailable(AsylumCase asylumCase, RecipientFinder recipientsFinder) {
+    private boolean digitalAppellantContactNotAvailable(AsylumCase asylumCase) {
         Set<String> emailAddresses = recipientsFinder.findAll(asylumCase, EMAIL);
         emailAddresses.addAll(recipientsFinder.findReppedAppellant(asylumCase, EMAIL));
 
@@ -160,7 +166,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         return emailAddresses.isEmpty() && mobileNos.isEmpty();
     }
 
-    private boolean digitalAppellantContactIsAvailable(AsylumCase asylumCase, RecipientFinder recipientsFinder) {
+    private boolean digitalAppellantContactIsAvailable(AsylumCase asylumCase) {
         Set<String> emailAddresses = recipientsFinder.findAll(asylumCase, EMAIL);
         emailAddresses.addAll(recipientsFinder.findReppedAppellant(asylumCase, EMAIL));
 
@@ -180,14 +186,19 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             .equals(Optional.of(YES));
     }
 
-    private Document getHearingNotice(boolean isCaseUsingLocationRefData, HearingCentre listCaseHearingCentre, AsylumCase asylumCase, CaseDetails<AsylumCase> caseDetails) {
+    private Document getHearingNotice(boolean isCaseUsingLocationRefData,
+        HearingCentre listCaseHearingCentre, AsylumCase asylumCase,
+        CaseDetails<AsylumCase> caseDetails) {
         Document hearingNotice;
-        if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
+        if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(
+            HearingCentre.REMOTE_HEARING))
             || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
-            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
-            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
+            boolean isAda =
+                asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
+            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails)
+                : hearingNoticeDocumentCreator.create(caseDetails);
         }
         return hearingNotice;
     }
@@ -214,7 +225,8 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
             asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
         List<IdValue<ReheardHearingDocuments>> allReheardDocuments =
-            reheardHearingAppender.append(newReheardDocuments, maybeExistingReheardDocuments.orElse(emptyList()));
+            reheardHearingAppender.append(newReheardDocuments,
+                maybeExistingReheardDocuments.orElse(emptyList()));
         asylumCase.write(REHEARD_HEARING_DOCUMENTS_COLLECTION, allReheardDocuments);
     }
 }
