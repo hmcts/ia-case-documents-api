@@ -57,7 +57,7 @@ class IdamServiceTest {
                 expectedSurname
         );
         when(idamApi.userInfo(anyString())).thenReturn(expecteduUerInfo);
-        when(roleAssignmentService.getAmRolesFromUser(expectedId, "Bearer " + expectedAccessToken))
+        when(roleAssignmentService.getAmRolesFromUser(expectedId, expectedAccessToken))
             .thenReturn(expectedAmRoles);
         UserInfo actualUserInfo = idamService.getUserInfo(expectedAccessToken);
         verify(idamApi).userInfo(expectedAccessToken);
@@ -92,7 +92,7 @@ class IdamServiceTest {
             expectedSurname
         );
         when(idamApi.userInfo(anyString())).thenReturn(expecteduUerInfo);
-        when(roleAssignmentService.getAmRolesFromUser(expectedId, "Bearer " + expectedAccessToken))
+        when(roleAssignmentService.getAmRolesFromUser(expectedId, expectedAccessToken))
             .thenReturn(Collections.emptyList());
         UserInfo actualUserInfo = idamService.getUserInfo(expectedAccessToken);
         verify(idamApi).userInfo(expectedAccessToken);
@@ -126,7 +126,7 @@ class IdamServiceTest {
             expectedSurname
         );
         when(idamApi.userInfo(anyString())).thenReturn(expecteduUerInfo);
-        when(roleAssignmentService.getAmRolesFromUser(expectedId, "Bearer " + expectedAccessToken))
+        when(roleAssignmentService.getAmRolesFromUser(expectedId, expectedAccessToken))
             .thenReturn(expectedAmRoles);
         UserInfo actualUserInfo = idamService.getUserInfo(expectedAccessToken);
         verify(idamApi).userInfo(expectedAccessToken);
@@ -166,7 +166,7 @@ class IdamServiceTest {
             expectedSurname
         );
         when(idamApi.userInfo(anyString())).thenReturn(expecteduUerInfo);
-        when(roleAssignmentService.getAmRolesFromUser(expectedId, "Bearer " + expectedAccessToken))
+        when(roleAssignmentService.getAmRolesFromUser(expectedId, expectedAccessToken))
             .thenThrow(new NullPointerException("Role assignment service failed"));
         idamService.getUserInfo(expectedAccessToken);
         List<ILoggingEvent> logEvents = this.listAppender.list;
