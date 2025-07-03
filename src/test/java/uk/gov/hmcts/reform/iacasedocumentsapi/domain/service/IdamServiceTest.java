@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
@@ -99,8 +101,9 @@ class IdamServiceTest {
         assertEquals(expectedSurname, actualUserInfo.getFamilyName());
     }
 
-    @Test
-    void getUserDetails_from_am() {
+    @ParameterizedTest
+    @CsvSource({"empty", "null"})
+    void getUserDetails_from_am(String expectedIdamRoles) {
 
         String expectedAccessToken = "ABCDEFG";
         String expectedId = "1234";
@@ -110,12 +113,10 @@ class IdamServiceTest {
         String expectedSurname = "Doe";
         String expectedName = expectedForename + " " + expectedSurname;
 
-        idamService = new IdamService(idamApi, roleAssignmentService);
-
         UserInfo expecteduUerInfo = new UserInfo(
             expectedEmailAddress,
             expectedId,
-            Collections.emptyList(),
+            expectedIdamRoles.equals("null") ? null : Collections.emptyList(),
             expectedName,
             expectedForename,
             expectedSurname
