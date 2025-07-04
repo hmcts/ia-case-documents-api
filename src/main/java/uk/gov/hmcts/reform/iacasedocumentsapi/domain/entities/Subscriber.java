@@ -16,8 +16,13 @@ public class Subscriber {
         //No-op constructor
     }
 
-    public Subscriber(final SubscriberType subscriber, final String email, final YesOrNo wantsEmail,
-        final String mobileNumber, final YesOrNo wantsSms) {
+    public Subscriber(
+        final SubscriberType subscriber,
+        final String email,
+        final YesOrNo wantsEmail,
+        final String mobileNumber,
+        final YesOrNo wantsSms)  {
+
         requireNonNull(subscriber);
         this.subscriber = subscriber;
         this.email = email;
