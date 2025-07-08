@@ -1,15 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_INTERPRETER_SIGN_LANGUAGE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_INTERPRETER_SPOKEN_LANGUAGE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ANY_WITNESS_INTERPRETER_REQUIRED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_APPELLANT_ATTENDING_THE_HEARING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_APPELLANT_GIVING_ORAL_EVIDENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_EVIDENCE_FROM_OUTSIDE_UK_OOC;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_WITNESSES_ATTENDING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.WITNESS_DETAILS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.InterpreterLanguagesUtils.WITNESS_N_INTERPRETER_SIGN_LANGUAGE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.InterpreterLanguagesUtils.WITNESS_N_INTERPRETER_SPOKEN_LANGUAGE;
 
@@ -58,6 +49,7 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
 
         Map<String, Object> fieldValues = fieldMapper.mapFields(asylumCase);
 
+        fieldValues.put("ccdReferenceNumberForDisplay", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse(""));
         fieldValues.put("appealOutOfCountry", asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put("isEvidenceFromOutsideUkOoc", asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put("isEvidenceFromOutsideUkInCountry", asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_IN_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO));
