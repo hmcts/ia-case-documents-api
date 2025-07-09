@@ -19,7 +19,10 @@ class UnknownDefaultValueDeserializerTest {
         UNKNOWN("unknown");
 
         private final String value;
-        TestEnumWithValue(String value) { this.value = value; }
+
+        TestEnumWithValue(String value) {
+            this.value = value;
+        }
     }
 
     enum TestEnumNoValue {
@@ -61,7 +64,7 @@ class UnknownDefaultValueDeserializerTest {
     }
 
     @Test
-    void should_return_UNKNOWN_for_unmatched_value() throws IOException {
+    void should_return_unknown_for_unmatched_value() throws IOException {
         UnknownDefaultValueDeserializer deserializer = new UnknownDefaultValueDeserializer();
         JsonParser parser = mock(JsonParser.class);
         DeserializationContext ctx = mock(DeserializationContext.class);
@@ -76,7 +79,7 @@ class UnknownDefaultValueDeserializerTest {
     }
 
     @Test
-    void should_return_null_if_no_UNKNOWN_constant() throws IOException {
+    void should_return_null_if_no_unknown_constant() throws IOException {
         UnknownDefaultValueDeserializer deserializer = new UnknownDefaultValueDeserializer();
         JsonParser parser = mock(JsonParser.class);
         DeserializationContext ctx = mock(DeserializationContext.class);

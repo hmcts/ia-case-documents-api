@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class UnknownDefaultValueDeserializer extends JsonDeserializer<Enum<?>> {
 
@@ -26,6 +28,7 @@ public class UnknownDefaultValueDeserializer extends JsonDeserializer<Enum<?>> {
                     return (Enum<?>) constant;
                 }
             } catch (Exception ignored) {
+                log.error("Error invoking getValue method on enum: {}", enumClass.getName(), ignored);
             }
         }
         try {
