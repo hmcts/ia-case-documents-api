@@ -146,8 +146,6 @@ class IdamServiceTest {
         String expectedAccessToken = "ABCDEFG";
         String expectedId = "1234";
         List<String> expectedIdamRoles = Arrays.asList("role-1", "role-2");
-        List<String> expectedAmRoles = Arrays.asList("role-3", "role-4");
-        List<String> expectedRoles = Stream.concat(expectedAmRoles.stream(), expectedIdamRoles.stream()).toList();
         String expectedEmailAddress = "john.doe@example.com";
         String expectedForename = "John";
         String expectedSurname = "Doe";
