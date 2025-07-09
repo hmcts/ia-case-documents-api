@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.roleassignment.UnknownDefaultValueDeserializer;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.roleassignment.RoleNameDeserializer;
 
-@JsonDeserialize(using = UnknownDefaultValueDeserializer.class)
+@JsonDeserialize(using = RoleNameDeserializer.class)
 @Getter
 public enum RoleName {
     CASE_MANAGER("case-manager"),
