@@ -29,7 +29,7 @@ class RoleNameDeserializerTest {
     }
 
     @Test
-    void should_return_UNKNOWN_for_null_value() throws IOException {
+    void should_return_unknown_for_null_value() throws IOException {
         RoleNameDeserializer deserializer = new RoleNameDeserializer();
         JsonParser parser = mock(JsonParser.class);
         DeserializationContext ctx = mock(DeserializationContext.class);
@@ -41,7 +41,7 @@ class RoleNameDeserializerTest {
     }
 
     @Test
-    void should_return_UNKNOWN_for_empty_value() throws IOException {
+    void should_return_unknown_for_empty_value() throws IOException {
         RoleNameDeserializer deserializer = new RoleNameDeserializer();
         JsonParser parser = mock(JsonParser.class);
         DeserializationContext ctx = mock(DeserializationContext.class);
