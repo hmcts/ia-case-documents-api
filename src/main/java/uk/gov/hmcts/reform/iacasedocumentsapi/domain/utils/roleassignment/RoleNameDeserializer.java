@@ -10,11 +10,9 @@ public class RoleNameDeserializer extends JsonDeserializer<RoleName> {
     @Override
     public RoleName deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String value = p.getText();
-        for (RoleName roleName : RoleName.values()) {
-            if (roleName.getValue().equals(value)) {
-                return roleName;
-            }
-        }
-        return RoleName.UNKNOWN;
+        return java.util.Arrays.stream(RoleName.values())
+            .filter(roleName -> roleName.getValue().equals(value))
+            .findFirst()
+            .orElse(RoleName.UNKNOWN);
     }
 }
