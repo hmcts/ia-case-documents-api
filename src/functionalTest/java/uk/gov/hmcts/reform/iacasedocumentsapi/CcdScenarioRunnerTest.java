@@ -115,9 +115,7 @@ public class CcdScenarioRunnerTest {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
 
                     description = MapValueExtractor.extract(scenario, "description");
-                    if (!description.contains("RIA-1152-1153-RIA-2804-generate-decisions-and-reasons")) {
-                        continue;
-                    }
+
                     Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
                     boolean scenarioEnabledFlag = true;
                     if (scenarioEnabled instanceof String) {
