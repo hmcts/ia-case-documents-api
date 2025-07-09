@@ -2,8 +2,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment;
 
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.roleassignment.UnknownDefaultValueDeserializer;
 
+@JsonDeserialize(using = UnknownDefaultValueDeserializer.class)
 @Getter
 public enum RoleName {
     CASE_MANAGER("case-manager"),
