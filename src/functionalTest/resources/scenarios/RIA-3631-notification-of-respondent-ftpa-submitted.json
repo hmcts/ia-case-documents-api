@@ -23,26 +23,9 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "notificationsSent": [
-          {
-            "id": "1373_FTPA_SUBMITTED_ADMIN_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ]
+        "notificationsSent": []
       }
     },
-    "notifications": [
-      {
-        "reference": "1373_FTPA_SUBMITTED_ADMIN_OFFICER",
-        "recipient": "{$ftpaSubmitted.ctscAdminEmailAddress}",
-        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      }
-    ]
+    "notifications": []
   }
 }
