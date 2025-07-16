@@ -284,7 +284,7 @@ dependencyManagement {
       entry 'guava'
     }
 
-    dependencySet(group: 'commons-fileupload', version: '1.5') {
+    dependencySet(group: 'commons-fileupload', version: '1.6.0') {
       entry 'commons-fileupload'
     }
 
@@ -391,11 +391,10 @@ dependencies {
   implementation group: 'org.springframework', name: 'spring-aspects', version: '6.0.14'
   implementation group: 'org.springframework.retry', name: 'spring-retry', version: '2.0.2'
 
-  // CVE-2019-17195
-  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.37.1'
+  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.37.3'
 
   // CVE-2021-27568
-  implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
+  implementation group: 'net.minidev', name: 'json-smart', version: '2.5.2'
 
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
 
@@ -422,7 +421,7 @@ dependencies {
 
   implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '3.0.2'
 
-  implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.74'
+  implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.78'
 
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
@@ -459,7 +458,7 @@ dependencies {
   testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
 
 
-  testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.3.0', classifier: 'all', {
+  testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.3.0-azure', classifier: 'all', {
     exclude group: 'commons-io', module: 'commons-io'
     exclude group: 'org.apache.commons', module: 'commons-lang3'
   }
