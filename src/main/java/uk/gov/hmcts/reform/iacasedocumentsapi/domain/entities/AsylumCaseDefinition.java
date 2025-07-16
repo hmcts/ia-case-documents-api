@@ -774,6 +774,9 @@ public enum AsylumCaseDefinition {
     IS_REMOTE_HEARING(
             "isRemoteHearing", new TypeReference<YesOrNo>() {}),
 
+    IS_VIRTUAL_HEARING(
+            "isVirtualHearing", new TypeReference<YesOrNo>(){}),
+
     LIST_CASE_HEARING_CENTRE_ADDRESS(
             "listCaseHearingCentreAddress",  new TypeReference<String>(){}),
 
