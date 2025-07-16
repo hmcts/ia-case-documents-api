@@ -4,6 +4,7 @@
         <!--These require spring 3 upgrade-->
         <cve>CVE-2024-38820</cve>
         <cve>CVE-2024-22259</cve>
-        <cve>CVE-2024-38808</cve>
+        <cve>CVE-2024-38808</cve>  
+        <cve>CVE-2025-48976</cve>
     </suppress>
 </suppressions>
