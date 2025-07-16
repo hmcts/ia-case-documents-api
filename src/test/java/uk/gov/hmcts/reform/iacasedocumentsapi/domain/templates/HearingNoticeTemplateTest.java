@@ -37,6 +37,7 @@ public class HearingNoticeTemplateTest {
     private String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
     private String taylorHouseHearingCentreAddress = "London, 456 Somewhere, South";
     private String vulnerabilities = "Vulnerabilities";
+    private String ccdReferenceNumberForDisplay = "1789 2222 3333 4444";
     private String multimedia = "Multimedia";
     private String singleSexCourt = "Single sex court";
     private String inCamera = "In camera";
@@ -90,6 +91,7 @@ public class HearingNoticeTemplateTest {
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
 
         when(asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(vulnerabilities));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumberForDisplay));
         when(asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(multimedia));
         when(asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(singleSexCourt));
         when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(inCamera));
@@ -100,7 +102,7 @@ public class HearingNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(18, templateFieldValues.size());
+        assertEquals(19, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -148,6 +150,7 @@ public class HearingNoticeTemplateTest {
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)).thenReturn(Optional.empty());
@@ -158,7 +161,7 @@ public class HearingNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(18, templateFieldValues.size());
+        assertEquals(19, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
@@ -167,6 +170,7 @@ public class HearingNoticeTemplateTest {
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals("", templateFieldValues.get("hearingDate"));
         assertEquals("", templateFieldValues.get("hearingTime"));
+        assertEquals("", templateFieldValues.get("ccdReferenceNumberForDisplay"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
         assertEquals("No special adjustments are being made to accommodate vulnerabilities", templateFieldValues.get("vulnerabilities"));
         assertEquals("No multimedia equipment is being provided", templateFieldValues.get("multimedia"));
