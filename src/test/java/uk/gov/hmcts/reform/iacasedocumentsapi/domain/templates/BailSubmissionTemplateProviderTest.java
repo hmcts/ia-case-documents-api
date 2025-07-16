@@ -688,6 +688,7 @@ public class BailSubmissionTemplateProviderTest {
         assertTrue(fieldValuesMap.containsKey("videoHearing1"));
         assertTrue(fieldValuesMap.containsKey("isLegallyRepresentedForFlag"));
         assertTrue(fieldValuesMap.containsKey("showPreviousApplicationSection"));
+        assertTrue(fieldValuesMap.containsKey("hasProbationOffenderManager"));
     }
 
     private void assertSupporter2Fields() {
