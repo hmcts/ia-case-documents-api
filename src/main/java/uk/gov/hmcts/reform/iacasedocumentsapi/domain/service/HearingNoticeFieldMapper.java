@@ -55,6 +55,9 @@ public class HearingNoticeFieldMapper {
                 || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
             fieldValues.put("remoteHearing", "Remote hearing");
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
+        } else if (asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)) {
+            fieldValues.put("remoteHearing", "IAC National (Virtual)");
+            fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 
         fieldValues.put("hearingCentreAddress", isCaseUsingLocationRefData ?

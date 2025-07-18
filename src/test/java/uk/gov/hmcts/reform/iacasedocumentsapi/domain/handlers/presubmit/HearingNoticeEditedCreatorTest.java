@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.Collections;
 import java.util.List;
@@ -133,6 +135,7 @@ class HearingNoticeEditedCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
@@ -162,10 +165,11 @@ class HearingNoticeEditedCreatorTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"NO, NO", "YES, YES", "NO, YES"})
+    @CsvSource({"NO, NO, NO", "NO, NO, YES", "YES, YES, NO", "YES, YES, YES", "NO, YES, NO", "NO, YES, YES"})
     void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_for_remote_hearing(
         YesOrNo enabledRefData,
-        YesOrNo isRefDataRemoteHearing) {
+        YesOrNo isRefDataRemoteHearing,
+        YesOrNo isVirtualHearing) {
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -176,11 +180,53 @@ class HearingNoticeEditedCreatorTest {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(enabledRefData));
+
         if (enabledRefData.equals(YesOrNo.YES)) {
             when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isRefDataRemoteHearing));
+        } else if (isVirtualHearing.equals(YES)) {
+            when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.IAC_NATIONAL_VIRTUAL));
+            when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(isVirtualHearing));
         } else {
             when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
         }
+
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(oldHearingDate);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(remoteHearingNoticeUpdatedDetailsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(hearingNoticeUpdatedDetailsDocumentCreator, times(0)).create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(0)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, REHEARD_HEARING_DOCUMENTS, DocumentTag.REHEARD_HEARING_NOTICE_RELISTED);
+        verify(documentHandler, times(0)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE_RELISTED);
+    }
+
+    @Test
+    void should_create_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_for_virtual_hearing() {
+        when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
 
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
@@ -258,6 +304,7 @@ class HearingNoticeEditedCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -296,6 +343,7 @@ class HearingNoticeEditedCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -340,6 +388,7 @@ class HearingNoticeEditedCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
