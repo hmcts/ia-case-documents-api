@@ -296,9 +296,9 @@ public class InternalOocAppealSubmissionTemplateTest {
         asylumCase.put("prisonNOMSNumber", nomsNumber);
         when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
 
-        when(asylumCase.containsKey("dateCustodialSentence")).thenReturn(true);
-        asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
-        when(asylumCase.get("dateCustodialSentence")).thenReturn(prisonerReleaseDate);
+        when(asylumCase.containsKey("releaseDate")).thenReturn(true);
+        asylumCase.put("releaseDate", prisonerReleaseDate);
+        when(asylumCase.get("releaseDate")).thenReturn(prisonerReleaseDate);
 
         when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.class)).thenReturn(Optional.of(hasPendingBailApplication));
         when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
@@ -653,7 +653,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(35, templateFieldValues.size());
+        assertEquals(37, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -671,11 +671,12 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertEquals("", templateFieldValues.get("detentionFacilityName"));
 
         assertEquals(BailApplicationStatus.NO, templateFieldValues.get("hasPendingBailApplication"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
         assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
     }
 
@@ -689,7 +690,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -711,9 +712,11 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
     }
 
     @Test
@@ -726,8 +729,8 @@ public class InternalOocAppealSubmissionTemplateTest {
         asylumCase.put("prisonNOMSNumber", "");
         when(asylumCase.get("prisonNOMSNumber")).thenReturn("");
 
-        asylumCase.put("dateCustodialSentence", "");
-        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
+        asylumCase.put("releaseDate", "");
+        when(asylumCase.get("releaseDate")).thenReturn("");
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -774,7 +777,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -796,8 +799,11 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
 
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
     }
 
     @Test
@@ -934,8 +940,8 @@ public class InternalOocAppealSubmissionTemplateTest {
     void test_detained_prison_no_release_date_template_fields() {
         dataSetUp();
 
-        asylumCase.put("dateCustodialSentence", "");
-        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
+        asylumCase.put("releaseDate", "");
+        when(asylumCase.get("releaseDate")).thenReturn("");
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
@@ -1019,7 +1025,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -1028,11 +1034,11 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
@@ -1051,7 +1057,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -1060,11 +1066,11 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
