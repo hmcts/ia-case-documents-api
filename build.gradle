@@ -30,8 +30,8 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.13.3',
-    junitPlatform      : '1.13.3',
+    junit              : '5.13.4',
+    junitPlatform      : '1.13.4',
     reformLogging      : '6.1.9',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
@@ -279,18 +279,18 @@ dependencyManagement {
         }
 
 
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.1') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.2') {
             entry 'jackson-databind'
             entry 'jackson-core'
             entry 'jackson-annotations'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.19.1') {
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.19.2') {
             entry 'jackson-dataformat-yaml'
             entry 'jackson-dataformat-csv'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.19.1') {
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.19.2') {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
@@ -351,8 +351,8 @@ dependencies {
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
@@ -397,9 +397,9 @@ dependencies {
     //pact contract testing
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.13.3")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.3")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.13.3')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.4")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.13.4')
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
