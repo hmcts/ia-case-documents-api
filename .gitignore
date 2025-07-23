@@ -26,3 +26,10 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+ 
+ #vs
+ # Ignore everything in bin directory
+/bin/*
+# But don't ignore .sh files
+!/bin/*.sh
+.vscode

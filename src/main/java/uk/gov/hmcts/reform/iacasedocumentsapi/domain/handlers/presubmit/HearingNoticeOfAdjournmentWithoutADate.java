@@ -1,12 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -18,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
+@Slf4j
 public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
@@ -48,13 +48,8 @@ public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallback
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document hearingNotice = documentCreator.create(caseDetails);
-
-        documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-            asylumCase,
-            hearingNotice,
-            HEARING_DOCUMENTS,
-            DocumentTag.HEARING_NOTICE
-        );
+        log.info("Hearing notice of adjourned document {}", hearingNotice.hashCode());
+        log.info("documentHandler {}", documentHandler.hashCode());
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.List;
@@ -65,7 +65,7 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(yes));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(yes));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(no));
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(HU));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(HU));
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.NO_REMISSION));
     }
 
@@ -215,10 +215,10 @@ public class InternalDetainedNoRemissionPaymentDueLetterTest {
     }
 
     @ParameterizedTest
-    @EnumSource(AsylumAppealType.class)
-    public void it_should_only_handle_hu_ea_eu_appeal_type(AsylumAppealType appealType) {
+    @EnumSource(AppealType.class)
+    public void it_should_only_handle_hu_ea_eu_appeal_type(AppealType appealType) {
 
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
 
         boolean canHandle = internalDetainedAppealFeeDueLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
