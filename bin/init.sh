@@ -47,7 +47,7 @@ perl -i -pe "s/reform.demo/reform.$package/g" build.gradle
 git mv src/integrationTest/java/uk/gov/hmcts/reform/demo/ src/integrationTest/java/uk/gov/hmcts/reform/${package}
 git mv src/main/java/uk/gov/hmcts/reform/demo/ src/main/java/uk/gov/hmcts/reform/${package}
 
-declare -a headers_to_delete=("Purpose" "What's inside" "Plugins" "Setup" "Hystrix")
+declare -a headers_to_delete=("Purpose" "What's inside" "Plugins" "Setup")
 
 # Clean-up README file
 for i in "${headers_to_delete[@]}"

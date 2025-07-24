@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.infrastructure.controllers.advice;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
