@@ -26,3 +26,8 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### vs ###
+/bin/*
+!/bin/*.sh
+.vscode 
