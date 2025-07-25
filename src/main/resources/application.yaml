@@ -162,6 +162,11 @@ govnotify:
           email: ce04b98a-5958-4dfb-8c7f-abc97b70a323
         rejected:
           email: bd1bc55d-cece-4aff-b38a-a72e506f662a
+        pa:
+          partiallyApproved:
+            email: f904bd15-752a-45bd-9a12-22127db41d16
+          rejected:
+            email: 3c69069c-76d7-4996-a459-65c798b08bfe  
       adminOfficer:
         approved:
           email: e819fd09-b350-41b3-a211-18d58936b65d
@@ -183,6 +188,16 @@ govnotify:
             letter: 5360d4f4-511e-496a-ae35-ffdd04f3705f
           onTime:
             letter: 14fd949c-d879-4878-ae6d-844abce5baf3
+        pa:
+          approved:
+            email: b37bfeae-cc9a-4389-92d6-b3a65060b192
+            sms: 352c22ca-8dbf-44f0-96d8-8ad5d5550345
+          partiallyApproved:
+            email: 3de5881f-7b79-4e98-b27d-f23b5da98548
+            sms: 8fd27331-abc0-4cc3-b61a-bb906b8f960d
+          rejected:
+            email: 8492f47a-7e71-4f76-9b03-4839a93803e5
+            sms: 6afea8a5-3d4c-4a16-8f0b-53194949a4f0 
         approvedOrPartiallyApproved:
           approved:
             letter: 590ee79d-a47c-47a0-9d31-a804aad483c2
