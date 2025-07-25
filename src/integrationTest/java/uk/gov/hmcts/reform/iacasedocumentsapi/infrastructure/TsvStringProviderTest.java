@@ -126,6 +126,11 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         );
 
         assertEquals(
+                Optional.of("IAC National (Virtual)"),
+                tsvStringProvider.get("hearingCentreName", "iacNationalVirtual")
+        );
+
+        assertEquals(
             Optional.of("Removing the appellant from the UK would breach the UK's obligation under the Refugee Convention"),
             tsvStringProvider.get("appealGrounds", "protectionRefugeeConvention")
         );
@@ -278,6 +283,11 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         assertEquals(
                 Optional.of("Alloa Sheriff Court, 47 Drysdale Street, Alloa, FK10 1JA"),
                 tsvStringProvider.get("hearingCentreAddress", "alloaSherrif")
+        );
+
+        assertEquals(
+                Optional.of("Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
+                tsvStringProvider.get("hearingCentreAddress", "iacNationalVirtual")
         );
 
         assertEquals(

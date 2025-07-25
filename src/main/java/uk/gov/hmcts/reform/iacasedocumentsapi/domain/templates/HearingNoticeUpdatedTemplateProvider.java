@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.HearingNoticeFieldMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -64,6 +65,14 @@ public class HearingNoticeUpdatedTemplateProvider {
                 .orElse("");
 
             fieldValues.put("remoteHearing", "Remote hearing");
+            fieldValues.put("remoteVideoCallTribunalResponse", remoteVideoCallTribunalResponse);
+        }
+
+        if (asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)) {
+            final String remoteVideoCallTribunalResponse = asylumCase
+                .read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)
+                .orElse("");
+
             fieldValues.put("remoteVideoCallTribunalResponse", remoteVideoCallTribunalResponse);
         }
 
