@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.Value;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils.secure;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -234,14 +234,14 @@ public class AppealSkeletonBundleGeneratorTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                secure().nextAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
-                RandomStringUtils.randomAlphabetic(20),
+                secure().nextAlphabetic(20),
                 new SystemDateProvider().now().toString(), documentTag,"test");
 
     }

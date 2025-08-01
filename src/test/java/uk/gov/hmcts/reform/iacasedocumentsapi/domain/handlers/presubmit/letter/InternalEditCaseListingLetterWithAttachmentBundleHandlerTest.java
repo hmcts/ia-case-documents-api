@@ -208,14 +208,14 @@ public class InternalEditCaseListingLetterWithAttachmentBundleHandlerTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                secure().nextAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata() {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
-                RandomStringUtils.randomAlphabetic(20),
+                secure().nextAlphabetic(20),
                 new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER,"test");
 
     }

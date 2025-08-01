@@ -197,14 +197,14 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                secure().nextAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata() {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
-                RandomStringUtils.randomAlphabetic(20),
+                secure().nextAlphabetic(20),
                 new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_END_APPEAL_LETTER,"test");
 
     }

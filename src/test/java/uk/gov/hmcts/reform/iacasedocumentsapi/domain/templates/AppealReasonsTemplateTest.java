@@ -112,7 +112,7 @@ class AppealReasonsTemplateTest {
     private DocumentWithMetadata createDocumentWithMetadata() {
         return
             new DocumentWithMetadata(createDocument(),
-                RandomStringUtils.randomAlphabetic(20),
+                secure().nextAlphabetic(20),
                 new SystemDateProvider().now().toString(), DocumentTag.ADDITIONAL_EVIDENCE, "test");
 
     }
