@@ -946,7 +946,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
     }
 
-    private DocumentWithDescription createDocumentWithDescription() {
+    private static DocumentWithDescription createDocumentWithDescription() {
         return
             new DocumentWithDescription(new Document("some-url",
                 "some-binary-url",

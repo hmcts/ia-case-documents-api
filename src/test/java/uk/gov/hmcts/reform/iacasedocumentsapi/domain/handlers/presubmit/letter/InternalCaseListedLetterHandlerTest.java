@@ -193,14 +193,14 @@ class InternalCaseListedLetterHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    private Document createDocumentWithDescription() {
+    private static Document createDocumentWithDescription() {
         return
             new Document("some-url",
                 "some-binary-url",
                 secure().nextAlphabetic(20));
     }
 
-    private DocumentWithMetadata createDocumentWithMetadata() {
+    private static DocumentWithMetadata createDocumentWithMetadata() {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),

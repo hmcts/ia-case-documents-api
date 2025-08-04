@@ -122,7 +122,7 @@ public class BundleTest {
     }
 
 
-    private String someRandomString() {
+    private static String someRandomString() {
         return secure().nextAlphabetic(8);
     }
 
