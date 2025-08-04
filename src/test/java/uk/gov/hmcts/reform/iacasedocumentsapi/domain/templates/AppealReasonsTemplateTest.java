@@ -12,7 +12,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import static org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -112,7 +112,7 @@ class AppealReasonsTemplateTest {
     private DocumentWithMetadata createDocumentWithMetadata() {
         return
             new DocumentWithMetadata(createDocument(),
-                secure().nextAlphabetic(20),
+                RandomStringUtils.randomAlphabetic(20),
                 new SystemDateProvider().now().toString(), DocumentTag.ADDITIONAL_EVIDENCE, "test");
 
     }

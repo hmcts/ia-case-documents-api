@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.Value;
-import static org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -195,14 +195,14 @@ class InternalRecordOutOfTimeDecisionLetterHandlerTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                secure().nextAlphabetic(20));
+                RandomStringUtils.randomAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata() {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
-                secure().nextAlphabetic(20),
+                RandomStringUtils.randomAlphabetic(20),
                 new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CASE_LISTED_LETTER,"test");
 
     }
