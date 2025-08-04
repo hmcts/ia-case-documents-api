@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.utilities;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.time.LocalDateTime;
-import org.apache.commons.lang3.RandomStringUtils.secure;
+import static org.apache.commons.lang3.RandomStringUtils.secure;
 import org.assertj.core.util.Lists;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
