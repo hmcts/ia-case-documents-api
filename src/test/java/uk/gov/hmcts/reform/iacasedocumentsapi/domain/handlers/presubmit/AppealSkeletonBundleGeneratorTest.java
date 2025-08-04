@@ -230,14 +230,14 @@ public class AppealSkeletonBundleGeneratorTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    private static Document createDocumentWithDescription() {
+    private Document createDocumentWithDescription() {
         return
             new Document("some-url",
                 "some-binary-url",
                 secure().nextAlphabetic(20));
     }
 
-    private static DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {
+    private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
