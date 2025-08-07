@@ -367,8 +367,8 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.13'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
 
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.106'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.106'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.107'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.107'
 
     implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
     implementation (group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'){
@@ -381,7 +381,7 @@ dependencies {
         exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
     }
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
 
     implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.8') {
