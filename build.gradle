@@ -30,8 +30,8 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.12.2',
-    junitPlatform      : '1.12.2',
+    junit              : '5.13.0',
+    junitPlatform      : '1.13.0',
     gradlePitest       : '1.15.0',
     pitest             : '1.19.4',
     reformLogging      : '6.1.9',
@@ -165,6 +165,7 @@ pmd {
     'category/java/bestpractices.xml'
   ]
 }
+
 tasks.register('integration', Test) {
   description = 'Runs the integration tests.'
   group = 'Verification'
