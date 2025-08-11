@@ -4,8 +4,8 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 
