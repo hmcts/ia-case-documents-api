@@ -5,12 +5,8 @@ import io.restassured.http.Headers;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 
 @Service
 public class AuthorizationHeadersProvider {
@@ -28,7 +24,7 @@ public class AuthorizationHeadersProvider {
     private AuthTokenGenerator serviceAuthTokenGenerator;
 
     @Autowired
-    private IdamApi idamApi;
+    private IdamAuthProvider idamAuthProvider;
 
     private final Map<String, String> tokens = new ConcurrentHashMap<>();
 
@@ -62,6 +58,7 @@ public class AuthorizationHeadersProvider {
             "LegalRepresentative"
         );
     }
+   
 
     public Headers getLegalRepresentativeOrgSuccessAuthorization() {
         return getUserAuthorization(
@@ -78,7 +75,7 @@ public class AuthorizationHeadersProvider {
             "LegalRepresentativeOrgDeleted"
         );
     }
-
+  
     public Headers getCaseOfficerAuthorization() {
         return getUserAuthorization(
             System.getenv("TEST_CASEOFFICER_USERNAME"),

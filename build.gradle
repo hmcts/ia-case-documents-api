@@ -9,19 +9,19 @@ buildscript {
 }
 
 plugins {
-  id 'application'
-  id 'checkstyle'
-  id 'jacoco'
-  id 'pmd'
-  id 'com.github.ben-manes.versions' version '0.52.0'
-  id "info.solidsoft.pitest" version '1.15.0'
-  id 'io.spring.dependency-management' version '1.1.7'
-  id 'org.owasp.dependencycheck' version '10.0.4'
-  id 'org.sonarqube' version '4.4.1.3373'
-  id 'org.springframework.boot' version '2.7.18'
-  id 'uk.gov.hmcts.java' version '0.12.66'
-  id 'au.com.dius.pact' version '4.6.17'
-  id "io.freefair.lombok" version "6.6.3"
+    id 'application'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'pmd'
+    id 'com.github.ben-manes.versions' version '0.52.0'
+    id 'info.solidsoft.pitest' version '1.15.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.owasp.dependencycheck' version '10.0.4'
+    id 'org.sonarqube' version '4.4.1.3373'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'uk.gov.hmcts.java' version '0.12.66'
+    id 'au.com.dius.pact' version '4.6.17'
+    id "io.freefair.lombok" version "6.6.3"
 }
 
 apply plugin: 'java'
@@ -30,18 +30,18 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-  junit              : '5.12.2',
-  junitPlatform      : '1.12.2',
-  gradlePitest       : '1.15.0',
-  pitest             : '1.19.4',
-  reformLogging      : '6.1.9',
-  reformHealthStarter: '0.0.5',
-  restAssured        : '5.4.0',
-  serenity           : '4.2.30',
-  sonarPitest        : '0.5',
-  pact_version       : '4.1.38',
-  springDoc          : '1.8.0',
-  springCloud        : '3.1.9'
+    junit              : '5.12.2',
+    junitPlatform      : '1.12.2',
+    gradlePitest       : '1.15.0',
+    pitest             : '1.19.4',
+    reformLogging      : '6.1.9',
+    reformHealthStarter: '0.0.5',
+    restAssured        : '5.4.0',
+    serenity           : '4.2.30',
+    pact_version       : '4.1.38',
+    sonarPitest        : '0.5',
+    springDoc          : '1.8.0',
+    springCloud        : '3.1.9'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
@@ -265,6 +265,7 @@ jacocoTestReport {
 pitest {
 //    print('./gradlew --version'.execute().text.trim())
   junit5PluginVersion = '1.2.3'
+  pitestVersion = "1.16.2"
   targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
   excludedClasses = [
     'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
@@ -301,9 +302,11 @@ project.tasks.named('sonarqube') {
   group = "Verification"
 }
 repositories {
-  mavenLocal()
-  mavenCentral()
-  maven { url 'https://jitpack.io' }
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url 'https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1'
+    }
 }
 
 dependencyManagement {
@@ -312,11 +315,10 @@ dependencyManagement {
     dependencySet(group: 'org.yaml', version: '2.4') {
       entry 'snakeyaml'
     }
-
-    dependencySet(group: 'commons-fileupload', version: '1.5') {
-      entry 'commons-fileupload'
+    
+    dependencySet(group: 'commons-fileupload', version: '1.6.0') {
+        entry 'commons-fileupload'
     }
-
 
     dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.0') {
       entry 'jackson-databind'
@@ -390,14 +392,14 @@ dependencies {
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
 
-  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
+  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
   implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
 
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
   implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.105'
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.105'
+  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.107'
+  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.107'
 
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
   implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
@@ -426,6 +428,11 @@ dependencies {
   testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-common', version: "1.9.0"
   testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk7', version: "1.9.0"
   testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: "1.9.0"
+
+  testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5"
+  testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
 
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
