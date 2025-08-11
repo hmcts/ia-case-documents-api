@@ -327,4 +327,16 @@ public class AsylumCaseUtils {
                 : "";
     }
 
+    public static boolean isDetainedInFacilityType(AsylumCase asylumCase, DetentionFacility facilityType) {
+        if (!isAppellantInDetention(asylumCase)) {
+            return false;
+        }
+        String detentionFacility = asylumCase.read(DETENTION_FACILITY, String.class).orElse("none");
+
+        return detentionFacility.equals(facilityType.getValue());
+    }
+
+    public static boolean isLegalRepCaseForDetainedAppellant(AsylumCase asylumCase) {
+        return (!isInternalCase(asylumCase)) && isDetainedAppeal(asylumCase);
+    }
 }
