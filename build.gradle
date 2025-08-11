@@ -351,9 +351,7 @@ dependencies {
     }
   }
 
-  implementation('org.apache.groovy:groovy-xml:4.0.23') {
-    force = true
-  }
+  implementation('org.apache.groovy:groovy-xml:4.0.23')
   configurations.configureEach {
     resolutionStrategy {
       force 'org.apache.groovy:groovy-xml:4.0.23'
