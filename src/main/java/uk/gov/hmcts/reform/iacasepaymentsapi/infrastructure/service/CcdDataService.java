@@ -89,7 +89,7 @@ public class CcdDataService {
 
         if (!isPaymentReferenceExists(startEventDetails.getCaseDetails().getCaseData(),
                                       caseMetaData.getPaymentReference()) && !isWaysToPay) {
-
+            log.warn("Payment reference not found for the caseId:={}", caseId);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                                               "Payment reference not found for the caseId: " + caseId);
         }
