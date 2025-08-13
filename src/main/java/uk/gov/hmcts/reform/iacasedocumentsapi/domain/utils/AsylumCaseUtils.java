@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -58,10 +59,15 @@ public class AsylumCaseUtils {
     }
 
     public static boolean hasAppellantAddressInCountryOrOoc(AsylumCase asylumCase) {
-        return asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
-                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-               || asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
-                   .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
+        boolean appellantHasFixedUkAddress = asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
+            .map(flag -> flag.equals(YES))
+            .orElse(false);
+
+        boolean appellantHasFixedOutOfCountryAddress = asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
+            .map(flag -> flag.equals(YES))
+            .orElse(false);
+
+        return appellantHasFixedUkAddress || appellantHasFixedOutOfCountryAddress || isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
@@ -325,6 +331,15 @@ public class AsylumCaseUtils {
                 ? new BigDecimal(String.valueOf(Double.parseDouble(amountFromAsylumCase) / 100))
                 .setScale(2, RoundingMode.DOWN).toString()
                 : "";
+    }
+
+    public static boolean isDetainedInOneOfFacilityTypes(AsylumCase asylumCase, DetentionFacility... facilityTypes) {
+        for (DetentionFacility facilityType : facilityTypes) {
+            if (isDetainedInFacilityType(asylumCase, facilityType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isDetainedInFacilityType(AsylumCase asylumCase, DetentionFacility facilityType) {
