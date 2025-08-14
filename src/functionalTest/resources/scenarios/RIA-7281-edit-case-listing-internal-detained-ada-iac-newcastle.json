@@ -13,7 +13,8 @@
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2023-10-20T12:30:00",
           "isAcceleratedDetainedAppeal": "No",
-          "appellantInDetention": "Yes"
+          "appellantInDetention": "Yes",
+          "detentionFacility": "immigrationRemovalCentre"
         }
       },
       "caseDataBefore": {
@@ -37,6 +38,7 @@
         "listCaseHearingDate": "2023-10-20T12:30:00",
         "isAcceleratedDetainedAppeal": "No",
         "appellantInDetention": "Yes",
+        "detentionFacility": "immigrationRemovalCentre",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
