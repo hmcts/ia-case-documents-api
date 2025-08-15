@@ -1,0 +1,21 @@
+{
+  "organisationEntityResponse" : {
+    "organisationIdentifier": "0UFUG4Z",
+    "name": "ia-legal-rep-org",
+    "status": "ACTIVE",
+    "sraId": null,
+    "sraRegulated": false,
+    "companyNumber": null,
+    "companyUrl": null,
+    "superUser": {
+      "firstName": "legalrep",
+      "lastName": "orgcreator",
+      "email": "ia.legalrep.orgcreator@gmail.com"
+    },
+    "paymentAccount": [
+      "PBA1234567",
+      "PBA7654321"
+    ],
+    "contactInformation": null
+  }
+}

@@ -26,3 +26,4 @@ spring:
         hearing-centre-hatton-cross-email: IA_HEARING_CENTRE_HATTON_CROSS_EMAIL
         hearing-centre-glasgow-email: IA_HEARING_CENTRE_GLASGOW_EMAIL
         ia-config-validator-secret: IA_CONFIG_VALIDATOR_SECRET
+        idam-redirect-uri: IA_IDAM_REDIRECT_URI

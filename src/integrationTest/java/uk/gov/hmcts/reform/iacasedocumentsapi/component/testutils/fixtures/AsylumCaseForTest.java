@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient.PAYMENT_CASE_REFERENCE;
+
 import java.util.Map;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
@@ -29,5 +31,9 @@ public class AsylumCaseForTest implements Builder<AsylumCase> {
 
     public AsylumCase build() {
         return asylumCase;
+    }
+
+    public static AsylumCase generateValidPaymentStatusAsylumCase() {
+        return anAsylumCase().with(AsylumCaseDefinition.PAYMENT_REFERENCE, PAYMENT_CASE_REFERENCE).build();
     }
 }
