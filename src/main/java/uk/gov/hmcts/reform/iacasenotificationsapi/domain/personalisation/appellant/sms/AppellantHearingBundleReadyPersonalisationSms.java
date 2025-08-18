@@ -61,6 +61,7 @@ public class AppellantHearingBundleReadyPersonalisationSms implements SmsNotific
         return ImmutableMap
             .<String, String>builder()
             .put("Appeal Ref Number", asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("ccdReferenceNumber", asylumCase.read(AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse(""))
             .put("Hyperlink to service", iaAipFrontendUrl)
             .build();
     }

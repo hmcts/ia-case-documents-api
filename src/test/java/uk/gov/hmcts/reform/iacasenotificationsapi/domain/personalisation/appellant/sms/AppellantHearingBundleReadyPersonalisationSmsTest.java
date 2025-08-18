@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY;
 
 import java.util.Collections;
 import java.util.Map;
@@ -30,6 +31,7 @@ class AppellantHearingBundleReadyPersonalisationSmsTest {
     private final String smsTemplateId = "someSmsTemplateId";
     private final String iaAipFrontendUrl = "http://localhost";
     private final String mockedAppealReferenceNumber = "someReferenceNumber";
+    private final String ccdReferenceNumber = "1234 5678 4321 8765";
     @Mock
     AsylumCase asylumCase;
     @Mock
@@ -45,8 +47,8 @@ class AppellantHearingBundleReadyPersonalisationSmsTest {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.of(mockedAppealReferenceNumber));
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
-            .thenReturn(Optional.of(mockedAppealReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class))
+                .thenReturn(Optional.of(ccdReferenceNumber));
 
         appellantHearingBundleReadyPersonalisationSms =
             new AppellantHearingBundleReadyPersonalisationSms(
@@ -125,6 +127,7 @@ class AppellantHearingBundleReadyPersonalisationSmsTest {
     void should_return_personalisation_when_only_mandatory_information_given() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.empty());
 
         Map<String, String> personalisation =
             appellantHearingBundleReadyPersonalisationSms.getPersonalisation(asylumCase);

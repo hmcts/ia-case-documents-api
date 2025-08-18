@@ -525,12 +525,12 @@ govnotify:
       detentionEngagementTeam:
         email: e4c5547d-7cff-49f5-b47c-7861343db513
       legalRep:
-        email: 33f23316-8283-4968-90a0-aac4a1faebce
+        email: 283d8b0e-daff-49f5-9b71-2f33eca08b99
       homeOffice:
-        email: c2f68250-3930-4284-aa08-54c94a37da70
+        email: 0ac82b78-a356-4ac4-8e8a-d7b83b94c841
       appellant:
-        email: fae42617-155a-4a46-b7be-9829e91bb17c
-        sms: 24e64431-0888-427e-b2e9-9a4cbb0d79d4
+        email: e5e9a82f-aba6-4d3c-a7e6-2005dad1b30f
+        sms: 77fa2da9-7bd5-4c8f-ba6b-7229ec7563ba
     hearingBundleFailed:
       caseOfficer:
         email: 640fa369-bdba-4dc7-93e4-bfb56e7e25bc

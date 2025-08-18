@@ -4,11 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixes;
 
 import java.util.Collections;
@@ -41,6 +37,7 @@ class AppellantHearingBundleReadyPersonalisationEmailTest {
     private final String templateId = "someEmailTemplateId";
     private final String homeOfficeReferenceNumber = "someHomeOfficeReferenceNumber";
     private final String appealReferenceNumber = "someReferenceNumber";
+    private String ccdReferenceNumber = "1234 5678 4321 8765";
     private final String appellantGivenNames = "someAppellantGivenNames";
     private final String appellantFamilyName = "someAppellantFamilyName";
     @Mock
@@ -62,6 +59,8 @@ class AppellantHearingBundleReadyPersonalisationEmailTest {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class))
+                .thenReturn(Optional.of(ccdReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class))
             .thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -130,6 +129,7 @@ class AppellantHearingBundleReadyPersonalisationEmailTest {
         Map<String, String> personalisation =
             appellantHearingBundleReadyPersonalisationEmail.getPersonalisation(asylumCase);
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(ccdReferenceNumber, personalisation.get("ccdReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, personalisation.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
@@ -148,6 +148,7 @@ class AppellantHearingBundleReadyPersonalisationEmailTest {
         initializePrefixes(appellantHearingBundleReadyPersonalisationEmail);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
