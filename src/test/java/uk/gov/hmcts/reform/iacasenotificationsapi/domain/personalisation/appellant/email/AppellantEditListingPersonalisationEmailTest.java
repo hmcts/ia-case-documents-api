@@ -33,6 +33,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.C
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 
@@ -53,6 +54,9 @@ public class AppellantEditListingPersonalisationEmailTest {
     CustomerServicesProvider customerServicesProvider;
     @Mock
     RecipientsFinder recipientsFinder;
+
+    @Mock
+    HearingDetailsFinder hearingDetailsFinder;
 
     private Long caseId = 12345L;
     private String templateId = "someTemplateId";
@@ -86,7 +90,6 @@ public class AppellantEditListingPersonalisationEmailTest {
 
     @BeforeEach
     public void setup() {
-        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(tribunalCentre));
         appellantEditListingPersonalisationEmail = new AppellantEditListingPersonalisationEmail(
             templateId,
             listAssistHearingTemplateId,
@@ -95,8 +98,11 @@ public class AppellantEditListingPersonalisationEmailTest {
             iaAipFrontendUrl,
             personalisationProvider,
             customerServicesProvider,
-            recipientsFinder
+            recipientsFinder,
+            hearingDetailsFinder
         );
+        when(asylumCase.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(tribunalCentre));
+        when(hearingDetailsFinder.getHearingCentreName(asylumCase)).thenReturn(tribunalCentre.getValue());
     }
 
     @Test

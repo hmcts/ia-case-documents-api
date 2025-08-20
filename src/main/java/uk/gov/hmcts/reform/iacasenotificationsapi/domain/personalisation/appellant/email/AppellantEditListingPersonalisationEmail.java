@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesO
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.HearingDetailsFinder;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 
 @Service
@@ -34,6 +35,7 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
     private final PersonalisationProvider personalisationProvider;
     private final CustomerServicesProvider customerServicesProvider;
     private final RecipientsFinder recipientsFinder;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     @Value("${govnotify.emailPrefix.ada}")
     private String adaPrefix;
@@ -48,7 +50,8 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         PersonalisationProvider personalisationProvider,
         CustomerServicesProvider customerServicesProvider,
-        RecipientsFinder recipientsFinder
+        RecipientsFinder recipientsFinder,
+        HearingDetailsFinder hearingDetailsFinder
     ) {
         this.editListingAppellantEmailTemplateId = editListingAppellantEmailTemplateId;
         this.listAssistHearingEditListingAppellantEmailTemplateId = listAssistHearingEditListingAppellantEmailTemplateId;
@@ -58,6 +61,7 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
         this.personalisationProvider = personalisationProvider;
         this.customerServicesProvider = customerServicesProvider;
         this.recipientsFinder = recipientsFinder;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     @Override
@@ -96,7 +100,7 @@ public class AppellantEditListingPersonalisationEmail implements EmailNotificati
             .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
             .putAll(personalisationProvider.getPersonalisation(callback))
             .put("subjectPrefix", isAcceleratedDetainedAppeal(callback.getCaseDetails().getCaseData()) ? adaPrefix : nonAdaPrefix)
-            .put("tribunalCentre", hearingCentre.getValue())
+            .put("tribunalCentre", hearingDetailsFinder.getHearingCentreName(callback.getCaseDetails().getCaseData()))
             .put("hyperlink to service", iaAipFrontendUrl)
             .build();
     }

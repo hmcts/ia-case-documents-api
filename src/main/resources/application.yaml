@@ -1895,6 +1895,7 @@ adminEmailAddresses:
   birmingham: ${IA_ADMIN_BIRMINGHAM_EMAIL:birminghamedets@example.com}
   harmondsworth: ${IA_ADMIN_HARMONDSWORTH_EMAIL:harmondsworthedets@example.com}
   yarlsWood: ${IA_ADMIN_YARLSWOOD_EMAIL:yarlswoodedets@example.com}
+  iacNationalVirtual: ${IA_ADMIN_VIRTUAL_REGION_EMAIL:virtual-region-admin-default@example.com}
 
 hearingCentreEmailAddresses:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}
@@ -1917,6 +1918,7 @@ hearingCentreEmailAddresses:
   nthTyneMags: ${IA_HOME_OFFICE_NTH_TYNE_MAGS_EMAIL:hc-nth-tyne-mags@example.com}
   leedsMags: ${IA_HOME_OFFICE_LEEDS_MAGS_EMAIL:hc-leeds-mags@example.com}
   alloaSherrif: ${IA_HOME_OFFICE_ALLOA_SHERRIF_EMAIL:hc-alloa-sherrif@example.com}
+  iacNationalVirtual: ${IA_HEARING_CENTRE_VIRTUAL_REGION_EMAIL:hc-virtualregion-default@example.com}
 
 ### Bail Hearing Email addresses
 bailHearingCentreEmailAddresses:
@@ -1951,6 +1953,7 @@ homeOfficeEmailAddresses:
   nthTyneMags: ${IA_HOME_OFFICE_NTH_TYNE_MAGS_EMAIL:ho-nth-tyne-mags@example.com}
   leedsMags: ${IA_HOME_OFFICE_LEEDS_MAGS_EMAIL:ho-leeds-mags@example.com}
   alloaSherrif: ${IA_HOME_OFFICE_ALLOA_SHERRIF_EMAIL:ho-alloa-sherrif@example.com}
+  iacNationalVirtual: ${IA_HOME_OFFICE_VIRTUAL_REGION_EMAIL:ho-virtual-region-default@example.com}
 
 
 homeOfficeFtpaEmailAddresses:
@@ -1979,6 +1982,7 @@ hearingCentreTelephoneNumber:
   hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE:0300 123 1711}
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_TELEPHONE:0300 123 1711}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_TELEPHONE:0300 123 1711}
+  iacNationalVirtual: ${IA_HEARING_CENTRE_VIRTUAL_REGION_TELEPHONE:0300 123 1711}
 
 endAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_END_APPEAL_EMAIL:ho-end-appeal@example.com}
 allowedAppealHomeOfficeEmailAddress: ${IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL:ho-allowed-appeal@example.com}

@@ -38,6 +38,7 @@ hearingCentreName	nthTyneMags	NTH Tyne Mags
 hearingCentreName	leedsMags	Leeds Mags
 hearingCentreName	alloaSherrif	Alloa Sherrif Court
 hearingCentreName	remoteHearing	Remote hearing
+hearingCentreName	iacNationalVirtual	IAC National (Virtual)
 hearingCentreAddress	birmingham	IAC Birmingham, Birmingham Justice Centre, 33 Bull Street, Birmingham, B4 6DS
 hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH
 hearingCentreAddress	coventry	Coventry Magistrates Court, Little Park Street, Coventry, West Midlands, CV1 2SQ
@@ -61,5 +62,6 @@ hearingCentreAddress	manchesterMags	Manchester Magistrates' Court, Crown Square,
 hearingCentreAddress	nthTyneMags	North Tyneside Magistrates' Court, Tynemouth Road, The Court House, NE30 1AG
 hearingCentreAddress	leedsMags	Leeds Magistrates' Court and Family Court, Westgate, LS1 3BY
 hearingCentreAddress	alloaSherrif	Alloa Sheriff Court, 47 Drysdale Street, Alloa, FK10 1JA
+hearingCentreAddress	iacNationalVirtual	Piccadilly Plaza, Mosley Street, Manchester, M1 4AH
 hearingCentreAddress	remoteHearing	Remote hearing
 hearingCentreAddress	decisionWithoutHearing	No hearing centre

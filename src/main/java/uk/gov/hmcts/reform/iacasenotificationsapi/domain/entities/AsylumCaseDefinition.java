@@ -524,6 +524,8 @@ public enum AsylumCaseDefinition {
     IS_REMOTE_HEARING(
         "isRemoteHearing", new TypeReference<YesOrNo>(){}),
 
+    IS_VIRTUAL_HEARING("isVirtualHearing", new TypeReference<YesOrNo>(){}),
+
     NOTIFICATIONS("notifications", new TypeReference<List<IdValue<StoredNotification>>>(){}),
   
     LISTING_LOCATION(

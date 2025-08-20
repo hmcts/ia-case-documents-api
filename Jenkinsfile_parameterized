@@ -27,6 +27,7 @@ def secrets = [
     secret('hearing-centre-birmingham-email', 'IA_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
     secret('hearing-centre-hatton-cross-email', 'IA_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
     secret('hearing-centre-glasgow-email', 'IA_HEARING_CENTRE_GLASGOW_EMAIL'),
+    secret('hearing-centre-virtual-region-email', 'IA_HEARING_CENTRE_VIRTUAL_REGION_EMAIL'),
 
     secret('home-office-bradford-email', 'IA_HOME_OFFICE_BRADFORD_EMAIL'),
     secret('home-office-manchester-email', 'IA_HOME_OFFICE_MANCHESTER_EMAIL'),
@@ -36,6 +37,7 @@ def secrets = [
     secret('home-office-birmingham-email', 'IA_HOME_OFFICE_BIRMINGHAM_EMAIL'),
     secret('home-office-hatton-cross-email', 'IA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
     secret('home-office-glasgow-email', 'IA_HOME_OFFICE_GLASGOW_EMAIL'),
+    secret('home-office-virtual-region-email', 'IA_HOME_OFFICE_VIRTUAL_REGION_EMAIL'),
     secret('home-office-apc-email', 'IA_HOME_OFFICE_APC_EMAIL'),
 
     secret('ftpa-home-office-bradford-email', 'IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL'),
@@ -52,6 +54,7 @@ def secrets = [
     secret('hearing-centre-birmingham-telephone', 'IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE'),
     secret('hearing-centre-hatton-cross-telephone', 'IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE'),
     secret('hearing-centre-glasgow-telephone', 'IA_HEARING_CENTRE_GLASGOW_TELEPHONE'),
+    secret('hearing-centre-virtual-region-telephone', 'IA_HEARING_CENTRE_VIRTUAL_REGION_TELEPHONE'),
 
     secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
     secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
@@ -96,6 +99,7 @@ def secrets = [
     secret('admin-office-birmingham-email', 'IA_ADMIN_BIRMINGHAM_EMAIL'),
     secret('admin-office-harmondsworth-email', 'IA_ADMIN_HARMONDSWORTH_EMAIL'),
     secret('admin-office-yarlswood-email', 'IA_ADMIN_YARLSWOOD_EMAIL'),
+    secret('admin-office-virtual-region-email', 'IA_ADMIN_VIRTUAL_REGION_EMAIL'),
 
     secret('case-officer-list-case-email', 'IA_CASE_OFFICER_LIST_CASE_EMAIL'),
 

@@ -33,6 +33,7 @@ class HearingCentreTest {
         assertEquals("alloaSherrif", HearingCentre.ALLOA_SHERRIF.toString());
         assertEquals("remoteHearing", HearingCentre.REMOTE_HEARING.toString());
         assertEquals("decisionWithoutHearing", HearingCentre.DECISION_WITHOUT_HEARING.toString());
+        assertEquals("iacNationalVirtual", HearingCentre.IAC_NATIONAL_VIRTUAL.toString());
 
     }
 
@@ -63,10 +64,11 @@ class HearingCentreTest {
         assertEquals(HearingCentre.ALLOA_SHERRIF, HearingCentre.from("alloaSherrif").get());
         assertEquals(HearingCentre.REMOTE_HEARING, HearingCentre.from("remoteHearing").get());
         assertEquals(HearingCentre.DECISION_WITHOUT_HEARING, HearingCentre.from("decisionWithoutHearing").get());
+        assertEquals(HearingCentre.IAC_NATIONAL_VIRTUAL, HearingCentre.from("iacNationalVirtual").get());
     }
 
     @Test
     void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(25, HearingCentre.values().length);
+        assertEquals(26, HearingCentre.values().length);
     }
 }

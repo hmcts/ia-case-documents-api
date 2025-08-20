@@ -109,6 +109,15 @@ class HearingDetailsFinderTest {
     }
 
     @Test
+    void getHearingCentreLocation_should_return_virtual_hearing_if_virtual_field_is_yes_and_refdata_enabled() {
+        when(asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(AsylumCaseDefinition.IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        assertEquals("IAC National (Virtual)", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
+    }
+
+    @Test
     void getHearingCentreLocation_should_return_refdata_address_if_remote_field_is_no_and_refdata_enabled() {
         when(asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YES));
@@ -116,6 +125,24 @@ class HearingDetailsFinderTest {
             .thenReturn(Optional.of("testAddress"));
 
         assertEquals("testAddress", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
+    }
+
+    @Test
+    void getHearingCentreLocation_should_return_virtual_hearing_if_virtual_field_is_yes() {
+        when(asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(AsylumCaseDefinition.IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        assertEquals("IAC National (Virtual)", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
+    }
+
+    @Test
+    void getHearingCentreLocation_should_return_virtual_hearing_if_virtual_field_is_yes_and_location_ref_data_no() {
+        when(asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(AsylumCaseDefinition.IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertEquals("IAC National (Virtual)", hearingDetailsFinder.getHearingCentreLocation(asylumCase));
     }
 
     @Test

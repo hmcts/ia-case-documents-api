@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
 
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_VIRTUAL_HEARING;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.IS_REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.BailCaseFieldDefinition.LISTING_HEARING_DATE;
@@ -112,7 +113,9 @@ public class HearingDetailsFinder {
                 .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
-        if (hearingCentre == HearingCentre.REMOTE_HEARING) {
+        if (isVirtualHearing(asylumCase)) {
+            return "IAC National (Virtual)";
+        } else if (hearingCentre == HearingCentre.REMOTE_HEARING) {
             return "Remote hearing";
         } else {
             return getHearingCentreAddress(asylumCase);
@@ -120,8 +123,13 @@ public class HearingDetailsFinder {
     }
 
     private String getRefDataLocationAddress(AsylumCase asylumCase) {
+        boolean isVirtualHearing = isVirtualHearing(asylumCase);
         YesOrNo isRemoteHearing = asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)
-            .orElseThrow(() -> new IllegalStateException("isRemoteHearing is not present"));
+                .orElseThrow(() -> new IllegalStateException("isRemoteHearing is not present"));
+
+        if (isVirtualHearing) {
+            return "IAC National (Virtual)";
+        }
 
         if (isRemoteHearing.equals(YES)) {
             return "Remote hearing";
@@ -132,16 +140,24 @@ public class HearingDetailsFinder {
     }
 
     private String getRefDataLocationName(AsylumCase asylumCase) {
+        boolean isVirtualHearing = isVirtualHearing(asylumCase);
         YesOrNo isRemoteHearing = asylumCase.read(AsylumCaseDefinition.IS_REMOTE_HEARING, YesOrNo.class)
-            .orElseThrow(() -> new IllegalStateException("isRemoteHearing is not present"));
+                .orElseThrow(() -> new IllegalStateException("isRemoteHearing is not present"));
 
-        if (isRemoteHearing.equals(YES)) {
+        if (isRemoteHearing.equals(YES) && !isVirtualHearing) {
             return "Remote hearing";
         }
 
-        return asylumCase.read(AsylumCaseDefinition.LISTING_LOCATION, DynamicList.class)
-            .map(listingLocation -> listingLocation.getValue().getLabel())
-            .orElseThrow(() -> new IllegalStateException("listingLocation is not present"));
+        DynamicList listingLocation = asylumCase.read(AsylumCaseDefinition.LISTING_LOCATION, DynamicList.class)
+                .orElseThrow(() -> new IllegalStateException("listingLocation is not present"));
+
+        return listingLocation.getValue().getLabel();
+    }
+
+    private static Boolean isVirtualHearing(AsylumCase asylumCase) {
+        return asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)
+                .map(virtual -> virtual == YesOrNo.YES)
+                .orElse(false);
     }
 
     public String getBailHearingCentreLocation(BailCase bailCase) {
