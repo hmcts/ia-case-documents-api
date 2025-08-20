@@ -198,10 +198,11 @@ class HearingNoticeCreatorTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "NO, NO", "YES, YES", "NO, YES" })
+    @CsvSource({ "NO, NO, NO", "NO, NO, YES", "YES, YES, NO", "YES, YES, YES", "NO, YES, NO", "NO, YES, YES" })
     void should_create_remote_hearing_notice_pdf_and_append_to_reheard_hearing_documents_for_the_case(
             YesOrNo enabledRefData,
-            YesOrNo isRefDataRemoteHearing) {
+            YesOrNo isRefDataRemoteHearing,
+            YesOrNo isVirtualHearing) {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
@@ -212,8 +213,12 @@ class HearingNoticeCreatorTest {
 
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(enabledRefData));
-        if (enabledRefData.equals(YesOrNo.YES)) {
+        if (enabledRefData.equals(YES)) {
             when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(isRefDataRemoteHearing));
+        }
+
+        if (isVirtualHearing.equals(YES)) {
+            when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(isVirtualHearing));
         }
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =

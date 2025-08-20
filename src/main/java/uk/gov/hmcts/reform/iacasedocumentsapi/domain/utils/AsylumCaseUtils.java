@@ -229,6 +229,12 @@ public class AsylumCaseUtils {
         return asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
     }
 
+    public static boolean isVirtualHearing(AsylumCase asylumCase) {
+        return asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)
+            || asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .map(HearingCentre.IAC_NATIONAL_VIRTUAL::equals).orElse(false);
+    }
+
     public static List<String> getAppellantAddressAsList(final AsylumCase asylumCase) {
         AddressUk address = asylumCase
             .read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)
