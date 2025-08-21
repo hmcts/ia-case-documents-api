@@ -490,9 +490,9 @@ public class AsylumCaseUtilsTest {
 
     @ParameterizedTest
     @CsvSource({
-            "immigrationRemovalCentre, IRC",
-            "prison, PRISON",
-            "other, OTHER"
+        "immigrationRemovalCentre, IRC",
+        "prison, PRISON",
+        "other, OTHER"
     })
     void should_return_true_for_all_facility_types_when_appellant_is_detained(String detentionFacilityValue, DetentionFacility facilityType) {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
@@ -535,10 +535,10 @@ public class AsylumCaseUtilsTest {
 
     @ParameterizedTest
     @CsvSource({
-            "YES, YES, false",
-            "YES, NO, false",
-            "NO, YES, true",
-            "NO, NO, false"
+        "YES, YES, false",
+        "YES, NO, false",
+        "NO, YES, true",
+        "NO, NO, false"
     })
     void should_return_correct_value_for_legal_rep_case_for_detained_appellant_combinations(YesOrNo isAdmin, YesOrNo isDetained, boolean expected) {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(isAdmin));
