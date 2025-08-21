@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -40,8 +41,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -62,8 +61,8 @@ class InternalCaseListedLetterHandlerTest {
     private DocumentHandler documentHandler;
     @Mock
     private Document bundleDocument;
-    private String fileExtension = "PDF";
-    private String fileName = "some-file-name";
+    private final String fileExtension = "PDF";
+    private final String fileName = "some-file-name";
 
     @BeforeEach
     public void setUp() {
@@ -132,6 +131,52 @@ class InternalCaseListedLetterHandlerTest {
                 fileExtension,
                 fileName,
                 false,
+                fileNameQualifier,
+                documentBundler,
+                documentHandler);
+
+        boolean canHandle = internalCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertFalse(canHandle);
+    }
+
+    @Test
+    public void it_should_handle_callback_when_appellant_in_detention_other() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+
+        internalCaseListedLetterHandler =
+            new InternalCaseListedLetterHandler(
+                fileExtension,
+                fileName,
+                true,
+                fileNameQualifier,
+                documentBundler,
+                documentHandler);
+
+        boolean canHandle = internalCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertTrue(canHandle);
+    }
+
+    @Test
+    public void it_should_not_handle_callback_when_appellant_in_detention_prison() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, DetentionFacility.class)).thenReturn(Optional.of(DetentionFacility.PRISON));
+
+        internalCaseListedLetterHandler =
+            new InternalCaseListedLetterHandler(
+                fileExtension,
+                fileName,
+                true,
                 fileNameQualifier,
                 documentBundler,
                 documentHandler);

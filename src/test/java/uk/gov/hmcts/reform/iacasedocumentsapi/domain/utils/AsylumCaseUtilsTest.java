@@ -19,6 +19,7 @@ import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
@@ -454,6 +455,96 @@ public class AsylumCaseUtilsTest {
         String convertedFeeValue = AsylumCaseUtils.convertAsylumCaseFeeValue(null);
 
         assertEquals("", convertedFeeValue);
+    }
+
+    @Test
+    void should_return_true_when_appellant_is_in_detention_and_facility_type_matches() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+
+        assertTrue(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @Test
+    void should_return_false_when_appellant_is_not_in_detention() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @Test
+    void should_return_false_when_facility_type_does_not_match() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
+
+        assertFalse(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @Test
+    void should_return_false_when_detention_facility_is_empty() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
+
+        assertFalse(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "immigrationRemovalCentre, IRC",
+            "prison, PRISON",
+            "other, OTHER"
+    })
+    void should_return_true_for_all_facility_types_when_appellant_is_detained(String detentionFacilityValue, DetentionFacility facilityType) {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityValue));
+
+        assertTrue(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, facilityType));
+    }
+
+    @Test
+    void should_return_true_for_legal_rep_case_for_detained_appellant() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        assertTrue(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+    }
+
+    @Test
+    void should_return_false_for_internal_case_with_detained_appellant() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+    }
+
+    @Test
+    void should_return_false_for_non_internal_case_with_non_detained_appellant() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+    }
+
+    @Test
+    void should_return_false_for_internal_case_with_non_detained_appellant() {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "YES, YES, false",
+            "YES, NO, false",
+            "NO, YES, true",
+            "NO, NO, false"
+    })
+    void should_return_correct_value_for_legal_rep_case_for_detained_appellant_combinations(YesOrNo isAdmin, YesOrNo isDetained, boolean expected) {
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(isAdmin));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(isDetained));
+
+        assertEquals(expected, AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
     }
 
 }
