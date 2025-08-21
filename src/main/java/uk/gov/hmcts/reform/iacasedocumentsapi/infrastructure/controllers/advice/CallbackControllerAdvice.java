@@ -37,7 +37,6 @@ public class CallbackControllerAdvice extends ResponseEntityExceptionHandler {
         HttpServletRequest request,
         Exception e
     ) {
-        log.error("-----888 ", e);
         log.error("Exception for the CCDCaseId: {}",
             RequestContextHolder.currentRequestAttributes().getAttribute("CCDCaseId", RequestAttributes.SCOPE_REQUEST));
         ExceptionUtils.printRootCauseStackTrace(e);
@@ -50,7 +49,6 @@ public class CallbackControllerAdvice extends ResponseEntityExceptionHandler {
         HttpServletRequest request,
         DocumentStitchingErrorResponseException ex
     ) {
-        log.error("-----666 ", ex);
         log.error("Exception for the CCDCaseId: {}",
             RequestContextHolder.currentRequestAttributes().getAttribute("CCDCaseId", RequestAttributes.SCOPE_REQUEST));
         errorResponseLogger.maybeLogErrorsListResponse(ex.getStitchingServiceResponse());
@@ -63,7 +61,6 @@ public class CallbackControllerAdvice extends ResponseEntityExceptionHandler {
         HttpServletRequest request,
         DocumentServiceResponseException ex
     ) {
-        log.error("-----777 ", ex);
         log.error("Exception for the CCDCaseId: {}",
             RequestContextHolder.currentRequestAttributes().getAttribute("CCDCaseId", RequestAttributes.SCOPE_REQUEST));
         errorResponseLogger.maybeLogException(ex.getCause());
