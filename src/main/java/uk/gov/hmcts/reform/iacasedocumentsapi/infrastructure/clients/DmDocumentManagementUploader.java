@@ -60,6 +60,7 @@ public class DmDocumentManagementUploader {
             );
 
             log.info("Uploading {} using DocumentUploadClientApi (CDAM)", resource.getFilename());
+            log.error("----------000");
             UploadResponse uploadResponse =
                 documentUploadClientApi
                     .upload(
@@ -68,12 +69,14 @@ public class DmDocumentManagementUploader {
                         userId,
                         Collections.singletonList(file)
                     );
+            log.error("----------111");
 
             uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
                 uploadResponse
                     .getEmbedded()
                     .getDocuments()
                     .get(0);
+            log.error("----------111---");
 
             return new Document(
                 uploadedDocument
@@ -89,6 +92,14 @@ public class DmDocumentManagementUploader {
             );
 
         } catch (IOException e) {
+            log.error("----------222");
+            log.error("Error while uploading document", e);
+            log.error("----------333");
+            throw new IllegalStateException(e);
+        } catch (Exception e) {
+            log.error("----------444");
+            log.error("Error while uploading document", e);
+            log.error("----------555");
             throw new IllegalStateException(e);
         }
     }
