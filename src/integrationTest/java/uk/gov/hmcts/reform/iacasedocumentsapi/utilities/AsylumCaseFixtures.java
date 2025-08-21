@@ -149,7 +149,7 @@ public class AsylumCaseFixtures {
                + "  \"uid\": \"27ff8bb2-8bd3-4577-8ee1-33099acd50a5\",\n"
                + "  \"roles\": [\n"
                + "    \"caseworker-ia\",\n"
-               + "    \"caseworker-ia-caseofficer\"\n"
+               + "    \"tribunal-caseworker\"\n"
                + "  ],\n"
                + "  \"name\": \"Officer\",\n"
                + "  \"given_name\": \"Case\",\n"
