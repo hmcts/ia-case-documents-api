@@ -338,6 +338,48 @@ public class AsylumCaseUtilsTest {
     }
 
     @Test
+    void should_return_isVirtualHearing() {
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.isVirtualHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isVirtualHearing_false_when_value_is_no() {
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
+        assertFalse(AsylumCaseUtils.isVirtualHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isVirtualHearing_true_when_list_hearing_centre_is_virtual() {
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.IAC_NATIONAL_VIRTUAL));
+        assertTrue(AsylumCaseUtils.isVirtualHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isVirtualHearing_false_when_missing_in_case_data() {
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.empty());
+        assertFalse(AsylumCaseUtils.isVirtualHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isVirtualHearing_true_when_missing_in_case_data__and_hearing_centre_not_virtual() {
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.GLASGOW_TRIBUNAL_CENTRE));
+        assertFalse(AsylumCaseUtils.isVirtualHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isVirtualHearing_true_when_isVirtualHearing_missing_and_hearing_centre_virtual() {
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.IAC_NATIONAL_VIRTUAL));
+        assertTrue(AsylumCaseUtils.isVirtualHearing(asylumCase));
+    }
+
+    @Test
     void should_return_address_with_all_fields_populated() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
         when(address.getAddressLine1()).thenReturn(Optional.of("Apartment 99"));
