@@ -76,7 +76,7 @@ public class DmDocumentManagementUploader {
                     .getEmbedded()
                     .getDocuments()
                     .get(0);
-            log.error("----------111---");
+            log.error("----------111999---");
 
             return new Document(
                 uploadedDocument
