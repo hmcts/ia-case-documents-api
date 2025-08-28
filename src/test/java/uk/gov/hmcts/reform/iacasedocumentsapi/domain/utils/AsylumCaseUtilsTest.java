@@ -595,48 +595,98 @@ public class AsylumCaseUtilsTest {
     @Test
     void should_return_due_date_plus_weeks() {
         AsylumCase asylumCase = mock(AsylumCase.class);
-        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
-                .thenReturn(Optional.of("2023-08-01"));
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.of("2023-08-01"));
 
         String result = AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 2);
 
         // 2023-08-01 + 2 weeks = 2023-08-15
-        assertThat(result).isEqualTo(
-                DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 15))
-        );
+        assertThat(result).isEqualTo(DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 15)));
     }
 
     @Test
     void should_return_due_date_plus_days() {
         AsylumCase asylumCase = mock(AsylumCase.class);
-        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
-                .thenReturn(Optional.of("2023-08-01"));
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.of("2023-08-01"));
 
         String result = AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 10);
 
         // 2023-08-01 + 10 days = 2023-08-11
-        assertThat(result).isEqualTo(
-                DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 11))
-        );
+        assertThat(result).isEqualTo(DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 11)));
     }
 
     @Test
     void should_throw_if_submission_date_missing_in_plus_weeks() {
         AsylumCase asylumCase = mock(AsylumCase.class);
-        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
-                .thenReturn(Optional.empty());
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalStateException.class,
-                () -> AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 1));
+        assertThrows(IllegalStateException.class, () -> AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 1));
     }
 
     @Test
     void should_throw_if_submission_date_missing_in_plus_days() {
         AsylumCase asylumCase = mock(AsylumCase.class);
-        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
-                .thenReturn(Optional.empty());
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalStateException.class,
-                () -> AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 5));
+        assertThrows(IllegalStateException.class, () -> AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 5));
+    }
+
+    @Test
+    void should_return_true_handle_has_been_submitted_internal_case() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void should_return_false_handle_has_been_submitted_internal_case() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void should_return_false_handle_has_been_submitted_internal_case_if_missing_field() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void should_return_true_submission_out_of_time() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        boolean result = AsylumCaseUtils.isSubmissionOutOfTime(asylumCase);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void should_return_false_submission_out_of_time() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        boolean result = AsylumCaseUtils.isSubmissionOutOfTime(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void should_return_false_submission_out_of_time_if_missing_field() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty());
+
+        boolean result = AsylumCaseUtils.isSubmissionOutOfTime(asylumCase);
+
+        assertFalse(result);
     }
 }

@@ -54,6 +54,11 @@ public class AsylumCaseUtils {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
     }
 
+    public static boolean hasBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+                .map(yesOrNo -> YES == yesOrNo).orElse(false);
+    }
+
     public static boolean isInternalNonDetainedCase(AsylumCase asylumCase) {
         return isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase);
     }
@@ -367,5 +372,9 @@ public class AsylumCaseUtils {
 
     public static boolean isLegalRepCaseForDetainedAppellant(AsylumCase asylumCase) {
         return (!isInternalCase(asylumCase)) && isDetainedAppeal(asylumCase);
+    }
+
+    public static boolean isSubmissionOutOfTime(AsylumCase asylumCase) {
+        return asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(NO).equals(YES);
     }
 }

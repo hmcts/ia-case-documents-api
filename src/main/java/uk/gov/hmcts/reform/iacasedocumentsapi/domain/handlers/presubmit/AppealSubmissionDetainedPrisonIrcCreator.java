@@ -51,13 +51,12 @@ public class AppealSubmissionDetainedPrisonIrcCreator implements PreSubmitCallba
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         RemissionType remissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class).orElse(NO_REMISSION);
-
         boolean isRemissionPresent = Arrays.asList(
                 HO_WAIVER_REMISSION, HELP_WITH_FEES, EXCEPTIONAL_CIRCUMSTANCES_REMISSION).contains(remissionType);
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.SUBMIT_APPEAL
-                && isInternalCase(asylumCase)
+                && (isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase))
                 && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
                 && isRemissionPresent
                 && !isSubmissionOutOfTime(asylumCase);
@@ -84,9 +83,5 @@ public class AppealSubmissionDetainedPrisonIrcCreator implements PreSubmitCallba
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
-    }
-
-    private boolean isSubmissionOutOfTime(AsylumCase asylumCase) {
-        return asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(NO).equals(YES);
     }
 }

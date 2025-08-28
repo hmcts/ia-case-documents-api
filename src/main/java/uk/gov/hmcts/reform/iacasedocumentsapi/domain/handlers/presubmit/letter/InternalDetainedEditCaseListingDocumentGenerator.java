@@ -2,13 +2,17 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.EXCEPTIONAL_CIRCUMSTANCES_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -18,6 +22,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+
+import java.util.Arrays;
 
 @Component
 public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -42,10 +48,16 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
+        RemissionType remissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class).orElse(NO_REMISSION);
+        boolean isRemissionPresent = Arrays.asList(
+                HO_WAIVER_REMISSION, HELP_WITH_FEES, EXCEPTIONAL_CIRCUMSTANCES_REMISSION).contains(remissionType);
+
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == Event.EDIT_CASE_LISTING
-            && isInternalCase(asylumCase)
-            && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
+            && (isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase))
+            && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
+            && isRemissionPresent
+            && !isSubmissionOutOfTime(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
