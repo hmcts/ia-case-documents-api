@@ -122,6 +122,14 @@ public class AsylumCaseUtils {
         return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusWeeks(numberOfWeeks));
     }
 
+    public static String dueDatePlusNumberOfDays(AsylumCase asylumCase, int numberOfDays) {
+        LocalDate appealSubmissionDate = asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)
+                .map(LocalDate::parse)
+                .orElseThrow(() -> new IllegalStateException("Appeal submission date is missing"));
+
+        return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusDays(numberOfDays));
+    }
+
     public static String formatDateForRendering(String date, DateTimeFormatter formatter) {
         if (!Strings.isNullOrEmpty(date)) {
             return LocalDate.parse(date).format(formatter);

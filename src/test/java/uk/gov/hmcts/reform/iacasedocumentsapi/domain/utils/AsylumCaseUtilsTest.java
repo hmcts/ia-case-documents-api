@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -10,6 +12,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -589,4 +592,51 @@ public class AsylumCaseUtilsTest {
         assertEquals(expected, AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
     }
 
+    @Test
+    void should_return_due_date_plus_weeks() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
+                .thenReturn(Optional.of("2023-08-01"));
+
+        String result = AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 2);
+
+        // 2023-08-01 + 2 weeks = 2023-08-15
+        assertThat(result).isEqualTo(
+                DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 15))
+        );
+    }
+
+    @Test
+    void should_return_due_date_plus_days() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
+                .thenReturn(Optional.of("2023-08-01"));
+
+        String result = AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 10);
+
+        // 2023-08-01 + 10 days = 2023-08-11
+        assertThat(result).isEqualTo(
+                DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 11))
+        );
+    }
+
+    @Test
+    void should_throw_if_submission_date_missing_in_plus_weeks() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
+                .thenReturn(Optional.empty());
+
+        assertThrows(IllegalStateException.class,
+                () -> AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 1));
+    }
+
+    @Test
+    void should_throw_if_submission_date_missing_in_plus_days() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class))
+                .thenReturn(Optional.empty());
+
+        assertThrows(IllegalStateException.class,
+                () -> AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 5));
+    }
 }
