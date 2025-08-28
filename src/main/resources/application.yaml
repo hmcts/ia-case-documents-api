@@ -44,7 +44,7 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o
+            issuer-uri: http://sidam-simulator:5000/o
         registration:
           oidc:
             client-id: ${IA_IDAM_CLIENT_ID:ia}
@@ -488,7 +488,7 @@ internalEditCaseListingLetterWithAttachment.fileName: "internal-edit-case-listin
 internalOutOfTimeDecisionLetter.contentType:  application/pdf
 internalOutOfTimeDecisionLetter.fileExtension: PDF
 internalOutOfTimeDecisionLetter.fileName: "internal-out-of-time-decision-letter"
-internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-record-out-time-decision-final.docx}
+internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-record-out-time-decision.docx}
 
 internalOutOfTimeDecisionLetterWithAttachment.fileExtension: PDF
 internalOutOfTimeDecisionLetterWithAttachment.fileName: "internal-out-of-time-decision-letter-with-attachment"
