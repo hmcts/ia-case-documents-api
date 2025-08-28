@@ -9,6 +9,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.NO_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -587,6 +588,31 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(isDetained));
 
         assertEquals(expected, AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"RP", "DC"})
+    void should_return_true_for_fee_exempt_appeal_types(String appealTypeValue) {
+        AppealType appealType = AppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertTrue(isFeeExemptAppeal(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PA", "EA", "HU", "EU", "AG"})
+    void should_return_false_for_non_fee_exempt_appeal_types(String appealTypeValue) {
+        AppealType appealType = AppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_appeal_type_is_not_present() {
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
     }
 
 }
