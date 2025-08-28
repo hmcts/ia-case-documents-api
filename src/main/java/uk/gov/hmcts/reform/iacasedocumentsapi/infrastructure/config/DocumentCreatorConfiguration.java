@@ -1744,9 +1744,9 @@ public class DocumentCreatorConfiguration {
 
     @Bean("internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealSubmissionOutOfTimeWithExemptionLetterDocumentCreator(
-        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionDocument.contentType}") String contentType,
-        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionDocument.fileExtension}") String fileExtension,
-        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionDocument.fileName}") String fileName,
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.contentType}") String contentType,
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplate documentTemplate,
         DocumentGenerator documentGenerator,
