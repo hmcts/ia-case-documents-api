@@ -593,24 +593,24 @@ public class AsylumCaseUtilsTest {
     @ParameterizedTest
     @ValueSource(strings = {"RP", "DC"})
     void should_return_true_for_fee_exempt_appeal_types(String appealTypeValue) {
-        AppealType appealType = AppealType.valueOf(appealTypeValue);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
+        AsylumAppealType appealType = AsylumAppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
 
         assertTrue(isFeeExemptAppeal(asylumCase));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"PA", "EA", "HU", "EU", "AG"})
+    @ValueSource(strings = {"PA", "EA", "HU", "EU"})
     void should_return_false_for_non_fee_exempt_appeal_types(String appealTypeValue) {
-        AppealType appealType = AppealType.valueOf(appealTypeValue);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
+        AsylumAppealType appealType = AsylumAppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
 
         assertFalse(isFeeExemptAppeal(asylumCase));
     }
 
     @Test
     void should_return_false_when_appeal_type_is_not_present() {
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
 
         assertFalse(isFeeExemptAppeal(asylumCase));
     }
