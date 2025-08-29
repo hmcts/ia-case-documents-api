@@ -76,9 +76,9 @@ class InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplateTest {
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
-        assertEquals(internalCustomerServicesEmail, templateFieldValues.get("detainedEmail"));
+        assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("dueDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("tenDaysAfterSubmitDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
     }
 
@@ -103,9 +103,9 @@ class InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplateTest {
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
-        assertEquals(internalCustomerServicesEmail, templateFieldValues.get("detainedEmail"));
+        assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("dueDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("tenDaysAfterSubmitDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
     }
 
@@ -126,9 +126,9 @@ class InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplateTest {
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
-        assertEquals(null, templateFieldValues.get("detainedEmail"));
+        assertEquals(null, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(null, templateFieldValues.get("dueDate"));
+        assertEquals(null, templateFieldValues.get("tenDaysAfterSubmitDate"));
         assertEquals(null, templateFieldValues.get("customerServicesTelephone"));
     }
 

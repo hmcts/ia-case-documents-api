@@ -45,11 +45,11 @@ public class InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplate impl
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.put("detainedEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("dueDate", systemDateProvider.dueDate(daysAfterSubmitAppeal));
+        fieldValues.put("tenDaysAfterSubmitDate", systemDateProvider.dueDate(daysAfterSubmitAppeal));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
+        fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
 
         return fieldValues;
     }
