@@ -18,6 +18,7 @@
           "detentionFacility": "prison",
           "prisonNOMSNumber": "",
           "submissionOutOfTime": "Yes",
+          "appealSubmissionDate": "{$TODAY}",
           "appealType": "revocationOfProtection"
         }
       }
@@ -36,6 +37,7 @@
         "detentionFacility": "prison",
         "prisonNOMSNumber": "",
         "submissionOutOfTime": "Yes",
+        "appealSubmissionDate": "{$TODAY}",
         "appealType": "revocationOfProtection",
         "notificationAttachmentDocuments": [
           {
