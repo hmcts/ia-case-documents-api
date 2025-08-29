@@ -41,7 +41,7 @@
         "appealType": "revocationOfProtection",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "2",
             "value": {
               "tag": "internalDetainedAppealSubmittedOutOfTimeWithExemptionLetter",
               "document": {
