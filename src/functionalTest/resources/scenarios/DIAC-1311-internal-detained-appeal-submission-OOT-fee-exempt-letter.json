@@ -16,6 +16,7 @@
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "prison",
+          "prisonNOMSNumber": "",
           "submissionOutOfTime": "Yes",
           "appealType": "revocationOfProtection"
         }
