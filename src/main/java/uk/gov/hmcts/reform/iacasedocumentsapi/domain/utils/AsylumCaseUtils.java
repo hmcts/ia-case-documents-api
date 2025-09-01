@@ -60,12 +60,12 @@ public class AsylumCaseUtils {
 
     public static boolean hasAppellantAddressInCountryOrOoc(AsylumCase asylumCase) {
         boolean appellantHasFixedUkAddress = asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
-                .map(flag -> flag.equals(YES))
-                .orElse(false);
+            .map(flag -> flag.equals(YES))
+            .orElse(false);
 
         boolean appellantHasFixedOutOfCountryAddress = asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
-                .map(flag -> flag.equals(YES))
-                .orElse(false);
+            .map(flag -> flag.equals(YES))
+            .orElse(false);
 
         return appellantHasFixedUkAddress || appellantHasFixedOutOfCountryAddress || isDetainedInFacilityType(asylumCase, OTHER);
     }
@@ -233,6 +233,12 @@ public class AsylumCaseUtils {
 
     public static boolean isRemoteHearing(AsylumCase asylumCase) {
         return asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
+    }
+
+    public static boolean isVirtualHearing(AsylumCase asylumCase) {
+        return asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)
+            || asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .map(HearingCentre.IAC_NATIONAL_VIRTUAL::equals).orElse(false);
     }
 
     public static List<String> getAppellantAddressAsList(final AsylumCase asylumCase) {

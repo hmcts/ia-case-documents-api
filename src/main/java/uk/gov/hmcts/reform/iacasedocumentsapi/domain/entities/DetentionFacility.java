@@ -19,9 +19,9 @@ public enum DetentionFacility {
 
     public static DetentionFacility from(String value) {
         return stream(values())
-                .filter(v -> v.getValue().equals(value))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(value + " not a Detention Facility"));
+            .filter(v -> v.getValue().equals(value))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(value + " not a Detention Facility"));
     }
 
     public String getValue() {

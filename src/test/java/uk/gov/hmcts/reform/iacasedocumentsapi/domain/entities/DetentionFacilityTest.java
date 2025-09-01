@@ -31,8 +31,8 @@ public class DetentionFacilityTest {
     @Test
     public void throws_when_trying_to_create_from_invalid_value() {
         assertThatThrownBy(() -> DetentionFacility.from("invalid-value"))
-                .isExactlyInstanceOf(IllegalArgumentException.class)
-                .hasMessage("invalid-value not a Detention Facility");
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("invalid-value not a Detention Facility");
     }
 
     @Test
