@@ -39,6 +39,7 @@
         "submissionOutOfTime": "Yes",
         "appealSubmissionDate": "{$TODAY}",
         "appealType": "revocationOfProtection",
+        "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
             "id": "2",
