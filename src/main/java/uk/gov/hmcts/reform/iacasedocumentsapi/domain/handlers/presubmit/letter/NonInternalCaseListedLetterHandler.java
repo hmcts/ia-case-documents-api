@@ -1,13 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-
-import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -24,8 +16,17 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
+import java.util.List;
+
+import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+
 @Component
-public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class NonInternalCaseListedLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -34,7 +35,7 @@ public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalCaseListedLetterHandler(
+    public NonInternalCaseListedLetterHandler(
         @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -61,8 +62,9 @@ public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == LIST_CASE
-            && isInternalCase(asylumCase)
-            && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER))
+            && !isInternalCase(asylumCase)
+            && isAppellantInDetention(asylumCase)
+            && isDetainedInFacilityType(asylumCase, OTHER)
             && isEmStitchingEnabled;
     }
 

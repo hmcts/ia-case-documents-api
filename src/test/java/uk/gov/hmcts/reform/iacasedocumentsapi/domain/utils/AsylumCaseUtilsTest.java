@@ -578,7 +578,7 @@ public class AsylumCaseUtilsTest {
     @ParameterizedTest
     @CsvSource({
         "YES, YES, false",
-        "YES, NO, false", 
+        "YES, NO, false",
         "NO, YES, true",
         "NO, NO, false"
     })
