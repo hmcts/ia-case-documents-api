@@ -469,6 +469,11 @@ internalDetainedAdjournHearingWithoutDateLetter.fileExtension: PDF
 internalDetainedAdjournHearingWithoutDateLetter.fileName: "internal-detained-adjourn-hearing-without-date-letter"
 internalDetainedAdjournHearingWithoutDateLetter.templateName: ${INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00040.docx}
 
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.contentType: application/pdf
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileExtension: PDF
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00812.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
@@ -736,6 +741,7 @@ appellantDaysToWait:
   letter:
     afterSubmission: 28
     afterManageFeeUpdate: 14
+    afterSubmitAppeal: 10
 
 
 ### Email addresses
