@@ -19,7 +19,8 @@
           "prisonNOMSNumber": "",
           "submissionOutOfTime": "No",
           "appealSubmissionDate": "{$TODAY}",
-          "appealType": "revocationOfProtection"
+          "appealType": "revocationOfProtection",
+          "paymentStatus": "Payment pending"
         }
       }
     }
@@ -30,17 +31,18 @@
     "caseData": {
       "template": "minimal-appeal-started.json",
       "replacements": {
-        "isAdmin": "Yes",
-        "appellantsRepresentation": "Yes",
-        "appellantInDetention": "Yes",
-        "isAcceleratedDetainedAppeal": "No",
-        "detentionFacility": "prison",
-        "prisonNOMSNumber": "",
-        "submissionOutOfTime": "No",
-        "appealSubmissionDate": "{$TODAY}",
-        "appealType": "revocationOfProtection",
-        "appealReferenceNumber": "$/(.+)/",
-        "notificationAttachmentDocuments": [
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "prison",
+          "prisonNOMSNumber": "",
+          "submissionOutOfTime": "No",
+          "appealSubmissionDate": "{$TODAY}",
+          "appealType": "revocationOfProtection",
+          "paymentStatus": "Payment pending",
+          "appealReferenceNumber": "$/(.+)/",
+          "notificationAttachmentDocuments": [
           {
             "id": "1",
             "value": {
