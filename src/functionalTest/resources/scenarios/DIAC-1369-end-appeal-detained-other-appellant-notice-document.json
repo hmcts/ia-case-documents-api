@@ -1,5 +1,5 @@
 {
-  "description": "RIA-4324 generate end of appeal document PDF - Appellant journey",
+  "description": "DIAC-1369 generate end of appeal document PDF - Appellant (detained in other) manual journey",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -33,6 +33,11 @@
     "caseData": {
       "template": "minimal-aip-appeal-submitted.json",
       "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "other",
+        "appellantHasFixedAddress": "Yes",
         "letterBundleDocuments": [
           {
             "id": "1",
