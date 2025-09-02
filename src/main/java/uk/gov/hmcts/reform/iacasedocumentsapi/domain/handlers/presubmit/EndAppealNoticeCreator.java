@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
@@ -19,7 +20,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyT
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-
 
 @Component
 public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -66,7 +66,7 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
 
         Document endAppealNotice;
 
-        if (isAipJourney) {
+        if (isAipJourney || hasBeenSubmittedByAppellantInternalCase(asylumCase)) {
             endAppealNotice = endAppealAppellantNoticeDocumentCreator.create(caseDetails);
         } else {
             endAppealNotice = endAppealNoticeDocumentCreator.create(caseDetails);
@@ -86,6 +86,16 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
                 endAppealNotice,
                 LETTER_NOTIFICATION_DOCUMENTS,
                 DocumentTag.INTERNAL_END_APPEAL_LETTER
+            );
+        }
+
+        if ((hasBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))
+            && hasAppellantAddressInCountryOrOoc(asylumCase)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                endAppealNotice,
+                LETTER_BUNDLE_DOCUMENTS,
+                DocumentTag.END_APPEAL
             );
         }
 
