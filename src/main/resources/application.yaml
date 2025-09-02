@@ -270,6 +270,11 @@ internalAppealSubmissionDocument.fileExtension: PDF
 internalAppealSubmissionDocument.fileName: "appeal-form"
 internalAppealSubmissionDocument.templateName: ${IA_INTERNAL_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-DEC-ENG-00010.docx}
 
+internalDetainedPrisonIrcAppealSubmissionDocument.contentType: application/pdf
+internalDetainedPrisonIrcAppealSubmissionDocument.fileExtension: PDF
+internalDetainedPrisonIrcAppealSubmissionDocument.fileName: "detained-prison-irc-appellant-appeal-submission-notice"
+internalDetainedPrisonIrcAppealSubmissionDocument.templateName: ${IA_INTERNAL_DETAINED_PRISON_IRC_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-Case-Submitted.docx}
+
 internalAppealCanProceedDocument.contentType: application/pdf
 internalAppealCanProceedDocument.fileExtension: PDF
 internalAppealCanProceedDocument.fileName: "appeal-form"
