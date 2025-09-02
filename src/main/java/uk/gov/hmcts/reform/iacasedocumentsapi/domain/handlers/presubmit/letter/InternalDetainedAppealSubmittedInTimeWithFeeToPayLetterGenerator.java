@@ -50,15 +50,15 @@ public class InternalDetainedAppealSubmittedInTimeWithFeeToPayLetterGenerator im
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        boolean submissionOutOfTime = asylumCase
+        boolean submissionInTime = asylumCase
                 .read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)
-                .map(yesOrNo -> yesOrNo == YES)
+                .map(yesOrNo -> yesOrNo == YesOrNo.NO)
                 .orElse(false);
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.SUBMIT_APPEAL
                 && isInternalCase(asylumCase)
-                && !submissionOutOfTime
+                && submissionInTime
                 && !isFeeExemptAppeal(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                 && !isAcceleratedDetainedAppeal(asylumCase);
