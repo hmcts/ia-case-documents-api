@@ -21,7 +21,7 @@ import java.util.Objects;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
@@ -50,15 +50,15 @@ public class InternalDetainedAppealSubmittedInTimeWithFeeToPayLetterGenerator im
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        boolean submissionInTime = asylumCase
+        boolean submissionOutOfTime = asylumCase
                 .read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)
-                .map(yesOrNo -> yesOrNo == NO)
+                .map(yesOrNo -> yesOrNo == YES)
                 .orElse(false);
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.SUBMIT_APPEAL
                 && isInternalCase(asylumCase)
-                && submissionInTime
+                && !submissionOutOfTime
                 && !isFeeExemptAppeal(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                 && !isAcceleratedDetainedAppeal(asylumCase);
