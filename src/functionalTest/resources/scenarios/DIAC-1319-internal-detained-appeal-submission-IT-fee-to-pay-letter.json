@@ -4,7 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "id": 1311,
+      "id": 1319,
       "eventId": "submitAppeal",
       "state": "appealStarted",
       "caseData": {
@@ -42,7 +42,7 @@
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
-            "id": "2",
+            "id": "1",
             "value": {
               "tag": "internalDetainedAppealSubmittedInTimeWithFeeToPayLetter",
               "document": {
