@@ -615,4 +615,30 @@ public class AsylumCaseUtilsTest {
         assertFalse(isFeeExemptAppeal(asylumCase));
     }
 
+    @Test
+    void should_return_true_handle_has_been_submitted_internal_case() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void should_return_false_handle_has_been_submitted_internal_case() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void should_return_false_handle_has_been_submitted_internal_case_if_missing_field() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertFalse(result);
+    }
 }
