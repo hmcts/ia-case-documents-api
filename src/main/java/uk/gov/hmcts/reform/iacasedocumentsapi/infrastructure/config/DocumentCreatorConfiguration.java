@@ -1763,4 +1763,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedAppealSubmissionWithExemptionLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealSubmissionWithExemptionLetterDocumentCreator(
+        @Value("${internalDetainedAppealSubmissionWithExemptionLetter.contentType}") String contentType,
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedAppealSubmissionWithExemptionTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 }
