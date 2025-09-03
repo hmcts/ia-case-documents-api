@@ -406,15 +406,16 @@ public class AsylumCaseUtils {
         return detentionFacility.equals(facilityType.getValue());
     }
 
-    public static boolean isLegalRepCaseForDetainedAppellant(AsylumCase asylumCase) {
-        return (!isInternalCase(asylumCase)) && isDetainedAppeal(asylumCase);
-    }
-
     public static Boolean isFeeExemptAppeal(AsylumCase asylumCase) {
         return asylumCase
             .read(APPEAL_TYPE, AsylumAppealType.class)
             .map(type -> type == RP || type == DC)
             .orElse(false);
+    }
+
+    public static boolean hasBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)
+            .map(yesOrNo -> YES == yesOrNo).orElse(false);
     }
 
 }
