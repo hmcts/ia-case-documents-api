@@ -57,6 +57,7 @@ public class InternalDetainedAppealSubmittedWithExemptionLetterGenerator impleme
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == Event.SUBMIT_APPEAL
                && isInternalCase(asylumCase)
+               && !submissionOutOfTime
                && isFeeExemptAppeal(asylumCase)
                && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                && !isAcceleratedDetainedAppeal(asylumCase);
