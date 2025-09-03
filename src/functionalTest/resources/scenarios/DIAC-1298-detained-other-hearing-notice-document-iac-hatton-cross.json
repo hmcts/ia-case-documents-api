@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1976-RIA-2804 Create hearing notice PDF (IAC Hatton Cross)",
+  "description": "DIAC-1298 Create hearing notice for detained appeal (other)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -12,6 +12,16 @@
           "hearingDocuments": [],
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "appellantHasFixedAddress": "Yes",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
           "listCaseHearingCentre": "hattonCross",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
@@ -50,6 +60,16 @@
         ],
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "appellantHasFixedAddress": "Yes",
+        "appellantInUk": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
         "listCaseHearingCentre": "hattonCross",
         "listCaseHearingLength": "60",
         "listCaseHearingDate": "2018-12-31T12:34:56",
