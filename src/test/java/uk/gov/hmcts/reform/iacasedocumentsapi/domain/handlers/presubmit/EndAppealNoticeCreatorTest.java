@@ -148,7 +148,7 @@ public class EndAppealNoticeCreatorTest {
         verify(endAppealAppellantNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(endAppealNoticeDocumentCreator, times(0)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, TRIBUNAL_DOCUMENTS, DocumentTag.END_APPEAL);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.END_APPEAL);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_END_APPEAL_LETTER);
     }
 
     @Test

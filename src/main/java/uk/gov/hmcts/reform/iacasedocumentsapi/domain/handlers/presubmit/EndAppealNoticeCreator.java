@@ -94,8 +94,8 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 endAppealNotice,
-                LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.END_APPEAL
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_END_APPEAL_LETTER
             );
         }
 
