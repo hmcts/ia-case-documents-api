@@ -1769,7 +1769,7 @@ public class DocumentCreatorConfiguration {
             @Value("${internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileExtension}") String fileExtension,
             @Value("${internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplate documentTemplate,
+            InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
