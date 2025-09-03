@@ -21,6 +21,8 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
@@ -47,6 +49,9 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
+    private final String onlineCaseRefNumber = "1234-5678-9012-3456";
+    private final String feeAmountInPence = "15400";
+    private final String feeAmountFormatted = "154.00";
 
     private InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplate template;
 
@@ -71,7 +76,7 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -79,8 +84,10 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("tenDaysAfterSubmitDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("daysAfterSubmissionDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
+        assertEquals(feeAmountFormatted, templateFieldValues.get("feeAmount"));
+        assertEquals(Optional.of(onlineCaseRefNumber), templateFieldValues.get("onlineCaseRefNumber"));
     }
 
     @Test
@@ -98,7 +105,7 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -106,8 +113,10 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("tenDaysAfterSubmitDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("daysAfterSubmissionDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
+        assertEquals("", templateFieldValues.get("feeAmount"));
+        assertEquals(Optional.empty(), templateFieldValues.get("onlineCaseRefNumber"));
     }
 
     @Test
@@ -118,10 +127,11 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(null);
 
         dataSetUpPersonalisation();
+        dataSetUpNewFields();
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -129,8 +139,10 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(null, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(null, templateFieldValues.get("tenDaysAfterSubmitDate"));
+        assertEquals(null, templateFieldValues.get("daysAfterSubmissionDate"));
         assertEquals(null, templateFieldValues.get("customerServicesTelephone"));
+        assertEquals(feeAmountFormatted, templateFieldValues.get("feeAmount"));
+        assertEquals(Optional.of(onlineCaseRefNumber), templateFieldValues.get("onlineCaseRefNumber"));
     }
 
     private void dataSetUp() {
@@ -140,6 +152,7 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(formatDateForNotificationAttachmentDocument(dueDate));
 
         dataSetUpPersonalisation();
+        dataSetUpNewFields();
     }
 
     private void dataSetUpPersonalisation() {
@@ -147,5 +160,10 @@ class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+    }
+
+    private void dataSetUpNewFields() {
+        when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.of(feeAmountInPence));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
     }
 }
