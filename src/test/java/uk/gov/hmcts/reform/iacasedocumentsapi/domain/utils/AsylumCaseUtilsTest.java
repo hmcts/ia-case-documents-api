@@ -11,6 +11,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.NO_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -688,5 +689,30 @@ public class AsylumCaseUtilsTest {
         boolean result = AsylumCaseUtils.isSubmissionOutOfTime(asylumCase);
 
         assertFalse(result);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"RP", "DC"})
+    void should_return_true_for_fee_exempt_appeal_types(String appealTypeValue) {
+        AsylumAppealType appealType = AsylumAppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertTrue(isFeeExemptAppeal(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PA", "EA", "HU", "EU"})
+    void should_return_false_for_non_fee_exempt_appeal_types(String appealTypeValue) {
+        AsylumAppealType appealType = AsylumAppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_appeal_type_is_not_present() {
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
     }
 }

@@ -98,6 +98,8 @@ public enum DocumentTag {
     INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_CASE_LISTING_LETTER("internalEditCaseListingLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE("internalEditCaseListingLetterBundle", CaseType.ASYLUM),
+    INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER("internalDetainedAppealSubmittedOutOfTimeWithExemptionLetter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER("internalDetainedAppealSubmittedInTimeWithFeeToPayLetter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
