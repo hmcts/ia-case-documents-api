@@ -7,6 +7,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isVirtualHearing;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -112,7 +114,9 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             //IS_REMOTE_HEARING is used for the case ref data
             if ((!isCaseUsingLocationRefData && asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .equals(Optional.of(HearingCentre.REMOTE_HEARING)))
-                    || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
+                    || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))
+                    || isVirtualHearing(asylumCase)
+            ) {
                 generateDocument(caseDetails, asylumCase, caseDetailsBefore, remoteHearingNoticeUpdatedDetailsDocumentCreator);
             } else if (hearingCentreNameBefore.equals(listCaseHearingCentre) && Objects.equals(oldHearingDate, hearingDate)) {
                 if (isAda) {
