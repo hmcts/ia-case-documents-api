@@ -17,21 +17,22 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixtures;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
 
 class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
-        WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithStitchingStub {
+        WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithStitchingStub, WithRoleAssignmentStub {
 
     private static final String STITCH_API_PATH = "/api/new-bundle";
 
     @Test
-    @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
+    @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void should_return_500_with_correct_message_when_api_returns_500() throws Exception {
         addServiceAuthStub(server);
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
         withDefaults(server);
         addNewStitchingBundleStub(server);
+        addRoleAssignmentActorStub(server);
 
         someLoggedIn(userWith()
-            .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))
+            .roles(newHashSet("caseworker-ia", "tribunal-caseworker"))
             .forename("Case")
             .surname("Officer"), server);
 
@@ -54,16 +55,17 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
     }
 
     @Test
-    @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
+    @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void should_return_500_with_correct_message_when_api_returns_400() throws Exception {
         addServiceAuthStub(server);
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
         withDefaults(server);
         addNewStitchingBundleError400Stub(server);
+        addRoleAssignmentActorStub(server);
 
         someLoggedIn(userWith()
-            .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))
+            .roles(newHashSet("caseworker-ia", "tribunal-caseworker"))
             .forename("Case")
             .surname("Officer"), server);
 
