@@ -40,7 +40,10 @@
     "caseData": {
       "template": "minimal-aip-appeal-submitted.json",
       "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
+        "isAcceleratedAppeal": "No",
         "detentionFacility": "other",
         "appellantHasFixedAddress": "Yes",
         "appellantInUk": "Yes",
