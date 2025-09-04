@@ -10,6 +10,7 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "isAdmin": "Yes",
+          "appealSubmissionDate": "{$TODAY}",
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "isAcceleratedAppeal": "No",
