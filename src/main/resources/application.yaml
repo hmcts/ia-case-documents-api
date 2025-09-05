@@ -479,6 +479,11 @@ internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileExtension: PDF
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.templateName: ${IA_APPEAL_SUBMISSION_IN_TIME_WITH_FEE_T_PAY_TEMPLATE:TB-IAC-LET-ENG-00816.docx}
 
+internalDetainedOutOfTimeDecisionAllowedLetter.contentType: application/pdf
+internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension: PDF
+internalDetainedOutOfTimeDecisionAllowedLetter.fileName: "appeal-form"
+internalDetainedOutOfTimeDecisionAllowedLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER:TB-IAC-LET-ENG-00816.docx}
+
 
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
@@ -749,6 +754,7 @@ appellantDaysToWait:
     afterManageFeeUpdate: 14
     afterSubmitAppeal: 10
     afterSubmitAppealWithFeeToPay: 14
+    tribunalDocumentToSendTimeline: 4
 
 
 ### Email addresses
