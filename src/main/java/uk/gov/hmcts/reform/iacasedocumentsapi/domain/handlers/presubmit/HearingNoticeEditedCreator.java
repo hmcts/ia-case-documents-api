@@ -3,9 +3,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isVirtualHearing;
@@ -172,6 +174,15 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
 
         if (isInternalNonDetainedCase(asylumCase)
             && hasAppellantAddressInCountryOrOoc(asylumCase)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNoticeEdited,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
+            );
+        }
+
+        if (isDetainedInFacilityType(asylumCase, OTHER)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,

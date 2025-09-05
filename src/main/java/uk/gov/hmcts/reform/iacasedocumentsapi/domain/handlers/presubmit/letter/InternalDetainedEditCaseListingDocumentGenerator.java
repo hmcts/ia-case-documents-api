@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,7 +45,7 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == Event.EDIT_CASE_LISTING
             && isInternalCase(asylumCase)
-            && isAppellantInDetention(asylumCase);
+            && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

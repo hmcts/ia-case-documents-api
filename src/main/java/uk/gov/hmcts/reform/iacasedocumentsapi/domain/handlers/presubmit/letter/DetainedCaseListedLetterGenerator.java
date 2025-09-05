@@ -1,16 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.EDIT_CASE_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
-
-import java.util.Objects;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -24,14 +13,21 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
+import java.util.Objects;
+
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+
 @Component
-public class InternalEditCaseListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalEditCaseListingLetterGenerator(
-        @Qualifier("internalEditCaseListingLetter") DocumentCreator<AsylumCase> documentCreator,
+    public DetainedCaseListedLetterGenerator(
+        @Qualifier("internalCaseListedLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
@@ -48,10 +44,8 @@ public class InternalEditCaseListingLetterGenerator implements PreSubmitCallback
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == EDIT_CASE_LISTING
-               && isInternalCase(asylumCase)
-               && (!isAppellantInDetention(asylumCase) || (isDetainedInFacilityType(asylumCase, OTHER) && hasBeenSubmittedByAppellantInternalCase(asylumCase)))
-               && hasAppellantAddressInCountryOrOoc(asylumCase);
+               && callback.getEvent() == LIST_CASE
+               && isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -64,16 +58,14 @@ public class InternalEditCaseListingLetterGenerator implements PreSubmitCallback
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
-        final Optional<CaseDetails<AsylumCase>> caseDetailsBefore = callback.getCaseDetailsBefore();
 
-        Document internalEditCaseListingLetter = documentCreator.create(caseDetails,  caseDetailsBefore
-            .orElseThrow(() -> new IllegalStateException("previous case data is not present")));
+        Document internalCaseListedLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalEditCaseListingLetter,
+            internalCaseListedLetter,
             LETTER_NOTIFICATION_DOCUMENTS,
-            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
+            DocumentTag.INTERNAL_CASE_LISTED_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

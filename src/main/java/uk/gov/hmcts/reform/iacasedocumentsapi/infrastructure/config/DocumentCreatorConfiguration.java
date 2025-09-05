@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.*;
 
+@Slf4j
 @Configuration
 public class DocumentCreatorConfiguration {
 
@@ -749,6 +751,27 @@ public class DocumentCreatorConfiguration {
                 documentTemplate,
                 documentGenerator,
                 documentUploader
+        );
+    }
+
+    @Bean("internalDetainedPrisonIrcAppealSubmission")
+    public DocumentCreator<AsylumCase> getInternalDetainedPrisonIrcAppealSubmissionDocumentCreator(
+        @Value("${internalDetainedPrisonIrcAppealSubmissionDocument.contentType}") String contentType,
+        @Value("${internalDetainedPrisonIrcAppealSubmissionDocument.fileExtension}") String fileExtension,
+        @Value("${internalDetainedPrisonIrcAppealSubmissionDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedPrisonIrcAppealSubmissionTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
         );
     }
 
@@ -1741,4 +1764,47 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealSubmissionOutOfTimeWithExemptionLetterDocumentCreator(
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.contentType}") String contentType,
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalDetainedAppealSubmissionInTimeWithFeeToPayLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealSubmissionInTimeWithFeeToPayLetterDocumentCreator(
+            @Value("${internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.contentType}") String contentType,
+            @Value("${internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }

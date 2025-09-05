@@ -631,6 +631,10 @@ public enum AsylumCaseDefinition {
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
     ),
+
+    APPELLANTS_REPRESENTATION(
+            "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
+
     DETENTION_FACILITY(
             "detentionFacility", new TypeReference<String>(){}),
 
@@ -827,7 +831,17 @@ public enum AsylumCaseDefinition {
             "feeUpdateReason", new TypeReference<FeeUpdateReason>(){}),
 
     NOTIFICATIONS(
-            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){})
+            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){}),
+
+    DETENTION_BUILDING(
+            "detentionBuilding", new TypeReference<String>(){}),
+
+    DETENTION_ADDRESS_LINES(
+            "detentionAddressLines", new TypeReference<String>(){}),
+
+    DETENTION_POSTCODE(
+            "detentionPostcode", new TypeReference<String>(){}),
+
     ;
 
     private final String value;
