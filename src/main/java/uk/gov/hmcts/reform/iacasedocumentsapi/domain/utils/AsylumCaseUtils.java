@@ -388,9 +388,4 @@ public class AsylumCaseUtils {
             .orElse(false);
     }
 
-    public static boolean hasBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
-        return asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)
-            .map(yesOrNo -> YES == yesOrNo).orElse(false);
-    }
-
 }
