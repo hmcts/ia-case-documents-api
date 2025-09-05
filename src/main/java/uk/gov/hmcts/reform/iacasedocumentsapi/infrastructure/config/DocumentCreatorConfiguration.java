@@ -1744,6 +1744,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedOutOfTimeDecisionAllowedLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedOutOfTimeDecisionAllowedLetterDocumentCreator(
+            @Value("${internalDetainedOutOfTimeDecisionAllowedLetter.contentType}") String contentType,
+            @Value("${internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedOutOfTimeDecisionAllowedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedOutOfTimeDecisionAllowedTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalEditCaseListingLetter")
     public DocumentCreator<AsylumCase> getinternalEditCaseListingLetterDocumentCreator(
         @Value("${internalEditCaseListingLetter.contentType}") String contentType,

@@ -101,6 +101,7 @@ class DocumentTagTest {
         assertEquals("internalEditCaseListingLetterBundle", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE.toString());
         assertEquals("internalDetainedAppealSubmittedOutOfTimeWithExemptionLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER.toString());
         assertEquals("internalDetainedAppealSubmittedInTimeWithFeeToPayLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER.toString());
+        assertEquals("internalDetainedOutOfTimeDecisionAllowedLetter", DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER.toString());
     }
 
     @Test
