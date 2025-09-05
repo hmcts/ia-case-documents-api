@@ -311,7 +311,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             }
             case INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER -> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 91;
+                yield 92;
             }
             case NONE ->  93;
             default ->
