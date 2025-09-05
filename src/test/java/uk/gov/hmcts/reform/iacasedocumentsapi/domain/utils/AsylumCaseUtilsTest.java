@@ -597,12 +597,12 @@ public class AsylumCaseUtilsTest {
     void should_return_due_date_plus_weeks() {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.of("2023-08-01"));
-
+      
         String result = AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 2);
 
         // 2023-08-01 + 2 weeks = 2023-08-15
         assertThat(result).isEqualTo(DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 15)));
-    }
+    }      
 
     @Test
     void should_return_due_date_plus_days() {
@@ -630,6 +630,26 @@ public class AsylumCaseUtilsTest {
 
         assertThrows(IllegalStateException.class, () -> AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 5));
     }
+
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class)
+    void should_return_correct_value_for_hasBeenSubmittedByAppellantInternalCase(YesOrNo yesOrNo) {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
+
+        if (yesOrNo.equals(YES)) {
+            assertTrue(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+        } else {
+            assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+        }
+    }
+
+    @Test
+    void should_return_false_when_appellants_representation_is_not_present() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
+
+        assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+    }
+
 
     @Test
     void should_return_true_handle_has_been_submitted_internal_case() {
