@@ -632,6 +632,9 @@ public enum AsylumCaseDefinition {
             "appellantInDetention", new TypeReference<YesOrNo>() {}
     ),
 
+    APPELLANTS_REPRESENTATION(
+            "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
+
     DETENTION_FACILITY(
             "detentionFacility", new TypeReference<String>(){}),
 
