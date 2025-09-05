@@ -662,9 +662,6 @@ public enum AsylumCaseDefinition {
     IS_ADMIN(
             "isAdmin", new TypeReference<YesOrNo>() {}),
 
-    APPELLANTS_REPRESENTATION(
-            "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
-
     HAS_OTHER_APPEALS(
             "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {}),
 
