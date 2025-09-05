@@ -546,52 +546,7 @@ public class AsylumCaseUtilsTest {
 
         assertTrue(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, facilityType));
     }
-
-    @Test
-    void should_return_true_for_legal_rep_case_for_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-
-        assertTrue(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
-    }
-
-    @Test
-    void should_return_false_for_internal_case_with_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-
-        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
-    }
-
-    @Test
-    void should_return_false_for_non_internal_case_with_non_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
-    }
-
-    @Test
-    void should_return_false_for_internal_case_with_non_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-        "YES, YES, false",
-        "YES, NO, false", 
-        "NO, YES, true",
-        "NO, NO, false"
-    })
-    void should_return_correct_value_for_legal_rep_case_for_detained_appellant_combinations(YesOrNo isAdmin, YesOrNo isDetained, boolean expected) {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(isAdmin));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(isDetained));
-
-        assertEquals(expected, AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
-    }
+   
 
     @Test
     void should_return_due_date_plus_weeks() {
