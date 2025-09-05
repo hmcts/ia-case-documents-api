@@ -32,7 +32,6 @@
           "isAdmin": "Yes",
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "Yes",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Harmondsworth",
           "submissionOutOfTime": "Yes",
