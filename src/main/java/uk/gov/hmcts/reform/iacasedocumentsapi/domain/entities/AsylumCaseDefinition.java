@@ -840,6 +840,7 @@ public enum AsylumCaseDefinition {
 
     DETENTION_POSTCODE(
             "detentionPostcode", new TypeReference<String>(){}),
+
     ;
 
     private final String value;

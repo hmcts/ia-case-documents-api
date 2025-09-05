@@ -381,10 +381,6 @@ public class AsylumCaseUtils {
         return detentionFacility.equals(facilityType.getValue());
     }
 
-    public static boolean isLegalRepCaseForDetainedAppellant(AsylumCase asylumCase) {
-        return (!isInternalCase(asylumCase)) && isDetainedAppeal(asylumCase);
-    }
-
     public static Boolean isFeeExemptAppeal(AsylumCase asylumCase) {
         return asylumCase
             .read(APPEAL_TYPE, AsylumAppealType.class)
