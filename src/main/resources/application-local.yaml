@@ -1,2 +1,0 @@
-logging.level.root: debug
-logging.level.org.springframework.web: debug
