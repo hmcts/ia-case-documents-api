@@ -841,8 +841,6 @@ public enum AsylumCaseDefinition {
     DETENTION_POSTCODE(
             "detentionPostcode", new TypeReference<String>(){}),
 
-    APPELLANTS_REPRESENTATION(
-        "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
     ;
 
     private final String value;
