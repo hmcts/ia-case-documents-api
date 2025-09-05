@@ -631,6 +631,10 @@ public enum AsylumCaseDefinition {
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
     ),
+
+    APPELLANTS_REPRESENTATION(
+            "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
+
     DETENTION_FACILITY(
             "detentionFacility", new TypeReference<String>(){}),
 
@@ -660,9 +664,6 @@ public enum AsylumCaseDefinition {
 
     IS_ADMIN(
             "isAdmin", new TypeReference<YesOrNo>() {}),
-
-    APPELLANTS_REPRESENTATION(
-            "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
 
     HAS_OTHER_APPEALS(
             "hasOtherAppeals", new TypeReference<HasOtherAppeals>() {}),
@@ -840,6 +841,7 @@ public enum AsylumCaseDefinition {
 
     DETENTION_POSTCODE(
             "detentionPostcode", new TypeReference<String>(){}),
+
     ;
 
     private final String value;

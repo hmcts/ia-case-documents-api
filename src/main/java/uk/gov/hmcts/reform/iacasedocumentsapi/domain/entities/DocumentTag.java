@@ -11,6 +11,7 @@ public enum DocumentTag {
     APPEAL_RESPONSE("appealResponse", CaseType.ASYLUM),
     APPEAL_SUBMISSION("appealSubmission", CaseType.ASYLUM),
     INTERNAL_APPEAL_SUBMISSION("internalAppealSubmission", CaseType.ASYLUM),
+    INTERNAL_DETAINED_PRISON_IRC_APPEAL_SUBMISSION("internalDetainedPrisonIrcAppealSubmission", CaseType.ASYLUM),
     ADDITIONAL_EVIDENCE("additionalEvidence", CaseType.ASYLUM),
     HEARING_REQUIREMENTS("hearingRequirements", CaseType.ASYLUM),
     HEARING_NOTICE("hearingNotice", CaseType.ASYLUM),

@@ -146,6 +146,14 @@ public class AsylumCaseUtils {
         return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusWeeks(numberOfWeeks));
     }
 
+    public static String dueDatePlusNumberOfDays(AsylumCase asylumCase, int numberOfDays) {
+        LocalDate appealSubmissionDate = asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)
+                .map(LocalDate::parse)
+                .orElseThrow(() -> new IllegalStateException("Appeal submission date is missing"));
+
+        return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusDays(numberOfDays));
+    }
+
     public static String formatDateForRendering(String date, DateTimeFormatter formatter) {
         if (!Strings.isNullOrEmpty(date)) {
             return LocalDate.parse(date).format(formatter);
@@ -381,8 +389,8 @@ public class AsylumCaseUtils {
         return detentionFacility.equals(facilityType.getValue());
     }
 
-    public static boolean isLegalRepCaseForDetainedAppellant(AsylumCase asylumCase) {
-        return (!isInternalCase(asylumCase)) && isDetainedAppeal(asylumCase);
+    public static boolean isSubmissionOutOfTime(AsylumCase asylumCase) {
+        return asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(NO).equals(YES);
     }
 
     public static Boolean isFeeExemptAppeal(AsylumCase asylumCase) {
