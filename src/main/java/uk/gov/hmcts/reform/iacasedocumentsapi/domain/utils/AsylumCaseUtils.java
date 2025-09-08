@@ -1,9 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.DC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.RP;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EA;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EU;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -15,15 +19,30 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 
@@ -52,6 +71,11 @@ public class AsylumCaseUtils {
 
     public static boolean isInternalCase(AsylumCase asylumCase) {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
+    }
+
+    public static boolean hasBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+                .map(yesOrNo -> YES == yesOrNo).orElse(false);
     }
 
     public static boolean isInternalNonDetainedCase(AsylumCase asylumCase) {
@@ -120,6 +144,14 @@ public class AsylumCaseUtils {
                 .orElseThrow(() -> new IllegalStateException("appealSubmissionDate is missing"));
 
         return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusWeeks(numberOfWeeks));
+    }
+
+    public static String dueDatePlusNumberOfDays(AsylumCase asylumCase, int numberOfDays) {
+        LocalDate appealSubmissionDate = asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)
+                .map(LocalDate::parse)
+                .orElseThrow(() -> new IllegalStateException("Appeal submission date is missing"));
+
+        return formatDateForNotificationAttachmentDocument(appealSubmissionDate.plusDays(numberOfDays));
     }
 
     public static String formatDateForRendering(String date, DateTimeFormatter formatter) {
@@ -357,7 +389,15 @@ public class AsylumCaseUtils {
         return detentionFacility.equals(facilityType.getValue());
     }
 
-    public static boolean isLegalRepCaseForDetainedAppellant(AsylumCase asylumCase) {
-        return (!isInternalCase(asylumCase)) && isDetainedAppeal(asylumCase);
+    public static boolean isSubmissionOutOfTime(AsylumCase asylumCase) {
+        return asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class).orElse(NO).equals(YES);
     }
+
+    public static Boolean isFeeExemptAppeal(AsylumCase asylumCase) {
+        return asylumCase
+            .read(APPEAL_TYPE, AsylumAppealType.class)
+            .map(type -> type == RP || type == DC)
+            .orElse(false);
+    }
+
 }
