@@ -27,7 +27,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 
 @Component
 public class InternalRecordOutOfTimeDecisionLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
