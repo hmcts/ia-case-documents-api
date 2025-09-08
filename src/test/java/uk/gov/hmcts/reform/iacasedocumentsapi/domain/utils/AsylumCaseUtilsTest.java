@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -9,7 +11,9 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.NO_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -542,51 +546,148 @@ public class AsylumCaseUtilsTest {
 
         assertTrue(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, facilityType));
     }
+   
 
     @Test
-    void should_return_true_for_legal_rep_case_for_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+    void should_return_due_date_plus_weeks() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.of("2023-08-01"));
+      
+        String result = AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 2);
 
-        assertTrue(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+        // 2023-08-01 + 2 weeks = 2023-08-15
+        assertThat(result).isEqualTo(DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 15)));
+    }      
+
+    @Test
+    void should_return_due_date_plus_days() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.of("2023-08-01"));
+
+        String result = AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 10);
+
+        // 2023-08-01 + 10 days = 2023-08-11
+        assertThat(result).isEqualTo(DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 11)));
     }
 
     @Test
-    void should_return_false_for_internal_case_with_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+    void should_throw_if_submission_date_missing_in_plus_weeks() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
 
-        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+        assertThrows(IllegalStateException.class, () -> AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 1));
     }
 
     @Test
-    void should_return_false_for_non_internal_case_with_non_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+    void should_throw_if_submission_date_missing_in_plus_days() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
 
-        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
-    }
-
-    @Test
-    void should_return_false_for_internal_case_with_non_detained_appellant() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        assertFalse(AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+        assertThrows(IllegalStateException.class, () -> AsylumCaseUtils.dueDatePlusNumberOfDays(asylumCase, 5));
     }
 
     @ParameterizedTest
-    @CsvSource({
-        "YES, YES, false",
-        "YES, NO, false", 
-        "NO, YES, true",
-        "NO, NO, false"
-    })
-    void should_return_correct_value_for_legal_rep_case_for_detained_appellant_combinations(YesOrNo isAdmin, YesOrNo isDetained, boolean expected) {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(isAdmin));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(isDetained));
+    @EnumSource(value = YesOrNo.class)
+    void should_return_correct_value_for_hasBeenSubmittedByAppellantInternalCase(YesOrNo yesOrNo) {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
-        assertEquals(expected, AsylumCaseUtils.isLegalRepCaseForDetainedAppellant(asylumCase));
+        if (yesOrNo.equals(YES)) {
+            assertTrue(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+        } else {
+            assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+        }
     }
 
+    @Test
+    void should_return_false_when_appellants_representation_is_not_present() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
+
+        assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+    }
+
+
+    @Test
+    void should_return_true_handle_has_been_submitted_internal_case() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void should_return_false_handle_has_been_submitted_internal_case() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void should_return_false_handle_has_been_submitted_internal_case_if_missing_field() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
+
+        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void should_return_true_submission_out_of_time() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        boolean result = AsylumCaseUtils.isSubmissionOutOfTime(asylumCase);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void should_return_false_submission_out_of_time() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        boolean result = AsylumCaseUtils.isSubmissionOutOfTime(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void should_return_false_submission_out_of_time_if_missing_field() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty());
+
+        boolean result = AsylumCaseUtils.isSubmissionOutOfTime(asylumCase);
+
+        assertFalse(result);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"RP", "DC"})
+    void should_return_true_for_fee_exempt_appeal_types(String appealTypeValue) {
+        AsylumAppealType appealType = AsylumAppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertTrue(isFeeExemptAppeal(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PA", "EA", "HU", "EU"})
+    void should_return_false_for_non_fee_exempt_appeal_types(String appealTypeValue) {
+        AsylumAppealType appealType = AsylumAppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_appeal_type_is_not_present() {
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
+    }
 }
