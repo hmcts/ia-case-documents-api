@@ -72,10 +72,10 @@ class InternalDetainedAppealRemissionGrantedInTimeLetterGeneratorTest {
         verify(documentCreator).create(caseDetails);
 
         verify(documentHandler).addWithMetadata(
-                eq(asylumCase),
-                eq(document),
-                eq(NOTIFICATION_ATTACHMENT_DOCUMENTS),
-                eq(DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER)
+                asylumCase,
+                document,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER
         );
     }
 
