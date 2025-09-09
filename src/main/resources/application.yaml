@@ -484,6 +484,10 @@ internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileExtension: PDF
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.templateName: ${IA_APPEAL_SUBMISSION_IN_TIME_WITH_FEE_T_PAY_TEMPLATE:TB-IAC-LET-ENG-00816.docx}
 
+internalDetainedAppealRemissionGrantedInTimeLetter.contentType: application/pdf
+internalDetainedAppealRemissionGrantedInTimeLetter.fileExtension: PDF
+internalDetainedAppealRemissionGrantedInTimeLetter.fileName: "appeal-form"
+internalDetainedAppealRemissionGrantedInTimeLetter.templateName: ${IA_APPEAL_SUBMISSION_IN_TIME_WITH_FEE_T_PAY_TEMPLATE:TB-IAC-LET-ENG-00816.docx}
 
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
