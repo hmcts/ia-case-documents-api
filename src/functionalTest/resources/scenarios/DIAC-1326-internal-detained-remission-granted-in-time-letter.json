@@ -48,7 +48,7 @@
           "amountRemitted": 140,
           "notificationAttachmentDocuments": [
           {
-            "id": "2",
+            "id": "1",
             "value": {
               "tag": "internalDetainedAppealRemissionGrantedInTimeLetter",
               "document": {
