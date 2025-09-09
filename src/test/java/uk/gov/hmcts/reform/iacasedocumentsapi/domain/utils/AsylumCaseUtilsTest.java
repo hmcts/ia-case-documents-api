@@ -243,6 +243,36 @@ public class AsylumCaseUtilsTest {
                 .hasMessage("Remission type not found");
     }
 
+    @Test
+    void shouldReturnTrue_whenRemissionDecisionIsApproved() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(RemissionDecision.APPROVED));
+
+        boolean result = AsylumCaseUtils.isRemissionApproved(asylumCase);
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalse_whenRemissionDecisionIsRejected() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(RemissionDecision.REJECTED));
+
+        boolean result = AsylumCaseUtils.isRemissionApproved(asylumCase);
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void shouldReturnFalse_whenRemissionDecisionIsEmpty() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+
+        boolean result = AsylumCaseUtils.isRemissionApproved(asylumCase);
+
+        assertThat(result).isFalse();
+    }
+
     @ParameterizedTest
     @EnumSource(value = RemissionType.class)
     void should_return_amount_remitted(RemissionType remissionType) {

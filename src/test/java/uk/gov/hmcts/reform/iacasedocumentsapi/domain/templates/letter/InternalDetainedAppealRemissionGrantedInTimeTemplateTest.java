@@ -1,9 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -20,6 +23,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class InternalDetainedAppealRemissionGrantedInTimeTemplateTest {
 
     private static final String TEMPLATE_NAME = "detained-remission-template";
@@ -35,22 +40,14 @@ class InternalDetainedAppealRemissionGrantedInTimeTemplateTest {
 
     private InternalDetainedAppealRemissionGrantedInTimeTemplate template;
 
-    private AutoCloseable closeable;
-
     @BeforeEach
     void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
         template = new InternalDetainedAppealRemissionGrantedInTimeTemplate(
                 TEMPLATE_NAME,
                 customerServicesProvider
         );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
-        closeable.close();
     }
 
     @Test

@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
@@ -20,10 +19,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import java.util.Objects;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAYMENT_PENDING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -54,14 +51,11 @@ public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator impleme
                 .map(yesOrNo -> yesOrNo == YesOrNo.NO)
                 .orElse(false);
 
-        boolean isPaymentPending = asylumCase.read(PAYMENT_STATUS, PaymentStatus.class).map(status -> status == PAYMENT_PENDING).orElse(false);
-
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.SUBMIT_APPEAL
-                && isInternalCase(asylumCase)
+                && callback.getEvent() == Event.RECORD_REMISSION_DECISION
+                && isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase)
                 && submissionInTime
-                && !isFeeExemptAppeal(asylumCase)
-                && isPaymentPending
+                && isRemissionApproved(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                 && !isAcceleratedDetainedAppeal(asylumCase);
     }
@@ -77,13 +71,13 @@ public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator impleme
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalDetainedAppealSubmissionInTimeWithFeeToPayLetter = documentCreator.create(caseDetails);
+        Document internalDetainedAppealRemissionGrantedInTimeLetterLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadata(
                 asylumCase,
-                internalDetainedAppealSubmissionInTimeWithFeeToPayLetter,
+                internalDetainedAppealRemissionGrantedInTimeLetterLetter,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER
+                DocumentTag.INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
