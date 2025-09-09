@@ -489,6 +489,10 @@ internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension: PDF
 internalDetainedOutOfTimeDecisionAllowedLetter.fileName: "appeal-form"
 internalDetainedOutOfTimeDecisionAllowedLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER:TB-IAC-LET-ENG-00817.docx}
 
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.contentType: application/pdf
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
 
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
