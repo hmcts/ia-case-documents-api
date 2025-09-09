@@ -6,7 +6,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -22,20 +21,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.form
 public class InternalDetainedAppealRemissionGrantedInTimeTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
-    private final int daysAfterSubmitAppeal;
     private final CustomerServicesProvider customerServicesProvider;
-    private final SystemDateProvider systemDateProvider;
 
     public InternalDetainedAppealRemissionGrantedInTimeTemplate(
         @Value("${internalDetainedAppealRemissionGrantedInTimeLetter.templateName}") String templateName,
-        @Value("${appellantDaysToWait.letter.afterSubmitAppealWithFeeToPay}") int daysAfterSubmitAppeal,
-        CustomerServicesProvider customerServicesProvider,
-        SystemDateProvider systemDateProvider
+        CustomerServicesProvider customerServicesProvider
     ) {
         this.templateName = templateName;
-        this.daysAfterSubmitAppeal = daysAfterSubmitAppeal;
         this.customerServicesProvider = customerServicesProvider;
-        this.systemDateProvider = systemDateProvider;
     }
 
     @Override
@@ -52,14 +45,11 @@ public class InternalDetainedAppealRemissionGrantedInTimeTemplate implements Doc
         String feeToPay = convertAsylumCaseFeeValue(asylumCase.read(FEE_AMOUNT_GBP, String.class).orElse(""));
 
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("feeAmount", feeToPay);
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("onlineCaseRefNumber", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY));
-        fieldValues.put("daysAfterSubmissionDate", systemDateProvider.dueDate(daysAfterSubmitAppeal));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
 
         return fieldValues;
     }
-
 }
