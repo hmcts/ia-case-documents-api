@@ -37,10 +37,12 @@ spring:
         jwt:
           jwk-set-uri: ${IDAM_URL:http://127.0.0.1:5000}/o/jwks
   cache:
-    cache-names: userInfoCache
+    cache-names: userInfoCache, accessTokenCache
     caffeine:
       spec: expireAfterAccess=3600s
 
+role-assignment-service:
+  url: ${ROLE_ASSIGNMENT_URL:http://localhost:8991}
 
 idam:
   baseUrl: ${IDAM_URL:http://127.0.0.1:5000}
@@ -119,11 +121,40 @@ security:
       - "payAndSubmitAppeal"
       - "payForAppeal"
       - "generateServiceRequest"
-    caseworker-ia-admofficer:
+    hearing-centre-admin:
       - "startAppeal"
       - "submitAppeal"
       - "editAppeal"
+      - "recordRemissionDecision"
       - "generateServiceRequest"
+    ctsc:
+      - "startAppeal"
+      - "submitAppeal"
+      - "editAppeal"
+      - "recordRemissionDecision"
+      - "generateServiceRequest"
+    ctsc-team-leader:
+      - "startAppeal"
+      - "submitAppeal"
+      - "editAppeal"
+      - "recordRemissionDecision"
+      - "generateServiceRequest"
+    national-business-centre:
+      - "startAppeal"
+      - "submitAppeal"
+      - "editAppeal"
+      - "recordRemissionDecision"
+      - "generateServiceRequest"
+    challenged-access-ctsc:
+      - "startAppeal"
+      - "submitAppeal"
+      - "editAppeal"
+      - "recordRemissionDecision"
+      - "generateServiceRequest"
+    challenged-access-admin:
+      - "startAppeal"
+      - "submitAppeal"
+      - "editAppeal"
       - "recordRemissionDecision"
       - "generateServiceRequest"
     caseworker-ia-system:

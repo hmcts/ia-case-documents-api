@@ -33,11 +33,12 @@ import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithFeeStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithIdamStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithPaymentStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithRefDataStub;
+import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithRoleAssignmentStub;
 import uk.gov.hmcts.reform.iacasepaymentsapi.testutils.WithServiceAuthStub;
 
 
-class MakePaymentIntegrationTest extends SpringBootIntegrationTest
-        implements WithServiceAuthStub, WithFeeStub, WithPaymentStub, WithIdamStub, WithRefDataStub {
+class MakePaymentIntegrationTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
+    WithFeeStub, WithPaymentStub, WithIdamStub, WithRefDataStub, WithRoleAssignmentStub {
 
     @org.springframework.beans.factory.annotation.Value("classpath:organisation-response.json")
     Resource resourceFile;
@@ -51,6 +52,7 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest
         addPaymentStub(server);
         addUserInfoStub(server);
         addRefDataStub(server, resourceFile);
+        addRoleAssignmentActorStub(server);
 
         IaCasePaymentApiClient iaCasePaymentApiClient = new IaCasePaymentApiClient(mockMvc);
 

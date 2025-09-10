@@ -52,7 +52,7 @@ public class IdamAuthoritiesConverter implements Converter<Jwt, Collection<Grant
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         } catch (FeignException e) {
-            throw new IdentityManagerResponseException("Could not get user details from IDAM", e);
+            throw new IdentityManagerResponseException("Could not get user details from IDAM or Role Assignment Service", e);
         }
     }
 }

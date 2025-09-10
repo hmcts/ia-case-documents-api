@@ -67,14 +67,14 @@ class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
-        when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "caseworker-ia-caseofficer"));
+        when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "tribunal-caseworker"));
         when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
         idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
 
         List<GrantedAuthority> expectedGrantedAuthorities = Lists.newArrayList(
             new SimpleGrantedAuthority("caseworker-ia"),
-            new SimpleGrantedAuthority("caseworker-ia-caseofficer")
+            new SimpleGrantedAuthority("tribunal-caseworker")
         );
 
         Collection<GrantedAuthority> grantedAuthorities = idamAuthoritiesConverter.convert(jwt);
@@ -122,6 +122,6 @@ class IdamAuthoritiesConverterTest {
             IdentityManagerResponseException.class,
             () -> idamAuthoritiesConverter.convert(jwt)
         );
-        assertEquals("Could not get user details from IDAM", thrown.getMessage());
+        assertEquals("Could not get user details from IDAM or Role Assignment Service", thrown.getMessage());
     }
 }
