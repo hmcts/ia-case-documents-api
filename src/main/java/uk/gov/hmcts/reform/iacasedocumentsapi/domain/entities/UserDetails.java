@@ -10,10 +10,6 @@ public interface UserDetails {
 
     List<String> getRoles();
 
-    boolean isLegalOfficer();
-
-    boolean isJudge();
-
     String getEmailAddress();
 
     String getForename();

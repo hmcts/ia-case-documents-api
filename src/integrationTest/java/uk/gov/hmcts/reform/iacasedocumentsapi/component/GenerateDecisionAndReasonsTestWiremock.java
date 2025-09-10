@@ -24,26 +24,26 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
 
 class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest implements WithServiceAuthStub,
-        WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithRoleAssignmentStub {
+        WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder {
 
     @Test
-    @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
+    @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
     void generates_decision_and_reasons() {
 
         addServiceAuthStub(server);
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
         withDefaults(server);
+        //addUserInfoStub(server);
 
         someLoggedIn(userWith()
-            .roles(newHashSet("caseworker-ia", "tribunal-caseworker"))
+            .roles(newHashSet("caseworker-ia", "caseworker-ia-caseofficer"))
             .forename("Case")
             .surname("Officer"), server);
 
         docmosisWillReturnSomeDocument(server);
         theDocoumentsManagementApiIsAvailable(server);
         theCaseDocumentAmIsAvailable(server);
-        addRoleAssignmentActorStub(server);
 
         PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.GENERATE_DECISION_AND_REASONS)

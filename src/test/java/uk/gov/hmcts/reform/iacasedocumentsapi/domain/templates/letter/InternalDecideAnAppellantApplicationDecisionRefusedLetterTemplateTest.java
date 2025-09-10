@@ -54,6 +54,8 @@ public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplateTe
     UserDetailsProvider userDetailsProvider;
     @Mock
     UserDetails userDetails;
+    private final String judgeRole = "caseworker-ia-iacjudge";
+    private final String legalOfficerRole = "caseworker-ia-caseofficer";
     private final String applicationRefusedAdaFormName = "IAFT-ADA4: Make an application – Accelerated detained appeal (ADA)";
     private final String applicationRefusedDetainedNonAdaFormName = "IAFT-DE4: Make an application – Detained appeal";
     private final String templateName = "TB-IAC-DEC-ENG-00016.docx";
@@ -72,7 +74,7 @@ public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplateTe
             LocalDate.now().toString(),
             "Refused",
             State.APPEAL_SUBMITTED.toString(),
-            "ctsc");
+            "caseworker-ia-admofficer");
     private InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplate internalDecideAnApplicationDecisionRefusedLetterTemplate;
 
     @BeforeEach
@@ -103,7 +105,7 @@ public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplateTe
         when(dateProvider.now()).thenReturn(LocalDate.now());
 
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
-        when(userDetails.isJudge()).thenReturn(true);
+        when(userDetails.getRoles()).thenReturn(List.of(judgeRole));
 
         application.setDecisionReason("No reason");
         makeAnApplications.add(new IdValue<>("1", application));
@@ -128,16 +130,11 @@ public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplateTe
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"judgeRole", "legalOfficerRole"})
+    @ValueSource(strings = {judgeRole, legalOfficerRole})
     void should_map_case_data_to_template_field_values_and_map_decision_maker_field_correctly(String role) {
         dataSetup();
-        if (role.equals("judgeRole")) {
-            when(userDetails.isJudge()).thenReturn(true);
-            when(userDetails.isLegalOfficer()).thenReturn(false);
-        } else if (role.equals("legalOfficerRole")) {
-            when(userDetails.isJudge()).thenReturn(false);
-            when(userDetails.isLegalOfficer()).thenReturn(true);
-        }
+
+        when(userDetailsProvider.getUserDetails().getRoles()).thenReturn(List.of(role));
 
         Map<String, Object> templateFieldValues = internalDecideAnApplicationDecisionRefusedLetterTemplate.mapFieldValues(caseDetails);
 
@@ -154,9 +151,9 @@ public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplateTe
         assertEquals(application.getDecisionReason(), templateFieldValues.get("applicationReason"));
         assertEquals(applicationRefusedDetainedNonAdaFormName, templateFieldValues.get("formName"));
 
-        if (role.equals("judgeRole")) {
+        if (role.equals(judgeRole)) {
             assertEquals("Judge", templateFieldValues.get("decisionMaker"));
-        } else if (role.equals("legalOfficerRole")) {
+        } else if (role.equals(legalOfficerRole)) {
             assertEquals("Legal Officer", templateFieldValues.get("decisionMaker"));
         }
     }

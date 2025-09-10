@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collections;
 import java.util.List;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserRole;
 
 public class IdamUserDetails implements UserDetails {
 
@@ -52,16 +51,6 @@ public class IdamUserDetails implements UserDetails {
     @Override
     public List<String> getRoles() {
         return Collections.unmodifiableList(roles);
-    }
-
-    @Override
-    public boolean isLegalOfficer() {
-        return roles.stream().anyMatch(UserRole.getCaseOfficerRoles()::contains);
-    }
-
-    @Override
-    public boolean isJudge() {
-        return roles.stream().anyMatch(UserRole.getJudgeRoles()::contains);
     }
 
     @Override

@@ -110,7 +110,7 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTe
                 LocalDate.now().toString(),
                 "Granted",
                 State.APPEAL_SUBMITTED.toString(),
-                "ctsc");
+                "caseworker-ia-admofficer");
         testApplication.setDecisionReason("No reason");
         makeAnApplications.add(new IdValue<>("1", testApplication));
 

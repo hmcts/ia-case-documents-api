@@ -23,6 +23,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationSe
 @Component
 public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
+    private static final String judgeRole = "caseworker-ia-iacjudge";
+    private static final String legalOfficerRole = "caseworker-ia-caseofficer";
     private static final String applicationRefusedAdaFormName = "IAFT-ADA4: Make an application – Accelerated detained appeal (ADA)";
     private static final String applicationRefusedDetainedNonAdaFormName = "IAFT-DE4: Make an application – Detained appeal";
     private final String templateName;
@@ -59,8 +61,8 @@ public class InternalDecideAnAppellantApplicationDecisionRefusedLetterTemplate i
         Map<String, String> applicationPropeties = makeAnApplicationService.retrieveApplicationProperties(optionalMakeAnApplication);
         makeAnApplicationService.getApplicationTypes(applicationPropeties.get(APPLICATION_TYPE));
 
-        final boolean applicationDecidedByLegalOfficer = userDetailsProvider.getUserDetails().isLegalOfficer();
-        final boolean applicationDecidedByJudge = userDetailsProvider.getUserDetails().isJudge();
+        final boolean applicationDecidedByLegalOfficer = userDetailsProvider.getUserDetails().getRoles().contains(legalOfficerRole);
+        final boolean applicationDecidedByJudge = userDetailsProvider.getUserDetails().getRoles().contains(judgeRole);
 
         String applicationDecidedBy = "";
         if (applicationDecidedByLegalOfficer) {

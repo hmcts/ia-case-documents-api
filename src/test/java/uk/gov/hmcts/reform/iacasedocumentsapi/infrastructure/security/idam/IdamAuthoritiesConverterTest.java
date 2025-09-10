@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RoleAssignmentService;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +30,7 @@ public class IdamAuthoritiesConverterTest {
     private org.springframework.security.oauth2.jwt.Jwt jwt;
 
     @Mock
-    private RoleAssignmentService roleAssignmentService;
+    private IdamApi idamApi;
     @Mock
     private IdamService idamService;
     @Mock
@@ -47,14 +47,14 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
-        when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "tribunal-caseworker"));
+        when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "caseworker-ia-caseofficer"));
         when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi,idamService);
 
         List<GrantedAuthority> expectedGrantedAuthorities = Lists.newArrayList(
             new SimpleGrantedAuthority("caseworker-ia"),
-            new SimpleGrantedAuthority("tribunal-caseworker")
+            new SimpleGrantedAuthority("caseworker-ia-caseofficer")
         );
 
         Collection<GrantedAuthority> grantedAuthorities = idamAuthoritiesConverter.convert(jwt);
@@ -67,7 +67,7 @@ public class IdamAuthoritiesConverterTest {
     @Test
     public void should_return_empty_list_when_token_is_missing() {
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi,idamService);
 
         assertEquals(Collections.emptyList(), idamAuthoritiesConverter.convert(jwt));
     }
@@ -78,7 +78,7 @@ public class IdamAuthoritiesConverterTest {
         when(userInfo.getRoles()).thenReturn(Lists.newArrayList());
         when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi,idamService);
 
         when(jwt.hasClaim(TOKEN_NAME)).thenReturn(true);
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
@@ -96,12 +96,12 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
-        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
+        idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamApi,idamService);
 
         IdentityManagerResponseException thrown = assertThrows(
             IdentityManagerResponseException.class,
             () -> idamAuthoritiesConverter.convert(jwt)
         );
-        assertEquals("Could not get user details from IDAM or RoleAssignmentService", thrown.getMessage());
+        assertEquals("Could not get user details from IDAM", thrown.getMessage());
     }
 }

@@ -62,7 +62,7 @@ public class InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplateTes
             LocalDate.now().toString(),
             "Refused",
             State.APPEAL_SUBMITTED.toString(),
-            "ctsc");
+            "caseworker-ia-admofficer");
     private InternalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate internalDecideHomeOfficeApplicationDecisionRefusedLetterTemplate;
 
     @BeforeEach
