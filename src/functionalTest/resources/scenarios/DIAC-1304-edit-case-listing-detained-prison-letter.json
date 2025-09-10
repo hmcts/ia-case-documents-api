@@ -1,0 +1,60 @@
+{
+  "description": "DIAC-1304-edit-case-listing-detained-irc-letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "eventId": "editCaseListing",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "newcastle",
+          "listCaseHearingLength": "30",
+          "listCaseHearingDate": "2023-09-22T13:30:00",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "prison"
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "nottingham",
+          "listCaseHearingLength": "150",
+          "listCaseHearingDate": "2023-08-10T10:15:00"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "newcastle",
+        "listCaseHearingLength": "30",
+        "listCaseHearingDate": "2023-09-22T13:30:00",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "prison",
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 12345 2019-Awan-detained-appellant-edit-case-listing-letter.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "internalDetainedEditCaseListingLetter"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
