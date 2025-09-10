@@ -54,7 +54,7 @@
                 "date":"",
                 "decision":"Refused",
                 "state":"caseBuilding",
-                "applicantRole":"caseworker-ia-admofficer",
+                "applicantRole":"ctsc",
                 "decisionReason":"A reason for the decision",
                 "decisionDate":"{$TODAY}",
                 "decisionMaker": "Tribunal Caseworker"

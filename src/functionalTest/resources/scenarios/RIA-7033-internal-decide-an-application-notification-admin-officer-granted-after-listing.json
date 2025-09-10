@@ -42,7 +42,7 @@
                 "date":"{$TODAY}",
                 "decision":"Granted",
                 "state":"prepareForHearing",
-                "applicantRole":"caseworker-ia-admofficer",
+                "applicantRole":"ctsc",
                 "decisionReason":"No Reason given",
                 "decisionDate":"{$TODAY}",
                 "decisionMaker": "Judge"

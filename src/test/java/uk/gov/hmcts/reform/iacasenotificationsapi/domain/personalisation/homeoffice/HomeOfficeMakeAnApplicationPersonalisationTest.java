@@ -48,7 +48,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.MakeAnApplicati
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class HomeOfficeMakeAnApplicationPersonalisationTest {
 
-    private static final String ADMIN_OFFICER = "caseworker-ia-admofficer";
+    private static final String ADMIN_OFFICER = "ctsc";
     private static final String LEGAL_REP_USER = "caseworker-ia-legalrep-solicitor";
     private static final String CITIZEN_USER = "citizen";
     private static final String HOME_OFFICE_LART = "caseworker-ia-homeofficelart";
@@ -73,28 +73,25 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     @Mock
     MakeAnApplication makeAnApplication;
 
-    private Long caseId = 12345L;
+    private final String iaExUiFrontendUrl = "http://somefrontendurl";
+    private final String appealReferenceNumber = "someReferenceNumber";
+    private final String ariaListingReference = "someAriaListingReference";
+    private final String homeOfficeRefNumber = "someHomeOfficeRefNumber";
+    private final String appellantGivenNames = "someAppellantGivenNames";
+    private final String appellantFamilyName = "someAppellantFamilyName";
 
-    private String iaExUiFrontendUrl = "http://somefrontendurl";
-    private String appealReferenceNumber = "someReferenceNumber";
-    private String ariaListingReference = "someAriaListingReference";
-    private String homeOfficeRefNumber = "someHomeOfficeRefNumber";
-    private String appellantGivenNames = "someAppellantGivenNames";
-    private String appellantFamilyName = "someAppellantFamilyName";
+    private final String customerServicesTelephone = "555 555 555";
+    private final String customerServicesEmail = "cust.services@example.com";
 
-    private String applicationType = "withdraw";
-    private String customerServicesTelephone = "555 555 555";
-    private String customerServicesEmail = "cust.services@example.com";
+    private final String homeOfficeMakeAnApplicationBeforeListingTemplateId = "SomeTemplate";
+    private final String homeOfficeMakeAnApplicationAfterListingTemplateId = "SomeTemplate";
+    private final String homeOfficeMakeAnApplicationOtherPartyBeforeListingTemplateId = "SomeTemplate";
+    private final String homeOfficeMakeAnApplicationOtherPartyAfterListingTemplateId = "SomeTemplate";
 
-    private String homeOfficeMakeAnApplicationBeforeListingTemplateId = "SomeTemplate";
-    private String homeOfficeMakeAnApplicationAfterListingTemplateId = "SomeTemplate";
-    private String homeOfficeMakeAnApplicationOtherPartyBeforeListingTemplateId = "SomeTemplate";
-    private String homeOfficeMakeAnApplicationOtherPartyAfterListingTemplateId = "SomeTemplate";
-
-    private String apcPrivateBetaInboxHomeOfficeEmailAddress = "homeoffice-apc@example.com";
-    private String respondentReviewDirectionEmail = "homeoffice-respondent@example.com";
-    private String homeOfficeHearingCentreEmail = "hc-taylorhouse@example.com";
-    private String homeOfficeEmail = "ho-taylorhouse@example.com";
+    private final String apcPrivateBetaInboxHomeOfficeEmailAddress = "homeoffice-apc@example.com";
+    private final String respondentReviewDirectionEmail = "homeoffice-respondent@example.com";
+    private final String homeOfficeHearingCentreEmail = "hc-taylorhouse@example.com";
+    private final String homeOfficeEmail = "ho-taylorhouse@example.com";
 
 
     private HomeOfficeMakeAnApplicationPersonalisation homeOfficeMakeAnApplicationPersonalisation;
@@ -111,6 +108,7 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
         when(makeAnApplicationService.getMakeAnApplication(asylumCase, false)).thenReturn(Optional.of(makeAnApplication));
+        String applicationType = "withdraw";
         when(makeAnApplication.getType()).thenReturn(applicationType);
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
@@ -138,14 +136,14 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     @Test
     public void should_return_given_template_id() {
         when(userDetails.getRoles()).thenReturn(
-            Arrays.asList(LEGAL_REP_USER)
+            List.of(LEGAL_REP_USER)
         );
         when(appealService.isAppealListed(asylumCase)).thenReturn(false);
         assertEquals(homeOfficeMakeAnApplicationBeforeListingTemplateId,
             homeOfficeMakeAnApplicationPersonalisation.getTemplateId(asylumCase));
 
         when(userDetails.getRoles()).thenReturn(
-                Arrays.asList(CITIZEN_USER)
+            List.of(CITIZEN_USER)
         );
         when(appealService.isAppealListed(asylumCase)).thenReturn(true);
         assertEquals(homeOfficeMakeAnApplicationAfterListingTemplateId,
@@ -155,7 +153,7 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
         List<String> roles = Arrays.asList(HOME_OFFICE_APC, HOME_OFFICE_LART, HOME_OFFICE_RESPONDENT, HOME_OFFICE_POU);
         for (String role : roles) {
             when(userDetails.getRoles()).thenReturn(
-                Arrays.asList(role)
+                Collections.singletonList(role)
             );
             when(appealService.isAppealListed(asylumCase)).thenReturn(false);
             assertEquals(homeOfficeMakeAnApplicationOtherPartyBeforeListingTemplateId,
@@ -175,6 +173,7 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
+        Long caseId = 12345L;
         assertEquals(caseId + "_MAKE_AN_APPLICATION_HOME_OFFICE",
             homeOfficeMakeAnApplicationPersonalisation.getReferenceId(caseId));
     }
@@ -186,19 +185,19 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
             .thenReturn(Optional.of(State.APPEAL_SUBMITTED));
 
         when(userDetails.getRoles()).thenReturn(
-            Arrays.asList(HOME_OFFICE_APC)
+            List.of(HOME_OFFICE_APC)
         );
         assertTrue(homeOfficeMakeAnApplicationPersonalisation.getRecipientsList(asylumCase)
             .contains(apcPrivateBetaInboxHomeOfficeEmailAddress));
 
         when(userDetails.getRoles()).thenReturn(
-            Arrays.asList(HOME_OFFICE_LART)
+            List.of(HOME_OFFICE_LART)
         );
         assertTrue(homeOfficeMakeAnApplicationPersonalisation.getRecipientsList(asylumCase)
             .contains(respondentReviewDirectionEmail));
 
         when(userDetails.getRoles()).thenReturn(
-            Arrays.asList(HOME_OFFICE_POU)
+            List.of(HOME_OFFICE_POU)
         );
         when(appealService.isAppealListed(asylumCase)).thenReturn(true);
         assertTrue(homeOfficeMakeAnApplicationPersonalisation.getRecipientsList(asylumCase)
@@ -214,7 +213,7 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     public void test_email_address_for_home_office_when_legal_rep_or_admin_applied(String role) {
 
         when(userDetails.getRoles()).thenReturn(
-            Arrays.asList(role)
+            Collections.singletonList(role)
         );
 
         List<State> apcEmail = newArrayList(
@@ -280,7 +279,7 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     public void test_email_address_for_home_office_when_generic_ho_applied() {
 
         when(userDetails.getRoles()).thenReturn(
-            Arrays.asList(HOME_OFFICE_RESPONDENT)
+            List.of(HOME_OFFICE_RESPONDENT)
         );
 
         List<State> apcEmail = newArrayList(
@@ -345,7 +344,7 @@ public class HomeOfficeMakeAnApplicationPersonalisationTest {
     @Test
     public void should_throw_exception_when_cannot_find_email_address_for_home_office() {
 
-        when(userDetails.getRoles()).thenReturn(Arrays.asList(""));
+        when(userDetails.getRoles()).thenReturn(List.of(""));
         when(asylumCase.read(CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
             .thenReturn(Optional.of(State.FTPA_DECIDED));
 

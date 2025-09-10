@@ -40,7 +40,7 @@
                 "date":"",
                 "decision":"Refused",
                 "state":"appealSubmitted",
-                "applicantRole":"caseworker-ia-admofficer",
+                "applicantRole":"ctsc",
                 "decisionReason":"No Reason given",
                 "decisionDate":"{$TODAY}",
                 "decisionMaker": "Judge"

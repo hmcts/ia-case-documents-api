@@ -48,27 +48,25 @@ public class AppellantInternalDecideApplicationLetterPersonalisationTest {
     CustomerServicesProvider customerServicesProvider;
     @Mock
     AddressUk address;
-    private Long ccdCaseId = 12345L;
-    private String letterTemplateId = "someLetterTemplateId";
-    private String appealReferenceNumber = "someAppealRefNumber";
-    private String homeOfficeRefNumber = "someHomeOfficeRefNumber";
-    private String appellantGivenNames = "someAppellantGivenNames";
-    private String appellantFamilyName = "someAppellantFamilyName";
-    private String addressLine1 = "50";
-    private String addressLine2 = "Building name";
-    private String addressLine3 = "Street name";
-    private String postCode = "XX1 2YY";
-    private String postTown = "Town name";
-    private String oocAddressLine1 = "Calle Toledo 32";
-    private String oocAddressLine2 = "Madrid";
-    private String oocAddressLine3 = "28003";
-    private NationalityFieldValue oocAddressCountry = mock(NationalityFieldValue.class);
-    private String decisionMaker = "Legal Officer";
-    private String customerServicesTelephone = "555 555 555";
-    private String customerServicesEmail = "example@example.com";
+    private final Long ccdCaseId = 12345L;
+    private final String letterTemplateId = "someLetterTemplateId";
+    private final String appealReferenceNumber = "someAppealRefNumber";
+    private final String homeOfficeRefNumber = "someHomeOfficeRefNumber";
+    private final String appellantGivenNames = "someAppellantGivenNames";
+    private final String appellantFamilyName = "someAppellantFamilyName";
+    private final String addressLine1 = "50";
+    private final String addressLine2 = "Building name";
+    private final String addressLine3 = "Street name";
+    private final String postCode = "XX1 2YY";
+    private final String postTown = "Town name";
+    private final String oocAddressLine1 = "Calle Toledo 32";
+    private final String oocAddressLine2 = "Madrid";
+    private final String oocAddressLine3 = "28003";
+    private final NationalityFieldValue oocAddressCountry = mock(NationalityFieldValue.class);
+    private final String decisionMaker = "Legal Officer";
     private final String decisionGranted = "Granted";
     private final String decisionReason = "Decision reason";
-    private List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
+    private final List<IdValue<MakeAnApplication>> makeAnApplications = new ArrayList<>();
     private final MakeAnApplication makeAnApplication = new MakeAnApplication(
         "Admin Officer",
         MakeAnApplicationTypes.ADJOURN.getValue(),
@@ -77,7 +75,7 @@ public class AppellantInternalDecideApplicationLetterPersonalisationTest {
         LocalDate.now().toString(),
         decisionGranted,
         State.APPEAL_SUBMITTED.toString(),
-        "caseworker-ia-admofficer");
+        "ctsc");
     private AppellantInternalDecideApplicationLetterPersonalisation appellantInternalDecideApplicationLetterPersonalisation;
 
     @BeforeEach
@@ -90,7 +88,9 @@ public class AppellantInternalDecideApplicationLetterPersonalisationTest {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
+        String customerServicesTelephone = "555 555 555";
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
+        String customerServicesEmail = "example@example.com";
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
         when(address.getAddressLine1()).thenReturn(Optional.of(addressLine1));
         when(address.getAddressLine2()).thenReturn(Optional.of(addressLine2));

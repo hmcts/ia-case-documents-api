@@ -50,20 +50,12 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
     private static final String HOME_OFFICE_APC = "caseworker-ia-homeofficeapc";
     private static final String HOME_OFFICE_POU = "caseworker-ia-homeofficepou";
     private static final String HOME_OFFICE_RESPONDENT = "caseworker-ia-respondentofficer";
-    private static final String ADMIN_OFFICER = "caseworker-ia-admofficer";
+    private static final String ADMIN_OFFICER = "ctsc";
 
-    private final String homeOfficeDecideAnApplicationGrantedBeforeListingTemplateId =
-        "someTemplateGrantedBeforeListing";
     private final String homeOfficeDecideAnApplicationGrantedAfterListingTemplateId = "SomeTemplateGrantedAfterListing";
-    private final String homeOfficeDecideAnApplicationGrantedOtherPartyBeforeListingTemplateId =
-        "SomeTemplateOtherGrantedBeforeListing";
     private final String homeOfficeDecideAnApplicationGrantedOtherPartyAfterListingTemplateId =
         "SomeTemplateOtherGrantedAfterListing";
-    private final String homeOfficeDecideAnApplicationRefusedBeforeListingTemplateId =
-        "SomeTemplateRefusedBeforeListing";
     private final String homeOfficeDecideAnApplicationRefusedAfterListingTemplateId = "SomeTemplateRefusedAfterListing";
-    private final String homeOfficeDecideAnApplicationRefusedOtherPartyBeforeListingTemplateId =
-        "SomeTemplateOtherRefusedBeforeListing";
     private final String homeOfficeDecideAnApplicationRefusedOtherPartyAfterListingTemplateId =
         "SomeTemplateOtherRefusedAfterListing";
     @Mock
@@ -76,19 +68,18 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
     EmailAddressFinder emailAddressFinder;
     @Mock
     MakeAnApplication makeAnApplication;
-    private Long caseId = 12345L;
-    private String iaExUiFrontendUrl = "http://somefrontendurl";
-    private String appealReferenceNumber = "someReferenceNumber";
-    private String ariaListingReference = "someAriaListingReference";
-    private String homeOfficeRefNumber = "someHomeOfficeRefNumber";
-    private String appellantGivenNames = "someAppellantGivenNames";
-    private String appellantFamilyName = "someAppellantFamilyName";
-    private String customerServicesTelephone = "555 555 555";
-    private String customerServicesEmail = "cust.services@example.com";
-    private String apcHomeOfficeEmailAddress = "homeoffice-apc@example.com";
-    private String lartHomeOfficeEmailAddress = "homeoffice-respondent@example.com";
-    private String homeOfficeHearingCentreEmail = "hc-taylorhouse@example.com";
-    private String homeOfficeEmail = "ho-taylorhouse@example.com";
+    private final String iaExUiFrontendUrl = "http://somefrontendurl";
+    private final String appealReferenceNumber = "someReferenceNumber";
+    private final String ariaListingReference = "someAriaListingReference";
+    private final String homeOfficeRefNumber = "someHomeOfficeRefNumber";
+    private final String appellantGivenNames = "someAppellantGivenNames";
+    private final String appellantFamilyName = "someAppellantFamilyName";
+    private final String customerServicesTelephone = "555 555 555";
+    private final String customerServicesEmail = "cust.services@example.com";
+    private final String apcHomeOfficeEmailAddress = "homeoffice-apc@example.com";
+    private final String lartHomeOfficeEmailAddress = "homeoffice-respondent@example.com";
+    private final String homeOfficeHearingCentreEmail = "hc-taylorhouse@example.com";
+    private final String homeOfficeEmail = "ho-taylorhouse@example.com";
 
 
     private HomeOfficeDecideAnApplicationPersonalisation homeOfficeDecideAnApplicationPersonalisation;
@@ -110,6 +101,10 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
         when((emailAddressFinder.getHomeOfficeEmailAddress(asylumCase))).thenReturn(homeOfficeEmail);
         when((makeAnApplicationService.getMakeAnApplication(asylumCase, true))).thenReturn(Optional.of(makeAnApplication));
 
+        String homeOfficeDecideAnApplicationRefusedOtherPartyBeforeListingTemplateId = "SomeTemplateOtherRefusedBeforeListing";
+        String homeOfficeDecideAnApplicationRefusedBeforeListingTemplateId = "SomeTemplateRefusedBeforeListing";
+        String homeOfficeDecideAnApplicationGrantedOtherPartyBeforeListingTemplateId = "SomeTemplateOtherGrantedBeforeListing";
+        String homeOfficeDecideAnApplicationGrantedBeforeListingTemplateId = "someTemplateGrantedBeforeListing";
         homeOfficeDecideAnApplicationPersonalisation = new HomeOfficeDecideAnApplicationPersonalisation(
             homeOfficeDecideAnApplicationGrantedBeforeListingTemplateId,
             homeOfficeDecideAnApplicationGrantedAfterListingTemplateId,
@@ -180,6 +175,7 @@ public class HomeOfficeDecideAnApplicationPersonalisationTest {
 
     @Test
     public void should_return_given_reference_id() {
+        Long caseId = 12345L;
         assertEquals(caseId + "_DECIDE_AN_APPLICATION_HOME_OFFICE",
             homeOfficeDecideAnApplicationPersonalisation.getReferenceId(caseId));
     }

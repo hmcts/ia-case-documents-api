@@ -3,24 +3,20 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.idam;
 import feign.FeignException;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.IdamService;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.AccessTokenProvider;
 
 public class IdamUserDetailsProvider implements UserDetailsProvider {
 
     private final AccessTokenProvider accessTokenProvider;
-    private final IdamApi idamApi;
     private final IdamService idamService;
 
     public IdamUserDetailsProvider(
         AccessTokenProvider accessTokenProvider,
-        IdamApi idamApi,
         IdamService idamService
     ) {
 
         this.accessTokenProvider = accessTokenProvider;
-        this.idamApi = idamApi;
         this.idamService = idamService;
     }
 

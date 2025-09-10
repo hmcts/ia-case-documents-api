@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.component;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -52,7 +53,7 @@ class SendsDirectionTest extends SpringBootIntegrationTest implements WithServic
     private GovNotifyNotificationSender notificationSender;
 
     @Test
-    @WithMockUser(authorities = {"caseworker-ia", "caseworker-ia-caseofficer"})
+    @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void sends_notification() {
 
         addServiceAuthStub(server);
@@ -88,6 +89,7 @@ class SendsDirectionTest extends SpringBootIntegrationTest implements WithServic
                 .getData()
                 .read(NOTIFICATIONS_SENT);
 
+        assertTrue(notificationsSent.isPresent());
         List<IdValue<String>> notifications = notificationsSent.get();
 
         assertThat(notifications.size()).isEqualTo(2);
