@@ -484,6 +484,12 @@ internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileExtension: PDF
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.templateName: ${IA_APPEAL_SUBMISSION_IN_TIME_WITH_FEE_T_PAY_TEMPLATE:TB-IAC-LET-ENG-00816.docx}
 
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.contentType: application/pdf
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension: PDF
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName: "appeal-form"
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-late-with-remission-Submitted.docx}
+
+
 internalDetainedOutOfTimeDecisionAllowedLetter.contentType: application/pdf
 internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension: PDF
 internalDetainedOutOfTimeDecisionAllowedLetter.fileName: "appeal-form"
