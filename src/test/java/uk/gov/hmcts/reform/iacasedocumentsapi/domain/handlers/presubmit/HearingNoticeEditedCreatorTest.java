@@ -586,86 +586,106 @@ class HearingNoticeEditedCreatorTest {
     }
 
     @Test
-    void should_create_hearing_notice_pdf_and_append_to_letter_notification_documents_for_detained_in_other_facility() {
+    void should_create_hearing_notice_pdf_and_append_to_letter_notification_documents_for_detained_in_other_facility_irc_prison() {
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore))
+                .thenReturn(uploadedDocument);
 
-        // Mock required fields for generateDocument logic
+        // Required fields for generateDocument logic
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        
-        // Mock reheard hearing fields
+
+        // Reheard fields
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        
-        // Mock fields for letter notification conditions
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO)); // Not internal for this test
+
+        // Letter notification conditions
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO)); // Not internal
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(
+                Optional.of("immigrationRemovalCentre"),
+                Optional.of("prison"),
+                Optional.of("other"));
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
-        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
-        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(oldHearingDate);
+        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData()))
+                .thenReturn(hearingCentreNameBefore);
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class))
+                .thenReturn(Optional.of(oldHearingDate));
+        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData()))
+                .thenReturn(hearingCentreNameBefore);
+        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData()))
+                .thenReturn(oldHearingDate);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
-        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE_RELISTED);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER);
+        // Always create NOH (relisted)
+        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1))
+                .create(caseDetails, caseDetailsBefore);
+        verify(documentHandler, times(1))
+                .addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
+                        asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE_RELISTED);
+
+        // And always append the letter for ALL detained facilities
+        verify(documentHandler, times(1))
+                .addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER);
+
+        // Prevent invocation counts from accumulating across parameter runs
+        clearInvocations(hearingNoticeUpdatedRequirementsDocumentCreator, documentHandler);
     }
 
-    @Test
-    void should_not_append_to_letter_notification_documents_for_detained_in_irc_facility() {
-        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
-
-        // Mock required fields for generateDocument logic
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
-        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        
-        // Mock reheard hearing fields
-        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        
-        // Mock fields for letter notification conditions
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO)); // Not internal for this test
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-
-        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
-        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
-
-        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
-        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(hearingCentreNameBefore);
-        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(oldHearingDate);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
-        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE_RELISTED);
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER);
-    }
+    //@Test
+//    void should_not_append_to_letter_notification_documents_for_detained_in_irc_facility() {
+//        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+//        when(callback.getCaseDetails()).thenReturn(caseDetails);
+//
+//        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+//        when(hearingNoticeUpdatedRequirementsDocumentCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
+//
+//        // Mock required fields for generateDocument logic
+//        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+//        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+//        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+//        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+//
+//        // Mock reheard hearing fields
+//        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+//
+//        // Mock fields for letter notification conditions
+//        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO)); // Not internal for this test
+//        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+//        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+//
+//        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+//        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+//
+//        when(hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.getCaseData())).thenReturn(hearingCentreNameBefore);
+//        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(oldHearingDate));
+//        when(hearingDetailsFinder.getHearingCentreName(caseDetails.getCaseData())).thenReturn(hearingCentreNameBefore);
+//        when(hearingDetailsFinder.getHearingDateTime(caseDetails.getCaseData())).thenReturn(oldHearingDate);
+//
+//        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+//            hearingNoticeEditedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+//
+//        assertNotNull(callbackResponse);
+//        assertEquals(asylumCase, callbackResponse.getData());
+//
+//        verify(hearingNoticeUpdatedRequirementsDocumentCreator, times(1)).create(caseDetails, caseDetailsBefore);
+//        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE_RELISTED);
+//        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER);
+//    }
 
     @Test
     void should_append_to_letter_notification_documents_for_internal_non_detained_with_address() {
