@@ -1828,4 +1828,26 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedOutOfTimeRemissionIrcPrisonLetterDocumentCreator")
+    public DocumentCreator<AsylumCase> getInternalDetainedOutOfTimeRemissionIrcPrisonLetterDocumentCreator(
+            @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.contentType}") String contentType,
+            @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+
 }
