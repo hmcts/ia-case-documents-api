@@ -1828,4 +1828,24 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedAppealHoUploadBundleAppellantLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealRemissionGrantedInTimeLetterDocumentCreator(
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.contentType}") String contentType,
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealHoUploadBundleAppellantTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
