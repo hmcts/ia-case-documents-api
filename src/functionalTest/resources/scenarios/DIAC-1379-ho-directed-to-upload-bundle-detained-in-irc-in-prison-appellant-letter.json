@@ -18,7 +18,7 @@
           "detentionFacility": "prison",
           "prisonNOMSNumber": "",
           "appealSubmissionDate": "{$TODAY}",
-          "appealType": "refusalOfHumanRights",
+          "appealType": "refusalOfHumanRights"
         }
       }
     }
