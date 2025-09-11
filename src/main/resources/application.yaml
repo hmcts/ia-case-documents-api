@@ -494,6 +494,11 @@ internalDetainedAppealHoUploadBundleAppellantLetter.fileExtension: PDF
 internalDetainedAppealHoUploadBundleAppellantLetter.fileName: "internal-detained-ho-upload-bundle-appellant-letter"
 internalDetainedAppealHoUploadBundleAppellantLetter.templateName: ${IA_INTERNAL_DETAINED_HO_UPLOAD_BUNDLE_APPELLANT_LETTER:TB-IAC-LET-ENG-Internal-HO-Upload-Bundle-Appellant.docx}
 
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.contentType: application/pdf
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
