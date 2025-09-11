@@ -60,7 +60,6 @@
         "isAcceleratedDetainedAppeal": "No",
         "detentionFacility": "prison",
         "prisonNOMSNumber": "",
-        "submissionOutOfTime": "No",
         "appealSubmissionDate": "{$TODAY}",
         "appealType": "refusalOfHumanRights",
         "appealReferenceNumber": "$/(.+)/",
