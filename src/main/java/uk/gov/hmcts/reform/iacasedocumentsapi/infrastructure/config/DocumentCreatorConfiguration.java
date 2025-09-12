@@ -1855,7 +1855,7 @@ public class DocumentCreatorConfiguration {
             @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension}") String fileExtension,
             @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplate documentTemplate,
+            InternalDetainedAppealSubmissionOutOfTimeWithRemissionIrcPrisonTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
