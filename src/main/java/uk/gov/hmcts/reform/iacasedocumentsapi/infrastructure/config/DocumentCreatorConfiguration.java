@@ -1870,5 +1870,24 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-
+    @Bean("internalDetainedAppealHearingAdjournedNoDateAppellantLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealHearingAdjournedNoDateLetterDocumentCreator(
+            @Value("${internalDetainedHearingAdjournedNoDateAppellantLetter.contentType}") String contentType,
+            @Value("${internalDetainedHearingAdjournedNoDateAppellantLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedHearingAdjournedNoDateAppellantLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }

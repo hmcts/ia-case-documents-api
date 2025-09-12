@@ -12,6 +12,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRepJourney;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,15 +28,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -689,5 +688,35 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
 
         assertFalse(isFeeExemptAppeal(asylumCase));
+    }
+
+    @Test
+    void should_return_true_when_journey_type_is_rep() {
+        AsylumCase asylumCase = Mockito.mock(AsylumCase.class);
+
+        when(asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class))
+                .thenReturn(Optional.of(JourneyType.REP));
+
+        assertTrue(isRepJourney(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_journey_type_is_not_rep() {
+        AsylumCase asylumCase = Mockito.mock(AsylumCase.class);
+
+        when(asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class))
+                .thenReturn(Optional.of(JourneyType.AIP)); // e.g., Appellant in Person
+
+        assertFalse(isRepJourney(asylumCase));
+    }
+
+    @Test
+    void should_return_true_when_journey_type_is_absent() {
+        AsylumCase asylumCase = Mockito.mock(AsylumCase.class);
+
+        when(asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class))
+                .thenReturn(Optional.empty());
+
+        assertTrue(isRepJourney(asylumCase));
     }
 }
