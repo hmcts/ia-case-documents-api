@@ -500,10 +500,10 @@ internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
 
-internalDetainedHearingAdjournedNoDateAppellantLetter.contentType: application/pdf
-internalDetainedHearingAdjournedNoDateAppellantLetter.fileExtension: PDF
-internalDetainedHearingAdjournedNoDateAppellantLetter.fileName: "internal-detained-hearing-adjourned-no-date-appellant-letter"
-internalDetainedHearingAdjournedNoDateAppellantLetter.templateName: ${IA_APPEAL_DETAINED_HEARING_ADJOURNED_NO_DATE_APPELLANT_LETTER:TB-IAC-LET-ENG-Detained-Hearing-Adjourned-No-Date-Appellant.docx}
+detainedHearingAdjournedNoDateAppellantLetter.contentType: application/pdf
+detainedHearingAdjournedNoDateAppellantLetter.fileExtension: PDF
+detainedHearingAdjournedNoDateAppellantLetter.fileName: "detained-hearing-adjourned-no-date-appellant-letter"
+detainedHearingAdjournedNoDateAppellantLetter.templateName: ${IA_APPEAL_DETAINED_HEARING_ADJOURNED_NO_DATE_APPELLANT_LETTER:TB-IAC-LET-ENG-Detained-Hearing-Adjourned-No-Date-Appellant.docx}
 
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF

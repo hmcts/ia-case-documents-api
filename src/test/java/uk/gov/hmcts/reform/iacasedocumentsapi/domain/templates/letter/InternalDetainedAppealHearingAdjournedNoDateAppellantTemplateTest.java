@@ -68,7 +68,7 @@ class InternalDetainedAppealHearingAdjournedNoDateAppellantTemplateTest {
     void should_map_field_values_with_direction_due_date() {
         when(asylumCaseBefore.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
         when(hearingCentre.getValue()).thenReturn("Hatton Cross");
-        when(asylumCase.read(DATE_BEFORE_ADJOURN_WITHOUT_DATE, String.class)).thenReturn(Optional.of("2025-10-20"));
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of("2018-12-31T12:34:56"));
         when(asylumCase.read(ADJOURN_HEARING_WITHOUT_DATE_REASONS, String.class)).thenReturn(Optional.of("Some reason"));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(CASE_REF));
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(CUSTOMER_PHONE);
@@ -81,7 +81,7 @@ class InternalDetainedAppealHearingAdjournedNoDateAppellantTemplateTest {
         assertThat(fieldValues.get("customerServicesEmail")).isEqualTo(CUSTOMER_EMAIL);
         assertThat(fieldValues.get("dateLetterSent")).isNotNull();
         assertThat(fieldValues.get("oldHearingCentre")).isEqualTo("Hatton Cross");
-        assertThat(fieldValues.get("oldHearingDate")).isEqualTo("2025-10-20");
+        assertThat(fieldValues.get("oldHearingDate")).isEqualTo("31 Dec 2018");
         assertThat(fieldValues.get("reasonForAdjournedHearing")).isEqualTo("Some reason");
     }
 

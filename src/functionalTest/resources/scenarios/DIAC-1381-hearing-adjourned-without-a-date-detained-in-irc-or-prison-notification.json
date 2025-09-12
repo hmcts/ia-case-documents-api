@@ -4,43 +4,46 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
     "input": {
-      "id": 1326,
-      "eventId": "requestRespondentEvidence",
-      "state": "appealSubmitted",
+      "id": 1381,
+      "eventId": "adjournHearingWithoutDate",
+      "state": "listing",
       "caseData": {
         "template": "minimal-appeal-started.json",
         "replacements": {
           "appealReferenceNumber": "HU/50001/2025",
+          "listCaseHearingCentre": "nottingham",
+          "adjournHearingWithoutDateReasons": "Sample reasons",
           "isAdmin": "Yes",
-          "appellantsRepresentation": "Yes",
-          "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",
-          "detentionFacility": "prison",
-          "prisonNOMSNumber": "",
-          "appealSubmissionDate": "{$TODAY}",
-          "appealType": "refusalOfHumanRights",
-          "lastModifiedDirection": {
-            "tag": "respondentEvidence",
-            "dateDue": "{$TODAY+14}",
-            "parties": "respondent",
-            "dateSent": "{$TODAY}",
-            "uniqueId": "f8197f50-ef66-4b13-a707-5806d47c077d",
-            "explanation": "A notice of appeal has been lodged against this decision.\n\nYou must now upload all documents to the Tribunal. The Tribunal will make them accessible to the other party. You have until the date indicated below to supply your bundle.\n\nThe bundle must comply with (i) Rule 24 of the Tribunal Procedure Rules 2014 and (ii) Practice Direction, Part 3, sections 7.1 - 7.4.\nSpecifically, the bundle must contain:\n\n- The explanation for refusal;\n- the deportation order and/or the notice of decision to make the order (if any);\n- Interview record (if any);\n- Appellant's representations (if any);\n- a copy of any relevant indictment; pre-sentence report and/or OASys/ARNS reports (if any);\n- a copy of the Appellant's criminal record (if any);\n- a copy of the certificate of conviction (if any);\n- a transcript of the Sentencing Judge's Remarks (if any).\n- a copy of any Parole Report or other document relating to the appellant's period in custody and/or release (if any);\n- a copy of any medical report (if any).\n\nParties must ensure they conduct proceedings with procedural rigour.\nThe Tribunal will not overlook breaches of the requirements of the Procedure Rules, Practice Statement or Practice Direction, nor failures to comply with directions issued by the Tribunal. Parties are reminded of the possible sanctions for non-compliance set out in paragraph 5.3 of the Practice Direction.",
-            "directionType": "requestRespondentEvidence",
-            "previousDates": []
-          },
-          "directions": [
+          "appellantInDetention": "Yes"
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "nottingham",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
+          "hearingDocuments": [
             {
               "id": "1",
               "value": {
-                "tag": "respondentEvidence",
-                "dateDue": "2025-09-17",
-                "parties": "respondent",
-                "dateSent": "2025-09-10",
-                "uniqueId": "f8197f50-ef66-4b13-a707-5806d47c077d",
-                "explanation": "A notice of appeal has been lodged against this decision.\n\nYou must now upload all documents to the Tribunal. The Tribunal will make them accessible to the other party. You have until the date indicated below to supply your bundle.\n\nThe bundle must comply with (i) Rule 24 of the Tribunal Procedure Rules 2014 and (ii) Practice Direction, Part 3, sections 7.1 - 7.4.\nSpecifically, the bundle must contain:\n\n- The explanation for refusal;\n- the deportation order and/or the notice of decision to make the order (if any);\n- Interview record (if any);\n- Appellant's representations (if any);\n- a copy of any relevant indictment; pre-sentence report and/or OASys/ARNS reports (if any);\n- a copy of the Appellant's criminal record (if any);\n- a copy of the certificate of conviction (if any);\n- a transcript of the Sentencing Judge's Remarks (if any).\n- a copy of any Parole Report or other document relating to the appellant's period in custody and/or release (if any);\n- a copy of any medical report (if any).\n\nParties must ensure they conduct proceedings with procedural rigour.\nThe Tribunal will not overlook breaches of the requirements of the Procedure Rules, Practice Statement or Practice Direction, nor failures to comply with directions issued by the Tribunal. Parties are reminded of the possible sanctions for non-compliance set out in paragraph 5.3 of the Practice Direction.",
-                "directionType": "requestRespondentEvidence",
-                "previousDates": []
+                "document": {
+                  "document_url": "old-hearing-notice",
+                  "document_binary_url": "old-hearing-notice",
+                  "document_filename": "old-hearing-notice"
+                },
+                "description": "OLD HEARING NOTICE",
+                "dateUploaded": "2019-01-01",
+                "tag": "hearingNotice"
               }
             }
           ]
@@ -67,10 +70,10 @@
           {
             "id":"2",
             "value": {
-              "tag": "internalRequestRespondentEvidenceLetter",
+              "tag": "detainedAppealAdjournHearingWithoutADateLetter",
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_filename":"HU 50001 2025-Awan-detained-appellant-request-respondent-evidence-notice.PDF",
+                "document_filename":"HU 50001 2025-Awan-detained-hearing-adjourned-no-date-appellant-letter.PDF",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
               },
               "suppliedBy": "",

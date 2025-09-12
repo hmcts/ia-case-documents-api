@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate imple
     private final CustomerServicesProvider customerServicesProvider;
 
     public InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate(
-            @Value("${internalDetainedHearingAdjournedNoDateAppellantLetter.templateName}") String templateName,
+            @Value("${detainedHearingAdjournedNoDateAppellantLetter.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider
     ) {
         this.templateName = templateName;
@@ -51,9 +52,10 @@ public class InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate imple
         }
 
         String previousHearingDate;
-        Optional<String> hearingDate = asylumCase.read(DATE_BEFORE_ADJOURN_WITHOUT_DATE, String.class);
-        if (hearingDate.isPresent()) {
-            previousHearingDate = hearingDate.get();
+        Optional<String> listCaseHearingDate = caseDetailsBefore.getCaseData().read(LIST_CASE_HEARING_DATE, String.class);
+        if (listCaseHearingDate.isPresent()) {
+            LocalDateTime hearingDateTime = LocalDateTime.parse(listCaseHearingDate.get());
+            previousHearingDate = formatDateForNotificationAttachmentDocument(hearingDateTime.toLocalDate());
         } else {
             previousHearingDate = "";
         }

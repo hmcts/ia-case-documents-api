@@ -1872,9 +1872,9 @@ public class DocumentCreatorConfiguration {
 
     @Bean("internalDetainedAppealHearingAdjournedNoDateAppellantLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealHearingAdjournedNoDateLetterDocumentCreator(
-            @Value("${internalDetainedHearingAdjournedNoDateAppellantLetter.contentType}") String contentType,
-            @Value("${internalDetainedHearingAdjournedNoDateAppellantLetter.fileExtension}") String fileExtension,
-            @Value("${internalDetainedHearingAdjournedNoDateAppellantLetter.fileName}") String fileName,
+            @Value("${detainedHearingAdjournedNoDateAppellantLetter.contentType}") String contentType,
+            @Value("${detainedHearingAdjournedNoDateAppellantLetter.fileExtension}") String fileExtension,
+            @Value("${detainedHearingAdjournedNoDateAppellantLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
             InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate documentTemplate,
             DocumentGenerator documentGenerator,
