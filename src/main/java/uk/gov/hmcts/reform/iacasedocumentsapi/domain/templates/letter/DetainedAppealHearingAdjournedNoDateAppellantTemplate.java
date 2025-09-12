@@ -61,13 +61,14 @@ public class DetainedAppealHearingAdjournedNoDateAppellantTemplate implements Do
 
         String reasonForAdjournedHearing = asylumCase.read(ADJOURN_HEARING_WITHOUT_DATE_REASONS, String.class).orElse("");
 
+        fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.put("oldHearingCentre", previousHearingCentre);
         fieldValues.put("oldHearingDate", previousHearingDate);
         fieldValues.put("reasonForAdjournedHearing", reasonForAdjournedHearing);
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("onlineCaseRefNumber", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY).orElse(""));
-        fieldValues.put("oldHearingCentre", previousHearingCentre);
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
 
