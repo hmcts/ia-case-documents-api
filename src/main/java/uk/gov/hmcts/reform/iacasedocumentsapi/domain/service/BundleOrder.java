@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.*;
+
 @Component
 public class BundleOrder implements Comparator<DocumentWithMetadata> {
 
@@ -323,7 +325,12 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 yield 94;
             }
 
-            case NONE ->  95;
+            case INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER -> {
+                log.warn("INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 95;
+            }
+
+            case NONE ->  96;
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         };
