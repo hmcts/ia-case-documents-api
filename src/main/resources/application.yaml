@@ -275,10 +275,10 @@ internalDetainedPrisonIrcAppealSubmissionDocument.fileExtension: PDF
 internalDetainedPrisonIrcAppealSubmissionDocument.fileName: "detained-prison-irc-appellant-appeal-submission-notice"
 internalDetainedPrisonIrcAppealSubmissionDocument.templateName: ${IA_INTERNAL_DETAINED_PRISON_IRC_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-Case-Submitted.docx}
 
-InternalDetainedResponderReviewIrcPrisonDocument.contentType: application/pdf
-InternalDetainedResponderReviewIrcPrisonDocument.fileExtension: PDF
-InternalDetainedResponderReviewIrcPrisonDocument.fileName: "internal-prison-irc-responder-review-notice"
-InternalDetainedResponderReviewIrcPrisonDocument.templateName: ${IA_INTERNAL_DETAINED_HO_TO_REVIEW_APPEAL_PRISON_IRC_TEMPLATE:TB-IAC-GNO-ENG-Internal-Irc-Prison-Ho-To-Review-Appeal.docx}
+internalDetainedRespondentReviewIrcPrisonNotificationLetter.contentType: application/pdf
+internalDetainedRespondentReviewIrcPrisonNotificationLetter.fileExtension: PDF
+internalDetainedRespondentReviewIrcPrisonNotificationLetter.fileName: "internal-prison-irc-responder-review-notice"
+internalDetainedRespondentReviewIrcPrisonNotificationLetter.templateName: ${IA_INTERNAL_DETAINED_HO_TO_REVIEW_APPEAL_PRISON_IRC_TEMPLATE:TB-IAC-GNO-ENG-Internal-Irc-Prison-Ho-To-Review-Appeal.docx}
 
 internalAppealCanProceedDocument.contentType: application/pdf
 internalAppealCanProceedDocument.fileExtension: PDF
