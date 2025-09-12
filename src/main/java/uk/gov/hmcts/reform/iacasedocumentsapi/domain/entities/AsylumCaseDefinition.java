@@ -845,6 +845,9 @@ public enum AsylumCaseDefinition {
     LAST_MODIFIED_DIRECTION(
             "lastModifiedDirection", new TypeReference<Direction>(){}),
 
+    HEARING_CHANNEL(
+        "hearingChannel", new TypeReference<DynamicList>(){}),
+
     ;
 
     private final String value;

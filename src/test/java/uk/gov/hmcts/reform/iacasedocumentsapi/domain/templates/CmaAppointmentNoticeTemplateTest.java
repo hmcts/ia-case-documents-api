@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -44,7 +45,6 @@ public class CmaAppointmentNoticeTemplateTest {
     private String legalRepReferenceNumber = "OUR-REF";
     private String hearingDate = "2020-12-25T12:34:56";
     private String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
-    private String taylorHouseHearingCentreAddress = "London, 456 Somewhere, South";
     private String vulnerabilitiesTribunalResponse = "Vulnerabilities";
     private String multimediaTribunalResponse = "Multimedia";
     private String singleSexCourtTribunalResponse = "Single sex court";
@@ -180,6 +180,7 @@ public class CmaAppointmentNoticeTemplateTest {
 
         when((hearingDetailsFinder.getHearingCentreUrl(MANCHESTER))).thenReturn(hearingCentreUrl);
         when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(isIntegrated));
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
@@ -210,7 +211,6 @@ public class CmaAppointmentNoticeTemplateTest {
 
     @Test
     public void should_be_tolerant_of_missing_data() {
-
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
@@ -260,6 +260,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
