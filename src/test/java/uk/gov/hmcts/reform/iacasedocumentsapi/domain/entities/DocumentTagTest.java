@@ -103,10 +103,11 @@ class DocumentTagTest {
         assertEquals("internalDetainedAppealSubmittedInTimeWithFeeToPayLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER.toString());
         assertEquals("internalDetainedOutOfTimeDecisionAllowedLetter", DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER.toString());
         assertEquals("internalDetainedAppealSubmittedOutOfTimeWithFeeLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER.toString());
+        assertEquals("internalDetainedOutOfTimeRemissionIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(104, DocumentTag.values().length);
+        assertEquals(105, DocumentTag.values().length);
     }
 }
