@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -19,12 +18,12 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 @Component
-public class InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate implements DocumentTemplate<AsylumCase> {
+public class DetainedAppealHearingAdjournedNoDateAppellantTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
 
-    public InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate(
+    public DetainedAppealHearingAdjournedNoDateAppellantTemplate(
             @Value("${detainedHearingAdjournedNoDateAppellantLetter.templateName}") String templateName,
             CustomerServicesProvider customerServicesProvider
     ) {
@@ -44,9 +43,9 @@ public class InternalDetainedAppealHearingAdjournedNoDateAppellantTemplate imple
         final Map<String, Object> fieldValues = new HashMap<>();
 
         String previousHearingCentre;
-        Optional<HearingCentre> hearingCentre = caseDetailsBefore.getCaseData().read(HEARING_CENTRE, HearingCentre.class);
+        Optional<String> hearingCentre = caseDetailsBefore.getCaseData().read(LIST_CASE_HEARING_CENTRE, String.class);
         if (hearingCentre.isPresent()) {
-            previousHearingCentre = hearingCentre.get().getValue();
+            previousHearingCentre = hearingCentre.get();
         } else {
             previousHearingCentre = "";
         }

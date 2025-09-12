@@ -22,13 +22,13 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGenerator(
-            @Qualifier("internalDetainedAppealHearingAdjournedNoDateAppellantLetter") DocumentCreator<AsylumCase> documentCreator,
+    public DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator(
+            @Qualifier("detainedAppealHearingAdjournedNoDateAppellantLetter") DocumentCreator<AsylumCase> documentCreator,
             DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;

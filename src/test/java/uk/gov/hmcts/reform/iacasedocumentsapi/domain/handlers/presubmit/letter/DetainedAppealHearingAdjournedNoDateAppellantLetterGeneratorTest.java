@@ -30,7 +30,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGeneratorTest {
+class DetainedAppealHearingAdjournedNoDateAppellantLetterGeneratorTest {
     @Mock private DocumentCreator<AsylumCase> documentCreator;
     @Mock private DocumentHandler documentHandler;
     @Mock private Callback<AsylumCase> callback;
@@ -38,11 +38,11 @@ class InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGeneratorTest {
     @Mock private AsylumCase asylumCase;
     @Mock private Document document;
 
-    private InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGenerator generator;
+    private DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator generator;
 
     @BeforeEach
     void setUp() {
-        generator = new InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGenerator(documentCreator, documentHandler);
+        generator = new DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator(documentCreator, documentHandler);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
