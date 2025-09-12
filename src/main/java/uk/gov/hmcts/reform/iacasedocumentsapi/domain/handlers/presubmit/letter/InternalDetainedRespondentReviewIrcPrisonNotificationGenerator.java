@@ -47,12 +47,12 @@ public class InternalDetainedRespondentReviewIrcPrisonNotificationGenerator impl
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-        && callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW
-        && (isDetainedInOneOfFacilityTypes(callback.getCaseDetails().getCaseData(),PRISON, IRC))
-        && (isInternalCase(callback.getCaseDetails().getCaseData()) && !hasBeenSubmittedAsLegalRepresentedInternalCase(callback.getCaseDetails().getCaseData()));
-        }
+            && callback.getEvent() == Event.REQUEST_RESPONDENT_REVIEW
+            && (isDetainedInOneOfFacilityTypes(callback.getCaseDetails().getCaseData(),PRISON, IRC))
+            && (isInternalCase(callback.getCaseDetails().getCaseData()) && !hasBeenSubmittedAsLegalRepresentedInternalCase(callback.getCaseDetails().getCaseData()));
+    }
 
-        // Introduce hasBeenSubmittedAsLegalRepresentedInternalCase as is in notifications API
+    // Introduce hasBeenSubmittedAsLegalRepresentedInternalCase as is in notifications API
     public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(AsylumCase asylumCase) {
         return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
                 .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);

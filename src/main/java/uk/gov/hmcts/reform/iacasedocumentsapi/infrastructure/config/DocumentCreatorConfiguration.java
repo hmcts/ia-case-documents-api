@@ -1300,6 +1300,7 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
     @Bean("internalDetainedRespondentReviewIrcPrisonNotificationLetter")
     public DocumentCreator<AsylumCase> internalDetainedRespondentReviewIrcPrisonNotificationCreator(
             @Value("${internalDetainedRespondentReviewIrcPrisonNotificationLetter.contentType}") String contentType,
@@ -1320,6 +1321,7 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
     @Bean("internalAppellantFtpaDecidedRefusedLetter")
     public DocumentCreator<AsylumCase> getInternalAppellantFtpaDecidedRefusedLetterCreator(
         @Value("${internalAppellantFtpaDecidedRefusedLetter.contentType}") String contentType,
