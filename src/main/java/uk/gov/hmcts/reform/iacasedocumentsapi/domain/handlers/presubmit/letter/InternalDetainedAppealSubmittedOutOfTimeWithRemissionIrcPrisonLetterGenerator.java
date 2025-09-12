@@ -78,11 +78,11 @@ public class InternalDetainedAppealSubmittedOutOfTimeWithRemissionIrcPrisonLette
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalDetainedAppealSubmissionInTimeWithFeeToPayLetter = documentCreator.create(caseDetails);
+        Document document = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadata(
                 asylumCase,
-                internalDetainedAppealSubmissionInTimeWithFeeToPayLetter,
+                document,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER
         );
