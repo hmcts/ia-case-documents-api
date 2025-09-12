@@ -68,7 +68,7 @@ public class InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGenerato
                 asylumCase,
                 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_A_DATE_LETTER
+                DocumentTag.DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

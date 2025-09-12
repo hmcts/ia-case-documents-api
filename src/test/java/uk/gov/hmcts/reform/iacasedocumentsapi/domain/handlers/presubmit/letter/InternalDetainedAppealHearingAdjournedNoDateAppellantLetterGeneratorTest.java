@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_A_DATE_LETTER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -96,7 +96,7 @@ class InternalDetainedAppealHearingAdjournedNoDateAppellantLetterGeneratorTest {
                 asylumCase,
                 document,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_A_DATE_LETTER
+                DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER
         );
     }
 
