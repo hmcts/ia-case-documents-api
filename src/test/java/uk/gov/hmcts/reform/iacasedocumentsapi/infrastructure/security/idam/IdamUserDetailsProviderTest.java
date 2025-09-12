@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
@@ -22,7 +21,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessToke
 public class IdamUserDetailsProviderTest {
 
     @Mock private AccessTokenProvider accessTokenProvider;
-    @Mock private IdamApi idamApi;
     @Mock
     private IdamService idamService;
     private IdamUserDetailsProvider idamUserDetailsProvider;
@@ -33,13 +31,12 @@ public class IdamUserDetailsProviderTest {
         idamUserDetailsProvider =
             new IdamUserDetailsProvider(
                 accessTokenProvider,
-                idamApi,
                 idamService
             );
     }
 
     @Test
-    public void should_call_idam_api_to_get_user_details() {
+    void should_call_idam_service_to_get_user_details() {
 
         String expectedAccessToken = "ABCDEFG";
         String expectedId = "1234";
@@ -61,7 +58,6 @@ public class IdamUserDetailsProviderTest {
         when(accessTokenProvider.getAccessToken()).thenReturn(expectedAccessToken);
 
         when(idamService.getUserInfo(expectedAccessToken)).thenReturn(userInfo);
-
         UserDetails actualUserDetails = idamUserDetailsProvider.getUserDetails();
 
         verify(idamService).getUserInfo(expectedAccessToken);
@@ -98,7 +94,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_throw_exception_if_idam_roles_missing() {
+    void should_throw_exception_if_idam_roles_missing() {
 
         String accessToken = "ABCDEFG";
 
@@ -121,7 +117,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_throw_exception_if_idam_email_missing() {
+    void should_throw_exception_if_idam_email_missing() {
 
         String accessToken = "ABCDEFG";
 
@@ -167,7 +163,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_throw_exception_if_idam_surname_missing() {
+    void should_throw_exception_if_idam_surname_missing() {
 
         String accessToken = "ABCDEFG";
 
@@ -191,7 +187,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_wrap_server_exception_when_calling_idam() {
+    void should_wrap_server_exception_when_calling_idam() {
 
         String accessToken = "ABCDEFG";
 
@@ -208,7 +204,7 @@ public class IdamUserDetailsProviderTest {
     }
 
     @Test
-    public void should_wrap_client_exception_when_calling_idam() {
+    void should_wrap_client_exception_when_calling_idam() {
 
         String accessToken = "ABCDEFG";
 
