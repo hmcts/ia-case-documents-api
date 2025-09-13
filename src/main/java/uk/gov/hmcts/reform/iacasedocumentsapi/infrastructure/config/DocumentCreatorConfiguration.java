@@ -1829,7 +1829,7 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("internalDetainedAppealHoUploadBundleAppellantLetter")
-    public DocumentCreator<AsylumCase> getInternalDetainedAppealRemissionGrantedInTimeLetterDocumentCreator(
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealHoUploadBundleLetterDocumentCreator(
             @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.contentType}") String contentType,
             @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileExtension}") String fileExtension,
             @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileName}") String fileName,
