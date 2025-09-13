@@ -162,7 +162,7 @@ class MakeAnApplicationServiceTest {
                 LocalDate.now().toString(),
                 "Granted",
                 State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
+                "ctsc");
         testApplication.setDecisionReason("No reason");
 
         Map<String, String> applicationPropertiesMap = makeAnApplicationService.retrieveApplicationProperties(Optional.of(testApplication));
