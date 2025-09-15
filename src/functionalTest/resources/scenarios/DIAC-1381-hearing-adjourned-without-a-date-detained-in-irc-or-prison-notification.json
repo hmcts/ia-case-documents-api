@@ -11,7 +11,9 @@
         "template": "minimal-appeal-started.json",
         "replacements": {
           "appealReferenceNumber": "HU/50001/2025",
-          "listCaseHearingCentre": "nottingham",
+          "listCaseHearingCentre": "taylorHouse",
+          "hearingCentre": "taylorHouse",
+          "listCaseHearingCentre": "taylorHouse",
           "adjournHearingWithoutDateReasons": "Sample reasons",
           "isAdmin": "Yes",
           "isAcceleratedDetainedAppeal": "No",
