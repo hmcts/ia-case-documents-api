@@ -1849,6 +1849,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedAppealHoUploadBundleAppellantLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealHoUploadBundleLetterDocumentCreator(
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.contentType}") String contentType,
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealHoUploadBundleAppellantTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalDetainedAppealSubmissionOutOfTimeWithFeeLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealSubmissionOutOfTimeWithFeeLetterDocumentCreator(
         @Value("${internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.contentType}") String contentType,
@@ -1869,5 +1890,27 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("internalDetainedOutOfTimeRemissionIrcPrisonLetterDocumentCreator")
+    public DocumentCreator<AsylumCase> getInternalDetainedOutOfTimeRemissionIrcPrisonLetterDocumentCreator(
+            @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.contentType}") String contentType,
+            @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealSubmissionOutOfTimeWithRemissionIrcPrisonTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 
 }
