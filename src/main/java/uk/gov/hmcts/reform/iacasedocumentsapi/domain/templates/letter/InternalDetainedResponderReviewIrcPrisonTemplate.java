@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
@@ -12,7 +13,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LAST_MODIFIED_DIRECTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getDirectionDueDate;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -43,12 +46,17 @@ public class InternalDetainedResponderReviewIrcPrisonTemplate implements Documen
             CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
+        String directionDueDate;
+        Optional<Direction> lastDirectionOpt = asylumCase.read(LAST_MODIFIED_DIRECTION, Direction.class);
 
+        directionDueDate = lastDirectionOpt.map(
+                direction -> formatDateForNotificationAttachmentDocument(LocalDate.parse(direction.getDateDue()))
+        ).orElse("");
         final Map<String, Object> fieldValues = new HashMap<>();
 
         fieldValues.put("dateLetterSent", getFormattedDate(dateProvider.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("directionDueDate", getFormattedDate(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.RESPONDENT_REVIEW))));
+        fieldValues.put("directionDueDate", directionDueDate);
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)); // how to change this to customer services email? or is it already and just need to change text to "customer services email"
         return fieldValues;
