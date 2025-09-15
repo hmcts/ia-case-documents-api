@@ -13,21 +13,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.convertAsylumCaseFeeValue;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 @Component
-public class InternalDetainedAppealSubmissionOutOfTimeWithRemissionIrcPrisonTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalDetainedAppealSubmissionOutOfTimeWithRemissionGrantedIrcPrisonTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final int daysAfterSubmitAppeal;
     private final CustomerServicesProvider customerServicesProvider;
     private final SystemDateProvider systemDateProvider;
 
-    public InternalDetainedAppealSubmissionOutOfTimeWithRemissionIrcPrisonTemplate(
-            @Value("${internalDetainedOutOfTimeRemissionIrcPrisonLetter.templateName}") String templateName,
+    public InternalDetainedAppealSubmissionOutOfTimeWithRemissionGrantedIrcPrisonTemplate(
+            @Value("${internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.templateName}") String templateName,
             @Value("${appellantDaysToWait.letter.afterSubmitAppeal}") int daysAfterSubmitAppeal,
             CustomerServicesProvider customerServicesProvider,
             SystemDateProvider systemDateProvider
@@ -49,10 +47,8 @@ public class InternalDetainedAppealSubmissionOutOfTimeWithRemissionIrcPrisonTemp
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        String feeToPay = convertAsylumCaseFeeValue(asylumCase.read(FEE_AMOUNT_GBP, String.class).orElse(""));
 
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("feeAmount", feeToPay);
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("onlineCaseRefNumber", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY));
         fieldValues.put("daysAfterSubmissionDate", systemDateProvider.dueDate(daysAfterSubmitAppeal));

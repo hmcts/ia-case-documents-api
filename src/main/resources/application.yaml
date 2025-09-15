@@ -490,6 +490,11 @@ internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName: "appeal-form"
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-late-with-remission-Submitted.docx}
 
 
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.contentType: application/pdf
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileExtension: PDF
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileName: "appeal-form"
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Remission-Granted-Out-Of-Time.docx}
+
 internalDetainedOutOfTimeDecisionAllowedLetter.contentType: application/pdf
 internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension: PDF
 internalDetainedOutOfTimeDecisionAllowedLetter.fileName: "appeal-form"
