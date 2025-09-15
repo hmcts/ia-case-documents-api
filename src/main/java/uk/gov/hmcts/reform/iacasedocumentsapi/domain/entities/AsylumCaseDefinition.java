@@ -842,6 +842,9 @@ public enum AsylumCaseDefinition {
     DETENTION_POSTCODE(
             "detentionPostcode", new TypeReference<String>(){}),
 
+    LAST_MODIFIED_DIRECTION(
+            "lastModifiedDirection", new TypeReference<Direction>(){}),
+
     ;
 
     private final String value;

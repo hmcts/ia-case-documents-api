@@ -321,7 +321,20 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 94;
             }
-            case NONE ->  95;
+            case INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 95;
+            }
+            case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER -> {
+                log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 96;
+            }
+            case INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 97;
+            }
+
+            case NONE ->  98;
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         };
