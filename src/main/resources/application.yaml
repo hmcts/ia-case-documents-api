@@ -500,6 +500,11 @@ internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension: PDF
 internalDetainedOutOfTimeDecisionAllowedLetter.fileName: "appeal-form"
 internalDetainedOutOfTimeDecisionAllowedLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER:TB-IAC-LET-ENG-00817.docx}
 
+internalDetainedAppealHoUploadBundleAppellantLetter.contentType: application/pdf
+internalDetainedAppealHoUploadBundleAppellantLetter.fileExtension: PDF
+internalDetainedAppealHoUploadBundleAppellantLetter.fileName: "internal-detained-ho-upload-bundle-appellant-letter"
+internalDetainedAppealHoUploadBundleAppellantLetter.templateName: ${IA_INTERNAL_DETAINED_HO_UPLOAD_BUNDLE_APPELLANT_LETTER:TB-IAC-LET-ENG-Internal-HO-Upload-Bundle-Appellant.docx}
+
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.contentType: application/pdf
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
