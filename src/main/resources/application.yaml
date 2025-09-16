@@ -500,6 +500,11 @@ internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
 
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.contentType: application/pdf
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileExtension: PDF
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileName: "appeal-form"
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.templateName: ${INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER:TB-IAC-LET-ENG-Internal-detained-update-tribunal-decision-rule-31-irc-prison.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
@@ -1165,6 +1170,7 @@ appellantDaysToWait:
     afterSubmitAppeal: 10
     afterSubmitAppealWithFeeToPay: 14
     tribunalDocumentToSendTimeline: 4
+    updateTribunalDecisionDone: 28
 
 
 ### Email addresses
