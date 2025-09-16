@@ -48,7 +48,14 @@ class IdamServiceTest {
 
     @BeforeEach
     void setUp() {
-        idamService = new IdamService(idamApi, roleAssignmentService);
+        idamService = new IdamService(systemUserName,
+                                      systemUserPass,
+                                      idamRedirectUrl,
+                                      systemUserScope,
+                                      idamClientId,
+                                      idamClientSecret,
+                                      idamApi,
+                                      roleAssignmentService);
     }
 
     @Test
