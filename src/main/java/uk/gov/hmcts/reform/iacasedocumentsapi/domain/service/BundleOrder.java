@@ -332,7 +332,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 yield 95;
             }
             case INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER -> {
-                    log.warn("INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                log.warn("INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 96;
             }
 
