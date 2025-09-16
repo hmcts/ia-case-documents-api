@@ -337,7 +337,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 yield 97;
             }
 
-          case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER -> {
+            case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 98;
             }
