@@ -23,8 +23,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
 public class InternalDetainedRespondentReviewIrcPrisonNotificationGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -52,12 +51,6 @@ public class InternalDetainedRespondentReviewIrcPrisonNotificationGenerator impl
             && (isDetainedInOneOfFacilityTypes(callback.getCaseDetails().getCaseData(),PRISON, IRC))
             && (isInternalCase(callback.getCaseDetails().getCaseData()) && !hasBeenSubmittedAsLegalRepresentedInternalCase(callback.getCaseDetails().getCaseData()));
     }
-
-    // Introduce hasBeenSubmittedAsLegalRepresentedInternalCase as is in notifications API
-    public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(AsylumCase asylumCase) {
-        return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
-                .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);
-    } // put in utyls file
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
             PreSubmitCallbackStage callbackStage,
