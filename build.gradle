@@ -451,10 +451,10 @@ dependencies {
   testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
-  testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
-    exclude group: 'commons-io', module: 'commons-io'
-    exclude group: 'org.apache.commons', module: 'commons-lang3'
-  }
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
+        exclude group: 'commons-io', module: 'commons-io'
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+    }
 
   testImplementation 'pl.pragmatists:JUnitParams:1.1.1'
 

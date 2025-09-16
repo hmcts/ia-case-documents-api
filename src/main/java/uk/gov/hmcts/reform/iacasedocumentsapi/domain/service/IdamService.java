@@ -3,12 +3,17 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Value;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.Token;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 
+@Slf4j
 @Component
 public class IdamService {
 
@@ -19,6 +24,7 @@ public class IdamService {
     private final String idamClientId;
     private final String idamClientSecret;
     private final IdamApi idamApi;
+    private final RoleAssignmentService roleAssignmentService;
 
     public IdamService(
         @Value("${idam.system.username}") String systemUserName,
@@ -27,7 +33,8 @@ public class IdamService {
         @Value("${idam.scope}") String systemUserScope,
         @Value("${spring.security.oauth2.client.registration.oidc.client-id}") String idamClientId,
         @Value("${spring.security.oauth2.client.registration.oidc.client-secret}") String idamClientSecret,
-        IdamApi idamApi
+        IdamApi idamApi,
+        RoleAssignmentService roleAssignmentService
     ) {
         this.systemUserName = systemUserName;
         this.systemUserPass = systemUserPass;
@@ -36,6 +43,7 @@ public class IdamService {
         this.idamClientId = idamClientId;
         this.idamClientSecret = idamClientSecret;
         this.idamApi = idamApi;
+        this.roleAssignmentService = roleAssignmentService;
     }
 
     @Cacheable(value = "systemTokenCache")
@@ -55,6 +63,18 @@ public class IdamService {
 
     @Cacheable(value = "userInfoCache")
     public UserInfo getUserInfo(String accessToken) {
-        return idamApi.userInfo(accessToken);
+        UserInfo userInfo = idamApi.userInfo(accessToken);
+        List<String> amRoles = Collections.emptyList();
+        try {
+            amRoles = roleAssignmentService.getAmRolesFromUser(userInfo.getUid(), accessToken);
+        } catch (Exception e) {
+            log.error("Error fetching AM roles for user: {}", userInfo.getUid(), e);
+        }
+        List<String> idamRoles = userInfo.getRoles() == null ?
+            Collections.emptyList() :
+            userInfo.getRoles();
+        List<String> roles = Stream.concat(amRoles.stream(), idamRoles.stream()).toList();
+        userInfo.setRoles(roles);
+        return userInfo;
     }
 }
