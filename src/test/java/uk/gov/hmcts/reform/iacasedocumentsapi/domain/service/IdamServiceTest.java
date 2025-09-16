@@ -61,15 +61,6 @@ class IdamServiceTest {
     @Test
     void getUserDetails_from_am_and_idam() {
 
-        String expectedAccessToken = "ABCDEFG";
-        String expectedId = "1234";
-        List<String> expectedIdamRoles = Arrays.asList("role-1", "role-2");
-        List<String> expectedAmRoles = Arrays.asList("role-3", "role-4");
-        String expectedEmailAddress = "john.doe@example.com";
-        String expectedForename = "John";
-        String expectedSurname = "Doe";
-        String expectedName = expectedForename + " " + expectedSurname;
-
         idamService = new IdamService(systemUserName,
                                       systemUserPass,
                                       idamRedirectUrl,
@@ -78,6 +69,15 @@ class IdamServiceTest {
                                       idamClientSecret,
                                       idamApi,
                                       roleAssignmentService);
+
+        String expectedAccessToken = "ABCDEFG";
+        String expectedId = "1234";
+        List<String> expectedIdamRoles = Arrays.asList("role-1", "role-2");
+        List<String> expectedAmRoles = Arrays.asList("role-3", "role-4");
+        String expectedEmailAddress = "john.doe@example.com";
+        String expectedForename = "John";
+        String expectedSurname = "Doe";
+        String expectedName = expectedForename + " " + expectedSurname;
 
         UserInfo expectedUserInfo = new UserInfo(
             expectedEmailAddress,
