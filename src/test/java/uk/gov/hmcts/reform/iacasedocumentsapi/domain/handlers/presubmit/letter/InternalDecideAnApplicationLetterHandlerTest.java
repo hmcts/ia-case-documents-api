@@ -80,7 +80,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
             LocalDate.now().toString(),
             decisionGranted,
             State.APPEAL_SUBMITTED.toString(),
-            "caseworker-ia-admofficer");
+            "ctsc");
     private InternalDecideAnApplicationLetterHandler internalDecideAnAppellantApplicationLetterHandler;
 
     @BeforeEach
@@ -236,7 +236,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
                 LocalDate.now().toString(),
                 decision.toString(),
                 State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
+                "ctsc");
         testApplications.add(new IdValue<>("1", testApplication));
 
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
@@ -268,7 +268,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
                 LocalDate.now().toString(),
                 decision.toString(),
                 State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
+                "ctsc");
         testApplications.add(new IdValue<>("1", testApplication));
 
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));
@@ -301,7 +301,7 @@ public class InternalDecideAnApplicationLetterHandlerTest {
                 LocalDate.now().toString(),
                 decisionPending,
                 State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
+                "ctsc");
         testApplications.add(new IdValue<>("1", testApplication));
 
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(testApplications));

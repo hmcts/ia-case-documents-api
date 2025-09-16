@@ -319,18 +319,29 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 93;
             }
-
+            case INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 94;
+            }
+            case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER -> {
+                log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 95;
+            }
             case INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 94;
+                yield 96;
             }
 
             case INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER -> {
                 log.warn("INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 95;
+                yield 97;
             }
 
-            case NONE ->  96;
+          case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER -> {
+                log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 98;
+            }
+            case NONE ->  99;
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         };
