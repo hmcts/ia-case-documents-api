@@ -12,7 +12,7 @@
         "replacements": {
           "appealReferenceNumber": "HU/50001/2025",
           "isAdmin": "Yes",
-          "appellantsRepresentation": "No",  // IMPORTANT: must be No to trigger handler
+          "appellantsRepresentation": "No",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "prison",
