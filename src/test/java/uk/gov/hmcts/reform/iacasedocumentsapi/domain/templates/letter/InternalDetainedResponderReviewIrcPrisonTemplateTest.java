@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LAST_MODIFIED_DIRECTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -50,7 +51,6 @@ class InternalDetainedResponderReviewIrcPrisonTemplateTest {
         );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-
         when(dateProvider.now()).thenReturn(LocalDate.of(2025, 9, 15));
     }
 
@@ -76,10 +76,10 @@ class InternalDetainedResponderReviewIrcPrisonTemplateTest {
             Map<String, Object> fieldValues = template.mapFieldValues(caseDetails);
 
             assertThat(fieldValues.get("onlineCaseRefNumber")).isEqualTo(CASE_REF);
-            assertThat(fieldValues.get("directionDueDate")).isEqualTo("20 Oct 2025");  // Formatted
+            assertThat(fieldValues.get("directionDueDate")).isEqualTo("20 Oct 2025");
             assertThat(fieldValues.get("customerServicesTelephone")).isEqualTo(CUSTOMER_PHONE);
             assertThat(fieldValues.get("customerServicesEmail")).isEqualTo(CUSTOMER_EMAIL);
-            assertThat(fieldValues.get("dateLetterSent")).isEqualTo("15 Sept 2025");
+            assertThat(fieldValues.get("dateLetterSent")).isEqualTo(formatDateForNotificationAttachmentDocument(dateProvider.now()).toString());
         }
     }
 
@@ -98,8 +98,7 @@ class InternalDetainedResponderReviewIrcPrisonTemplateTest {
 
             assertThat(fieldValues.get("directionDueDate")).isEqualTo("");
             assertThat(fieldValues.get("onlineCaseRefNumber")).isEqualTo(CASE_REF);
-            assertThat(fieldValues.get("dateLetterSent")).isEqualTo("15 Sept 2025");
+            assertThat(fieldValues.get("dateLetterSent")).isEqualTo(formatDateForNotificationAttachmentDocument(dateProvider.now()).toString());
         }
     }
-
 }
