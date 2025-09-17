@@ -48,7 +48,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeType;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.ServiceRequestResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.ServiceRequestService;
