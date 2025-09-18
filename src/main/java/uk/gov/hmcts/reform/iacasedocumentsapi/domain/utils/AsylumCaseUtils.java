@@ -93,7 +93,7 @@ public class AsylumCaseUtils {
             .map(flag -> flag.equals(YES))
             .orElse(false);
 
-        return appellantHasFixedUkAddress || appellantHasFixedOutOfCountryAddress || isDetainedInOneOfFacilityTypes(asylumCase, OTHER,IRC,PRISON);
+        return appellantHasFixedUkAddress || appellantHasFixedOutOfCountryAddress || isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
