@@ -589,6 +589,9 @@ security:
     - "caseworker-ia"
     - "citizen"
   roleEventAccess:
+    caseworker-approver:
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -602,6 +605,7 @@ security:
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
       - "applyForFTPAAppellant"
+      - "removeRepresentation"
     tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
