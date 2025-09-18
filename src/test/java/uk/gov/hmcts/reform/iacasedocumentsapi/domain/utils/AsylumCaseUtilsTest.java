@@ -720,4 +720,29 @@ public class AsylumCaseUtilsTest {
 
         assertFalse(isFeeExemptAppeal(asylumCase));
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PARTIALLY_APPROVED", "REJECTED"})
+    void should_return_true_for_remission_decision_partially_granted_or_refused(String remissionDecisionValue) {
+        RemissionDecision remissionDecision = RemissionDecision.valueOf(remissionDecisionValue);
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertTrue(AsylumCaseUtils.remissionDecisionPartiallyGrantedOrRefused(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"APPROVED"})
+    void should_return_false_for_other_remission_decisions(String remissionDecisionValue) {
+        RemissionDecision remissionDecision = RemissionDecision.valueOf(remissionDecisionValue);
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertFalse(AsylumCaseUtils.remissionDecisionPartiallyGrantedOrRefused(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_remission_decision_is_not_present() {
+        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+
+        assertFalse(AsylumCaseUtils.remissionDecisionPartiallyGrantedOrRefused(asylumCase));
+    }
 }
