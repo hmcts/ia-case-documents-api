@@ -4,10 +4,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.EDIT_CASE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -48,10 +44,9 @@ public class InternalEditCaseListingLetterGenerator implements PreSubmitCallback
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == EDIT_CASE_LISTING
-               && isInternalCase(asylumCase)
-               && (!isAppellantInDetention(asylumCase) || (isDetainedInFacilityType(asylumCase, OTHER) && hasBeenSubmittedByAppellantInternalCase(asylumCase)))
-               && hasAppellantAddressInCountryOrOoc(asylumCase);
+                && callback.getEvent() == EDIT_CASE_LISTING
+                && hasAppellantAddressInCountryOrOoc(asylumCase)
+                && (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

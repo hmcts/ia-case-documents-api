@@ -1912,4 +1912,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealRemissionPartiallyGrantedOrRefusedDocumentCreator(
+        @Value("${internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType}") String contentType,
+        @Value("${internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 }
