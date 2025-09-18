@@ -509,6 +509,11 @@ internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
 
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType: application/pdf
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension: PDF
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName: "appeal-form"
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.templateName: ${IA_APPEAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE:TB-IAC-LET-ENG-00821.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
@@ -1183,6 +1188,7 @@ appellantDaysToWait:
     afterSubmitAppeal: 10
     afterSubmitAppealWithFeeToPay: 14
     tribunalDocumentToSendTimeline: 4
+    afterRemissionDecision: 14
 
 
 ### Email addresses
