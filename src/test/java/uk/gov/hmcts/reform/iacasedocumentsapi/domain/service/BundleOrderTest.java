@@ -18,14 +18,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 @ExtendWith(MockitoExtension.class)
-public class BundleOrderTest {
+class BundleOrderTest {
 
     private final BundleOrder bundleOrder = new BundleOrder();
 
     @Mock Document document;
 
     @Test
-    public void should_sort_in_correct_order_excluding_bail_tags() {
+    void should_sort_in_correct_order_excluding_bail_tags() {
         List<DocumentTag> tags = newArrayList(DocumentTag.values());
         tags.add(DocumentTag.CASE_ARGUMENT);
         tags.add(DocumentTag.APPEAL_SUBMISSION);
@@ -87,7 +87,6 @@ public class BundleOrderTest {
             DocumentTag.INTERNAL_APPEAL_SUBMISSION,
             DocumentTag.INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER,
             DocumentTag.INTERNAL_END_APPEAL_AUTOMATICALLY,
-            DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER,
             DocumentTag.INTERNAL_DET_MARK_AS_PAID_LETTER,
             DocumentTag.INTERNAL_LIST_CASE_LETTER,
             DocumentTag.INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER,
