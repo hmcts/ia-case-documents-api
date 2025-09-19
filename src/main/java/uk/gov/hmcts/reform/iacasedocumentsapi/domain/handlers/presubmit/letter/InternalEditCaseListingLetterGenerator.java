@@ -45,8 +45,8 @@ public class InternalEditCaseListingLetterGenerator implements PreSubmitCallback
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == EDIT_CASE_LISTING
-                && hasAppellantAddressInCountryOrOoc(asylumCase)
-                && (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
+                && (hasAppellantAddressInCountryOrOoc(asylumCase) && isInternalNonDetainedCase(asylumCase))
+                || isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
