@@ -746,6 +746,8 @@ security:
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
       - "caseListing"
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
