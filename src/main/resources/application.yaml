@@ -489,7 +489,6 @@ internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension: PDF
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName: "appeal-form"
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-late-with-remission-Submitted.docx}
 
-
 internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.contentType: application/pdf
 internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileExtension: PDF
 internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileName: "appeal-form"
@@ -547,6 +546,11 @@ internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
 
+detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
+detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
+detainedLegalRepRemovedIrcPrisonLetter.fileName: "appeal-form"
+detainedLegalRepRemovedIrcPrisonLetter.templateName: ${DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER_TEMPLATE:TB-IAC-LET-ENG-legal-rep-removed.docx}
+
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
 bailNoticeOfHearing.fileName: "hearing-notice"
@@ -590,6 +594,9 @@ security:
     - "caseworker-ia"
     - "citizen"
   roleEventAccess:
+    caseworker-approver:
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -603,6 +610,7 @@ security:
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
       - "applyForFTPAAppellant"
+      - "removeRepresentation"
     tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -738,6 +746,8 @@ security:
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
       - "caseListing"
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
