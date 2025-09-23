@@ -81,6 +81,9 @@ public enum Event {
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments", CaseType.ASYLUM),
     SAVE_NOTIFICATIONS_TO_DATA("saveNotificationsToData", CaseType.ASYLUM),
 
+    REMOVE_REPRESENTATION("removeRepresentation", CaseType.ASYLUM),
+    REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative", CaseType.ASYLUM),
+
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);
 
