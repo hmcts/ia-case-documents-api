@@ -408,4 +408,9 @@ public class AsylumCaseUtils {
             .orElse(false);
     }
 
+    public static Boolean remissionDecisionPartiallyGranted(AsylumCase asylumCase) {
+        return asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+                .map(decision -> PARTIALLY_APPROVED == decision)
+                .orElse(false);
+    }
 }
