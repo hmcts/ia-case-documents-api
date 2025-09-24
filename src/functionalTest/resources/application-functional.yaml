@@ -9,6 +9,6 @@ idam:
 
 spring:
   cache:
-    cache-names: userInfoCache, legalRepATokenCache, caseOfficerTokenCache, adminOfficerTokenCache, homeOfficeApcTokenCache, homeOfficeLartTokenCache, homeOfficePouTokenCache, homeOfficeGenericTokenCache, legalRepShareCaseATokenCache, legalRepOrgSuccessTokenCache, legalRepOrgDeletedTokenCache, judgeTokenCache, citizenTokenCache, systemTokenCache
+    cache-names: userInfoCache, accessTokenCache, legalRepATokenCache, caseOfficerTokenCache, adminOfficerTokenCache, homeOfficeApcTokenCache, homeOfficeLartTokenCache, homeOfficePouTokenCache, homeOfficeGenericTokenCache, legalRepShareCaseATokenCache, legalRepOrgSuccessTokenCache, legalRepOrgDeletedTokenCache, judgeTokenCache, citizenTokenCache, systemTokenCache
     caffeine:
       spec: expireAfterAccess=3600s

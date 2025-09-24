@@ -5,6 +5,9 @@ Immigration &amp; Asylum case documents API
 ## Purpose
 
 Immigration &amp; Asylum case documents API is a Spring Boot based application to generate documents for Immigration & Asylum Appellants and Legal Representatives.
+Includes `ia-case-payments-api` which allows Immigration and Asylum workflow to check fees and make a payment for an appeal based on chosen type of hearing
+during appeal submission. There are exceptions based on Business logic when payment can be done after appeal is submitted. All interactions with Fees and Payment system are encapsulated within this service.
+
 
 ### Prerequisites
 
@@ -29,7 +32,7 @@ The following environment variables are required when running the api without it
 
 ### Running the application
 
-To run the API quickly use the docker helper script as follows: (make sure to have the environment variables set) 
+To run the API quickly use the docker helper script as follows: (make sure to have the environment variables set)
 
 ```
 ./bin/run-in-docker.sh --clean --install
@@ -54,6 +57,13 @@ If the API is running, you should see this response:
 ```
 {"status":"UP"}
 ```
+
+### Implementation
+
+Downstream services for payments are listed below:
+- Fees service
+- Professional Ref Data
+- Payment service
 
 ### Running verification tests:
 
@@ -116,4 +126,9 @@ additional information where necessary.
    `git config --local --unset core.hooksPath`
 
    Still, you shouldn't be doing it so make sure you get in touch with a Technical Lead soon afterwards.
- 
+
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

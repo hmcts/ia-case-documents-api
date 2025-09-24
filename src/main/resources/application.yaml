@@ -12,6 +12,8 @@ management:
   endpoints:
     web:
       base-path: "/"
+      exposure:
+        include: health, info, prometheus
 
   health:
     probes:
@@ -53,7 +55,7 @@ spring:
         jwt:
           jwk-set-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o/jwks
   cache:
-    cache-names: userInfoCache
+    cache-names: userInfoCache, accessTokenCache
     caffeine:
       spec: expireAfterAccess=3600s
 
@@ -540,6 +542,10 @@ security:
     - "/swagger-ui/**"
     - "/v3/api-docs/**"
     - "/favicon.ico"
+    - "/csrf"
+    - "/testing-support/**"
+    - "/payment-updates"
+    - "/service-request-update"
   authorisedRoles:
     - "caseworker-ia"
     - "citizen"
@@ -557,6 +563,9 @@ security:
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
       - "applyForFTPAAppellant"
+      - "paymentAppeal"
+      - "payForAppeal"
+      - "generateServiceRequest"
     tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -721,6 +730,8 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "startAppeal"
+      - "generateServiceRequest"
     ctsc:
       - "listCase"
       - "submitAppeal"
@@ -750,6 +761,8 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "startAppeal"
+      - "generateServiceRequest"
     ctsc-team-leader:
       - "listCase"
       - "submitAppeal"
@@ -779,6 +792,8 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "startAppeal"
+      - "generateServiceRequest"
     national-business-centre:
       - "listCase"
       - "submitAppeal"
@@ -808,6 +823,8 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "startAppeal"
+      - "generateServiceRequest"
     challenged-access-ctsc:
       - "listCase"
       - "submitAppeal"
@@ -837,6 +854,8 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "startAppeal"
+      - "generateServiceRequest"
     challenged-access-admin:
       - "listCase"
       - "submitAppeal"
@@ -866,9 +885,12 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "startAppeal"
+      - "generateServiceRequest"
     citizen:
       - "startAppeal"
       - "editAppeal"
+      - "paymentAppeal"
       - "uploadAdditionalEvidence"
       - "submitAppeal"
       - "submitCmaRequirements"
@@ -1073,6 +1095,7 @@ security:
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
       - "saveNotificationsToData"
+      - "updatePaymentStatus"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"
@@ -1096,6 +1119,19 @@ security:
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
 case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
+
+auth:
+  idam:
+    client:
+      baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
+      detailsUri: "/details"
+      id: ${IA_IDAM_CLIENT_ID:ia}
+      secret: ${IA_IDAM_SECRET:something}
+      redirectUri: ${IA_IDAM_REDIRECT_URI:http://localhost}
+  provider:
+    service:
+      client:
+        baseUrl: ${S2S_URL:http://127.0.0.1:4502}
 
 idam:
   baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}
@@ -1154,3 +1190,8 @@ ia:
   config:
     validator:
       secret: ${IA_CONFIG_VALIDATOR_SECRET:}
+  payment:
+    debug:
+      logs:
+        enabled:
+          ${ENABLE_DEBUG_PAYMENT_LOGS:false}

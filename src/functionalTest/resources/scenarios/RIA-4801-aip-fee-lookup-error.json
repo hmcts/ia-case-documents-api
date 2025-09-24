@@ -1,0 +1,33 @@
+{
+  "description": "RIA-4801 Fee lookup error",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "eventId": "editAppeal",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "journeyType": "aip",
+          "homeOfficeReferenceNumber": "123456789",
+          "customerReference": "543232"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [
+      "Cannot retrieve the fee from fees-register."
+    ],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+        "journeyType": "aip",
+        "homeOfficeReferenceNumber": "123456789",
+        "customerReference": "543232"
+      }
+    }
+  }
+}

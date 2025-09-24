@@ -37,6 +37,10 @@
       "enabled": false
     },
     {
+      "matchPackageNames": ["au.com.dius.pact"],
+      "enabled": false
+    },
+    {
       "matchPackageNames": ["info.solidsoft.pitest"],
       "enabled": false
     }
