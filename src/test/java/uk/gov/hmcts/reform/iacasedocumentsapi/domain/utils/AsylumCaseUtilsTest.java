@@ -12,6 +12,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.remissionDecisionPartiallyGranted;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -714,5 +716,29 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
 
         assertFalse(AsylumCaseUtils.remissionDecisionPartiallyGrantedOrRefused(asylumCase));
+    }
+
+    @Test
+    void should_return_true_for_remission_decision_partially_granted() {
+        RemissionDecision remissionDecision = RemissionDecision.PARTIALLY_APPROVED;
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertTrue(remissionDecisionPartiallyGranted(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"APPROVED", "REJECTED"})
+    void should_return_false_for_remission_decision_not_partially_granted(String remissionDecisionValue) {
+        RemissionDecision remissionDecision = RemissionDecision.valueOf(remissionDecisionValue);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertFalse(remissionDecisionPartiallyGranted(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_remission_decision_is_not_present_for_partially_granted() {
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+
+        assertFalse(remissionDecisionPartiallyGranted(asylumCase));
     }
 }

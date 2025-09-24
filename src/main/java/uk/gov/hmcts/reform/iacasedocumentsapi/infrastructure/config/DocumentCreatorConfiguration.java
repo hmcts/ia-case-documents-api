@@ -1933,4 +1933,46 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedLateRemissionPartiallyGrantedTemplateLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedLateRemissionPartiallyGrantedDocumentCreator(
+            @Value("${internalDetainedLateRemissionPartiallyGrantedLetter.contentType}") String contentType,
+            @Value("${internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedLateRemissionPartiallyGrantedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedLateRemissionPartiallyGrantedTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("detainedLegalRepRemovedIrcPrisonLetterCreator")
+    public DocumentCreator<AsylumCase> getDetainedLegalRepRemovedIrcPrisonLetterCreator(
+            @Value("${detainedLegalRepRemovedIrcPrisonLetter.contentType}") String contentType,
+            @Value("${detainedLegalRepRemovedIrcPrisonLetter.fileExtension}") String fileExtension,
+            @Value("${detainedLegalRepRemovedIrcPrisonLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            DetainedLegalRepRemovedIrcPrisonTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
 }
