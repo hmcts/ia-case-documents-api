@@ -690,6 +690,10 @@ public enum AsylumCaseDefinition {
     FEE_AMOUNT_GBP(
             "feeAmountGbp", new TypeReference<String>(){}),
 
+    AMOUNT_LEFT_TO_PAY(
+        "amountLeftToPay", new TypeReference<String>(){}),
+
+
     UPDATE_TRIBUNAL_DECISION_LIST(
             "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),
 
@@ -842,6 +846,11 @@ public enum AsylumCaseDefinition {
     DETENTION_POSTCODE(
             "detentionPostcode", new TypeReference<String>(){}),
 
+    LAST_MODIFIED_DIRECTION(
+            "lastModifiedDirection", new TypeReference<Direction>(){}),
+
+    REMISSION_DECISION_REASON(
+        "remissionDecisionReason", new TypeReference<String>(){}),
     ;
 
     private final String value;
