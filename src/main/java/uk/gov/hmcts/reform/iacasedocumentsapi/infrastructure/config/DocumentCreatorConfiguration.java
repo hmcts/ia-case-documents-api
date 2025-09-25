@@ -1974,6 +1974,7 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
     @Bean("internalDetainedUpdateTribunalDecisionRule31IrcPrisonLetterDocumentCreator")
     public DocumentCreator<AsylumCase> getInternalDetainedUpdateTribunalDecisionRule31IrcPrisonLetterDocumentCreator(
             @Value("${internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.contentType}") String contentType,

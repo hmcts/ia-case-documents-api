@@ -79,7 +79,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("tenDaysAfterSubmitDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("updateTribunalDecisionDoneDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
     }
 
@@ -106,7 +106,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("tenDaysAfterSubmitDate"));
+        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("updateTribunalDecisionDoneDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
     }
 

@@ -14,7 +14,6 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -39,12 +38,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANTS_REPRESENTATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -93,7 +91,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
                 asylumCase,
                 uploadedDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER
+                DocumentTag.INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER
         );
     }
 
@@ -137,7 +135,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
         when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        setUpValidCaseExcept();
+        setUpValidCase();
         invalidConditionSetup.accept(asylumCase);
 
         assertFalse(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
@@ -148,23 +146,14 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
                 Arguments.of("not internal case",
                         (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
                 ),
-                Arguments.of("submission is not out of time",
-                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
-                ),
-                Arguments.of("submission out of time is missing",
-                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty())
-                ),
                 Arguments.of("not detained",
                         (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
                 ),
                 Arguments.of("in other detention facility",
                         (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"))
                 ),
-                Arguments.of("no remission",
-                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.NO_REMISSION))
-                ),
-                Arguments.of("remission type missing",
-                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.empty())
+                Arguments.of("appellants representation is no",
+                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
                 )
         );
     }
@@ -176,31 +165,10 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
         when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        setUpValidCaseExcept();
+        setUpValidCase();
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility));
 
         assertTrue(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideValidRemissionTypes")
-    void should_handle_callback_for_valid_remission_types(RemissionType remissionType) {
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-
-        setUpValidCaseExcept();
-        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
-
-        assertTrue(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
-    }
-
-    private static Stream<RemissionType> provideValidRemissionTypes() {
-        return Stream.of(
-                RemissionType.HO_WAIVER_REMISSION,
-                RemissionType.HELP_WITH_FEES,
-                RemissionType.EXCEPTIONAL_CIRCUMSTANCES_REMISSION
-        );
     }
 
     @ParameterizedTest
@@ -210,7 +178,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
         when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        setUpValidCaseExcept();
+        setUpValidCase();
         when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
 
         assertTrue(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
@@ -273,25 +241,12 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
     }
 
     @Test
-    void should_handle_callback_when_remission_type_defaults_to_no_remission_but_has_valid_remission() {
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-
-        setUpValidCaseExcept();
-        // Test when remission type is not present, it should default to NO_REMISSION and not handle
-        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.empty());
-
-        assertFalse(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
-    }
-
-    @Test
     void should_not_handle_when_detention_facility_is_missing() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        setUpValidCaseExcept();
+        setUpValidCase();
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
 
         assertFalse(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
@@ -303,7 +258,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        setUpValidCaseExcept();
+        setUpValidCase();
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.empty());
 
         assertFalse(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
@@ -311,19 +266,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
 
     private void setUpValidCase() {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.HELP_WITH_FEES));
-    }
-
-    private void setUpValidCaseExcept() {
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.HU));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.HELP_WITH_FEES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
     }
 }
