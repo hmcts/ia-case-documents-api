@@ -56,7 +56,6 @@ public enum DocumentTag {
     HEARING_BUNDLE_READY_LETTER("hearingBundleReadyLetter", CaseType.ASYLUM),
     INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER("internalRequestRespondentEvidenceLetter", CaseType.ASYLUM),
     INTERNAL_END_APPEAL_AUTOMATICALLY("internalEndAppealAutomatically", CaseType.ASYLUM),
-    INTERNAL_APPEAL_FEE_DUE_LETTER("internalAppealFeeDueLetter", CaseType.ASYLUM),
     INTERNAL_DET_MARK_AS_PAID_LETTER("internalDetMarkAsPaidLetter", CaseType.ASYLUM),
     INTERNAL_LIST_CASE_LETTER("internalListCaseLetter", CaseType.ASYLUM),
     INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER("internalRequestHearingRequirementsLetter", CaseType.ASYLUM),
@@ -106,6 +105,9 @@ public enum DocumentTag {
     INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER("internalDetainedAppealSubmittedOutOfTimeWithFeeLetter", CaseType.ASYLUM),
     INTERNAL_PRISON_IRC_RESPONDER_REVIEW_NOTICE_LETTER("internalDetainedRespondentReviewIrcPrisonNotificationLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER("internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER("internalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateLetter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER("internalDetainedLateRemissionPartiallyGrantedOrRefusedTemplateLetter", CaseType.ASYLUM),
+    DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER("detainedLegalRepRemovedIrcPrisonLetter", CaseType.ASYLUM),
 
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
