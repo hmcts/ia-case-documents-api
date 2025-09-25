@@ -18,14 +18,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 @ExtendWith(MockitoExtension.class)
-public class BundleOrderTest {
+class BundleOrderTest {
 
     private final BundleOrder bundleOrder = new BundleOrder();
 
     @Mock Document document;
 
     @Test
-    public void should_sort_in_correct_order_excluding_bail_tags() {
+    void should_sort_in_correct_order_excluding_bail_tags() {
         List<DocumentTag> tags = newArrayList(DocumentTag.values());
         tags.add(DocumentTag.CASE_ARGUMENT);
         tags.add(DocumentTag.APPEAL_SUBMISSION);
@@ -38,7 +38,7 @@ public class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(99, sortedTags.size());
+        assertEquals(102, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -87,7 +87,6 @@ public class BundleOrderTest {
             DocumentTag.INTERNAL_APPEAL_SUBMISSION,
             DocumentTag.INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER,
             DocumentTag.INTERNAL_END_APPEAL_AUTOMATICALLY,
-            DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER,
             DocumentTag.INTERNAL_DET_MARK_AS_PAID_LETTER,
             DocumentTag.INTERNAL_LIST_CASE_LETTER,
             DocumentTag.INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER,
@@ -135,6 +134,11 @@ public class BundleOrderTest {
             DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER,
             DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER,
             DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER,
+            DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER,
+            DocumentTag.DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER,
             DocumentTag.INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER,
             DocumentTag.NONE
         );

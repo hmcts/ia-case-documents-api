@@ -1828,6 +1828,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedAppealHoUploadBundleAppellantLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealHoUploadBundleLetterDocumentCreator(
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.contentType}") String contentType,
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAppealHoUploadBundleAppellantLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealHoUploadBundleAppellantTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalDetainedAppealSubmissionOutOfTimeWithFeeLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealSubmissionOutOfTimeWithFeeLetterDocumentCreator(
         @Value("${internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.contentType}") String contentType,
@@ -1870,6 +1891,89 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetterCreator")
+    public DocumentCreator<AsylumCase> getInternalDetainedOutOfTimeRemissionGrantedIrcPrisonLetterCreator(
+            @Value("${internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.contentType}") String contentType,
+            @Value("${internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealSubmissionOutOfTimeWithRemissionGrantedIrcPrisonTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedAppealRemissionPartiallyGrantedOrRefusedDocumentCreator(
+        @Value("${internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType}") String contentType,
+        @Value("${internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalDetainedLateRemissionPartiallyGrantedTemplateLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedLateRemissionPartiallyGrantedDocumentCreator(
+            @Value("${internalDetainedLateRemissionPartiallyGrantedLetter.contentType}") String contentType,
+            @Value("${internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedLateRemissionPartiallyGrantedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedLateRemissionPartiallyGrantedTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("detainedLegalRepRemovedIrcPrisonLetterCreator")
+    public DocumentCreator<AsylumCase> getDetainedLegalRepRemovedIrcPrisonLetterCreator(
+            @Value("${detainedLegalRepRemovedIrcPrisonLetter.contentType}") String contentType,
+            @Value("${detainedLegalRepRemovedIrcPrisonLetter.fileExtension}") String fileExtension,
+            @Value("${detainedLegalRepRemovedIrcPrisonLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            DetainedLegalRepRemovedIrcPrisonTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
     @Bean("internalDetainedUpdateTribunalDecisionRule31IrcPrisonLetterDocumentCreator")
     public DocumentCreator<AsylumCase> getInternalDetainedUpdateTribunalDecisionRule31IrcPrisonLetterDocumentCreator(
             @Value("${internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.contentType}") String contentType,
