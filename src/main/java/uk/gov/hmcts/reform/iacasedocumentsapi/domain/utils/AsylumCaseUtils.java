@@ -411,7 +411,7 @@ public class AsylumCaseUtils {
     }
 
     public static List<String> getAppellantAddressInCountryOrOoc(final AsylumCase asylumCase) {
-        return isAppellantInUk(asylumCase) ? getAppellantAddressAsList(asylumCase):
+        return isAppellantInUk(asylumCase) ? getAppellantAddressAsList(asylumCase) :
                 getAppellantAddressAsListOoc(asylumCase);
     }
 
@@ -483,6 +483,13 @@ public class AsylumCaseUtils {
         legalRepAddressAsList.add(oocLrCountryGovUkAdminJ.toString());
 
         return legalRepAddressAsList;
+    }
+
+    public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(IS_ADMIN, YesOrNo.class)
+                .map(yesOrNo -> Objects.equals(YES, yesOrNo)).orElse(false)
+                && asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+                .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);
     }
 }
 

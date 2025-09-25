@@ -45,7 +45,10 @@ public class InternalRecordOutOfTimeDecisionLetterGenerator implements PreSubmit
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == RECORD_OUT_OF_TIME_DECISION
                && isInternalCase(asylumCase)
-               && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase,OTHER));
+               && (!isAppellantInDetention(asylumCase)
+                || (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+                || (hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                && isDetainedInFacilityType(asylumCase, OTHER)));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
