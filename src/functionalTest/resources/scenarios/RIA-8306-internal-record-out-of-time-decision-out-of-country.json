@@ -14,7 +14,7 @@
           "outOfTimeDecisionType": "rejected",
           "appealReferenceNumber": "PA/11111/2019",
           "isAdmin": "Yes",
-          "appellantInDetention": "No",
+          "appellantInDetention": "Yes",
           "appellantInUk": "No",
           "appellantHasFixedAddressAdminJ": "Yes",
           "addressLine1AdminJ": "Calle Toledo 32",
