@@ -2,7 +2,7 @@
   "description": "DIAC-1389 Internal Detained Appeal Update Tribunal Decision Rule 31 IRC Letter",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "AdminOfficer",
+    "credentials": "Judge",
     "input": {
       "id": 1389,
       "eventId": "updateTribunalDecision",
