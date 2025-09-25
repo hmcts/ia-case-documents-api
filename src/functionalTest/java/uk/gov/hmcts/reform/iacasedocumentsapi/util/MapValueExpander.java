@@ -33,7 +33,7 @@ public final class MapValueExpander {
                 untypedValue =
                     ((List) untypedValue)
                         .stream()
-                        .map(element -> this.expandValue(element))
+                        .map(this::expandValue)
                         .collect(Collectors.toList());
 
             } else {

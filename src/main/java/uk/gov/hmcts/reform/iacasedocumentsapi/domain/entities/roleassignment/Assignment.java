@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
@@ -18,17 +19,28 @@ import lombok.ToString;
 @Builder
 public class Assignment {
 
+    @Getter
     private final String id;
+    @Getter
     private final LocalDateTime created;
+    @Getter
     private final List<String> authorisations;
+    @Getter
     private final ActorIdType actorIdType;
+    @Getter
     private final String actorId;
+    @Getter
     private final RoleType roleType;
+    @Getter
     private final RoleName roleName;
+    @Getter
     private final RoleCategory roleCategory;
+    @Getter
     private final Classification classification;
+    @Getter
     private final GrantType grantType;
     private final Boolean readOnly;
+    @Getter
     private final Map<String, String> attributes;
 
     @JsonCreator
@@ -56,49 +68,5 @@ public class Assignment {
         this.grantType = grantType;
         this.readOnly = readOnly;
         this.attributes = attributes;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public List<String> getAuthorisations() {
-        return authorisations;
-    }
-
-    public ActorIdType getActorIdType() {
-        return actorIdType;
-    }
-
-    public String getActorId() {
-        return actorId;
-    }
-
-    public RoleType getRoleType() {
-        return roleType;
-    }
-
-    public RoleName getRoleName() {
-        return roleName;
-    }
-
-    public RoleCategory getRoleCategory() {
-        return roleCategory;
-    }
-
-    public Classification getClassification() {
-        return classification;
-    }
-
-    public GrantType getGrantType() {
-        return grantType;
-    }
-
-    public Map<String, String> getAttributes() {
-        return attributes;
     }
 }

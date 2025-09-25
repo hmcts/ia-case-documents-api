@@ -2,7 +2,7 @@
   "description": "RIA-7200 - Internal ADA hearing bundle ready letter generation",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "caseOfficer",
+    "credentials": "CaseOfficer",
     "input": {
       "id": 7200,
       "eventId": "asyncStitchingComplete",

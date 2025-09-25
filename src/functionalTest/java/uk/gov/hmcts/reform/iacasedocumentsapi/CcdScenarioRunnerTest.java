@@ -72,7 +72,7 @@ public class CcdScenarioRunnerTest {
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
-        RestAssured.useRelaxedHTTPSValidation();        
+        RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
@@ -118,7 +118,9 @@ public class CcdScenarioRunnerTest {
 
                     Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
                     boolean scenarioEnabledFlag = true;
-                    if (scenarioEnabled instanceof String) {
+                    if (scenarioEnabled instanceof Boolean) {
+                        scenarioEnabledFlag = (Boolean) scenarioEnabled;
+                    } else if (scenarioEnabled instanceof String) {
                         scenarioEnabledFlag = Boolean.parseBoolean((String) scenarioEnabled);
                     }
 
@@ -214,7 +216,7 @@ public class CcdScenarioRunnerTest {
         StreamSupport
             .stream(propertySources.spliterator(), false)
             .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
-            .map(ropertySource -> ((EnumerablePropertySource) ropertySource).getPropertyNames())
+            .map(propertySource -> ((EnumerablePropertySource<?>) propertySource).getPropertyNames())
             .flatMap(Arrays::stream)
             .forEach(name -> MapValueExpander.ENVIRONMENT_PROPERTIES.setProperty(name, environment.getProperty(name)));
     }
@@ -313,7 +315,7 @@ public class CcdScenarioRunnerTest {
                 new PreSubmitCallbackResponse<>(
                     objectMapper.readValue(
                         MapSerializer.serialize(caseData),
-                        new TypeReference<AsylumCase>() {
+                        new TypeReference<>() {
                         }
                     )
                 );
@@ -325,56 +327,22 @@ public class CcdScenarioRunnerTest {
     }
 
     private Headers getAuthorizationHeaders(Map<String, Object> scenario) {
+        String credentials = Optional.ofNullable(MapValueExtractor.extract(scenario, "request.credentials"))
+            .map(Object::toString)
+            .orElse("None");
 
-        String credentials = MapValueExtractor.extract(scenario, "request.credentials");
-
-        if ("LegalRepresentative".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getLegalRepresentativeAuthorization();
-        }
-
-        if ("CaseOfficer".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getCaseOfficerAuthorization();
-        }
-
-        if ("AdminOfficer".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getAdminOfficerAuthorization();
-        }
-
-        if ("Citizen".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getCitizenAuthorization();
-        }
-
-        if ("Judge".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getJudgeAuthorization();
-        }
-
-        if ("System".equalsIgnoreCase(credentials)) {
-            return authorizationHeadersProvider
-                .getSystemAuthorization();
-        }
-
-        if ("HomeOfficeLart".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getHomeOfficeLartAuthorization();
-        }
-
-        if ("HomeOfficePOU".equalsIgnoreCase(credentials)) {
-
-            return authorizationHeadersProvider
-                .getHomeOfficePouAuthorization();
-        }
-
-        return new Headers();
+        return switch (credentials) {
+            case "LegalRepresentative" -> authorizationHeadersProvider.getLegalRepresentativeAuthorization();
+            case "LegalRepresentativeOrgSuccess" -> authorizationHeadersProvider.getLegalRepresentativeOrgSuccessAuthorization();
+            case "LegalRepresentativeOrgDeleted" -> authorizationHeadersProvider.getLegalRepresentativeOrgDeletedAuthorization();
+            case "CaseOfficer" -> authorizationHeadersProvider.getCaseOfficerAuthorization();
+            case "AdminOfficer" -> authorizationHeadersProvider.getAdminOfficerAuthorization();
+            case "Citizen" -> authorizationHeadersProvider.getCitizenAuthorization();
+            case "Judge" -> authorizationHeadersProvider.getJudgeAuthorization();
+            case "System" -> authorizationHeadersProvider.getSystemAuthorization();
+            case "HomeOfficeLart" -> authorizationHeadersProvider.getHomeOfficeLartAuthorization();
+            case "HomeOfficePOU" -> authorizationHeadersProvider.getHomeOfficePouAuthorization();
+            default -> new Headers();
+        };
     }
 }

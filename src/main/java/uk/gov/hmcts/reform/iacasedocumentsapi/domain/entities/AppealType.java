@@ -3,8 +3,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import static java.util.Arrays.stream;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
+
 import java.util.Optional;
 
+@Getter
 public enum AppealType {
 
     RP("revocationOfProtection", "Revocation of a protection status"),
@@ -32,14 +35,6 @@ public enum AppealType {
         return stream(values())
                 .filter(v -> v.getValue().equals(value))
                 .findFirst();
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     @Override

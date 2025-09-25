@@ -827,8 +827,74 @@ public enum AsylumCaseDefinition {
             "feeUpdateReason", new TypeReference<FeeUpdateReason>(){}),
 
     NOTIFICATIONS(
-            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){})
+            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){}),
+    APPELLANT_NAME_FOR_DISPLAY(
+        "appellantNameForDisplay", new TypeReference<String>(){}),
+    FEE_WITH_HEARING(
+        "feeWithHearing", new TypeReference<String>(){}),
+    FEE_WITHOUT_HEARING(
+        "feeWithoutHearing", new TypeReference<String>(){}),
+    APPEAL_FEE_HEARING_DESC(
+        "appealFeeHearingDesc", new TypeReference<String>(){}),
+    APPEAL_FEE_WITHOUT_HEARING_DESC(
+        "appealFeeWithoutHearingDesc", new TypeReference<String>(){}),
+    FEE_CODE(
+        "feeCode", new TypeReference<String>(){}),
+    FEE_DESCRIPTION(
+        "feeDescription", new TypeReference<String>(){}),
+    FEE_VERSION(
+        "feeVersion", new TypeReference<String>(){}),
+    FEE_AMOUNT_FOR_DISPLAY(
+        "feeAmountForDisplay", new TypeReference<String>(){}),
+    PAYMENT_FAILED_FOR_DISPLAY(
+        "paymentFailedForDisplay", new TypeReference<String>(){}),
+    FEE_PAYMENT_APPEAL_TYPE(
+        "feePaymentAppealType", new TypeReference<String>(){}),
+    PBA_NUMBER(
+        "pbaNumber", new TypeReference<String>(){}),
+    PAYMENT_ACCOUNT_LIST(
+        "paymentAccountList", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList>(){}),
+    PAYMENT_DESCRIPTION(
+        "paymentDescription", new TypeReference<String>(){}),
+    PAYMENT_REFERENCE(
+        "paymentReference", new TypeReference<String>(){}),
+    PAYMENT_DATE(
+        "paymentDate", new TypeReference<String>(){}),
+    PAYMENT_ERROR_CODE(
+        "paymentErrorCode", new TypeReference<String>(){}),
+    PAYMENT_ERROR_MESSAGE(
+        "paymentErrorMessage", new TypeReference<String>(){}),
+    HEARING_DECISION_SELECTED(
+        "hearingDecisionSelected", new TypeReference<String>(){}),
+    DECISION_WITH_HEARING(
+        "decisionWithHearing", new TypeReference<String>(){}),
+    DECISION_WITHOUT_HEARING(
+        "decisionWithoutHearing", new TypeReference<String>(){}),
+    DECISION_HEARING_FEE_OPTION(
+        "decisionHearingFeeOption", new TypeReference<String>(){}),
+    HAS_PBA_ACCOUNTS(
+        "hasPbaAccounts", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo>(){}),
+    HAS_SERVICE_REQUEST_ALREADY(
+        "hasServiceRequestAlready", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo>(){}),
+    SERVICE_REQUEST_REFERENCE(
+        "serviceRequestReference", new TypeReference<String>(){}),
+    IS_SERVICE_REQUEST_TAB_VISIBLE_CONSIDERING_REMISSIONS(
+        "isServiceRequestTabVisibleConsideringRemissions", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo>(){}),
+    REQUEST_FEE_REMISSION_FLAG_FOR_SERVICE_REQUEST(
+        "requestFeeRemissionFlagForServiceRequest", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo>(){}),
+    IS_EJP(
+        "isEjp", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo>() {}),
+    REMISSION_OPTION(
+        "remissionOption", new TypeReference<RemissionOption>(){}),
+    HELP_WITH_FEES_OPTION(
+        "helpWithFeesOption", new TypeReference<HelpWithFeesOption>(){}),
+    REFUND_CONFIRMATION_APPLIED(
+        "refundConfirmationApplied", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo>(){}),
+    DECISION_TYPE_CHANGED_WITH_REFUND_FLAG(
+        "decisionTypeChangedWithRefundFlag", new TypeReference<uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo>(){}),
     ;
+
+
 
     private final String value;
     private final TypeReference typeReference;
