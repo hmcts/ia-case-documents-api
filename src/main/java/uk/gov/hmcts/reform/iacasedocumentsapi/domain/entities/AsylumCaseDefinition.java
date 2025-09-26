@@ -133,6 +133,9 @@ public enum AsylumCaseDefinition {
     LEGAL_REP_REFERENCE_NUMBER(
         "legalRepReferenceNumber", new TypeReference<String>(){}),
 
+    LEGAL_REP_REF_NUMBER_PAPER_J(
+            "legalRepRefNumberPaperJ", new TypeReference<String>(){}),
+
     APPEAL_REFERENCE_NUMBER(
         "appealReferenceNumber", new TypeReference<String>(){}),
 
@@ -690,6 +693,10 @@ public enum AsylumCaseDefinition {
     FEE_AMOUNT_GBP(
             "feeAmountGbp", new TypeReference<String>(){}),
 
+    AMOUNT_LEFT_TO_PAY(
+        "amountLeftToPay", new TypeReference<String>(){}),
+
+
     UPDATE_TRIBUNAL_DECISION_LIST(
             "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),
 
@@ -845,6 +852,8 @@ public enum AsylumCaseDefinition {
     LAST_MODIFIED_DIRECTION(
             "lastModifiedDirection", new TypeReference<Direction>(){}),
 
+    REMISSION_DECISION_REASON(
+        "remissionDecisionReason", new TypeReference<String>(){}),
     ;
 
     private final String value;
