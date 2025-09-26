@@ -19,6 +19,7 @@
           "ircName": "Harmondsworth",
           "ccdReferenceNumberForDisplay": "1234-5678-9012-3457",
           "updateTribunalDecisionList": "underRule31",
+          "updatedAppealDecision": "Dismissed",
           "correctedDecisionAndReasons": [
             {
               "id": "1",
