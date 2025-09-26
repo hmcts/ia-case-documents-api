@@ -133,6 +133,9 @@ public enum AsylumCaseDefinition {
     LEGAL_REP_REFERENCE_NUMBER(
         "legalRepReferenceNumber", new TypeReference<String>(){}),
 
+    LEGAL_REP_REF_NUMBER_PAPER_J(
+            "legalRepRefNumberPaperJ", new TypeReference<String>(){}),
+
     APPEAL_REFERENCE_NUMBER(
         "appealReferenceNumber", new TypeReference<String>(){}),
 
