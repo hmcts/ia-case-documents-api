@@ -42,7 +42,7 @@
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
-            "id": "2",
+            "id": "1",
             "value": {
               "tag": "internalDetainedAppealSubmittedOutOfTimeWithExemptionLetter",
               "document": {
