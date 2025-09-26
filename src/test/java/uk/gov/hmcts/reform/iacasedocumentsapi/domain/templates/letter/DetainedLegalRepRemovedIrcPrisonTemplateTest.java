@@ -25,6 +25,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,7 +100,8 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.empty());
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
@@ -160,7 +162,8 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(""));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(""));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
@@ -184,7 +187,8 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(""));
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER)).thenReturn(Optional.of(""));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(""));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(""));
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
@@ -275,6 +279,87 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
 
     private void dataSetUpNewFields() {
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
+    }
+
+    @Test
+    void should_use_paper_j_reference_number_when_primary_is_empty() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+
+        dataSetUpPersonalisation();
+        
+        // Mock primary field as empty and paper J field with value
+        String paperJRefNumber = "PJ123456";
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(""));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(paperJRefNumber));
+
+        Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
+
+        assertEquals(Optional.of(paperJRefNumber), templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    void should_use_paper_j_reference_number_when_primary_is_null() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+
+        dataSetUpPersonalisation();
+        
+        // Mock primary field as null and paper J field with value
+        String paperJRefNumber = "PJ789012";
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(paperJRefNumber));
+
+        Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
+
+        assertEquals(Optional.of(paperJRefNumber), templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    void should_return_empty_when_both_reference_numbers_are_empty() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+
+        dataSetUpPersonalisation();
+        
+        // Mock both fields as empty
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
+
+        Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
+
+        assertEquals(Optional.empty(), templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    void should_prefer_primary_reference_number_when_both_present() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
+        when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
+
+        dataSetUpPersonalisation();
+        
+        // Mock both fields with values
+        String paperJRefNumber = "PJ999999";
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(paperJRefNumber));
+
+        Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
+
+        // Should prefer the primary reference number
+        assertEquals(Optional.of(legalRepReferenceNumber), templateFieldValues.get("legalRepReferenceNumber"));
     }
 }
