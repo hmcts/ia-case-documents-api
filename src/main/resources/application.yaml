@@ -489,7 +489,6 @@ internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension: PDF
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName: "appeal-form"
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-late-with-remission-Submitted.docx}
 
-
 internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.contentType: application/pdf
 internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileExtension: PDF
 internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileName: "appeal-form"
@@ -509,6 +508,16 @@ internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.contentType: application/
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
+
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType: application/pdf
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension: PDF
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName: "appeal-form"
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.templateName: ${IA_APPEAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE:TB-IAC-LET-ENG-00821.docx}
+
+internalDetainedLateRemissionPartiallyGrantedLetter.contentType: application/pdf
+internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension: PDF
+internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "appeal-form"
+internalDetainedLateRemissionPartiallyGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Partially-Granted.docx}
 
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
@@ -541,6 +550,11 @@ internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
+
+detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
+detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
+detainedLegalRepRemovedIrcPrisonLetter.fileName: "appeal-form"
+detainedLegalRepRemovedIrcPrisonLetter.templateName: ${DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER_TEMPLATE:TB-IAC-LET-ENG-legal-rep-removed.docx}
 
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
@@ -585,6 +599,9 @@ security:
     - "caseworker-ia"
     - "citizen"
   roleEventAccess:
+    caseworker-approver:
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -598,6 +615,7 @@ security:
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
       - "applyForFTPAAppellant"
+      - "removeRepresentation"
     tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -733,6 +751,8 @@ security:
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
       - "caseListing"
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
@@ -1175,6 +1195,7 @@ appellantDaysToWait:
     afterSubmitAppeal: 10
     afterSubmitAppealWithFeeToPay: 14
     tribunalDocumentToSendTimeline: 4
+    afterRemissionDecision: 14
 
 
 ### Email addresses
