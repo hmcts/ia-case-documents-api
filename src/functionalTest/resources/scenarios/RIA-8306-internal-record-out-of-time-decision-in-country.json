@@ -15,7 +15,7 @@
           "appealReferenceNumber": "PA/11111/2019",
           "isAdmin": "Yes",
           "appellantsRepresentation" : "Yes",
-          "appellantInDetention": "No",
+          "appellantInDetention": "Yes",
           "appellantHasFixedAddress": "Yes",
           "appellantInUk": "Yes",
           "appellantAddress": {
@@ -56,7 +56,7 @@
         "outOfTimeDecisionType": "rejected",
         "appealReferenceNumber": "PA/11111/2019",
         "isAdmin": "Yes",
-        "appellantInDetention": "No",
+        "appellantInDetention": "Yes",
         "appellantHasFixedAddress": "Yes",
         "appellantInUk": "Yes",
         "appellantAddress": {

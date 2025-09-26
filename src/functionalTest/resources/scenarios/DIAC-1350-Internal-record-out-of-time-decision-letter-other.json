@@ -19,6 +19,7 @@
           "appealSubmissionDate": "{$TODAY}",
           "appealType": "refusalOfHumanRights",
           "recordOutOfTimeDecision": "Yes",
+          "appellantHasFixedAddress": "Yes",
           "appellantInUk": "Yes",
           "appellantAddress": {
             "County": "",
