@@ -58,6 +58,7 @@
         "isAdmin": "Yes",
         "appellantInDetention": "Yes",
         "appellantHasFixedAddress": "Yes",
+        "appealSubmissionDate": "{$TODAY}",
         "appellantInUk": "Yes",
         "appellantAddress": {
           "County": "",
