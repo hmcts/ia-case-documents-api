@@ -1301,27 +1301,6 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalDetainedRespondentReviewIrcPrisonNotificationLetter")
-    public DocumentCreator<AsylumCase> internalDetainedRespondentReviewIrcPrisonNotificationCreator(
-            @Value("${internalDetainedRespondentReviewIrcPrisonNotificationLetter.contentType}") String contentType,
-            @Value("${internalDetainedRespondentReviewIrcPrisonNotificationLetter.fileExtension}") String fileExtension,
-            @Value("${internalDetainedRespondentReviewIrcPrisonNotificationLetter.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDetainedResponderReviewIrcPrisonTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
-        );
-    }
-
     @Bean("internalAppellantFtpaDecidedRefusedLetter")
     public DocumentCreator<AsylumCase> getInternalAppellantFtpaDecidedRefusedLetterCreator(
         @Value("${internalAppellantFtpaDecidedRefusedLetter.contentType}") String contentType,
