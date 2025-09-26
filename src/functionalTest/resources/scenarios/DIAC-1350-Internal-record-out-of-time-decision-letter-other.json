@@ -47,6 +47,16 @@
         "appealSubmissionDate": "{$TODAY}",
         "appealType": "refusalOfHumanRights",
         "recordOutOfTimeDecision": "Yes",
+        "appellantInUk": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "appellantHasFixedAddress": "Yes",
         "appealReferenceNumber": "$/(.+)/",
         "letterNotificationDocuments": [
           {
