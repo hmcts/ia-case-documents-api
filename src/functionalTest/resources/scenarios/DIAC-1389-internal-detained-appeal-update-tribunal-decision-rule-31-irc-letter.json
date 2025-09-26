@@ -19,8 +19,14 @@
           "ircName": "Harmondsworth",
           "ccdReferenceNumberForDisplay": "1234-5678-9012-3457",
           "updateTribunalDecisionList": "underRule31",
-          "updatedAppealDecision": "Allowed",
-          "updateTribunalDecisionAndReasonsFinalCheck": "Yes"
+          "correctedDecisionAndReasons": [
+            {
+              "id": "1",
+              "value": {
+                "updatedDecisionDate": "{$TODAY}"
+              }
+            }
+          ]
         }
       }
     }
@@ -40,8 +46,6 @@
         "ccdReferenceNumberForDisplay": "1234-5678-9012-3457",
         "appealReferenceNumber": "$/(.+)/",
         "updateTribunalDecisionList": "underRule31",
-        "updatedAppealDecision": "Allowed",
-        "updateTribunalDecisionAndReasonsFinalCheck": "Yes",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
