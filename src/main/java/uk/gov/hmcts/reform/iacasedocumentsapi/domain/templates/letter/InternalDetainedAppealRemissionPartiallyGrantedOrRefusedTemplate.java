@@ -29,7 +29,7 @@ public class InternalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplate im
     // Template field names
     private static final String DATE_LETTER_SENT = "dateLetterSent";
     private static final String FEE_AMOUNT = "feeAmount";
-    private static final String ONLINE_CASE_REF_NUMBER = "onlineCaseRefNumber";
+    private static final String ONLINE_CASE_REF_NUMBER = "onlineCaseReferenceNumber";
     private static final String REMISSION_REASON = "remissionReason";
     private static final String DAYS_AFTER_REMISSION_DECISION = "daysAfterRemissionDecision";
     private static final String CUSTOMER_SERVICES_TELEPHONE = "customerServicesTelephone";
