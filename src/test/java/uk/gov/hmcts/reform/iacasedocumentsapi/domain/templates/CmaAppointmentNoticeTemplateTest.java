@@ -180,7 +180,7 @@ public class CmaAppointmentNoticeTemplateTest {
 
         when((hearingDetailsFinder.getHearingCentreUrl(MANCHESTER))).thenReturn(hearingCentreUrl);
         when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(isIntegrated));
-//        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+        //        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
@@ -260,7 +260,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-//        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+        //        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
