@@ -1,4 +1,4 @@
-targetInstance: http://localhost:8092
+targetInstance: ${TEST_URL:http://localhost:8092}
 
 docmosis.accessKey: unused
 docmosis.endpoint: unused
