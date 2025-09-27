@@ -25,7 +25,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
-@Disabled
 class HearingNoticeFieldMapperTest {
 
     private final String templateName = "HEARING_NOTICE_TEMPLATE.docx";
