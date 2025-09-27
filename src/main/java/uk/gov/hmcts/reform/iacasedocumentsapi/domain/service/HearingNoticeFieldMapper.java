@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -83,10 +82,6 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
         fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
         fieldValues.put("isIntegrated", asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO));
-
-        asylumCase.read(HEARING_CHANNEL, DynamicList.class).ifPresent(
-            hearingChannel -> fieldValues.put("hearingChannel", hearingChannel.getValue().getLabel()));
-
 
         return fieldValues;
     }
