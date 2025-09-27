@@ -854,6 +854,30 @@ public enum AsylumCaseDefinition {
 
     REMISSION_DECISION_REASON(
         "remissionDecisionReason", new TypeReference<String>(){}),
+
+    LEGAL_REP_ADDRESS_U_K(
+            "legalRepAddressUK", new TypeReference<AddressUk>(){}),
+
+    OOC_ADDRESS_LINE_1(
+            "oocAddressLine1", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_2(
+            "oocAddressLine2", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_3(
+            "oocAddressLine3", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_4(
+            "oocAddressLine4", new TypeReference<String>(){}),
+
+    OOC_COUNTRY_LINE(
+            "oocCountryLine", new TypeReference<String>(){}),
+
+    OOC_LR_COUNTRY_GOV_UK_ADMIN_J(
+            "oocLrCountryGovUkAdminJ", new TypeReference<NationalityFieldValue>(){}),
+
+    LEGAL_REP_HAS_ADDRESS(
+            "legalRepHasAddress", new TypeReference<YesOrNo>(){}),
     ;
 
     private final String value;

@@ -55,6 +55,7 @@ class InternalRecordOutOfTimeDecisionLetterGeneratorTest {
         when(callback.getEvent()).thenReturn(Event.RECORD_OUT_OF_TIME_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(documentCreator.create(caseDetails)).thenReturn(document);
