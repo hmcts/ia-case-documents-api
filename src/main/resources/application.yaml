@@ -663,6 +663,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -705,6 +706,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -747,6 +749,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -787,6 +790,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc:
       - "listCase"
       - "submitAppeal"
@@ -816,6 +820,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc-team-leader:
       - "listCase"
       - "submitAppeal"
@@ -845,6 +850,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     national-business-centre:
       - "listCase"
       - "submitAppeal"
@@ -874,6 +880,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-ctsc:
       - "listCase"
       - "submitAppeal"
@@ -903,6 +910,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-admin:
       - "listCase"
       - "submitAppeal"
@@ -932,6 +940,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     citizen:
       - "startAppeal"
       - "editAppeal"
