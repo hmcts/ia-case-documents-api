@@ -44,9 +44,9 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class DetainedCaseListedLetterHandlerTest {
+class DetainedInOtherCaseListedDocumentBundlerTest {
 
-    private DetainedCaseListedLetterHandler detainedCaseListedLetterHandler;
+    private DetainedInOtherCaseListedDocumentBundler detainedInOtherCaseListedDocumentBundler;
     @Mock
     private Callback<AsylumCase> callback;
     @Mock
@@ -67,8 +67,8 @@ class DetainedCaseListedLetterHandlerTest {
     @BeforeEach
     public void setUp() {
 
-        detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+        detainedInOtherCaseListedDocumentBundler =
+            new DetainedInOtherCaseListedDocumentBundler(
                 fileExtension,
                 fileName,
                 true,
@@ -79,7 +79,7 @@ class DetainedCaseListedLetterHandlerTest {
 
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(DetainedCaseListedLetterHandlerTest.TestScenario scenario) {
+    public void it_can_handle_callback(DetainedInOtherCaseListedDocumentBundlerTest.TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -87,13 +87,13 @@ class DetainedCaseListedLetterHandlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(scenario.callbackStage, callback);
+        boolean canHandle = detainedInOtherCaseListedDocumentBundler.canHandle(scenario.callbackStage, callback);
 
         assertEquals(canHandle, scenario.isExpected());
     }
 
-    private static List<DetainedCaseListedLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
-        return DetainedCaseListedLetterHandlerTest.TestScenario.builder();
+    private static List<DetainedInOtherCaseListedDocumentBundlerTest.TestScenario> generateDifferentEventScenarios() {
+        return DetainedInOtherCaseListedDocumentBundlerTest.TestScenario.builder();
     }
 
     @Value
@@ -102,17 +102,17 @@ class DetainedCaseListedLetterHandlerTest {
         PreSubmitCallbackStage callbackStage;
         boolean expected;
 
-        public static List<DetainedCaseListedLetterHandlerTest.TestScenario> builder() {
-            List<DetainedCaseListedLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
+        public static List<DetainedInOtherCaseListedDocumentBundlerTest.TestScenario> builder() {
+            List<DetainedInOtherCaseListedDocumentBundlerTest.TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
                 if (e.equals(Event.LIST_CASE)) {
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
+                    testScenarios.add(new DetainedInOtherCaseListedDocumentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new DetainedInOtherCaseListedDocumentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
                 } else {
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new DetainedInOtherCaseListedDocumentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new DetainedInOtherCaseListedDocumentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new DetainedInOtherCaseListedDocumentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new DetainedInOtherCaseListedDocumentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
                 }
             }
             return testScenarios;
@@ -128,8 +128,8 @@ class DetainedCaseListedLetterHandlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+        detainedInOtherCaseListedDocumentBundler =
+            new DetainedInOtherCaseListedDocumentBundler(
                 fileExtension,
                 fileName,
                 false,
@@ -137,7 +137,7 @@ class DetainedCaseListedLetterHandlerTest {
                 documentBundler,
                 documentHandler);
 
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedDocumentBundler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
     }
@@ -150,8 +150,8 @@ class DetainedCaseListedLetterHandlerTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+        detainedInOtherCaseListedDocumentBundler =
+            new DetainedInOtherCaseListedDocumentBundler(
                 fileExtension,
                 fileName,
                 true,
@@ -159,7 +159,7 @@ class DetainedCaseListedLetterHandlerTest {
                 documentBundler,
                 documentHandler);
 
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedDocumentBundler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
     }
@@ -173,8 +173,8 @@ class DetainedCaseListedLetterHandlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
-        detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+        detainedInOtherCaseListedDocumentBundler =
+            new DetainedInOtherCaseListedDocumentBundler(
                 fileExtension,
                 fileName,
                 true,
@@ -182,7 +182,7 @@ class DetainedCaseListedLetterHandlerTest {
                 documentBundler,
                 documentHandler);
 
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedDocumentBundler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
     }
@@ -208,7 +208,7 @@ class DetainedCaseListedLetterHandlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = detainedInOtherCaseListedDocumentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
@@ -239,7 +239,7 @@ class DetainedCaseListedLetterHandlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = detainedInOtherCaseListedDocumentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
@@ -269,7 +269,7 @@ class DetainedCaseListedLetterHandlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = detainedInOtherCaseListedDocumentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
@@ -281,7 +281,7 @@ class DetainedCaseListedLetterHandlerTest {
 
     @Test
     void set_to_late_dispatch() {
-        assertThat(detainedCaseListedLetterHandler.getDispatchPriority()).isEqualTo(LATE);
+        assertThat(detainedInOtherCaseListedDocumentBundler.getDispatchPriority()).isEqualTo(LATE);
     }
 
     @Test
@@ -292,13 +292,13 @@ class DetainedCaseListedLetterHandlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        assertThatThrownBy(() -> detainedCaseListedLetterHandler.handle(ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> detainedInOtherCaseListedDocumentBundler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
 
-        assertThatThrownBy(() -> detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> detainedInOtherCaseListedDocumentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }

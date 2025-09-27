@@ -1,5 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeNotificationAttachmentDocuments;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
+
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -16,17 +26,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
-import java.util.List;
-
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-
 @Component
-public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class DetainedIrcPrisonCaseListedDocumentBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,7 +36,7 @@ public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public DetainedCaseListedLetterHandler(
+    public DetainedIrcPrisonCaseListedDocumentBundler(
         @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -62,7 +63,7 @@ public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == LIST_CASE
-               && isDetainedInFacilityType(asylumCase, OTHER)
+               && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
                && isEmStitchingEnabled;
     }
 
@@ -84,7 +85,7 @@ public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,
@@ -99,7 +100,7 @@ public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
 
-        asylumCase.clear(LETTER_NOTIFICATION_DOCUMENTS);
+        asylumCase.clear(NOTIFICATION_ATTACHMENT_DOCUMENTS);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

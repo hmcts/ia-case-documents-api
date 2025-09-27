@@ -30,7 +30,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class DetainedCaseListedLetterGeneratorTest {
+class DetainedInOtherCaseListedLetterGeneratorTest {
     @Mock
     private DocumentCreator<AsylumCase> documentCreator;
     @Mock
@@ -43,12 +43,12 @@ class DetainedCaseListedLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document document;
-    private DetainedCaseListedLetterGenerator detainedCaseListedLetterGenerator;
+    private DetainedInOtherCaseListedLetterGenerator detainedInOtherCaseListedLetterGenerator;
 
     @BeforeEach
     void setUp() {
-        detainedCaseListedLetterGenerator =
-            new DetainedCaseListedLetterGenerator(documentCreator, documentHandler);
+        detainedInOtherCaseListedLetterGenerator =
+            new DetainedInOtherCaseListedLetterGenerator(documentCreator, documentHandler);
     }
 
     @Test
@@ -64,7 +64,7 @@ class DetainedCaseListedLetterGeneratorTest {
         when(documentCreator.create(caseDetails)).thenReturn(document);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            detainedCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            detainedInOtherCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -83,7 +83,7 @@ class DetainedCaseListedLetterGeneratorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
-        boolean canHandle = detainedCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
     }
@@ -96,7 +96,7 @@ class DetainedCaseListedLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
-        boolean canHandle = detainedCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
     }
@@ -111,7 +111,7 @@ class DetainedCaseListedLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        boolean canHandle = detainedCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertTrue(canHandle);
     }
@@ -126,7 +126,7 @@ class DetainedCaseListedLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        boolean canHandle = detainedCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertTrue(canHandle);
     }
@@ -141,7 +141,7 @@ class DetainedCaseListedLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        boolean canHandle = detainedCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = detainedInOtherCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertTrue(canHandle);
     }
@@ -156,31 +156,31 @@ class DetainedCaseListedLetterGeneratorTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        assertThatThrownBy(() -> detainedCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> detainedInOtherCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> detainedCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> detainedInOtherCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void should_not_allow_null_arguments() {
-        assertThatThrownBy(() -> detainedCaseListedLetterGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> detainedInOtherCaseListedLetterGenerator.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> detainedCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> detainedInOtherCaseListedLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> detainedCaseListedLetterGenerator.handle(null, callback))
+        assertThatThrownBy(() -> detainedInOtherCaseListedLetterGenerator.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> detainedCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> detainedInOtherCaseListedLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

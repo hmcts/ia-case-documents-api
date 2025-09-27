@@ -1,10 +1,19 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
@@ -13,21 +22,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-import java.util.Objects;
-
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-
 @Component
-public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetainedInIrcPrisonListCaseLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public DetainedCaseListedLetterGenerator(
-        @Qualifier("internalCaseListedLetter") DocumentCreator<AsylumCase> documentCreator,
+    public InternalDetainedInIrcPrisonListCaseLetterGenerator(
+        @Qualifier("internalDetainedListCase") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
@@ -44,8 +46,10 @@ public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandl
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == LIST_CASE
-               && isDetainedInFacilityType(asylumCase, OTHER);
+               && callback.getEvent() == Event.LIST_CASE
+               && isInternalCase(asylumCase) // Needs to work for LR as well
+               && !isAcceleratedDetainedAppeal(asylumCase)
+               && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -59,15 +63,16 @@ public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandl
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalCaseListedLetter = documentCreator.create(caseDetails);
+        Document internalDetainedListCaseLetter = documentCreator.create(caseDetails);
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+        documentHandler.addWithMetadata(
             asylumCase,
-            internalCaseListedLetter,
-            LETTER_NOTIFICATION_DOCUMENTS,
+            internalDetainedListCaseLetter,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
+
 }

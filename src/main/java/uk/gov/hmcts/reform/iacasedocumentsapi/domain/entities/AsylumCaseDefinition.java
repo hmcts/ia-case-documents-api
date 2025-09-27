@@ -878,6 +878,10 @@ public enum AsylumCaseDefinition {
 
     LEGAL_REP_HAS_ADDRESS(
             "legalRepHasAddress", new TypeReference<YesOrNo>(){}),
+
+    HEARING_CHANNEL(
+        "hearingChannel", new TypeReference<DynamicList>(){}),
+
     ;
 
     private final String value;
