@@ -106,6 +106,7 @@ public enum DocumentTag {
     INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER("internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER("internalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER("internalDetainedLateRemissionPartiallyGrantedOrRefusedTemplateLetter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER("internalDetainedLateRemissionGrantedTemplateLetter", CaseType.ASYLUM),
     DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER("detainedLegalRepRemovedIrcPrisonLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER("internalDetainedAppealSubmittedWithExemptionLetter", CaseType.ASYLUM),
 
