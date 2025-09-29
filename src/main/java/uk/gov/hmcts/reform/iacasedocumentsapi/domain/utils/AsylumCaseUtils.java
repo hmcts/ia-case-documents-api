@@ -21,11 +21,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
@@ -413,4 +409,88 @@ public class AsylumCaseUtils {
                 .map(decision -> PARTIALLY_APPROVED == decision)
                 .orElse(false);
     }
+
+    public static List<String> getAppellantAddressInCountryOrOoc(final AsylumCase asylumCase) {
+        return isAppellantInUk(asylumCase) ? getAppellantAddressAsList(asylumCase) :
+                getAppellantAddressAsListOoc(asylumCase);
+    }
+
+    public static List<String> getLegalRepAddressInCountryOrOoc(final AsylumCase asylumCase) {
+        return legalRepInCountryAppeal(asylumCase) ? getLegalRepresentativeAddressAsList(asylumCase) :
+                getLegalRepresentativeAddressOocAsList(asylumCase);
+    }
+
+    public static boolean legalRepInCountryAppeal(AsylumCase asylumCase) {
+        return asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class).map(value -> value.equals(YesOrNo.YES)).orElse(false);
+    }
+
+    public static List<String> getLegalRepresentativeAddressAsList(final AsylumCase asylumCase) {
+        AddressUk address = asylumCase
+                .read(LEGAL_REP_ADDRESS_U_K, AddressUk.class)
+                .orElseThrow(() -> new IllegalStateException("legalRepAddressUK is not present"));
+
+        List<String> legalRepAddressAsList = new ArrayList<>();
+
+        legalRepAddressAsList.add(address.getAddressLine1().orElseThrow(() -> new IllegalStateException("legalRepAddress line 1 is not present")));
+        String addressLine2 = address.getAddressLine2().orElse(null);
+        String addressLine3 = address.getAddressLine3().orElse(null);
+
+        if (addressLine2 != null) {
+            legalRepAddressAsList.add(addressLine2);
+        }
+        if (addressLine3 != null) {
+            legalRepAddressAsList.add(addressLine3);
+        }
+        legalRepAddressAsList.add(address.getPostTown().orElseThrow(() -> new IllegalStateException("legalRepAddress postTown is not present")));
+        legalRepAddressAsList.add(address.getPostCode().orElseThrow(() -> new IllegalStateException("legalRepAddress postCode is not present")));
+
+        return legalRepAddressAsList;
+    }
+
+    public static List<String> getLegalRepresentativeAddressOocAsList(final AsylumCase asylumCase) {
+
+        String addressLine1 = asylumCase
+                .read(OOC_ADDRESS_LINE_1, String.class)
+                .orElseThrow(() -> new IllegalStateException("Ooc Legal Rep Address line 1 is not present"));
+
+        String addressLine2 = asylumCase
+                .read(OOC_ADDRESS_LINE_2, String.class)
+                .orElseThrow(() -> new IllegalStateException("Ooc Legal Rep Address line 2 is not present"));
+
+        List<String> legalRepAddressAsList = new ArrayList<>();
+
+        legalRepAddressAsList.add(addressLine1);
+        legalRepAddressAsList.add(addressLine2);
+
+        String addressLine3 = asylumCase
+                .read(OOC_ADDRESS_LINE_3, String.class)
+                .orElse(null);
+
+        String addressLine4 = asylumCase
+                .read(OOC_ADDRESS_LINE_4, String.class)
+                .orElse(null);
+
+        NationalityGovUk oocLrCountryGovUkAdminJ = NationalityGovUk.valueOf(asylumCase
+                .read(OOC_LR_COUNTRY_GOV_UK_ADMIN_J, NationalityFieldValue.class)
+                .orElseThrow(() -> new IllegalStateException("oocLrCountryGovUkAdminJ is not present")).getCode());
+
+        if (addressLine3 != null) {
+            legalRepAddressAsList.add(addressLine3);
+        }
+        if (addressLine4 != null) {
+            legalRepAddressAsList.add(addressLine4);
+        }
+        legalRepAddressAsList.add(oocLrCountryGovUkAdminJ.toString());
+
+        return legalRepAddressAsList;
+    }
+
+    public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(IS_ADMIN, YesOrNo.class)
+                .map(yesOrNo -> Objects.equals(YES, yesOrNo)).orElse(false)
+                && asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+                .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);
+    }
 }
+
+
