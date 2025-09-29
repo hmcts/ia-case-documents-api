@@ -11,13 +11,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_DATE_OF_BIRTH;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CCD_REFERENCE_NUMBER_FOR_DISPLAY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
@@ -56,26 +54,7 @@ public class DetainedLegalRepRemovedIrcPrisonTemplate implements DocumentTemplat
         fieldValues.put("firstName", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("lastName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("onlineReferenceNumber", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY));
-        
-        // Try to get legal rep reference number from primary field, fallback to paper J field if null/empty
-        Optional<String> primaryRef = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class);
-        Optional<String> legalRepReferenceNumber;
-        
-        if (primaryRef.isPresent() && primaryRef.get() != null && !primaryRef.get().trim().isEmpty()) {
-            // Primary field has a valid non-empty value
-            legalRepReferenceNumber = primaryRef;
-        } else {
-            // Primary field is null, empty, or not present - try fallback
-            Optional<String> fallbackRef = asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class);
-            if (fallbackRef.isPresent() && fallbackRef.get() != null && !fallbackRef.get().trim().isEmpty()) {
-                legalRepReferenceNumber = fallbackRef;
-            } else {
-                // Both are empty/null - return the primary field as-is to preserve original behavior
-                legalRepReferenceNumber = primaryRef;
-            }
-        }
-        
-        fieldValues.put("legalRepReferenceNumber", legalRepReferenceNumber);
+        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
 
