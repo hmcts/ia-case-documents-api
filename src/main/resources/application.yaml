@@ -519,6 +519,11 @@ internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension: PDF
 internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "appeal-form"
 internalDetainedLateRemissionPartiallyGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Partially-Granted.docx}
 
+internalDetainedAppealSubmissionWithExemptionLetter.contentType: application/pdf
+internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
+internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00818.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
@@ -658,6 +663,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -700,6 +706,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -742,6 +749,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -782,6 +790,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc:
       - "listCase"
       - "submitAppeal"
@@ -811,6 +820,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc-team-leader:
       - "listCase"
       - "submitAppeal"
@@ -840,6 +850,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     national-business-centre:
       - "listCase"
       - "submitAppeal"
@@ -869,6 +880,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-ctsc:
       - "listCase"
       - "submitAppeal"
@@ -898,6 +910,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-admin:
       - "listCase"
       - "submitAppeal"
@@ -927,6 +940,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     citizen:
       - "startAppeal"
       - "editAppeal"
