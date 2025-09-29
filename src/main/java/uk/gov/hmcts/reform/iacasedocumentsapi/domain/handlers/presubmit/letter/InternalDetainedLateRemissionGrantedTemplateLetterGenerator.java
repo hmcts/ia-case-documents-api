@@ -34,7 +34,7 @@ public class InternalDetainedLateRemissionGrantedTemplateLetterGenerator impleme
     private final DocumentHandler documentHandler;
 
     public InternalDetainedLateRemissionGrantedTemplateLetterGenerator(
-            @Qualifier("internalDetainedLateRemissionPartiallyGrantedTemplateLetter") DocumentCreator<AsylumCase> documentCreator,
+            @Qualifier("internalDetainedLateRemissionGrantedTemplateLetter") DocumentCreator<AsylumCase> documentCreator,
             DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
