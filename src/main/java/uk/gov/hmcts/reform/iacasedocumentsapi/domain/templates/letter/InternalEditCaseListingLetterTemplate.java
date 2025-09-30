@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_CHANNEL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
@@ -12,9 +13,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeUpdatedTemplateProvider;
@@ -56,8 +59,12 @@ public class InternalEditCaseListingLetterTemplate implements DocumentTemplate<A
         Map<String, Object> fieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("oldHearingChannel", "Old channel"); //TODO
-        fieldValues.put("hearingChannel", "Current Channel");  //TODO
+
+        String oldHearingChannel = getHearingChannel(asylumCaseBefore, "Unknown");
+        String newHearingChannel = getHearingChannel(asylumCase, "Unknown");
+
+        fieldValues.put("oldHearingChannel", oldHearingChannel);
+        fieldValues.put("hearingChannel", newHearingChannel);
         fieldValues.put("oldHearingTime", formatDateTimeForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
@@ -74,5 +81,13 @@ public class InternalEditCaseListingLetterTemplate implements DocumentTemplate<A
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
         }
         return fieldValues;
+    }
+
+    private String getHearingChannel(AsylumCase asylumCase, String defaultValue) {
+        Optional<DynamicList> hearingChannelDl = asylumCase.read(HEARING_CHANNEL, DynamicList.class);
+
+        return hearingChannelDl
+            .map(dynamicList -> dynamicList.getValue().getLabel())
+            .orElse(defaultValue);
     }
 }
