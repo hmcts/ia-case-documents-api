@@ -34,6 +34,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
@@ -344,6 +345,17 @@ public class AsylumCaseUtils {
             .collect(Collectors.toList());
     }
 
+    public static List<DocumentWithMetadata> getMaybeNotificationAttachmentDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS);
+
+        return maybeLetterNotificationDocuments
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(IdValue::getValue)
+            .filter(document -> document.getTag() == documentTag)
+            .collect(Collectors.toList());
+    }
+
     public static boolean isAppellantInUk(AsylumCase asylumCase) {
         return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)
             .map(inUk -> YesOrNo.YES == inUk).orElse(true);
@@ -497,6 +509,14 @@ public class AsylumCaseUtils {
                 .map(yesOrNo -> Objects.equals(YES, yesOrNo)).orElse(false)
                 && asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
                 .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);
+    }
+
+    public static String getHearingChannel(AsylumCase asylumCase, String defaultValue) {
+        Optional<DynamicList> hearingChannelDl = asylumCase.read(HEARING_CHANNEL, DynamicList.class);
+
+        return hearingChannelDl
+            .map(dynamicList -> dynamicList.getValue().getLabel())
+            .orElse(defaultValue);
     }
 }
 
