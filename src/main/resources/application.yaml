@@ -313,7 +313,7 @@ internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_
 internalDetainedEndAppeal.contentType:  application/pdf
 internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
-internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
+internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00059.docx}
 
 internalDetainedEditCaseListingLetter.contentType: application/pdf
 internalDetainedEditCaseListingLetter.fileExtension: PDF
