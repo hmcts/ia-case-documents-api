@@ -1,0 +1,76 @@
+{
+  "description": "DIAC-1403 internal-detained-late-remission-granted-irc-letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1403,
+      "eventId": "recordRemissionDecision",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "HU/50008/2025",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Harmondsworth",
+          "submissionOutOfTime": "No",
+          "appealSubmissionDate": "{$TODAY}",
+          "appealType": "refusalOfHumanRights",
+          "remissionType": "lateRemission",
+          "feeAmountGbp": "14000",
+          "ccdReferenceNumberForDisplay": "1234-5678-9012-3461",
+          "remissionDecision": "approved",
+          "paymentStatus": "Paid",
+          "refundAmount": "14000",
+          "refundInstructed": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Harmondsworth",
+        "submissionOutOfTime": "No",
+        "appealSubmissionDate": "{$TODAY}",
+        "appealType": "refusalOfHumanRights",
+        "remissionType": "lateRemission",
+        "feeAmountGbp": "14000",
+        "ccdReferenceNumberForDisplay": "1234-5678-9012-3461",
+        "remissionDecision": "approved",
+        "paymentStatus": "Paid",
+        "refundAmount": "14000",
+        "refundInstructed": "Yes",
+        "appealReferenceNumber": "$/(.+)/",
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "internalDetainedLateRemissionGrantedTemplateLetter",
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_filename": "HU 50008 2025-Gonzlez-appeal-form.PDF",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
+              },
+              "suppliedBy": "",
+              "description": "",
+              "dateUploaded": "{$TODAY}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
