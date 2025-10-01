@@ -516,8 +516,13 @@ internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.templateName: ${I
 
 internalDetainedLateRemissionPartiallyGrantedLetter.contentType: application/pdf
 internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension: PDF
-internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "appeal-form"
+internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "late-remission-partially-granted-letter"
 internalDetainedLateRemissionPartiallyGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Partially-Granted.docx}
+
+internalDetainedLateRemissionRefusedLetter.contentType: application/pdf
+internalDetainedLateRemissionRefusedLetter.fileExtension: PDF
+internalDetainedLateRemissionRefusedLetter.fileName: "late-remission-refused-letter"
+internalDetainedLateRemissionRefusedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Refused.docx}
 
 internalDetainedAppealSubmissionWithExemptionLetter.contentType: application/pdf
 internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF

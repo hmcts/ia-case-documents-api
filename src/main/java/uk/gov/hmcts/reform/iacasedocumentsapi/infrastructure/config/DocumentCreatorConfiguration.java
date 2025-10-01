@@ -1954,6 +1954,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedLateRemissionRefusedTemplateLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedLateRemissionRefusedDocumentCreator(
+            @Value("${internalDetainedLateRemissionRefusedLetter.contentType}") String contentType,
+            @Value("${internalDetainedLateRemissionRefusedLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedLateRemissionRefusedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedLateRemissionRefusedTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("detainedLegalRepRemovedIrcPrisonLetterCreator")
     public DocumentCreator<AsylumCase> getDetainedLegalRepRemovedIrcPrisonLetterCreator(
             @Value("${detainedLegalRepRemovedIrcPrisonLetter.contentType}") String contentType,
