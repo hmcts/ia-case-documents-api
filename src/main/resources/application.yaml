@@ -524,6 +524,11 @@ internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
 internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00818.docx}
 
+internalDetainedDecisionWithoutHearing.contentType: application/pdf
+internalDetainedDecisionWithoutHearing.fileExtension: PDF
+internalDetainedDecisionWithoutHearing.fileName: "internal-detained-decision-without-hearing-letter"
+internalDetainedDecisionWithoutHearing.templateName: ${IA_DECISION_WITHOUT_HEARING_TEMPLATE:TB-IAC-DEC-ENG-decision-without-hearing.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
