@@ -12,7 +12,7 @@
         "replacements": {
           "appealReferenceNumber": "HU/50009/2025",
           "isAdmin": "Yes",
-          "appellantsRepresentation": "No",
+          "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "prison",
@@ -37,7 +37,7 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "isAdmin": "Yes",
-        "appellantsRepresentation": "No",
+        "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
         "detentionFacility": "prison",
