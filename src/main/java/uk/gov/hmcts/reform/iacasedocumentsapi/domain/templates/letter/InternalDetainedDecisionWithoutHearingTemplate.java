@@ -27,7 +27,9 @@ public class InternalDetainedDecisionWithoutHearingTemplate implements DocumentT
     }
 
     @Override
-    public String getName() { return templateName; }
+    public String getName() {
+        return templateName;
+    }
 
     @Override
     public Map<String, Object> mapFieldValues(CaseDetails<AsylumCase> caseDetails) {
