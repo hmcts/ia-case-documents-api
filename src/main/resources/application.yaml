@@ -529,6 +529,11 @@ internalDetainedLateRemissionGrantedLetter.fileExtension: PDF
 internalDetainedLateRemissionGrantedLetter.fileName: "appeal-form"
 internalDetainedLateRemissionGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Granted.docx}
 
+internalDetainedLateRemissionRefusedLetter.contentType: application/pdf
+internalDetainedLateRemissionRefusedLetter.fileExtension: PDF
+internalDetainedLateRemissionRefusedLetter.fileName: "late-remission-refused-letter"
+internalDetainedLateRemissionRefusedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Refused.docx}
+
 internalDetainedAppealSubmissionWithExemptionLetter.contentType: application/pdf
 internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
 internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
