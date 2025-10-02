@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.*;
+
 @Component
 public class BundleOrder implements Comparator<DocumentWithMetadata> {
 
