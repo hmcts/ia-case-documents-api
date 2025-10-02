@@ -39,7 +39,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
     @Mock
     private SystemDateProvider systemDateProvider;
 
-    private final String templateName = "TB-IAC-DEC-ENG-00028.docx";
+    private final String templateName = "TB-IAC-LET-ENG-Internal-detained-update-tribunal-decision-rule-31-irc-prison.docx";
     private final int daysAfterSubmitAppeal = 14;
     private final String internalCustomerServicesTelephone = "0300 123 1711";
     private final String internalCustomerServicesEmail = "IAC-DetainedTeam@justice.gov.uk";
