@@ -62,8 +62,7 @@ public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallba
         return callback.getEvent() == Event.DECIDE_AN_APPLICATION
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && isInternalCase(asylumCase)
-                && isAppellantInDetention(asylumCase)
-                && isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC,DetentionFacility.PRISON);
+                && isAppellantInDetention(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC,DetentionFacility.PRISON);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
