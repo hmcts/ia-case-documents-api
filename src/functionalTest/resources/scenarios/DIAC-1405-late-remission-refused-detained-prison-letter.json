@@ -25,7 +25,7 @@
           "ccdReferenceNumberForDisplay": "1234-5678-9012-3460",
           "remissionDecision": "rejected",
           "paymentStatus": "Paid",
-          "remissionRejectionReason": "The evidence provided does not support the claim for exceptional circumstances."
+          "amountRemitted": "0"
         }
       }
     }
@@ -50,7 +50,7 @@
         "ccdReferenceNumberForDisplay": "1234-5678-9012-3460",
         "remissionDecision": "rejected",
         "paymentStatus": "Paid",
-        "remissionRejectionReason": "The evidence provided does not support the claim for exceptional circumstances.",
+        "amountRemitted": "0",
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {

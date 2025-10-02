@@ -516,7 +516,7 @@ internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.templateName: ${I
 
 internalDetainedLateRemissionPartiallyGrantedLetter.contentType: application/pdf
 internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension: PDF
-internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "late-remission-partially-granted-letter"
+internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "appeal-form"
 internalDetainedLateRemissionPartiallyGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Partially-Granted.docx}
 
 internalDetainedLateRemissionGrantedLetter.contentType: application/pdf
