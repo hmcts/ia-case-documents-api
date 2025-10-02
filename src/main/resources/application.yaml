@@ -313,7 +313,7 @@ internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_
 internalDetainedEndAppeal.contentType:  application/pdf
 internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
-internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
+internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00059.docx}
 
 internalDetainedEditCaseListingLetter.contentType: application/pdf
 internalDetainedEditCaseListingLetter.fileExtension: PDF
@@ -523,6 +523,11 @@ internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.contentType: a
 internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileExtension: PDF
 internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileName: "appeal-form"
 internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.templateName: ${INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER:TB-IAC-LET-ENG-Internal-detained-update-tribunal-decision-rule-31-irc-prison.docx}
+
+internalDetainedLateRemissionGrantedLetter.contentType: application/pdf
+internalDetainedLateRemissionGrantedLetter.fileExtension: PDF
+internalDetainedLateRemissionGrantedLetter.fileName: "appeal-form"
+internalDetainedLateRemissionGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Granted.docx}
 
 internalDetainedAppealSubmissionWithExemptionLetter.contentType: application/pdf
 internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
