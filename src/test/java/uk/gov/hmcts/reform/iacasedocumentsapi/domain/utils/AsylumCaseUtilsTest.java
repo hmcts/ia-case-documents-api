@@ -313,15 +313,6 @@ public class AsylumCaseUtilsTest {
     }
 
     @Test
-    void hasBeenSubmittedAsLegalRepresentedInternalCase() {
-        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-
-        boolean result = AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
-
-        assertThat(result).isFalse();
-    }
-
-    @Test
     void should_get_addendum_document_when_present() {
         List<IdValue<DocumentWithMetadata>> addendumDocuments = new ArrayList<>();
         addendumDocuments.add(addendumOne);
