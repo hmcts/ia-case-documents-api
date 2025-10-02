@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class InternalDetainedDecisionWithoutHearingTemplate implements DocumentTemplate<AsylumCase> {
 
     private String templateName;
