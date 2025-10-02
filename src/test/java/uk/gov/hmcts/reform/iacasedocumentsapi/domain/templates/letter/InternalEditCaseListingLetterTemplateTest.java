@@ -15,6 +15,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_UK;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.COUNTRY_GOV_UK_OOC_ADMIN_J;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_CHANNEL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 
@@ -31,6 +32,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
@@ -68,6 +71,9 @@ public class InternalEditCaseListingLetterTemplateTest {
     private NationalityFieldValue oocAddressCountry = mock(NationalityFieldValue.class);
     private String hearingDate = "2024-12-20T12:34:56";
     @Mock private HearingNoticeUpdatedTemplateProvider hearingNoticeUpdatedTemplateProvider;
+    @Mock private DynamicList hearingChannelDynamicList;
+    @Mock private Value hearingChannelValue;
+    private String hearingChannelLabel = "In person";
 
     private InternalEditCaseListingLetterTemplate internalEditCaseListingLetterTemplate;
 
@@ -96,6 +102,9 @@ public class InternalEditCaseListingLetterTemplateTest {
         when(address.getAddressLine3()).thenReturn(Optional.of(addressLine3));
         when(address.getPostCode()).thenReturn(Optional.of(postCode));
         when(address.getPostTown()).thenReturn(Optional.of(postTown));
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
+        when(hearingChannelValue.getLabel()).thenReturn(hearingChannelLabel);
     }
 
     @Test
@@ -124,6 +133,8 @@ public class InternalEditCaseListingLetterTemplateTest {
         assertEquals(postCode, templateFieldValues.get("address_line_5"));
         assertEquals("20 December 2024", templateFieldValues.get("hearingDate"));
         assertTrue("12:34 PM".equalsIgnoreCase(templateFieldValues.get("hearingTime").toString()));
+        assertEquals(hearingChannelLabel, templateFieldValues.get("hearingChannel"));
+        assertEquals(hearingChannelLabel, templateFieldValues.get("oldHearingChannel"));
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
     }
 
@@ -146,6 +157,8 @@ public class InternalEditCaseListingLetterTemplateTest {
         Assert.assertEquals(Nationality.ES.toString(), templateFieldValues.get("address_line_4"));
         assertEquals("20 December 2024", templateFieldValues.get("hearingDate"));
         assertTrue("12:34 PM".equalsIgnoreCase(templateFieldValues.get("hearingTime").toString()));
+        assertEquals(hearingChannelLabel, templateFieldValues.get("hearingChannel"));
+        assertEquals(hearingChannelLabel, templateFieldValues.get("oldHearingChannel"));
         verify(hearingNoticeUpdatedTemplateProvider, times(1)).mapFieldValues(caseDetails, caseDetailsBefore);
     }
 
@@ -158,5 +171,18 @@ public class InternalEditCaseListingLetterTemplateTest {
         when(asylumCase.read(ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine3));
         when(asylumCase.read(COUNTRY_GOV_UK_OOC_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(oocAddressCountry));
         when(oocAddressCountry.getCode()).thenReturn(Nationality.ES.name());
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
+        when(hearingChannelValue.getLabel()).thenReturn(hearingChannelLabel);
+    }
+
+    @Test
+    public void should_use_default_hearing_channel_when_missing() {
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+
+        Map<String, Object> templateFieldValues = internalEditCaseListingLetterTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+
+        assertEquals("Unknown", templateFieldValues.get("hearingChannel"));
+        assertEquals("Unknown", templateFieldValues.get("oldHearingChannel"));
     }
 }
