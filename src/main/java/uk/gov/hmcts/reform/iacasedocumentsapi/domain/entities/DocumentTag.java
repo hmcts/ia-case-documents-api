@@ -110,7 +110,6 @@ public enum DocumentTag {
     DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER("detainedLegalRepRemovedIrcPrisonLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER("internalDetainedAppealSubmittedWithExemptionLetter", CaseType.ASYLUM),
 
-
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
