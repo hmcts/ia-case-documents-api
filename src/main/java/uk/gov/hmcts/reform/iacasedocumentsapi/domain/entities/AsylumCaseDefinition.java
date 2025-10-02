@@ -882,6 +882,9 @@ public enum AsylumCaseDefinition {
     HEARING_CHANNEL(
         "hearingChannel", new TypeReference<DynamicList>(){}),
 
+    UPDATE_TRIBUNAL_DECISION_DATE(
+            "updateTribunalDecisionDate", new TypeReference<String>(){}),
+
     ;
 
 

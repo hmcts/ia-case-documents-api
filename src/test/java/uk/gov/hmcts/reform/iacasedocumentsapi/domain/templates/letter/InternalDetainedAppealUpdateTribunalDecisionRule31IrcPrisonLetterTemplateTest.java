@@ -22,6 +22,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATE_TRIBUNAL_DECISION_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +48,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
+    private final String updateTribunalDecisionDate =  "2025-10-01";
+    private final String appealTribunalDecisionDeadlineDate =  "15 Oct 2025";
 
     private InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplate template;
 
@@ -79,8 +82,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("updateTribunalDecisionDoneDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
+        assertEquals(appealTribunalDecisionDeadlineDate, templateFieldValues.get("appealTribunalDecisionDeadlineDate"));
     }
 
     @Test
@@ -88,8 +91,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
-        when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(formatDateForNotificationAttachmentDocument(dueDate));
-        
+        when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_DATE, String.class)).thenReturn(Optional.of(updateTribunalDecisionDate));
+
         // Mock empty values for optional fields
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -106,8 +109,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(formatDateForNotificationAttachmentDocument(dueDate), templateFieldValues.get("updateTribunalDecisionDoneDate"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
+        assertEquals(appealTribunalDecisionDeadlineDate, templateFieldValues.get("appealTribunalDecisionDeadlineDate"));
     }
 
     @Test
@@ -129,7 +132,6 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(null, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(null, templateFieldValues.get("tenDaysAfterSubmitDate"));
         assertEquals(null, templateFieldValues.get("customerServicesTelephone"));
     }
 
@@ -147,5 +149,6 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_DATE, String.class)).thenReturn(Optional.of(updateTribunalDecisionDate));
     }
 }

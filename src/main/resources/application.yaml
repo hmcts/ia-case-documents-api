@@ -1220,7 +1220,7 @@ appellantDaysToWait:
     afterSubmitAppealWithFeeToPay: 14
     tribunalDocumentToSendTimeline: 4
     afterRemissionDecision: 14
-    updateTribunalDecisionDone: 28
+    appealAfterTribunalDecision: 14
 
 
 ### Email addresses

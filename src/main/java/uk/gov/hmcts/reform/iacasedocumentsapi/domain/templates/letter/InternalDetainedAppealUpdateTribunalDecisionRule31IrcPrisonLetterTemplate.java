@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATE_TRIBUNAL_DECISION_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
@@ -19,18 +20,18 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.form
 public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
-    private final int daysUpdateTribunalDecisionDone;
+    private final int appealAfterTribunalDecision;
     private final CustomerServicesProvider customerServicesProvider;
     private final SystemDateProvider systemDateProvider;
 
     public InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplate(
             @Value("${internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.templateName}") String templateName,
-            @Value("${appellantDaysToWait.letter.updateTribunalDecisionDone}") int daysUpdateTribunalDecisionDone,
+            @Value("${appellantDaysToWait.letter.appealAfterTribunalDecision}") int appealAfterTribunalDecision,
             CustomerServicesProvider customerServicesProvider,
             SystemDateProvider systemDateProvider
     ) {
         this.templateName = templateName;
-        this.daysUpdateTribunalDecisionDone = daysUpdateTribunalDecisionDone;
+        this.appealAfterTribunalDecision = appealAfterTribunalDecision;
         this.customerServicesProvider = customerServicesProvider;
         this.systemDateProvider = systemDateProvider;
     }
@@ -46,9 +47,13 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTe
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
+        final String appealTribunalDecisionDeadlineDate = formatDateForNotificationAttachmentDocument(LocalDate.parse(asylumCase.read(UPDATE_TRIBUNAL_DECISION_DATE, String.class)
+                        .orElseThrow(() -> new IllegalStateException("Update Tribunal Decision date is missing")))
+                .plusDays(appealAfterTribunalDecision));
+
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("updateTribunalDecisionDoneDate", systemDateProvider.dueDate(daysUpdateTribunalDecisionDone));
+        fieldValues.put("appealTribunalDecisionDeadlineDate", appealTribunalDecisionDeadlineDate);
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
 
