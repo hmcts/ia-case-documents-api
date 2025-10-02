@@ -1,26 +1,31 @@
 {
-  "description": "DIAC-1313-internal-detained-appeal-submission-OOT-with-fee-letter",
+  "description": "DIAC-1403 internal-detained-late-remission-granted-prison-letter",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "id": 1313,
-      "eventId": "submitAppeal",
-      "state": "appealStarted",
+      "id": 1403,
+      "eventId": "recordRemissionDecision",
+      "state": "appealSubmitted",
       "caseData": {
-        "template": "minimal-appeal-started.json",
+        "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealReferenceNumber": "EU/50001/2025",
+          "appealReferenceNumber": "HU/50009/2025",
           "isAdmin": "Yes",
           "appellantsRepresentation": "Yes",
-          "paymentStatus": "Payment pending",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "prison",
-          "prisonNOMSNumber": "",
-          "submissionOutOfTime": "Yes",
+          "prisonName": "HMP Pentonville",
+          "submissionOutOfTime": "No",
           "appealSubmissionDate": "{$TODAY}",
-          "appealType": "refusalOfEu"
+          "appealType": "refusalOfHumanRights",
+          "remissionType": "exceptionalCircumstancesRemission",
+          "feeAmountGbp": "14000",
+          "ccdReferenceNumberForDisplay": "1234-5678-9012-3462",
+          "remissionDecision": "approved",
+          "paymentStatus": "Paid",
+          "amountRemitted": "14000"
         }
       }
     }
@@ -29,27 +34,32 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-started.json",
+      "template": "minimal-appeal-submitted.json",
       "replacements": {
         "isAdmin": "Yes",
         "appellantsRepresentation": "Yes",
-        "paymentStatus": "Payment pending",
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
         "detentionFacility": "prison",
-        "prisonNOMSNumber": "",
-        "submissionOutOfTime": "Yes",
+        "prisonName": "HMP Pentonville",
+        "submissionOutOfTime": "No",
         "appealSubmissionDate": "{$TODAY}",
-        "appealType": "refusalOfEu",
+        "appealType": "refusalOfHumanRights",
+        "remissionType": "exceptionalCircumstancesRemission",
+        "feeAmountGbp": "14000",
+        "ccdReferenceNumberForDisplay": "1234-5678-9012-3462",
+        "remissionDecision": "approved",
+        "paymentStatus": "Paid",
+        "amountRemitted": "14000",
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
             "value": {
-              "tag": "internalDetainedAppealSubmittedOutOfTimeWithFeeLetter",
+              "tag": "internalDetainedLateRemissionGrantedTemplateLetter",
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_filename": "EU 50001 2025-Awan-appeal-form.PDF",
+                "document_filename": "HU 50009 2025-Gonzlez-appeal-form.PDF",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
               },
               "suppliedBy": "",

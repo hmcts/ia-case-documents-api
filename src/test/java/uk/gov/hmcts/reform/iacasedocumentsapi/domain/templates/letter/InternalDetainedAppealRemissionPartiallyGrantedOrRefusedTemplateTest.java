@@ -97,7 +97,7 @@ class InternalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateTest {
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
-        assertEquals(Optional.of(appealReferenceNumber), templateFieldValues.get("onlineCaseRefNumber"));
+        assertEquals(Optional.of(appealReferenceNumber), templateFieldValues.get("onlineCaseReferenceNumber"));
         assertEquals(Optional.of(remissionDecisionReason), templateFieldValues.get("remissionReason"));
         assertEquals(dueDate, templateFieldValues.get("daysAfterRemissionDecision"));
         assertEquals(internalCustomerServicesTelephoneNumber, templateFieldValues.get("customerServicesTelephone"));
