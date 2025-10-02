@@ -54,7 +54,7 @@
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "2",
             "value": {
               "tag": "internalDetainedLateRemissionRefusedTemplateLetter",
               "document": {
