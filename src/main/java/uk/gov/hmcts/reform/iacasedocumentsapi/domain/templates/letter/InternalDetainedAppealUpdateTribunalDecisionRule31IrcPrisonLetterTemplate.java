@@ -24,7 +24,7 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTe
     private final SystemDateProvider systemDateProvider;
 
     public InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplate(
-            @Value("${internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.templateName}") String templateName,
+            @Value("${internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.templateName}") String templateName,
             @Value("${appellantDaysToWait.letter.updateTribunalDecisionDone}") int daysUpdateTribunalDecisionDone,
             CustomerServicesProvider customerServicesProvider,
             SystemDateProvider systemDateProvider
