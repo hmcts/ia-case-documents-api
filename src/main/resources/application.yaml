@@ -242,7 +242,7 @@ decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 hoReviewEvidenceLetter.contentType: application/pdf
 hoReviewEvidenceLetter.fileExtension: PDF
 hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
-hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
+hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-Internal-Irc-Prison-Ho-To-Review-Appeal.docx}
 
 uploadAppealResponseMaintainedLetter.contentType: application/pdf
 uploadAppealResponseMaintainedLetter.fileExtension: PDF
@@ -524,6 +524,11 @@ internalDetainedLateRemissionGrantedLetter.fileExtension: PDF
 internalDetainedLateRemissionGrantedLetter.fileName: "appeal-form"
 internalDetainedLateRemissionGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Granted.docx}
 
+
+internalDetainedLateRemissionRefusedLetter.contentType: application/pdf
+internalDetainedLateRemissionRefusedLetter.fileExtension: PDF
+internalDetainedLateRemissionRefusedLetter.fileName: "late-remission-refused-letter"
+internalDetainedLateRemissionRefusedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Refused.docx}
 
 internalDetainedAppealSubmissionWithExemptionLetter.contentType: application/pdf
 internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
