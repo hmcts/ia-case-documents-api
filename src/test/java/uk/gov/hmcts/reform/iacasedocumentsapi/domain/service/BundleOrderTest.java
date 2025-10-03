@@ -38,7 +38,7 @@ class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(104, sortedTags.size());
+        assertEquals(105, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -140,6 +140,7 @@ class BundleOrderTest {
             DocumentTag.DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER,
             DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER,
             DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER,
             DocumentTag.NONE
         );
 
