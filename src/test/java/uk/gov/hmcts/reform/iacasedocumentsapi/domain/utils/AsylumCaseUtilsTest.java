@@ -22,10 +22,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -60,6 +62,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_EXPLANATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_PARTIES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FEE_AMOUNT_GBP;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_CHANNEL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_WITHOUT_HEARING;
@@ -88,6 +91,10 @@ public class AsylumCaseUtilsTest {
     private Document document;
     @Mock
     private AddressUk address;
+    @Mock
+    private DynamicList hearingChannelDynamicList;
+    @Mock
+    private Value hearingChannelValue;
     private final String directionExplanation = "some explanation";
     private final Parties directionParties = Parties.APPELLANT;
     private final String directionDateDue = "2023-06-16";
@@ -795,6 +802,51 @@ public class AsylumCaseUtilsTest {
         Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
 
         assertFalse(remissionDecisionGranted(asylumCase));
+    }
+
+    @Test
+    void should_return_hearing_channel_label_when_present() {
+        String expectedLabel = "In person";
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
+        when(hearingChannelValue.getLabel()).thenReturn(expectedLabel);
+
+        String result = AsylumCaseUtils.getHearingChannel(asylumCase, "Unknown");
+
+        assertEquals(expectedLabel, result);
+    }
+
+    @Test
+    void should_return_default_value_when_hearing_channel_not_present() {
+        String defaultValue = "Unknown";
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+
+        String result = AsylumCaseUtils.getHearingChannel(asylumCase, defaultValue);
+
+        assertEquals(defaultValue, result);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"In person", "Video call", "Telephone", "Paper hearing"})
+    void should_return_correct_hearing_channel_for_different_types(String hearingChannelType) {
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
+        when(hearingChannelValue.getLabel()).thenReturn(hearingChannelType);
+
+        String result = AsylumCaseUtils.getHearingChannel(asylumCase, "Unknown");
+
+        assertEquals(hearingChannelType, result);
+    }
+
+    @Test
+    void should_throw_exception_when_hearing_channel_value_is_null() {
+        String defaultValue = "Not specified";
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(null);
+
+        assertThrows(NullPointerException.class, () -> {
+            AsylumCaseUtils.getHearingChannel(asylumCase, defaultValue);
+        });
     }
 
 }
