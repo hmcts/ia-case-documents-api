@@ -1,11 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.EDIT_CASE_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeNotificationAttachmentDocuments;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
@@ -24,7 +26,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 @Component
-public class InternalEditCaseListingLetterWithAttachmentBundleHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class DetainedIrcPrisonCaseListedDocumentBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -33,9 +35,9 @@ public class InternalEditCaseListingLetterWithAttachmentBundleHandler implements
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalEditCaseListingLetterWithAttachmentBundleHandler(
-        @Value("${internalEditCaseListingLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalEditCaseListingLetterWithAttachment.fileName}") String fileName,
+    public DetainedIrcPrisonCaseListedDocumentBundler(
+        @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
+        @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
@@ -59,9 +61,14 @@ public class InternalEditCaseListingLetterWithAttachmentBundleHandler implements
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == EDIT_CASE_LISTING
-               && isEmStitchingEnabled
-               && (isDetainedInFacilityType(asylumCase, OTHER) || (hasAppellantAddressInCountryOrOoc(asylumCase) && isInternalNonDetainedCase(asylumCase)));
+               && callback.getEvent() == LIST_CASE
+               && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
+               && isEmStitchingEnabled;
+    }
+
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return DispatchPriority.LATEST;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -75,11 +82,11 @@ public class InternalEditCaseListingLetterWithAttachmentBundleHandler implements
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER);
-
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        Document internalEditCaseListingLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
+        List<DocumentWithMetadata> bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+
+        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,
             "Letter bundle documents",
             qualifiedDocumentFileName
@@ -87,12 +94,10 @@ public class InternalEditCaseListingLetterWithAttachmentBundleHandler implements
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalEditCaseListingLetterBundle,
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
+            internalCaseListedLetterBundle,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
-
-        asylumCase.clear(LETTER_NOTIFICATION_DOCUMENTS);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
