@@ -242,7 +242,7 @@ decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 hoReviewEvidenceLetter.contentType: application/pdf
 hoReviewEvidenceLetter.fileExtension: PDF
 hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
-hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
+hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-Internal-Irc-Prison-Ho-To-Review-Appeal.docx}
 
 uploadAppealResponseMaintainedLetter.contentType: application/pdf
 uploadAppealResponseMaintainedLetter.fileExtension: PDF
@@ -313,7 +313,7 @@ internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_
 internalDetainedEndAppeal.contentType:  application/pdf
 internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
-internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
+internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00059.docx}
 
 internalDetainedEditCaseListingLetter.contentType: application/pdf
 internalDetainedEditCaseListingLetter.fileExtension: PDF
@@ -489,6 +489,10 @@ internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension: PDF
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName: "appeal-form"
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-late-with-remission-Submitted.docx}
 
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.contentType: application/pdf
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileExtension: PDF
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileName: "appeal-form"
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Remission-Granted-Out-Of-Time.docx}
 
 internalDetainedOutOfTimeDecisionAllowedLetter.contentType: application/pdf
 internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension: PDF
@@ -509,6 +513,32 @@ detainedHearingAdjournedNoDateAppellantLetter.contentType: application/pdf
 detainedHearingAdjournedNoDateAppellantLetter.fileExtension: PDF
 detainedHearingAdjournedNoDateAppellantLetter.fileName: "detained-hearing-adjourned-no-date-appellant-letter"
 detainedHearingAdjournedNoDateAppellantLetter.templateName: ${IA_APPEAL_DETAINED_HEARING_ADJOURNED_NO_DATE_APPELLANT_LETTER:TB-IAC-LET-ENG-Detained-Hearing-Adjourned-No-Date-Appellant.docx}
+
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType: application/pdf
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension: PDF
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName: "appeal-form"
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.templateName: ${IA_APPEAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE:TB-IAC-LET-ENG-00821.docx}
+
+internalDetainedLateRemissionPartiallyGrantedLetter.contentType: application/pdf
+internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension: PDF
+internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "appeal-form"
+internalDetainedLateRemissionPartiallyGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Partially-Granted.docx}
+
+internalDetainedLateRemissionGrantedLetter.contentType: application/pdf
+internalDetainedLateRemissionGrantedLetter.fileExtension: PDF
+internalDetainedLateRemissionGrantedLetter.fileName: "appeal-form"
+internalDetainedLateRemissionGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Granted.docx}
+
+
+internalDetainedLateRemissionRefusedLetter.contentType: application/pdf
+internalDetainedLateRemissionRefusedLetter.fileExtension: PDF
+internalDetainedLateRemissionRefusedLetter.fileName: "late-remission-refused-letter"
+internalDetainedLateRemissionRefusedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Refused.docx}
+
+internalDetainedAppealSubmissionWithExemptionLetter.contentType: application/pdf
+internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
+internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00818.docx}
 
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
@@ -541,6 +571,11 @@ internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
+
+detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
+detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
+detainedLegalRepRemovedIrcPrisonLetter.fileName: "appeal-form"
+detainedLegalRepRemovedIrcPrisonLetter.templateName: ${DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER_TEMPLATE:TB-IAC-LET-ENG-legal-rep-removed.docx}
 
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
@@ -585,6 +620,9 @@ security:
     - "caseworker-ia"
     - "citizen"
   roleEventAccess:
+    caseworker-approver:
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -598,6 +636,7 @@ security:
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
       - "applyForFTPAAppellant"
+      - "removeRepresentation"
     tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -640,6 +679,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -682,6 +722,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -724,6 +765,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -733,6 +775,8 @@ security:
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
       - "caseListing"
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
@@ -762,6 +806,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc:
       - "listCase"
       - "submitAppeal"
@@ -791,6 +836,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc-team-leader:
       - "listCase"
       - "submitAppeal"
@@ -820,6 +866,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     national-business-centre:
       - "listCase"
       - "submitAppeal"
@@ -849,6 +896,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-ctsc:
       - "listCase"
       - "submitAppeal"
@@ -878,6 +926,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-admin:
       - "listCase"
       - "submitAppeal"
@@ -907,6 +956,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -1175,6 +1225,7 @@ appellantDaysToWait:
     afterSubmitAppeal: 10
     afterSubmitAppealWithFeeToPay: 14
     tribunalDocumentToSendTimeline: 4
+    afterRemissionDecision: 14
 
 
 ### Email addresses

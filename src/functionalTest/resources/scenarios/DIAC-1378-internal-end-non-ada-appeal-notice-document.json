@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7372 end appeal for Ada notice document PDF",
+  "description": "DIAC-1378 end appeal for non Ada notice document PDF",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -10,11 +10,15 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "tribunalDocuments": [],
-          "endAppealDate": "2022-08-01",
+          "detentionFacility": "immigrationRemovalCentre",
           "appellantInDetention": "Yes",
           "isAdmin": "Yes",
           "appealSubmissionDate": "{$TODAY}",
-          "isAcceleratedDetainedAppeal": "Yes"
+          "isAcceleratedDetainedAppeal": "No",
+          "endAppealDate": "2022-08-01",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
+          "decisionMaker": "Admin Officer"
         }
       }
     }
@@ -28,7 +32,10 @@
         "appellantInDetention": "Yes",
         "isAdmin": "Yes",
         "appealSubmissionDate": "{$TODAY}",
-        "isAcceleratedDetainedAppeal": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "detentionFacility": "immigrationRemovalCentre",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
