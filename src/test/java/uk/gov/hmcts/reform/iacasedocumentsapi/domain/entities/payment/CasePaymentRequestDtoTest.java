@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.CasePaymentRequestDto;
 
 class CasePaymentRequestDtoTest {
 

@@ -26,24 +26,24 @@ public class AsylumCaseTest {
     }
 
     @Test
-    public void reads_simple_type_with_target_type_generics() {
-
-        Optional<String> maybeAppealReferenceNumber = asylumCase.read(APPEAL_REFERENCE_NUMBER);
-
-        assertEquals(maybeAppealReferenceNumber.get(), "PA/50222/2019");
-    }
-
-    @Test
     void read_appeal_reference_number() {
         Optional<String> maybeAppealReferenceNumberWithoutType = asylumCase.read(APPEAL_REFERENCE_NUMBER);
         Optional<String> maybeAppealReferenceNumberWithType = asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class);
 
         String appealReferenceNumberWithoutType = maybeAppealReferenceNumberWithoutType.orElseThrow(() ->
-            new AssertionError("Expected value not found"));
+                                                                                                        new AssertionError("Expected value not found"));
         String appealReferenceNumberWithType = maybeAppealReferenceNumberWithType.orElseThrow(() ->
-            new AssertionError("Expected value not found"));
+                                                                                                  new AssertionError("Expected value not found"));
         assertEquals("PA/50222/2019", appealReferenceNumberWithoutType);
         assertEquals("PA/50222/2019", appealReferenceNumberWithType);
+    }
+
+    @Test
+    public void reads_simple_type_with_target_type_generics() {
+
+        Optional<String> maybeAppealReferenceNumber = asylumCase.read(APPEAL_REFERENCE_NUMBER);
+
+        assertEquals(maybeAppealReferenceNumber.get(), "PA/50222/2019");
     }
 
     @Test

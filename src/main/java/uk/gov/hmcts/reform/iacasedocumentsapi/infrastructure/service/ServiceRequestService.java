@@ -33,7 +33,7 @@ public class ServiceRequestService {
     private final SystemTokenGenerator systemTokenGenerator;
     private final AuthTokenGenerator serviceAuthorization;
     private final ServiceRequestApi serviceRequestApi;
-    private String callBackUrl;
+    private final String callBackUrl;
 
     public ServiceRequestService(SystemTokenGenerator systemTokenGenerator,
                                  AuthTokenGenerator serviceAuthorization,

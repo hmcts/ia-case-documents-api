@@ -1,5 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,17 +19,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.StartEventDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.SubmitEventDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.CcdDataApi;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.IdentityManagerResponseException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.S2STokenValidator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SystemTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SystemUserProvider;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 
 @Service
 @Slf4j
@@ -89,7 +88,7 @@ public class CcdDataService {
 
         if (!isPaymentReferenceExists(startEventDetails.getCaseDetails().getCaseData(),
                                       caseMetaData.getPaymentReference()) && !isWaysToPay) {
-            log.warn("Payment reference not found for the caseId:={}", caseId);
+
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                                               "Payment reference not found for the caseId: " + caseId);
         }

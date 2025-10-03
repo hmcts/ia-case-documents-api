@@ -1,7 +1,20 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,30 +26,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 @ExtendWith(MockitoExtension.class)
 public class CcdEventAuthorizorTest {
 
-    @Mock
-    private AuthorizedRolesProvider authorizedRolesProvider;
-
-    private final String role = "caseworker-ia";
-    private Map<String, List<Event>> roleEventAccess;
+    @Mock private AuthorizedRolesProvider authorizedRolesProvider;
     private CcdEventAuthorizor ccdEventAuthorizor;
     private static final String EVENT_NOT_ALLOWED = "Event 'unknown' not allowed";
+    private final String role = "caseworker-ia";
 
     @BeforeEach
     public void setUp() {

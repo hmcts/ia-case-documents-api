@@ -6,18 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.SubmitEventDetails;
 
 class SubmitEventDetailsTest {
-
-    private final long id = 1234;
-    private final String jurisdiction = "IA";
-    private State state;
-    private Map<String, Object> data;
-    private final int callbackResponseStatusCode = 200;
-    private final String callbackResponseStatus = "CALLBACK_COMPLETED";
-
-    private SubmitEventDetails submitEventDetails;
 
     @Test
     void should_test_equals_contract() {
@@ -30,13 +20,20 @@ class SubmitEventDetailsTest {
     @Test
     void should_hold_onto_values() {
 
-        state = State.APPEAL_SUBMITTED;
-        data = new HashMap<>();
+        State state = State.APPEAL_SUBMITTED;
+        Map<String, Object> data = new HashMap<>();
         data.put("paymentStatus", "Success");
         data.put("paymentReference", "RC-1234");
 
-        submitEventDetails =
-            new SubmitEventDetails(id, jurisdiction, state, data, callbackResponseStatusCode, callbackResponseStatus);
+        String callbackResponseStatus = "CALLBACK_COMPLETED";
+        int callbackResponseStatusCode = 200;
+        String jurisdiction = "IA";
+        long id = 1234;
+        SubmitEventDetails submitEventDetails = new SubmitEventDetails(
+            id, jurisdiction, state, data,
+            callbackResponseStatusCode,
+            callbackResponseStatus
+        );
 
         assertEquals(id, submitEventDetails.getId());
         assertEquals(jurisdiction, submitEventDetails.getJurisdiction());

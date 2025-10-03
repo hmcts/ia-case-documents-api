@@ -1,5 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,21 +24,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.CaseMetaData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.SubmitEventDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.UpdatePaymentStatusController;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.CcdDataService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.exceptions.BadRequestException;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UpdatePaymentStatusControllerTest {
@@ -38,7 +36,6 @@ class UpdatePaymentStatusControllerTest {
     @Mock
     private PaymentDto paymentDto;
 
-    private final String jurisdiction = "IA";
     private final String caseType = "Asylum";
     private final long caseId = 1234;
     private static final String VALID_S2S_TOKEN = "VALID_S2S_TOKEN";
@@ -106,6 +103,7 @@ class UpdatePaymentStatusControllerTest {
         data.put("paymentReference", "RC-1234");
         data.put("paymentStatus", "Success");
 
+        String jurisdiction = "IA";
         return new SubmitEventDetails(1234, jurisdiction, State.APPEAL_SUBMITTED, data,
                                       200, "CALLBACK_COMPLETED");
     }

@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import java.util.List;
+import lombok.Getter;
 
 
+@Getter
 public class LegRepAddressUk {
 
     private String addressLine1;
@@ -45,35 +47,4 @@ public class LegRepAddressUk {
         this.dxAddress = dxAddress;
     }
 
-    public String getAddressLine1() {
-        return addressLine1;
-    }
-
-    public String getAddressLine2() {
-        return addressLine2;
-    }
-
-    public String getAddressLine3() {
-        return addressLine3;
-    }
-
-    public String getTownCity() {
-        return townCity;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public String getPostCode() {
-        return postCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public List<String> getDxAddress() {
-        return dxAddress;
-    }
 }

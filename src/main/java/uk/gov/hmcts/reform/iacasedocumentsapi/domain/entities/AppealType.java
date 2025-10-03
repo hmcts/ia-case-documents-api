@@ -3,9 +3,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import static java.util.Arrays.stream;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Getter;
-
 import java.util.Optional;
+import lombok.Getter;
 
 @Getter
 public enum AppealType {
@@ -18,10 +17,8 @@ public enum AppealType {
     EU("euSettlementScheme", "EU Settlement Scheme"),
     AG("ageAssessment", "Age assessment appeal");
 
-
     @JsonValue
     private String value;
-
     private String description;
 
     AppealType(String value, String description) {

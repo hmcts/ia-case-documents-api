@@ -12,8 +12,6 @@ management:
   endpoints:
     web:
       base-path: "/"
-      exposure:
-        include: health, info, prometheus
 
   health:
     probes:
@@ -30,6 +28,18 @@ management:
         response: '"status":"UP"'
       serviceAuth:
         uri: ${S2S_URL:http://localhost:4502}/health
+        response: '"status":"UP"'
+      feesRegister:
+        uri: ${FEES_REGISTER_API_URL:http://localhost:8991}/health
+        response: '"status":"UP"'
+      rdProfessional:
+        uri: ${PROF_REF_DATA_URL:http://localhost:8991}/health
+        response: '"status":"UP"'
+      paymentApi:
+        url: ${PAYMENT_API_URL:http://localhost:8083}/health
+        response: '"status":"UP"'
+      ccd:
+        uri: ${CCD_URL:http:/localhost:4452}/health
         response: '"status":"UP"'
 
 
@@ -55,7 +65,7 @@ spring:
         jwt:
           jwk-set-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o/jwks
   cache:
-    cache-names: userInfoCache, accessTokenCache
+    cache-names: userInfoCache, systemTokenCache
     caffeine:
       spec: expireAfterAccess=3600s
 
@@ -147,12 +157,12 @@ remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
 remoteHearingNoticeUpdatedDetailsDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00680.docx}
 
-decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
+decisionAndReasons.contentType: application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
 decisionAndReasons.fileName: "decision-and-reasons-draft"
 decisionAndReasons.templateName: ${IA_DECISION_AND_REASONS_TEMPLATE:TB-IAC-DEC-ENG-00738.docx}
 
-decisionAndReasonsCoverLetter.contentType:  application/pdf
+decisionAndReasonsCoverLetter.contentType: application/pdf
 decisionAndReasonsCoverLetter.fileExtension: PDF
 decisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 decisionAndReasonsCoverLetter.templateName: ${IA_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00756.docx}
@@ -165,7 +175,7 @@ internalDetainedDecisionsAndReasonsAllowedLetter.templateName: ${IA_ADA_INTERNAL
 internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueInWorkingDays: 7
 internalDetainedDecisionsAndReasonsAllowedLetter.ftpaDueCalendarDays: 14
 
-aipDecisionAndReasonsCoverLetter.contentType:  application/pdf
+aipDecisionAndReasonsCoverLetter.contentType: application/pdf
 aipDecisionAndReasonsCoverLetter.fileExtension: PDF
 aipDecisionAndReasonsCoverLetter.fileName: "Decision-and-reasons-Cover-letter"
 aipDecisionAndReasonsCoverLetter.templateName: ${IA_AIP_DECISION_AND_REASONS_COVER_LETTER_TEMPLATE:TB-IAC-LET-ENG-00807.docx}
@@ -191,7 +201,7 @@ internalAdaHearingBundle.templateName: ${IA_INTERNAL_ADA_HEARING_BUNDLE_TEMPLATE
 appealSkeletonBundle.fileExtension: PDF
 appealSkeletonBundle.fileName: "appeal-skeleton-argument"
 
-endAppeal.contentType:  application/pdf
+endAppeal.contentType: application/pdf
 endAppeal.fileExtension: PDF
 endAppeal.fileName: "NoticeOfEndedAppeal"
 endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
@@ -202,22 +212,22 @@ endAppealAutomatically.fileExtension: PDF
 endAppealAutomatically.fileName: "NoticeOfEndedAppeal"
 endAppealAutomatically.templateName: ${IA_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-GNO-ENG-00239.docx}
 
-cmaRequirements.contentType:  application/pdf
+cmaRequirements.contentType: application/pdf
 cmaRequirements.fileExtension: PDF
 cmaRequirements.fileName: "Case-management-appointment-requirements"
 cmaRequirements.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HRN-ENG-00506.docx}
 
-cmaAppointmentNotice.contentType:  application/pdf
+cmaAppointmentNotice.contentType: application/pdf
 cmaAppointmentNotice.fileExtension: PDF
 cmaAppointmentNotice.fileName: "Case-management-appointment-notice"
 cmaAppointmentNotice.templateName: ${IA_CMA_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00504.docx}
 
-appealReasons.contentType:  application/pdf
+appealReasons.contentType: application/pdf
 appealReasons.fileExtension: PDF
 appealReasons.fileName: "Appeal-reasons"
 appealReasons.templateName: ${IA_APPEAL_REASONS_TEMPLATE:TB-IAC-GNO-ENG-00802.docx}
 
-clarifyingQuestionsAnswers.contentType:  application/pdf
+clarifyingQuestionsAnswers.contentType: application/pdf
 clarifyingQuestionsAnswers.fileExtension: PDF
 clarifyingQuestionsAnswers.fileName: "Tribunal-questions-and-answers"
 clarifyingQuestionsAnswers.templateName: ${IA_CLARIFYING_QUESTIONS_TEMPLATE:TB-IAC-GNO-ENG-00803.docx }
@@ -262,7 +272,7 @@ internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileExtension: PDF
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.fileName: "Detained appellant letter_HO response when decision withdrawn"
 internalDetainedReviewHomeOfficeResponseWithdrawnLetter.templateName: ${IA_REVIEW_HO_RESPONSE_DECISION_WITHDRAWN_TEMPLATE:TB-IAC-LET-ENG-00014.docx}
 
-bailEndApplication.contentType:  application/pdf
+bailEndApplication.contentType: application/pdf
 bailEndApplication.fileExtension: PDF
 bailEndApplication.fileName: "ended-application-notice"
 bailEndApplication.templateName: ${IA_BAIL_END_APPLICATION_TEMPLATE:TB-IAC-APP-ENG-01138.docx}
@@ -277,22 +287,22 @@ internalAppealCanProceedDocument.fileExtension: PDF
 internalAppealCanProceedDocument.fileName: "appeal-form"
 internalAppealCanProceedDocument.templateName: ${IA_INTERNAL_APPEAL_CAN_PROCEED_TEMPLATE:TB-IAC-DEC-ENG-00012.docx}
 
-internalDetainedRequestRespondentEvidence.contentType:  application/pdf
+internalDetainedRequestRespondentEvidence.contentType: application/pdf
 internalDetainedRequestRespondentEvidence.fileExtension: PDF
 internalDetainedRequestRespondentEvidence.fileName: "detained-appellant-request-respondent-evidence-notice"
 internalDetainedRequestRespondentEvidence.templateName: ${IA_INTERNAL_DETAINED_REQUEST_RESPONDENT_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00010.docx}
 
-internalDetainedEndAppealAutomatically.contentType:  application/pdf
+internalDetainedEndAppealAutomatically.contentType: application/pdf
 internalDetainedEndAppealAutomatically.fileExtension: PDF
 internalDetainedEndAppealAutomatically.fileName: "detained-appellant-end-appeal-automaticaly-notice"
 internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003.docx}
 
-internalDetainedAppealFeeDue.contentType:  application/pdf
+internalDetainedAppealFeeDue.contentType: application/pdf
 internalDetainedAppealFeeDue.fileExtension: PDF
 internalDetainedAppealFeeDue.fileName: "internal-detained-appeal-fee-is-due-letter"
 internalDetainedAppealFeeDue.templateName: ${IA_INTERNAL_DETAINED_APPEAL_FEE_IS_DUE_TEMPLATE:TB-IAC-LET-ENG-00001.docx}
 
-internalDetainedMarkAppealPaid.contentType:  application/pdf
+internalDetainedMarkAppealPaid.contentType: application/pdf
 internalDetainedMarkAppealPaid.fileExtension: PDF
 internalDetainedMarkAppealPaid.fileName: "detained-appellant-mark-appeal-paid-notice"
 internalDetainedMarkAppealPaid.templateName: ${IA_INTERNAL_DETAINED_MARK_APPEAL_PAID_TEMPLATE:TB-IAC-LET-ENG-00004.docx}
@@ -302,12 +312,12 @@ internalDetainedListCaseLetter.fileExtension: PDF
 internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
 internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
 
-internalDetainedRequestHearingRequirements.contentType:  application/pdf
+internalDetainedRequestHearingRequirements.contentType: application/pdf
 internalDetainedRequestHearingRequirements.fileExtension: PDF
 internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"
 internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_REQUEST_HEARING_REQUIREMENTS_TEMPLATE:TB-IAC-LET-ENG-00006.docx}
 
-internalDetainedEndAppeal.contentType:  application/pdf
+internalDetainedEndAppeal.contentType: application/pdf
 internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
 internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
@@ -322,7 +332,7 @@ internalDetainedManageFeeUpdateLetter.fileExtension: PDF
 internalDetainedManageFeeUpdateLetter.fileName: "internal-detained-manage-fee-update-letter"
 internalDetainedManageFeeUpdateLetter.templateName: ${IA_INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00808.docx}
 
-internalMarkAppealAsAda.contentType:  application/pdf
+internalMarkAppealAsAda.contentType: application/pdf
 internalMarkAppealAsAda.fileExtension: PDF
 internalMarkAppealAsAda.fileName: "detained-appellant-mark-as-ada-notice"
 internalMarkAppealAsAda.templateName: ${IA_INTERNAL_MARK_APPEAL_AS_ADA_TEMPLATE:TB-IAC-LET-ENG-00008.docx}
@@ -401,12 +411,12 @@ internalHearingAdjustmentsUpdated.fileExtension: PDF
 internalHearingAdjustmentsUpdated.fileName: "hearing-adjustments-updated-letter"
 internalHearingAdjustmentsUpdated.templateName: ${IA_INTERNAL_HEARING_ADJUSTMENTS_UPDATED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00030.docx}
 
-internalDetainedMaintainCaseUnlinkAppeal.contentType:  application/pdf
+internalDetainedMaintainCaseUnlinkAppeal.contentType: application/pdf
 internalDetainedMaintainCaseUnlinkAppeal.fileExtension: PDF
 internalDetainedMaintainCaseUnlinkAppeal.fileName: "detained-appellant-maintain-case-unlink-appeal-notice"
 internalDetainedMaintainCaseUnlinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_UNLINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00026.docx}
 
-internalUploadAdditionalEvidence.contentType:  application/pdf
+internalUploadAdditionalEvidence.contentType: application/pdf
 internalUploadAdditionalEvidence.fileExtension: PDF
 internalUploadAdditionalEvidence.fileName: "additional-evidence-uploaded-letter"
 internalUploadAdditionalEvidence.templateName: ${IA_INTERNAL_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00031.docx}
@@ -416,22 +426,22 @@ internalChangeHearingCentreLetter.fileExtension: PDF
 internalChangeHearingCentreLetter.fileName: "appellant-change-hearing-centre-letter"
 internalChangeHearingCentreLetter.templateName: ${IA_INTERNAL_CHANGE_HEARING_CENTRE_TEMPLATE:TB-IAC-LET-ENG-00032.docx}
 
-internalHomeOfficeUploadAdditionalAddendumEvidence.contentType:  application/pdf
+internalHomeOfficeUploadAdditionalAddendumEvidence.contentType: application/pdf
 internalHomeOfficeUploadAdditionalAddendumEvidence.fileExtension: PDF
 internalHomeOfficeUploadAdditionalAddendumEvidence.fileName: "appellant letter_HO-evidence"
 internalHomeOfficeUploadAdditionalAddendumEvidence.templateName: ${IA_INTERNAL_HOME_OFFICE_UPLOAD_ADDITIONAL_ADDENDUM_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00035.docx}
 
-internalLegalOfficerUploadAdditionalEvidence.contentType:  application/pdf
+internalLegalOfficerUploadAdditionalEvidence.contentType: application/pdf
 internalLegalOfficerUploadAdditionalEvidence.fileExtension: PDF
 internalLegalOfficerUploadAdditionalEvidence.fileName: "appellant letter_LO-evidence"
 internalLegalOfficerUploadAdditionalEvidence.templateName: ${IA_INTERNAL_LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_TEMPLATE:TB-IAC-LET-ENG-00036.docx}
 
-internalDetainedMaintainCaseLinkAppeal.contentType:  application/pdf
+internalDetainedMaintainCaseLinkAppeal.contentType: application/pdf
 internalDetainedMaintainCaseLinkAppeal.fileExtension: PDF
 internalDetainedMaintainCaseLinkAppeal.fileName: "detained-appellant-maintain-case-link-appeal-notice"
 internalDetainedMaintainCaseLinkAppeal.templateName: ${IA_INTERNAL_DETAINED_MAINTAIN_CASE_LINK_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00033.docx}
 
-internalHomeOfficeAmendAppealResponse.contentType:  application/pdf
+internalHomeOfficeAmendAppealResponse.contentType: application/pdf
 internalHomeOfficeAmendAppealResponse.fileExtension: PDF
 internalHomeOfficeAmendAppealResponse.fileName: "home-office-amend-appeal-response"
 internalHomeOfficeAmendAppealResponse.templateName: ${IA_INTERNAL_HOME_OFFICE_AMEND_APPEAL_RESPONSE_TEMPLATE:TB-IAC-LET-ENG-00029.docx}
@@ -441,12 +451,12 @@ internalNonStandardDirectionLetter.fileExtension: PDF
 internalNonStandardDirectionLetter.fileName: "non-standard-direction-to-appellant-letter"
 internalNonStandardDirectionLetter.templateName: ${IA_INTERNAL_NON_STANDARD_DIRECTION_TO_APPELLANT_LETTER_TEMPLATE:TB-IAC-LET-ENG-00028.docx}
 
-internalChangeDueDateLetter.contentType:  application/pdf
+internalChangeDueDateLetter.contentType: application/pdf
 internalChangeDueDateLetter.fileExtension: PDF
 internalChangeDueDateLetter.fileName: "appellant-change-direction-due-date-letter"
 internalChangeDueDateLetter.templateName: ${IA_INTERNAL_CHANGE_DUE_DATE_LETTER_TEMPLATE :TB-IAC-LET-ENG-00034.docx}
 
-internalDetainedEditAppeal.contentType:  application/pdf
+internalDetainedEditAppeal.contentType: application/pdf
 internalDetainedEditAppeal.fileExtension: PDF
 internalDetainedEditAppeal.fileName: "detained-appellant-edit-appeal-notice"
 internalDetainedEditAppeal.templateName: ${INTERNAL_EDIT_APPEAL_NOTICE_TEMPLATE:TB-IAC-LET-ENG-00038.docx}
@@ -456,22 +466,22 @@ homeOfficeNonStandardDirectionLetter.fileExtension: PDF
 homeOfficeNonStandardDirectionLetter.fileName: "home-office-non-standard-direction-letter"
 homeOfficeNonStandardDirectionLetter.templateName: ${IA_HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER:TB-IAC-LET-ENG-00041.docx}
 
-internalHoChangeDirectionDueDateLetter.contentType:  application/pdf
+internalHoChangeDirectionDueDateLetter.contentType: application/pdf
 internalHoChangeDirectionDueDateLetter.fileExtension: PDF
 internalHoChangeDirectionDueDateLetter.fileName: "internal-ho-change-direction-due-date-letter"
 internalHoChangeDirectionDueDateLetter.templateName: ${IA_INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_TEMPLATE:TB-IAC-LET-ENG-00037.docx}
 
-internalDetainedReinstateAppealLetter.contentType:  application/pdf
+internalDetainedReinstateAppealLetter.contentType: application/pdf
 internalDetainedReinstateAppealLetter.fileExtension: PDF
 internalDetainedReinstateAppealLetter.fileName: "internal-detained-reinstate-appeal-letter"
 internalDetainedReinstateAppealLetter.templateName: ${INTERNAL_REINSTATE_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-00050.docx}
 
-internalDetainedAdjournHearingWithoutDateLetter.contentType:  application/pdf
+internalDetainedAdjournHearingWithoutDateLetter.contentType: application/pdf
 internalDetainedAdjournHearingWithoutDateLetter.fileExtension: PDF
 internalDetainedAdjournHearingWithoutDateLetter.fileName: "internal-detained-adjourn-hearing-without-date-letter"
 internalDetainedAdjournHearingWithoutDateLetter.templateName: ${INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00040.docx}
 
-internalEndAppealLetter.contentType:  application/pdf
+internalEndAppealLetter.contentType: application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
 internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-End-Appeal.docx}
@@ -479,7 +489,7 @@ internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-I
 internalEndAppealLetterWithAttachment.fileExtension: PDF
 internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
 
-internalEditCaseListingLetter.contentType:  application/pdf
+internalEditCaseListingLetter.contentType: application/pdf
 internalEditCaseListingLetter.fileExtension: PDF
 internalEditCaseListingLetter.fileName: "internal-edit-case-listing-letter"
 internalEditCaseListingLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
@@ -487,7 +497,7 @@ internalEditCaseListingLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLAT
 internalEditCaseListingLetterWithAttachment.fileExtension: PDF
 internalEditCaseListingLetterWithAttachment.fileName: "internal-edit-case-listing-letter-with-attachment"
 
-internalOutOfTimeDecisionLetter.contentType:  application/pdf
+internalOutOfTimeDecisionLetter.contentType: application/pdf
 internalOutOfTimeDecisionLetter.fileExtension: PDF
 internalOutOfTimeDecisionLetter.fileName: "internal-out-of-time-decision-letter"
 internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-record-out-time-decision-final.docx}
@@ -495,7 +505,7 @@ internalOutOfTimeDecisionLetter.templateName: ${INTERNAL_OUT_OF_TIME_DECISION_LE
 internalOutOfTimeDecisionLetterWithAttachment.fileExtension: PDF
 internalOutOfTimeDecisionLetterWithAttachment.fileName: "internal-out-of-time-decision-letter-with-attachment"
 
-internalCaseListedLetter.contentType:  application/pdf
+internalCaseListedLetter.contentType: application/pdf
 internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
 internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
@@ -730,8 +740,6 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
-      - "startAppeal"
-      - "generateServiceRequest"
     ctsc:
       - "listCase"
       - "submitAppeal"
@@ -761,8 +769,6 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
-      - "startAppeal"
-      - "generateServiceRequest"
     ctsc-team-leader:
       - "listCase"
       - "submitAppeal"
@@ -792,8 +798,6 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
-      - "startAppeal"
-      - "generateServiceRequest"
     national-business-centre:
       - "listCase"
       - "submitAppeal"
@@ -823,8 +827,6 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
-      - "startAppeal"
-      - "generateServiceRequest"
     challenged-access-ctsc:
       - "listCase"
       - "submitAppeal"
@@ -854,8 +856,6 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
-      - "startAppeal"
-      - "generateServiceRequest"
     challenged-access-admin:
       - "listCase"
       - "submitAppeal"
@@ -1120,27 +1120,19 @@ core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
 case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
 
-auth:
-  idam:
-    client:
-      baseUrl: ${IDAM_URL:http://127.0.0.1:4501}
-      detailsUri: "/details"
-      id: ${IA_IDAM_CLIENT_ID:ia}
-      secret: ${IA_IDAM_SECRET:something}
-      redirectUri: ${IA_IDAM_REDIRECT_URI:http://localhost}
-  provider:
-    service:
-      client:
-        baseUrl: ${S2S_URL:http://127.0.0.1:4502}
-
 idam:
   baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}
+  redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
+  system:
+    username: ${IA_SYSTEM_USERNAME:ia-system-user@fake.hmcts.net}
+    password: ${IA_SYSTEM_PASSWORD:something}
+  scope: "openid profile authorities acr roles create-user manage-user search-user"
   s2s-auth:
     totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
     microservice: ${IA_S2S_MICROSERVICE:ia}
     url: ${S2S_URL:http://127.0.0.1:4502}
   s2s-authorised:
-    services: ccd,ccd_data,ccd_gw,ccd_ps,iac
+    services: ccd,ccd_data,ccd_gw,ccd_ps,iac,payment_app
 
 role-assignment-service:
   url: ${ROLE_ASSIGNMENT_URL:http://localhost:8991}
@@ -1193,5 +1185,53 @@ ia:
   payment:
     debug:
       logs:
-        enabled:
-          ${ENABLE_DEBUG_PAYMENT_LOGS:false}
+        enabled: false
+
+### ia-case-payments-api
+fees-register:
+  api:
+    url: ${FEES_REGISTER_API_URL:http://localhost:8991}
+  fees:
+    feeWithHearing:
+      channel: default
+      event: issue
+      jurisdiction1: tribunal
+      jurisdiction2: immigration and asylum chamber
+      keyword: HearingOral
+      service: other
+    feeWithoutHearing:
+      channel: default
+      event: issue
+      jurisdiction1: tribunal
+      jurisdiction2: immigration and asylum chamber
+      keyword: HearingPaper
+      service: other
+
+rd-professional:
+  api:
+    url: ${PROF_REF_DATA_URL:http://localhost:8991}
+
+payment:
+  api:
+    url: ${PAYMENT_API_URL:http://localhost:8083}
+    callback-url: ${PAY_CALLBACK_URL:http://host.docker.internal:8092/service-request-update}
+  params:
+    organisationUrn: immigration and asylum chamber
+    siteId: BFA1
+
+core-case-data:
+  api:
+    url: ${CCD_URL:http://127.0.0.1:4452}
+
+auth:
+  idam:
+    client:
+      baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:4501}
+      detailsUri: "/details"
+      id: ${IA_IDAM_CLIENT_ID:ia}
+      secret: ${IA_IDAM_SECRET:something}
+      redirectUri: ${IA_IDAM_REDIRECT_URI:http://localhost}
+  provider:
+    service:
+      client:
+        baseUrl: ${S2S_URL:http://127.0.0.1:4502}

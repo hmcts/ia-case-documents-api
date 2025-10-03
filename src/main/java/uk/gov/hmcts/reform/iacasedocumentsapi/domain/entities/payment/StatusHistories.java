@@ -3,20 +3,25 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment;
 import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 public class StatusHistories {
 
     private String status;
 
+    @Getter
     @JsonProperty("error_code")
     private String errorCode;
 
+    @Getter
     @JsonProperty("error_message")
     private String errorMessage;
 
+    @Getter
     @JsonProperty("date_created")
     private String dateCreated;
 
+    @Getter
     @JsonProperty("date_updated")
     private String dateUpdated;
 
@@ -42,19 +47,4 @@ public class StatusHistories {
         return status;
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public String getDateCreated() {
-        return dateCreated;
-    }
-
-    public String getDateUpdated() {
-        return dateUpdated;
-    }
 }

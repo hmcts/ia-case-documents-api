@@ -1,24 +1,21 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.StatusHistories;
 
 class PaymentResponseTest {
 
-    private String reference = "RC-1590-6786-1063-9996";
-    private Date dateCreated = new Date();
-    private String status = "Success";
-    private String paymentGroupReference = "2020-1590678609071";
-    private List<StatusHistories> statusHistories =
-        Arrays.asList(new StatusHistories("Success", null, null, null, null));
+    private final String reference = "RC-1590-6786-1063-9996";
+    private final Date dateCreated = new Date();
+    private final String status = "Success";
+    private final String paymentGroupReference = "2020-1590678609071";
+    private final List<StatusHistories> statusHistories =
+        List.of(new StatusHistories("Success", null, null, null, null));
 
     private PaymentResponse paymentResponse;
 
@@ -36,10 +33,10 @@ class PaymentResponseTest {
     @Test
     void should_hold_onto_values() {
 
-        assertEquals(paymentResponse.getReference(), reference);
-        assertEquals(paymentResponse.getDateCreated(), dateCreated);
-        assertEquals(paymentResponse.getStatus(), status);
-        assertEquals(paymentResponse.getPaymentGroupReference(), paymentGroupReference);
+        Assertions.assertEquals(paymentResponse.getReference(), reference);
+        Assertions.assertEquals(paymentResponse.getDateCreated(), dateCreated);
+        Assertions.assertEquals(paymentResponse.getStatus(), status);
+        Assertions.assertEquals(paymentResponse.getPaymentGroupReference(), paymentGroupReference);
     }
 
     @Test

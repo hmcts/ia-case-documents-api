@@ -2,8 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,19 +24,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.payments.FeeLookupHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.FeeLookupHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
 class FeeLookupHandlerTest {
 
     @Mock private Callback<AsylumCase> callback;
@@ -143,9 +141,9 @@ class FeeLookupHandlerTest {
                 if (Arrays.asList(Event.START_APPEAL, Event.EDIT_APPEAL, Event.PAYMENT_APPEAL).contains(event)
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
 
-                    assertTrue(canHandle);
+                    Assertions.assertTrue(canHandle);
                 } else {
-                    assertFalse(canHandle);
+                    Assertions.assertFalse(canHandle);
                 }
             }
         }

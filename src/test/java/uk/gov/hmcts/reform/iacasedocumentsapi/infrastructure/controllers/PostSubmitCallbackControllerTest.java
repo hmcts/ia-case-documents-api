@@ -19,7 +19,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PostSubmitCallbackDispatcher;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.PostSubmitCallbackController;
 
 @ExtendWith(MockitoExtension.class)
 class PostSubmitCallbackControllerTest {
@@ -32,7 +31,7 @@ class PostSubmitCallbackControllerTest {
     private Callback<AsylumCase> callback;
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
-    private PostSubmitCallbackStage callbackStage = PostSubmitCallbackStage.CCD_SUBMITTED;
+    private final PostSubmitCallbackStage callbackStage = PostSubmitCallbackStage.CCD_SUBMITTED;
 
     private PostSubmitCallbackController postSubmitCallbackController;
 

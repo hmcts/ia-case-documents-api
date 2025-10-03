@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public class ExceptionResponse {
 
-    private String errorMessage;
-    private String errorCode;
+    private final String errorMessage;
+    private final String errorCode;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    private LocalDateTime timestamp;
+    private final LocalDateTime timestamp;
 
     public ExceptionResponse(String errorCode, String errorMessage, LocalDateTime timestamp) {
         this.errorCode = errorCode;

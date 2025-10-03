@@ -12,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdamSystemUserProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +49,7 @@ class IdamSystemUserProviderTest {
 
         IdamSystemUserProvider idamSystemUserProvider = new IdamSystemUserProvider(idamService);
 
-        IdentityManagerResponseException thrown = assertThrows(
+        uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException thrown = assertThrows(
             IdentityManagerResponseException.class,
             () -> idamSystemUserProvider.getSystemUserId(token)
         );

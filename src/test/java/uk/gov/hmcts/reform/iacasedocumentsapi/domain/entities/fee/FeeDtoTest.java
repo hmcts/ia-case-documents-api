@@ -5,19 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeDto;
 
 class FeeDtoTest {
 
-    private final String code = "FEE0001";
-    private final String version = "1";
-    private final Integer volume = 1;
     private final BigDecimal calculatedAmount = new BigDecimal("140");
-    private final String memoLine = "memoLine";
-    private final String ccdCaseNumber = "1234";
-    private final String reference = "RC-1627-5070-9329-7815";
-
-    private FeeDto feeDto;
 
     @Test
     void should_test_equals_contract() {
@@ -30,7 +21,13 @@ class FeeDtoTest {
     @Test
     void should_hold_onto_values() {
 
-        feeDto = FeeDto.builder()
+        String reference = "RC-1627-5070-9329-7815";
+        String ccdCaseNumber = "1234";
+        String memoLine = "memoLine";
+        Integer volume = 1;
+        String version = "1";
+        String code = "FEE0001";
+        FeeDto feeDto = FeeDto.builder()
             .code(code)
             .version(version)
             .volume(volume)

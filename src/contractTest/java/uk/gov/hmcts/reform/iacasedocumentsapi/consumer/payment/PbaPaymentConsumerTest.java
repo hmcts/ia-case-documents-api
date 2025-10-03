@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.consumer.payment;
 
-import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
+import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 
 import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -23,9 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.consumer.util.TestHelper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.CreditAccountPayment;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Currency;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.PaymentApi;
 
@@ -34,10 +38,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.PaymentApi;
 @PactTestFor(providerName = "payment_creditAccountPayment", port = "8991")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(
-    classes = {PaymentConsumerApplication.class}
+    classes = {PaymentConsumerApplication.class, DocumentUploadClientApi.class}
 )
 @TestPropertySource(
-    properties = {"payment.api.url=localhost:8991"}
+    properties = {"payment.api.url=localhost:8991", "document_management.url=http://localhost:8992"}
 )
 @PactFolder("pacts")
 public class PbaPaymentConsumerTest {
@@ -49,8 +53,8 @@ public class PbaPaymentConsumerTest {
     private static final String SERVICE_AUTH_TOKEN = "someServiceAuthToken";
     private static final String AUTHORIZATION_TOKEN = "Bearer some-access-token";
 
-    @Pact(provider = "payment_creditAccountPayment", consumer = "ia_casePaymentsApi")
-    public RequestResponsePact generatePactFragment(PactDslWithProvider builder) throws JSONException, IOException {
+    @Pact(provider = "payment_creditAccountPayment", consumer = "ia_caseDocumentsApi")
+    public V4Pact generatePactFragment(PactDslWithProvider builder) throws JSONException, IOException {
         Map<String, Object> paymentMap = new HashMap<>();
         paymentMap.put("accountNumber", "PBA123");
         paymentMap.put("availableBalance", "1000.00");
@@ -66,35 +70,36 @@ public class PbaPaymentConsumerTest {
             .willRespondWith()
             .status(201)
             .body(buildPaymentResponse("Success", "success", null, "Insufficient funds available"))
-            .toPact();
+            .toPact(V4Pact.class);
     }
 
     private DslPart buildPaymentResponse(String status, String paymentStatus, String errorCode, String errorMessage) {
-        return newJsonBody((o) -> {
-            o.stringType("reference", "reference")
-                .stringType("status", status)
-                .minArrayLike("status_histories", 1, 1,
-                    (sh) -> {
-                        sh.stringMatcher("date_updated",
-                                         "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}\\+\\d{4})$",
-                                         "2020-10-06T18:54:48.785+0000")
-                            .stringMatcher("date_created",
-                                           "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}\\+\\d{4})$",
-                                           "2020-10-06T18:54:48.785+0000")
-                            .stringValue("status", paymentStatus);
-                        if (errorCode != null) {
-                            sh.stringValue("error_code", errorCode);
-                            sh.stringType("error_message",
-                                          errorMessage);
-                        }
-                    });
-        }).build();
+        return newJsonBody((o) -> o.stringType("reference", "reference")
+            .stringType("status", status)
+            .minArrayLike("status_histories", 1, 1,
+                (sh) -> {
+                    sh.stringMatcher("date_updated",
+                                     "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}\\+\\d{4})$",
+                                     "2020-10-06T18:54:48.785+0000")
+                        .stringMatcher("date_created",
+                                       "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}\\+\\d{4})$",
+                                       "2020-10-06T18:54:48.785+0000")
+                        .stringValue("status", paymentStatus);
+                    if (errorCode != null) {
+                        sh.stringValue("error_code", errorCode);
+                        sh.stringType("error_message",
+                                      errorMessage);
+                    }
+                })).build();
     }
 
     @Test
     @PactTestFor(pactMethod = "generatePactFragment")
     public void verifyPayment() {
-        paymentApi.creditAccountPaymentRequest(AUTHORIZATION_TOKEN, SERVICE_AUTH_TOKEN, getPaymentRequest());
+        TestHelper<PaymentResponse> testHelper = new TestHelper<>();
+        Callable<PaymentResponse> getPayment = () ->
+            paymentApi.creditAccountPaymentRequest(AUTHORIZATION_TOKEN, SERVICE_AUTH_TOKEN, getPaymentRequest());
+        testHelper.executeWithRetry(getPayment, 3);
     }
 
     private static CreditAccountPayment getPaymentRequest() {

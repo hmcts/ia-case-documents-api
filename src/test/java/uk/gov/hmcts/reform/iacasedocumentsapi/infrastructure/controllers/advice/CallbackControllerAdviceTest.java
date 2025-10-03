@@ -150,6 +150,7 @@ class CallbackControllerAdviceTest {
 
     }
 
+
     @Test
     void should_handle_required_404_exception() {
 
@@ -185,5 +186,4 @@ class CallbackControllerAdviceTest {
 
         assertEquals(responseEntity.getStatusCode().value(), HttpStatus.FORBIDDEN.value());
     }
-
 }

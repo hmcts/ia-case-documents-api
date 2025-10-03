@@ -4,6 +4,7 @@ import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.S
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -18,14 +19,11 @@ public class ConfigValidatorAppListener implements ApplicationListener<ContextRe
 
     protected static final String CLUSTER_NAME = "CLUSTER_NAME";
 
+    @Autowired
     private Environment environment;
 
     @Value("${ia.config.validator.secret}")
     private String iaConfigValidatorSecret;
-
-    public ConfigValidatorAppListener(Environment environment) {
-        this.environment = environment;
-    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

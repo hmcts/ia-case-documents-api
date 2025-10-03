@@ -3,11 +3,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeResponse;
 
 class FeeResponseTest {
 

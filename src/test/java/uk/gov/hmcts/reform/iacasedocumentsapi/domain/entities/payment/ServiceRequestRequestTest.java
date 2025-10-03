@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeDto;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.CasePaymentRequestDto;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.ServiceRequestRequest;
 
 class ServiceRequestRequestTest {
 

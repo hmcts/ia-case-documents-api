@@ -3,11 +3,13 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
+import lombok.Getter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CaseDetails<T extends CaseData> {
 
+    @Getter
     private long id;
     private String jurisdiction;
     private State state;
@@ -30,10 +32,6 @@ public class CaseDetails<T extends CaseData> {
         this.state = state;
         this.caseData = caseData;
         this.createdDate = createdDate;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public String getJurisdiction() {

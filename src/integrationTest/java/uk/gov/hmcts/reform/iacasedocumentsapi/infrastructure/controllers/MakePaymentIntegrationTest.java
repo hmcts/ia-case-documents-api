@@ -13,10 +13,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_REFERENCE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus.PAID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.fixtures.AsylumCaseForTest.anAsylumCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.CallbackForTest.CallbackForTestBuilder.callback;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
@@ -25,20 +25,19 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.IaCasePaymentApiClient;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.fixtures.PreSubmitCallbackResponseForTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.SpringBootIntegrationTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithFeeStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithIdamStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithPaymentStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithRefDataStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithRoleAssignmentStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithServiceAuthStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithFeeStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithIdamStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithPaymentStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithRefDataStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithServiceAuthStub;
 
 
-class MakePaymentIntegrationTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
-    WithFeeStub, WithPaymentStub, WithIdamStub, WithRefDataStub, WithRoleAssignmentStub {
+class MakePaymentIntegrationTest extends SpringBootIntegrationTest
+        implements WithServiceAuthStub, WithFeeStub, WithPaymentStub, WithIdamStub, WithRefDataStub {
 
     @org.springframework.beans.factory.annotation.Value("classpath:organisation-response.json")
     Resource resourceFile;
@@ -52,11 +51,10 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest implements Wi
         addPaymentStub(server);
         addUserInfoStub(server);
         addRefDataStub(server, resourceFile);
-        addRoleAssignmentActorStub(server);
 
-        IaCasePaymentApiClient iaCasePaymentApiClient = new IaCasePaymentApiClient(mockMvc);
+        IaCaseDocumentsApiClient iaCaseDocumentsApiClient = new IaCaseDocumentsApiClient(objectMapper, mockMvc);
 
-        PreSubmitCallbackResponseForTest response = iaCasePaymentApiClient.aboutToSubmit(callback()
+        PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.PAYMENT_APPEAL)
             .caseDetails(someCaseDetailsWith()
                 .state(State.APPEAL_STARTED)
@@ -70,9 +68,10 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest implements Wi
                           new DynamicList(new Value("PBA1234567", "PBA1234588"), null))
                     .with(HOME_OFFICE_REFERENCE_NUMBER, "A123456/003"))));
 
-        assertEquals(PAID, response.getAsylumCase().read(PAYMENT_STATUS, PaymentStatus.class).get());
+        assertEquals(PAID, response.getAsylumCase().read(PAYMENT_STATUS, PaymentStatus.class).orElse(null));
         assertEquals(new DynamicList(new Value("PBA1234567", "PBA1234588"), null),
-                     response.getAsylumCase().read(PAYMENT_ACCOUNT_LIST, String.class).orElse(""));
+                     response.getAsylumCase().read(PAYMENT_ACCOUNT_LIST, DynamicList.class)
+                         .orElse(null));
         assertEquals("RC-1590-6786-1063-9996", response.getAsylumCase()
                             .read(PAYMENT_REFERENCE, String.class).orElse(""));
         assertEquals("29 May 2020", response.getAsylumCase()
@@ -82,7 +81,7 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest implements Wi
         assertEquals("2", response.getAsylumCase().read(FEE_VERSION, String.class).orElse(""));
 
 
-        PreSubmitCallbackResponseForTest responseNoHearing = iaCasePaymentApiClient.aboutToSubmit(callback()
+        PreSubmitCallbackResponseForTest responseNoHearing = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.PAYMENT_APPEAL)
             .caseDetails(someCaseDetailsWith()
                 .state(State.APPEAL_STARTED)
@@ -97,9 +96,10 @@ class MakePaymentIntegrationTest extends SpringBootIntegrationTest implements Wi
                     .with(HOME_OFFICE_REFERENCE_NUMBER, "A123456/003"))));
 
         assertEquals(PAID, responseNoHearing.getAsylumCase()
-                        .read(PAYMENT_STATUS, PaymentStatus.class).get());
+                        .read(PAYMENT_STATUS, PaymentStatus.class).orElse(null));
         assertEquals(new DynamicList(new Value("PBA1234567", "PBA1234588"), null),
-                     responseNoHearing.getAsylumCase().read(PAYMENT_ACCOUNT_LIST, String.class).orElse(""));
+                     responseNoHearing.getAsylumCase().read(PAYMENT_ACCOUNT_LIST, DynamicList.class)
+                         .orElse(null));
         assertEquals("RC-1590-6786-1063-9996", responseNoHearing.getAsylumCase()
                         .read(PAYMENT_REFERENCE, String.class).orElse(""));
         assertEquals("8000", responseNoHearing.getAsylumCase()

@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 
-import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HelpWithFeesOption;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 class HelpWithFeesOptionTest {
 

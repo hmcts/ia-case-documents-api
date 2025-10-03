@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 
-import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionOption;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 public class RemissionOptionTest {
 

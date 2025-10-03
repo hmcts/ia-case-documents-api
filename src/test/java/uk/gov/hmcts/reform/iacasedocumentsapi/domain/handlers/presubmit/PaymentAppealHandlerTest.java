@@ -31,9 +31,9 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.values;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus.FAILED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus.PAID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAYMENT_PENDING;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
@@ -54,12 +54,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.payments.PaymentAppealHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.LegRepAddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.PaymentAppealHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeType;
@@ -74,7 +78,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RefDataService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.PaymentProperties;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
 class PaymentAppealHandlerTest {
 
     @Mock private Callback<AsylumCase> callback;
@@ -88,25 +91,23 @@ class PaymentAppealHandlerTest {
     @Mock private PaymentResponse paymentResponse;
     @Mock private CreditAccountPayment creditAccountPayment;
 
-    private ObjectMapper objectMapper;
-    private long caseId = Long.parseLong("112233445566");
+    private final long caseId = Long.parseLong("112233445566");
 
-    private final String addressLine1 = "A";
-    private final String addressLine2 = "B";
-    private final String addressLine3 = "C";
-    private final String townCity = "D";
-    private final String county = "E";
-    private final String postCode = "F";
-    private final String country = "G";
     private List<LegRepAddressUk> addresses;
-    private LegRepAddressUk legRepAddressUk;
 
     private PaymentAppealHandler appealFeePaymentHandler;
 
     @BeforeEach
     public void setUp() {
         addresses = new ArrayList<>();
-        legRepAddressUk = new LegRepAddressUk(
+        String country = "G";
+        String postCode = "F";
+        String county = "E";
+        String townCity = "D";
+        String addressLine3 = "C";
+        String addressLine2 = "B";
+        String addressLine1 = "A";
+        LegRepAddressUk legRepAddressUk = new LegRepAddressUk(
             addressLine1,
             addressLine2,
             addressLine3,
@@ -118,7 +119,7 @@ class PaymentAppealHandlerTest {
         );
         addresses.add(legRepAddressUk);
 
-        objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         appealFeePaymentHandler =
             new PaymentAppealHandler(feeService, paymentService, refDataService, paymentProperties, objectMapper);
 
@@ -133,7 +134,7 @@ class PaymentAppealHandlerTest {
     void should_return_error_when_fee_does_not_exists() {
 
         when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(null);
@@ -164,7 +165,7 @@ class PaymentAppealHandlerTest {
         when(fee.getCode()).thenReturn("FEE0123");
         when(fee.getVersion()).thenReturn("1");
         when(fee.getDescription()).thenReturn("IA hearing fee");
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.PA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class)).thenReturn(Optional.of("decisionWithHearing"));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
@@ -188,7 +189,7 @@ class PaymentAppealHandlerTest {
         when(fee.getVersion()).thenReturn("1");
         when(fee.getDescription()).thenReturn("IA hearing fee");
 
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.PA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class)).thenReturn(Optional.of("decisionWithHearing"));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
         when(asylumCase.read(PAYMENT_ACCOUNT_LIST, DynamicList.class))
@@ -209,7 +210,7 @@ class PaymentAppealHandlerTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("AppellantFamilyName"));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("LegRep001"));
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
@@ -276,7 +277,7 @@ class PaymentAppealHandlerTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("AppellantFamilyName"));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("LegRep001"));
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
@@ -342,7 +343,7 @@ class PaymentAppealHandlerTest {
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("AppellantFamilyName"));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("LegRep001"));
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
@@ -394,7 +395,7 @@ class PaymentAppealHandlerTest {
     void should_throw_when_no_account_number_is_present() {
 
         when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
@@ -414,7 +415,7 @@ class PaymentAppealHandlerTest {
     void should_throw_when_no_payment_description_is_present() {
 
         when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(DECISION_HEARING_FEE_OPTION, String.class))
             .thenReturn(Optional.of(DECISION_WITH_HEARING.value()));
         when(feeService.getFee(FeeType.FEE_WITH_HEARING)).thenReturn(fee);
@@ -439,7 +440,7 @@ class PaymentAppealHandlerTest {
         String result = appealFeePaymentHandler
             .appendCaseReferenceAndAppellantName(String.valueOf(caseId), "aSurname");
 
-        assertEquals(result, String.valueOf(caseId) + "_aSurname");
+        assertEquals(result, caseId + "_aSurname");
     }
 
     @Test
@@ -574,7 +575,7 @@ class PaymentAppealHandlerTest {
     void should_throw_on_appeal_reference_number_is_null() {
 
         when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(PAYMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("PaymentDescription"));
         when(refDataService.getOrganisationResponse()).thenReturn(
             new OrganisationResponse(new OrganisationEntityResponse("ia-legal-rep-org")));
@@ -605,7 +606,7 @@ class PaymentAppealHandlerTest {
         when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("EA/50001/2020"));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("AppellantFamilyName"));
-        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
         when(asylumCase.read(PAYMENT_DESCRIPTION, String.class)).thenReturn(Optional.of("PaymentDescription"));
         when(refDataService.getOrganisationResponse()).thenReturn(
             new OrganisationResponse(new OrganisationEntityResponse("ia-legal-rep-org")));

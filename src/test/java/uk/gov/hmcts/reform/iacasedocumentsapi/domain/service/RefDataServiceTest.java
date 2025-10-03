@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,15 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RefDataService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.LegRepAddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.OrganisationEntityResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.OrganisationResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.SuperUser;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RefDataService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.RefDataApi;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 
 @ExtendWith(MockitoExtension.class)
 class RefDataServiceTest {
@@ -37,14 +37,6 @@ class RefDataServiceTest {
     private IdamService idamService;
     @Mock
     private UserInfo userInfo;
-
-    private final String addressLine1 = "A";
-    private final String addressLine2 = "B";
-    private final String addressLine3 = "C";
-    private final String townCity = "D";
-    private final String county = "E";
-    private final String postCode = "F";
-    private final String country = "G";
 
     private RefDataService refDataService;
 
@@ -60,6 +52,13 @@ class RefDataServiceTest {
     @Test
     void should_get_ref_data_organisation() {
         List<LegRepAddressUk> addresses = new ArrayList<>();
+        String country = "G";
+        String postCode = "F";
+        String county = "E";
+        String townCity = "D";
+        String addressLine3 = "C";
+        String addressLine2 = "B";
+        String addressLine1 = "A";
         LegRepAddressUk legRepAddressUk =  new LegRepAddressUk(
             addressLine1,
             addressLine2,
@@ -109,12 +108,12 @@ class RefDataServiceTest {
             postCode,
             country
         );
-        Assertions.assertEquals(addressLine1, addressUk.getAddressLine1().get());
-        Assertions.assertEquals(addressLine2, addressUk.getAddressLine2().get());
-        Assertions.assertEquals(addressLine3, addressUk.getAddressLine3().get());
-        Assertions.assertEquals(postCode, addressUk.getPostCode().get());
-        Assertions.assertEquals(townCity, addressUk.getPostTown().get());
-        Assertions.assertEquals(county, addressUk.getCounty().get());
-        Assertions.assertEquals(country, addressUk.getCountry().get());
+        Assertions.assertEquals(addressLine1, addressUk.getAddressLine1().orElse(null));
+        Assertions.assertEquals(addressLine2, addressUk.getAddressLine2().orElse(null));
+        Assertions.assertEquals(addressLine3, addressUk.getAddressLine3().orElse(null));
+        Assertions.assertEquals(postCode, addressUk.getPostCode().orElse(null));
+        Assertions.assertEquals(townCity, addressUk.getPostTown().orElse(null));
+        Assertions.assertEquals(county, addressUk.getCounty().orElse(null));
+        Assertions.assertEquals(country, addressUk.getCountry().orElse(null));
     }
 }

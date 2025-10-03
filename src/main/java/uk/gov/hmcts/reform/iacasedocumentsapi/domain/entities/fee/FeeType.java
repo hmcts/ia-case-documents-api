@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
+@Getter
 public enum FeeType {
 
     FEE_WITH_HEARING("feeWithHearing"),
@@ -12,10 +14,6 @@ public enum FeeType {
 
     FeeType(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     @Override

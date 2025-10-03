@@ -44,17 +44,26 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 @ActiveProfiles("functional")
 public class CcdScenarioRunnerTest {
 
-    @Value("${targetInstance}") private String targetInstance;
-    @Autowired FeatureToggler featureToggler;
-    @Autowired private Environment environment;
-    @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
-    @Autowired private MapValueExpander mapValueExpander;
-    @Autowired private ObjectMapper objectMapper;
-    @Autowired private List<Fixture> fixtures;
-    @Autowired private List<Verifier> verifiers;
+    @Value("${targetInstance}")
+    private String targetInstance;
+    @Autowired
+    FeatureToggler featureToggler;
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private AuthorizationHeadersProvider authorizationHeadersProvider;
+    @Autowired
+    private MapValueExpander mapValueExpander;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private List<Fixture> fixtures;
+    @Autowired
+    private List<Verifier> verifiers;
     private boolean haveAllPassed = true;
     private final ArrayList<String> failedScenarios = new ArrayList<>();
-    @MockBean RequestUserAccessTokenProvider requestUserAccessTokenProvider;
+    @MockBean
+    RequestUserAccessTokenProvider requestUserAccessTokenProvider;
 
     @BeforeEach
     void authenticateMe() {
@@ -99,6 +108,7 @@ public class CcdScenarioRunnerTest {
         Collection<String> scenarioSources = new ArrayList<>();
         scenarioSources.addAll(StringResourceLoader.load("/scenarios/" + scenarioPattern).values());
         scenarioSources.addAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern).values());
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern).values());
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
@@ -181,12 +191,12 @@ public class CcdScenarioRunnerTest {
                     Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
 
                     verifiers.forEach(verifier ->
-                        verifier.verify(
-                            testCaseId,
-                            scenario,
-                            expectedResponse,
-                            actualResponse
-                        )
+                                          verifier.verify(
+                                              testCaseId,
+                                              scenario,
+                                              expectedResponse,
+                                              actualResponse
+                                          )
                     );
                     runScenarios.add(description);
                     break;
@@ -206,7 +216,8 @@ public class CcdScenarioRunnerTest {
         System.out.println(String.join(";\n", scenariosThatHaveRun));
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         if (!haveAllPassed) {
-            throw new AssertionError("Not all scenarios passed.\nFailed scenarios are:\n" + failedScenarios.stream().map(Object::toString).collect(Collectors.joining(";\n")));
+            throw new AssertionError("Not all scenarios passed.\nFailed scenarios are:\n" + failedScenarios.stream().map(
+                Object::toString).collect(Collectors.joining(";\n")));
         }
     }
 

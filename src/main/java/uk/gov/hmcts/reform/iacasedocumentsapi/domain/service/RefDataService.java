@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUse
 public class RefDataService {
 
     private final RefDataApi refDataApi;
-    private final uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService idamService;
+    private final IdamService idamService;
     private final RequestUserAccessTokenProvider userAuthorizationProvider;
     private final AuthTokenGenerator serviceAuthorizationProvider;
 

@@ -9,13 +9,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 
 class CaseMetaDataTest {
 
-    private Event event;
-    private final String jurisdiction = "IA";
-    private final String caseType = "Asylum";
-    private final long caseId = 1234;
-    private final String paymentStatus = "Success";
-    private final String paymentReference = "RC-1234";
-
     @Test
     void should_test_equals_contract() {
 
@@ -30,7 +23,12 @@ class CaseMetaDataTest {
     @Test
     void should_hold_onto_values() {
 
-        event = Event.UPDATE_PAYMENT_STATUS;
+        Event event = Event.UPDATE_PAYMENT_STATUS;
+        String paymentReference = "RC-1234";
+        String paymentStatus = "Success";
+        long caseId = 1234;
+        String caseType = "Asylum";
+        String jurisdiction = "IA";
         CaseMetaData caseMetaData =
             new CaseMetaData(event, jurisdiction, caseType, caseId, paymentStatus, paymentReference);
 

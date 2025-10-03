@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
 
 @ExtendWith(MockitoExtension.class)
 class PostSubmitCallbackStageTest {

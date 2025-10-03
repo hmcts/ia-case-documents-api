@@ -21,15 +21,12 @@ public class OrganisationEntityResponse {
     private String companyNumber;
     private String companyUrl;
     private SuperUser superUser;
+    @Getter
     private List<String> paymentAccount;
     private List<LegRepAddressUk> contactInformation;
 
     public OrganisationEntityResponse(String name) {
         this.name = name;
-    }
-
-    public List<String> getPaymentAccount() {
-        return paymentAccount;
     }
 
 }

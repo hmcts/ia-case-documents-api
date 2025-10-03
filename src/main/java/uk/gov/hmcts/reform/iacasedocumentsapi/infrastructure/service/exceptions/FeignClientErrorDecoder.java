@@ -14,8 +14,7 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
     public Exception decode(String methodKey, Response response) {
 
         if (response.status() == 400 || response.status() == 404) {
-            log.error("Error in calling Feign client. Status code "
-                      + response.status() + ", methodKey = " + methodKey);
+            log.error("Error in calling Feign client. Status code {}, methodKey = {}", response.status(), methodKey);
             log.error("Error details: {}", response.body().toString());
             ExceptionUtils.printRootCauseStackTrace(new BadRequestException(response.reason()));
             return new ResponseStatusException(HttpStatus.valueOf(response.status()),

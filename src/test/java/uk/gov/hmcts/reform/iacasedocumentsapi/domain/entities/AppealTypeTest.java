@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
@@ -9,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 public class AppealTypeTest {
-
     @ParameterizedTest
     @CsvSource({
         "revocationOfProtection, RP",
@@ -20,8 +18,8 @@ public class AppealTypeTest {
         "euSettlementScheme, EU",
         "ageAssessment, AG"
     })
-    void has_correct_asylum_appeal_types(String input, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType expected) {
-        assertThat(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.from(input).orElseThrow(() -> new AssertionError("Expected value not found"))).isEqualTo(expected);
+    void has_correct_asylum_appeal_types(String input, AppealType expected) {
+        assertEquals(expected, AppealType.from(input).orElse(null));
     }
 
     @Test

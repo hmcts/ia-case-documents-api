@@ -6,28 +6,30 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECISION_HEARING_FEE_OPTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.FEE_WITH_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PAYMENT_STATUS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus.PAYMENT_PENDING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.fixtures.AsylumCaseForTest.anAsylumCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.CallbackForTest.CallbackForTestBuilder.callback;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.utilities.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAYMENT_PENDING;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.security.test.context.support.WithMockUser;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentStatus;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.IaCasePaymentApiClient;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.fixtures.PreSubmitCallbackResponseForTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.SpringBootIntegrationTest;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithFeeStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithIdamStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithRefDataStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.WithServiceAuthStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.IaCaseDocumentsApiClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithFeeStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithIdamStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithRefDataStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithServiceAuthStub;
 
 public class AppealStartFeeIntegrationTest extends SpringBootIntegrationTest
         implements WithServiceAuthStub, WithFeeStub, WithIdamStub, WithRefDataStub {
 
-    @org.springframework.beans.factory.annotation.Value("classpath:organisation-response.json")
+    @Value("classpath:organisation-response.json")
     Resource resourceFile;
 
     @Test
@@ -39,13 +41,13 @@ public class AppealStartFeeIntegrationTest extends SpringBootIntegrationTest
         addFeesRegisterStub(server);
         addRefDataStub(server, resourceFile);
 
-        IaCasePaymentApiClient iaCasePaymentApiClient = new IaCasePaymentApiClient(mockMvc);
+        IaCaseDocumentsApiClient iaCaseDocumentsApiClient = new IaCaseDocumentsApiClient(objectMapper, mockMvc);
 
-        PreSubmitCallbackResponseForTest response = iaCasePaymentApiClient.aboutToStart(
+        PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToStart(
             callback()
                 .event(Event.PAY_AND_SUBMIT_APPEAL)
                 .caseDetails(someCaseDetailsWith()
-                                 .state(null)
+                                 .state(State.APPEAL_STARTED)
                                  .caseData(anAsylumCase()
                                      .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
                                      .with(APPEAL_TYPE, "refusalOfEu")
@@ -58,7 +60,7 @@ public class AppealStartFeeIntegrationTest extends SpringBootIntegrationTest
                     .read(FEE_WITH_HEARING, String.class).orElse("140"));
         assertEquals(
             PAYMENT_PENDING,
-            response.getAsylumCase().read(PAYMENT_STATUS, PaymentStatus.class).get());
+            response.getAsylumCase().read(PAYMENT_STATUS, PaymentStatus.class).orElse(null));
         assertEquals("some-appeal-reference-number",
                      response.getAsylumCase().read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
     }

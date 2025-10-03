@@ -9,7 +9,6 @@ spring:
         system-password: IA_SYSTEM_PASSWORD
         idam-client-id: IA_IDAM_CLIENT_ID
         idam-secret: IA_IDAM_SECRET
-        idam-redirect-uri: IA_IDAM_REDIRECT_URI
         s2s-secret: IA_S2S_SECRET
         s2s-microservice: IA_S2S_MICROSERVICE
         em-stitching-enabled: IA_EM_STITCHING_ENABLED
@@ -27,3 +26,4 @@ spring:
         hearing-centre-hatton-cross-email: IA_HEARING_CENTRE_HATTON_CROSS_EMAIL
         hearing-centre-glasgow-email: IA_HEARING_CENTRE_GLASGOW_EMAIL
         ia-config-validator-secret: IA_CONFIG_VALIDATOR_SECRET
+        idam-redirect-uri: IA_IDAM_REDIRECT_URI

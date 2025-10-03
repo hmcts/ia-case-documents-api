@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 
 /**
  * Built-in feature which saves service's swagger specs in temporary directory.
@@ -20,7 +20,7 @@ class SwaggerPublisher extends SpringBootIntegrationTest {
     @Test
     @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void generateDocs() throws Exception {
-        byte[] specs = mockMvc.perform(get("/v3/api-docs?group=ia-case-payments-api"))
+        byte[] specs = mockMvc.perform(get("/v3/api-docs?group=ia-case-documents-api"))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()

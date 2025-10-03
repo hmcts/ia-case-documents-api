@@ -10,21 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.StartEventDetails;
 
 @ExtendWith(MockitoExtension.class)
 class StartEventDetailsTest {
 
-    private Event eventId;
-    private String token = "eventToken";
-    private long caseId = 1234;
-    private String jurisdiction = "IA";
-
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private CaseDetails<AsylumCase> expectedCaseDetails;
     @Mock private AsylumCase asylumCase;
-
-    private StartEventDetails startEventDetails;
 
     @Test
     void should_test_equals_contract() {
@@ -40,14 +32,17 @@ class StartEventDetailsTest {
     @Test
     void should_hold_onto_values() {
 
-        eventId = Event.UPDATE_PAYMENT_STATUS;
+        Event eventId = Event.UPDATE_PAYMENT_STATUS;
 
+        long caseId = 1234;
         when(caseDetails.getId()).thenReturn(caseId);
         when(caseDetails.getState()).thenReturn(State.APPEAL_SUBMITTED);
+        String jurisdiction = "IA";
         when(caseDetails.getJurisdiction()).thenReturn(jurisdiction);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        startEventDetails = new StartEventDetails(eventId, token, caseDetails);
+        String token = "eventToken";
+        StartEventDetails startEventDetails = new StartEventDetails(eventId, token, caseDetails);
 
         assertEquals(Event.UPDATE_PAYMENT_STATUS, startEventDetails.getEventId());
         assertEquals(token, startEventDetails.getToken());

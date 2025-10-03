@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
 
@@ -17,13 +19,21 @@ public class CreditAccountPayment {
 
     private String accountNumber;
     private BigDecimal amount;
+    @Getter
     private String caseReference;
+    @Getter
     private String ccdCaseNumber;
     private Currency currency;
     private String customerReference;
     private String description;
+    @Setter
+    @Getter
     private String organisationName;
+    @Setter
+    @Getter
     private Service service;
+    @Setter
+    @Getter
     private String siteId;
     private List<Fee> fees;
 
@@ -64,14 +74,6 @@ public class CreditAccountPayment {
         return amount;
     }
 
-    public String getCaseReference() {
-        return caseReference;
-    }
-
-    public String getCcdCaseNumber() {
-        return ccdCaseNumber;
-    }
-
     public Currency getCurrency() {
         requireNonNull(currency);
         return currency;
@@ -87,32 +89,9 @@ public class CreditAccountPayment {
         return description;
     }
 
-    public String getOrganisationName() {
-        return organisationName;
-    }
-
-    public Service getService() {
-        return service;
-    }
-
-    public String getSiteId() {
-        return siteId;
-    }
-
     public List<Fee> getFees() {
         requireNonNull(fees);
         return fees;
     }
 
-    public void setOrganisationName(String organisationName) {
-        this.organisationName = organisationName;
-    }
-
-    public void setService(Service service) {
-        this.service = service;
-    }
-
-    public void setSiteId(String siteId) {
-        this.siteId = siteId;
-    }
 }

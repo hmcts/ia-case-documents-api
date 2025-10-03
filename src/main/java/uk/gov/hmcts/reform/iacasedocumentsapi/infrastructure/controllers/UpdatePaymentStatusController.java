@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.S2STokenValidator.SERVICE_AUTHORIZATION_HEADER;
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,8 +20,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.SubmitEventDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentDto;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.CcdDataService;
-
-import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.S2STokenValidator.SERVICE_AUTHORIZATION_HEADER;
 
 @Tag(name = "Update payment status controller")
 @OpenAPIDefinition(tags = {@Tag(name = "UpdatePaymentStatusController", description = "Update payment status")})
@@ -71,7 +71,7 @@ public class UpdatePaymentStatusController {
 
         CaseMetaData caseMetaData =
             new CaseMetaData(Event.UPDATE_PAYMENT_STATUS, JURISDICTION,
-                             CASE_TYPE, Long.parseLong(caseId), paymentDto.getStatus(), paymentDto.getReference());
+                CASE_TYPE, Long.parseLong(caseId), paymentDto.getStatus(), paymentDto.getReference());
 
         SubmitEventDetails response = ccdDataService.updatePaymentStatus(caseMetaData, false, s2sAuthToken);
         return ResponseEntity.status(response.getCallbackResponseStatusCode()).body(response);

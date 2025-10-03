@@ -1,13 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.when;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +18,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Currency;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.StatusHistories;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.PaymentService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.PaymentApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 
@@ -31,7 +28,6 @@ class PaymentServiceTest {
     @Mock private RequestUserAccessTokenProvider userAuthorizationProvider;
     @Mock private AuthTokenGenerator serviceAuthorizationProvider;
 
-    private CreditAccountPayment creditAccountPayment;
     private PaymentService paymentService;
 
     @BeforeEach
@@ -47,7 +43,7 @@ class PaymentServiceTest {
         when(userAuthorizationProvider.getAccessToken()).thenReturn("userAuthorizationToken");
         when(serviceAuthorizationProvider.generate()).thenReturn("serviceAuthorizationToken");
 
-        creditAccountPayment = getCreditAccountPaymentRequest();
+        CreditAccountPayment creditAccountPayment = getCreditAccountPaymentRequest();
         PaymentResponse expectedPaymentResponse = getExpectedPaymentResponse();
         when(paymentApi.creditAccountPaymentRequest(
             userAuthorizationProvider.getAccessToken(),
@@ -58,10 +54,10 @@ class PaymentServiceTest {
 
         PaymentResponse paymentResponse = paymentService.creditAccountPayment(creditAccountPayment);
 
-        assertNotNull(paymentResponse);
+        Assertions.assertNotNull(paymentResponse);
 
-        assertEquals("RC-1590-6748-2373-9129", paymentResponse.getReference());
-        assertEquals("Success", paymentResponse.getStatus());
+        Assertions.assertEquals("RC-1590-6748-2373-9129", paymentResponse.getReference());
+        Assertions.assertEquals("Success", paymentResponse.getStatus());
     }
 
     private CreditAccountPayment getCreditAccountPaymentRequest() {

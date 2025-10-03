@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,16 +17,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.FeeType;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.FeesRegisterApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.FeesConfiguration;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FeeServiceTest {

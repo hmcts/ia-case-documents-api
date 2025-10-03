@@ -16,6 +16,11 @@ java:
     EM_BUNDLER_STITCH_URI: /api/stitch-ccd-bundles
     IA_AIP_FRONTEND_URL: "https://www.appeal-immigration-asylum-decision.service.gov.uk/"
     OPEN_ID_IDAM_URL: "https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net"
+    FEES_REGISTER_API_URL: "http://fees-register-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+    PAYMENT_API_URL: "http://payment-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+    PAY_CALLBACK_URL: "http://ia-case-documents-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/service-request-update"
+    PROF_REF_DATA_URL: "http://rd-professional-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+    ENABLE_DEBUG_PAYMENT_LOGS: false
     ROLE_ASSIGNMENT_URL: "http://am-role-assignment-service-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
   keyVaults:
     ia:
@@ -29,6 +34,8 @@ java:
           alias: IA_IDAM_CLIENT_ID
         - name: idam-secret
           alias: IA_IDAM_SECRET
+        - name: idam-redirect-uri
+          alias: IA_IDAM_REDIRECT_URI
         - name: s2s-secret
           alias: idam.s2s-auth.totp_secret
         - name: s2s-microservice

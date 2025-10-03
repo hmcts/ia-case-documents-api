@@ -1,11 +1,11 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:3.6.22")
-        classpath("au.com.dius.pact:au.com.dius.pact.gradle.plugin:4.4.0-beta.1")
-    }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("net.serenity-bdd:serenity-gradle-plugin:3.6.22")
+    classpath("au.com.dius.pact:au.com.dius.pact.gradle.plugin:4.4.0-beta.1")
+  }
 }
 
 plugins {
@@ -22,8 +22,6 @@ plugins {
     id 'uk.gov.hmcts.java' version '0.12.66'
     id 'au.com.dius.pact' version '4.6.17'
     id "io.freefair.lombok" version "6.6.3"
-    id 'com.adarshr.test-logger' version '3.2.0'
-
 }
 
 apply plugin: 'java'
@@ -53,119 +51,119 @@ group = 'uk.gov.hmcts.reform'
 version = '0.0.1'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
 }
 
 compileJava {
-    options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
+  options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
 }
 
 compileTestJava {
-    options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked"
+  options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked"
 }
 
 tasks.withType(Test) {
-    useJUnitPlatform {}
+  useJUnitPlatform {}
 
-    testLogging {
-        exceptionFormat = 'full'
-    }
+  testLogging {
+    exceptionFormat = 'full'
+  }
 }
 
 ext.libraries = [
-    junit5: [
-        "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
-        "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
-        "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
-        "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
-        "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
-    ]
+  junit5: [
+    "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
+    "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
+    "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
+    "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
+    "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
+  ]
 ]
 
 sourceSets {
 
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integrationTest/java')
-        }
-        resources.srcDir file('src/integrationTest/resources')
+  integrationTest {
+    java {
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+      srcDir file('src/integrationTest/java')
     }
+    resources.srcDir file('src/integrationTest/resources')
+  }
 
-    functionalTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/functionalTest/java')
-        }
-        resources.srcDir file('src/functionalTest/resources')
+  functionalTest {
+    java {
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+      srcDir file('src/functionalTest/java')
     }
+    resources.srcDir file('src/functionalTest/resources')
+  }
 
-    smokeTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/smokeTest/java')
-        }
-        resources.srcDir file('src/smokeTest/resources')
+  smokeTest {
+    java {
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+      srcDir file('src/smokeTest/java')
     }
-    contractTest {
-        java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-            srcDir file('src/contractTest/java')
-        }
-        resources.srcDir file('src/contactTest/resources')
+    resources.srcDir file('src/smokeTest/resources')
+  }
+  contractTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/contractTest/java')
     }
+    resources.srcDir file('src/contactTest/resources')
+  }
 }
 
 processFunctionalTestResources {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 processIntegrationTestResources {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 idea {
-    module {
-        testSourceDirs += project.sourceSets.integrationTest.java.srcDirs
-        testResourceDirs += project.sourceSets.integrationTest.resources.srcDirs
-        testSourceDirs += project.sourceSets.functionalTest.java.srcDirs
-        testResourceDirs += project.sourceSets.functionalTest.resources.srcDirs
-        testSourceDirs += project.sourceSets.smokeTest.java.srcDirs
-        testSourceDirs += project.sourceSets.contractTest.java.srcDirs
-        testResourceDirs += project.sourceSets.smokeTest.resources.srcDirs
-    }
+  module {
+    testSourceDirs += project.sourceSets.integrationTest.java.srcDirs
+    testResourceDirs += project.sourceSets.integrationTest.resources.srcDirs
+    testSourceDirs += project.sourceSets.functionalTest.java.srcDirs
+    testResourceDirs += project.sourceSets.functionalTest.resources.srcDirs
+    testSourceDirs += project.sourceSets.smokeTest.java.srcDirs
+    testSourceDirs += project.sourceSets.contractTest.java.srcDirs
+    testResourceDirs += project.sourceSets.smokeTest.resources.srcDirs
+  }
 }
 
 configurations {
-    integrationTestCompile.extendsFrom testImplementation
-    integrationTestRuntime.extendsFrom testRuntime
-    functionalTestImplementation.extendsFrom testImplementation
-    contractTestImplementation.extendsFrom testImplementation
-    functionalTestRuntime.extendsFrom testRuntime
+  integrationTestCompile.extendsFrom testImplementation
+  integrationTestRuntime.extendsFrom testRuntime
+  functionalTestImplementation.extendsFrom testImplementation
+  contractTestImplementation.extendsFrom testImplementation
+  functionalTestRuntime.extendsFrom testRuntime
 }
 
 checkstyle {
-    maxWarnings = 0
-    toolVersion = '10.12.5'
-    configDirectory.set(new File(rootDir, 'config/checkstyle'))
+  maxWarnings = 0
+  toolVersion = '10.12.5'
+  configDirectory.set(new File(rootDir, 'config/checkstyle'))
 }
 
 
 pmd {
-    toolVersion = '6.55.0'
-    ignoreFailures = true
-    sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.functionalTest, sourceSets.smokeTest]
-    reportsDir = file("$project.buildDir/reports/pmd")
-    ruleSets = [
-        'category/java/errorprone.xml',
-        'category/java/bestpractices.xml'
-    ]
+  toolVersion = '6.55.0'
+  ignoreFailures = true
+  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.functionalTest, sourceSets.smokeTest]
+  reportsDir = file("$project.buildDir/reports/pmd")
+  ruleSets = [
+    'category/java/errorprone.xml',
+    'category/java/bestpractices.xml'
+  ]
 }
 
 tasks.register('integration', Test) {
@@ -174,7 +172,6 @@ tasks.register('integration', Test) {
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
-
 
 tasks.register('functional', Test) {
   description = 'Runs the functional tests.'
@@ -217,7 +214,6 @@ tasks.register('fortifyScan', JavaExec) {
 }
 
 project.ext {
-  pactVersion = getCheckedOutGitCommitHash()
   pacticipant = 'ia_caseDocumentsApi'
   if (System.env.GIT_COMMIT) {
     pacticipantVersion = System.env.GIT_COMMIT.substring(0,9)
@@ -255,58 +251,57 @@ pact {
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 jacoco {
-    toolVersion = "0.8.13"
+  toolVersion = "0.8.13"
 }
 
 jacocoTestReport {
-    executionData(test, integration)
-    reports {
-        xml.required.set(true)
-        csv.required.set(false)
-        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
-    }
+  executionData(test, integration)
+  reports {
+    xml.required.set(true)
+    csv.required.set(false)
+    xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
+  }
 }
 
 pitest {
 //    print('./gradlew --version'.execute().text.trim())
-    junit5PluginVersion = '1.2.3'
-    pitestVersion = "1.16.2"
-    targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
-    excludedClasses = [
-        'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
-        'uk.gov.hmcts.reform.iacasedocumentsapi.Application',
-        'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.TsvStringProvider'
-    ]
-    threads = 10
-    outputFormats = ['XML', 'HTML']
-    timestampedReports = false
-    failWhenNoMutations = false
-    verbose = true
-    mutationThreshold = 85
+  junit5PluginVersion = '1.2.3'
+  pitestVersion = "1.16.2"
+  targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
+  excludedClasses = [
+    'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
+    'uk.gov.hmcts.reform.iacasedocumentsapi.Application',
+    'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.TsvStringProvider'
+  ]
+  threads = 10
+  outputFormats = ['XML', 'HTML']
+  timestampedReports = false
+  failWhenNoMutations = false
+  verbose = true
+  mutationThreshold = 85
 }
 
-project.tasks['pitest'].group = "Verification"
+project.tasks.named('pitest') { group = "Verification" }
 
 sonarqube {
-    properties {
-      property "sonar.projectName", "IA :: Immigration & Asylum case documents api"
-      property "sonar.projectKey", "IACASEDOCUMENTSAPI"
-      property "sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml").get().asFile
-      property "sonar.pitest.mode", "reuseReport"
-      property "sonar.pitest.reportsDirectory", "build/reports/pitest"
-      property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/config/**," +
-        "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/SystemDateProvider.java," +
-        "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/Application.java"
-      property "sonar.cpd.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCase.java," +
-        "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCaseBuilder.java"
-    }
+  properties {
+    property "sonar.projectName", "IA :: Immigration & Asylum case documents api"
+    property "sonar.projectKey", "IACASEDOCUMENTSAPI"
+    property "sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml").get().asFile
+    property "sonar.pitest.mode", "reuseReport"
+    property "sonar.pitest.reportsDirectory", "build/reports/pitest"
+    property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/config/**," +
+      "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/SystemDateProvider.java," +
+      "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/Application.java"
+    property "sonar.cpd.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCase.java," +
+      "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCaseBuilder.java"
+  }
 }
 
 project.tasks.named('sonarqube') {
   dependsOn test, integration, jacocoTestReport
   group = "Verification"
 }
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -316,47 +311,46 @@ repositories {
 }
 
 dependencyManagement {
-    dependencies {
+  dependencies {
 
-        dependencySet(group: 'org.yaml', version: '2.4') {
-            entry 'snakeyaml'
-        }
-
-        dependencySet(group: 'commons-fileupload', version: '1.6.0') {
-            entry 'commons-fileupload'
-        }
-
-
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.0') {
-            entry 'jackson-databind'
-            entry 'jackson-core'
-            entry 'jackson-annotations'
-        }
-
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.19.0') {
-            entry 'jackson-dataformat-yaml'
-            entry 'jackson-dataformat-csv'
-        }
-
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.19.0') {
-            entry 'jackson-datatype-jsr310'
-            entry 'jackson-datatype-jdk8'
-        }
+    dependencySet(group: 'org.yaml', version: '2.4') {
+      entry 'snakeyaml'
     }
+
+    dependencySet(group: 'commons-fileupload', version: '1.6.0') {
+        entry 'commons-fileupload'
+    }
+
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.0') {
+      entry 'jackson-databind'
+      entry 'jackson-core'
+      entry 'jackson-annotations'
+    }
+
+    dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.19.0') {
+      entry 'jackson-dataformat-yaml'
+      entry 'jackson-dataformat-csv'
+    }
+
+    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.19.0') {
+      entry 'jackson-datatype-jsr310'
+      entry 'jackson-datatype-jdk8'
+    }
+  }
 }
 
 dependencies {
-    modules {
-        module("org.codehaus.groovy:groovy") {
-            replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
-        }
-        module("org.codehaus.groovy:groovy-xml") {
-            replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
-        }
-        module("org.codehaus.groovy:groovy-json") {
-            replacedBy("org.apache.groovy:groovy-json", "conflicts in current rest-assured version")
-        }
+  modules {
+    module("org.codehaus.groovy:groovy") {
+      replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
     }
+    module("org.codehaus.groovy:groovy-xml") {
+      replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
+    }
+    module("org.codehaus.groovy:groovy-json") {
+      replacedBy("org.apache.groovy:groovy-json", "conflicts in current rest-assured version")
+    }
+  }
 
   implementation('org.apache.groovy:groovy-xml:4.0.23')
   configurations.configureEach {
@@ -456,76 +450,67 @@ dependencies {
   testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.7.2'
   testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
-  testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
-      exclude group: 'commons-io', module: 'commons-io'
-      exclude group: 'org.apache.commons', module: 'commons-lang3'
-  }
+
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
+        exclude group: 'commons-io', module: 'commons-io'
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+    }
 
   testImplementation 'pl.pragmatists:JUnitParams:1.1.1'
 
   testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.10') {
-      exclude group: "com.github.tomakehurst", module: "wiremock-standalone"
+    exclude group: "com.github.tomakehurst", module: "wiremock-standalone"
   }
 
-    //pact contract testing
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+  //pact contract testing
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.13.0")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.0")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.13.0')
+  contractTestImplementation("org.junit.jupiter:junit-jupiter:${versions.junit}")
+  contractTestImplementation("org.junit.jupiter:junit-jupiter-api:${versions.junit}")
+  contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
 
-    integrationTestImplementation sourceSets.main.runtimeClasspath
-    integrationTestImplementation sourceSets.test.runtimeClasspath
+  integrationTestImplementation sourceSets.main.runtimeClasspath
+  integrationTestImplementation sourceSets.test.runtimeClasspath
 
-    functionalTestImplementation sourceSets.main.runtimeClasspath
-    functionalTestImplementation sourceSets.test.runtimeClasspath
+  functionalTestImplementation sourceSets.main.runtimeClasspath
+  functionalTestImplementation sourceSets.test.runtimeClasspath
 
-    smokeTestImplementation sourceSets.main.runtimeClasspath
-    smokeTestImplementation sourceSets.test.runtimeClasspath
+  smokeTestImplementation sourceSets.main.runtimeClasspath
+  smokeTestImplementation sourceSets.test.runtimeClasspath
 
-    contractTestImplementation sourceSets.main.runtimeClasspath
-    contractTestImplementation sourceSets.test.runtimeClasspath
+  contractTestImplementation sourceSets.main.runtimeClasspath
+  contractTestImplementation sourceSets.test.runtimeClasspath
 
 }
 
-//pact {
-//    publish {
-//        pactDirectory = 'target/pacts'
-//        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
-//        tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
-//        version = project.pactVersion
-//    }
-//}
-
 dependencyCheck {
-    suppressionFile = 'config/owasp/suppressions.xml'
+  suppressionFile = 'config/owasp/suppressions.xml'
 }
 
 dependencyUpdates.resolutionStrategy = {
-    componentSelection { rules ->
-        rules.all { ComponentSelection selection ->
-            boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-                selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-            }
-            if (rejected) {
-                selection.reject('Release candidate')
-            }
-        }
+  componentSelection { rules ->
+    rules.all { ComponentSelection selection ->
+      boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+        selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+      }
+      if (rejected) {
+        selection.reject('Release candidate')
+      }
     }
+  }
 }
 
 def getCheckedOutGitCommitHash() {
-    'git rev-parse --verify --short HEAD'.execute().text.trim()
+  'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
 gradle.startParameter.continueOnFailure = true
 
 bootJar {
-    setArchiveFileName(jarName)
-    manifest {
-        attributes('Implementation-Version': project.version.toString())
-    }
+  setArchiveFileName(jarName)
+  manifest {
+    attributes('Implementation-Version': project.version.toString())
+  }
 }
 
 // this is required to force Java running on the Azure Windows Server OS into using
@@ -535,6 +520,6 @@ bootJar {
 applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
 
 wrapper {
-    distributionType = Wrapper.DistributionType.ALL
+  distributionType = Wrapper.DistributionType.ALL
 }
 

@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -21,8 +22,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.DocumentSti
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.exceptions.BadRequestException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.exceptions.ExceptionResponse;
 
-import java.time.LocalDateTime;
-
 @Slf4j
 @ControllerAdvice(basePackages = "uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers")
 @RequestMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -41,7 +40,7 @@ public class CallbackControllerAdvice extends ResponseEntityExceptionHandler {
     })
     protected ResponseEntity<String> handleExceptions(HttpServletRequest request, Exception e) {
         log.error("Exception for the CCDCaseId: {}",
-                  RequestContextHolder.currentRequestAttributes().getAttribute("CCDCaseId", RequestAttributes.SCOPE_REQUEST));
+            RequestContextHolder.currentRequestAttributes().getAttribute("CCDCaseId", RequestAttributes.SCOPE_REQUEST));
         ExceptionUtils.printRootCauseStackTrace(e);
 
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

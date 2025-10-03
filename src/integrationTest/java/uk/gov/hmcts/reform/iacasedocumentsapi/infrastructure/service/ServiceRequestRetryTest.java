@@ -41,7 +41,6 @@ public class ServiceRequestRetryTest {
     private static final String APPELLANT_FAMILY_NAMES = "Surname";
     private static final String APPEAL_REFERENCE_NUMBER = "EA/00001/01";
     private static final long CASE_ID = 1111222233334444L;
-    private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
@@ -53,9 +52,7 @@ public class ServiceRequestRetryTest {
     @MockBean private Callback<AsylumCase> callback;
     @MockBean private CaseDetails<AsylumCase> caseDetails;
     @MockBean private AsylumCase asylumCase;
-    private String token = "token";
-    private String serviceToken = "Bearer serviceToken";
-    private Fee fee = mock(Fee.class);
+    private final Fee fee = mock(Fee.class);
     ArgumentCaptor<String> tokenCaptor = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<String> serviceTokenCaptor = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<ServiceRequestRequest> serviceRequestRequestArgumentCaptor = ArgumentCaptor
@@ -63,7 +60,7 @@ public class ServiceRequestRetryTest {
 
     @BeforeEach
     public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
@@ -78,7 +75,9 @@ public class ServiceRequestRetryTest {
                 .thenReturn(Optional.of(APPELLANT_FAMILY_NAMES));
         when(caseDetails.getId()).thenReturn(CASE_ID);
 
+        String token = "token";
         when(systemTokenGenerator.generate()).thenReturn(token);
+        String serviceToken = "Bearer serviceToken";
         when(serviceAuthorization.generate()).thenReturn(serviceToken);
         when(serviceRequestApi.createServiceRequest(eq(token), eq(serviceToken), any(ServiceRequestRequest.class)))
                 .thenThrow(FeignException.FeignClientException.class);

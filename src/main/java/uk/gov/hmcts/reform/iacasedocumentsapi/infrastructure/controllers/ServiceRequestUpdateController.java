@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.S2STokenValidator.SERVICE_AUTHORIZATION_HEADER;
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,8 +19,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.SubmitEventDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.ServiceRequestUpdateDto;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.CcdDataService;
-
-import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.S2STokenValidator.SERVICE_AUTHORIZATION_HEADER;
 
 @Tag(name = "Update service request controller")
 @OpenAPIDefinition(tags = {@Tag(name = "ServiceRequestUpdateController", description = "Update service request")})
@@ -54,13 +54,12 @@ public class ServiceRequestUpdateController {
                  serviceRequestUpdateDto.getPayment().getStatus());
 
         CaseMetaData updatePaymentStatusCaseMetaData =
-            new CaseMetaData(
-                Event.UPDATE_PAYMENT_STATUS,
-                JURISDICTION,
-                CASE_TYPE,
-                Long.parseLong(caseId),
-                serviceRequestUpdateDto.getServiceRequestStatus(),
-                serviceRequestUpdateDto.getPayment().getReference());
+            new CaseMetaData(Event.UPDATE_PAYMENT_STATUS,
+                             JURISDICTION,
+                             CASE_TYPE,
+                             Long.parseLong(caseId),
+                             serviceRequestUpdateDto.getServiceRequestStatus(),
+                             serviceRequestUpdateDto.getPayment().getReference());
 
         SubmitEventDetails response = ccdDataService.updatePaymentStatus(updatePaymentStatusCaseMetaData, true, s2sAuthToken);
 
