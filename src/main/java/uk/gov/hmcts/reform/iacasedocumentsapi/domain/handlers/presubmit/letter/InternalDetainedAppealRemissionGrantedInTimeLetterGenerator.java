@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
@@ -21,6 +22,7 @@ import java.util.Objects;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -51,10 +53,14 @@ public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator impleme
                 .map(yesOrNo -> yesOrNo == YesOrNo.NO)
                 .orElse(false);
 
+        boolean paymentPaid = asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)
+                .map(paymentStatus -> paymentStatus == PAID).orElse(false);
+
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.RECORD_REMISSION_DECISION
                 && isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase)
                 && submissionInTime
+                && !paymentPaid
                 && isRemissionApproved(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                 && !isAcceleratedDetainedAppeal(asylumCase);
