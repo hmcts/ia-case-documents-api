@@ -630,6 +630,8 @@ public enum AsylumCaseDefinition {
 
     UPDATED_APPEAL_DECISION(
             "updatedAppealDecision", new TypeReference<String>(){}),
+    APPEAL_DECISION(
+            "appealDecision", new TypeReference<String>(){}),
 
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}

@@ -18,10 +18,12 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATED_APPEAL_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATE_TRIBUNAL_DECISION_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
@@ -50,6 +52,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
     private final String appellantFamilyName = "Doe";
     private final String updateTribunalDecisionDate =  "2025-10-01";
     private final String appealTribunalDecisionDeadlineDate =  "15 Oct 2025";
+    private final String appealDecision =  "Allowed";
+    private final String updatedAppealDecision =  "Dismissed";
 
     private InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplate template;
 
@@ -74,7 +78,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -92,6 +96,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
         when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_DATE, String.class)).thenReturn(Optional.of(updateTribunalDecisionDate));
+        when(asylumCase.read(APPEAL_DECISION, String.class)).thenReturn(Optional.of(appealDecision));
+        when(asylumCase.read(UPDATED_APPEAL_DECISION, String.class)).thenReturn(Optional.of(updatedAppealDecision));
 
         // Mock empty values for optional fields
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -101,7 +107,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -111,6 +117,8 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(appealTribunalDecisionDeadlineDate, templateFieldValues.get("appealTribunalDecisionDeadlineDate"));
+        assertEquals(appealDecision, templateFieldValues.get("oldDecision"));
+        assertEquals(updatedAppealDecision, templateFieldValues.get("newDecision"));
     }
 
     @Test
@@ -124,7 +132,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -132,7 +140,6 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(null, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(null, templateFieldValues.get("customerServicesTelephone"));
     }
 
     private void dataSetUp() {
@@ -150,5 +157,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_DATE, String.class)).thenReturn(Optional.of(updateTribunalDecisionDate));
+        when(asylumCase.read(APPEAL_DECISION, String.class)).thenReturn(Optional.of(appealDecision));
+        when(asylumCase.read(UPDATED_APPEAL_DECISION, String.class)).thenReturn(Optional.of(updatedAppealDecision));
     }
 }

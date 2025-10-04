@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_DECISION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATED_APPEAL_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATE_TRIBUNAL_DECISION_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -51,11 +53,19 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTe
                         .orElseThrow(() -> new IllegalStateException("Update Tribunal Decision date is missing")))
                 .plusDays(appealAfterTribunalDecision));
 
+        final String oldDecision = asylumCase.read(APPEAL_DECISION, String.class)
+                        .orElseThrow(() -> new IllegalStateException("Appeal Decision is missing"));
+
+        final String newDecision = asylumCase.read(UPDATED_APPEAL_DECISION, String.class)
+                .orElseThrow(() -> new IllegalStateException("Updated Appeal Decision is missing"));
+
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("appealTribunalDecisionDeadlineDate", appealTribunalDecisionDeadlineDate);
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
+        fieldValues.put("oldDecision", oldDecision);
+        fieldValues.put("newDecision", newDecision);
 
         return fieldValues;
     }
