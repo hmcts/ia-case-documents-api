@@ -46,9 +46,10 @@ public class DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator implem
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.ADJOURN_HEARING_WITHOUT_DATE
-                && (isRepJourney(asylumCase) || isInternalCase(asylumCase))
+                && isAppellantInDetention(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                 && !isAcceleratedDetainedAppeal(asylumCase);
+
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
