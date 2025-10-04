@@ -196,6 +196,12 @@ public class AsylumCaseUtils {
         }
     }
 
+    public static boolean isRemissionApproved(AsylumCase asylumCase) {
+        Optional<RemissionDecision> remissionDecision = asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
+
+        return remissionDecision.isPresent() && remissionDecision.get().equals(RemissionDecision.APPROVED);
+    }
+
     public static double getFeeRemission(AsylumCase asylumCase) {
         RemissionType remissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class)
                 .orElseThrow(() -> new RequiredFieldMissingException("Remission type not found"));
