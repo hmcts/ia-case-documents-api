@@ -12,7 +12,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
@@ -159,6 +161,66 @@ public class InternalEditCaseListingLetterWithAttachmentBundleHandlerTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
+        IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        )).thenReturn(bundleDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLetterWithAttachmentBundleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
+        );
+        verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
+    }
+
+    @Test
+    void should_read_and_bundle_letter_notification_documents_for_detained_other_facility() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
+        IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        )).thenReturn(bundleDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLetterWithAttachmentBundleHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
+        );
+        verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
+    }
+
+    @Test
+    void should_read_and_bundle_letter_notification_documents_for_detained_other_facility_ooc() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());

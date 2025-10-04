@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.*;
+
 @Component
 public class BundleOrder implements Comparator<DocumentWithMetadata> {
 
@@ -313,37 +315,53 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 92;
             }
-            case INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER -> {
-                log.warn("INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 93;
-            }
             case INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 94;
+                yield 93;
             }
             case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 95;
+                yield 94;
             }
             case INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 96;
+                yield 95;
             }
             case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 97;
+                yield 96;
             }
             case INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER -> {
                 log.warn(
                     "INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}",
                     document.getDescription());
-                yield 98;
+                yield 97;
             }
             case DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER -> {
                 log.warn("DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 98;
+            }
+            case INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER -> {
+                log.warn("INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 99;
             }
-            case NONE ->  100;
+            case INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 100;
+            }
+            case INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER -> {
+                log.warn("INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 101;
+            }
+            case INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER -> {
+                log.warn("INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 102;
+            }
+            case INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 103;
+            }
+            case NONE ->  104;
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         };
