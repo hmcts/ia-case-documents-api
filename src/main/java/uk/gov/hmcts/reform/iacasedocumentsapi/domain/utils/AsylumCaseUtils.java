@@ -229,6 +229,14 @@ public class AsylumCaseUtils {
         return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
+    public static List<IdValue<DocumentWithMetadata>> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
+        Optional<List<IdValue<DocumentWithMetadata>>> thedecisionOfNoticeDocs = asylumCase.read(UPLOAD_THE_NOTICE_OF_DECISION_DOCS);
+        if (thedecisionOfNoticeDocs.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return thedecisionOfNoticeDocs.get();
+    }
 
     public static Optional<IdValue<DocumentWithMetadata>> getLatestAddendumEvidenceDocument(AsylumCase asylumCase) {
         List<IdValue<DocumentWithMetadata>> addendums = getAddendumEvidenceDocuments(asylumCase);
