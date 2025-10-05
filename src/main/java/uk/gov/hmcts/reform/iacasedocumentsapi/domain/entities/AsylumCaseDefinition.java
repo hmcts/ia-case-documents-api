@@ -718,8 +718,8 @@ public enum AsylumCaseDefinition {
     LATEST_DECISION_AND_REASONS_DOCUMENTS(
             "latestDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
-    UPLOAD_THE_NOTICE_OF_DECISION_DOCS(
-            "uploadTheNoticeOfDecisionDocs", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+    OUT_OF_TIME_DECISION_DOCUMENT(
+            "outOfTimeDecisionDocument", new TypeReference<Document>(){}),
 
     LATEST_REMITTAL_DOCUMENTS(
             "latestRemittalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),

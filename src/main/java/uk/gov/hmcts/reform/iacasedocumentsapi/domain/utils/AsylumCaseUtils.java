@@ -41,6 +41,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -229,13 +230,12 @@ public class AsylumCaseUtils {
         return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
-    public static List<IdValue<DocumentWithMetadata>> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
-        Optional<List<IdValue<DocumentWithMetadata>>> thedecisionOfNoticeDocs = asylumCase.read(UPLOAD_THE_NOTICE_OF_DECISION_DOCS);
-        if (thedecisionOfNoticeDocs.isEmpty()) {
-            return Collections.emptyList();
+    public static Document getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
+        Optional<Document> outOfTimeDecisionDocument = asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT);
+        if (outOfTimeDecisionDocument.isEmpty()) {
+            throw new IllegalStateException("outOfTimeDecisionDocument is not present");
         }
-
-        return thedecisionOfNoticeDocs.get();
+        return outOfTimeDecisionDocument.get();
     }
 
     public static Optional<IdValue<DocumentWithMetadata>> getLatestAddendumEvidenceDocument(AsylumCase asylumCase) {

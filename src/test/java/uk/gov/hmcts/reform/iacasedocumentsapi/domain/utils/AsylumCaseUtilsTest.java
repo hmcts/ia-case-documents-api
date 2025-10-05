@@ -52,7 +52,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppea
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPLOAD_THE_NOTICE_OF_DECISION_DOCS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_DOCUMENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.AMOUNT_REMITTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
@@ -384,66 +384,19 @@ public class AsylumCaseUtilsTest {
     class GetDecisionOfNoticeDocuments {
 
         @Test
-        void should_get_decision_of_notice_documents_when_present() {
-            List<IdValue<DocumentWithMetadata>> decisionOfNoticeDocuments = new ArrayList<>();
-            IdValue<DocumentWithMetadata> decisionDoc1 = new IdValue<>(
-                    "1",
-                    new DocumentWithMetadata(
-                            document,
-                            "Decision notice 1",
-                            "2018-12-25",
-                            DocumentTag.DECISION_AND_REASONS_DRAFT,
-                            "The respondent",
-                            "TCW"
-                    )
-            );
-            IdValue<DocumentWithMetadata> decisionDoc2 = new IdValue<>(
-                    "2",
-                    new DocumentWithMetadata(
-                            document,
-                            "Decision notice 2",
-                            "2018-12-26",
-                            DocumentTag.DECISION_AND_REASONS_DRAFT,
-                            "The respondent",
-                            "TCW"
-                    )
-            );
-            decisionOfNoticeDocuments.add(decisionDoc1);
-            decisionOfNoticeDocuments.add(decisionDoc2);
-            
-            when(asylumCase.read(UPLOAD_THE_NOTICE_OF_DECISION_DOCS)).thenReturn(Optional.of(decisionOfNoticeDocuments));
+        void should_get_decision_of_notice_document_when_present() {
+            when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(document));
 
-            assertEquals(decisionOfNoticeDocuments, AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase));
-            assertEquals(2, AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase).size());
+            assertEquals(document, AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase));
         }
 
         @Test
-        void should_return_empty_list_when_no_decision_of_notice_documents_present() {
-            when(asylumCase.read(UPLOAD_THE_NOTICE_OF_DECISION_DOCS)).thenReturn(Optional.empty());
+        void should_throw_exception_when_no_decision_of_notice_document_present() {
+            when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
 
-            assertEquals(Collections.emptyList(), AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase));
-        }
-
-        @Test
-        void should_get_single_decision_of_notice_document_when_only_one_exists() {
-            List<IdValue<DocumentWithMetadata>> decisionOfNoticeDocuments = new ArrayList<>();
-            IdValue<DocumentWithMetadata> decisionDoc = new IdValue<>(
-                    "1",
-                    new DocumentWithMetadata(
-                            document,
-                            "Single decision notice",
-                            "2018-12-25",
-                            DocumentTag.DECISION_AND_REASONS_DRAFT,
-                            "The respondent",
-                            "TCW"
-                    )
-            );
-            decisionOfNoticeDocuments.add(decisionDoc);
-            
-            when(asylumCase.read(UPLOAD_THE_NOTICE_OF_DECISION_DOCS)).thenReturn(Optional.of(decisionOfNoticeDocuments));
-
-            assertEquals(decisionOfNoticeDocuments, AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase));
-            assertEquals(1, AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase).size());
+            assertThatThrownBy(() -> AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase))
+                    .isExactlyInstanceOf(IllegalStateException.class)
+                    .hasMessage("outOfTimeDecisionDocument is not present");
         }
     }
 

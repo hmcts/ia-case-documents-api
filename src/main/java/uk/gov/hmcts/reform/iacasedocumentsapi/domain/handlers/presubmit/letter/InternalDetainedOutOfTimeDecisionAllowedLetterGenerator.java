@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
@@ -84,12 +83,9 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
 
         Document internalDetainedOutOfTimeDecisionAllowedLetter = documentCreator.create(caseDetails);
 
-        // Get decision of notice documents
-        List<IdValue<DocumentWithMetadata>> decisionOfNoticeDocuments = getDecisionOfNoticeDocuments(asylumCase);
-        
         // Create bundle documents list
         List<DocumentWithMetadata> bundleDocuments = new ArrayList<>();
-        
+
         // Add the generated letter to bundle
         DocumentWithMetadata letterDocument = new DocumentWithMetadata(
                 internalDetainedOutOfTimeDecisionAllowedLetter,
@@ -98,11 +94,16 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
                 DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
         );
         bundleDocuments.add(letterDocument);
-        
-        // Add decision of notice documents to bundle
-        for (IdValue<DocumentWithMetadata> doc : decisionOfNoticeDocuments) {
-            bundleDocuments.add(doc.getValue());
-        }
+
+        // Get decision document
+        Document outOfTimeDecisionDocument = getDecisionOfNoticeDocuments(asylumCase);
+        DocumentWithMetadata outOfTimeDecisionDocumentWithMetaData = new DocumentWithMetadata(
+                outOfTimeDecisionDocument,
+                "Letter",
+                "Letter",
+                DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
+        );
+        bundleDocuments.add(outOfTimeDecisionDocumentWithMetaData);
 
         // Create qualified file name
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
