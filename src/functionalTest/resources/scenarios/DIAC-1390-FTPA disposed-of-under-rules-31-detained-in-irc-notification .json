@@ -2,7 +2,7 @@
   "description": "DIAC-1390 FTPA disposed of under rules 31 - Detained (in IRC) notification",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "AdminOfficer",
+    "credentials": "Judge",
     "input": {
       "id": 1390,
       "eventId": "decideFtpaApplication",
