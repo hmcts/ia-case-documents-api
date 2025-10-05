@@ -243,10 +243,6 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_REINSTATE_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 71;
             }
-            case INTERNAL_ADJOURN_HEARING_WITHOUT_DATE -> {
-                log.warn("INTERNAL_ADJOURN_HEARING_WITHOUT_DATE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 72;
-            }
             case UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT -> {
                 log.warn("UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 73;

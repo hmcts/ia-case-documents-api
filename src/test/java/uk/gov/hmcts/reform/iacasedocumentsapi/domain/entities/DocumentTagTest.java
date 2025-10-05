@@ -86,7 +86,6 @@ class DocumentTagTest {
         assertEquals("legalOfficerUploadAdditionalEvidenceLetter", DocumentTag.LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_LETTER.toString());
         assertEquals("internalHoChangeDirectionDueDateLetter", DocumentTag.INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER.toString());
         assertEquals("internalReinstateAppealLetter", DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER.toString());
-        assertEquals("internalAdjournHearingWithoutDate", DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE.toString());
         assertEquals("upperTribunalTransferOrderDocument", DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT.toString());
         assertEquals("internalEndAppealLetter", DocumentTag.INTERNAL_END_APPEAL_LETTER.toString());
         assertEquals("internalEndAppealLetterBundle", DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE.toString());
@@ -116,6 +115,6 @@ class DocumentTagTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(114, DocumentTag.values().length);
+        assertEquals(113, DocumentTag.values().length);
     }
 }

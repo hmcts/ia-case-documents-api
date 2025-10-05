@@ -38,7 +38,7 @@ class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(107, sortedTags.size());
+        assertEquals(106, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -114,7 +114,6 @@ class BundleOrderTest {
             DocumentTag.INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER,
             DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER,
             DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER,
-            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE,
             DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT,
             DocumentTag.IAUT_2_FORM,
             DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER,

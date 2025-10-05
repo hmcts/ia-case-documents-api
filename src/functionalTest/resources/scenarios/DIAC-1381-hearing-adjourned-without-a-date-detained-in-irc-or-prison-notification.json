@@ -17,7 +17,9 @@
           "adjournHearingWithoutDateReasons": "Sample reasons",
           "isAdmin": "Yes",
           "isAcceleratedDetainedAppeal": "No",
-          "appellantInDetention": "Yes"
+          "appellantInDetention": "Yes",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Harmondsworth"
         }
       },
       "caseDataBefore": {
@@ -63,8 +65,8 @@
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
-        "detentionFacility": "prison",
-        "prisonNOMSNumber": "",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Harmondsworth",
         "appealSubmissionDate": "{$TODAY}",
         "appealType": "refusalOfHumanRights",
         "appealReferenceNumber": "$/(.+)/",
