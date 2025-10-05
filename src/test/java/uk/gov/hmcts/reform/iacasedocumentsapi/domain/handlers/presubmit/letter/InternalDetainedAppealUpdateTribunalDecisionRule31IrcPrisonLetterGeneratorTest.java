@@ -37,12 +37,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANTS_REPRESENTATION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -154,6 +149,9 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
                 ),
                 Arguments.of("appellants representation is no",
                         (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
+                ),
+                Arguments.of("Update tribunal decision not under rule 31",
+                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, String.class)).thenReturn(Optional.of("rule32"))
                 )
         );
     }
@@ -269,5 +267,6 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, String.class)).thenReturn(Optional.of("underRule31"));
     }
 }

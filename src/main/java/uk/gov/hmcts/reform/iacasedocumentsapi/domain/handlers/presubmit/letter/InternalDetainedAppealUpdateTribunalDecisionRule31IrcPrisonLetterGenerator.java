@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import java.util.Objects;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATE_TRIBUNAL_DECISION_LIST;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase;
@@ -52,7 +53,8 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGe
                 && callback.getEvent() == Event.UPDATE_TRIBUNAL_DECISION
                 && isInternalCase(asylumCase)
                 && hasBeenSubmittedByAppellantInternalCase(asylumCase)
-                && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC);
+                && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
+                && isRule31ReasonUpdatingDecision(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -78,4 +80,9 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGe
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
+    private boolean isRule31ReasonUpdatingDecision(AsylumCase asylumCase) {
+
+        return asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, String.class)
+                .map(reason -> reason.equals("underRule31")).orElse(false);
+    }
 }
