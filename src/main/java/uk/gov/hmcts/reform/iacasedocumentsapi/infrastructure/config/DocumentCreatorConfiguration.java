@@ -1618,27 +1618,6 @@ public class DocumentCreatorConfiguration {
     }
 
 
-    @Bean("internalAdjournHearingWithoutDateLetter")
-    public DocumentCreator<AsylumCase> getInternalAdjournHearingWithoutDateLetter(
-            @Value("${internalDetainedAdjournHearingWithoutDateLetter.contentType}") String contentType,
-            @Value("${internalDetainedAdjournHearingWithoutDateLetter.fileExtension}") String fileExtension,
-            @Value("${internalDetainedAdjournHearingWithoutDateLetter.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalDetainedAdjournHearingWithoutDateLetterTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
-        );
-    }
-
     @Bean("updatedDecisionAndReasonsCoverLetter")
     public DocumentCreator<AsylumCase> getUpdatedDecisionAndReasonsCoverLetterDocumentCreator(
         @Value("${decisionAndReasonsCoverLetter.contentType}") String contentType,
