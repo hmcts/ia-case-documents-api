@@ -70,26 +70,12 @@
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
-            "id":"2",
+            "id":"1",
             "value": {
               "tag": "detainedAppealAdjournHearingWithoutDateIrcPrisonLetter",
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                 "document_filename":"HU 50001 2025-Awan-detained-hearing-adjourned-no-date-appellant-letter.PDF",
-                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
-              },
-              "suppliedBy": "",
-              "description": "",
-              "dateUploaded": "{$TODAY}"
-            }
-          },
-          {
-            "id":"1",
-            "value": {
-              "tag": "internalDetainedAppealHOUploadBundleAppellantLetter",
-              "document": {
-                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_filename":"HU 50001 2025-Awan-internal-detained-ho-upload-bundle-appellant-letter.PDF",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
               },
               "suppliedBy": "",
