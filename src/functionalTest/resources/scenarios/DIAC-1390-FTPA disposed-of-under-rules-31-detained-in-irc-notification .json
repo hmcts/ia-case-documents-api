@@ -30,7 +30,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-started.json",
+      "template": "minimal-appeal-submitted.json",
       "replacements": {
           "isAdmin": "Yes",
           "appellantsRepresentation": "Yes",
