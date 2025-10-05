@@ -2059,4 +2059,26 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+
+    @Bean("internalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaLetter")
+    public DocumentCreator<AsylumCase> getInternalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaLetterDocumentCreator(
+        @Value("${internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.contentType}") String contentType,
+        @Value("${internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileExtension}") String fileExtension,
+        @Value("${internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 }

@@ -1,0 +1,69 @@
+{
+  "description": "DIAC-1390 FTPA disposed of under rules 32 - Detained (in Prison) notification",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1390,
+      "eventId": "decideFtpaApplication",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "HU/50001/2025",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "prison",
+          "prisonNOMSNumber": "",
+          "submissionOutOfTime": "No",
+          "appealSubmissionDate": "{$TODAY}",
+          "appealType": "refusalOfHumanRights",
+          "ftpaApplicantType": "appellant",
+          "ftpaAppellantDecisionRemadeRule32Text": "Some decision text",
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "prison",
+          "prisonNOMSNumber": "",
+          "submissionOutOfTime": "No",
+          "appealSubmissionDate": "{$TODAY}",
+          "appealType": "refusalOfHumanRights",
+          "appealReferenceNumber": "$/(.+)/",
+          "ftpaApplicantType": "appellant",
+          "ftpaAppellantDecisionRemadeRule32Text": "Some decision text",
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "internalDetainedIrcPrisonFtpaDisposedRules31Or32Letter",
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_filename": "HU 50001 2025-Awan-ftp-disposed-of-under-rules-31-or-32-letter.PDF",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
+              },
+              "suppliedBy": "",
+              "description": "",
+              "dateUploaded": "{$TODAY}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
