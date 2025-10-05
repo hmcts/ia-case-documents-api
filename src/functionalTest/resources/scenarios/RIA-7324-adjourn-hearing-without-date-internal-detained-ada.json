@@ -19,7 +19,7 @@
       "caseDataBefore": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "hearingCentre": "nottingham",
+          "listCaseHearingCentre": "nottingham",
           "listCaseHearingDate": "2018-12-31T12:34:56"
         }
       }

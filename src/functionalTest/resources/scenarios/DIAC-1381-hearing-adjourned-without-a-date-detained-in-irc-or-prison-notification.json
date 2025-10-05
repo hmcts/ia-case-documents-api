@@ -12,8 +12,8 @@
         "replacements": {
           "appealReferenceNumber": "HU/50001/2025",
           "listCaseHearingCentre": "taylorHouse",
+          "appealSubmissionDate": "{$TODAY}",
           "hearingCentre": "taylorHouse",
-          "listCaseHearingCentre": "taylorHouse",
           "adjournHearingWithoutDateReasons": "Sample reasons",
           "isAdmin": "Yes",
           "isAcceleratedDetainedAppeal": "No",
