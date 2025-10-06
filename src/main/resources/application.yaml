@@ -782,7 +782,7 @@ security:
       - "caseListing"
       - "removeRepresentation"
       - "removeLegalRepresentative"
-      - "markAsRemitted"
+      - "markAppealAsRemitted"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
