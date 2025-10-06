@@ -20,7 +20,6 @@
           "ccdReferenceNumberForDisplay": "1234-5678-9012-3457",
           "updateTribunalDecisionList": "underRule31",
           "updatedAppealDecision": "Dismissed",
-          "appealDecision": "Allowed",
           "updateTribunalDecisionDate": "2025-10-01",
           "correctedDecisionAndReasons": [
             {
@@ -50,7 +49,6 @@
         "appealReferenceNumber": "$/(.+)/",
         "updateTribunalDecisionList": "underRule31",
         "updatedAppealDecision": "Dismissed",
-        "appealDecision": "Allowed",
         "updateTribunalDecisionDate": "2025-10-01",
         "notificationAttachmentDocuments": [
           {
