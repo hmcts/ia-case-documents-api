@@ -4,6 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
+      "id": 1321,
       "eventId": "submitAppeal",
       "state": "appealStarted",
       "caseData": {
