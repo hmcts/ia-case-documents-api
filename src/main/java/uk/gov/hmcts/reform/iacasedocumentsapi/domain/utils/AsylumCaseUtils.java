@@ -233,6 +233,9 @@ public class AsylumCaseUtils {
         return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
+    public static Optional<Document> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
+        return asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT);
+    }
 
     public static Optional<IdValue<DocumentWithMetadata>> getLatestAddendumEvidenceDocument(AsylumCase asylumCase) {
         List<IdValue<DocumentWithMetadata>> addendums = getAddendumEvidenceDocuments(asylumCase);
