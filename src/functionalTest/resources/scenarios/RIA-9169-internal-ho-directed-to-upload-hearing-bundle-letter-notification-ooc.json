@@ -1,0 +1,72 @@
+{
+  "description": "RIA-9169 - HO directed to review the appeal - Non Detained letter notification - Out of country",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 9169,
+      "eventId": "requestRespondentEvidence",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "appellantInUk": "No",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES",
+          "appellantInDetention": "No",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Send your evidence",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+28}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentEvidence"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "appellantInUk": "No",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+        "appellantInDetention": "No",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Send your evidence",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+28}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentEvidence"
+            }
+          }
+        ]
+      },
+      "notificationsSent": [
+        {
+          "id": "9169_INTERNAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER",
+          "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+        }
+      ]
+    }
+  }
+}

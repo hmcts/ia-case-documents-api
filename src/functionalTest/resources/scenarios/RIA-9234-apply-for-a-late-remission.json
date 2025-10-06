@@ -1,0 +1,76 @@
+{
+  "description": "RIA-9234 Legal rep apply for a late remission for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 92342,
+      "eventId": "requestFeeRemission",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "appealType": "protection",
+          "isRemissionsEnabled": "Yes",
+          "lateRemissionType": "hoWaiverRemission",
+          "remissionClaim": "legalAid",
+          "legalAidAccountNumber": "1A234B"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "appealType": "protection",
+        "isRemissionsEnabled": "Yes",
+        "lateRemissionType": "hoWaiverRemission",
+        "remissionClaim": "legalAid",
+        "legalAidAccountNumber": "1A234B",
+        "notificationsSent": [
+          {
+            "id": "92342_LEGAL_REPRESENTATIVE_APPLY_FOR_LATE_REMISSION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "92342_ADMIN_OFFICER_LATE_REMISSION_SUBMITTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "92342_LEGAL_REPRESENTATIVE_APPLY_FOR_LATE_REMISSION",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Fee remission requested",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "92342_ADMIN_OFFICER_LATE_REMISSION_SUBMITTED",
+        "recipient": "{$PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL}",
+        "subject": "Immigration and Asylum appeal: Fee remission requested",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

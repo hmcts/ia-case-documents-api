@@ -1,0 +1,66 @@
+{
+  "description": "RIA-7160 Send request case building notification (Non-ADA) to DET prison (The Mount)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "caseOfficer",
+    "input": {
+      "id": 7160,
+      "eventId": "requestCaseBuilding",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll":"awaitingRespondentEvidence",
+          "currentCaseStateVisibleToLegalRepresentative": "awaitingRespondentEvidence",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "requestCaseBuilding",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "7160_INTERNAL_DET_REQUEST_CASE_BUILDING_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7160_INTERNAL_DET_REQUEST_CASE_BUILDING_EMAIL",
+        "recipient": "det-irc-brookhouse@example.com",
+        "subject": "IAFT – SERVE IN PERSON: Appeal reasons form",
+        "body": [
+          "Home Office reference: A1234567",
+          "HMCTS reference: PA/12345/2019",
+          "Appellant name: Talha Awan"
+        ]
+      }
+    ]
+  }
+}

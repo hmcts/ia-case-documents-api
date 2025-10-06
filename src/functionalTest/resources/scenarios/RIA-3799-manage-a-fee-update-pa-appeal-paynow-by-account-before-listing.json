@@ -1,0 +1,56 @@
+{
+  "description": "RIA-3799 Manage a fee update PA appeal paylater by account before listing (CTSC)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 3799,
+      "eventId": "manageFeeUpdate",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType":"protection",
+          "paymentStatus":"Paid",
+          "paAppealTypePaymentOption":"payNow",
+          "feeUpdateRecorded": {
+            "values": [
+              "feeUpdateRecorded"
+            ]
+          },
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "protection",
+        "paymentStatus": "Paid",
+        "notificationsSent": [
+          {
+            "id": "3799_MANAGE_FEE_UPDATE_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "3799_MANAGE_FEE_UPDATE_CASE_OFFICER",
+        "recipient": "{$ctscEmailAddress}",
+        "subject": "Immigration and Asylum appeal: A fee update has been recorded",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

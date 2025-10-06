@@ -1,0 +1,32 @@
+{
+  "description": "RIA-4084-RIA-4467 Send apply notice of change notification after listing",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 4084,
+      "eventId": "nocRequest",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "journeyType": "rep",
+          "ariaListingReference": "PA/12345/2019",
+          "listCaseHearingCentre": "taylorHouse",
+          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "contactPreference": "wantsEmail",
+          "email": "{$TEST_CITIZEN_USERNAME}",
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_NOC_REQUEST_DECISION_APPELLANT_EMAIL,_NOC_REQUEST_DECISION_HOME_OFFICE,_NOC_REQUEST_DECISION_LEGAL_REP])"
+    }
+   }
+}

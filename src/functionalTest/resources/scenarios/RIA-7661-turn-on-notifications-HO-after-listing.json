@@ -1,0 +1,68 @@
+{
+  "description": "RIA-7661 Send notification to HO when turn on notification event completed by admin or legal officer after listing",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7661,
+      "eventId": "turnOnNotifications",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-ejp-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appealReferenceNumber": "PA/12345/2018",
+          "upperTribunalReferenceNumber": "UI-2020-123456",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isNotificationTurnedOff": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-ejp-appeal-submitted.json",
+      "replacements": {
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "appealReferenceNumber": "PA/12345/2018",
+        "upperTribunalReferenceNumber": "UI-2020-123456",
+        "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "isNotificationTurnedOff": "Yes",
+        "notificationsSent": [
+          {
+            "id": "7661_TURN_ON_NOTIFICATIONS_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7661_TURN_ON_NOTIFICATIONS_RESPONDENT",
+        "recipient": "{$HOME_OFFICE_EMAIL_APC}",
+        "subject": "Immigration and Asylum appeal: Appeal transferred to the First-tier tribunal",
+        "body": [
+          "PA/12345/2018",
+          "LP/12345/2019",
+          "123456789",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "PA/12345/2018",
+          "UI-2020-123456"
+        ]
+      }
+    ]
+  }
+}

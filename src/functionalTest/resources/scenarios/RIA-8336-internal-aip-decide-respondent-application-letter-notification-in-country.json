@@ -1,0 +1,118 @@
+{
+  "description": "RIA-8336 Send letter notification to appellant for decided application submitted by Respondent (Granted) - In country (internal case creation)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 8336,
+      "eventId": "decideAnApplication",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "No",
+          "appellantInUk": "Yes",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "decideAnApplicationId": "1",
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[
+                  {
+                    "id": "1",
+                    "value": {
+                      "document_url": "http://document-store/AAA",
+                      "document_filename": "Annexure-E.pdf",
+                      "document_binary_url": "http://document-store/AAA/binary"
+                    }
+                  }
+                ],
+                "applicant":"Respondent",
+                "date":"",
+                "decision":"Granted",
+                "state":"caseBuilding",
+                "applicantRole":"caseworker-ia-homeofficeapc",
+                "decisionReason":"A reason for the decision",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Tribunal Caseworker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "No",
+        "appellantInUk": "Yes",
+        "appellantHasFixedAddress": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "decideAnApplicationId": "1",
+        "makeAnApplications": [
+          {
+            "id": "1",
+            "value": {
+              "type":"Other",
+              "details":"",
+              "evidence":[
+                {
+                  "id": "1",
+                  "value": {
+                    "document_url": "http://document-store/AAA",
+                    "document_filename": "Annexure-E.pdf",
+                    "document_binary_url": "http://document-store/AAA/binary"
+                  }
+                }
+              ],
+              "applicant":"Respondent",
+              "date":"",
+              "decision":"Granted",
+              "state":"caseBuilding",
+              "applicantRole":"caseworker-ia-homeofficeapc",
+              "decisionReason":"A reason for the decision",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "Tribunal Caseworker"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "8336_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8336_INTERNAL_RESPONDENT_APPLICATION_DECIDED_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

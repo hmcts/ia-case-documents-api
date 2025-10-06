@@ -1,0 +1,81 @@
+{
+  "description": "RIA-5559 send bail documents edited notification to HomeOffice and legal representative",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 5553,
+      "eventId": "uploadDocuments",
+      "state": "bailSummaryUploaded",
+      "caseData": {
+        "template": "minimal-bail-application-submitted-edited-documents.json",
+        "replacements": {
+          "isLegallyRepresentedForFlag": "Yes",
+          "currentCaseStateVisibleToJudge": "applicationSubmitted",
+          "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+          "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+          "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted-edited-documents.json",
+      "replacements": {
+        "isLegallyRepresentedForFlag": "Yes",
+        "currentCaseStateVisibleToJudge": "applicationSubmitted",
+        "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+        "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+        "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted",
+        "notificationsSent": [
+          {
+            "id": "5559_BAIL_EDITED_DOCUMENTS_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "5559_BAIL_EDITED_DOCUMENTS_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "5559_BAIL_EDITED_DOCUMENTS_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: New document uploaded",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "The Tribunal has edited, removed or added the following document(s):",
+          "B1_Bail_Form_0222_save.pdf",
+          "document2.pdf",
+          "",
+          "Reason the document(s) were edited, removed or added:",
+          "editing B1, deleting newDocTxt, adding newDocTxt2"
+        ]
+      },
+      {
+        "reference": "5559_BAIL_EDITED_DOCUMENTS_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Bail application: New document uploaded",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "The Tribunal has edited, removed or added the following document(s):",
+          "B1_Bail_Form_0222_save.pdf",
+          "document2.pdf",
+          "",
+          "Reason the document(s) were edited, removed or added:",
+          "editing B1, deleting newDocTxt, adding newDocTxt2"
+        ]
+      }
+    ]
+  }
+}

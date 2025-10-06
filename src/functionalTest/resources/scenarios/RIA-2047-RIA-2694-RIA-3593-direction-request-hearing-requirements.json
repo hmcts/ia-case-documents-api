@@ -1,0 +1,95 @@
+{
+  "description": "RIA-2047-RIA-2694-RIA-3593 direction to legal rep to submit hearing requirements",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 2047,
+      "eventId": "requestHearingRequirementsFeature",
+      "state": "submitHearingRequirements",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "The appeal is going to a hearing and you should tell the Tribunal if the appellant has any hearing requirements.\n\n# Next steps\n\nVisit the online service and use the HMCTS reference to find the case. You'll be able to submit the hearing requirements using the Overview tab.\nThe Tribunal will review the hearing requirements and any requests for additional adjustments. You'll then be sent a hearing date.\nIf you do not submit the hearing requirements within 5 working days, the Tribunal may not be able to accommodate the appellant's needs for the hearing.",
+                "parties": "legalRepresentative",
+                "dateDue": "{$TODAY+5}",
+                "dateSent": "{$TODAY}",
+                "tag": "legalRepresentativeHearingRequirements"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "The appeal is going to a hearing and you should tell the Tribunal if the appellant has any hearing requirements.\n\n# Next steps\n\nVisit the online service and use the HMCTS reference to find the case. You'll be able to submit the hearing requirements using the Overview tab.\nThe Tribunal will review the hearing requirements and any requests for additional adjustments. You'll then be sent a hearing date.\nIf you do not submit the hearing requirements within 5 working days, the Tribunal may not be able to accommodate the appellant's needs for the hearing.",
+              "parties": "legalRepresentative",
+              "dateDue": "{$TODAY+5}",
+              "dateSent": "{$TODAY}",
+              "tag": "legalRepresentativeHearingRequirements"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "2047_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2047_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2047_LEGAL_REPRESENTATIVE_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: submit hearing requirements direction",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "The appeal is going to a hearing and you should tell the Tribunal if the appellant has any hearing requirements.",
+          "Next steps",
+          "Visit the online service and use the HMCTS reference to find the case. You'll be able to submit the hearing requirements using the Overview tab.",
+          "The Tribunal will review the hearing requirements and any requests for additional adjustments. You'll then be sent a hearing date.",
+          "If you do not submit the hearing requirements within 5 working days, the Tribunal may not be able to accommodate the appellant's needs for the hearing.",
+          "{$TODAY+5|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "2047_CASE_OFFICER_REQUEST_HEARING_REQUIREMENTS_DIRECTION",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: submit hearing requirements direction",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

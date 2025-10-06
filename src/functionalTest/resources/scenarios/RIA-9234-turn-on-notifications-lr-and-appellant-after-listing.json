@@ -1,0 +1,136 @@
+{
+  "description": "RIA-9234 Send notification to LR and Appellant when turn on notification event completed by admin or legal officer after listing for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 923428,
+      "eventId": "turnOnNotifications",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-ejp-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "upperTribunalReferenceNumber": "UI-2020-123456",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appealReferenceNumber": "PA/12345/2018",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isNotificationTurnedOff": "Yes",
+          "isLegallyRepresentedEjp": "Yes",
+          "legalRepEmailEjp": "ia.legalrep.a.ccd@gmail.com",
+          "legalRepCompanyEjp": "Legal company",
+          "legalRepGivenNameEjp": "John",
+          "legalRepFamilyNameEjp": "Smith",
+          "legalRepReferenceEjp": "TEST923428",
+          "email": "appellant@test.com",
+          "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+          "ccdReferenceNumberForDisplay": "refNumber",
+          "appellantPinInPost": {
+            "accessCode": "AI123BX",
+            "expiryDate": "01/01/2022",
+            "pinUsed": "No"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-ejp-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "upperTribunalReferenceNumber": "UI-2020-123456",
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "appealReferenceNumber": "PA/12345/2018",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "isNotificationTurnedOff": "Yes",
+        "isLegallyRepresentedEjp": "Yes",
+        "legalRepEmailEjp": "ia.legalrep.a.ccd@gmail.com",
+        "legalRepCompanyEjp": "Legal company",
+        "legalRepGivenNameEjp": "John",
+        "legalRepFamilyNameEjp": "Smith",
+        "legalRepReferenceEjp": "TEST923428",
+        "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+        "notificationsSent": [
+          {
+            "id": "923428_TURN_ON_NOTIFICATIONS_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "923428_APPELLANT_NOTIFICATIONS_TURNED_ON",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "923428_APPELLANT_NOTIFICATIONS_TURNED_ON_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "923428_NOTIFICATIONS_TURNED_ON",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "923428_TURN_ON_NOTIFICATIONS_RESPONDENT",
+        "recipient": "{$HOME_OFFICE_EMAIL_APC}",
+        "subject": "Immigration and Asylum appeal: Appeal transferred to the First-tier tribunal",
+        "body": [
+          "PA/12345/2018",
+          "LP/12345/2019",
+          "123456789",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "PA/12345/2018",
+          "UI-2020-123456"
+        ]
+      },
+      {
+        "reference": "923428_NOTIFICATIONS_TURNED_ON",
+        "recipient": "ia.legalrep.a.ccd@gmail.com",
+        "subject": "Immigration and asylum appeal: Appeal transferred to the First-tier Tribunal",
+        "body": [
+          "HMCTS reference: PA/12345/2018",
+          "Listing reference: LP/12345/2019",
+          "Your reference: TEST923428",
+          "Appellant name: Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "923428_APPELLANT_NOTIFICATIONS_TURNED_ON",
+        "recipient": "appellant@test.com",
+        "subject": "Immigration and asylum appeal: Appeal transferred to the First-tier Tribunal",
+        "body": [
+          "Appeal reference: PA/12345/2018",
+          "Listing reference: LP/12345/2019",
+          "Home Office reference: 123456789"
+        ]
+      },
+      {
+        "reference": "923428_APPELLANT_NOTIFICATIONS_TURNED_ON_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "Appeal reference: PA/12345/2018"
+        ]
+      }
+    ]
+  }
+}
+

@@ -24,7 +24,21 @@ appealType	refusalOfHumanRights	Refusal of a human rights claim
 appealType	refusalOfEu	Refusal of application under the EEA regulations
 appealType	deprivation	Deprivation of citizenship
 appealType	euSettlementScheme	EU Settlement Scheme
-hearingCentreName	belfast	Belfast
+hearingCentre	birmingham	Birmingham
+hearingCentre	bradford	Bradford
+hearingCentre	coventry	Coventry Magistrates Court
+hearingCentre	glasgow	Glasgow (Eagle Building)
+hearingCentre	glasgowTribunalsCentre	Glasgow Tribunals Centre
+hearingCentre	hattonCross	Hatton Cross
+hearingCentre	manchester	Manchester
+hearingCentre	newcastle	Newcastle Civil & Family Courts and Tribunals Centre
+hearingCentre	newport	Newport
+hearingCentre	northShields	North Shields
+hearingCentre	nottingham	Nottingham Justice Centre
+hearingCentre	taylorHouse	Taylor House
+hearingCentre	belfast	Belfast
+hearingCentre	remoteHearing	Remote hearing
+hearingCentre	yarlsWood	Yarl's Wood
 hearingCentreName	birmingham	Birmingham
 hearingCentreName	bradford	Bradford
 hearingCentreName	coventry	Coventry Magistrates Court
@@ -37,6 +51,8 @@ hearingCentreName	newport	Newport
 hearingCentreName	northShields	North Shields
 hearingCentreName	nottingham	Nottingham Justice Centre
 hearingCentreName	taylorHouse	Taylor House
+hearingCentreName	decisionWithoutHearing	Decision Without Hearing
+hearingCentreName	belfast	Belfast
 hearingCentreName	harmondsworth	Harmondsworth
 hearingCentreName	hendon	Hendon
 hearingCentreName	yarlsWood	Yarl's Wood
@@ -49,7 +65,6 @@ hearingCentreName	leedsMags	Leeds Mags
 hearingCentreName	alloaSherrif	Alloa Sherrif Court
 hearingCentreName	iacNationalVirtual	IAC National (Virtual)
 hearingCentreName	decisionWithoutHearing	Decision Without Hearing
-hearingCentreAddress	belfast	Belfast Laganside Court, Oxford Street, Belfast, BT1 3LL
 hearingCentreName	remoteHearing	Remote hearing
 hearingCentreAddress	birmingham	IAC Birmingham, Birmingham Justice Centre, 33 Bull Street, Birmingham, B4 6DS
 hearingCentreAddress	bradford	IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH
@@ -63,6 +78,7 @@ hearingCentreAddress	newport	IAC Newport, Columbus House, Langstone Business Par
 hearingCentreAddress	northShields	IAC North Shields, Kings Court, Royal Quays, Earl Grey Way, North Shields, NE29 6AR
 hearingCentreAddress	nottingham	Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE
 hearingCentreAddress	taylorHouse	IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU
+hearingCentreAddress	belfast	Belfast Laganside Court, Oxford Street, Belfast, BT1 3LL
 hearingCentreAddress	harmondsworth	Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB
 hearingCentreAddress	hendon	Hendon Magistrates' Court, The Court House, The Hyde, NW9 7BY
 hearingCentreAddress	yarlsWood	Yarl's Wood Immigration and Asylum Hearing Centre, Twinwood Road, MK44 1FD

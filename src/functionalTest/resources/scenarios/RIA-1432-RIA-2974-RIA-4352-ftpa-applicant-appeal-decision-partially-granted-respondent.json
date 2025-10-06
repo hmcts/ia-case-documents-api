@@ -1,0 +1,81 @@
+{
+  "description": "RIA-1432-RIA-2974-RIA-3754-RIA-4352 FTPA Applicant Application Decision Partially Granted Respondent",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 1007,
+      "eventId": "leadershipJudgeFtpaDecision",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaRespondentDecisionOutcomeType": "partiallyGranted",
+          "ftpaApplicantType": "respondent",
+          "ariaListingReference": "987654321",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "1007_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1007_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1007_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1007_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "987654321",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "1007_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "987654321",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "1007_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+        "recipient": "{$upperTribunalPermissionApplicationsEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
+        "body": [
+          "PA/12345/2019",
+          "987654321",
+          "Talha Awan",
+          "You must create a bundle for the Upper Tribunal. Follow these steps to do this:"
+        ]
+      }
+    ]
+  }
+}

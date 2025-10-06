@@ -1,0 +1,69 @@
+{
+  "description": "RIA-3155 Send reinstate appeal notification before listing",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 31551,
+      "eventId": "reinstateAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "stateBeforeEndAppeal": "appealSubmitted",
+          "reinstateAppealDate": "{$TODAY}",
+          "reinstateAppealReason": "Withdraw",
+          "reinstatedDecisionMaker": "Admin Officer"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "stateBeforeEndAppeal": "appealSubmitted",
+        "reinstateAppealDate": "{$TODAY}",
+        "reinstateAppealReason": "Withdraw",
+        "reinstatedDecisionMaker": "Admin Officer",
+        "notificationsSent": [
+          {
+            "id": "31551_REINSTATE_APPEAL_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "31551_REINSTATE_APPEAL_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "31551_REINSTATE_APPEAL_LEGAL_REP",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: appeal reinstated",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "31551_REINSTATE_APPEAL_HOME_OFFICE",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: appeal reinstated",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

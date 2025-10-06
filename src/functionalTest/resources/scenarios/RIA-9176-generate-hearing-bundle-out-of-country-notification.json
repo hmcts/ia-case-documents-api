@@ -1,0 +1,40 @@
+{
+  "description": "RIA-9176 Generate Hearing bundle notification to HO Email out of country",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 9176,
+      "eventId": "generateHearingBundle",
+      "state": "finalBundling",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "listCaseHearingCentre": "harmondsworth",
+          "ariaListingReference": "LP/12345/2019",
+          "appellantInUk": "No"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "listCaseHearingCentre": "harmondsworth",
+        "ariaListingReference": "LP/12345/2019",
+        "appellantInUk": "No",
+        "notificationsSent": [
+          {
+            "id": "9176_GENERATE_HEARING_BUNDLE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

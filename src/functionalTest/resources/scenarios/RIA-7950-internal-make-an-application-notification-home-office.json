@@ -1,0 +1,155 @@
+{
+  "description": "RIA-7950 Send make an application notification home office APC after listing for internal case",
+  "launchDarklyKey": "tcw-application-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "HomeOfficePOU",
+    "input": {
+      "id": 7950,
+      "eventId": "makeAnApplication",
+      "state": "decision",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "currentCaseStateVisibleToHomeOfficeAll":"decision",
+          "currentCaseStateVisibleToLegalRepresentative": "decision",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "PA/12345/2019",
+          "makeAnApplications": [
+            {
+              "id": "2",
+              "value": {
+                "type":"withdraw",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Pending",
+                "state":"decision",
+                "applicantRole":"",
+                "decisionReason":"",
+                "decisionDate":"",
+                "decisionMaker": ""
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Pending",
+                "state":"decision",
+                "applicantRole":"",
+                "decisionReason":"",
+                "decisionDate":"",
+                "decisionMaker": ""
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Refused",
+                "state":"decision",
+                "applicantRole":"caseworker-ia-homeofficeapc",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "currentCaseStateVisibleToHomeOfficeAll":"decision",
+        "currentCaseStateVisibleToLegalRepresentative": "decision",
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "PA/12345/2019",
+        "makeAnApplications": [
+          {
+            "id": "2",
+            "value": {
+              "type":"withdraw",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"{$TODAY}",
+              "decision":"Pending",
+              "state":"decision",
+              "applicantRole":"",
+              "decisionReason":"",
+              "decisionDate":"",
+              "decisionMaker": ""
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "type":"Other",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"{$TODAY}",
+              "decision":"Pending",
+              "state":"decision",
+              "applicantRole":"",
+              "decisionReason":"",
+              "decisionDate":"",
+              "decisionMaker": ""
+            }
+          },
+          {
+            "id": "1",
+            "value": {
+              "type":"Other",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"{$TODAY}",
+              "decision":"Refused",
+              "state":"decision",
+              "applicantRole":"caseworker-ia-homeofficeapc",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "Judge"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "7950_MAKE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7950_MAKE_AN_APPLICATION_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Your application has been submitted",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

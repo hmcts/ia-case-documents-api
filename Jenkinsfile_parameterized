@@ -16,6 +16,9 @@ properties([
 def secrets = [
     'ia-${env}': [
 
+        secret('ia-gov-notify-key', 'IA_GOV_NOTIFY_KEY'),
+        secret('ia-bail-gov-notify-key', 'IA_BAIL_GOV_NOTIFY_KEY'),
+
         secret('test-caseofficer-username', 'TEST_CASEOFFICER_USERNAME'),
         secret('test-caseofficer-password', 'TEST_CASEOFFICER_PASSWORD'),
         secret('test-law-firm-a-username', 'TEST_LAW_FIRM_A_USERNAME'),
@@ -41,13 +44,117 @@ def secrets = [
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
         secret('gov-call-charges-url', 'IA_BAIL_GOV_CALL_CHARGES_URL'),
 
-        secret('generic-docker-pact-broker-password', 'GENERIC_DOCKER_PACT_BROKER_YAML_PASS')
+        secret('generic-docker-pact-broker-password', 'GENERIC_DOCKER_PACT_BROKER_YAML_PASS'),
 
         secret('test-homeoffice-lart-username', 'TEST_HOMEOFFICE_LART_USERNAME'),
         secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD'),
 
         secret('test-homeoffice-pou-username', 'TEST_HOMEOFFICE_POU_USERNAME'),
-        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD')
+        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
+        secret('hearing-centre-bradford-email', 'IA_HEARING_CENTRE_BRADFORD_EMAIL'),
+        secret('hearing-centre-manchester-email', 'IA_HEARING_CENTRE_MANCHESTER_EMAIL'),
+        secret('hearing-centre-newport-email', 'IA_HEARING_CENTRE_NEWPORT_EMAIL'),
+        secret('hearing-centre-taylor-house-email', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+        secret('hearing-centre-north-shields-email', 'IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL'),
+        secret('hearing-centre-birmingham-email', 'IA_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
+        secret('hearing-centre-hatton-cross-email', 'IA_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
+        secret('hearing-centre-glasgow-email', 'IA_HEARING_CENTRE_GLASGOW_EMAIL'),
+        secret('hearing-centre-virtual-region-email', 'IA_HEARING_CENTRE_VIRTUAL_REGION_EMAIL'),
+
+        secret('home-office-bradford-email', 'IA_HOME_OFFICE_BRADFORD_EMAIL'),
+        secret('home-office-manchester-email', 'IA_HOME_OFFICE_MANCHESTER_EMAIL'),
+        secret('home-office-newport-email', 'IA_HOME_OFFICE_NEWPORT_EMAIL'),
+        secret('home-office-taylor-house-email', 'IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
+        secret('home-office-north-shields-email', 'IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL'),
+        secret('home-office-birmingham-email', 'IA_HOME_OFFICE_BIRMINGHAM_EMAIL'),
+        secret('home-office-hatton-cross-email', 'IA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
+        secret('home-office-glasgow-email', 'IA_HOME_OFFICE_GLASGOW_EMAIL'),
+        secret('home-office-virtual-region-email', 'IA_HOME_OFFICE_VIRTUAL_REGION_EMAIL'),
+        secret('home-office-apc-email', 'IA_HOME_OFFICE_APC_EMAIL'),
+
+        secret('ftpa-home-office-bradford-email', 'IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL'),
+        secret('ftpa-home-office-taylor-house-email', 'IA_FTPA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL'),
+        secret('ftpa-home-office-north-shields-email', 'IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL'),
+        secret('ftpa-home-office-hatton-cross-email', 'IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL'),
+        secret('ftpa-home-office-yarlswood-email', 'IA_FTPA_HOME_OFFICE_YARLSWOOD_EMAIL'),
+
+        secret('hearing-centre-bradford-telephone', 'IA_HEARING_CENTRE_BRADFORD_TELEPHONE'),
+        secret('hearing-centre-manchester-telephone', 'IA_HEARING_CENTRE_MANCHESTER_TELEPHONE'),
+        secret('hearing-centre-newport-telephone', 'IA_HEARING_CENTRE_NEWPORT_TELEPHONE'),
+        secret('hearing-centre-taylor-house-telephone', 'IA_HEARING_CENTRE_TAYLOR_HOUSE_TELEPHONE'),
+        secret('hearing-centre-north-shields-telephone', 'IA_HEARING_CENTRE_NORTH_SHIELDS_TELEPHONE'),
+        secret('hearing-centre-birmingham-telephone', 'IA_HEARING_CENTRE_BIRMINGHAM_TELEPHONE'),
+        secret('hearing-centre-hatton-cross-telephone', 'IA_HEARING_CENTRE_HATTON_CROSS_TELEPHONE'),
+        secret('hearing-centre-glasgow-telephone', 'IA_HEARING_CENTRE_GLASGOW_TELEPHONE'),
+        secret('hearing-centre-virtual-region-telephone', 'IA_HEARING_CENTRE_VIRTUAL_REGION_TELEPHONE'),
+
+        secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
+        secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
+        secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
+
+        secret('ctsc-admin-ftpa-submitted-email', 'IA_CTSC_ADMIN_FTPA_SUBMITTED'),
+        secret('respondent-ftpa-submitted-email', 'IA_RESPONDENT_FTPA_SUBMITTED'),
+
+        secret('test-homeoffice-apc-username', 'TEST_HOMEOFFICE_APC_USERNAME'),
+        secret('test-homeoffice-apc-password', 'TEST_HOMEOFFICE_APC_PASSWORD'),
+        secret('test-homeoffice-lart-username', 'TEST_HOMEOFFICE_LART_USERNAME'),
+        secret('test-homeoffice-lart-password', 'TEST_HOMEOFFICE_LART_PASSWORD'),
+        secret('test-homeoffice-pou-username', 'TEST_HOMEOFFICE_POU_USERNAME'),
+        secret('test-homeoffice-pou-password', 'TEST_HOMEOFFICE_POU_PASSWORD'),
+        secret('test-homeoffice-generic-username', 'TEST_HOMEOFFICE_GENERIC_USERNAME'),
+        secret('test-homeoffice-generic-password', 'TEST_HOMEOFFICE_GENERIC_PASSWORD'),
+        secret('test-judge-x-username', 'TEST_JUDGE_X_USERNAME'),
+        secret('test-judge-x-password', 'TEST_JUDGE_X_PASSWORD'),
+        secret('test-citizen-mobile', 'TEST_CITIZEN_MOBILE'),
+        secret('home-office-end-appeal-email', 'IA_HOME_OFFICE_END_APPEAL_EMAIL'),
+        secret('home-office-allowed-appeal-email', 'IA_HOME_OFFICE_ALLOWED_APPEAL_EMAIL'),
+        secret('home-office-dismissed-appeal-email', 'IA_HOME_OFFICE_DISMISSED_APPEAL_EMAIL'),
+        secret('home-office-apply-for-costs-email', 'HO_APPLY_FOR_COSTS_EMAIL'),
+
+        secret('admin-officer-review-hearing-requirements-email', 'IA_ADMIN_OFFICER_REVIEW_HEARING_REQUIREMENTS_EMAIL'),
+
+        secret('admin-office-newport-email', 'IA_ADMIN_NEWPORT_EMAIL'),
+        secret('admin-office-taylor-house-email', 'IA_ADMIN_TAYLOR_HOUSE_EMAIL'),
+        secret('admin-office-hatton-cross-email', 'IA_ADMIN_HATTON_CROSS_EMAIL'),
+        secret('admin-office-manchester-email', 'IA_ADMIN_MANCHESTER_EMAIL'),
+        secret('admin-office-glasgow-email', 'IA_ADMIN_GLASGOW_EMAIL'),
+        secret('admin-office-bradford-email', 'IA_ADMIN_BRADFORD_EMAIL'),
+        secret('admin-office-birmingham-email', 'IA_ADMIN_BIRMINGHAM_EMAIL'),
+        secret('admin-office-harmondsworth-email', 'IA_ADMIN_HARMONDSWORTH_EMAIL'),
+        secret('admin-office-yarlswood-email', 'IA_ADMIN_YARLSWOOD_EMAIL'),
+        secret('admin-office-virtual-region-email', 'IA_ADMIN_VIRTUAL_REGION_EMAIL'),
+
+        secret('case-officer-list-case-email', 'IA_CASE_OFFICER_LIST_CASE_EMAIL'),
+
+
+        secret('ctsc-admin-ftpa-decision-email', 'IA_CTSC_ADMIN_FTPA_DECISION'),
+        secret('ctsc-admin-pending-payment-email', 'IA_CTSC_ADMIN_PENDING_PAYMENT_EMAIL'),
+
+        secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
+        secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
+        secret('fees-admin-officer-email', 'FEES_ADMIN_OFFICER_EMAIL'),
+        secret('payment-exceptions-admin-officer-email', 'PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL'),
+
+        secret('home-office-email-apc', 'HOME_OFFICE_EMAIL_APC'),
+        secret('home-office-email-lart', 'HOME_OFFICE_EMAIL_LART'),
+        secret('upper-tribunal-notices-email', 'IA_UPPER_TRIBUNAL_NOTICES_EMAIL'),
+        secret('utiac-permission-applications-email', 'IA_UPPER_TRIBUNAL_PERMISSION_APPLICATIONS_EMAIL'),
+        secret('nbc-email', 'IA_NBC_EMAIL'),
+        secret('ctsc-email', 'IA_CTSC_EMAIL'),
+
+        secret('bail-hearing-centre-bradford-email', 'IA_BAIL_HEARING_CENTRE_BRADFORD_EMAIL'),
+        secret('bail-hearing-centre-birmingham-email', 'IA_BAIL_HEARING_CENTRE_BIRMINGHAM_EMAIL'),
+        secret('bail-hearing-centre-newport-email', 'IA_BAIL_HEARING_CENTRE_NEWPORT_EMAIL'),
+        secret('bail-hearing-centre-taylor-house-email', 'IA_BAIL_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL'),
+        secret('bail-hearing-centre-hatton-cross-email', 'IA_BAIL_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
+        secret('bail-hearing-centre-manchester-email', 'IA_BAIL_HEARING_CENTRE_MANCHESTER_EMAIL'),
+        secret('bail-hearing-centre-glasgow-email', 'IA_BAIL_HEARING_CENTRE_GLASGOW_EMAIL'),
+        secret('bail-hearing-centre-yarlswood-email', 'IA_BAIL_HEARING_CENTRE_YARLSWOOD_EMAIL'),
+
+        secret('bail-home-office-email', 'IA_BAIL_HOME_OFFICE_EMAIL'),
+        secret('unrepresented-ada-det-email', 'IA_UNREPRESENTED_ADA_DET_EMAIL'),
+        secret('bail-upper-tribunal-email', 'IA_BAIL_UPPER_TRIBUNAL_EMAIL'),
+        secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE')
     ]
 ]
 
@@ -65,6 +172,7 @@ withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.E
     env.DOCMOSIS_ENDPOINT = "https://docmosis-development.platform.hmcts.net"
     env.IA_IDAM_REDIRECT_URI = "https://ia-case-api-aat.service.core-compute-aat.internal/oauth2/callback"
     env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
+    env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
     env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
     env.CASE_DOCUMENT_AM_URL = "http://ccd-case-document-am-api-aat.service.core-compute-aat.internal"

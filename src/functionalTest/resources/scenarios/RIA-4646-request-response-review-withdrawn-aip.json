@@ -1,0 +1,117 @@
+{
+  "description": "RIA-4646 Send response review direction to Appellant (AIP) - Decision withdrawn",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 4646,
+      "eventId": "requestResponseReview",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "taylorHouse",
+          "homeOfficeReferenceNumber": "1212-0099-0062-8083",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "The Home Office has replied to your Appeal Skeleton Argument and evidence. You should review their response.\n\n# Next steps\n\nYou have 5 days to review the Home Office response. If you want to respond to what they have said, you should email the Tribunal.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
+                "parties": "appellant",
+                "dateDue": "{$TODAY+5}",
+                "dateSent": "{$TODAY}",
+                "tag": "requestResponseReview"
+              }
+            }
+          ],
+          "appealReviewOutcome": "decisionWithdrawn",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "taylorHouse",
+        "homeOfficeReferenceNumber": "1212-0099-0062-8083",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "The Home Office has replied to your Appeal Skeleton Argument and evidence. You should review their response.\n\n# Next steps\n\nYou have 5 days to review the Home Office response. If you want to respond to what they have said, you should email the Tribunal.\nIf you do not respond within 5 days, the case will automatically go to hearing.",
+              "parties": "appellant",
+              "dateDue": "{$TODAY+5}",
+              "dateSent": "{$TODAY}",
+              "tag": "requestResponseReview"
+            }
+          }
+        ],
+        "appealReviewOutcome": "decisionWithdrawn",
+        "notificationsSent": [
+          {
+            "id": "4646_REQUEST_RESPONSE_REVIEW_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4646_REQUEST_RESPONSE_REVIEW_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4646_REQUEST_RESPONSE_REVIEW_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: The Home Office has reviewed your appeal",
+        "body": [
+          "PA/12345/2019",
+          "1212-0099-0062-8083",
+          "Pablo Jimenez,",
+          "{$iaAipFrontendUrl}",
+          "{$hearingCentreEmailAddresses.taylorHouse}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "4646_REQUEST_RESPONSE_REVIEW_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "{$iaAipFrontendUrl}",
+          "{$hearingCentreEmailAddresses.taylorHouse}"
+        ]
+      }
+    ]
+  }
+}

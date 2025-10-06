@@ -1,0 +1,65 @@
+{
+  "description": "RIA-7032 End appeal notification to Home Office",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7032,
+      "eventId": "endAppeal",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "endAppealOutcome": "Withdrawn",
+          "endAppealApproverType": "Judge",
+          "endAppealDate": "2019-08-13",
+          "endAppealOutcomeReason": "some outcome reason",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {   
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "endAppealOutcome": "Withdrawn",
+        "endAppealApproverType": "Judge",
+        "endAppealDate": "2019-08-13",
+        "endAppealOutcomeReason": "some outcome reason",
+        "notificationsSent": [
+          {
+            "id": "7032_END_APPEAL_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7032_END_APPEAL_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "Withdrawn",
+          "some outcome reason",
+          "Judge",
+          "13 Aug 2019",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

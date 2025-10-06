@@ -1,0 +1,101 @@
+{
+  "description": "RIA-9233 Send letter notification to Legal Rep for Decide Application (by appellant) - In country (internal case creation - represented)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 9233,
+      "eventId": "decideAnApplication",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "decideAnApplicationId": "1",
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant": "",
+                "date":"",
+                "decision":"Granted",
+                "state":"appealSubmitted",
+                "applicantRole": "ctsc",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
+            }
+          ],
+          "appellantInDetention": "No",
+          "appellantInUk": "Yes",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "decideAnApplicationId": "1",
+        "makeAnApplications": [
+          {
+            "id": "1",
+            "value": {
+              "type":"Other",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"",
+              "decision":"Granted",
+              "state":"appealSubmitted",
+              "applicantRole":"ctsc",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "Judge"
+            }
+          }
+        ],
+        "appellantInDetention": "No",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "9233_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "9233_INTERNAL_DECIDE_APPLICATION_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

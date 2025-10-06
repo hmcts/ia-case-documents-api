@@ -1,0 +1,40 @@
+{
+  "description": "RIA-8064 payment reminder to legal-rep - Partially approved",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "SystemUser",
+    "input": {
+      "id": 8064,
+      "eventId": "recordRemissionReminder",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType": "protection",
+          "isRemissionsEnabled": "Yes",
+          "remissionType": "exceptionalCircumstancesRemission",
+          "remissionDecision": "partiallyApproved",
+          "remittedAmount": "10000",
+          "amountLeftToPay": "4000",
+          "ccdReferenceNumberForDisplay": "1111222233334444",
+          "isDlrmFeeRemissionEnabled": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "8064_REMISSION_REMINDER_DECISION_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

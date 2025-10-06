@@ -1,0 +1,78 @@
+{
+  "description": "RIA-3631 Do not send respondent review direction (Taylor House hearing centre) - Home Office notification disabled",
+  "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1005,
+      "eventId": "requestRespondentReview",
+      "state": "caseUnderReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Review the built case",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentReview"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "hearingCentre": "taylorHouse",
+          "legalRepresentativeEmailAddress": "RIA-3631-test-case-1@example.com"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "legalRepresentativeEmailAddress": "RIA-3631-test-case-1@example.com",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Review the built case",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentReview"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1005_LEGAL_REPRESENTATIVE_RESPONDENT_REVIEW_CASE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "hearingCentre": "taylorHouse"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1005_LEGAL_REPRESENTATIVE_RESPONDENT_REVIEW_CASE",
+        "recipient": "RIA-3631-test-case-1@example.com",
+        "subject": "Immigration and Asylum appeal: direction sent to the Home Office",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "The respondent has been directed to review the Appeal Skeleton Argument by: ",
+          "{$TODAY+14|d MMM yyyy}",
+          "The respondent will review the Appeal Skeleton Argument and provide a response.",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

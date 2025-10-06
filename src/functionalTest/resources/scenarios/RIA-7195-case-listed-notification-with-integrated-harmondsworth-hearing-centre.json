@@ -1,0 +1,88 @@
+{
+  "description": "RIA-7195 Send case listed notification with isIntegrated field (Harmondsworth hearing centre)",
+  "enabled": "{$featureFlag.appealsLocationReferenceData}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1020,
+      "eventId": "listCase",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "PA/12345/2023",
+          "ariaListingReference": "LP/12345/2023",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingCentreAddress": "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB",
+          "listCaseHearingDate": "2023-09-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "isIntegrated": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealReferenceNumber": "PA/12345/2023",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingCentreAddress": "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB",
+        "listCaseHearingDate": "2023-09-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "1020_CASE_LISTED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1020_CASE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1020_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1020_CASE_LISTED_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: check the details of your hearing",
+        "body": [
+          "PA/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      },
+      {
+        "reference": "1020_CASE_LISTED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.harmondsworth}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      },
+      {
+        "reference": "1020_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.harmondsworth}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      }
+    ]
+  }
+}

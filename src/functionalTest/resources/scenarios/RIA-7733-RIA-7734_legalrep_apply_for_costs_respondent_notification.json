@@ -1,0 +1,98 @@
+{
+  "description": "RIA-7733-RIA-7734: Legal rep applies for costs and notifies home office",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 7734,
+      "eventId": "applyForCosts",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "journeyType": "rep",
+          "appealType": "revocationOfProtection",
+          "appealGroundsRevocation": {
+            "values": [
+              "revocationRefugeeConvention",
+              "revocationHumanitarianProtection"
+            ]
+          },
+          "appliesForCosts": [
+            {
+              "id": "1",
+              "value": {
+                "applyForCostsRespondentRole": "Home office",
+                "appliedCostsType": "Unreasonable costs",
+                "respondentToCostsOrder": "Home office",
+                "applyForCostsHearingType": "No",
+                "scheduleOfCostsDocuments": [],
+                "applyForCostsCreationDate": "2023-11-24",
+                "applyForCostsApplicantType": "Legal representative",
+                "argumentsAndEvidenceDetails": "",
+                "argumentsAndEvidenceDocuments": [
+                  {
+                    "id": "2f352b16-0ed9-4c2e-88c2-4bc091485504",
+                    "value": {
+                      "document_url": "http://dm-store:8080/documents/45ec3a85-8fad-4caa-81a5-6b3b5c3b3bb8",
+                      "document_filename": "test.pdf",
+                      "document_binary_url": "http://dm-store:8080/documents/45ec3a85-8fad-4caa-81a5-6b3b5c3b3bb8/binary"
+                    }
+                  }
+                ],
+                "applyForCostsHearingTypeExplanation": ""
+              }
+            }
+          ],
+          "legalRepName": "Fake Org Ltd"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "revocationOfProtection",
+        "appealGroundsRevocation": {
+          "values": [
+            "revocationRefugeeConvention",
+            "revocationHumanitarianProtection"
+          ]
+        },
+        "legalRepName": "Fake Org Ltd"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7734_APPLY_FOR_COSTS_RESPONDENT_EMAIL",
+        "recipient": "{$applyForCostsHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: Costs application submitted",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The online service: {$iaExUiFrontendUrl}",
+          "Date application was made: 24 Nov 2023",
+          "Application type: Unreasonable Costs application"
+        ]
+      },
+      {
+        "reference": "7734_APPLY_FOR_COSTS_APPLICANT_EMAIL",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Costs application submitted",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Your reference: CASE001",
+          "Appellant name: Talha Awan",
+          "The online service: {$iaExUiFrontendUrl}",
+          "Date application was made: 24 Nov 2023",
+          "Application type: Unreasonable Costs application"
+        ]
+      }
+    ]
+  }
+}
+

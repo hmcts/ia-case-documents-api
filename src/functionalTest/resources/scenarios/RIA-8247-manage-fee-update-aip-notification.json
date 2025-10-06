@@ -1,0 +1,77 @@
+{
+  "description": "RIA-8247 Manage fee update AIP Notification",
+  "enabled": "{$featureFlag.dlrmTelephonyFeatureFlag}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 8247,
+      "eventId": "manageFeeUpdate",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "journeyType": "aip",
+          "isDlrmSetAsideEnabled": "Yes",
+          "feeUpdateTribunalAction": "additionalPayment",
+          "feeAmountGbp": "1000",
+          "previousFeeAmountGbp": "1000",
+          "manageFeeRequestedAmount": "1000",
+          "ccdReferenceNumberForDisplay": "test",
+          "feeUpdateReason": "appealNotValid",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "journeyType": "aip",
+        "isDlrmSetAsideEnabled": "Yes",
+        "feeUpdateTribunalAction": "additionalPayment",
+        "feeAmountGbp": "1000",
+        "previousFeeAmountGbp": "1000",
+        "manageFeeRequestedAmount": "1000",
+        "ccdReferenceNumberForDisplay": "test",
+        "feeUpdateReason": "appealNotValid",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "8247_MANAGE_FEE_UPDATE_AIP_APPELLANT_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8247_MANAGE_FEE_UPDATE_AIP_APPELLANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

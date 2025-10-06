@@ -1,0 +1,53 @@
+{
+  "description": "RIA-9525: Mark Appeal As Detained for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 952516,
+      "eventId": "markAppealAsDetained",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "ariaListingReference": "LR/1234/2345",
+          "appellantGivenNames": "Test",
+          "appellantFamilyName": "User",
+          "listCaseHearingDate": "2023-05-01T13:30:15.000",
+          "listCaseHearingCentre": "harmondsworth",
+          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "ariaListingReference": "LR/1234/2345",
+        "appellantGivenNames": "Test",
+        "appellantFamilyName": "User",
+        "listCaseHearingDate": "2023-05-01T13:30:15.000",
+        "notificationsSent":[
+          {
+            "id":"952516_MARK_APPEAL_AS_DETAINED_LEGAL_REP",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id":"952516_MARK_APPEAL_AS_DETAINED_HOME_OFFICE",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
+

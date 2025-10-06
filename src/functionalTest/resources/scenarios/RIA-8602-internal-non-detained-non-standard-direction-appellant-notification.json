@@ -1,0 +1,66 @@
+{
+  "description": "RIA-8602 Send Non Standard Direction to Appellant on Internal Non-Detained Appeal.",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "caseOfficer",
+    "input": {
+      "id": 7436,
+      "eventId": "sendDirection",
+      "state": "decision",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "ircName": "Brookhouse",
+          "detentionFacility": "immigrationRemovalCentre",
+          "isAcceleratedDetainedAppeal": "No",
+          "appellantInDetention": "No",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "The non-standard direction explanation goes here",
+                "parties": "appellant",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ],
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalNonStandardDirectionToAppellantLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "appellantInDetention": "No",
+        "notificationsSent": [
+          {
+            "id": "7436_RESPONDENT_NON_STANDARD_DIRECTION_OF_APPELLANT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

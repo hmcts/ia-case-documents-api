@@ -30,6 +30,7 @@ services:
       S2S_URL: http://service-auth-provider-api:8080
       IA_IDAM_REDIRECT_URI: http://idam-api
       IDAM_URL: http://idam-api:8080
+      CCD_URL: http://ccd-data-store-api:4452
       DM_URL: http://dm-store:8080
       CASE_DOCUMENT_AM_URL: http://ccd-case-document-am-api:4455
       CCD_GW_URL: http://ccd-api-gateway-web:3453
@@ -43,6 +44,11 @@ services:
       IA_SYSTEM_USERNAME:
       IA_SYSTEM_PASSWORD:
       TEST_URL: http://ia-case-documents-api:8092
+      IA_GOV_NOTIFY_KEY:
+      IA_BAIL_GOV_NOTIFY_KEY:
+      IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL:
+      IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL:
+      IA_RESPONDENT_REVIEW_DIRECTION_EMAIL:
     external_links:
       - idam-api
       - dm-store
@@ -50,6 +56,7 @@ services:
       - rpa-em-ccd-orchestrator
       - ccd-api-gateway-web
       - stitching-api
+      - ccd-data-store-api
     ports:
       - ${SERVER_PORT:-8092}:${SERVER_PORT:-8092}
 networks:

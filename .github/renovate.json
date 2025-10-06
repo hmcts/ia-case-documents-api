@@ -9,7 +9,24 @@
     "org.apache.logging.log4j:log4j-api",
     "checkstyle",
     "io.rest-assured:rest-assured",
-    "io.rest-assured:rest-assured-all"
+    "io.rest-assured:rest-assured-all",
+    "hashicorp/terraform",
+    "io.freefair.lombok",
+    "launchdarkly",
+    "info.solidsoft.pitest"
+  ],
+  "helmv3": {
+    "bumpVersion": "patch"
+  },
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "^Dockerfile$"
+      ],
+      "matchStrings": [
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sARG .*?_VERSION=(?<currentValue>.*)\\s"
+      ]
+    }
   ],
   "packageRules": [
     {

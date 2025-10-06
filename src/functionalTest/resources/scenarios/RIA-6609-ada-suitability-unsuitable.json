@@ -1,0 +1,48 @@
+{
+  "description": "RIA-6609 Send ada suitability notification to legal rep and home office for ADA appeal (Unsuitable)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 6609,
+      "eventId": "adaSuitabilityReview",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAcceleratedDetainedAppeal": "Yes",
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "suitabilityReviewDecision": "unsuitable"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAcceleratedDetainedAppeal": "Yes",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "suitabilityReviewDecision": "unsuitable",
+        "notificationsSent": [
+          {
+            "id": "6609_ADA_SUITABILITY_DETERMINED_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "6609_ADA_SUITABILITY_DETERMINED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

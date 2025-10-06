@@ -4,6 +4,7 @@
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
+      "id": 8249,
       "eventId": "manageFeeUpdate",
       "state": "appealSubmitted",
       "caseData": {
@@ -25,7 +26,23 @@
             "values": [
               "feeUpdateRecorded"
             ]
-          }
+          },
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalDetainedManageFeeUpdateLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
         }
       }
     }
@@ -48,6 +65,12 @@
         "isDlrmSetAsideEnabled": "Yes",
         "paymentDate": "10 Oct 2000",
         "feeAmountGbp": "14000",
+        "notificationsSent": [
+          {
+            "id": "8249_INTERNAL_DETAINED_MANAGE_FEE_UPDATE_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
         "notificationAttachmentDocuments": [
           {
             "id": "1",

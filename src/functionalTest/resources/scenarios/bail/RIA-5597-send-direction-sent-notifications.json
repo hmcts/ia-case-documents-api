@@ -1,0 +1,78 @@
+{
+  "description": "RIA-5597 send application-sent notification to HomeOffice and Legal Representative",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 5597,
+      "eventId": "sendDirection",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted-direction-sent.json",
+        "replacements": {
+          "isLegallyRepresentedForFlag": "Yes",
+          "currentCaseStateVisibleToJudge": "applicationSubmitted",
+          "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+          "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+          "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted.json",
+      "replacements": {
+        "isLegallyRepresentedForFlag": "Yes",
+        "currentCaseStateVisibleToJudge": "applicationSubmitted",
+        "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+        "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+        "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted",
+        "notificationsSent": [
+          {
+            "id": "5597_BAIL_SENT_DIRECTION_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "5597_BAIL_SENT_DIRECTION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "5597_BAIL_SENT_DIRECTION_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: You have a direction",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "You have a direction for this bail application.",
+          "Here are the direction details:",
+          "This is the content of the direction",
+          "You must comply with this direction by 2022-05-25."
+        ]
+      },
+      {
+        "reference": "5597_BAIL_SENT_DIRECTION_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Bail application: New document uploaded",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "A direction has been sent to the Home Office.",
+         " The Home Office has been directed to:",
+          "This is the content of the direction",
+          "Next steps",
+          "The 2022-05-25 must comply with this direction by 2022-05-25."
+        ]
+      }
+    ]
+  }
+}

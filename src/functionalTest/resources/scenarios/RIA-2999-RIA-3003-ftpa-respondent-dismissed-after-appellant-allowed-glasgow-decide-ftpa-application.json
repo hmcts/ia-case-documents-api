@@ -1,0 +1,65 @@
+{
+  "description": "RIA-2999-RIA-3003-RIA-3754  Respondent FTPA Application is allowed after the appellant application allowed (Glasgow hearing centre)",
+  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 9008,
+      "eventId": "decideFtpaApplication",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "listCaseHearingCentre": "glasgow",
+          "ftpaRespondentRjDecisionOutcomeType": "remadeRule32",
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+          "ftpaRespondentDecisionRemadeRule32": "allowed",
+          "ftpaApplicantType": "respondent",
+          "ariaListingReference": "987654321",
+          "notificationsSent": [
+            {
+              "id": "9008_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_APPELLANT",
+              "value": "34e146c9-6050-4894-a64e-acd461a5f934"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": []
+      }
+    },
+    "notifications": [
+      {
+        "reference": "9008_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "987654321",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "9008_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "987654321",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

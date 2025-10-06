@@ -1,0 +1,56 @@
+{
+  "description": "RIA-9165 Appeal fee changed(Additional payment required) - Non Detained (by post) notification (internal case creation) - OOC",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 9165,
+      "eventId": "manageFeeUpdate",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appellantsRepresentation": "Yes",
+          "isAdmin": "Yes",
+          "appellantInDetention": "No",
+          "newFeeAmount": "2000",
+          "paymentStatus": "Paid",
+          "feeUpdateReason": "appealNotValid",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "appellantInUk": "No",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appellantsRepresentation": "Yes",
+        "isAdmin": "Yes",
+        "appellantInDetention": "No",
+        "newFeeAmount": "2000",
+        "paymentStatus": "Paid",
+        "feeUpdateReason": "appealNotValid",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "appellantInUk": "No",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+        "notificationsSent": [
+          {
+            "id": "9165_INTERNAL_MANAGE_FEE_UPDATE_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

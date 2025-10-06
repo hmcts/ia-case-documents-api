@@ -1,0 +1,55 @@
+{
+  "description": "RIA-8246 Legal rep notification for Manage Fee Update - Additional payment requested",
+  "enabled": "{$featureFlag.dlrmTelephonyFeatureFlag}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 8246,
+      "eventId": "manageFeeUpdate",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ccdReferenceNumberForDisplay": "1111222233334444",
+          "feeUpdateReason": "appealWithdrawn",
+          "feeUpdateTribunalAction": "additionalPayment",
+          "feeAmountGbp": "8000",
+          "previousFeeAmountGbp": "14000",
+          "manageFeeRequestedAmount": "6000",
+          "isDlrmFeeRefundEnabled": "Yes",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "8246_LEGAL_REPRESENTATIVE_ADDITIONAL_PAYMENT_REQUESTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "8246_LEGAL_REPRESENTATIVE_ADDITIONAL_PAYMENT_REQUESTED",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Appeal fee changed",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

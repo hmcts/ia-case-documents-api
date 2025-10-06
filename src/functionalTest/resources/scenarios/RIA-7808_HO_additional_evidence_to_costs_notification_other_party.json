@@ -1,0 +1,94 @@
+{
+  "description": "RIA-7808: Home office lart adds evidence to costs which notifies legal rep",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "HomeOfficeGeneric",
+    "input": {
+      "id": 7808,
+      "eventId": "addEvidenceForCosts",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "legalRepReferenceNumber": "A1234567",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "journeyType": "rep",
+          "appealType": "revocationOfProtection",
+          "appealGroundsRevocation": {
+            "values": [
+              "revocationRefugeeConvention",
+              "revocationHumanitarianProtection"
+            ]
+          },
+          "addEvidenceForCostsList": {
+            "value": {
+              "code": "1",
+              "label": "Costs 1, Unreasonable costs, 15 Dec 2023"
+            },
+            "list_items": [
+              {
+                "code": "1",
+                "label": "Costs 1, Unreasonable costs, 15 Dec 2023"
+              }
+            ]
+          },
+          "appliesForCosts": [
+            {
+              "id": "1",
+              "value": {
+                "applyForCostsRespondentRole": "Home office",
+                "appliedCostsType": "Unreasonable costs",
+                "loggedUserRole": "Home office",
+                "applyForCostsHearingType": "No",
+                "scheduleOfCostsDocuments": [],
+                "applyForCostsCreationDate": "{$TODAY}",
+                "applyForCostsApplicantType": "Legal representative",
+                "argumentsAndEvidenceDetails": "",
+                "argumentsAndEvidenceDocuments": [
+                  {
+                    "id": "2f352b16-0ed9-4c2e-88c2-4bc091485504",
+                    "value": {
+                      "document_url": "http://dm-store:8080/documents/45ec3a85-8fad-4caa-81a5-6b3b5c3b3bb8",
+                      "document_filename": "test.pdf",
+                      "document_binary_url": "http://dm-store:8080/documents/45ec3a85-8fad-4caa-81a5-6b3b5c3b3bb8/binary"
+                    }
+                  }
+                ],
+                "applyForCostsHearingTypeExplanation": ""
+              }
+            }
+          ],
+          "legalRepName": "Fake Org Ltd"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "legalRepReferenceNumber": "A1234567",
+        "appealType": "revocationOfProtection",
+        "appealGroundsRevocation": {
+          "values": [
+            "revocationRefugeeConvention",
+            "revocationHumanitarianProtection"
+          ]
+        },
+        "legalRepName": "Fake Org Ltd"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7808_ADDITIONAL_EVIDENCE_OTHER_PARTY_EMAIL",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and asylum appeal: Cost application response submitted",
+        "body": [
+        ]
+      }
+    ]
+  }
+}
+

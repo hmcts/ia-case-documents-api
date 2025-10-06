@@ -24,15 +24,48 @@ The following environment variables are required when running the api without it
 |----------------------|----------|
 | DOCMOSIS_ACCESS_KEY | some-docmosis-access-key |
 | DOCMOSIS_ENDPOINT | some-docmosis-url |
+| IA_GOV_NOTIFY_KEY | some-gov-notify-key |
+| IA_BAIL_GOV_NOTIFY_KEY | some-gov-notify-key |
 | IA_IDAM_CLIENT_ID  |  some-idam-client-id |
 | IA_IDAM_SECRET  |  some-idam-secret |
 | IA_IDAM_REDIRECT_URI  |  http://localhost:3451/oauth2redirect |
 | IA_S2S_SECRET  |  some-s2s-secret |
 | IA_S2S_MICROSERVICE  |  some-s2s-gateway |
+| IA_ADMIN_NEWPORT_EMAIL | some-email |
+| IA_ADMIN_TAYLOR_HOUSE_EMAIL | some-email |
+| IA_ADMIN_HATTON_CROSS_EMAIL | some-email |
+| IA_ADMIN_MANCHESTER_EMAIL | some-email |
+| IA_ADMIN_GLASGOW_EMAIL | some-email |
+| IA_ADMIN_BRADFORD_EMAIL | some-email |
+| IA_ADMIN_BIRMINGHAM_EMAIL | some-email |
+| IA_HEARING_CENTRE_BRADFORD_EMAIL |  some-email |
+| IA_HEARING_CENTRE_MANCHESTER_EMAIL |  some-email |
+| IA_HEARING_CENTRE_NEWPORT_EMAIL |  some-email |
+| IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL |  some-email |
+| IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL |  some-email |
+| IA_HEARING_CENTRE_BIRMINGHAM_EMAIL |  some-email |
+| IA_HEARING_CENTRE_HATTON_CROSS_EMAIL |  some-email |
+| IA_HEARING_CENTRE_GLASGOW_EMAIL |  some-email |
+| IA_HOME_OFFICE_BRADFORD_EMAIL |  some-email |
+| IA_HOME_OFFICE_MANCHESTER_EMAIL |  some-email |
+| IA_HOME_OFFICE_NEWPORT_EMAIL |  some-email |
+| IA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL |  some-email |
+| IA_HOME_OFFICE_NORTH_SHIELDS_EMAIL |  some-email |
+| IA_HOME_OFFICE_BIRMINGHAM_EMAIL |  some-email |
+| IA_HOME_OFFICE_HATTON_CROSS_EMAIL |  some-email |
+| IA_HOME_OFFICE_GLASGOW_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_BRADFORD_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_TAYLOR_HOUSE_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_NEWCASTLE_EMAIL |  some-email |
+| IA_FTPA_HOME_OFFICE_HATTON_CROSS_EMAIL |  some-email |
+| IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL |  some-email |
+| IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL |  some-email |
+| IA_RESPONDENT_REVIEW_DIRECTION_EMAIL |  some-email |
+| IA_HOME_OFFICE_GOV_NOTIFY_ENABLED |  true/false |
 
 ### Running the application
 
-To run the API quickly use the docker helper script as follows: (make sure to have the environment variables set)
+To run the API quickly use the docker helper script as follows: (make sure to have set the required environment variables as above)
 
 ```
 ./bin/run-in-docker.sh --clean --install
