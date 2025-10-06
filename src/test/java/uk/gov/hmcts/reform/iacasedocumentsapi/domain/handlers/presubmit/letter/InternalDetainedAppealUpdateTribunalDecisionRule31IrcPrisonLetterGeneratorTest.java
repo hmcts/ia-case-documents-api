@@ -14,6 +14,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribunalRules;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -151,7 +152,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
                         (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
                 ),
                 Arguments.of("Update tribunal decision not under rule 31",
-                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, String.class)).thenReturn(Optional.of("rule32"))
+                        (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, UpdateTribunalRules.class)).thenReturn(Optional.of(UpdateTribunalRules.UNDER_RULE_32))
                 )
         );
     }
@@ -267,6 +268,6 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, String.class)).thenReturn(Optional.of("underRule31"));
+        when(asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, UpdateTribunalRules.class)).thenReturn(Optional.of(UpdateTribunalRules.UNDER_RULE_31));
     }
 }
