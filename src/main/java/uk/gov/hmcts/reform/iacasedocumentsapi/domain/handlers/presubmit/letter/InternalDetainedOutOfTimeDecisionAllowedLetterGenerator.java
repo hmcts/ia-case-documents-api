@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
@@ -98,17 +99,16 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
         bundleDocuments.add(letterDocument);
 
         // Get decision document if present
-        try {
-            Document outOfTimeDecisionDocument = getDecisionOfNoticeDocuments(asylumCase);
+        Optional<Document> outOfTimeDecisionDocument = getDecisionOfNoticeDocuments(asylumCase);
+        if (outOfTimeDecisionDocument.isPresent()) {
             DocumentWithMetadata outOfTimeDecisionDocumentWithMetaData = new DocumentWithMetadata(
-                    outOfTimeDecisionDocument,
+                    outOfTimeDecisionDocument.get(),
                     "Letter",
                     "Letter",
                     DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
             );
             bundleDocuments.add(outOfTimeDecisionDocumentWithMetaData);
-        } catch (IllegalStateException e) {
-            // Decision document not present, continue with just the letter
+        } else {
             log.info("Decision document not present, creating bundle with letter only");
         }
 

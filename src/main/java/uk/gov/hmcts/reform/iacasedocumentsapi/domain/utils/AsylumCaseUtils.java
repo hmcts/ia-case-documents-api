@@ -230,12 +230,8 @@ public class AsylumCaseUtils {
         return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
-    public static Document getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
-        Optional<Document> outOfTimeDecisionDocument = asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT);
-        if (outOfTimeDecisionDocument.isEmpty()) {
-            throw new IllegalStateException("outOfTimeDecisionDocument is not present");
-        }
-        return outOfTimeDecisionDocument.get();
+    public static Optional<Document> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
+        return asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT);
     }
 
     public static Optional<IdValue<DocumentWithMetadata>> getLatestAddendumEvidenceDocument(AsylumCase asylumCase) {

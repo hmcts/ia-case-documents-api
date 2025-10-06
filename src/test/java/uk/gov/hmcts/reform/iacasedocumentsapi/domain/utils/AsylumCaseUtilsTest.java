@@ -387,16 +387,19 @@ public class AsylumCaseUtilsTest {
         void should_get_decision_of_notice_document_when_present() {
             when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(document));
 
-            assertEquals(document, AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase));
+            Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
+            
+            assertTrue(result.isPresent());
+            assertEquals(document, result.get());
         }
 
         @Test
-        void should_throw_exception_when_no_decision_of_notice_document_present() {
+        void should_return_empty_optional_when_no_decision_of_notice_document_present() {
             when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase))
-                    .isExactlyInstanceOf(IllegalStateException.class)
-                    .hasMessage("outOfTimeDecisionDocument is not present");
+            Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
+            
+            assertFalse(result.isPresent());
         }
     }
 
