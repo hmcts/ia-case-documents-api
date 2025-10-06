@@ -6,7 +6,7 @@
     "credentials": "LegalRepresentative",
     "input": {
       "eventId": "paymentAppeal",
-      "state": "pendingPayment",
+      "state": "appealStarted",
       "caseData": {
         "template": "minimal-payments-appeal-started.json",
         "replacements": {
@@ -29,7 +29,7 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "paymentStatus": "Paid",
+        "paymentStatus":"Paid",
         "pbaNumber":"PBA0072626",
         "feeCode":"FEE0238",
         "feeVersion":"3",
