@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
+@Slf4j
 @Component
 public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -95,15 +97,20 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
         );
         bundleDocuments.add(letterDocument);
 
-        // Get decision document
-        Document outOfTimeDecisionDocument = getDecisionOfNoticeDocuments(asylumCase);
-        DocumentWithMetadata outOfTimeDecisionDocumentWithMetaData = new DocumentWithMetadata(
-                outOfTimeDecisionDocument,
-                "Letter",
-                "Letter",
-                DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
-        );
-        bundleDocuments.add(outOfTimeDecisionDocumentWithMetaData);
+        // Get decision document if present
+        try {
+            Document outOfTimeDecisionDocument = getDecisionOfNoticeDocuments(asylumCase);
+            DocumentWithMetadata outOfTimeDecisionDocumentWithMetaData = new DocumentWithMetadata(
+                    outOfTimeDecisionDocument,
+                    "Letter",
+                    "Letter",
+                    DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
+            );
+            bundleDocuments.add(outOfTimeDecisionDocumentWithMetaData);
+        } catch (IllegalStateException e) {
+            // Decision document not present, continue with just the letter
+            log.info("Decision document not present, creating bundle with letter only");
+        }
 
         // Create qualified file name
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);

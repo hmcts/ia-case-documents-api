@@ -18,7 +18,12 @@
           "submissionOutOfTime": "Yes",
           "appealSubmissionDate": "{$TODAY}",
           "appealType": "refusalOfHumanRights",
-          "recordOutOfTimeDecision": "Yes"
+          "recordOutOfTimeDecision": "Yes",
+          "outOfTimeDecisionDocument": {
+            "document_url": "http://dm-store:8080/documents/12345678-1234-1234-1234-123456789012",
+            "document_filename": "decision-document.pdf",
+            "document_binary_url": "http://dm-store:8080/documents/12345678-1234-1234-1234-123456789012/binary"
+          }
         }
       }
     }
@@ -46,7 +51,7 @@
               "tag": "internalDetainedOutOfTimeDecisionAllowedLetter",
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_filename": "HU 50002 2025-Awan-appeal-form.PDF",
+                "document_filename": "$/test-file\.pdf/",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
               },
               "description": "",

@@ -143,7 +143,7 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
     }
 
     @Test
-    void should_throw_exception_when_decision_document_missing() {
+    void should_create_letter_bundle_without_decision_document_when_missing() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.RECORD_OUT_OF_TIME_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -151,13 +151,24 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         setUpValidCase();
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(fileNameQualifier.get("test-file.pdf", caseDetails)).thenReturn("qualified-filename.pdf");
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(anyList(), eq("Letter bundle documents"), eq("qualified-filename.pdf")))
+                .thenReturn(bundledDocument);
 
         // Mock missing decision of notice document
         when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
-                .hasMessage("outOfTimeDecisionDocument is not present")
-                .isExactlyInstanceOf(IllegalStateException.class);
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                bundledDocument,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
+        );
     }
 
     @Test
