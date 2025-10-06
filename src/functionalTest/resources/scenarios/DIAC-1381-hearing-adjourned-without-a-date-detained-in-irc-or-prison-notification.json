@@ -61,8 +61,7 @@
     "caseData": {
       "template": "minimal-appeal-started.json",
       "replacements": {
-        "isAdmin": "Yes",
-        "appellantsRepresentation": "Yes",
+        "isAdmin": "Yes",       
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
         "detentionFacility": "immigrationRemovalCentre",
