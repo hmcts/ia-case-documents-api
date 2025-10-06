@@ -2038,6 +2038,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedUpdateTribunalDecisionRule31IrcPrisonLetterDocumentCreator")
+    public DocumentCreator<AsylumCase> getInternalDetainedUpdateTribunalDecisionRule31IrcPrisonLetterDocumentCreator(
+            @Value("${internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.contentType}") String contentType,
+            @Value("${internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileExtension}") String fileExtension,
+            @Value("${internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalDetainedAppealSubmissionWithExemptionLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealSubmissionWithExemptionLetterDocumentCreator(
         @Value("${internalDetainedAppealSubmissionWithExemptionLetter.contentType}") String contentType,
@@ -2058,5 +2079,4 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
-
 }

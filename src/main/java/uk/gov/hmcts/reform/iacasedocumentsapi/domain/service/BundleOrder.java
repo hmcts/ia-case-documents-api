@@ -341,27 +341,31 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 99;
             }
+            case INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 100;
+            }
             case INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 100;
+                yield 101;
             }
             case INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 101;
+                yield 102;
             }
             case INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 102;
+                yield 103;
             }            
             case DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_A_DATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 103;
+                yield 104;
             }
             case INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 104;
+                yield 105;
             }
-            case NONE ->  105;
+            case NONE ->  106;
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         };
