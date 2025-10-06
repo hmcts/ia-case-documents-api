@@ -36,7 +36,7 @@
         "feeVersion":"3",
         "feeAmountGbp":"8000",
         "feeDescription":"Notice of Appeal - appellant consents without hearing A",
-        "paymentStatus":"Paid"
+        "paymentStatus": "Paid"
       }
     }
   }

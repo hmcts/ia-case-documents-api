@@ -1,12 +1,12 @@
 {
   "description": "RIA-2935 Make a payment now for EA appeal type without hearing",
-  "enabled": false,
+  "enabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
     "input": {
       "eventId": "paymentAppeal",
-      "state": "appealStarted",
+      "state": "pendingPayment",
       "caseData": {
         "template": "minimal-payments-appeal-started.json",
         "replacements": {
@@ -29,7 +29,7 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "paymentStatus":"Paid",
+        "paymentStatus": "Paid",
         "pbaNumber":"PBA0072626",
         "feeCode":"FEE0456",
         "feeVersion":"3",
