@@ -1,8 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +18,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.Assignment;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.QueryRequest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleAssignmentResource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleName;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleType;
@@ -71,18 +68,18 @@ class RoleAssignmentServiceTest {
             .actorId(userId)
             .build();
 
-        when(roleAssignmentApi.queryRoleAssignments(
-            eq(accessToken),
-            eq(serviceToken),
-            any(QueryRequest.class)
+        when(roleAssignmentApi.getRoleAssignments(
+            accessToken,
+            serviceToken,
+            userId
         )).thenReturn(new RoleAssignmentResource(List.of(assignment1, assignment2, assignment3)));
 
         List<String> roles = roleAssignmentService.getAmRolesFromUser(userId, accessToken);
 
-        verify(roleAssignmentApi).queryRoleAssignments(
-            eq(accessToken),
-            eq(serviceToken),
-            any(QueryRequest.class)
+        verify(roleAssignmentApi).getRoleAssignments(
+            accessToken,
+            serviceToken,
+            userId
         );
         assertTrue(roles.contains(RoleName.CTSC_TEAM_LEADER.getValue()));
         assertTrue(roles.contains(RoleName.CTSC.getValue()));
