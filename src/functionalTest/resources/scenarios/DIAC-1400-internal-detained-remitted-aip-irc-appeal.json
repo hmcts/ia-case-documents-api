@@ -1,10 +1,11 @@
 {
-  "description": "DIAC-1321 Internal detained in IRC AiP appeal submitted",
+  "description": "DIAC-1400 Internal detained in IRC AiP appeal submitted",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "eventId": "markAsRemitted",
+      "id": 1400,
+      "eventId": "markAppealAsRemitted",
       "state": "appealStarted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
