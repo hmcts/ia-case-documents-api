@@ -108,6 +108,7 @@ class DocumentTagTest {
         assertEquals("internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER.toString());
         assertEquals("internalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER.toString());
         assertEquals("internalDetainedLateRemissionPartiallyGrantedOrRefusedTemplateLetter", DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER.toString());
+        assertEquals("internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER.toString());
         assertEquals("internalDetainedLateRemissionGrantedTemplateLetter", DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER.toString());
         assertEquals("internalDetainedAppealSubmittedWithExemptionLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER.toString());
         assertEquals("internalDetainedLateRemissionRefusedTemplateLetter", DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER.toString());
@@ -115,6 +116,6 @@ class DocumentTagTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(113, DocumentTag.values().length);
+        assertEquals(114, DocumentTag.values().length);
     }
 }

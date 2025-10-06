@@ -630,6 +630,8 @@ public enum AsylumCaseDefinition {
 
     UPDATED_APPEAL_DECISION(
             "updatedAppealDecision", new TypeReference<String>(){}),
+    APPEAL_DECISION(
+            "appealDecision", new TypeReference<String>(){}),
 
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
@@ -884,6 +886,9 @@ public enum AsylumCaseDefinition {
 
     HEARING_CHANNEL(
         "hearingChannel", new TypeReference<DynamicList>(){}),
+
+    UPDATE_TRIBUNAL_DECISION_DATE(
+            "updateTribunalDecisionDate", new TypeReference<String>(){}),
 
     ;
 
