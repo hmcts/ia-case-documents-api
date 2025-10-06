@@ -41,6 +41,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -229,6 +230,9 @@ public class AsylumCaseUtils {
         return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
+    public static Optional<Document> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
+        return asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT);
+    }
 
     public static Optional<IdValue<DocumentWithMetadata>> getLatestAddendumEvidenceDocument(AsylumCase asylumCase) {
         List<IdValue<DocumentWithMetadata>> addendums = getAddendumEvidenceDocuments(asylumCase);

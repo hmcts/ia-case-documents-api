@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.collection.IsIterableContainingInOrder;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,6 +52,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppea
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_DOCUMENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.AMOUNT_REMITTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
@@ -376,6 +378,29 @@ public class AsylumCaseUtilsTest {
 
         assertEquals(Collections.emptyList(), AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
         assertEquals(Optional.empty(), AsylumCaseUtils.getLatestAddendumEvidenceDocument(asylumCase));
+    }
+
+    @Nested
+    class GetDecisionOfNoticeDocuments {
+
+        @Test
+        void should_get_decision_of_notice_document_when_present() {
+            when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(document));
+
+            Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
+            
+            assertTrue(result.isPresent());
+            assertEquals(document, result.get());
+        }
+
+        @Test
+        void should_return_empty_optional_when_no_decision_of_notice_document_present() {
+            when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
+
+            Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
+            
+            assertFalse(result.isPresent());
+        }
     }
 
     @ParameterizedTest
