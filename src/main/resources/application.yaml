@@ -540,6 +540,11 @@ internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
 internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00818.docx}
 
+internalDetainedAppealRemittedAipIrcPrisonLetter.contentType: application/pdf
+internalDetainedAppealRemittedAipIrcPrisonLetter.fileExtension: PDF
+internalDetainedAppealRemittedAipIrcPrisonLetter.fileName: "appeal-form"
+internalDetainedAppealRemittedAipIrcPrisonLetter.templateName: ${IA_APPEAL_DETAINED_REMITTED_AIP_TEMPLATE:TB-IAC-LET-ENG-Internal-detained-mark-appeal-remitted-aip-manual-irc-prison.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
@@ -777,6 +782,7 @@ security:
       - "caseListing"
       - "removeRepresentation"
       - "removeLegalRepresentative"
+      - "markAsRemitted"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
