@@ -18,12 +18,7 @@
           "submissionOutOfTime": "Yes",
           "appealSubmissionDate": "{$TODAY}",
           "appealType": "refusalOfHumanRights",
-          "recordOutOfTimeDecision": "Yes",
-          "outOfTimeDecisionDocument": {
-            "document_url": "http://dm-store:8080/documents/12345678-1234-1234-1234-123456789012",
-            "document_filename": "decision-document.pdf",
-            "document_binary_url": "http://dm-store:8080/documents/12345678-1234-1234-1234-123456789012/binary"
-          }
+          "recordOutOfTimeDecision": "Yes"
         }
       }
     }
