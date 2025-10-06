@@ -68,7 +68,7 @@ public class InternalDetainedAppealRemittedAipIrcPrisonLetterGenerator implement
             asylumCase,
             internalDetainedAppealRemittedAipIrcPrisonLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER
+            DocumentTag.INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
