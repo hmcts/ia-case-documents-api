@@ -68,7 +68,7 @@
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Harmondsworth",
         "appealSubmissionDate": "{$TODAY}",
-        "appealType": "refusalOfHumanRights",
+        "appealType": "protection",
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
