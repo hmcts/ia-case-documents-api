@@ -53,14 +53,11 @@ public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator impleme
                 .map(yesOrNo -> yesOrNo == YesOrNo.NO)
                 .orElse(false);
 
-        boolean paymentPaid = asylumCase.read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)
-                .map(paymentStatus -> paymentStatus == PAID).orElse(false);
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.RECORD_REMISSION_DECISION
                 && isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase)
                 && submissionInTime
-                && !paymentPaid
                 && isRemissionApproved(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                 && !isAcceleratedDetainedAppeal(asylumCase);
