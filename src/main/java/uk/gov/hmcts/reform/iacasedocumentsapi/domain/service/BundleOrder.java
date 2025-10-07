@@ -243,10 +243,6 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_REINSTATE_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 71;
             }
-            case INTERNAL_ADJOURN_HEARING_WITHOUT_DATE -> {
-                log.warn("INTERNAL_ADJOURN_HEARING_WITHOUT_DATE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 72;
-            }
             case UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT -> {
                 log.warn("UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 73;
@@ -360,12 +356,16 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 103;
+            }            
+            case DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_A_DATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 104;
             }
             case INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 104;
+                yield 105;
             }
-            case NONE ->  105;
+            case NONE ->  106;
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         };
