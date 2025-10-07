@@ -14,67 +14,64 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-import static java.util.Objects.requireNonNull;
+import java.util.Objects;
+
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalDetainedAdjournHearingWithoutDateLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final DocumentCreator<AsylumCase> adjournHearingWithoutDateDocumentCreator;
+    private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalDetainedAdjournHearingWithoutDateLetterGenerator(
-        @Qualifier("internalAdjournHearingWithoutDateLetter") DocumentCreator<AsylumCase> adjournHearingWithoutDateDocumentCreator,
-        DocumentHandler documentHandler
+    public DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator(
+            @Qualifier("detainedAppealHearingAdjournedNoDateAppellantLetter") DocumentCreator<AsylumCase> documentCreator,
+            DocumentHandler documentHandler
     ) {
-        this.adjournHearingWithoutDateDocumentCreator = adjournHearingWithoutDateDocumentCreator;
+        this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
     }
 
     public boolean canHandle(
-        PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+            PreSubmitCallbackStage callbackStage,
+            Callback<AsylumCase> callback
     ) {
-        requireNonNull(callbackStage, "callbackStage must not be null");
-        requireNonNull(callback, "callback must not be null");
+        Objects.requireNonNull(callbackStage, "callbackStage must not be null");
+        Objects.requireNonNull(callback, "callback must not be null");
 
-        final AsylumCase asylumCase =
-            callback
-                .getCaseDetails()
-                .getCaseData();
+        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && isInternalCase(asylumCase)
-               && isAppellantInDetention(asylumCase)
-               && callback.getEvent() == Event.ADJOURN_HEARING_WITHOUT_DATE;
+                && callback.getEvent() == Event.ADJOURN_HEARING_WITHOUT_DATE
+                && isAppellantInDetention(asylumCase)
+                && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
+                && !isAcceleratedDetainedAppeal(asylumCase);
+
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
-        PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+            PreSubmitCallbackStage callbackStage,
+            Callback<AsylumCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
-        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore()
-                .orElseThrow(() -> new IllegalStateException("previous case data is not present"));
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document letter = adjournHearingWithoutDateDocumentCreator.create(caseDetails, caseDetailsBefore);
+        Document internalDetainedAppealSubmissionInTimeWithFeeToPayLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadata(
-            asylumCase,
-            letter,
-            NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE
+                asylumCase,
+                internalDetainedAppealSubmissionInTimeWithFeeToPayLetter,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
-
 }
-

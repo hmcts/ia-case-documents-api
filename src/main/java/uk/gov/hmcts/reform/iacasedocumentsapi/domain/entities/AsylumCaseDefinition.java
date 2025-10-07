@@ -113,6 +113,9 @@ public enum AsylumCaseDefinition {
     HEARING_CENTRE(
             "hearingCentre", new TypeReference<HearingCentre>(){}),
 
+    DATE_BEFORE_ADJOURN_WITHOUT_DATE(
+            "dateBeforeAdjournWithoutDate", new TypeReference<String>(){}),
+
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
