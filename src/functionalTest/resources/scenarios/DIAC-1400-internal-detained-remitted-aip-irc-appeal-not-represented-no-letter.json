@@ -31,10 +31,10 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "isAdmin": "Yes",
-        "appellantsRepresentation": "Yes",
+        "appellantsRepresentation": "No",
         "appellantInDetention": "Yes",
         "isAcceleratedAppeal": "No",
-        "detentionFacility": "other",
+        "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
         "feeAmountGbp": "14000",
         "amountRemitted": "14000",
