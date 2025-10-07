@@ -80,6 +80,7 @@ public enum Event {
     UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments", CaseType.ASYLUM),
     SAVE_NOTIFICATIONS_TO_DATA("saveNotificationsToData", CaseType.ASYLUM),
+    DECIDE_FTPA_APPLICATION("decideFtpaApplication", CaseType.ASYLUM),
 
     PAYMENT_APPEAL("paymentAppeal", CaseType.ASYLUM),
     PAY_FOR_APPEAL("payForAppeal", CaseType.ASYLUM),

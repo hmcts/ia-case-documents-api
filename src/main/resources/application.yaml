@@ -3012,24 +3012,7 @@ launchDarkly:
   connectionTimeout: 5000
   socketTimeout: 5000
 
-customerServices:
-  emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
-  telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
-  internal:
-    telephoneNumber:
-      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
-    emailAddress:
-      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_EMAIL:IAC-ADA-HW@justice.gov.uk}
-
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
-
-iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
-
-appellantDaysToWait:
-  letter:
-    afterSubmission: 28
-    afterManageFeeUpdate: 14
-
 
 ### Email addresses
 adminEmailAddresses:
@@ -3345,6 +3328,12 @@ customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@justice.gov.uk}
   internalCaseEmailAddress: ${IA_CUSTOMER_SERVICES_UNREPRESENTED_EMAIL:IAC-ADA-HW@justice.gov.uk}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
+  internal:
+    telephoneNumber:
+      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
+    emailAddress:
+      ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_EMAIL:IAC-ADA-HW@justice.gov.uk}
+
 
 appellantDaysToWait:
   afterSubmission: 28
@@ -3362,6 +3351,7 @@ appellantDaysToWait:
     afterSubmitAppealWithFee: 14
     afterManageFeeEvent: 14
     toReinstateAppeal: 14
+    afterSubmission: 28
     afterRespondentApplicationDecided:
       inCountry: 14
       outOfCountry: 28
@@ -3383,11 +3373,6 @@ ftpaApplicationDecidedDaysToWait:
   inCountry: 14
   outOfCountry: 28
   ada: 7
-
-launchDarkly:
-  sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}
-  connectionTimeout: 5000
-  socketTimeout: 5000
 
 govUkHolidays:
   url: https://www.gov.uk/
