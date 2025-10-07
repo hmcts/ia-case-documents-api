@@ -514,6 +514,11 @@ internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
 
+detainedHearingAdjournedNoDateAppellantLetter.contentType: application/pdf
+detainedHearingAdjournedNoDateAppellantLetter.fileExtension: PDF
+detainedHearingAdjournedNoDateAppellantLetter.fileName: "detained-hearing-adjourned-no-date-appellant-letter"
+detainedHearingAdjournedNoDateAppellantLetter.templateName: ${IA_APPEAL_DETAINED_HEARING_ADJOURNED_NO_DATE_APPELLANT_LETTER:TB-IAC-LET-ENG-Detained-Hearing-Adjourned-No-Date-Appellant.docx}
+
 internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType: application/pdf
 internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension: PDF
 internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName: "appeal-form"
