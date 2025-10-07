@@ -1,0 +1,65 @@
+{
+  "description": "DIAC-1400 Internal detained in Other AiP appeal submitted - No Letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1400,
+      "eventId": "markAppealAsRemitted",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealSubmissionDate": "{$TODAY}",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedAppeal": "No",
+          "detentionFacility": "other",
+          "feeAmountGbp": "14000",
+          "amountRemitted": "14000",
+          "remissionType": "hoWaiverRemission",
+          "appellantHasFixedAddress": "Yes",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedAppeal": "No",
+        "detentionFacility": "other",
+        "ircName": "Brookhouse",
+        "feeAmountGbp": "14000",
+        "amountRemitted": "14000",
+        "remissionType": "hoWaiverRemission",
+        "appellantHasFixedAddress": "Yes",
+        "appellantInUk": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationAttachmentDocuments": []
+      }
+    }
+  }
+}
