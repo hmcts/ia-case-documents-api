@@ -1,10 +1,10 @@
 {
-  "description": "DIAC-1400 Internal detained in Other AiP appeal submitted - No Letter",
+  "description": "DIAC-1400 Internal detained in IRC AiP appeal submitted Appellants Representation No - No Letter",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
     "input": {
-      "id": 1400,
+      "id": 14003,
       "eventId": "markAppealAsRemitted",
       "state": "appealStarted",
       "caseData": {
@@ -39,7 +39,7 @@
         "feeAmountGbp": "14000",
         "amountRemitted": "14000",
         "remissionType": "hoWaiverRemission",
-        "notificationAttachmentDocuments": []
+        "notificationAttachmentDocuments": null
       }
     }
   }

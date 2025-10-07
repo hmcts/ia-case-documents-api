@@ -57,7 +57,7 @@
           "AddressLine1": "5",
           "AddressLine2": "Example Street"
         },
-        "notificationAttachmentDocuments": []
+        "notificationAttachmentDocuments": null
       }
     }
   }
