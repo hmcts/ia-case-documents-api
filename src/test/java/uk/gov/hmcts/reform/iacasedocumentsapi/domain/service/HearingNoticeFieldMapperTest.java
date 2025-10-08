@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -20,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemp
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 class HearingNoticeFieldMapperTest {
 
@@ -74,6 +77,7 @@ class HearingNoticeFieldMapperTest {
                 stringProvider,
                 customerServicesProvider
             );
+        when(asylumCase.read(IS_VIRTUAL_HEARING)).thenReturn(Optional.of(YesOrNo.NO));
 
     }
 
@@ -251,6 +255,41 @@ class HearingNoticeFieldMapperTest {
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Remote hearing", templateFieldValues.get("remoteHearing"));
+        assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
+        assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+    }
+
+    @Test
+    void should_use_virtual_hearing_centre_when_case_using_location_ref_data() {
+
+        setUpData();
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.IAC_NATIONAL_VIRTUAL));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("Remote hearing agreed"));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class)).thenReturn(Optional.of("Some address"));
+
+        Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("IAC National (Virtual)", templateFieldValues.get("remoteHearing"));
+        assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
+        assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+    }
+
+    @Test
+    void should_use_virtual_hearing_centre_when_case_not_using_location_ref_data() {
+        setUpData();
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.IAC_NATIONAL_VIRTUAL));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("Remote hearing agreed"));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("IAC National (Virtual)", templateFieldValues.get("remoteHearing"));
         assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
         assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
     }
