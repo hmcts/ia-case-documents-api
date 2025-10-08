@@ -21,6 +21,7 @@
           "appealSubmissionDate": "{$TODAY}",
           "appealType": "refusalOfHumanRights",
           "remissionType": "helpWithFees",
+          "lateRemissionType": "helpWithFees",
           "feeAmountGbp": "14000",
           "ccdReferenceNumberForDisplay": "1234-5678-9012-3461",
           "remissionDecision": "approved",

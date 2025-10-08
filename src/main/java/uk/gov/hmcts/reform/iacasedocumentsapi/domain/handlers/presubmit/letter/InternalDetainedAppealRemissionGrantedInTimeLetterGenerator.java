@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -21,7 +20,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import java.util.Objects;
 import java.util.Optional;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LATE_REMISSION_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
@@ -62,7 +60,6 @@ public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator impleme
                 ? caseDetailsBefore.get().getCaseData().read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)
                 .map(paymentStatus -> paymentStatus == PAID).orElse(false) : false;
 
-        Optional<RemissionType> lateRemissionType = asylumCase.read(LATE_REMISSION_TYPE, RemissionType.class);
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.RECORD_REMISSION_DECISION
@@ -71,8 +68,7 @@ public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator impleme
                 && !paymentPaid
                 && isRemissionApproved(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
-                && !isAcceleratedDetainedAppeal(asylumCase)
-                && !lateRemissionType.isPresent();
+                && !isAcceleratedDetainedAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
