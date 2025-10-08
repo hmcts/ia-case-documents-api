@@ -52,6 +52,7 @@
         "paymentStatus": "Paid",
         "amountRemitted": "14000",
         "appealReferenceNumber": "$/(.+)/",
+        "lateRemissionType": "helpWithFees",
         "notificationAttachmentDocuments": [
           {
             "id": "1",

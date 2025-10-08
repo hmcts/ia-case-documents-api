@@ -46,6 +46,7 @@
         "appealSubmissionDate": "{$TODAY}",
         "appealType": "refusalOfHumanRights",
         "remissionType": "exceptionalCircumstancesRemission",
+        "lateRemissionType": "exceptionalCircumstancesRemission",
         "feeAmountGbp": "14000",
         "ccdReferenceNumberForDisplay": "1234-5678-9012-3462",
         "remissionDecision": "approved",
