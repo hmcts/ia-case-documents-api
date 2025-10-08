@@ -485,6 +485,11 @@ internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileExtension: PDF
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.templateName: ${IA_APPEAL_SUBMISSION_IN_TIME_WITH_FEE_T_PAY_TEMPLATE:TB-IAC-LET-ENG-00816.docx}
 
+internalDetainedAppealRemissionGrantedInTimeLetter.contentType: application/pdf
+internalDetainedAppealRemissionGrantedInTimeLetter.fileExtension: PDF
+internalDetainedAppealRemissionGrantedInTimeLetter.fileName: "internal-detained-remission-granted-in-time-letter"
+internalDetainedAppealRemissionGrantedInTimeLetter.templateName: ${IA_INTERNAL_DETAINED_REMISSION_GRANTED_IN_TIME_LETTER:TB-IAC-LET-ENG-Internal-Case-Remission-Granted-In-Time.docx}
+
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.contentType: application/pdf
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension: PDF
 internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName: "appeal-form"
@@ -510,6 +515,11 @@ internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
 
+detainedHearingAdjournedNoDateAppellantLetter.contentType: application/pdf
+detainedHearingAdjournedNoDateAppellantLetter.fileExtension: PDF
+detainedHearingAdjournedNoDateAppellantLetter.fileName: "detained-hearing-adjourned-no-date-appellant-letter"
+detainedHearingAdjournedNoDateAppellantLetter.templateName: ${IA_APPEAL_DETAINED_HEARING_ADJOURNED_NO_DATE_APPELLANT_LETTER:TB-IAC-LET-ENG-Detained-Hearing-Adjourned-No-Date-Appellant.docx}
+
 internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType: application/pdf
 internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension: PDF
 internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName: "appeal-form"
@@ -520,11 +530,15 @@ internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension: PDF
 internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "appeal-form"
 internalDetainedLateRemissionPartiallyGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Partially-Granted.docx}
 
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.contentType: application/pdf
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileExtension: PDF
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileName: "appeal-form"
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.templateName: ${INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER:TB-IAC-LET-ENG-Internal-detained-update-tribunal-decision-rule-31-irc-prison.docx}
+
 internalDetainedLateRemissionGrantedLetter.contentType: application/pdf
 internalDetainedLateRemissionGrantedLetter.fileExtension: PDF
 internalDetainedLateRemissionGrantedLetter.fileName: "appeal-form"
 internalDetainedLateRemissionGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Granted.docx}
-
 
 internalDetainedLateRemissionRefusedLetter.contentType: application/pdf
 internalDetainedLateRemissionRefusedLetter.fileExtension: PDF
@@ -1222,6 +1236,7 @@ appellantDaysToWait:
     afterSubmitAppealWithFeeToPay: 14
     tribunalDocumentToSendTimeline: 4
     afterRemissionDecision: 14
+    appealAfterTribunalDecision: 14
 
 
 ### Email addresses
