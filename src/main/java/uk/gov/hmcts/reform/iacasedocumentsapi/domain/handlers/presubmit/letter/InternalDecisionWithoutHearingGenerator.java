@@ -48,6 +48,7 @@ public class InternalDecisionWithoutHearingGenerator implements PreSubmitCallbac
         System.out.println("Is internal case: " + isInternalCase(asylumCase));
         System.out.println("hasBeenSubmittedByAppellantInternalCase: " + hasBeenSubmittedByAppellantInternalCase(asylumCase));
         System.out.println("isDetainedInOneOfFacilityTypes: " + isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON));
+        System.out.println("event: " + callback.getEvent());
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.DECISION_WITHOUT_HEARING
