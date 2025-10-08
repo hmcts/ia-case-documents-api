@@ -20,8 +20,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -32,6 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -40,6 +44,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_DOCUMENT;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -51,6 +56,10 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
     @Mock
     private DocumentHandler documentHandler;
     @Mock
+    private DocumentBundler documentBundler;
+    @Mock
+    private FileNameQualifier<AsylumCase> fileNameQualifier;
+    @Mock
     private Callback<AsylumCase> callback;
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
@@ -58,25 +67,37 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
+    @Mock
+    private Document bundledDocument;
 
     private InternalDetainedOutOfTimeDecisionAllowedLetterGenerator letterGenerator;
 
     @BeforeEach
     void setUp() {
         letterGenerator = new InternalDetainedOutOfTimeDecisionAllowedLetterGenerator(
+                "pdf",
+                "test-file",
                 documentCreator,
-                documentHandler
+                documentHandler,
+                documentBundler,
+                fileNameQualifier
         );
     }
 
     @Test
-    void should_create_letter_and_append_to_notification_documents() {
+    void should_create_letter_bundle_and_append_to_notification_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.RECORD_OUT_OF_TIME_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         setUpValidCase();
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(fileNameQualifier.get("test-file.pdf", caseDetails)).thenReturn("qualified-filename.pdf");
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(anyList(), eq("Letter bundle documents"), eq("qualified-filename.pdf")))
+                .thenReturn(bundledDocument);
+
+        // Mock decision of notice document
+        when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(uploadedDocument));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -84,9 +105,67 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(documentHandler, times(1)).addWithMetadata(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
-                uploadedDocument,
+                bundledDocument,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
+        );
+    }
+
+    @Test
+    void should_create_letter_bundle_with_decision_document() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.RECORD_OUT_OF_TIME_DECISION);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        setUpValidCase();
+        when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(fileNameQualifier.get("test-file.pdf", caseDetails)).thenReturn("qualified-filename.pdf");
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(anyList(), eq("Letter bundle documents"), eq("qualified-filename.pdf")))
+                .thenReturn(bundledDocument);
+
+        // Mock decision of notice document
+        when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(uploadedDocument));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                bundledDocument,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
+        );
+    }
+
+    @Test
+    void should_create_letter_bundle_without_decision_document_when_missing() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.RECORD_OUT_OF_TIME_DECISION);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        setUpValidCase();
+        when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(fileNameQualifier.get("test-file.pdf", caseDetails)).thenReturn("qualified-filename.pdf");
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(anyList(), eq("Letter bundle documents"), eq("qualified-filename.pdf")))
+                .thenReturn(bundledDocument);
+
+        // Mock missing decision of notice document
+        when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                bundledDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
         );

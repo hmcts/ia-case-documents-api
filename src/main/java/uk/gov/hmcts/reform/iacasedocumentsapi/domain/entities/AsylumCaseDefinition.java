@@ -113,6 +113,9 @@ public enum AsylumCaseDefinition {
     HEARING_CENTRE(
             "hearingCentre", new TypeReference<HearingCentre>(){}),
 
+    DATE_BEFORE_ADJOURN_WITHOUT_DATE(
+            "dateBeforeAdjournWithoutDate", new TypeReference<String>(){}),
+
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
@@ -630,6 +633,8 @@ public enum AsylumCaseDefinition {
 
     UPDATED_APPEAL_DECISION(
             "updatedAppealDecision", new TypeReference<String>(){}),
+    APPEAL_DECISION(
+            "appealDecision", new TypeReference<String>(){}),
 
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
@@ -717,6 +722,9 @@ public enum AsylumCaseDefinition {
 
     LATEST_DECISION_AND_REASONS_DOCUMENTS(
             "latestDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    OUT_OF_TIME_DECISION_DOCUMENT(
+            "outOfTimeDecisionDocument", new TypeReference<Document>(){}),
 
     LATEST_REMITTAL_DOCUMENTS(
             "latestRemittalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
@@ -881,6 +889,9 @@ public enum AsylumCaseDefinition {
 
     HEARING_CHANNEL(
         "hearingChannel", new TypeReference<DynamicList>(){}),
+
+    UPDATE_TRIBUNAL_DECISION_DATE(
+            "updateTribunalDecisionDate", new TypeReference<String>(){}),
 
     ;
 

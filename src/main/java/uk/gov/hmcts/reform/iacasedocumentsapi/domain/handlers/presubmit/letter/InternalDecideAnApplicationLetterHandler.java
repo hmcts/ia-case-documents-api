@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -20,7 +21,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.MakeAnApplicationService;
-
 
 @Component
 public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
@@ -62,7 +62,8 @@ public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallba
         return callback.getEvent() == Event.DECIDE_AN_APPLICATION
                 && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && isInternalCase(asylumCase)
-                && isAppellantInDetention(asylumCase);
+                && isAppellantInDetention(asylumCase)
+                && !isDetainedInFacilityType(asylumCase, DetentionFacility.OTHER);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

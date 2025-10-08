@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.collection.IsIterableContainingInOrder;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
+
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
@@ -31,6 +34,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 import java.time.LocalDate;
@@ -51,6 +55,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppea
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_DOCUMENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.AMOUNT_REMITTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
@@ -76,9 +81,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType.NO_REMISSION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.remissionDecisionGranted;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.remissionDecisionPartiallyGranted;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -376,6 +379,29 @@ public class AsylumCaseUtilsTest {
 
         assertEquals(Collections.emptyList(), AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
         assertEquals(Optional.empty(), AsylumCaseUtils.getLatestAddendumEvidenceDocument(asylumCase));
+    }
+
+    @Nested
+    class GetDecisionOfNoticeDocuments {
+
+        @Test
+        void should_get_decision_of_notice_document_when_present() {
+            when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(document));
+
+            Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
+            
+            assertTrue(result.isPresent());
+            assertEquals(document, result.get());
+        }
+
+        @Test
+        void should_return_empty_optional_when_no_decision_of_notice_document_present() {
+            when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
+
+            Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
+            
+            assertFalse(result.isPresent());
+        }
     }
 
     @ParameterizedTest
@@ -768,6 +794,36 @@ public class AsylumCaseUtilsTest {
         assertFalse(isFeeExemptAppeal(asylumCase));
     }
 
+    @Test
+    void should_return_true_when_journey_type_is_rep() {
+        AsylumCase asylumCase = Mockito.mock(AsylumCase.class);
+
+        when(asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class))
+                .thenReturn(Optional.of(JourneyType.REP));
+
+        assertTrue(isRepJourney(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_journey_type_is_not_rep() {
+        AsylumCase asylumCase = Mockito.mock(AsylumCase.class);
+
+        when(asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class))
+                .thenReturn(Optional.of(JourneyType.AIP)); // e.g., Appellant in Person
+
+        assertFalse(isRepJourney(asylumCase));
+    }
+
+    @Test
+    void should_return_true_when_journey_type_is_absent() {
+        AsylumCase asylumCase = Mockito.mock(AsylumCase.class);
+
+        when(asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class))
+                .thenReturn(Optional.empty());
+
+        assertTrue(isRepJourney(asylumCase));
+    }
+  
     @ParameterizedTest
     @ValueSource(strings = {"PARTIALLY_APPROVED", "REJECTED"})
     void should_return_true_for_remission_decision_partially_granted_or_refused(String remissionDecisionValue) {
