@@ -893,6 +893,9 @@ public enum AsylumCaseDefinition {
     UPDATE_TRIBUNAL_DECISION_DATE(
             "updateTribunalDecisionDate", new TypeReference<String>(){}),
 
+    LATE_REMISSION_TYPE(
+            "lateRemissionType", new TypeReference<RemissionType>(){}),
+
     ;
 
 
