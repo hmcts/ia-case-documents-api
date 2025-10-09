@@ -60,9 +60,7 @@ public class InternalEditCaseListingLetterWithAttachmentBundleHandler implements
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == EDIT_CASE_LISTING
-               && isInternalCase(asylumCase)
-               && (!isAppellantInDetention(asylumCase) || (isDetainedInOneOfFacilityTypes(asylumCase, OTHER, IRC,PRISON) && hasBeenSubmittedByAppellantInternalCase(asylumCase)))
-               && hasAppellantAddressInCountryOrOoc(asylumCase)
+               && isInternalCase(asylumCase)             
                && isEmStitchingEnabled;
     }
 

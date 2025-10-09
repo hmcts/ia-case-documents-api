@@ -38,7 +38,7 @@ class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(100, sortedTags.size());
+        assertEquals(107, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -114,7 +114,6 @@ class BundleOrderTest {
             DocumentTag.INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER,
             DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER,
             DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER,
-            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE,
             DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT,
             DocumentTag.IAUT_2_FORM,
             DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER,
@@ -137,6 +136,11 @@ class BundleOrderTest {
             DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER,
             DocumentTag.INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER,
             DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER,
+            DocumentTag.DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER,
             DocumentTag.NONE
         );
 

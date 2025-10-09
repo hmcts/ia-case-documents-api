@@ -8,8 +8,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppea
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.APPROVED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.REJECTED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.REP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -21,11 +23,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
@@ -37,15 +35,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 
 
@@ -116,6 +112,12 @@ public class AsylumCaseUtils {
     public static String getDirectionDueDate(AsylumCase asylumCase, DirectionTag tag) {
         Direction direction = getCaseDirectionsBasedOnTag(asylumCase, tag).get(0);
         return direction.getDateDue();
+    }
+
+    public static boolean isRepJourney(AsylumCase asylumCase) {
+        return asylumCase
+                .read(JOURNEY_TYPE, JourneyType.class)
+                .map(type -> type == REP).orElse(true);
     }
 
     public static Map<String, String> getAppellantPersonalisation(AsylumCase asylumCase) {
@@ -194,6 +196,12 @@ public class AsylumCaseUtils {
         }
     }
 
+    public static boolean isRemissionApproved(AsylumCase asylumCase) {
+        Optional<RemissionDecision> remissionDecision = asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
+
+        return remissionDecision.isPresent() && remissionDecision.get().equals(RemissionDecision.APPROVED);
+    }
+
     public static double getFeeRemission(AsylumCase asylumCase) {
         RemissionType remissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class)
                 .orElseThrow(() -> new RequiredFieldMissingException("Remission type not found"));
@@ -225,6 +233,9 @@ public class AsylumCaseUtils {
         return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
+    public static Optional<Document> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
+        return asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT);
+    }
 
     public static Optional<IdValue<DocumentWithMetadata>> getLatestAddendumEvidenceDocument(AsylumCase asylumCase) {
         List<IdValue<DocumentWithMetadata>> addendums = getAddendumEvidenceDocuments(asylumCase);
@@ -347,6 +358,17 @@ public class AsylumCaseUtils {
             .collect(Collectors.toList());
     }
 
+    public static List<DocumentWithMetadata> getMaybeNotificationAttachmentDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS);
+
+        return maybeLetterNotificationDocuments
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(IdValue::getValue)
+            .filter(document -> document.getTag() == documentTag)
+            .collect(Collectors.toList());
+    }
+
     public static boolean isAppellantInUk(AsylumCase asylumCase) {
         return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)
             .map(inUk -> YesOrNo.YES == inUk).orElse(true);
@@ -408,4 +430,107 @@ public class AsylumCaseUtils {
             .orElse(false);
     }
 
+    public static Boolean remissionDecisionPartiallyGranted(AsylumCase asylumCase) {
+        return asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+                .map(decision -> PARTIALLY_APPROVED == decision)
+                .orElse(false);
+    }
+
+    public static Boolean remissionDecisionGranted(AsylumCase asylumCase) {
+        return asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+                .map(decision -> APPROVED == decision)
+                .orElse(false);
+    }
+
+    public static List<String> getAppellantAddressInCountryOrOoc(final AsylumCase asylumCase) {
+        return isAppellantInUk(asylumCase) ? getAppellantAddressAsList(asylumCase) :
+                getAppellantAddressAsListOoc(asylumCase);
+    }
+
+    public static List<String> getLegalRepAddressInCountryOrOoc(final AsylumCase asylumCase) {
+        return legalRepInCountryAppeal(asylumCase) ? getLegalRepresentativeAddressAsList(asylumCase) :
+                getLegalRepresentativeAddressOocAsList(asylumCase);
+    }
+
+    public static boolean legalRepInCountryAppeal(AsylumCase asylumCase) {
+        return asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class).map(value -> value.equals(YesOrNo.YES)).orElse(false);
+    }
+
+    public static List<String> getLegalRepresentativeAddressAsList(final AsylumCase asylumCase) {
+        AddressUk address = asylumCase
+                .read(LEGAL_REP_ADDRESS_U_K, AddressUk.class)
+                .orElseThrow(() -> new IllegalStateException("legalRepAddressUK is not present"));
+
+        List<String> legalRepAddressAsList = new ArrayList<>();
+
+        legalRepAddressAsList.add(address.getAddressLine1().orElseThrow(() -> new IllegalStateException("legalRepAddress line 1 is not present")));
+        String addressLine2 = address.getAddressLine2().orElse(null);
+        String addressLine3 = address.getAddressLine3().orElse(null);
+
+        if (addressLine2 != null) {
+            legalRepAddressAsList.add(addressLine2);
+        }
+        if (addressLine3 != null) {
+            legalRepAddressAsList.add(addressLine3);
+        }
+        legalRepAddressAsList.add(address.getPostTown().orElseThrow(() -> new IllegalStateException("legalRepAddress postTown is not present")));
+        legalRepAddressAsList.add(address.getPostCode().orElseThrow(() -> new IllegalStateException("legalRepAddress postCode is not present")));
+
+        return legalRepAddressAsList;
+    }
+
+    public static List<String> getLegalRepresentativeAddressOocAsList(final AsylumCase asylumCase) {
+
+        String addressLine1 = asylumCase
+                .read(OOC_ADDRESS_LINE_1, String.class)
+                .orElseThrow(() -> new IllegalStateException("Ooc Legal Rep Address line 1 is not present"));
+
+        String addressLine2 = asylumCase
+                .read(OOC_ADDRESS_LINE_2, String.class)
+                .orElseThrow(() -> new IllegalStateException("Ooc Legal Rep Address line 2 is not present"));
+
+        List<String> legalRepAddressAsList = new ArrayList<>();
+
+        legalRepAddressAsList.add(addressLine1);
+        legalRepAddressAsList.add(addressLine2);
+
+        String addressLine3 = asylumCase
+                .read(OOC_ADDRESS_LINE_3, String.class)
+                .orElse(null);
+
+        String addressLine4 = asylumCase
+                .read(OOC_ADDRESS_LINE_4, String.class)
+                .orElse(null);
+
+        NationalityGovUk oocLrCountryGovUkAdminJ = NationalityGovUk.valueOf(asylumCase
+                .read(OOC_LR_COUNTRY_GOV_UK_ADMIN_J, NationalityFieldValue.class)
+                .orElseThrow(() -> new IllegalStateException("oocLrCountryGovUkAdminJ is not present")).getCode());
+
+        if (addressLine3 != null) {
+            legalRepAddressAsList.add(addressLine3);
+        }
+        if (addressLine4 != null) {
+            legalRepAddressAsList.add(addressLine4);
+        }
+        legalRepAddressAsList.add(oocLrCountryGovUkAdminJ.toString());
+
+        return legalRepAddressAsList;
+    }
+
+    public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(IS_ADMIN, YesOrNo.class)
+                .map(yesOrNo -> Objects.equals(YES, yesOrNo)).orElse(false)
+                && asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+                .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);
+    }
+
+    public static String getHearingChannel(AsylumCase asylumCase, String defaultValue) {
+        Optional<DynamicList> hearingChannelDl = asylumCase.read(HEARING_CHANNEL, DynamicList.class);
+
+        return hearingChannelDl
+            .map(dynamicList -> dynamicList.getValue().getLabel())
+            .orElse(defaultValue);
+    }
 }
+
+

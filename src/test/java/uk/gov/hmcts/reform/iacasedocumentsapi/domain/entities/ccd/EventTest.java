@@ -77,10 +77,12 @@ public class EventTest {
         assertEquals("updateHearingAdjustments", Event.UPDATE_HEARING_ADJUSTMENTS.toString());
         assertEquals("saveNotificationsToData", Event.SAVE_NOTIFICATIONS_TO_DATA.toString());
         assertEquals("manageFeeUpdate", Event.MANAGE_FEE_UPDATE.toString());
+        assertEquals("removeRepresentation", Event.REMOVE_REPRESENTATION.toString());
+        assertEquals("removeLegalRepresentative", Event.REMOVE_LEGAL_REPRESENTATIVE.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(72, Event.values().length);
+        assertEquals(74, Event.values().length);
     }
 }
