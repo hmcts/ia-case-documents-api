@@ -21,6 +21,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 @Component
 public class InternalDetainedAppealRemittedAipIrcPrisonLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -47,6 +48,7 @@ public class InternalDetainedAppealRemittedAipIrcPrisonLetterGenerator implement
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == Event.MARK_APPEAL_AS_REMITTED
+               && isInternalCase(asylumCase)
                && hasBeenSubmittedByAppellantInternalCase(asylumCase)
                && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
