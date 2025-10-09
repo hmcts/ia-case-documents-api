@@ -45,7 +45,8 @@ public class InternalEndAppealAutomaticallyGenerator implements PreSubmitCallbac
                && callback.getEvent() == Event.END_APPEAL_AUTOMATICALLY
                && isInternalCase(asylumCase)
                && isAppellantInDetention(asylumCase)
-               && !isAcceleratedDetainedAppeal(asylumCase);
+               && !isAcceleratedDetainedAppeal(asylumCase)
+               && !isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
