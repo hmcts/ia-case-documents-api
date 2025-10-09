@@ -1001,6 +1001,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     senior-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1021,6 +1022,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     leadership-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1041,6 +1043,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     fee-paid-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1061,6 +1064,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     lead-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1081,6 +1085,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     hearing-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1101,6 +1106,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     ftpa-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1121,6 +1127,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     hearing-panel-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1141,6 +1148,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     challenged-access-judiciary:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1161,6 +1169,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"

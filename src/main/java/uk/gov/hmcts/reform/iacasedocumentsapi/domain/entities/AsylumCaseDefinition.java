@@ -895,6 +895,9 @@ public enum AsylumCaseDefinition {
 
     TRIBUNAL_RECEIVED_DATE(
             "tribunalReceivedDate", new TypeReference<String>(){}),
+  
+    LATE_REMISSION_TYPE(
+            "lateRemissionType", new TypeReference<RemissionType>(){}),
 
     ;
 

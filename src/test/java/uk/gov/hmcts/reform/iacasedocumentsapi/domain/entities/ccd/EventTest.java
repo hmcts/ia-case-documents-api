@@ -79,10 +79,11 @@ public class EventTest {
         assertEquals("manageFeeUpdate", Event.MANAGE_FEE_UPDATE.toString());
         assertEquals("removeRepresentation", Event.REMOVE_REPRESENTATION.toString());
         assertEquals("removeLegalRepresentative", Event.REMOVE_LEGAL_REPRESENTATIVE.toString());
+        assertEquals("decideFtpaApplication", Event.DECIDE_FTPA_APPLICATION.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(74, Event.values().length);
+        assertEquals(75, Event.values().length);
     }
 }
