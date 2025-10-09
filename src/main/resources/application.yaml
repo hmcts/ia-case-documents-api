@@ -288,7 +288,8 @@ internalDetainedRequestRespondentEvidence.templateName: ${IA_INTERNAL_DETAINED_R
 internalDetainedEndAppealAutomatically.contentType:  application/pdf
 internalDetainedEndAppealAutomatically.fileExtension: PDF
 internalDetainedEndAppealAutomatically.fileName: "detained-appellant-end-appeal-automaticaly-notice"
-internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003.docx}
+internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003-v2.docx}
+#add new template 00003-v2.docx
 
 internalDetainedAppealFeeDue.contentType:  application/pdf
 internalDetainedAppealFeeDue.fileExtension: PDF
