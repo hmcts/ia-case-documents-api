@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
@@ -124,6 +125,8 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
             Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(
             Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(
+            Optional.of("prison"));
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionOne));
         when(asylumCase.read(SEND_DIRECTION_PARTIES)).thenReturn(Optional.of(Parties.APPELLANT));
 
@@ -154,6 +157,8 @@ public class InternalNonStandardDirectionLetterGeneratorTest {
             Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(
             Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(
+            Optional.of("prison"));
         when(directionFinder.findFirst(asylumCase, DirectionTag.NONE)).thenReturn(Optional.of(directionOne));
         when(asylumCase.read(SEND_DIRECTION_PARTIES)).thenReturn(Optional.of(Parties.APPELLANT));
 
