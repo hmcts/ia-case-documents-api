@@ -550,6 +550,11 @@ internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
 internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00818.docx}
 
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.contentType: application/pdf
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileExtension: PDF
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileName: "ftp-disposed-of-under-rules-31-or-32-letter"
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.templateName: ${INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULE_31_OR_32_LETTER:TB-IAC-LET-ENG-00825.docx}
+
 internalDetainedAppealRemittedAipIrcPrisonLetter.contentType: application/pdf
 internalDetainedAppealRemittedAipIrcPrisonLetter.fileExtension: PDF
 internalDetainedAppealRemittedAipIrcPrisonLetter.fileName: "appeal-form"

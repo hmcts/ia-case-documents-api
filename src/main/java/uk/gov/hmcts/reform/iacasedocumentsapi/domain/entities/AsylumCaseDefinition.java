@@ -757,12 +757,14 @@ public enum AsylumCaseDefinition {
             "ftpaAppellantRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
     FTPA_APPLICANT_TYPE(
-            "ftpaApplicantType", new TypeReference<String>(){}),
+            "ftpaApplicantType", new TypeReference<ApplicantType>(){}),
+
     DIRECTION_EDIT_DATE_DUE(
             "directionEditDateDue", new TypeReference<String>(){}),
 
     DIRECTION_EDIT_EXPLANATION(
             "directionEditExplanation", new TypeReference<String>(){}),
+
     DIRECTION_EDIT_PARTIES(
             "directionEditParties", new TypeReference<Parties>(){}),
 
@@ -890,6 +892,11 @@ public enum AsylumCaseDefinition {
     HEARING_CHANNEL(
         "hearingChannel", new TypeReference<DynamicList>(){}),
 
+    FTPA_APPELLANT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaAppellantDecisionRemadeRule32Text", new TypeReference<String>(){}),
+
+    FTPA_RESPONDENT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaRespondentDecisionRemadeRule32Text", new TypeReference<String>(){}),
     UPDATE_TRIBUNAL_DECISION_DATE(
             "updateTribunalDecisionDate", new TypeReference<String>(){}),
 
