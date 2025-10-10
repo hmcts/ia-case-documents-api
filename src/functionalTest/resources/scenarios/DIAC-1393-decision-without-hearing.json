@@ -28,7 +28,6 @@
       "replacements": {
         "appellantInDetention": "Yes",
         "isAdmin": "Yes",
-        "appealSubmissionDate": "{$TODAY}",
         "isAcceleratedDetainedAppeal": "No",
         "detentionFacility": "immigrationRemovalCentre",
         "notificationAttachmentDocuments": [
