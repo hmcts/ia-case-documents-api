@@ -113,6 +113,9 @@ public enum AsylumCaseDefinition {
     HEARING_CENTRE(
             "hearingCentre", new TypeReference<HearingCentre>(){}),
 
+    DATE_BEFORE_ADJOURN_WITHOUT_DATE(
+            "dateBeforeAdjournWithoutDate", new TypeReference<String>(){}),
+
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
@@ -630,6 +633,8 @@ public enum AsylumCaseDefinition {
 
     UPDATED_APPEAL_DECISION(
             "updatedAppealDecision", new TypeReference<String>(){}),
+    APPEAL_DECISION(
+            "appealDecision", new TypeReference<String>(){}),
 
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
@@ -718,6 +723,9 @@ public enum AsylumCaseDefinition {
     LATEST_DECISION_AND_REASONS_DOCUMENTS(
             "latestDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
+    OUT_OF_TIME_DECISION_DOCUMENT(
+            "outOfTimeDecisionDocument", new TypeReference<Document>(){}),
+
     LATEST_REMITTAL_DOCUMENTS(
             "latestRemittalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
 
@@ -749,12 +757,14 @@ public enum AsylumCaseDefinition {
             "ftpaAppellantRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
     FTPA_APPLICANT_TYPE(
-            "ftpaApplicantType", new TypeReference<String>(){}),
+            "ftpaApplicantType", new TypeReference<ApplicantType>(){}),
+
     DIRECTION_EDIT_DATE_DUE(
             "directionEditDateDue", new TypeReference<String>(){}),
 
     DIRECTION_EDIT_EXPLANATION(
             "directionEditExplanation", new TypeReference<String>(){}),
+
     DIRECTION_EDIT_PARTIES(
             "directionEditParties", new TypeReference<Parties>(){}),
 
@@ -881,6 +891,20 @@ public enum AsylumCaseDefinition {
 
     HEARING_CHANNEL(
         "hearingChannel", new TypeReference<DynamicList>(){}),
+
+    FTPA_APPELLANT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaAppellantDecisionRemadeRule32Text", new TypeReference<String>(){}),
+
+    FTPA_RESPONDENT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaRespondentDecisionRemadeRule32Text", new TypeReference<String>(){}),
+    UPDATE_TRIBUNAL_DECISION_DATE(
+            "updateTribunalDecisionDate", new TypeReference<String>(){}),
+
+    TRIBUNAL_RECEIVED_DATE(
+            "tribunalReceivedDate", new TypeReference<String>(){}),
+  
+    LATE_REMISSION_TYPE(
+            "lateRemissionType", new TypeReference<RemissionType>(){}),
 
     ;
 
