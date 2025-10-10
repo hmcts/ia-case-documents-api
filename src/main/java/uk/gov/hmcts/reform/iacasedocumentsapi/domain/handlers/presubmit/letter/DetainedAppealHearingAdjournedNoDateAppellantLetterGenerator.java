@@ -61,9 +61,10 @@ public class DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator implem
         }
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
+        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore().orElse(caseDetails);
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalDetainedAppealSubmissionInTimeWithFeeToPayLetter = documentCreator.create(caseDetails);
+        Document internalDetainedAppealSubmissionInTimeWithFeeToPayLetter = documentCreator.create(caseDetails, caseDetailsBefore);
 
         documentHandler.addWithMetadata(
                 asylumCase,
