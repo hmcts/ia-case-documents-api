@@ -111,6 +111,7 @@ public enum DocumentTag {
     DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER("detainedLegalRepRemovedIrcPrisonLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER("internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER("internalDetainedAppealSubmittedWithExemptionLetter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER("internalDetainedAppealRemittedAipIrcPrisonLetter", CaseType.ASYLUM),
     DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER("detainedAppealAdjournHearingWithoutDateIrcPrisonLetter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
