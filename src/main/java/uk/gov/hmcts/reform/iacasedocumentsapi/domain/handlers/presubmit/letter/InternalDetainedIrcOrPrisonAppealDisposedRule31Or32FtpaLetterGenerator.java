@@ -3,9 +3,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isFtpaDecisionOutcomeTypeUnderRule31OrRule32;
 
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,7 +47,7 @@ public class InternalDetainedIrcOrPrisonAppealDisposedRule31Or32FtpaLetterGenera
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == Event.DECIDE_FTPA_APPLICATION
-            && hasBeenSubmittedByAppellantInternalCase(asylumCase)
+            && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
             && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
             && isFtpaDecisionOutcomeTypeUnderRule31OrRule32(asylumCase);
     }

@@ -55,7 +55,7 @@ public class AppealSubmissionDetainedPrisonIrcCreator implements PreSubmitCallba
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.SUBMIT_APPEAL
-                && (isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase))
+                && (isInternalCase(asylumCase) && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase))
                 && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
                 && isRemissionPresent
                 && !isSubmissionOutOfTime(asylumCase);
