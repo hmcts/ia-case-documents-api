@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
@@ -25,19 +26,16 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.remissionDecisionGranted;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalDetainedLateRemissionGrantedTemplateLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalDetainedLateRemissionGrantedTemplateLetterGenerator(
-            @Qualifier("internalDetainedLateRemissionGrantedTemplateLetter") DocumentCreator<AsylumCase> documentCreator,
+    public InternalDetainedAppealRemissionGrantedInTimeLetterGenerator(
+            @Qualifier("internalDetainedAppealRemissionGrantedInTimeLetter") DocumentCreator<AsylumCase> documentCreator,
             DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
@@ -52,20 +50,29 @@ public class InternalDetainedLateRemissionGrantedTemplateLetterGenerator impleme
         Objects.requireNonNull(callback, "callback must not be null");
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
-        boolean paymentPaid = asylumCase
-                .read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)
-                .map(paymentStatus -> paymentStatus == PAID).orElse(false);
+
+        final Optional<CaseDetails<AsylumCase>> caseDetailsBefore = callback.getCaseDetailsBefore();
+
+        boolean submissionInTime = asylumCase
+                .read(AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME, YesOrNo.class)
+                .map(yesOrNo -> yesOrNo == YesOrNo.NO)
+                .orElse(false);
+
+        boolean paymentPaid = caseDetailsBefore.isPresent()
+                ? caseDetailsBefore.get().getCaseData().read(AsylumCaseDefinition.PAYMENT_STATUS, PaymentStatus.class)
+                .map(paymentStatus -> paymentStatus == PAID).orElse(false) : false;
 
         Optional<RemissionType> lateRemissionType = asylumCase.read(LATE_REMISSION_TYPE, RemissionType.class);
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.RECORD_REMISSION_DECISION
-                && hasBeenSubmittedByAppellantInternalCase(asylumCase)
-                && paymentPaid
-                && remissionDecisionGranted(asylumCase)
+                && isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                && submissionInTime
+                && !paymentPaid
+                && isRemissionApproved(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
-                && !isAcceleratedDetainedAppeal(asylumCase)
-                && lateRemissionType.isPresent();
+                && lateRemissionType.isEmpty()
+                && !isAcceleratedDetainedAppeal(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -79,13 +86,13 @@ public class InternalDetainedLateRemissionGrantedTemplateLetterGenerator impleme
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalDetainedAppealSubmissionInTimeWithFeeToPayLetter = documentCreator.create(caseDetails);
+        Document internalDetainedAppealRemissionGrantedInTimeLetterLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadata(
                 asylumCase,
-                internalDetainedAppealSubmissionInTimeWithFeeToPayLetter,
+                internalDetainedAppealRemissionGrantedInTimeLetterLetter,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER
+                DocumentTag.INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
