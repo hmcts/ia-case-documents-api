@@ -31,8 +31,6 @@
         "appealSubmissionDate": "{$TODAY}",
         "isAcceleratedDetainedAppeal": "No",
         "detentionFacility": "immigrationRemovalCentre",
-        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
-        "customerServicesEmail": "{$customerServices.emailAddress}",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
