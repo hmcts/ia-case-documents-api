@@ -56,7 +56,7 @@ public class InternalDetainedAdjournHearingWithoutDateLetterTemplate implements 
 
         final HearingCentre listedHearingCentreBefore =
                 asylumCaseBefore
-                        .read(HEARING_CENTRE, HearingCentre.class)
+                        .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                         .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
 
         final String hearingCentreNameBefore =
