@@ -43,13 +43,6 @@ public class InternalDecisionWithoutHearingGenerator implements PreSubmitCallbac
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        System.out.println("Entering internal detained decision without hearing pre submit handler in docs api");
-
-        System.out.println("Is internal case: " + isInternalCase(asylumCase));
-        System.out.println("hasBeenSubmittedByAppellantInternalCase: " + hasBeenSubmittedByAppellantInternalCase(asylumCase));
-        System.out.println("isDetainedInOneOfFacilityTypes: " + isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON));
-        System.out.println("event: " + callback.getEvent());
-
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.DECISION_WITHOUT_HEARING
                 && isInternalCase(asylumCase)
