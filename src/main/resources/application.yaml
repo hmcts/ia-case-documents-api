@@ -597,6 +597,11 @@ detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
 detainedLegalRepRemovedIrcPrisonLetter.fileName: "appeal-form"
 detainedLegalRepRemovedIrcPrisonLetter.templateName: ${DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER_TEMPLATE:TB-IAC-LET-ENG-legal-rep-removed.docx}
 
+homeOfficeApplicationDecidedLetter.contentType: application/pdf
+homeOfficeApplicationDecidedLetter.fileExtension: PDF
+homeOfficeApplicationDecidedLetter.fileName: "home-office-application-decided-letter"
+homeOfficeApplicationDecidedLetter.templateName: ${HOME_OFFICE_APPLICATION_DECIDED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00828.docx}
+
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
 bailNoticeOfHearing.fileName: "hearing-notice"
@@ -1250,6 +1255,8 @@ iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
 appellantDaysToWait:
   letter:
+    afterRespondentApplicationDecided:
+      inCountry: 14
     afterSubmission: 28
     afterManageFeeUpdate: 14
     afterSubmitAppeal: 10

@@ -66,7 +66,7 @@ public class InternalDetainedAppealRemissionGrantedInTimeLetterGenerator impleme
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.RECORD_REMISSION_DECISION
-                && isInternalCase(asylumCase) && hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                && isInternalCase(asylumCase) && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && submissionInTime
                 && !paymentPaid
                 && isRemissionApproved(asylumCase)

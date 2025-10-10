@@ -2123,4 +2123,26 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("homeOfficeApplicationDecidedLetter")
+    public DocumentCreator<AsylumCase> getHomeOfficeApplicationDecidedLetterDocumentCreator(
+        @Value("${homeOfficeApplicationDecidedLetter.contentType}") String contentType,
+        @Value("${homeOfficeApplicationDecidedLetter.fileExtension}") String fileExtension,
+        @Value("${homeOfficeApplicationDecidedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HomeOfficeApplicationDecidedLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+
 }
