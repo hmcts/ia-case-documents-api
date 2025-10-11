@@ -2080,6 +2080,26 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedDecisionWithoutHearingNotice")
+    public DocumentCreator<AsylumCase> getInternalDetainedDecisionWithoutHearingDocumentCreator(
+            @Value("${internalDetainedDecisionWithoutHearing.contentType}") String contentType,
+            @Value("${internalDetainedDecisionWithoutHearing.fileExtension}") String fileExtension,
+            @Value("${internalDetainedDecisionWithoutHearing.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedDecisionWithoutHearingTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 
     @Bean("internalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaLetter")
     public DocumentCreator<AsylumCase> getInternalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaLetterDocumentCreator(
@@ -2143,6 +2163,5 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
-
 
 }

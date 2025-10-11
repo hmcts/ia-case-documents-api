@@ -550,6 +550,11 @@ internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
 internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
 internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00818.docx}
 
+internalDetainedDecisionWithoutHearing.contentType: application/pdf
+internalDetainedDecisionWithoutHearing.fileExtension: PDF
+internalDetainedDecisionWithoutHearing.fileName: "internal-detained-decision-without-hearing-letter"
+internalDetainedDecisionWithoutHearing.templateName: ${IA_DECISION_WITHOUT_HEARING_TEMPLATE:TB-IAC-DEC-ENG-decision-without-hearing.docx}
+
 internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.contentType: application/pdf
 internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileExtension: PDF
 internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileName: "ftp-disposed-of-under-rules-31-or-32-letter"
@@ -687,6 +692,7 @@ security:
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
       - "markAppealAsAda"
@@ -730,6 +736,7 @@ security:
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
       - "markAppealAsAda"
@@ -773,6 +780,7 @@ security:
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
       - "markAppealAsAda"
@@ -821,6 +829,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -851,6 +860,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -881,6 +891,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -911,6 +922,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -941,6 +953,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -971,6 +984,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"

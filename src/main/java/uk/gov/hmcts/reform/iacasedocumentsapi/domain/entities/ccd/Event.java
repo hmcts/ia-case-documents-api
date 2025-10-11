@@ -68,6 +68,7 @@ public enum Event {
     UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE("uploadAddendumEvidenceHomeOffice", CaseType.ASYLUM),
     UPLOAD_ADDENDUM_EVIDENCE("uploadAddendumEvidence", CaseType.ASYLUM),
     REINSTATE_APPEAL("reinstateAppeal", CaseType.ASYLUM),
+    DECISION_WITHOUT_HEARING("decisionWithoutHearing", CaseType.ASYLUM),
     MARK_APPEAL_AS_REMITTED("markAppealAsRemitted", CaseType.ASYLUM),
 
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
