@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.UPDATED_APPEAL_DECISION;
@@ -44,7 +45,7 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTe
     }
 
     @Override
-    public Map<String, Object> mapFieldValues(CaseDetails<AsylumCase> caseDetails) {
+    public Map<String, Object> mapFieldValues(CaseDetails<AsylumCase> caseDetails, CaseDetails<AsylumCase> caseDetailsBefore) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         final Map<String, Object> fieldValues = new HashMap<>();
@@ -53,8 +54,9 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTe
                         .orElseThrow(() -> new IllegalStateException("Update Tribunal Decision date is missing")))
                 .plusDays(appealAfterTribunalDecision));
 
-        final String oldDecision = asylumCase.read(APPEAL_DECISION, String.class)
-                        .orElseThrow(() -> new IllegalStateException("Appeal Decision is missing"));
+        final Optional<String> updatedAppealDecisionBefore = caseDetailsBefore.getCaseData().read(UPDATED_APPEAL_DECISION, String.class);
+        final String oldDecision = updatedAppealDecisionBefore.isPresent() ? updatedAppealDecisionBefore.get() : caseDetailsBefore.getCaseData().read(APPEAL_DECISION, String.class)
+                        .orElseThrow(() -> new IllegalStateException("Appeal Decision and Updated Appeal Decision are missing"));
 
         final String newDecision = asylumCase.read(UPDATED_APPEAL_DECISION, String.class)
                 .orElseThrow(() -> new IllegalStateException("Updated Appeal Decision is missing"));

@@ -68,9 +68,10 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGe
         }
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
+        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore().orElse(caseDetails);
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document document = documentCreator.create(caseDetails);
+        Document document = documentCreator.create(caseDetails, caseDetailsBefore);
 
         documentHandler.addWithMetadata(
                 asylumCase,
