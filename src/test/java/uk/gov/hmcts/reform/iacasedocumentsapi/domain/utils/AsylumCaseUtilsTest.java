@@ -935,4 +935,70 @@ public class AsylumCaseUtilsTest {
         });
     }
 
+    @Nested
+    class AddIndefiniteArticleTest {
+
+        @ParameterizedTest
+        @CsvSource({
+            "Admin, An Admin",
+            "admin, An admin",
+            "Officer, An Officer",
+            "officer, An officer",
+            "Employee, An Employee",
+            "employee, An employee",
+            "Individual, An Individual",
+            "individual, An individual",
+            "User, A User",
+            "user, A user",
+            "University, A University",
+            "university, A university",
+            "Legal Worker, A Legal Worker",
+            "legal worker, A legal worker",
+            "Appeal Officer, An Appeal Officer",
+            "appeal officer, An appeal officer",
+            "Honor, An Honor",
+            "honor, An honor",
+            "Hour, An Hour",
+            "hour, An hour"
+        })
+        void should_add_correct_indefinite_article(String input, String expected) {
+            String result = AsylumCaseUtils.addIndefiniteArticle(input);
+            assertEquals(expected, result);
+        }
+
+        @Test
+        void should_return_empty_string_for_null_input() {
+            String result = AsylumCaseUtils.addIndefiniteArticle(null);
+            assertEquals("", result);
+        }
+
+        @Test
+        void should_return_empty_string_for_empty_input() {
+            String result = AsylumCaseUtils.addIndefiniteArticle("");
+            assertEquals("", result);
+        }
+
+        @Test
+        void should_return_empty_string_for_whitespace_input() {
+            String result = AsylumCaseUtils.addIndefiniteArticle("   ");
+            assertEquals("", result);
+        }
+
+        @Test
+        void should_handle_single_character_inputs() {
+            assertEquals("A B", AsylumCaseUtils.addIndefiniteArticle("B"));
+            assertEquals("An A", AsylumCaseUtils.addIndefiniteArticle("A"));
+            assertEquals("An E", AsylumCaseUtils.addIndefiniteArticle("E"));
+            assertEquals("An I", AsylumCaseUtils.addIndefiniteArticle("I"));
+            assertEquals("An O", AsylumCaseUtils.addIndefiniteArticle("O"));
+            assertEquals("An U", AsylumCaseUtils.addIndefiniteArticle("U"));
+        }
+
+        @Test
+        void should_trim_input_before_processing() {
+            String result = AsylumCaseUtils.addIndefiniteArticle("  Admin  ");
+            assertEquals("An Admin", result);
+        }
+    }
+
 }
