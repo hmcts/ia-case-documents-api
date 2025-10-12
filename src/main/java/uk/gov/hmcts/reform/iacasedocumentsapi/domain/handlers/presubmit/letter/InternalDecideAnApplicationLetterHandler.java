@@ -51,6 +51,8 @@ public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallba
         this.makeAnApplicationService = makeAnApplicationService;
     }
 
+    // Currently still be requested from the notification api
+    // for aipm admin-applications for prison + irc
     public boolean canHandle(
             PreSubmitCallbackStage callbackStage,
             Callback<AsylumCase> callback

@@ -68,6 +68,8 @@ public enum Event {
     UPLOAD_ADDENDUM_EVIDENCE_HOME_OFFICE("uploadAddendumEvidenceHomeOffice", CaseType.ASYLUM),
     UPLOAD_ADDENDUM_EVIDENCE("uploadAddendumEvidence", CaseType.ASYLUM),
     REINSTATE_APPEAL("reinstateAppeal", CaseType.ASYLUM),
+    DECISION_WITHOUT_HEARING("decisionWithoutHearing", CaseType.ASYLUM),
+    MARK_APPEAL_AS_REMITTED("markAppealAsRemitted", CaseType.ASYLUM),
 
     SUBMIT_APPLICATION("submitApplication", CaseType.BAIL),
     RECORD_THE_DECISION("recordTheDecision", CaseType.BAIL),
@@ -80,6 +82,7 @@ public enum Event {
     UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments", CaseType.ASYLUM),
     SAVE_NOTIFICATIONS_TO_DATA("saveNotificationsToData", CaseType.ASYLUM),
+    DECIDE_FTPA_APPLICATION("decideFtpaApplication", CaseType.ASYLUM),
 
     REMOVE_REPRESENTATION("removeRepresentation", CaseType.ASYLUM),
     REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative", CaseType.ASYLUM),

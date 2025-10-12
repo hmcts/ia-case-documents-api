@@ -22,7 +22,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribunalRules.UNDER_RULE_31;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
@@ -54,7 +54,7 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGe
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.UPDATE_TRIBUNAL_DECISION
                 && isInternalCase(asylumCase)
-                && hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
                 && isRule31ReasonUpdatingDecision(asylumCase);
     }
@@ -68,9 +68,10 @@ public class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGe
         }
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
+        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore().orElse(caseDetails);
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document document = documentCreator.create(caseDetails);
+        Document document = documentCreator.create(caseDetails, caseDetailsBefore);
 
         documentHandler.addWithMetadata(
                 asylumCase,

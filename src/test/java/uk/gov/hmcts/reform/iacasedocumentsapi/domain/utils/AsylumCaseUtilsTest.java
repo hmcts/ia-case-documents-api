@@ -691,13 +691,13 @@ public class AsylumCaseUtilsTest {
 
     @ParameterizedTest
     @EnumSource(value = YesOrNo.class)
-    void should_return_correct_value_for_hasBeenSubmittedByAppellantInternalCase(YesOrNo yesOrNo) {
+    void should_return_correct_value_for_hasAppealBeenSubmittedByAppellantInternalCase(YesOrNo yesOrNo) {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
         if (yesOrNo.equals(YES)) {
-            assertTrue(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+            assertTrue(AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase));
         } else {
-            assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+            assertFalse(AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase));
         }
     }
 
@@ -705,7 +705,7 @@ public class AsylumCaseUtilsTest {
     void should_return_false_when_appellants_representation_is_not_present() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
 
-        assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+        assertFalse(AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase));
     }
 
 
@@ -714,7 +714,7 @@ public class AsylumCaseUtilsTest {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+        boolean result = AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase);
 
         assertTrue(result);
     }
@@ -724,7 +724,7 @@ public class AsylumCaseUtilsTest {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+        boolean result = AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase);
 
         assertFalse(result);
     }
@@ -734,7 +734,7 @@ public class AsylumCaseUtilsTest {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
 
-        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+        boolean result = AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase);
 
         assertFalse(result);
     }

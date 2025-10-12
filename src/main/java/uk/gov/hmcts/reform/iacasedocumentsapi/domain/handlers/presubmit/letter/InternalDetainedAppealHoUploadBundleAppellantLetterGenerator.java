@@ -47,7 +47,7 @@ public class InternalDetainedAppealHoUploadBundleAppellantLetterGenerator implem
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.REQUEST_RESPONDENT_EVIDENCE
                 && isInternalCase(asylumCase)
-                && hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
                 && !isAcceleratedDetainedAppeal(asylumCase);
     }

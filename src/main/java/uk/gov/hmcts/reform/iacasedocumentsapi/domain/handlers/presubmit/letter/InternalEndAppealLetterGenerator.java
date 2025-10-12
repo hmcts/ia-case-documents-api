@@ -45,7 +45,7 @@ public class InternalEndAppealLetterGenerator implements PreSubmitCallbackHandle
                && callback.getEvent() == END_APPEAL
                && isInternalCase(asylumCase)
                && (!isAppellantInDetention(asylumCase)
-                   || (hasBeenSubmittedByAppellantInternalCase(asylumCase) && isAppellantInDetention(asylumCase))
+                   || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && && isAppellantInDetention(asylumCase))
                )
                && hasAppellantAddressInCountryOrOoc(asylumCase);
     }

@@ -66,7 +66,7 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
 
         Document endAppealNotice;
 
-        if (isAipJourney || hasBeenSubmittedByAppellantInternalCase(asylumCase)) {
+        if (isAipJourney || hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)) {
             endAppealNotice = endAppealAppellantNoticeDocumentCreator.create(caseDetails);
         } else {
             endAppealNotice = endAppealNoticeDocumentCreator.create(caseDetails);
