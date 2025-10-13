@@ -573,6 +573,9 @@ internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-I
 internalEndAppealLetterWithAttachment.fileExtension: PDF
 internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
 
+internalEndAppealDetWithAttachment.fileExtension: PDF
+internalEndAppealDetWithAttachment.fileName: "internal-end-appeal-det-with-attachment"
+
 internalEditCaseListingLetter.contentType:  application/pdf
 internalEditCaseListingLetter.fileExtension: PDF
 internalEditCaseListingLetter.fileName: "internal-edit-case-listing-letter"
