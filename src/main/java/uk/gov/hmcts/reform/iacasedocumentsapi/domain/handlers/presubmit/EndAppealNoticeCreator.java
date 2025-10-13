@@ -98,7 +98,7 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
             );
         }
 
-        if ((hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) && hasAppellantAddressInCountryOrOoc(asylumCase)) {
+        if ((hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     endAppealNotice,

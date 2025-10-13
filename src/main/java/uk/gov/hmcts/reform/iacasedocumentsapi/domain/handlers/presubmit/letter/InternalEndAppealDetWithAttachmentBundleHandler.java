@@ -66,7 +66,6 @@ public class InternalEndAppealDetWithAttachmentBundleHandler implements PreSubmi
                 && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && isAppellantInDetention(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
-                && hasAppellantAddressInCountryOrOoc(asylumCase)
                 && isEmStitchingEnabled;
     }
 
