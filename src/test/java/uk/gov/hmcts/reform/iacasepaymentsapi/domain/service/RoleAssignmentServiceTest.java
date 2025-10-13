@@ -1,10 +1,14 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,8 +38,6 @@ class RoleAssignmentServiceTest {
     private RoleAssignmentService roleAssignmentService;
     @Mock
     private CaseDetails<CaseData> caseDetails;
-    private final String userId = "userId";
-    private final String accessToken = "accessToken";
     private final String serviceToken = "serviceToken";
 
     @BeforeEach
@@ -47,6 +49,7 @@ class RoleAssignmentServiceTest {
 
     @Test
     void getCaseRolesForUserTest() {
+        String userId = "userId";
         Assignment assignment1 = Assignment.builder()
             .roleName(RoleName.CTSC_TEAM_LEADER)
             .roleType(RoleType.CASE)
@@ -62,19 +65,25 @@ class RoleAssignmentServiceTest {
             .roleType(RoleType.CASE)
             .actorId(userId)
             .build();
+        Map<String, Object> requestBody = Map.of(
+            "actorId", Collections.singletonList(userId),
+            "roleType", Collections.singletonList(RoleType.ORGANISATION),
+            "attributes", Collections.singletonMap("jurisdiction", Collections.singletonList("IA"))
+        );
 
-        when(roleAssignmentApi.getRoleAssignments(
-            accessToken,
-            serviceToken,
-            userId
+        String accessToken = "accessToken";
+        when(roleAssignmentApi.queryRoleAssignments(
+            eq(accessToken),
+            eq(serviceToken),
+            anyMap()
         )).thenReturn(new RoleAssignmentResource(List.of(assignment1, assignment2, assignment3)));
 
         List<String> roles = roleAssignmentService.getAmRolesFromUser(userId, accessToken);
 
-        verify(roleAssignmentApi).getRoleAssignments(
-            accessToken,
-            serviceToken,
-            userId
+        verify(roleAssignmentApi).queryRoleAssignments(
+            eq(accessToken),
+            eq(serviceToken),
+            eq(requestBody)
         );
         assertTrue(roles.contains(RoleName.CTSC_TEAM_LEADER.getValue()));
         assertTrue(roles.contains(RoleName.CTSC.getValue()));
