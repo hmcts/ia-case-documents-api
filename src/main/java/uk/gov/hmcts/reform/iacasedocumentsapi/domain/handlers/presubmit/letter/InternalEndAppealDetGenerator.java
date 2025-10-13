@@ -47,7 +47,6 @@ public class InternalEndAppealDetGenerator implements PreSubmitCallbackHandler<A
                 && callback.getEvent() == Event.END_APPEAL
                 && isInternalCase(asylumCase)
                 && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
-                && isAppellantInDetention(asylumCase)
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
