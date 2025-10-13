@@ -352,7 +352,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
             case INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 102;
-            }
+            }  
             case INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 103;
@@ -365,7 +365,24 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 105;
             }
-            case NONE ->  106;
+            case INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER -> {
+                log.warn("INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 106;
+            }
+            case INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER -> {
+                log.warn("INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 107;
+            }
+            case HOME_OFFICE_APPLICATION_DECIDED_LETTER -> {
+                log.warn("HOME_OFFICE_APPLICATION_DECIDED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 108;
+            }
+            case INTERNAL_DETAINED_DECISION_WITHOUT_HEARING -> {
+                log.warn("INTERNAL_DETAINED_DECISION_WITHOUT_HEARING tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 109;
+            }
+            case NONE ->  110;
+
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
         };

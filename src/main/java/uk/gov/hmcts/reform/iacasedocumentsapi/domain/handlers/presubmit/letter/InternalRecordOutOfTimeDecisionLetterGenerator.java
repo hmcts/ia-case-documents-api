@@ -47,7 +47,7 @@ public class InternalRecordOutOfTimeDecisionLetterGenerator implements PreSubmit
                && isInternalCase(asylumCase)
                && (!isAppellantInDetention(asylumCase)
                 || (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
-                || (hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && isDetainedInFacilityType(asylumCase, OTHER)));
     }
 

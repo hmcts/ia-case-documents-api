@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -43,9 +44,9 @@ public class DetainedAppealHearingAdjournedNoDateAppellantTemplate implements Do
         final Map<String, Object> fieldValues = new HashMap<>();
 
         String previousHearingCentre;
-        Optional<String> hearingCentre = caseDetailsBefore.getCaseData().read(LIST_CASE_HEARING_CENTRE, String.class);
+        Optional<HearingCentre> hearingCentre = caseDetailsBefore.getCaseData().read(LIST_CASE_HEARING_CENTRE, HearingCentre.class);
         if (hearingCentre.isPresent()) {
-            previousHearingCentre = hearingCentre.get();
+            previousHearingCentre = hearingCentre.get().getValue();
         } else {
             previousHearingCentre = "";
         }

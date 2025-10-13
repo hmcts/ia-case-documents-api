@@ -25,7 +25,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.REJECTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 
@@ -62,7 +62,7 @@ public class InternalDetainedLateRemissionRefusedTemplateLetterGenerator impleme
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == Event.RECORD_REMISSION_DECISION
-                && hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && paymentPaid
                 && rejected
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)

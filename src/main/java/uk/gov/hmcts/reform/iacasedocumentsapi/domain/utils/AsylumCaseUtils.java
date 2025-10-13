@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType.APPELLANT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.DC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.RP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EA;
@@ -27,6 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
@@ -36,13 +38,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 
 
 public class AsylumCaseUtils {
@@ -71,7 +74,7 @@ public class AsylumCaseUtils {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
     }
 
-    public static boolean hasBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
+    public static boolean hasAppealBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
         return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
                 .map(yesOrNo -> YES == yesOrNo).orElse(false);
     }
@@ -211,16 +214,6 @@ public class AsylumCaseUtils {
         } else {
             return getAmountRemitted(asylumCase);
         }
-    }
-
-    public static boolean isValidUserDirection(
-            DirectionFinder directionFinder, AsylumCase asylumCase,
-            DirectionTag directionTag, Parties parties
-    ) {
-        return directionFinder
-                .findFirst(asylumCase, directionTag)
-                .map(direction -> direction.getParties().equals(parties))
-                .orElse(false);
     }
 
     public static List<IdValue<DocumentWithMetadata>> getAddendumEvidenceDocuments(AsylumCase asylumCase) {
@@ -530,6 +523,49 @@ public class AsylumCaseUtils {
         return hearingChannelDl
             .map(dynamicList -> dynamicList.getValue().getLabel())
             .orElse(defaultValue);
+    }
+
+    public static boolean isFtpaDecisionOutcomeTypeUnderRule31OrRule32(AsylumCase asylumCase) {
+        List<String> rule31And32 = List.of(
+            FtpaDecisionOutcomeType.FTPA_REMADE31.toString(),
+            FtpaDecisionOutcomeType.FTPA_REMADE32.toString()
+        );
+
+        final ApplicantType ftpaApplicantType = retrieveApplicantType(asylumCase);
+
+        Optional<FtpaDecisionOutcomeType> ftpaDecisionOutcomeType = retrieveFtpaDecisionApplicantType(asylumCase, ftpaApplicantType);
+
+        return ftpaDecisionOutcomeType
+            .map(decision -> rule31And32.contains(decision.toString()))
+            .orElse(false);
+    }
+
+    private static ApplicantType retrieveApplicantType(AsylumCase asylumCase) {
+        return asylumCase
+            .read(FTPA_APPLICANT_TYPE, ApplicantType.class)
+            .orElseThrow(() -> new IllegalStateException("ftpaApplicantType is not present"));
+    }
+
+    private static Optional<FtpaDecisionOutcomeType> retrieveFtpaDecisionApplicantType(AsylumCase asylumCase, ApplicantType ftpaApplicantType) {
+        return asylumCase.read(ftpaApplicantType.equals(APPELLANT)
+            ? FTPA_APPELLANT_RJ_DECISION_OUTCOME_TYPE
+            : FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
+    }
+
+    public static MakeAnApplication getDecidedApplication(AsylumCase asylumCase) {
+        String decidedApplicationId = asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class)
+            .orElseThrow(() -> new IllegalStateException("decideAnApplicationId is not present"));
+
+        Optional<List<IdValue<MakeAnApplication>>> applications = asylumCase.read(MAKE_AN_APPLICATIONS);
+
+        IdValue<MakeAnApplication> applicationIdValue = applications
+            .orElse(Collections.emptyList())
+            .stream()
+            .filter(app -> app.getId().equals(decidedApplicationId))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("the decided application is not present in make an applications list"));;
+
+        return applicationIdValue.getValue();
     }
 }
 

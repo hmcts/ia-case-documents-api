@@ -75,7 +75,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         setUpValidCase();
-        when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(documentCreator.create(caseDetails, caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
