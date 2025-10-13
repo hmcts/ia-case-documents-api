@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
@@ -18,7 +19,6 @@ import java.util.Objects;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.END_APPEAL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -44,12 +44,11 @@ public class InternalEndAppealDetGenerator implements PreSubmitCallbackHandler<A
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == END_APPEAL
+                && callback.getEvent() == Event.END_APPEAL
                 && isInternalCase(asylumCase)
                 && hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && isAppellantInDetention(asylumCase)
-                && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
-                && hasAppellantAddressInCountryOrOoc(asylumCase);
+                && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -63,16 +62,15 @@ public class InternalEndAppealDetGenerator implements PreSubmitCallbackHandler<A
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalEndAppealLetter = documentCreator.create(caseDetails);
+        Document internalEndAppealNotice = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
-                internalEndAppealLetter,
+                internalEndAppealNotice,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.END_APPEAL
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
-
 }
