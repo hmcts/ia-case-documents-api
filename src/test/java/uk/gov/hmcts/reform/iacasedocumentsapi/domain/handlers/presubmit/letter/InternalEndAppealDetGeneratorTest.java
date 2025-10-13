@@ -28,7 +28,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalEndAppealGeneratorTest {
+class InternalEndAppealDetGeneratorTest {
     @Mock
     private DocumentCreator<AsylumCase> documentCreator;
     @Mock
