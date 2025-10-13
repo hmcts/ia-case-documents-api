@@ -26,7 +26,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeLetterNotificationDocuments;
 
 @Component
-public class internalEndAppealDetWithAttachmentBundleHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalEndAppealDetWithAttachmentBundleHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,7 +35,7 @@ public class internalEndAppealDetWithAttachmentBundleHandler implements PreSubmi
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public internalEndAppealDetWithAttachmentBundleHandler(
+    public InternalEndAppealDetWithAttachmentBundleHandler(
             @Value("${internalEndAppealDetWithAttachment.fileExtension}") String fileExtension,
             @Value("${internalEndAppealDetWithAttachment.fileName}") String fileName,
             @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
