@@ -20,4 +20,10 @@ public class DateUtilsTest {
         assertEquals(formattedExampleDate, DateUtils.formatDateForNotificationAttachmentDocument(exampleDateToFormat));
     }
 
+    @Test
+    void should_format_and_return_date_correctly_from_date_notification() {
+        assertEquals(formattedExampleDate, DateUtils.formatDateForNotification(exampleDateToFormat));
+    }
+
+
 }

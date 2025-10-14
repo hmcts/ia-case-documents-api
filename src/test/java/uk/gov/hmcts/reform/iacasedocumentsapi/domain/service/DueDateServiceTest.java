@@ -53,6 +53,26 @@ class DueDateServiceTest {
     }
 
     @Test
+    void should_return_next_calendar_day_4_pm_when_calculated() {
+        ZonedDateTime eventDateTime =
+            ZonedDateTime.of(
+                2022, 7, 19,
+                9, 0, 0, 0,
+                ZoneId.systemDefault()
+            );
+
+        int calendarDaysAllowed = 2;
+
+        ZonedDateTime expectedDueDate = eventDateTime.plusDays(calendarDaysAllowed);
+        ZonedDateTime expectedDueDateTime = expectedDueDate.with(
+            LocalTime.of(16, 0, 0, 0)
+        );
+        ZonedDateTime actualDateTime = dueDateService.calculateCalendarDaysDueDate(eventDateTime, calendarDaysAllowed);
+
+        assertThat(actualDateTime, is(expectedDueDateTime));
+    }
+
+    @Test
     void should_return_next_working_day_4_pm_when_delay_date_matches_holiday() {
         ZonedDateTime eventDateTime =
                 ZonedDateTime.of(

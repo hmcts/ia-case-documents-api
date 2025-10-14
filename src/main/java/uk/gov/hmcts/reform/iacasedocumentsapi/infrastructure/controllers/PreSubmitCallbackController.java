@@ -34,8 +34,9 @@ public class PreSubmitCallbackController<T extends CaseData> {
         return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_START, callback);
     }
 
+    // parameter was added from notifications api
     public ResponseEntity<PreSubmitCallbackResponse<T>> ccdAboutToSubmit(
-        Callback<T> callback
+        @Parameter(name = "Asylum case data", required = true) @NotNull @RequestBody Callback<T> callback
     ) {
         return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
     }

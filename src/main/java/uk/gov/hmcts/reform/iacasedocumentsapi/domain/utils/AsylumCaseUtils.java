@@ -6,6 +6,20 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IRC_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_WITHOUT_HEARING;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_EJP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_EMAIL_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.PRISON_NAME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
@@ -15,8 +29,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
@@ -24,10 +40,21 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.National
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AccessCodeGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplyForCosts;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.OtherDetentionFacilityName;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.PinInPostDetails;
 
 
 public class AsylumCaseUtils {
+
+    public static final String HOME_OFFICE = "Home office";
+    public static final String LEGAL_REPRESENTATIVE = "Legal representative";
+    public static final String JUDGE = "Tribunal";
+    private static final String INCORRECT_APPLICANT_TYPE_ERROR_MESSAGE = "Correct applicant type is not present";
+    private static final String INCORRECT_RESPONDENT_TYPE_ERROR_MESSAGE = "Correct respondent type is not present";
+
 
     private AsylumCaseUtils() {
         // prevent public constructor for Sonar
@@ -43,6 +70,14 @@ public class AsylumCaseUtils {
                 .equals(YES);
     }
 
+    public static boolean isLegalRepEjp(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(LEGAL_REP_REFERENCE_EJP, String.class).isPresent();
+    }
+
+    public static boolean isAgeAssessmentAppeal(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return (asylumCase.read(APPEAL_TYPE, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.class)).orElse(null) == uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.AG;
+    }
+
     public static boolean isDetainedAppeal(AsylumCase asylumCase) {
         return asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)
                 .orElse(NO)
@@ -53,8 +88,79 @@ public class AsylumCaseUtils {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
     }
 
+    public static boolean isNotInternalOrIsInternalWithLegalRepresentation(AsylumCase asylumCase) {
+        return (!isInternalCase(asylumCase) ||
+            isInternalCase(asylumCase) && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase));
+    }
+
+    public static boolean inCountryAppeal(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_IN_UK, YesOrNo.class).map(value -> value.equals(YesOrNo.YES)).orElse(false);
+    }
+
     public static boolean isInternalNonDetainedCase(AsylumCase asylumCase) {
         return isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase);
+    }
+
+    public static boolean legalRepInCountryAppeal(AsylumCase asylumCase) {
+        return asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class).map(value -> value.equals(YesOrNo.YES)).orElse(false);
+    }
+
+    public static boolean isAriaMigrated(AsylumCase asylumCase) {
+        return asylumCase.read(IS_ARIA_MIGRATED, YesOrNo.class).map(isAdmin -> YesOrNo.YES == isAdmin).orElse(false);
+    }
+
+    public static Optional<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType> getFtpaDecisionOutcomeType(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        Optional<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType> ftpaDecisionOutcomeType = asylumCase
+            .read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
+        if (ftpaDecisionOutcomeType.isPresent()) {
+            return ftpaDecisionOutcomeType;
+        }
+        return asylumCase.read(FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.FtpaDecisionOutcomeType.class);
+    }
+
+    public static boolean isAppealListed(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        final Optional<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre> appealListed = asylumCase
+            .read(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre.class);
+
+        return appealListed.isPresent();
+    }
+
+    public static String getDetentionFacilityName(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        String detentionFacility = asylumCase.read(DETENTION_FACILITY, String.class)
+            .orElse("");
+        switch (detentionFacility) {
+            case "immigrationRemovalCentre":
+                return getFacilityName(IRC_NAME, asylumCase);
+            case "prison":
+                return getFacilityName(PRISON_NAME, asylumCase);
+            case "other":
+                return asylumCase.read(OTHER_DETENTION_FACILITY_NAME, OtherDetentionFacilityName.class)
+                    .orElseThrow(() -> new RequiredFieldMissingException("Other detention facility name is missing")).getOther();
+            default:
+                throw new RequiredFieldMissingException("Detention Facility is missing");
+        }
+    }
+
+    public static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata getLetterForNotification(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag documentTag) {
+        Optional<List<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata>>> optionalNotificationLetters = asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS);
+        return optionalNotificationLetters
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue::getValue)
+            .filter(d -> d.getTag() == documentTag)
+            .findFirst().orElseThrow(() -> new IllegalStateException(documentTag + " document not available"));
+    }
+
+    private static String getFacilityName(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition field, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(field, String.class)
+            .orElseThrow(() -> new RequiredFieldMissingException(field.name() + " is missing"));
+    }
+
+    public static boolean isAipJourney(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+
+        return asylumCase
+            .read(JOURNEY_TYPE, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.class)
+            .map(type -> type == AIP).orElse(false);
     }
 
     public static boolean hasAppellantAddressInCountryOrOoc(AsylumCase asylumCase) {
@@ -235,6 +341,92 @@ public class AsylumCaseUtils {
                 .map(HearingCentre.IAC_NATIONAL_VIRTUAL::equals).orElse(false);
     }
 
+    // This method uses the isEjp field which is set yes for EJP when a case is saved or no if paper form
+    public static boolean isEjpCase(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(IS_EJP, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class).orElse(
+            uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO) == uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
+    }
+
+    public static ImmutablePair<String, String> getApplicantAndRespondent(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase, Function<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase, ApplyForCosts> retrieveApplyForCosts) {
+        List<String> availableRoles = List.of(HOME_OFFICE, LEGAL_REPRESENTATIVE, JUDGE);
+
+        ApplyForCosts applyForCosts = retrieveApplyForCosts.apply(asylumCase);
+
+        final String applicantType = applyForCosts.getApplyForCostsApplicantType();
+        final String respondentType = applyForCosts.getApplyForCostsRespondentRole();
+
+        if (!availableRoles.contains(applicantType)) {
+            throw new IllegalStateException(INCORRECT_APPLICANT_TYPE_ERROR_MESSAGE);
+        }
+        if (!availableRoles.contains(respondentType)) {
+            throw new IllegalStateException(INCORRECT_RESPONDENT_TYPE_ERROR_MESSAGE);
+        }
+
+        return new ImmutablePair<>(applicantType, respondentType);
+    }
+
+    public static ApplyForCosts retrieveLatestApplyForCosts(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        Optional<List<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue<ApplyForCosts>>> applyForCosts = asylumCase.read(APPLIES_FOR_COSTS);
+
+        if (applyForCosts.isPresent()) {
+            List<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue<ApplyForCosts>> applyForCostsList = applyForCosts.get();
+            return applyForCostsList.get(0).getValue();
+        } else {
+            throw new IllegalStateException("Applies for costs are not present");
+        }
+    }
+
+    public static ApplyForCosts getApplicationById(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition definition) {
+        uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DynamicList applyForCostsDynamicList = asylumCase.read(definition, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DynamicList.class)
+            .orElseThrow(() -> new IllegalStateException(definition.value() + " is not present"));
+
+        String applicationId = applyForCostsDynamicList.getValue().getCode();
+
+        Optional<List<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue<ApplyForCosts>>> maybeApplyForCosts = asylumCase.read(APPLIES_FOR_COSTS);
+
+        return maybeApplyForCosts
+            .orElseThrow(() -> new IllegalStateException("appliesForCost are not present"))
+            .stream()
+            .filter(applyForCosts -> applyForCosts.getId().equals(applicationId))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Apply for costs with id " + applicationId + " not found"))
+            .getValue();
+    }
+
+    public static boolean isLoggedUserIsHomeOffice(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase, Function<uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase, ApplyForCosts> retrieveApplyForCosts) {
+        ApplyForCosts selectedApplication = retrieveApplyForCosts.apply(asylumCase);
+
+        if (selectedApplication.getLoggedUserRole().equals(HOME_OFFICE)) {
+            return true;
+        } else if (selectedApplication.getLoggedUserRole().equals(LEGAL_REPRESENTATIVE)) {
+            return false;
+        }
+        throw new IllegalStateException(INCORRECT_APPLICANT_TYPE_ERROR_MESSAGE);
+    }
+
+    public static PinInPostDetails generateAppellantPinIfNotPresent(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        if (!asylumCase.read(APPELLANT_PIN_IN_POST, PinInPostDetails.class).isPresent()) {
+            asylumCase.write(APPELLANT_PIN_IN_POST, PinInPostDetails.builder()
+                .accessCode(AccessCodeGenerator.generateAccessCode())
+                .expiryDate(LocalDate.now().plusDays(30).toString())
+                .pinUsed(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO)
+                .build());
+        }
+
+        return asylumCase.read(APPELLANT_PIN_IN_POST, PinInPostDetails.class)
+            .orElseThrow(() -> new IllegalStateException("Failed to generate appellantPinInPost."));
+    }
+
+    public static boolean isSubmissionOutOfTime(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(SUBMISSION_OUT_OF_TIME, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class).orElse(
+            uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO).equals(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES);
+    }
+
+    public static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo isAppellantInUK(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_UK, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class).orElse(
+            uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO);
+    }
+
     public static List<String> getAppellantAddressAsList(final AsylumCase asylumCase) {
         AddressUk address = asylumCase
             .read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)
@@ -312,6 +504,74 @@ public class AsylumCaseUtils {
             .map(inUk -> YesOrNo.YES == inUk).orElse(true);
     }
 
+    public static List<String> getLegalRepresentativeAddressAsList(final uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk address = asylumCase
+            .read(LEGAL_REP_ADDRESS_U_K, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk.class)
+            .orElseThrow(() -> new IllegalStateException("legalRepAddressUK is not present"));
+
+        List<String> legalRepAddressAsList = new ArrayList<>();
+
+        legalRepAddressAsList.add(address.getAddressLine1().orElseThrow(() -> new IllegalStateException("legalRepAddress line 1 is not present")));
+        String addressLine2 = address.getAddressLine2().orElse(null);
+        String addressLine3 = address.getAddressLine3().orElse(null);
+
+        if (addressLine2 != null) {
+            legalRepAddressAsList.add(addressLine2);
+        }
+        if (addressLine3 != null) {
+            legalRepAddressAsList.add(addressLine3);
+        }
+        legalRepAddressAsList.add(address.getPostTown().orElseThrow(() -> new IllegalStateException("legalRepAddress postTown is not present")));
+        legalRepAddressAsList.add(address.getPostCode().orElseThrow(() -> new IllegalStateException("legalRepAddress postCode is not present")));
+
+        return legalRepAddressAsList;
+    }
+
+    public static List<String> getLegalRepresentativeAddressOocAsList(final uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+
+        String addressLine1 = asylumCase
+            .read(OOC_ADDRESS_LINE_1, String.class)
+            .orElseThrow(() -> new IllegalStateException("Ooc Legal Rep Address line 1 is not present"));
+
+        String addressLine2 = asylumCase
+            .read(OOC_ADDRESS_LINE_2, String.class)
+            .orElseThrow(() -> new IllegalStateException("Ooc Legal Rep Address line 2 is not present"));
+
+        List<String> legalRepAddressAsList = new ArrayList<>();
+
+        legalRepAddressAsList.add(addressLine1);
+        legalRepAddressAsList.add(addressLine2);
+
+        String addressLine3 = asylumCase
+            .read(OOC_ADDRESS_LINE_3, String.class)
+            .orElse(null);
+
+        String addressLine4 = asylumCase
+            .read(OOC_ADDRESS_LINE_4, String.class)
+            .orElse(null);
+
+        uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.NationalityGovUk oocLrCountryGovUkAdminJ = uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.NationalityGovUk.valueOf(asylumCase
+                                                                                                                                                                                                              .read(OOC_LR_COUNTRY_GOV_UK_ADMIN_J, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.NationalityFieldValue.class)
+                                                                                                                                                                                                              .orElseThrow(() -> new IllegalStateException("oocLrCountryGovUkAdminJ is not present")).getCode());
+
+        if (addressLine3 != null) {
+            legalRepAddressAsList.add(addressLine3);
+        }
+        if (addressLine4 != null) {
+            legalRepAddressAsList.add(addressLine4);
+        }
+        legalRepAddressAsList.add(oocLrCountryGovUkAdminJ.toString());
+
+        return legalRepAddressAsList;
+    }
+
+    public static String convertAsylumCaseFeeValue(String amountFromAsylumCase) {
+        return StringUtils.isNotBlank(amountFromAsylumCase)
+            ? new BigDecimal(String.valueOf(Double.parseDouble(amountFromAsylumCase) / 100))
+            .setScale(2, RoundingMode.DOWN).toString()
+            : "";
+    }
+
     public static String calculateFeeDifference(String originalFeeTotal, String newFeeTotal) {
         try {
 
@@ -331,6 +591,84 @@ public class AsylumCaseUtils {
                 ? new BigDecimal(String.valueOf(Double.parseDouble(amountFromAsylumCase) / 100))
                 .setScale(2, RoundingMode.DOWN).toString()
                 : "";
+    }
+
+    public static boolean hasAppellantAddressInCountryOrOutOfCountry(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class)
+            .map(flag -> flag.equals(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES)).orElse(false)
+            || asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class)
+            .map(flag -> flag.equals(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES)).orElse(false);
+    }
+
+    public static Set<String> getAppellantAddressInCountryOrOoc(final uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return inCountryAppeal(asylumCase) ? Collections.singleton(getAppellantAddressAsList(asylumCase).stream()
+                                                                       .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_"))) :
+            Collections.singleton(getAppellantAddressAsListOoc(asylumCase).stream()
+                                      .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_")));
+    }
+
+    public static Set<String> getLegalRepAddressInCountryOrOoc(final uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return legalRepInCountryAppeal(asylumCase) ? Collections.singleton(getLegalRepresentativeAddressAsList(asylumCase).stream()
+                                                                               .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_"))) :
+            Collections.singleton(getLegalRepresentativeAddressOocAsList(asylumCase).stream()
+                                      .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_")));
+    }
+
+    public static String getLegalRepEmailInternalOrLegalRepJourney(final uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        if (isInternalCase(asylumCase) && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+            return asylumCase.read(LEGAL_REP_EMAIL, String.class).orElseThrow(() -> new IllegalStateException("legalRepEmail is not present"));
+        } else if (isInternalCase(asylumCase) && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+            return StringUtils.EMPTY;
+        } else {
+            return asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElseThrow(() -> new IllegalStateException("legalRepresentativeEmailAddress is not present"));
+        }
+    }
+
+    public static String getLegalRepEmailInternalOrLegalRepJourneyNonMandatory(final uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase) ? asylumCase.read(LEGAL_REP_EMAIL, String.class).orElse("")
+            : asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse("");
+    }
+
+    public static boolean isDecisionWithoutHearingAppeal(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(IS_DECISION_WITHOUT_HEARING, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class)
+            .map(yesOrNo -> uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES == yesOrNo).orElse(false);
+    }
+
+    public static boolean hasBeenSubmittedByAppellantInternalCase(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANTS_REPRESENTATION, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class)
+            .map(yesOrNo -> uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES == yesOrNo).orElse(false);
+    }
+
+    public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANTS_REPRESENTATION, uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.class)
+            .map(yesOrNo -> Objects.equals(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO, yesOrNo)).orElse(false);
+    }
+
+    public static List<String> getAppellantOrLegalRepAddressLetterPersonalisation(uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase asylumCase) {
+        boolean appellantRepresentation = hasBeenSubmittedByAppellantInternalCase(asylumCase);
+        List<String> address;
+        // Internal appellant no representation - use appellant address
+        if (appellantRepresentation) {
+            address = inCountryAppeal(asylumCase) ?
+                getAppellantAddressAsList(asylumCase) :
+                getAppellantAddressAsListOoc(asylumCase);
+            // Internal appellant has representation - use legal rep address
+        } else {
+            address = legalRepInCountryAppeal(asylumCase) ?
+                getLegalRepresentativeAddressAsList(asylumCase) :
+                getLegalRepresentativeAddressOocAsList(asylumCase);
+        }
+        return address;
+    }
+
+    public static String normalizeDecisionHearingOptionText(String decisionHearingFeeOption) {
+        if ("decisionWithHearing".equals(decisionHearingFeeOption)) {
+            return "Decision with hearing";
+        } else if ("decisionWithoutHearing".equals(decisionHearingFeeOption)) {
+            return "Decision without hearing";
+        } else {
+            return "";
+        }
     }
 
 }

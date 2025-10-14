@@ -15,6 +15,18 @@ public class AppealDecisionTest {
     }
 
     @Test
+    public void has_correct_values() {
+        assertEquals(AppealDecision.DISMISSED.toString(), AppealDecision.DISMISSED.getValue());
+        assertEquals(AppealDecision.ALLOWED.toString(), AppealDecision.ALLOWED.getValue());
+
+        assertEquals("dismissed", AppealDecision.DISMISSED.toString());
+        assertEquals("allowed", AppealDecision.ALLOWED.toString());
+
+        assertEquals(AppealDecision.DISMISSED, AppealDecision.from("dismissed"));
+        assertEquals(AppealDecision.ALLOWED, AppealDecision.from("allowed"));
+    }
+
+    @Test
     public void correct_enum_returned_for_valid_values() {
 
         assertEquals(AppealDecision.ALLOWED, AppealDecision.from("allowed"));

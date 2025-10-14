@@ -22,6 +22,11 @@ public class AsylumCaseForTest implements Builder<AsylumCase> {
         return this;
     }
 
+    public <T> AsylumCaseForTest with(AsylumCaseDefinition field, Builder<T> value) {
+        asylumCase.write(field, value.build());
+        return this;
+    }
+
     public AsylumCaseForTest writeOrOverwrite(Map<String, Object> additionalAsylumCaseData) {
         asylumCase.putAll(additionalAsylumCaseData);
         return this;

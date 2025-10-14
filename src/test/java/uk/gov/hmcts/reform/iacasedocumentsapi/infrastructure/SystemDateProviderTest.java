@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SystemDateProviderTest {
 
@@ -24,5 +24,13 @@ public class SystemDateProviderTest {
         LocalDateTime actualDateTime = systemDateProvider.nowWithTime();
         assertNotNull(actualDateTime);
         assertFalse(actualDateTime.isAfter(LocalDateTime.now()));
+    }
+
+    @Test
+    public void returns_now_date_plus_days_offset() {
+        String actualDate = systemDateProvider.dueDate(28);
+        assertNotNull(actualDate);
+        assertEquals(actualDate, LocalDate.now().plusDays(28)
+            .format(DateTimeFormatter.ofPattern("d MMM yyyy")));
     }
 }

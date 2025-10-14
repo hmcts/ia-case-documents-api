@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
@@ -148,5 +149,21 @@ public class CcdEventAuthorizorTest {
             Arguments.of(new ImmutableMap.Builder<String, List<Event>>().build(), EVENT_NOT_ALLOWED),
             Arguments.of(new ImmutableMap.Builder<String, List<Event>>().put("caseworker-ia", Collections.emptyList()).build(), EVENT_NOT_ALLOWED)
         );
+    }
+
+    @Test
+    public void should_throw_exception_when_access_map_for_role_is_empty() {
+
+        Map<String, List<Event>> roleEventAccess = new ImmutableMap.Builder<String, List<Event>>()
+            .put(role, newArrayList())
+            .build();
+
+        ccdEventAuthorizor = new CcdEventAuthorizor(roleEventAccess, authorizedRolesProvider);
+
+        AccessDeniedException thrown = assertThrows(
+            AccessDeniedException.class,
+            () -> ccdEventAuthorizor.throwIfNotAuthorized(Event.UNKNOWN)
+        );
+        assertEquals("Event 'unknown' not allowed", thrown.getMessage());
     }
 }

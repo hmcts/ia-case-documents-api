@@ -2,10 +2,12 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unchecked")
 public final class MapFieldAssertor {
@@ -77,6 +79,15 @@ public final class MapFieldAssertor {
 
                 String expectedValueString = (String) expectedValue;
 
+                if (isPathContainsNotificationsSentReference(path)) {
+                    assertThat(
+                            "Expected field matches (" + path + ")",
+                            removeTimestampFromNotificationReference((String) actualValue),
+                            equalTo(expectedValue)
+                    );
+                    return;
+                }
+
                 if (expectedValueString.length() > 3
                     && expectedValueString.startsWith("$/")
                     && expectedValueString.endsWith("/")) {
@@ -93,6 +104,21 @@ public final class MapFieldAssertor {
 
                     return;
                 }
+
+                if (expectedValueString.startsWith("contains([")) {
+
+                    Stream
+                        .of(expectedValueString.substring(10, expectedValueString.length() - 2)
+                            .split(","))
+                        .forEach(expectedValueItem -> {
+                            assertThat(
+                                "Expected field contains (" + path + ")",
+                                String.valueOf(actualValue),
+                                containsString(expectedValueItem)
+                            );
+                        });
+                    return;
+                }
             }
 
             assertThat(
@@ -102,4 +128,17 @@ public final class MapFieldAssertor {
             );
         }
     }
+
+    private static boolean isPathContainsNotificationsSentReference(String path) {
+        // Regular expression to match the notificationsSent id format
+        String regex = ".*data\\.notificationsSent\\.\\d+\\.id.*";
+
+        // Check if the input matches the pattern
+        return path.matches(regex);
+    }
+
+    public static String removeTimestampFromNotificationReference(String input) {
+        return input.replaceAll("_(\\d{13})$", "");
+    }
+
 }

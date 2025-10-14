@@ -8,6 +8,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import java.util.List;
+
 public class UserRoleTest {
 
     @ParameterizedTest
@@ -56,6 +58,23 @@ public class UserRoleTest {
     @Test
     void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
         assertEquals(30, UserRole.values().length);
+    }
+
+    @Test
+    void get_admin_officer_correct_values() {
+        List<String> adminOfficerRoles = UserRole.getAdminOfficerRoles().stream().map(UserRole::toString).toList();
+        assertTrue(adminOfficerRoles.contains("caseworker-ia-admofficer"));
+        assertTrue(adminOfficerRoles.contains("hearing-centre-admin"));
+        assertTrue(adminOfficerRoles.contains("ctsc"));
+        assertTrue(adminOfficerRoles.contains("ctsc-team-leader"));
+        assertTrue(adminOfficerRoles.contains("national-business-centre"));
+        assertTrue(adminOfficerRoles.contains("challenged-access-ctsc"));
+        assertTrue(adminOfficerRoles.contains("challenged-access-admin"));
+    }
+
+    @Test
+    void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes_admin_officer_roles() {
+        assertEquals(7, UserRole.getAdminOfficerRoles().size());
     }
 
     @Test

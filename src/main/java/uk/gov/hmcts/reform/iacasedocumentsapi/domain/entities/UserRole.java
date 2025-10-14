@@ -57,6 +57,27 @@ public enum UserRole {
     }
 
 
+    public static List<UserRole> getAdminOfficerRoles() {
+        return List.of(
+            ADMIN_OFFICER,
+            HEARING_CENTRE_ADMIN,
+            CTSC,
+            CTSC_TEAM_LEADER,
+            NATIONAL_BUSINESS_CENTRE,
+            CHALLENGED_ACCESS_CTSC,
+            CHALLENGED_ACCESS_ADMIN
+        );
+    }
+
+    public static UserRole getById(String id) {
+        for (UserRole role : UserRole.values()) {
+            if (role.id.equals(id)) {
+                return role;
+            }
+        }
+        return UNKNOWN;
+    }
+
     public static List<String> getCaseOfficerRoles() {
         return List.of(
             CASE_OFFICER.getId(),

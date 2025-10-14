@@ -17,6 +17,71 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
 
         assertEquals(
             Optional.of("Birmingham"),
+            tsvStringProvider.get("hearingCentre", "birmingham")
+        );
+
+        assertEquals(
+            Optional.of("Bradford"),
+            tsvStringProvider.get("hearingCentre", "bradford")
+        );
+
+        assertEquals(
+            Optional.of("Coventry Magistrates Court"),
+            tsvStringProvider.get("hearingCentre", "coventry")
+        );
+
+        assertEquals(
+            Optional.of("Glasgow (Eagle Building)"),
+            tsvStringProvider.get("hearingCentre", "glasgow")
+        );
+
+        assertEquals(
+            Optional.of("Glasgow Tribunals Centre"),
+            tsvStringProvider.get("hearingCentre", "glasgowTribunalsCentre")
+        );
+
+        assertEquals(
+            Optional.of("Hatton Cross"),
+            tsvStringProvider.get("hearingCentre", "hattonCross")
+        );
+
+        assertEquals(
+            Optional.of("Manchester"),
+            tsvStringProvider.get("hearingCentre", "manchester")
+        );
+
+        assertEquals(
+            Optional.of("Newcastle Civil & Family Courts and Tribunals Centre"),
+            tsvStringProvider.get("hearingCentre", "newcastle")
+        );
+
+        assertEquals(
+            Optional.of("Newport"),
+            tsvStringProvider.get("hearingCentre", "newport")
+        );
+
+        assertEquals(
+            Optional.of("North Shields"),
+            tsvStringProvider.get("hearingCentre", "northShields")
+        );
+
+        assertEquals(
+            Optional.of("Nottingham Justice Centre"),
+            tsvStringProvider.get("hearingCentre", "nottingham")
+        );
+
+        assertEquals(
+            Optional.of("Taylor House"),
+            tsvStringProvider.get("hearingCentre", "taylorHouse")
+        );
+
+        assertEquals(
+            Optional.of("Remote hearing"),
+            tsvStringProvider.get("hearingCentre", "remoteHearing")
+        );
+
+        assertEquals(
+            Optional.of("Birmingham"),
             tsvStringProvider.get("hearingCentreName", "birmingham")
         );
 
@@ -123,6 +188,11 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         assertEquals(
                 Optional.of("Alloa Sherrif Court"),
                 tsvStringProvider.get("hearingCentreName", "alloaSherrif")
+        );
+
+        assertEquals(
+            Optional.of("Remote hearing"),
+            tsvStringProvider.get("hearingCentreName", "remoteHearing")
         );
 
         assertEquals(

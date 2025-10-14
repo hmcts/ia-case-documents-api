@@ -2,9 +2,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+
+import com.google.common.collect.ImmutableMap;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +18,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AuthorizedRolesProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SpringAuthorizedRolesProvider;
+import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.CcdEventAuthorizor;
 
 @Configuration
 @ConfigurationProperties(prefix = "security")
@@ -27,6 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SpringAuth
 public class SecurityConfiguration {
 
     private final List<String> anonymousPaths = new ArrayList<>();
+    private final Map<String, List<Event>> roleEventAccess = new HashMap<>();
 
     private final Converter<Jwt, Collection<GrantedAuthority>> authoritiesConverter;
     private final ServiceAuthFilter serviceAuthFiler;
@@ -78,6 +81,19 @@ public class SecurityConfiguration {
     @Bean
     public AuthorizedRolesProvider authorizedRolesProvider() {
         return new SpringAuthorizedRolesProvider();
+    }
+
+    @Bean
+    public CcdEventAuthorizor getCcdEventAuthorizor(AuthorizedRolesProvider authorizedRolesProvider) {
+
+        return new CcdEventAuthorizor(
+            ImmutableMap.copyOf(roleEventAccess),
+            authorizedRolesProvider
+        );
+    }
+
+    public Map<String, List<Event>> getRoleEventAccess() {
+        return roleEventAccess;
     }
 
     public List<String> getAnonymousPaths() {

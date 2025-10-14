@@ -13,4 +13,8 @@ public class DateUtils {
     public static String formatDateForNotificationAttachmentDocument(LocalDate localDate) {
         return localDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"));
     }
+
+    public static String formatDateForNotification(LocalDate localDate) {
+        return localDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+    }
 }

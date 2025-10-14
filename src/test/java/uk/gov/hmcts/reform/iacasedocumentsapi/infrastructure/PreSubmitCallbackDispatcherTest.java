@@ -2,11 +2,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
@@ -19,6 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.security.access.AccessDeniedException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -30,6 +31,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("unchecked")
 class PreSubmitCallbackDispatcherTest {
 
     @Mock private CcdEventAuthorizor ccdEventAuthorizor;
@@ -39,6 +42,9 @@ class PreSubmitCallbackDispatcherTest {
     @Mock private Callback<CaseData> callback;
     @Mock private CaseDetails<CaseData> caseDetails;
     @Mock private CaseData caseData;
+    @Mock private CaseData caseDataMutation1;
+    @Mock private CaseData caseDataMutation2;
+    @Mock private CaseData caseDataMutation3;
     @Mock private PreSubmitCallbackResponse<CaseData> response1;
     @Mock private PreSubmitCallbackResponse<CaseData> response2;
     @Mock private PreSubmitCallbackResponse<CaseData> response3;
@@ -63,13 +69,19 @@ class PreSubmitCallbackDispatcherTest {
             ImmutableSet.of("error1", "error2", "error3", "error4");
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
+            when(caseDetails.getCaseData()).thenReturn(caseData);
 
             when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(caseData);
 
+            when(response1.getData()).thenReturn(caseDataMutation1);
             when(response1.getErrors()).thenReturn(ImmutableSet.of("error1"));
+
+            when(response2.getData()).thenReturn(caseDataMutation2);
             when(response2.getErrors()).thenReturn(ImmutableSet.of("error2", "error3"));
+
+            when(response3.getData()).thenReturn(caseDataMutation3);
             when(response3.getErrors()).thenReturn(ImmutableSet.of("error4"));
 
             when(handler1.getDispatchPriority()).thenReturn(DispatchPriority.EARLY);
@@ -116,6 +128,15 @@ class PreSubmitCallbackDispatcherTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(caseData);
 
+            when(response1.getData()).thenReturn(caseData);
+            when(response1.getErrors()).thenReturn(Collections.emptySet());
+
+            when(response2.getData()).thenReturn(caseData);
+            when(response2.getErrors()).thenReturn(Collections.emptySet());
+
+            when(response3.getData()).thenReturn(caseData);
+            when(response3.getErrors()).thenReturn(Collections.emptySet());
+
             when(handler1.getDispatchPriority()).thenReturn(DispatchPriority.EARLY);
             when(handler1.canHandle(callbackStage, callback)).thenReturn(false);
             when(handler1.handle(callbackStage, callback)).thenReturn(response1);
@@ -149,6 +170,34 @@ class PreSubmitCallbackDispatcherTest {
             reset(ccdEventAuthorizor, handler1, handler2, handler3);
         }
     }
+
+    @Test
+    public void should_not_dispatch_to_handlers_if_user_not_authorized_for_event() {
+
+        for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
+
+            when(callback.getEvent()).thenReturn(Event.PAYMENT_APPEAL);
+
+            doThrow(AccessDeniedException.class)
+                .when(ccdEventAuthorizor)
+                .throwIfNotAuthorized(Event.PAYMENT_APPEAL);
+
+            assertThatThrownBy(() -> preSubmitCallbackDispatcher.handle(callbackStage, callback))
+                .isExactlyInstanceOf(AccessDeniedException.class);
+
+            verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.PAYMENT_APPEAL);
+
+            verify(handler1, never()).canHandle(any(), any());
+            verify(handler1, never()).handle(any(), any());
+            verify(handler2, never()).canHandle(any(), any());
+            verify(handler2, never()).handle(any(), any());
+            verify(handler3, never()).canHandle(any(), any());
+            verify(handler3, never()).handle(any(), any());
+
+            reset(ccdEventAuthorizor, handler1, handler2, handler3);
+        }
+    }
+
 
     @Test
     void should_not_error_if_no_handler_is_provided() {

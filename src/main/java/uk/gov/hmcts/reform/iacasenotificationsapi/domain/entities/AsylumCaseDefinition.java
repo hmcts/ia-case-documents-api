@@ -1,11 +1,12 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CheckValues;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.ChangeOrganisationRequest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.TtlCcdObject;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.caselinking.CaseLink;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
 
 import java.util.List;
 
@@ -527,7 +528,7 @@ public enum AsylumCaseDefinition {
     IS_VIRTUAL_HEARING("isVirtualHearing", new TypeReference<YesOrNo>(){}),
 
     NOTIFICATIONS("notifications", new TypeReference<List<IdValue<StoredNotification>>>(){}),
-  
+
     LISTING_LOCATION(
         "listingLocation", new TypeReference<DynamicList>(){}),
 

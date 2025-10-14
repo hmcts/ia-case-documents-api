@@ -7,5 +7,7 @@ public interface DateProvider {
 
     LocalDate now();
 
+    String dueDate(int plusDays);
+
     LocalDateTime nowWithTime();
 }

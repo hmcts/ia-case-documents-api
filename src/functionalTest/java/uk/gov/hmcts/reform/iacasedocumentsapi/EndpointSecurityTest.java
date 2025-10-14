@@ -36,9 +36,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
     private final List<String> callbackEndpoints =
         Arrays.asList(
             "/asylum/ccdAboutToStart",
-            "/asylum/ccdAboutToSubmit"
+            "/asylum/ccdAboutToSubmit",
+            "/asylum/ccdSubmitted"
         );
-
+    @Value("${targetInstance}")
+    private String targetInstance;
     @Autowired
     private AuthorizationHeadersProvider authorizationHeadersProvider;
 

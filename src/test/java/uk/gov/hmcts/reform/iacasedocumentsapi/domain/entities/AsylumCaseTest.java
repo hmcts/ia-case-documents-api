@@ -1,11 +1,17 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CASE_ARGUMENT_EVIDENCE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.MANCHESTER;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
+@SuppressWarnings("OperatorWrap")
 public class AsylumCaseTest {
 
     private final String caseData = "{\"appealType\": \"protection\", \"directions\": [{\"id\": \"2\", \"value\": {\"tag\": \"buildCase\", \"dateDue\": \"2019-06-06\", \"parties\": \"legalRepresentative\", \"dateSent\": \"2019-05-09\", \"explanation\": \"You must now build your case by uploading your appeal argument and evidence.\\n\\nAdvice on writing an appeal argument\\nYou must write a full argument that references:\\n- all the evidence you have or plan to rely on, including any witness statements\\n- the grounds and issues of the case\\n- any new matters\\n- any legal authorities you plan to rely on and why they are applicable to your case\\n\\nYour argument must explain why you believe the respondent's decision is wrong. You must provide all the information for the Home Office to conduct a thorough review of their decision at this stage.\\n\\nNext steps\\nOnce you have uploaded your appeal argument and all evidence, submit your case. The case officer will then review everything you've added. If your case looks ready, the case officer will send it to the respondent for their review. The respondent then has 14 days to respond.\"}}, {\"id\": \"1\", \"value\": {\"tag\": \"respondentEvidence\", \"dateDue\": \"2019-05-23\", \"parties\": \"respondent\", \"dateSent\": \"2019-05-09\", \"explanation\": \"A notice of appeal has been lodged against this asylum decision.\\n\\nYou must now send all documents to the case officer. The case officer will send them to the other party. You have 14 days to supply these documents.\\n\\nYou must include:\\n- the notice of decision\\n- any other document provided to the appellant giving reasons for that decision\\n- any statements of evidence\\n- the application form\\n- any record of interview with the appellant in relation to the decision being appealed\\n- any other unpublished documents on which you rely\\n- the notice of any other appealable decision made in relation to the appellant\"}}], \"hasNewMatters\": \"No\", \"hearingCentre\": \"taylorHouse\", \"appellantTitle\": \"MR\", \"hasOtherAppeals\": \"No\", \"notificationsSent\": [{\"id\": \"1557411655106767_APPEAL_SUBMITTED_CASE_OFFICER\", \"value\": \"c959bba5-f808-4c84-be35-3c4a59f5e71a\"}, {\"id\": \"1557411655106767_RESPONDENT_EVIDENCE_DIRECTION\", \"value\": \"c1c3c96c-326d-4916-b63c-7d49277121fe\"}, {\"id\": \"1557411655106767_BUILD_CASE_DIRECTION\", \"value\": \"c54a67fd-eede-4ad1-aa39-2c05400bf201\"}], \"caseArgumentEvidence\": [{\"id\": \"d019091d-806c-49cf-af64-669fb3d21361\", \"value\": {\"document\": {\"document_url\": \"http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2\", \"document_filename\": \"test.doc\", \"document_binary_url\": \"http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2/binary\"}, \"description\": \"desc\"}}], \"appellantFamilyName\": \"Mortimer\", \"appellantGivenNames\": \"Antony\", \"respondentDocuments\": [{\"id\": \"1\", \"value\": {\"tag\": \"respondentEvidence\", \"document\": {\"document_url\": \"http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2\", \"document_filename\": \"test.doc\", \"document_binary_url\": \"http://dm-store:8080/documents/7a45c5cb-7b8f-47e0-983b-815b613cdce2/binary\"}, \"description\": \"desc\", \"dateUploaded\": \"2019-05-09\"}}], \"submissionOutOfTime\": \"Yes\", \"appellantDateOfBirth\": \"1980-04-12\", \"appealReferenceNumber\": \"PA/50222/2019\", \"appellantNationalities\": [{\"id\": \"44ac652f-4c79-4bf5-95f2-3f670990a900\", \"value\": {\"code\": \"AF\"}}], \"homeOfficeDecisionDate\": \"1980-04-12\", \"appealGroundsForDisplay\": [\"protectionRefugeeConvention\", \"protectionHumanRights\"], \"appealGroundsProtection\": {\"values\": [\"protectionRefugeeConvention\"]}, \"appellantNameForDisplay\": \"Antony Mortimer\", \"legalRepresentativeName\": \"A Legal Rep\", \"appealGroundsHumanRights\": {\"values\": [\"protectionHumanRights\"]}, \"appellantHasFixedAddress\": \"No\", \"homeOfficeReferenceNumber\": \"A1234567\", \"sendDirectionActionAvailable\": \"Yes\", \"caseBuildingReadyForSubmission\": \"No\", \"legalRepresentativeEmailAddress\": \"ia-law-firm-a@fake.hmcts.net\", \"currentCaseStateVisibleToCaseOfficer\": \"caseBuilding\", \"changeDirectionDueDateActionAvailable\": \"Yes\", \"uploadAdditionalEvidenceActionAvailable\": \"No\", \"currentCaseStateVisibleToLegalRepresentative\": \"caseBuilding\"}";
@@ -47,6 +54,67 @@ public class AsylumCaseTest {
     }
 
     @Test
+    public void reads_hearing_centre() throws IOException {
+
+        String caseData = "{\"hearingCentre\": \"manchester\"}";
+        AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
+
+        Optional<HearingCentre> maybeHearingCentre = asylumCase.read(HEARING_CENTRE);
+
+        assertThat(maybeHearingCentre.get()).isEqualTo(MANCHESTER);
+    }
+
+    @Test
+    public void reads_id_value_list() throws IOException {
+
+        String caseData = "{\"directions\": [\n" +
+            "    {\n" +
+            "      \"id\": \"2\",\n" +
+            "      \"value\": {\n" +
+            "        \"tag\": \"buildCase\",\n" +
+            "        \"dateDue\": \"2019-06-13\",\n" +
+            "        \"parties\": \"legalRepresentative\",\n" +
+            "        \"dateSent\": \"2019-05-16\",\n" +
+            "        \"explanation\": \"some-explanation\"\n" +
+            "      }\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"id\": \"1\",\n" +
+            "      \"value\": {\n" +
+            "        \"tag\": \"respondentEvidence\",\n" +
+            "        \"dateDue\": \"2019-05-30\",\n" +
+            "        \"parties\": \"respondent\",\n" +
+            "        \"dateSent\": \"2019-05-16\",\n" +
+            "        \"explanation\": \"some-other-explanation\"\n" +
+            "      }\n" +
+            "    }\n" +
+            "  ]}";
+
+        AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
+
+        Optional<List<IdValue<Direction>>> maybeRespondentDocuments = asylumCase.read(DIRECTIONS);
+
+        List<IdValue<Direction>> idValues = maybeRespondentDocuments.get();
+
+        Direction direction1 = idValues.get(0).getValue();
+        Direction direction2 = idValues.get(1).getValue();
+
+        assertThat(idValues.get(0).getId()).isEqualTo("2");
+        assertThat(direction1.getTag()).isEqualTo(DirectionTag.BUILD_CASE);
+        assertThat(direction1.getDateDue()).isEqualTo("2019-06-13");
+        assertThat(direction1.getParties()).isEqualTo(Parties.LEGAL_REPRESENTATIVE);
+        assertThat(direction1.getDateSent()).isEqualTo("2019-05-16");
+        assertThat(direction1.getExplanation()).isEqualTo("some-explanation");
+
+        assertThat(idValues.get(1).getId()).isEqualTo("1");
+        assertThat(direction2.getTag()).isEqualTo(DirectionTag.RESPONDENT_EVIDENCE);
+        assertThat(direction2.getDateDue()).isEqualTo("2019-05-30");
+        assertThat(direction2.getParties()).isEqualTo(Parties.RESPONDENT);
+        assertThat(direction2.getDateSent()).isEqualTo("2019-05-16");
+        assertThat(direction2.getExplanation()).isEqualTo("some-other-explanation");
+    }
+
+    @Test
     public void reads_complex_type_with_target_type_generics() {
 
         Optional<List<IdValue<DocumentWithDescription>>> maybeCaseArgumentEvidence = asylumCase.read(AsylumCaseDefinition.CASE_ARGUMENT_EVIDENCE);
@@ -66,6 +134,16 @@ public class AsylumCaseTest {
     public void reads_simple_type_with_parameter_type_generics() {
 
         assertEquals(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).get(),"PA/50222/2019");
+    }
+
+    @Test
+    public void reads_using_parameter_type_generics() throws IOException {
+
+        String caseData = "{\"appealReferenceNumber\": \"PA/50222/2019\"}";
+        AsylumCase asylumCase = objectMapper.readValue(caseData, AsylumCase.class);
+
+        assertThat(asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).get())
+            .isEqualTo("PA/50222/2019");
     }
 
     @Test

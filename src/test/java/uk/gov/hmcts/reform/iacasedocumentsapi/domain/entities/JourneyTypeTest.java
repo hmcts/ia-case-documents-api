@@ -1,11 +1,18 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.JourneyType;
 
 class JourneyTypeTest {
+
+    @Test
+    public void has_correct_values() {
+        assertEquals("rep", JourneyType.REP.toString());
+        assertEquals("aip", JourneyType.AIP.toString());
+    }
 
     @Test
     void has_correct_journey_types() {

@@ -68,5 +68,13 @@ public class BailPreSubmitCallbackControllerTest {
         verify(callbackDispatcher, times(1)).handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
     }
 
+    @Test
+    public void should_not_allow_null_constructor_arguments() {
+
+        assertThatThrownBy(() -> new PreSubmitCallbackController<>(null))
+            .hasMessage("callbackDispatcher must not be null")
+            .isExactlyInstanceOf(NullPointerException.class);
+    }
+
 
 }
