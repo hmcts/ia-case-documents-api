@@ -607,6 +607,11 @@ homeOfficeApplicationDecidedLetter.fileExtension: PDF
 homeOfficeApplicationDecidedLetter.fileName: "home-office-application-decided-letter"
 homeOfficeApplicationDecidedLetter.templateName: ${HOME_OFFICE_APPLICATION_DECIDED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00828.docx}
 
+aipmPrisonIrcReinstateAppealLetter.contentType:  application/pdf
+aipmPrisonIrcReinstateAppealLetter.fileExtension: PDF
+aipmPrisonIrcReinstateAppealLetter.fileName: "aipm-detained-in-irc-prison-reinstate-appeal-letter"
+aipmPrisonIrcReinstateAppealLetter.templateName: ${AIPM_PRISON_IRC_REINSTATE_APPEAL:TB-IAC-LET-ENG-00831.docx}
+
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
 bailNoticeOfHearing.fileName: "hearing-notice"

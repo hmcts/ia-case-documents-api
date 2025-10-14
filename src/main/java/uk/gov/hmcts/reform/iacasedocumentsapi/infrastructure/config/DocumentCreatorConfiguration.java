@@ -2120,8 +2120,8 @@ public class DocumentCreatorConfiguration {
             documentGenerator,
             documentUploader
         );
-    }          
-          
+    }
+
     @Bean("internalDetainedAppealRemittedAipIrcPrisonLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealRemittedAipIrcPrisonLetterDocumentCreator(
             @Value("${internalDetainedAppealRemittedAipIrcPrisonLetter.contentType}") String contentType,
@@ -2163,5 +2163,27 @@ public class DocumentCreatorConfiguration {
             documentUploader
         );
     }
+
+    @Bean("aipmPrisonIrcReinstateAppealLetterCreator")
+    public DocumentCreator<AsylumCase> getAipmPrisonIrcReinstateAppealDocumentCreator(
+        @Value("${aipmPrisonIrcReinstateAppealLetter.contentType}") String contentType,
+        @Value("${aipmPrisonIrcReinstateAppealLetter.fileExtension}") String fileExtension,
+        @Value("${aipmPrisonIrcReinstateAppealLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        AipManualDetainedInPrisonOrIrcReinstateAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 
 }
