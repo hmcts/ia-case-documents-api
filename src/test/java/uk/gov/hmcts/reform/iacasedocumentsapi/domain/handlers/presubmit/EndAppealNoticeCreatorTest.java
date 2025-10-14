@@ -96,7 +96,7 @@ public class EndAppealNoticeCreatorTest {
     }
 
     @Test
-    public void should_create_end_appeal_notice_pdf_and_append_to_letter_notifications_documents_for_internal_non_detained_in_country() {
+    public void should_create_end_appeal_notice_pdf_and_append_to_letter_notifications_documents_for_internal_cases() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.END_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -107,12 +107,12 @@ public class EndAppealNoticeCreatorTest {
 
         JourneyType journeyType = JourneyType.REP;
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
-            .thenReturn(Optional.of(journeyType));
+                .thenReturn(Optional.of(journeyType));
 
         when(endAppealNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -135,12 +135,12 @@ public class EndAppealNoticeCreatorTest {
 
         JourneyType journeyType = JourneyType.REP;
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
-            .thenReturn(Optional.of(journeyType));
+                .thenReturn(Optional.of(journeyType));
 
         when(endAppealAppellantNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -164,16 +164,12 @@ public class EndAppealNoticeCreatorTest {
 
         JourneyType journeyType = JourneyType.REP;
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class))
-            .thenReturn(Optional.of(journeyType));
-
+                .thenReturn(Optional.of(journeyType));
         when(endAppealNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
+                endAppealNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
-
         verify(endAppealAppellantNoticeDocumentCreator, times(0)).create(caseDetails);
         verify(endAppealNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_END_APPEAL_LETTER);
