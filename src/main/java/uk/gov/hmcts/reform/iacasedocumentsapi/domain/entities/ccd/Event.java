@@ -80,6 +80,7 @@ public enum Event {
     UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments", CaseType.ASYLUM),
     SAVE_NOTIFICATIONS_TO_DATA("saveNotificationsToData", CaseType.ASYLUM),
+    DECIDE_FTPA_APPLICATION("decideFtpaApplication", CaseType.ASYLUM),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);

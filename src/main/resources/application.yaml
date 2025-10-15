@@ -876,8 +876,27 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
       - "applyForFTPAAppellant"
-    # These events are used by the bails service, they will need to be migrated to the judge access management roles - see DIAC-855
     caseworker-ia-iacjudge:
+      - "sendDirection"
+      - "generateDecisionAndReasons"
+      - "endAppeal"
+      - "sendDecisionAndReasons"
+      - "updateHearingRequirements"
+      - "editAppealAfterSubmit"
+      - "generateUpperTribunalBundle"
+      - "updateTribunalDecision"
+      - "adaSuitabilityReview"
+      - "generateHearingBundle"
+      - "decideAnApplication"
+      - "transferOutOfAda"
+      - "residentJudgeFtpaDecision"
+      - "maintainCaseLinks"
+      - "createCaseLink"
+      - "changeDirectionDueDate"
+      - "reinstateAppeal"
+      - "UpdateHearingAdjustments"
+      - "asyncStitchingComplete"
+      - "decideFtpaApplication"
       - "recordTheDecision"
       - "endApplication"
       - "uploadSignedDecisionNotice"
@@ -901,6 +920,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     senior-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -921,6 +941,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     leadership-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -941,6 +962,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     fee-paid-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -961,6 +983,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     lead-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -981,6 +1004,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     hearing-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1001,6 +1025,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     ftpa-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1021,6 +1046,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     hearing-panel-judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1041,6 +1067,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     challenged-access-judiciary:
       - "sendDirection"
       - "generateDecisionAndReasons"
@@ -1061,6 +1088,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "decideFtpaApplication"
     caseworker-ia-homeofficebail:
       - "submitApplication"
       - "makeNewApplication"
