@@ -5,7 +5,7 @@ import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import com.google.common.collect.ImmutableMap;
@@ -46,7 +46,7 @@ public class IdamApiConsumerTest {
     private static final String AUTH_TOKEN = "Bearer someAuthorizationToken";
 
     @Pact(provider = "idamApi_oidc", consumer = "ia_casePaymentsApi")
-    public RequestResponsePact generatePactFragmentUser(PactDslWithProvider builder) {
+    public V4Pact generatePactFragmentUser(PactDslWithProvider builder) {
         return builder
             .given("userinfo is requested")
             .uponReceiving("a request for a user")
@@ -56,12 +56,12 @@ public class IdamApiConsumerTest {
             .willRespondWith()
             .status(HttpStatus.SC_OK)
             .body(createUserDetailsResponse())
-            .toPact();
+            .toPact(V4Pact.class);
 
     }
 
     @Pact(provider = "idamApi_oidc", consumer = "ia_casePaymentsApi")
-    public RequestResponsePact generatePactFragmentToken(PactDslWithProvider builder) throws JSONException {
+    public V4Pact generatePactFragmentToken(PactDslWithProvider builder) throws JSONException {
         Map<String, String> responseheaders = ImmutableMap.<String, String>builder()
             .put("Content-Type", "application/json")
             .build();
@@ -81,7 +81,7 @@ public class IdamApiConsumerTest {
             .status(org.springframework.http.HttpStatus.OK.value())
             .headers(responseheaders)
             .body(createAuthResponse())
-            .toPact();
+            .toPact(V4Pact.class);
     }
 
     private PactDslJsonBody createUserDetailsResponse() {

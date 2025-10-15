@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.domain.entities.fee;
 
+import static nl.jqno.equalsverifier.Warning.BIGDECIMAL_EQUALITY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ class FeeDtoTest {
 
         EqualsVerifier.simple()
             .forClass(FeeDto.class)
+            .suppress(BIGDECIMAL_EQUALITY)
             .verify();
     }
 

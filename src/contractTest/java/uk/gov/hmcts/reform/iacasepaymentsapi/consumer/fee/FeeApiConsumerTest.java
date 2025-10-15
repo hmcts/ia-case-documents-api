@@ -4,7 +4,7 @@ import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import java.math.BigDecimal;
@@ -38,20 +38,20 @@ public class FeeApiConsumerTest {
     FeesRegisterApi feesRegisterApi;
 
     @Pact(provider = "feeRegister_lookUp", consumer = "ia_casePaymentsApi")
-    private RequestResponsePact generateFeeWithHearingPact(PactDslWithProvider builder) {
+    private V4Pact generateFeeWithHearingPact(PactDslWithProvider builder) {
         return getRequestResponsePact(builder, "HearingOral", "FEE0238",
                                       "Appeal determined with a hearing", BigDecimal.valueOf(140.00)
         );
     }
 
     @Pact(provider = "feeRegister_lookUp", consumer = "ia_casePaymentsApi")
-    private RequestResponsePact generateFeeWithoutHearingPact(PactDslWithProvider builder) {
+    private V4Pact generateFeeWithoutHearingPact(PactDslWithProvider builder) {
         return getRequestResponsePact(builder, "HearingPaper", "FEE0372",
                                       "Appeal determined without a hearing", BigDecimal.valueOf(80.00)
         );
     }
 
-    private RequestResponsePact getRequestResponsePact(PactDslWithProvider builder, String keyword, String code,
+    private V4Pact getRequestResponsePact(PactDslWithProvider builder, String keyword, String code,
                                                        String description, BigDecimal feeAmount) {
         return builder
             .given("Fees exist for IA")
@@ -68,7 +68,7 @@ public class FeeApiConsumerTest {
             .matchHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(buildFeesResponseDsl(code, description, feeAmount))
             .status(HttpStatus.SC_OK)
-            .toPact();
+            .toPact(V4Pact.class);
     }
 
     private PactDslJsonBody buildFeesResponseDsl(String code, String description, BigDecimal feeAmount) {

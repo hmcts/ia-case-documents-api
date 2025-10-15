@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.consumer.payment;
 
-import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
+import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 
 import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +50,7 @@ public class PbaPaymentConsumerTest {
     private static final String AUTHORIZATION_TOKEN = "Bearer some-access-token";
 
     @Pact(provider = "payment_creditAccountPayment", consumer = "ia_casePaymentsApi")
-    public RequestResponsePact generatePactFragment(PactDslWithProvider builder) throws JSONException, IOException {
+    public V4Pact generatePactFragment(PactDslWithProvider builder) throws JSONException, IOException {
         Map<String, Object> paymentMap = new HashMap<>();
         paymentMap.put("accountNumber", "PBA123");
         paymentMap.put("availableBalance", "1000.00");
@@ -66,7 +66,7 @@ public class PbaPaymentConsumerTest {
             .willRespondWith()
             .status(201)
             .body(buildPaymentResponse("Success", "success", null, "Insufficient funds available"))
-            .toPact();
+            .toPact(V4Pact.class);
     }
 
     private DslPart buildPaymentResponse(String status, String paymentStatus, String errorCode, String errorMessage) {

@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.iacasepaymentsapi.consumer.payment;
 
-import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
+import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 
 import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class GetPaymentConsumerTest {
     private static final String AUTHORIZATION_TOKEN = "Bearer some-access-token";
 
     @Pact(provider = "payment_getPayment", consumer = "ia_casePaymentsApi")
-    public RequestResponsePact generateGetPaymentPactFragment(
+    public V4Pact generateGetPaymentPactFragment(
         PactDslWithProvider builder) throws JSONException, IOException {
         Map<String, Object> paymentMap = new HashMap<>();
         paymentMap.put("paymentReference", "RC-1638-1892-5327-5886");
@@ -63,7 +63,7 @@ public class GetPaymentConsumerTest {
             .matchHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .status(200)
             .body(buildGetPaymentResponse(response))
-            .toPact();
+            .toPact(V4Pact.class);
     }
 
     @Test
