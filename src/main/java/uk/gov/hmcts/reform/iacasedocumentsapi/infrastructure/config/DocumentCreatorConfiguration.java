@@ -1745,12 +1745,33 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("internalEditCaseListingLetter")
-    public DocumentCreator<AsylumCase> getinternalEditCaseListingLetterDocumentCreator(
+    public DocumentCreator<AsylumCase> getInternalEditCaseListingLetterDocumentCreator(
         @Value("${internalEditCaseListingLetter.contentType}") String contentType,
         @Value("${internalEditCaseListingLetter.fileExtension}") String fileExtension,
         @Value("${internalEditCaseListingLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalEditCaseListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalEditCaseListingForPrisonAndIrcLetter")
+    public DocumentCreator<AsylumCase> getInternalEditCaseListingForPrisonAndIrcLetter(
+        @Value("${internalEditCaseListingForIrcAndPrisonLetter.contentType}") String contentType,
+        @Value("${internalEditCaseListingForIrcAndPrisonLetter.fileExtension}") String fileExtension,
+        @Value("${internalEditCaseListingForIrcAndPrisonLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalEditCaseListingForIrcAndPrisonLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

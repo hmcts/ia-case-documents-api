@@ -19,7 +19,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '10.0.4'
     id 'org.sonarqube' version '4.4.1.3373'
     id 'org.springframework.boot' version '2.7.18'
-    id 'uk.gov.hmcts.java' version '0.12.66'
+    id 'uk.gov.hmcts.java' version '0.12.67'
     id 'au.com.dius.pact' version '4.6.17'
     id "io.freefair.lombok" version "6.6.3"
 }
@@ -30,12 +30,12 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-    junit              : '5.13.0',
-    junitPlatform      : '1.13.0',
+    junit              : '5.13.4',
+    junitPlatform      : '1.13.4',
     reformLogging      : '6.1.9',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
-    serenity           : '4.2.30',
+    serenity           : '4.2.31',
     pact_version       : '4.1.38',
     springDoc          : '1.8.0',
     springCloud        : '3.1.9'
@@ -75,7 +75,8 @@ ext.libraries = [
         "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
         "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
         "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
-        "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
+        "org.junit.platform:junit-platform-engine:${versions.junitPlatform}",
+        "org.junit.platform:junit-platform-launcher:${versions.junitPlatform}"
     ]
 ]
 
@@ -279,18 +280,18 @@ dependencyManagement {
         }
 
 
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.0') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.2') {
             entry 'jackson-databind'
             entry 'jackson-core'
             entry 'jackson-annotations'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.19.0') {
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.19.2') {
             entry 'jackson-dataformat-yaml'
             entry 'jackson-dataformat-csv'
         }
 
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.19.0') {
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.19.2') {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
@@ -352,7 +353,7 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
@@ -397,9 +398,9 @@ dependencies {
     //pact contract testing
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.13.0")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.0")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.13.0')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.4")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.13.4')
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
