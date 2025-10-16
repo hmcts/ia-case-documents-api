@@ -567,6 +567,39 @@ public class AsylumCaseUtils {
 
         return applicationIdValue.getValue();
     }
+
+    public static String addIndefiniteArticle(String noun) {
+        if (StringUtils.isBlank(noun)) {
+            return "";
+        }
+
+        String trimmedNoun = noun.trim();
+        if (trimmedNoun.isEmpty()) {
+            return "";
+        }
+
+        char firstChar = Character.toLowerCase(trimmedNoun.charAt(0));
+
+        boolean startsWithVowelSound = firstChar == 'a' || firstChar == 'e' || firstChar == 'i' || firstChar == 'o' || firstChar == 'u';
+
+        // Handle special cases where 'u' sounds like 'you' (consonant sound)
+        if (firstChar == 'u' && trimmedNoun.length() > 1) {
+            String lowerNoun = trimmedNoun.toLowerCase();
+            if (lowerNoun.startsWith("uni") || lowerNoun.startsWith("us") || lowerNoun.startsWith("ut")) {
+                startsWithVowelSound = false; // "university", "user", "utility" use "A"
+            }
+        }
+
+        // Handle 'h' words where 'h' is silent (vowel sound)
+        if (firstChar == 'h' && trimmedNoun.length() > 1) {
+            String lowerNoun = trimmedNoun.toLowerCase();
+            if (lowerNoun.startsWith("hon") || lowerNoun.startsWith("hou")) {
+                startsWithVowelSound = true; // "honor", "hour" use "An"
+            }
+        }
+
+        return (startsWithVowelSound ? "An " : "A ") + trimmedNoun;
+    }
 }
 
 

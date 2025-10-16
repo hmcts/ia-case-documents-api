@@ -573,6 +573,9 @@ internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-I
 internalEndAppealLetterWithAttachment.fileExtension: PDF
 internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
 
+internalEndAppealDetWithAttachment.fileExtension: PDF
+internalEndAppealDetWithAttachment.fileName: "internal-end-appeal-det-with-attachment"
+
 internalEditCaseListingLetter.contentType:  application/pdf
 internalEditCaseListingLetter.fileExtension: PDF
 internalEditCaseListingLetter.fileName: "internal-edit-case-listing-letter"
@@ -606,6 +609,11 @@ homeOfficeApplicationDecidedLetter.contentType: application/pdf
 homeOfficeApplicationDecidedLetter.fileExtension: PDF
 homeOfficeApplicationDecidedLetter.fileName: "home-office-application-decided-letter"
 homeOfficeApplicationDecidedLetter.templateName: ${HOME_OFFICE_APPLICATION_DECIDED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00828.docx}
+
+aipmPrisonIrcReinstateAppealLetter.contentType:  application/pdf
+aipmPrisonIrcReinstateAppealLetter.fileExtension: PDF
+aipmPrisonIrcReinstateAppealLetter.fileName: "aipm-detained-in-irc-prison-reinstate-appeal-letter"
+aipmPrisonIrcReinstateAppealLetter.templateName: ${AIPM_PRISON_IRC_REINSTATE_APPEAL:TB-IAC-LET-ENG-00831.docx}
 
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
@@ -1007,8 +1015,27 @@ security:
       - "submitClarifyingQuestionAnswers"
       - "draftHearingRequirements"
       - "applyForFTPAAppellant"
-    # These events are used by the bails service, they will need to be migrated to the judge access management roles - see DIAC-855
     caseworker-ia-iacjudge:
+      - "sendDirection"
+      - "generateDecisionAndReasons"
+      - "endAppeal"
+      - "sendDecisionAndReasons"
+      - "updateHearingRequirements"
+      - "editAppealAfterSubmit"
+      - "generateUpperTribunalBundle"
+      - "updateTribunalDecision"
+      - "adaSuitabilityReview"
+      - "generateHearingBundle"
+      - "decideAnApplication"
+      - "transferOutOfAda"
+      - "residentJudgeFtpaDecision"
+      - "maintainCaseLinks"
+      - "createCaseLink"
+      - "changeDirectionDueDate"
+      - "reinstateAppeal"
+      - "UpdateHearingAdjustments"
+      - "asyncStitchingComplete"
+      - "decideFtpaApplication"
       - "recordTheDecision"
       - "endApplication"
       - "uploadSignedDecisionNotice"
