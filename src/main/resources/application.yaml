@@ -581,6 +581,11 @@ internalEditCaseListingLetter.fileExtension: PDF
 internalEditCaseListingLetter.fileName: "internal-edit-case-listing-letter"
 internalEditCaseListingLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
 
+internalEditCaseListingForIrcAndPrisonLetter.contentType:  application/pdf
+internalEditCaseListingForIrcAndPrisonLetter.fileExtension: PDF
+internalEditCaseListingForIrcAndPrisonLetter.fileName: "internal-edit-case-listing-for-prison-and-irc-letter"
+internalEditCaseListingForIrcAndPrisonLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-00835.docx}
+
 internalEditCaseListingLetterWithAttachment.fileExtension: PDF
 internalEditCaseListingLetterWithAttachment.fileName: "internal-edit-case-listing-letter-with-attachment"
 
