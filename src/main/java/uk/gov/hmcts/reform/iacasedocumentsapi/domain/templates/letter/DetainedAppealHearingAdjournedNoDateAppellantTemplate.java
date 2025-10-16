@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
@@ -23,13 +24,16 @@ public class DetainedAppealHearingAdjournedNoDateAppellantTemplate implements Do
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
+    private final StringProvider stringProvider;
 
     public DetainedAppealHearingAdjournedNoDateAppellantTemplate(
             @Value("${detainedHearingAdjournedNoDateAppellantLetter.templateName}") String templateName,
-            CustomerServicesProvider customerServicesProvider
+            CustomerServicesProvider customerServicesProvider,
+            StringProvider stringProvider
     ) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
+        this.stringProvider = stringProvider;
     }
 
     @Override
@@ -46,7 +50,9 @@ public class DetainedAppealHearingAdjournedNoDateAppellantTemplate implements Do
         String previousHearingCentre;
         Optional<HearingCentre> hearingCentre = caseDetailsBefore.getCaseData().read(LIST_CASE_HEARING_CENTRE, HearingCentre.class);
         if (hearingCentre.isPresent()) {
-            previousHearingCentre = hearingCentre.get().getValue();
+            previousHearingCentre = stringProvider
+                    .get("hearingCentreName", hearingCentre.get().toString())
+                    .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
         } else {
             previousHearingCentre = "";
         }
