@@ -10,6 +10,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 import java.util.Map;
@@ -43,13 +44,17 @@ class DetainedAppealHearingAdjournedNoDateAppellantTemplateTest {
     @Mock
     private CustomerServicesProvider customerServicesProvider;
 
+    @Mock
+    StringProvider stringProvider;
+
     private DetainedAppealHearingAdjournedNoDateAppellantTemplate template;
 
     @BeforeEach
     void setUp() {
         template = new DetainedAppealHearingAdjournedNoDateAppellantTemplate(
                 TEMPLATE_NAME,
-                customerServicesProvider
+                customerServicesProvider,
+                stringProvider
         );
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -63,7 +68,10 @@ class DetainedAppealHearingAdjournedNoDateAppellantTemplateTest {
 
     @Test
     void should_map_field_values_with_direction_due_date() {
-        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.NOTTINGHAM));
+        when(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.NOTTINGHAM));
+        when(stringProvider.get("hearingCentreName", HearingCentre.NOTTINGHAM.toString()))
+                .thenReturn(Optional.of("Nottingham"));
         when(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of("2018-12-31T12:34:56"));
         when(asylumCase.read(ADJOURN_HEARING_WITHOUT_DATE_REASONS, String.class)).thenReturn(Optional.of("Some reason"));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(CASE_REF));
@@ -76,7 +84,7 @@ class DetainedAppealHearingAdjournedNoDateAppellantTemplateTest {
         assertThat(fieldValues.get("customerServicesTelephone")).isEqualTo(CUSTOMER_PHONE);
         assertThat(fieldValues.get("customerServicesEmail")).isEqualTo(CUSTOMER_EMAIL);
         assertThat(fieldValues.get("dateLetterSent")).isNotNull();
-        assertThat(fieldValues.get("oldHearingCentre")).isEqualTo("nottingham");
+        assertThat(fieldValues.get("oldHearingCentre")).isEqualTo("Nottingham");
         assertThat(fieldValues.get("oldHearingDate")).isEqualTo("31 Dec 2018");
         assertThat(fieldValues.get("reasonForAdjournedHearing")).isEqualTo("Some reason");
     }
