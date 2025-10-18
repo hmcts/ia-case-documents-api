@@ -88,7 +88,7 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
             );
         }
 
-        // TODO: check with Rajesh
+        // TODO: check if thi can be removed
         /*if ((hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
