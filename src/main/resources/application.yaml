@@ -314,7 +314,7 @@ internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_
 internalDetainedEndAppeal.contentType:  application/pdf
 internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
-internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00059.docx}
+internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-internal-appeal-ended.docx}
 
 internalDetainedEditCaseListingLetter.contentType: application/pdf
 internalDetainedEditCaseListingLetter.fileExtension: PDF
@@ -553,7 +553,7 @@ internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SU
 internalDetainedDecisionWithoutHearing.contentType: application/pdf
 internalDetainedDecisionWithoutHearing.fileExtension: PDF
 internalDetainedDecisionWithoutHearing.fileName: "internal-detained-decision-without-hearing-letter"
-internalDetainedDecisionWithoutHearing.templateName: ${IA_DECISION_WITHOUT_HEARING_TEMPLATE:TB-IAC-DEC-ENG-decision-without-hearing.docx}
+internalDetainedDecisionWithoutHearing.templateName: ${IA_DECISION_WITHOUT_HEARING_TEMPLATE:TB-IAC-DEC-ENG-internal-decision-without-hearing.docx}
 
 internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.contentType: application/pdf
 internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileExtension: PDF
