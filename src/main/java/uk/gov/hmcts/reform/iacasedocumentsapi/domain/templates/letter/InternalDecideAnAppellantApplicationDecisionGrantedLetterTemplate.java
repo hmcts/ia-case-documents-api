@@ -69,6 +69,7 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplate i
         } else if (applicationDecidedByJudge) {
             applicationDecidedBy = "Judge";
         }
+        fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(makeAnApplicationTypes, true));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(dateProvider.now()));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
@@ -76,7 +77,6 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplate i
         fieldValues.put("applicationType", applicationPropeties.get(APPLICATION_TYPE));
         fieldValues.put("applicationReason", applicationPropeties.get(APPLICATION_DECISION_REASON));
         fieldValues.put("decisionMaker", applicationDecidedBy);
-        fieldValues.put("whatHappensNextContent", getWhatHappensNextContent(makeAnApplicationTypes, true));
 
         return fieldValues;
     }
