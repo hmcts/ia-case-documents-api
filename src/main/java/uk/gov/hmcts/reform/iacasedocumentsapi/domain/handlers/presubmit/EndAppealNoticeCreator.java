@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
@@ -88,15 +90,14 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
             );
         }
 
-        // TODO: check if thi can be removed
-        /*if ((hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))) {
+        if ((hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     endAppealNotice,
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
                     DocumentTag.END_APPEAL
             );
-        }*/
+        }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
