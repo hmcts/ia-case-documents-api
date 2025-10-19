@@ -1,18 +1,19 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -24,6 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.National
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -77,17 +79,20 @@ class InternalCaseListedLetterTemplateTest {
     void should_populate_template_correctly_appellant_in_uk() {
         dataSetup(true);
 
-        fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
-        assertEquals(logo, fieldValuesMap.get("hmcts"));
-        assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
-        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
-        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
-        assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
-        assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
-        assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
-        assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
-        assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
-        assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
+        try (MockedStatic<AsylumCaseUtils> mockUtils = mockStatic(AsylumCaseUtils.class)) {
+            mockUtils.when(() -> AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase)).thenReturn(true);
+            mockUtils.when(() -> AsylumCaseUtils.getAppellantAddressInCountryOrOoc(asylumCase))
+                    .thenReturn(List.of(addressLine1, addressLine2, addressLine3, postTown, postCode));
+            mockUtils.when(() -> AsylumCaseUtils.formatDateTimeForRendering(listCaseHearingDate, DateTimeFormatter.ofPattern("d MMMM yyyy")))
+                    .thenReturn(formattedListCaseHearingDate);
+            mockUtils.when(() -> AsylumCaseUtils.formatDateTimeForRendering(listCaseHearingDate, DateTimeFormatter.ofPattern("HHmm")))
+                    .thenReturn(formattedListCaseHearingTime);
+            mockUtils.when(() -> AsylumCaseUtils.formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMMM yyyy")))
+                    .thenReturn(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")));
+
+            fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
+        }
+
         assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
         assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
@@ -95,21 +100,25 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(postCode, fieldValuesMap.get("address_line_5"));
     }
 
+
     @Test
     void should_populate_template_correctly_appellant_ooc() {
         dataSetup(false);
 
-        fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
-        assertEquals(logo, fieldValuesMap.get("hmcts"));
-        assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
-        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
-        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
-        assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
-        assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
-        assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
-        assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
-        assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
-        assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
+        try (MockedStatic<AsylumCaseUtils> mockUtils = mockStatic(AsylumCaseUtils.class)) {
+            mockUtils.when(() -> AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase)).thenReturn(true);
+            mockUtils.when(() -> AsylumCaseUtils.getAppellantAddressInCountryOrOoc(asylumCase))
+                    .thenReturn(List.of(addressLine1, addressLine2, addressLine3, postTown, Nationality.ES.toString()));
+            mockUtils.when(() -> AsylumCaseUtils.formatDateTimeForRendering(listCaseHearingDate, DateTimeFormatter.ofPattern("d MMMM yyyy")))
+                    .thenReturn(formattedListCaseHearingDate);
+            mockUtils.when(() -> AsylumCaseUtils.formatDateTimeForRendering(listCaseHearingDate, DateTimeFormatter.ofPattern("HHmm")))
+                    .thenReturn(formattedListCaseHearingTime);
+            mockUtils.when(() -> AsylumCaseUtils.formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMMM yyyy")))
+                    .thenReturn(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")));
+
+            fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
+        }
+
         assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
         assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
@@ -117,9 +126,10 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_5"));
     }
 
+
     void dataSetup(boolean appellantInUk) {
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));

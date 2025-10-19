@@ -63,9 +63,8 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
 
-        List<String> appellantAddress = isAppellantInUk(asylumCase) ?
-            getAppellantAddressAsList(asylumCase) :
-            getAppellantAddressAsListOoc(asylumCase);
+        List<String> appellantAddress = hasBeenSubmittedByAppellantInternalCase(asylumCase) ?
+                getAppellantAddressInCountryOrOoc(asylumCase) : getLegalRepAddressInCountryOrOoc(asylumCase);
 
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
