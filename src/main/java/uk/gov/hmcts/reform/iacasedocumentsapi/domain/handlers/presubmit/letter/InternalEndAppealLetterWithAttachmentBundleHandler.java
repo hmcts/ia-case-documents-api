@@ -63,9 +63,9 @@ public class InternalEndAppealLetterWithAttachmentBundleHandler implements PreSu
                && callback.getEvent() == END_APPEAL
                && isInternalCase(asylumCase)
                && (!isAppellantInDetention(asylumCase)
+                   || hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                    || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))
                )
-               && hasAppellantAddressInCountryOrOoc(asylumCase)
                && isEmStitchingEnabled;
     }
 

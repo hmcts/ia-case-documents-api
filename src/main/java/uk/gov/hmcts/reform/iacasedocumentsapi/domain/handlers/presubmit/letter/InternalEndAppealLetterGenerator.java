@@ -3,8 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 
 import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -45,9 +47,9 @@ public class InternalEndAppealLetterGenerator implements PreSubmitCallbackHandle
                && callback.getEvent() == END_APPEAL
                && isInternalCase(asylumCase)
                && (!isAppellantInDetention(asylumCase)
+                   || hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                    || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isAppellantInDetention(asylumCase))
-               )
-               && hasAppellantAddressInCountryOrOoc(asylumCase);
+               );
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
