@@ -22,9 +22,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -46,7 +48,11 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTe
     @Mock
     private CustomerServicesProvider customerServicesProvider;
     @Mock
+    UserDetailsProvider userDetailsProvider;
+    @Mock
     private MakeAnApplicationService makeAnApplicationService;
+    @Mock
+    UserDetails userDetails;
     private final String templateName = "TB-IAC-DEC-ENG-00015.docx";
     private final String timeExtentionContent = "The Tribunal will give you more time to complete your next task. You will get a notification with the new date soon.";
     private final String adjournExpediteTransferOrUpdateHearingReqsContent = "The details of your hearing will be updated. The Tribunal will contact you when this happens.";
@@ -72,7 +78,8 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTe
                         templateName,
                         dateProvider,
                         customerServicesProvider,
-                        makeAnApplicationService
+                        makeAnApplicationService,
+                        userDetailsProvider
                 );
     }
 
@@ -83,7 +90,8 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTe
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-
+        when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
+        when(userDetails.isJudge()).thenReturn(true);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase))
                 .thenReturn(internalAdaCustomerServicesTelephoneNumber);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase))
@@ -129,7 +137,7 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTe
 
         Map<String, Object> templateFieldValues = internalDecideAnAppellantApplicationDecisionGrantedLetterTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(11, templateFieldValues.size());
+        assertEquals(12, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -140,6 +148,8 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTe
         assertEquals(formatDateForNotificationAttachmentDocument(dateProvider.now()), templateFieldValues.get("dateLetterSent"));
         assertEquals(testApplication.getType(), templateFieldValues.get("applicationType"));
         assertEquals(testApplication.getDecisionReason(), templateFieldValues.get("applicationReason"));
+        assertEquals("Judge", templateFieldValues.get("decisionMaker"));
+
 
         switch (makeAnApplicationTypes) {
             case TIME_EXTENSION -> assertEquals(timeExtentionContent, templateFieldValues.get("whatHappensNextContent"));
