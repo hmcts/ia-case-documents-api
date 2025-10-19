@@ -20,7 +20,15 @@
           "endAppealDate": "2022-08-01",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
-          "decisionMaker": "Admin Officer"
+          "decisionMaker": "Admin Officer",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
         }
       }
     }
