@@ -26,7 +26,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.L
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCaseListedAppellantLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,7 +35,7 @@ public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public DetainedCaseListedLetterHandler(
+    public InternalCaseListedAppellantLetterHandler(
         @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -62,7 +62,7 @@ public class DetainedCaseListedLetterHandler implements PreSubmitCallbackHandler
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == LIST_CASE
-               && isDetainedInFacilityType(asylumCase, OTHER)
+               && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)) || isDetainedInFacilityType(asylumCase, OTHER))
                && isEmStitchingEnabled;
     }
 

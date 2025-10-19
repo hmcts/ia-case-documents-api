@@ -44,9 +44,9 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class DetainedCaseListedLetterHandlerTest {
+class InternalCaseListedAppellantLetterHandlerTest {
 
-    private DetainedCaseListedLetterHandler detainedCaseListedLetterHandler;
+    private InternalCaseListedAppellantLetterHandler detainedCaseListedLetterHandler;
     @Mock
     private Callback<AsylumCase> callback;
     @Mock
@@ -68,7 +68,7 @@ class DetainedCaseListedLetterHandlerTest {
     public void setUp() {
 
         detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+            new InternalCaseListedAppellantLetterHandler(
                 fileExtension,
                 fileName,
                 true,
@@ -79,7 +79,7 @@ class DetainedCaseListedLetterHandlerTest {
 
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(DetainedCaseListedLetterHandlerTest.TestScenario scenario) {
+    public void it_can_handle_callback(InternalCaseListedAppellantLetterHandlerTest.TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -92,8 +92,8 @@ class DetainedCaseListedLetterHandlerTest {
         assertEquals(canHandle, scenario.isExpected());
     }
 
-    private static List<DetainedCaseListedLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
-        return DetainedCaseListedLetterHandlerTest.TestScenario.builder();
+    private static List<InternalCaseListedAppellantLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
+        return InternalCaseListedAppellantLetterHandlerTest.TestScenario.builder();
     }
 
     @Value
@@ -102,17 +102,17 @@ class DetainedCaseListedLetterHandlerTest {
         PreSubmitCallbackStage callbackStage;
         boolean expected;
 
-        public static List<DetainedCaseListedLetterHandlerTest.TestScenario> builder() {
-            List<DetainedCaseListedLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
+        public static List<InternalCaseListedAppellantLetterHandlerTest.TestScenario> builder() {
+            List<InternalCaseListedAppellantLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
                 if (e.equals(Event.LIST_CASE)) {
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
+                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
                 } else {
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new DetainedCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
                 }
             }
             return testScenarios;
@@ -129,7 +129,7 @@ class DetainedCaseListedLetterHandlerTest {
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
         detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+            new InternalCaseListedAppellantLetterHandler(
                 fileExtension,
                 fileName,
                 false,
@@ -143,15 +143,15 @@ class DetainedCaseListedLetterHandlerTest {
     }
 
     @Test
-    public void it_should_not_handle_callback_when_not_detained() {
+    public void it_should_not_handle_callback_when_not_admin_and_not_detained() {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+            new InternalCaseListedAppellantLetterHandler(
                 fileExtension,
                 fileName,
                 true,
@@ -169,12 +169,12 @@ class DetainedCaseListedLetterHandlerTest {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
         detainedCaseListedLetterHandler =
-            new DetainedCaseListedLetterHandler(
+            new InternalCaseListedAppellantLetterHandler(
                 fileExtension,
                 fileName,
                 true,

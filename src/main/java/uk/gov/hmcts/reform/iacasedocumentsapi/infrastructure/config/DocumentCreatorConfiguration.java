@@ -1702,6 +1702,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalCaseListedLrLetter")
+    public DocumentCreator<AsylumCase> getinternalCaseListedlLrLetterDocumentCreator(
+        @Value("${internalCaseListedLetter.contentType}") String contentType,
+        @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
+        @Value("${internalCaseListedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCaseListedLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalOutOfTimeDecisionLetter")
     public DocumentCreator<AsylumCase> getinternalOutOfTimeDecisionLetterDocumentCreator(
         @Value("${internalOutOfTimeDecisionLetter.contentType}") String contentType,

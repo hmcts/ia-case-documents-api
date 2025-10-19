@@ -91,6 +91,8 @@ public enum DocumentTag {
     REMITTAL_DECISION("remittalDecision", CaseType.ASYLUM),
     INTERNAL_CASE_LISTED_LETTER("internalCaseListedLetter", CaseType.ASYLUM),
     INTERNAL_CASE_LISTED_LETTER_BUNDLE("internalCaseListedLetterBundle", CaseType.ASYLUM),
+    INTERNAL_CASE_LISTED_LR_LETTER("internalCaseListedLrLetter", CaseType.ASYLUM),
+    INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE("internalCaseListedLrLetterBundle", CaseType.ASYLUM),
     APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
     INTERNAL_OUT_OF_TIME_DECISION_LETTER("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
     INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
