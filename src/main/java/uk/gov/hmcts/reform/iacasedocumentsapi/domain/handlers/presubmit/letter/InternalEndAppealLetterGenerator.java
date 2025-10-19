@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
@@ -48,7 +49,7 @@ public class InternalEndAppealLetterGenerator implements PreSubmitCallbackHandle
                && isInternalCase(asylumCase)
                && (!isAppellantInDetention(asylumCase)
                    || hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-                   || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isAppellantInDetention(asylumCase))
+                   || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))
                );
     }
 
