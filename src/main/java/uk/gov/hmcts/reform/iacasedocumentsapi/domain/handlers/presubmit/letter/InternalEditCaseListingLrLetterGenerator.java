@@ -52,8 +52,8 @@ public class InternalEditCaseListingLrLetterGenerator implements PreSubmitCallba
     @Override
     public PreSubmitCallbackResponse<AsylumCase> handle(
             PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback)
-    {
+            Callback<AsylumCase> callback
+    ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
