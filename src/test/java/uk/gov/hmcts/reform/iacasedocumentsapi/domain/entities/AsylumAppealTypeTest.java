@@ -25,6 +25,7 @@ public class AsylumAppealTypeTest {
         assertEquals("refusalOfEu", AsylumAppealType.EA.toString());
         assertEquals("deprivation", AsylumAppealType.DC.toString());
         assertEquals("euSettlementScheme", AsylumAppealType.EU.toString());
+        assertEquals("ageAssessment", AsylumAppealType.AG.toString());
     }
 
     @Test
@@ -34,6 +35,6 @@ public class AsylumAppealTypeTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(6, AsylumAppealType.values().length);
+        assertEquals(7, AsylumAppealType.values().length);
     }
 }

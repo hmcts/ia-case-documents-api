@@ -77,11 +77,15 @@ public class EventTest {
         assertEquals("updateHearingAdjustments", Event.UPDATE_HEARING_ADJUSTMENTS.toString());
         assertEquals("saveNotificationsToData", Event.SAVE_NOTIFICATIONS_TO_DATA.toString());
         assertEquals("manageFeeUpdate", Event.MANAGE_FEE_UPDATE.toString());
+        assertEquals("paymentAppeal", Event.PAYMENT_APPEAL.toString());
+        assertEquals("payForAppeal", Event.PAY_FOR_APPEAL.toString());
+        assertEquals("updatePaymentStatus", Event.UPDATE_PAYMENT_STATUS.toString());
+        assertEquals("generateServiceRequest", Event.GENERATE_SERVICE_REQUEST.toString());
         assertEquals("decideFtpaApplication", Event.DECIDE_FTPA_APPLICATION.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(73, Event.values().length);
+        assertEquals(77, Event.values().length);
     }
 }

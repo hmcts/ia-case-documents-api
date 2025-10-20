@@ -28,6 +28,10 @@ public class AsylumCaseRequestAdapter extends RequestBodyAdviceAdapter {
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+        if (!(body instanceof Callback)) {
+            log.warn("Request body is not an instance of Callback, skipping setting CCDCaseId attribute.");
+            return body;
+        }
 
         Callback<AsylumCase> callback = (Callback<AsylumCase>) body;
         CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();

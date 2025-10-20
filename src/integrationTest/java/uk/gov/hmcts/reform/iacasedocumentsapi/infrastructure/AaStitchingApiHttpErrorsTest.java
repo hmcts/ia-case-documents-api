@@ -16,7 +16,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.AsylumCaseFixtures;
 import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
 
-class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
+// This test fails if not first in the test suite.
+class AaStitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
         WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithStitchingStub, WithRoleAssignmentStub {
 
     private static final String STITCH_API_PATH = "/api/new-bundle";
@@ -25,7 +26,6 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void should_return_500_with_correct_message_when_api_returns_500() throws Exception {
         addServiceAuthStub(server);
-        addDocumentUploadStub(server);
         addDocumentUploadStub(server);
         withDefaults(server);
         addNewStitchingBundleStub(server);
@@ -58,7 +58,6 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void should_return_500_with_correct_message_when_api_returns_400() throws Exception {
         addServiceAuthStub(server);
-        addDocumentUploadStub(server);
         addDocumentUploadStub(server);
         withDefaults(server);
         addNewStitchingBundleError400Stub(server);

@@ -4,7 +4,14 @@ docmosis.endpoint: unused
 security:
   authorisedServices:
     - "ia"
+    - "payment_app"
 
 idam:
   s2s-authorised:
-    services: ia
+    services: ia,payment_app
+
+ia:
+  payment:
+    debug:
+      logs:
+        enabled: true

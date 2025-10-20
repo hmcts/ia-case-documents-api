@@ -1,0 +1,34 @@
+{
+  "homeOfficeReferenceNumber": "A1234567",
+  "homeOfficeDecisionDate": "{$TODAY}",
+  "appellantTitle": "Mr",
+  "appellantGivenNames": "Talha",
+  "appellantFamilyName": "Awan",
+  "appellantDateOfBirth": "{$TODAY-7300}",
+  "legalRepName": "RS John",
+  "legalRepCompany": "RS Consulting",
+  "appellantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "Iceland": "IS"
+      }
+    }
+  ],
+  "appellantHasFixedAddress": "No",
+  "appealType": "protection",
+  "appealGroundsProtection": {
+    "values": [
+      "refugeeConvention"
+    ]
+  },
+  "hasNewMatters": "No",
+  "hasOtherAppeals": "No",
+  "legalRepReferenceNumber": "CASE001",
+  "appellantNameForDisplay": "Talha Awan",
+  "appealReferenceNumber": "PA/12345/2019",
+  "legalRepresentativeName": "A Legal Rep",
+  "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+  "hearingCentre": "taylorHouse",
+  "sendDirectionActionAvailable": "Yes"
+}

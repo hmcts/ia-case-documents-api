@@ -82,6 +82,11 @@ public enum Event {
     SAVE_NOTIFICATIONS_TO_DATA("saveNotificationsToData", CaseType.ASYLUM),
     DECIDE_FTPA_APPLICATION("decideFtpaApplication", CaseType.ASYLUM),
 
+    PAYMENT_APPEAL("paymentAppeal", CaseType.ASYLUM),
+    PAY_FOR_APPEAL("payForAppeal", CaseType.ASYLUM),
+    UPDATE_PAYMENT_STATUS("updatePaymentStatus", CaseType.ASYLUM),
+    GENERATE_SERVICE_REQUEST("generateServiceRequest", CaseType.ASYLUM),
+
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);
 
