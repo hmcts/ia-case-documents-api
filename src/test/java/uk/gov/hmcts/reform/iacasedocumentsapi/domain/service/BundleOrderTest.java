@@ -38,7 +38,7 @@ class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(112, sortedTags.size());
+        assertEquals(114, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -129,6 +129,8 @@ class BundleOrderTest {
             DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE,
             DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER,
             DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE,
             DocumentTag.INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER,
             DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER,
             DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER,
