@@ -111,8 +111,12 @@ public enum DocumentTag {
     DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER("detainedLegalRepRemovedIrcPrisonLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER("internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER("internalDetainedAppealSubmittedWithExemptionLetter", CaseType.ASYLUM),
+    INTERNAL_DETAINED_DECISION_WITHOUT_HEARING("internalDetainedDecisionWithoutHearing", CaseType.ASYLUM),
+    INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER("internalDetainedIrcPrisonFtpaDisposedRules31Or32Letter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER("internalDetainedAppealRemittedAipIrcPrisonLetter", CaseType.ASYLUM),
     DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER("detainedAppealAdjournHearingWithoutDateIrcPrisonLetter", CaseType.ASYLUM),
+    HOME_OFFICE_APPLICATION_DECIDED_LETTER("homeOfficeApplicationDecidedLetter", CaseType.ASYLUM),
+    AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER("aipmDetainedInPrisonOrIrcReinstateAppealLetter", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),

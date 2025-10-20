@@ -691,13 +691,13 @@ public class AsylumCaseUtilsTest {
 
     @ParameterizedTest
     @EnumSource(value = YesOrNo.class)
-    void should_return_correct_value_for_hasBeenSubmittedByAppellantInternalCase(YesOrNo yesOrNo) {
+    void should_return_correct_value_for_hasAppealBeenSubmittedByAppellantInternalCase(YesOrNo yesOrNo) {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(yesOrNo));
 
         if (yesOrNo.equals(YES)) {
-            assertTrue(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+            assertTrue(AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase));
         } else {
-            assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+            assertFalse(AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase));
         }
     }
 
@@ -705,7 +705,7 @@ public class AsylumCaseUtilsTest {
     void should_return_false_when_appellants_representation_is_not_present() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
 
-        assertFalse(AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase));
+        assertFalse(AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase));
     }
 
 
@@ -714,7 +714,7 @@ public class AsylumCaseUtilsTest {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+        boolean result = AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase);
 
         assertTrue(result);
     }
@@ -724,7 +724,7 @@ public class AsylumCaseUtilsTest {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+        boolean result = AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase);
 
         assertFalse(result);
     }
@@ -734,7 +734,7 @@ public class AsylumCaseUtilsTest {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
 
-        boolean result = AsylumCaseUtils.hasBeenSubmittedByAppellantInternalCase(asylumCase);
+        boolean result = AsylumCaseUtils.hasAppealBeenSubmittedByAppellantInternalCase(asylumCase);
 
         assertFalse(result);
     }
@@ -933,6 +933,72 @@ public class AsylumCaseUtilsTest {
         assertThrows(NullPointerException.class, () -> {
             AsylumCaseUtils.getHearingChannel(asylumCase, defaultValue);
         });
+    }
+
+    @Nested
+    class AddIndefiniteArticleTest {
+
+        @ParameterizedTest
+        @CsvSource({
+            "Admin, An Admin",
+            "admin, An admin",
+            "Officer, An Officer",
+            "officer, An officer",
+            "Employee, An Employee",
+            "employee, An employee",
+            "Individual, An Individual",
+            "individual, An individual",
+            "User, A User",
+            "user, A user",
+            "University, A University",
+            "university, A university",
+            "Legal Worker, A Legal Worker",
+            "legal worker, A legal worker",
+            "Appeal Officer, An Appeal Officer",
+            "appeal officer, An appeal officer",
+            "Honor, An Honor",
+            "honor, An honor",
+            "Hour, An Hour",
+            "hour, An hour"
+        })
+        void should_add_correct_indefinite_article(String input, String expected) {
+            String result = AsylumCaseUtils.addIndefiniteArticle(input);
+            assertEquals(expected, result);
+        }
+
+        @Test
+        void should_return_empty_string_for_null_input() {
+            String result = AsylumCaseUtils.addIndefiniteArticle(null);
+            assertEquals("", result);
+        }
+
+        @Test
+        void should_return_empty_string_for_empty_input() {
+            String result = AsylumCaseUtils.addIndefiniteArticle("");
+            assertEquals("", result);
+        }
+
+        @Test
+        void should_return_empty_string_for_whitespace_input() {
+            String result = AsylumCaseUtils.addIndefiniteArticle("   ");
+            assertEquals("", result);
+        }
+
+        @Test
+        void should_handle_single_character_inputs() {
+            assertEquals("A B", AsylumCaseUtils.addIndefiniteArticle("B"));
+            assertEquals("An A", AsylumCaseUtils.addIndefiniteArticle("A"));
+            assertEquals("An E", AsylumCaseUtils.addIndefiniteArticle("E"));
+            assertEquals("An I", AsylumCaseUtils.addIndefiniteArticle("I"));
+            assertEquals("An O", AsylumCaseUtils.addIndefiniteArticle("O"));
+            assertEquals("An U", AsylumCaseUtils.addIndefiniteArticle("U"));
+        }
+
+        @Test
+        void should_trim_input_before_processing() {
+            String result = AsylumCaseUtils.addIndefiniteArticle("  Admin  ");
+            assertEquals("An Admin", result);
+        }
     }
 
 }

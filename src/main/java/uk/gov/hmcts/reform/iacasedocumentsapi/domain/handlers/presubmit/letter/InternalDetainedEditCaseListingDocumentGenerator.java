@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +25,7 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
     private final DocumentHandler documentHandler;
 
     public InternalDetainedEditCaseListingDocumentGenerator(
-            @Qualifier("internalDetEditCaseListingLetter") DocumentCreator<AsylumCase> internalDetainedEditCaseListingLetterCreator,
+            @Qualifier("internalEditCaseListingLetter") DocumentCreator<AsylumCase> internalDetainedEditCaseListingLetterCreator,
             DocumentHandler documentHandler
     ) {
         this.internalDetainedEditCaseListingLetterCreator = internalDetainedEditCaseListingLetterCreator;
@@ -44,8 +43,7 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == Event.EDIT_CASE_LISTING
-            && isInternalCase(asylumCase)
-            && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
+            && isInternalNonDetainedCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -68,7 +66,7 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
                 asylumCase,
                 internalEditCaseListingDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

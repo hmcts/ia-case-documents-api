@@ -55,7 +55,8 @@ public class InternalRecordOutOfTimeDecisionLetterTemplate implements DocumentTe
         fieldValues.put("fourWeeksAfterSubmitDate", dueDate);
 
 
-        List<String> appellantAddress = new ArrayList<>(hasBeenSubmittedByAppellantInternalCase(asylumCase) ?
+        List<String> appellantAddress = new ArrayList<>(
+            hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) ?
                 getAppellantAddressInCountryOrOoc(asylumCase) : getLegalRepAddressInCountryOrOoc(asylumCase));
 
         for (int i = 0; i < appellantAddress.size(); i++) {

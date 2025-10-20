@@ -68,7 +68,7 @@ public class InternalRecordOutOfTimeDecisionLetterHandler implements PreSubmitCa
                && isInternalCase(asylumCase)
                && (!isAppellantInDetention(asylumCase)
                 || (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
-                || (hasBeenSubmittedByAppellantInternalCase(asylumCase)
+                || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
                 && isDetainedInFacilityType(asylumCase, OTHER)))
                && isEmStitchingEnabled;
     }

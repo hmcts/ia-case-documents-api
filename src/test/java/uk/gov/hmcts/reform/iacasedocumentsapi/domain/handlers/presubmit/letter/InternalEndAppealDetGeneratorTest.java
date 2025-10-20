@@ -28,7 +28,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalEndAppealGeneratorTest {
+class InternalEndAppealDetGeneratorTest {
     @Mock
     private DocumentCreator<AsylumCase> documentCreator;
     @Mock
@@ -42,12 +42,12 @@ class InternalEndAppealGeneratorTest {
     @Mock
     private Document uploadedDocument;
 
-    private InternalEndAppealGenerator internalEndAppealGenerator;
+    private InternalEndAppealDetGenerator internalEndAppealDetGenerator;
 
     @BeforeEach
     void setUp() {
-        internalEndAppealGenerator =
-                new InternalEndAppealGenerator(documentCreator, documentHandler);
+        internalEndAppealDetGenerator =
+                new InternalEndAppealDetGenerator(documentCreator, documentHandler);
     }
 
     @Test
@@ -57,12 +57,14 @@ class InternalEndAppealGeneratorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
 
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalEndAppealDetGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -82,12 +84,12 @@ class InternalEndAppealGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalEndAppealDetGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalEndAppealDetGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -104,7 +106,7 @@ class InternalEndAppealGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalEndAppealGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalEndAppealDetGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -122,7 +124,7 @@ class InternalEndAppealGeneratorTest {
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalEndAppealGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = internalEndAppealDetGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -132,19 +134,19 @@ class InternalEndAppealGeneratorTest {
     @Test
     void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> internalEndAppealDetGenerator.canHandle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalEndAppealDetGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(null, callback))
+        assertThatThrownBy(() -> internalEndAppealDetGenerator.handle(null, callback))
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalEndAppealGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalEndAppealDetGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }

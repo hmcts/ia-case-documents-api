@@ -43,7 +43,6 @@ class DetainedAppealHearingAdjournedNoDateAppellantLetterGeneratorTest {
     @BeforeEach
     void setUp() {
         generator = new DetainedAppealHearingAdjournedNoDateAppellantLetterGenerator(documentCreator, documentHandler);
-
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(Event.ADJOURN_HEARING_WITHOUT_DATE);
@@ -85,7 +84,7 @@ class DetainedAppealHearingAdjournedNoDateAppellantLetterGeneratorTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(documentCreator.create(caseDetails)).thenReturn(document);
+        when(documentCreator.create(caseDetails, caseDetails)).thenReturn(document);
 
         PreSubmitCallbackResponse<AsylumCase> response = generator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 

@@ -1745,12 +1745,33 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("internalEditCaseListingLetter")
-    public DocumentCreator<AsylumCase> getinternalEditCaseListingLetterDocumentCreator(
+    public DocumentCreator<AsylumCase> getInternalEditCaseListingLetterDocumentCreator(
         @Value("${internalEditCaseListingLetter.contentType}") String contentType,
         @Value("${internalEditCaseListingLetter.fileExtension}") String fileExtension,
         @Value("${internalEditCaseListingLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalEditCaseListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalEditCaseListingForPrisonAndIrcLetter")
+    public DocumentCreator<AsylumCase> getInternalEditCaseListingForPrisonAndIrcLetter(
+        @Value("${internalEditCaseListingForIrcAndPrisonLetter.contentType}") String contentType,
+        @Value("${internalEditCaseListingForIrcAndPrisonLetter.fileExtension}") String fileExtension,
+        @Value("${internalEditCaseListingForIrcAndPrisonLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalEditCaseListingForIrcAndPrisonLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
@@ -2080,6 +2101,48 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedDecisionWithoutHearingNotice")
+    public DocumentCreator<AsylumCase> getInternalDetainedDecisionWithoutHearingDocumentCreator(
+            @Value("${internalDetainedDecisionWithoutHearing.contentType}") String contentType,
+            @Value("${internalDetainedDecisionWithoutHearing.fileExtension}") String fileExtension,
+            @Value("${internalDetainedDecisionWithoutHearing.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalDetainedDecisionWithoutHearingTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("internalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaLetter")
+    public DocumentCreator<AsylumCase> getInternalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaLetterDocumentCreator(
+        @Value("${internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.contentType}") String contentType,
+        @Value("${internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileExtension}") String fileExtension,
+        @Value("${internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalPrisonOrIrcAppealDisposedUnderRule31Or32FtpaTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalDetainedAppealRemittedAipIrcPrisonLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealRemittedAipIrcPrisonLetterDocumentCreator(
             @Value("${internalDetainedAppealRemittedAipIrcPrisonLetter.contentType}") String contentType,
@@ -2100,5 +2163,48 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("homeOfficeApplicationDecidedLetter")
+    public DocumentCreator<AsylumCase> getHomeOfficeApplicationDecidedLetterDocumentCreator(
+        @Value("${homeOfficeApplicationDecidedLetter.contentType}") String contentType,
+        @Value("${homeOfficeApplicationDecidedLetter.fileExtension}") String fileExtension,
+        @Value("${homeOfficeApplicationDecidedLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        HomeOfficeApplicationDecidedLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("aipmPrisonIrcReinstateAppealLetterCreator")
+    public DocumentCreator<AsylumCase> getAipmPrisonIrcReinstateAppealDocumentCreator(
+        @Value("${aipmPrisonIrcReinstateAppealLetter.contentType}") String contentType,
+        @Value("${aipmPrisonIrcReinstateAppealLetter.fileExtension}") String fileExtension,
+        @Value("${aipmPrisonIrcReinstateAppealLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        AipManualDetainedInPrisonOrIrcReinstateAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
 
 }

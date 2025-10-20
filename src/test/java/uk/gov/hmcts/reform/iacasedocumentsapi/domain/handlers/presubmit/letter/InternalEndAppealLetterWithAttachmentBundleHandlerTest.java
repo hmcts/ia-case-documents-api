@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -140,14 +141,16 @@ public class InternalEndAppealLetterWithAttachmentBundleHandlerTest {
         assertFalse(canHandle);
     }
 
-    @Test
-    void should_read_and_bundle_letter_notification_documents() {
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = {"YES", "NO"})
+    void should_read_and_bundle_letter_notification_documents(YesOrNo appellantRepresentation) {
         when(callback.getEvent()).thenReturn(Event.END_APPEAL);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class))
+                .thenReturn(Optional.of(appellantRepresentation));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());

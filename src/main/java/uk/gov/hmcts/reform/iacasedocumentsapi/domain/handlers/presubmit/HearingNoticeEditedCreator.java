@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
@@ -182,14 +183,18 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             );
         }
 
-        if (isDetainedInFacilityType(asylumCase, OTHER)) {
+        if (isDetainedAppeal(asylumCase)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,
-                LETTER_NOTIFICATION_DOCUMENTS,
+                getAsylumCaseStorageLocation(asylumCase),
                 DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
             );
         }
+    }
+
+    private static AsylumCaseDefinition getAsylumCaseStorageLocation(AsylumCase asylumCase) {
+        return isDetainedInFacilityType(asylumCase, OTHER) ? LETTER_NOTIFICATION_DOCUMENTS : NOTIFICATION_ATTACHMENT_DOCUMENTS;
     }
 
     private void appendReheardHearingDocuments(AsylumCase asylumCase, Document hearingNotice) {
