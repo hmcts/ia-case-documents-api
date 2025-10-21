@@ -1765,6 +1765,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalEditCaseListingLrLetter")
+    public DocumentCreator<AsylumCase> getInternalEditCaseListingLrLetterDocumentCreator(
+        @Value("${internalEditCaseListingLetter.contentType}") String contentType,
+        @Value("${internalEditCaseListingLetter.fileExtension}") String fileExtension,
+        @Value("${internalEditCaseListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalEditCaseListingLrLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("internalEditCaseListingForPrisonAndIrcLetter")
     public DocumentCreator<AsylumCase> getInternalEditCaseListingForPrisonAndIrcLetter(
         @Value("${internalEditCaseListingForIrcAndPrisonLetter.contentType}") String contentType,
