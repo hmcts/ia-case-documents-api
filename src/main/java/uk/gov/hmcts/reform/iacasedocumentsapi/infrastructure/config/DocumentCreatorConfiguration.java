@@ -1708,7 +1708,7 @@ public class DocumentCreatorConfiguration {
         @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
         @Value("${internalCaseListedLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCaseListedLetterTemplate documentTemplate,
+        InternalCaseListedLrLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
