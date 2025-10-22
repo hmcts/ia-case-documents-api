@@ -5,8 +5,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeLetterNotificationDocuments;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 @Component
-public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,7 +34,7 @@ public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalCaseListedLetterHandler(
+    public InternalCaseListedLegalRepLetterHandler(
         @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -62,8 +61,7 @@ public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == LIST_CASE
-               && isInternalCase(asylumCase)
-               && !isAppellantInDetention(asylumCase)
+               && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                && isEmStitchingEnabled;
     }
 
@@ -85,7 +83,7 @@ public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,
@@ -97,7 +95,7 @@ public class InternalCaseListedLetterHandler implements PreSubmitCallbackHandler
             asylumCase,
             internalCaseListedLetterBundle,
             LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
         );
 
         asylumCase.clear(LETTER_NOTIFICATION_DOCUMENTS);

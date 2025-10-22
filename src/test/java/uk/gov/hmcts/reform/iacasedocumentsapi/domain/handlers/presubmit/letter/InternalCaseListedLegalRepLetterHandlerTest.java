@@ -41,13 +41,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCaseListedLetterHandlerTest {
+class InternalCaseListedLegalRepLetterHandlerTest {
 
-    private InternalCaseListedLetterHandler internalCaseListedLetterHandler;
+    private InternalCaseListedLegalRepLetterHandler internalCaseListedLetterHandler;
     @Mock
     private Callback<AsylumCase> callback;
     @Mock
@@ -69,7 +67,7 @@ class InternalCaseListedLetterHandlerTest {
     public void setUp() {
 
         internalCaseListedLetterHandler =
-            new InternalCaseListedLetterHandler(
+            new InternalCaseListedLegalRepLetterHandler(
                 fileExtension,
                 fileName,
                 true,
@@ -80,20 +78,20 @@ class InternalCaseListedLetterHandlerTest {
 
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(InternalCaseListedLetterHandlerTest.TestScenario scenario) {
+    public void it_can_handle_callback(InternalCaseListedLegalRepLetterHandlerTest.TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         boolean canHandle = internalCaseListedLetterHandler.canHandle(scenario.callbackStage, callback);
 
         assertEquals(canHandle, scenario.isExpected());
     }
 
-    private static List<InternalCaseListedLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
-        return InternalCaseListedLetterHandlerTest.TestScenario.builder();
+    private static List<InternalCaseListedLegalRepLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
+        return InternalCaseListedLegalRepLetterHandlerTest.TestScenario.builder();
     }
 
     @Value
@@ -102,17 +100,17 @@ class InternalCaseListedLetterHandlerTest {
         PreSubmitCallbackStage callbackStage;
         boolean expected;
 
-        public static List<InternalCaseListedLetterHandlerTest.TestScenario> builder() {
-            List<InternalCaseListedLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
+        public static List<InternalCaseListedLegalRepLetterHandlerTest.TestScenario> builder() {
+            List<InternalCaseListedLegalRepLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
                 if (e.equals(Event.LIST_CASE)) {
-                    testScenarios.add(new InternalCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
                 } else {
-                    testScenarios.add(new InternalCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
                 }
             }
             return testScenarios;
@@ -128,7 +126,7 @@ class InternalCaseListedLetterHandlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         internalCaseListedLetterHandler =
-            new InternalCaseListedLetterHandler(
+            new InternalCaseListedLegalRepLetterHandler(
                 fileExtension,
                 fileName,
                 false,
@@ -147,7 +145,7 @@ class InternalCaseListedLetterHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
@@ -165,7 +163,7 @@ class InternalCaseListedLetterHandlerTest {
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
         );
         verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
     }

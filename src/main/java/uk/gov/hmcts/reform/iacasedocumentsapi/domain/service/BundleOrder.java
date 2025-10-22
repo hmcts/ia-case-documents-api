@@ -275,21 +275,29 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_CASE_LISTED_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 83;
             }
+            case INTERNAL_CASE_LISTED_LR_LETTER -> {
+                log.warn("INTERNAL_CASE_LISTED_LR_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 84;
+            }
+            case INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE -> {
+                log.warn("INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 85;
+            }
             case INTERNAL_OUT_OF_TIME_DECISION_LETTER -> {
                 log.warn("INTERNAL_OUT_OF_TIME_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 84;
+                yield 86;
             }
             case INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE -> {
                 log.warn("INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 85;
+                yield 87;
             }
             case INTERNAL_EDIT_CASE_LISTING_LETTER -> {
                 log.warn("INTERNAL_EDIT_CASE_LISTING_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 86;
+                yield 88;
             }
             case INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE -> {
                 log.warn("INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 87;
+                yield 89;
             }
             case INTERNAL_EDIT_CASE_LISTING_LR_LETTER -> {
                 log.warn("INTERNAL_EDIT_CASE_LISTING_LR_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
