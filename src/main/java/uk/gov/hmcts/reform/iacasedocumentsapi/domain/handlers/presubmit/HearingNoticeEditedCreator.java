@@ -3,15 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedAppeal;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isVirtualHearing;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -173,8 +168,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             );
         }
 
-        if (isInternalNonDetainedCase(asylumCase)
-            && hasAppellantAddressInCountryOrOoc(asylumCase)) {
+        if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,
@@ -183,18 +177,23 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             );
         }
 
-        if (isDetainedAppeal(asylumCase)) {
+        if (isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,
-                getAsylumCaseStorageLocation(asylumCase),
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
             );
         }
-    }
 
-    private static AsylumCaseDefinition getAsylumCaseStorageLocation(AsylumCase asylumCase) {
-        return isDetainedInFacilityType(asylumCase, OTHER) ? LETTER_NOTIFICATION_DOCUMENTS : NOTIFICATION_ATTACHMENT_DOCUMENTS;
+        if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNoticeEdited,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER
+            );
+        }
     }
 
     private void appendReheardHearingDocuments(AsylumCase asylumCase, Document hearingNotice) {

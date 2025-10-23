@@ -11,14 +11,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS_COLLECTION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isVirtualHearing;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -134,7 +130,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 DocumentTag.HEARING_NOTICE
             );
 
-            if (isInternalNonDetainedCase(asylumCase)) {
+            if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -149,6 +145,15 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                     hearingNotice,
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
                     DocumentTag.INTERNAL_CASE_LISTED_LETTER
+                );
+            }
+
+            if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    hearingNotice,
+                    LETTER_NOTIFICATION_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER
                 );
             }
         }
