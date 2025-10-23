@@ -50,7 +50,7 @@ public class InternalEditCaseListingLrLetterTemplate implements DocumentTemplate
 
         Map<String, Object> fieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
-        fieldValues.putAll(getAppellantPersonalisation(asylumCase));
+        fieldValues.putAll(getLegalRepPersonalisation(asylumCase));
 
         String oldHearingChannel = getHearingChannel(asylumCaseBefore, "Unknown");
         String newHearingChannel = getHearingChannel(asylumCase, "Unknown");

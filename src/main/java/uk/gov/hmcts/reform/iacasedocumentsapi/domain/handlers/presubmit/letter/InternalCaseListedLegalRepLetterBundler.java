@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeLetterNotificationDocuments;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
@@ -25,7 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 @Component
-public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -34,7 +33,7 @@ public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbac
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalCaseListedLegalRepLetterHandler(
+    public InternalCaseListedLegalRepLetterBundler(
         @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -50,6 +49,11 @@ public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbac
         this.documentHandler = documentHandler;
     }
 
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return DispatchPriority.LATE;
+    }
+
     public boolean canHandle(
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
@@ -63,11 +67,6 @@ public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbac
                && callback.getEvent() == LIST_CASE
                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                && isEmStitchingEnabled;
-    }
-
-    @Override
-    public DispatchPriority getDispatchPriority() {
-        return DispatchPriority.LATE;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -97,8 +96,6 @@ public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbac
             LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
         );
-
-        asylumCase.clear(LETTER_NOTIFICATION_DOCUMENTS);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

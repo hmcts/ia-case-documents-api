@@ -133,6 +133,16 @@ public class AsylumCaseUtils {
                 .build();
     }
 
+    public static Map<String, String> getLegalRepPersonalisation(AsylumCase asylumCase) {
+        requireNonNull(asylumCase, "asylumCase must not be null");
+
+        return ImmutableMap
+            .<String, String>builder()
+            .put("hmcts", "[userImage:hmcts.png]")
+            .putAll(getLegalRepPersonalisationWithoutUserImage(asylumCase))
+            .build();
+    }
+
     public static Map<String, String> getAppellantPersonalisationWithoutUserImage(AsylumCase asylumCase) {
         requireNonNull(asylumCase, "asylumCase must not be null");
 
@@ -142,6 +152,18 @@ public class AsylumCaseUtils {
                 .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
+                .build();
+    }
+
+    public static Map<String, String> getLegalRepPersonalisationWithoutUserImage(AsylumCase asylumCase) {
+        requireNonNull(asylumCase, "asylumCase must not be null");
+
+        return ImmutableMap
+                .<String, String>builder()
+                .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("appellantGivenNames", asylumCase.read(LEGAL_REP_GIVEN_NAME, String.class).orElse(""))
+                .put("appellantFamilyName", asylumCase.read(LEGAL_REP_FAMILY_NAME_PAPER_J, String.class).orElse(""))
                 .build();
     }
 
@@ -511,10 +533,15 @@ public class AsylumCaseUtils {
     }
 
     public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(AsylumCase asylumCase) {
-        return asylumCase.read(IS_ADMIN, YesOrNo.class)
-                .map(yesOrNo -> Objects.equals(YES, yesOrNo)).orElse(false)
-                && asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
-                .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);
+        Boolean isAdmin = asylumCase.read(IS_ADMIN, YesOrNo.class)
+            .map(yesOrNo -> Objects.equals(YES, yesOrNo))
+            .orElse(false);
+
+        Boolean isLegallyRepresented = asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+            .map(yesOrNo -> Objects.equals(NO, yesOrNo))
+            .orElse(false);
+
+        return isAdmin && isLegallyRepresented;
     }
 
     public static String getHearingChannel(AsylumCase asylumCase, String defaultValue) {

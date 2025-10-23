@@ -43,9 +43,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCaseListedLegalRepLetterHandlerTest {
+class InternalCaseListedLegalRepLetterBundlerTest {
 
-    private InternalCaseListedLegalRepLetterHandler internalCaseListedLetterHandler;
+    private InternalCaseListedLegalRepLetterBundler internalCaseListedLetterHandler;
     @Mock
     private Callback<AsylumCase> callback;
     @Mock
@@ -67,7 +67,7 @@ class InternalCaseListedLegalRepLetterHandlerTest {
     public void setUp() {
 
         internalCaseListedLetterHandler =
-            new InternalCaseListedLegalRepLetterHandler(
+            new InternalCaseListedLegalRepLetterBundler(
                 fileExtension,
                 fileName,
                 true,
@@ -78,7 +78,7 @@ class InternalCaseListedLegalRepLetterHandlerTest {
 
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(InternalCaseListedLegalRepLetterHandlerTest.TestScenario scenario) {
+    public void it_can_handle_callback(InternalCaseListedLegalRepLetterBundlerTest.TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -90,8 +90,8 @@ class InternalCaseListedLegalRepLetterHandlerTest {
         assertEquals(canHandle, scenario.isExpected());
     }
 
-    private static List<InternalCaseListedLegalRepLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
-        return InternalCaseListedLegalRepLetterHandlerTest.TestScenario.builder();
+    private static List<InternalCaseListedLegalRepLetterBundlerTest.TestScenario> generateDifferentEventScenarios() {
+        return InternalCaseListedLegalRepLetterBundlerTest.TestScenario.builder();
     }
 
     @Value
@@ -100,17 +100,17 @@ class InternalCaseListedLegalRepLetterHandlerTest {
         PreSubmitCallbackStage callbackStage;
         boolean expected;
 
-        public static List<InternalCaseListedLegalRepLetterHandlerTest.TestScenario> builder() {
-            List<InternalCaseListedLegalRepLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
+        public static List<InternalCaseListedLegalRepLetterBundlerTest.TestScenario> builder() {
+            List<InternalCaseListedLegalRepLetterBundlerTest.TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
                 if (e.equals(Event.LIST_CASE)) {
-                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
                 } else {
-                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
                 }
             }
             return testScenarios;
@@ -126,7 +126,7 @@ class InternalCaseListedLegalRepLetterHandlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         internalCaseListedLetterHandler =
-            new InternalCaseListedLegalRepLetterHandler(
+            new InternalCaseListedLegalRepLetterBundler(
                 fileExtension,
                 fileName,
                 false,
@@ -165,7 +165,6 @@ class InternalCaseListedLegalRepLetterHandlerTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
         );
-        verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
     }
 
     @Test
