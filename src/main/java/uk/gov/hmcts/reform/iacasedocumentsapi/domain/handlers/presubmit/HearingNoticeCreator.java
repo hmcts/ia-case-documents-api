@@ -131,6 +131,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             );
 
             if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
+                System.out.println("Appending notice to appellant case listed documents");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -149,6 +150,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
 
             if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+                System.out.println("Appending notice to lr case listed documents");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,

@@ -53,6 +53,9 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
                 .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
+        System.out.println("listCaseHearingCentre in appellant listed template:");
+        System.out.println(listedHearingCentre);
+
         final Map<String, Object> fieldValues = new HashMap<>();
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
@@ -70,6 +73,10 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
         }
+
+        System.out.println("field values in appellant listed template:");
+        System.out.println(fieldValues);
+
         return fieldValues;
     }
 }

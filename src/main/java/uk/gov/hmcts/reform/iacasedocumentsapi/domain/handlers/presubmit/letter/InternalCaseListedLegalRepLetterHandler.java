@@ -85,11 +85,16 @@ public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbac
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
 
+        System.out.println("Bundled documents in legal rep handler:");
+        System.out.println(bundleDocuments);
+
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,
             "Letter bundle documents",
             qualifiedDocumentFileName
         );
+
+        System.out.println("Adding documents to INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE");
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
@@ -97,6 +102,8 @@ public class InternalCaseListedLegalRepLetterHandler implements PreSubmitCallbac
             LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
         );
+
+        System.out.println("clearing letter notifs in in legal rep handler");
 
         asylumCase.clear(LETTER_NOTIFICATION_DOCUMENTS);
 
