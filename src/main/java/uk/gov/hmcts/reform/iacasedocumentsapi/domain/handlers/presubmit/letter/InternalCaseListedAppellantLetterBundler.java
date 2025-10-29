@@ -20,13 +20,12 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalCaseListedAppellantLetterHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,7 +34,7 @@ public class InternalCaseListedAppellantLetterHandler implements PreSubmitCallba
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalCaseListedAppellantLetterHandler(
+    public InternalCaseListedAppellantLetterBundler(
         @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -51,6 +50,11 @@ public class InternalCaseListedAppellantLetterHandler implements PreSubmitCallba
         this.documentHandler = documentHandler;
     }
 
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return DispatchPriority.LATE;
+    }
+
     public boolean canHandle(
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
@@ -64,11 +68,6 @@ public class InternalCaseListedAppellantLetterHandler implements PreSubmitCallba
                && callback.getEvent() == LIST_CASE
                && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)) || isDetainedInFacilityType(asylumCase, OTHER))
                && isEmStitchingEnabled;
-    }
-
-    @Override
-    public DispatchPriority getDispatchPriority() {
-        return DispatchPriority.LATE;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -98,8 +97,6 @@ public class InternalCaseListedAppellantLetterHandler implements PreSubmitCallba
             LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
-
-        asylumCase.clear(LETTER_NOTIFICATION_DOCUMENTS);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

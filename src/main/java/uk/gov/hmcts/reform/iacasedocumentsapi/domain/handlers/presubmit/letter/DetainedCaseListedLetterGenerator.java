@@ -6,6 +6,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
@@ -32,6 +33,11 @@ public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandl
     ) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
+    }
+
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return  DispatchPriority.EARLY;
     }
 
     public boolean canHandle(

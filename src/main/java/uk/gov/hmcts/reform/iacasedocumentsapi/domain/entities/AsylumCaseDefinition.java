@@ -906,6 +906,12 @@ public enum AsylumCaseDefinition {
     LATE_REMISSION_TYPE(
             "lateRemissionType", new TypeReference<RemissionType>(){}),
 
+    LEGAL_REP_FAMILY_NAME_PAPER_J(
+            "legalRepFamilyNamePaperJ", new TypeReference<String>(){}),
+
+    LEGAL_REP_GIVEN_NAME(
+            "legalRepGivenName", new TypeReference<String>(){}),
+
     ;
 
 

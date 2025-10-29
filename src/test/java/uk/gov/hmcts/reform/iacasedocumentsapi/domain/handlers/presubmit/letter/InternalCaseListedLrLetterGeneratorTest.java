@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANTS_REPRESENTATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.EARLY;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -53,6 +54,11 @@ class InternalCaseListedLrLetterGeneratorTest {
     void setUp() {
         internalCaseListedLrLetterGenerator =
                 new InternalCaseListedLrLetterGenerator(documentCreator, documentHandler);
+    }
+
+    @Test
+    void should_have_early_dispatch_priority() {
+        assertEquals(EARLY, internalCaseListedLrLetterGenerator.getDispatchPriority());
     }
 
     @Test

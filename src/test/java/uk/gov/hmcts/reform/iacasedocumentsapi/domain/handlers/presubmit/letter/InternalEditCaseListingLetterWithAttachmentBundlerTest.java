@@ -1,5 +1,32 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,26 +54,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCaseListedAppellantLetterHandlerTest {
+public class InternalEditCaseListingLetterWithAttachmentBundlerTest {
 
-    private InternalCaseListedAppellantLetterHandler detainedCaseListedLetterHandler;
+    private InternalEditCaseListingLetterWithAttachmentBundler internalEditCaseListingLetterWithAttachmentBundler;
     @Mock
     private Callback<AsylumCase> callback;
     @Mock
@@ -67,8 +79,8 @@ class InternalCaseListedAppellantLetterHandlerTest {
     @BeforeEach
     public void setUp() {
 
-        detainedCaseListedLetterHandler =
-            new InternalCaseListedAppellantLetterHandler(
+        internalEditCaseListingLetterWithAttachmentBundler =
+            new InternalEditCaseListingLetterWithAttachmentBundler(
                 fileExtension,
                 fileName,
                 true,
@@ -79,21 +91,21 @@ class InternalCaseListedAppellantLetterHandlerTest {
 
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(InternalCaseListedAppellantLetterHandlerTest.TestScenario scenario) {
+    public void it_can_handle_callback(InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(scenario.callbackStage, callback);
+        boolean canHandle = internalEditCaseListingLetterWithAttachmentBundler.canHandle(scenario.callbackStage, callback);
 
         assertEquals(canHandle, scenario.isExpected());
     }
 
-    private static List<InternalCaseListedAppellantLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
-        return InternalCaseListedAppellantLetterHandlerTest.TestScenario.builder();
+    private static List<InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario> generateDifferentEventScenarios() {
+        return InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario.builder();
     }
 
     @Value
@@ -102,17 +114,17 @@ class InternalCaseListedAppellantLetterHandlerTest {
         PreSubmitCallbackStage callbackStage;
         boolean expected;
 
-        public static List<InternalCaseListedAppellantLetterHandlerTest.TestScenario> builder() {
-            List<InternalCaseListedAppellantLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
+        public static List<InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario> builder() {
+            List<InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario> testScenarios = new ArrayList<>();
             for (Event e : Event.values()) {
-                if (e.equals(Event.LIST_CASE)) {
-                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
+                if (e.equals(Event.EDIT_CASE_LISTING)) {
+                    testScenarios.add(new InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
                 } else {
-                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedAppellantLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
+                    testScenarios.add(new InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
                 }
             }
             return testScenarios;
@@ -121,15 +133,14 @@ class InternalCaseListedAppellantLetterHandlerTest {
 
     @Test
     public void it_should_not_handle_callback_when_stitching_flag_is_false() {
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        detainedCaseListedLetterHandler =
-            new InternalCaseListedAppellantLetterHandler(
+        internalEditCaseListingLetterWithAttachmentBundler =
+            new InternalEditCaseListingLetterWithAttachmentBundler(
                 fileExtension,
                 fileName,
                 false,
@@ -137,65 +148,19 @@ class InternalCaseListedAppellantLetterHandlerTest {
                 documentBundler,
                 documentHandler);
 
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalEditCaseListingLetterWithAttachmentBundler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertFalse(canHandle);
     }
 
     @Test
-    public void it_should_not_handle_callback_when_not_admin_and_not_detained() {
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+    void should_read_and_bundle_letter_notification_documents() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        detainedCaseListedLetterHandler =
-            new InternalCaseListedAppellantLetterHandler(
-                fileExtension,
-                fileName,
-                true,
-                fileNameQualifier,
-                documentBundler,
-                documentHandler);
-
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertFalse(canHandle);
-    }
-
-    @Test
-    public void it_should_not_handle_callback_when_detained_not_in_other() {
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
-
-        detainedCaseListedLetterHandler =
-            new InternalCaseListedAppellantLetterHandler(
-                fileExtension,
-                fileName,
-                true,
-                fileNameQualifier,
-                documentBundler,
-                documentHandler);
-
-        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertFalse(canHandle);
-    }
-
-    @Test
-    void should_read_and_bundle_letter_notification_documents_for_internal_lr() {
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
@@ -208,25 +173,23 @@ class InternalCaseListedAppellantLetterHandlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLetterWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
         );
-        verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
     }
 
     @Test
-    void should_read_and_bundle_letter_notification_documents_for_internal_aip() {
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+    void should_read_and_bundle_letter_notification_documents_for_detained_other_facility() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
@@ -239,24 +202,23 @@ class InternalCaseListedAppellantLetterHandlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLetterWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
         );
-        verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
     }
 
     @Test
-    void should_read_and_bundle_letter_notification_documents_for_digital_lr() {
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+    void should_read_and_bundle_letter_notification_documents_for_detained_other_facility_ooc() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
@@ -269,19 +231,18 @@ class InternalCaseListedAppellantLetterHandlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLetterWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
         );
-        verify(asylumCase, times(1)).clear(LETTER_NOTIFICATION_DOCUMENTS);
     }
 
     @Test
     void set_to_late_dispatch() {
-        assertThat(detainedCaseListedLetterHandler.getDispatchPriority()).isEqualTo(LATE);
+        assertThat(internalEditCaseListingLetterWithAttachmentBundler.getDispatchPriority()).isEqualTo(LATE);
     }
 
     @Test
@@ -289,16 +250,15 @@ class InternalCaseListedAppellantLetterHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        assertThatThrownBy(() -> detainedCaseListedLetterHandler.handle(ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalEditCaseListingLetterWithAttachmentBundler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
 
-        assertThatThrownBy(() -> detainedCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalEditCaseListingLetterWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -315,7 +275,7 @@ class InternalCaseListedAppellantLetterHandlerTest {
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
                 RandomStringUtils.randomAlphabetic(20),
-                new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CASE_LISTED_LETTER,"test");
+                new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER,"test");
 
     }
 }

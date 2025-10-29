@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.EARLY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +50,11 @@ class DetainedCaseListedLetterGeneratorTest {
     void setUp() {
         detainedCaseListedLetterGenerator =
             new DetainedCaseListedLetterGenerator(documentCreator, documentHandler);
+    }
+
+    @Test
+    void should_have_early_dispatch_priority() {
+        assertEquals(EARLY, detainedCaseListedLetterGenerator.getDispatchPriority());
     }
 
     @Test
