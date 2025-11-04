@@ -51,7 +51,11 @@ public class AppealSubmissionDocFieldMapper {
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("CREATED_DATE", caseDetails.getCreatedDate().format(DOCUMENT_DATE_FORMAT));
         fieldValues.put("appealSubmissionDate", formatDateForRendering(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
-        fieldValues.put("tribunalReceivedDate", formatDateForRendering(asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
+
+        Optional<String> tribunalReceivedDate = asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class);
+        fieldValues.put("tribunalReceivedDate", tribunalReceivedDate.isPresent()
+                ? formatDateForRendering(asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT) : null);
+
         fieldValues.put("legalRepresentativeEmailAddress", asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class).orElse(""));
         fieldValues.put("legalRepName", formatLegalRepName(
                 asylumCase.read(LEGAL_REP_NAME, String.class).orElse(""),
